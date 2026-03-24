@@ -1,40 +1,162 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
-import PricingSection from "@/components/PricingSection";
-import SocialProof from "@/components/SocialProof";
+import PaywallOverlay from "@/components/PaywallOverlay";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCredits } from "@/contexts/CreditsContext";
+import { supabase } from "@/integrations/supabase/client";
+
+const randomPrompts = [
+  "cyberpunk warrior with neon tattoos, confident stance, leather jacket",
+  "ethereal elf princess, silver hair, glowing eyes, forest armor",
+  "street samurai, scarred face, katana, rain-soaked city backdrop",
+  "steampunk inventor, goggles, brass arm, wild curly hair",
+  "space bounty hunter, sleek helmet, dark bodysuit, holographic badge",
+];
 
 const Index = () => {
+  const { user, loading: authLoading } = useAuth();
+  const { credits, refetch: refetchCredits } = useCredits();
+  const navigate = useNavigate();
+  const [prompt, setPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleGenerate = async () => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    if (credits <= 0) {
+      setShowPaywall(true);
+      return;
+    }
+    if (!prompt.trim()) return;
+
+    setIsGenerating(true);
+    setImages([]);
+    setError("");
+
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("generate", {
+        body: { prompt: prompt.trim() },
+      });
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+
+      setImages(data.images || []);
+      await refetchCredits();
+    } catch (e: any) {
+      console.error("Generation error:", e);
+      if (e.message?.includes("No credits") || e.message?.includes("402")) {
+        setShowPaywall(true);
+      } else {
+        setError(e.message || "generation failed. please try again.");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleRandomize = () => {
+    setPrompt(randomPrompts[Math.floor(Math.random() * randomPrompts.length)]);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      {/* Hero */}
-      <section className="bg-nav py-22 md:py-30">
-        <div className="container max-w-4xl text-center">
-          <h1 className="text-display-sm md:text-display text-nav-foreground mb-8">
-            create beautiful ai characters in seconds
-          </h1>
-          <p className="text-nav-foreground/60 text-body-lg max-w-2xl mx-auto mb-12">
-            describe a character. get 3 perfectly consistent angles — front, left, and right. ready for games, comics, or concept art.
-          </p>
-          <Link to="/generate">
-            <Button size="xl" variant="hero-outline">
-              try 1 free generation
-            </Button>
-          </Link>
+      <main className="container max-w-4xl py-10 md:py-18">
+        {/* Credits Badge */}
+        {user && (
+          <div className="flex justify-end mb-6">
+            <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-sm">
+              {credits} credit{credits !== 1 ? "s" : ""}
+            </div>
+          </div>
+        )}
+
+        {/* Input */}
+        <div className="mb-6">
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="describe her look, mood, style…"
+            rows={4}
+            className="w-full border-2 border-foreground bg-background text-foreground p-6 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
+          />
         </div>
-      </section>
 
-      <PricingSection />
-      <SocialProof />
+        {error && (
+          <div className="border-2 border-destructive p-4 mb-6 text-destructive font-semibold lowercase">
+            {error}
+          </div>
+        )}
 
-      {/* Footer */}
-      <footer className="bg-nav py-10">
-        <div className="container text-center">
-          <p className="text-nav-foreground/40 font-semibold lowercase">© 2026 vizura. all rights reserved.</p>
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-14">
+          <Button
+            size="xl"
+            variant="hero"
+            className="flex-1"
+            onClick={handleGenerate}
+            disabled={isGenerating || !prompt.trim()}
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="animate-spin" />
+                generating…
+              </>
+            ) : (
+              "generate"
+            )}
+          </Button>
+          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating}>
+            <Shuffle className="mr-2" />
+            randomize
+          </Button>
         </div>
-      </footer>
+
+        {/* Results */}
+        <AnimatePresence>
+          {images.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-heading mb-8 text-center">your character</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {images.map((src, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.15, duration: 0.4 }}
+                    className="border-2 border-foreground overflow-hidden"
+                  >
+                    <img
+                      src={src}
+                      alt={`character angle ${i + 1}`}
+                      className="w-full aspect-[2/3] object-cover"
+                    />
+                    <div className="p-4 text-center font-extrabold lowercase text-sm">
+                      {["front", "left", "right"][i]}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
     </div>
   );
 };
