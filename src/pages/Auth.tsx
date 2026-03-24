@@ -46,29 +46,6 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
-        {/* Toggle tabs */}
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => { setIsLogin(true); setError(""); }}
-            className={`flex-1 py-4 font-extrabold lowercase text-lg tracking-tight border-[3px] transition-all duration-0 ${
-              isLogin
-                ? "bg-background text-foreground border-foreground"
-                : "bg-foreground text-background border-foreground"
-            }`}
-          >
-            log in
-          </button>
-          <button
-            onClick={() => { setIsLogin(false); setError(""); }}
-            className={`flex-1 py-4 font-extrabold lowercase text-lg tracking-tight border-[3px] transition-all duration-0 ${
-              !isLogin
-                ? "bg-background text-foreground border-foreground"
-                : "bg-foreground text-background border-foreground"
-            }`}
-          >
-            create
-          </button>
-        </div>
 
         {signupSuccess ? (
           <div className="border-[3px] border-foreground p-8 text-center">
