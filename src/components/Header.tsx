@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import VizuraLogo from "@/components/VizuraLogo";
@@ -7,6 +7,8 @@ import { UserRound } from "lucide-react";
 const Header = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isOnAuth = location.pathname === "/auth";
 
   const handleSignOut = async () => {
     await signOut();
@@ -28,6 +30,10 @@ const Header = () => {
                 logged in
               </div>
             </div>
+          ) : isOnAuth ? (
+            <Button variant="hero-outline" size="sm" onClick={() => navigate("/")}>
+              back
+            </Button>
           ) : (
             <Button variant="hero-outline" size="sm" onClick={() => navigate("/auth")}>
               create
