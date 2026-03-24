@@ -42,10 +42,10 @@ const Auth = () => {
       <Header />
       <main className="container max-w-md py-22">
         <h1 className="text-display-sm text-center mb-3">
-          {isLogin ? "welcome back" : "create your account"}
+          {isLogin ? "authenticate" : "initialize account"}
         </h1>
         <p className="text-muted-foreground text-body-lg text-center mb-10">
-          {isLogin ? "log in to continue generating characters" : "sign up to get your first free credit and start creating"}
+          {isLogin ? "enter credentials to access the rendering pipeline" : "register to receive your initial credit allocation & start generating"}
         </p>
 
         {signupSuccess ? (
