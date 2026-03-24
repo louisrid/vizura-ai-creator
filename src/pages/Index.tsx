@@ -87,7 +87,10 @@ const Index = () => {
       <main className="container max-w-4xl py-8 md:py-14">
         {/* Top bar: credits + status */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-heading">create your character</h1>
+          <div>
+            <h1 className="text-heading">create your character</h1>
+            <p className="text-muted-foreground text-body-lg mt-1">describe a look and we'll generate three angles in seconds</p>
+          </div>
           {user && (
             <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-sm">
               {credits} credit{credits !== 1 ? "s" : ""}
