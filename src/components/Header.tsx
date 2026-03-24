@@ -32,11 +32,11 @@ const Header = () => {
             </div>
           ) : isOnAuth ? (
             <Button variant="hero-outline" size="sm" onClick={() => navigate("/")}>
-              generate
+              home
             </Button>
           ) : (
             <Button variant="hero-outline" size="sm" onClick={() => navigate("/auth")}>
-              create
+              log in
             </Button>
           )}
         </nav>
