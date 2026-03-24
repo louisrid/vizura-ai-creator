@@ -78,7 +78,7 @@ const Auth = () => {
             </div>
 
             <div>
-              <label className="block font-extrabold lowercase text-sm mb-1">password</label>
+              <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">password</label>
               <input
                 type="password"
                 value={password}
