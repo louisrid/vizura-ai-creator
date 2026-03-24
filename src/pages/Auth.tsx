@@ -122,7 +122,7 @@ const Auth = () => {
             </p>
           </form>
         )}
-      </main>
+      </motion.main>
     </div>
   );
 };
