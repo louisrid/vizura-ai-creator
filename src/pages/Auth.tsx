@@ -40,12 +40,12 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-md pt-16 md:pt-24 pb-8">
-        <h1 className="text-display-sm text-center mb-2">
+      <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
+        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-2">
           {isLogin ? "log in" : "sign up"}
         </h1>
-        <p className="text-muted-foreground text-sm text-center mb-8">
-          {isLogin ? "enter your email & password to continue" : "create an account & get your first free credit"}
+        <p className="text-foreground/50 text-sm font-extrabold lowercase text-center mb-6">
+          {isLogin ? "enter email & password" : "create account & get 1 free credit"}
         </p>
 
         {signupSuccess ? (
