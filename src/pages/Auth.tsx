@@ -8,12 +8,14 @@ import Header from "@/components/Header";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isForgot, setIsForgot] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
-  const { user, signIn, signUp } = useAuth();
+  const [resetSent, setResetSent] = useState(false);
+  const { user, signIn, signUp, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   // Already logged in — send back to generate
