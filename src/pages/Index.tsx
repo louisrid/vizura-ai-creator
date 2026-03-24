@@ -124,7 +124,7 @@ const Index = () => {
         <Button
           size="xl"
           variant="hero"
-          className="w-full text-lg sm:text-xl [&_svg]:size-5 sm:[&_svg]:size-6 h-16 sm:h-20 mb-10"
+          className="w-full text-xl sm:text-2xl [&_svg]:size-6 sm:[&_svg]:size-7 h-18 sm:h-22 mb-10"
           onClick={handleGenerate}
           disabled={isGenerating || !prompt.trim()}
         >
