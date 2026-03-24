@@ -99,7 +99,7 @@ const Index = () => {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="describe your character…"
           rows={4}
-          className="w-full border-[3px] border-foreground bg-background text-foreground p-5 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
+          className="w-full border-[3px] border-foreground bg-background text-foreground p-5 text-lg font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
         />
 
         {/* Style presets */}
@@ -111,14 +111,14 @@ const Index = () => {
               <button
                 key={style.label}
                 onClick={() => setActiveStyle(i)}
-                className={`flex items-center justify-center gap-2 border-[3px] px-3 py-3 font-extrabold lowercase text-sm transition-all ${
+                className={`flex flex-row items-center justify-center gap-2.5 border-[3px] px-4 py-4 font-extrabold lowercase text-base tracking-tight transition-all ${
                   isActive
                     ? "border-foreground bg-foreground text-background"
                     : "border-foreground text-foreground hover:bg-foreground/5"
                 }`}
               >
-                <Icon size={18} strokeWidth={2.5} />
-                {style.label}
+                <Icon size={24} strokeWidth={3} />
+                <span className="whitespace-nowrap">{style.label}</span>
               </button>
             );
           })}
@@ -135,21 +135,21 @@ const Index = () => {
           <Button
             size="xl"
             variant="hero"
-            className="flex-1 text-lg"
+            className="flex-1 text-xl [&_svg]:size-6"
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
           >
             {isGenerating ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2 className="animate-spin" strokeWidth={3} />
                 generating…
               </>
             ) : (
               "generate"
             )}
           </Button>
-          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating} className="text-lg">
-            <Shuffle className="mr-2" strokeWidth={2.5} />
+          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating} className="text-xl [&_svg]:size-6 border-[3px]">
+            <Shuffle className="mr-2" strokeWidth={3} />
             random
           </Button>
         </div>
