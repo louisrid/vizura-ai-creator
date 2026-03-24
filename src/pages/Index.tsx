@@ -81,14 +81,9 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <motion.main
-        key={bounceKey}
-        initial={bounceKey === 0 ? { opacity: 0, y: 10 } : { x: 6 }}
-        animate={bounceKey === 0 ? { opacity: 1, y: 0 } : { x: 0 }}
-        transition={
-          bounceKey === 0
-            ? { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }
-            : { type: "spring", stiffness: 60, damping: 18, mass: 2 }
-        }
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         className="w-full max-w-4xl mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6"
       >
         {/* Top bar */}
