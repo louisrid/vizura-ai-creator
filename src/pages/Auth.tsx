@@ -111,7 +111,7 @@ const Auth = () => {
             </div>
 
             <Button size="xl" variant="hero" className="w-full text-lg disabled:opacity-100" disabled={loading}>
-              {loading ? "loading…" : isLogin ? "log in" : "create account"}
+              {loading ? "loading…" : isLogin ? "log in" : "create"}
             </Button>
           </form>
         )}
