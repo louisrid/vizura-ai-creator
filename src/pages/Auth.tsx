@@ -90,6 +90,16 @@ const Auth = () => {
             <Button size="xl" variant="hero" className="w-full text-lg disabled:opacity-100" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create"}
             </Button>
+            <p className="text-center font-extrabold lowercase text-sm text-foreground/50 pt-2">
+              {isLogin ? "no account? " : "have an account? "}
+              <button
+                type="button"
+                onClick={() => { setIsLogin(!isLogin); setError(""); }}
+                className="text-foreground underline"
+              >
+                {isLogin ? "create one" : "log in"}
+              </button>
+            </p>
           </form>
         )}
       </main>
