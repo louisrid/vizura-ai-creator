@@ -111,7 +111,7 @@ const Index = () => {
         {/* Style presets */}
         <div className="mb-5">
           <p className="font-extrabold lowercase text-xs text-muted-foreground mb-2">style preset</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {stylePresets.map((style, i) => {
               const Icon = style.icon;
               const isActive = activeStyle === i;
