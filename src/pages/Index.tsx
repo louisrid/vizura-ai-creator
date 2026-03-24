@@ -134,7 +134,7 @@ const Index = () => {
               generating…
             </>
           ) : (
-            "generate"
+            "create"
           )}
         </Button>
 
