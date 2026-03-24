@@ -75,7 +75,7 @@ const Index = () => {
       <main className="w-full max-w-4xl mx-auto pt-10 md:pt-14 pb-8 px-4 sm:px-6">
         {/* Top bar */}
         <div className="flex items-center justify-between mb-5">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold lowercase tracking-tight">generate</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold lowercase tracking-tight">create a photo</h1>
           {user && (
             <div className="border-[3px] border-foreground px-4 py-2 font-extrabold lowercase text-sm sm:text-base shrink-0">
               {credits} credit{credits !== 1 ? "s" : ""}
