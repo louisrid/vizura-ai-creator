@@ -18,10 +18,9 @@ const randomPrompts = [
 ];
 
 const stylePresets = [
-  { label: "anime", icon: Sparkles, suffix: ", anime art style, cel shaded" },
-  { label: "realistic", icon: User, suffix: ", photorealistic, hyperdetailed" },
-  { label: "comic", icon: Zap, suffix: ", comic book style, bold lines, halftone" },
-  { label: "painterly", icon: Palette, suffix: ", oil painting style, rich textures" },
+  { label: "instagram photo", icon: Sparkles, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
+  { label: "instagram selfie", icon: User, suffix: ", instagram selfie style, front-facing camera, natural skin texture, soft ring light, photorealistic" },
+  { label: "freestyle", icon: Palette, suffix: ", photorealistic, hyperdetailed, cinematic lighting" },
 ];
 
 const Index = () => {
