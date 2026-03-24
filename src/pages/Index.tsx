@@ -26,6 +26,14 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeStyle, setActiveStyle] = useState<number>(0);
+  const [bounceKey, setBounceKey] = useState(0);
+
+  const handleStyleChange = useCallback((i: number) => {
+    if (i !== activeStyle) {
+      setActiveStyle(i);
+      setBounceKey((k) => k + 1);
+    }
+  }, [activeStyle]);
   const handleGenerate = async () => {
     if (!user) {
       navigate("/auth");
