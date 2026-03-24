@@ -70,6 +70,7 @@ export default {
           DEFAULT: "hsl(var(--surface-dark))",
           foreground: "hsl(var(--surface-dark-foreground))",
         },
+        'accent-purple': "hsl(var(--accent-purple))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
