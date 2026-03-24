@@ -107,7 +107,7 @@ const Index = () => {
                     : "border-foreground text-foreground hover:bg-foreground/5"
                 }`}
               >
-                <Icon size={20} strokeWidth={3} className="shrink-0" />
+                <Icon size={24} strokeWidth={3} className="shrink-0" />
                 <span className="truncate">{style.label}</span>
               </button>
             );
