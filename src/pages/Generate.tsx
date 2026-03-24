@@ -1,9 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCredits } from "@/contexts/CreditsContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 const randomPrompts = [
   "cyberpunk warrior with neon tattoos, confident stance, leather jacket",
@@ -14,13 +19,22 @@ const randomPrompts = [
 ];
 
 const Generate = () => {
+  const { user, loading: authLoading } = useAuth();
+  const { credits, refetch: refetchCredits } = useCredits();
+  const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [images, setImages] = useState<string[]>([]);
-  const [credits, setCredits] = useState(1);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleGenerate = () => {
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate]);
+
+  const handleGenerate = async () => {
     if (credits <= 0) {
       setShowPaywall(true);
       return;
@@ -29,38 +43,48 @@ const Generate = () => {
 
     setIsGenerating(true);
     setImages([]);
+    setError("");
 
-    // Simulate generation
-    setTimeout(() => {
-      setImages([
-        `https://placehold.co/512x768/111/fff?text=front&font=raleway`,
-        `https://placehold.co/512x768/111/fff?text=left&font=raleway`,
-        `https://placehold.co/512x768/111/fff?text=right&font=raleway`,
-      ]);
-      setCredits((c) => c - 1);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("generate", {
+        body: { prompt: prompt.trim() },
+      });
+
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+
+      setImages(data.images || []);
+      await refetchCredits();
+    } catch (e: any) {
+      console.error("Generation error:", e);
+      if (e.message?.includes("No credits") || e.message?.includes("402")) {
+        setShowPaywall(true);
+      } else {
+        setError(e.message || "generation failed. please try again.");
+      }
+    } finally {
       setIsGenerating(false);
-    }, 3000);
+    }
   };
 
   const handleRandomize = () => {
-    const random = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
-    setPrompt(random);
+    setPrompt(randomPrompts[Math.floor(Math.random() * randomPrompts.length)]);
   };
+
+  if (authLoading) return null;
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <PaywallOverlay open={showPaywall} />
+      <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="container max-w-4xl py-14 md:py-22">
-        {/* Credits Badge */}
         <div className="flex justify-end mb-8">
           <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-sm">
             {credits} credit{credits !== 1 ? "s" : ""} remaining
           </div>
         </div>
 
-        {/* Input */}
         <div className="mb-8">
           <textarea
             value={prompt}
@@ -71,7 +95,12 @@ const Generate = () => {
           />
         </div>
 
-        {/* Actions */}
+        {error && (
+          <div className="border-2 border-destructive p-4 mb-8 text-destructive font-semibold lowercase">
+            {error}
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row gap-4 mb-14">
           <Button
             size="xl"
@@ -95,7 +124,6 @@ const Generate = () => {
           </Button>
         </div>
 
-        {/* Results */}
         <AnimatePresence>
           {images.length > 0 && (
             <motion.div

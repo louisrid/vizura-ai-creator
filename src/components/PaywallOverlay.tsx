@@ -1,12 +1,36 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 interface PaywallOverlayProps {
   open: boolean;
+  onClose: () => void;
 }
 
-const PaywallOverlay = ({ open }: PaywallOverlayProps) => {
+const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { priceId: "price_vizura_monthly" }, // Replace with real Stripe price ID
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (e) {
+      console.error("Checkout error:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -30,12 +54,12 @@ const PaywallOverlay = ({ open }: PaywallOverlayProps) => {
               <span className="text-display-sm">$7</span>
               <p className="text-muted-foreground font-semibold mt-1">first month, then $20/mo</p>
             </div>
-            <Button size="xl" variant="hero" className="w-full mb-4">
-              subscribe & continue
+            <Button size="xl" variant="hero" className="w-full mb-4" onClick={handleSubscribe} disabled={loading}>
+              {loading ? <><Loader2 className="animate-spin" /> loading…</> : "subscribe & continue"}
             </Button>
-            <Link to="/" className="text-muted-foreground font-semibold lowercase hover:underline">
-              back to home
-            </Link>
+            <button onClick={onClose} className="text-muted-foreground font-semibold lowercase hover:underline">
+              close
+            </button>
           </motion.div>
         </motion.div>
       )}

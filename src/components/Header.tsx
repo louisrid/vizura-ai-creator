@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
   return (
     <header className="bg-nav">
       <div className="container flex items-center justify-between py-6">
@@ -9,11 +18,20 @@ const Header = () => {
           vizura
         </Link>
         <nav className="flex items-center gap-4">
-          <Link to="/generate">
-            <Button variant="hero-outline" size="sm">
-              generate
-            </Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/generate">
+                <Button variant="hero-outline" size="sm">generate</Button>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-nav-foreground hover:text-nav-foreground/80 hover:bg-nav-foreground/10">
+                log out
+              </Button>
+            </>
+          ) : (
+            <Link to="/auth">
+              <Button variant="hero-outline" size="sm">log in</Button>
+            </Link>
+          )}
         </nav>
       </div>
     </header>
