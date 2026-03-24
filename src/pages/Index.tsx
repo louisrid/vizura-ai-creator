@@ -66,9 +66,6 @@ const Index = () => {
     }
   };
 
-  const handleRandomize = () => {
-    setPrompt(randomPrompts[Math.floor(Math.random() * randomPrompts.length)]);
-  };
 
   return (
     <div className="min-h-screen bg-background">
