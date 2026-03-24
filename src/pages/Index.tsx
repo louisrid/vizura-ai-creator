@@ -103,7 +103,7 @@ const Index = () => {
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="describe the character's appearance, outfit, mood, and setting in detail…"
+            placeholder="specify facial features, outfit layers, pose dynamics & environment context…"
             rows={5}
             className="w-full border-2 border-foreground bg-background text-foreground p-6 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
           />
