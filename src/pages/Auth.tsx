@@ -40,12 +40,12 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-md py-22">
-        <h1 className="text-display-sm text-center mb-3">
-          {isLogin ? "authenticate" : "initialize account"}
+      <main className="container max-w-md pt-16 md:pt-24 pb-8">
+        <h1 className="text-display-sm text-center mb-2">
+          {isLogin ? "log in" : "sign up"}
         </h1>
-        <p className="text-muted-foreground text-body-lg text-center mb-10">
-          {isLogin ? "enter credentials to access the rendering pipeline" : "register to receive your initial credit allocation & start generating"}
+        <p className="text-muted-foreground text-sm text-center mb-8">
+          {isLogin ? "enter your email & password to continue" : "create an account & get your first free credit"}
         </p>
 
         {signupSuccess ? (
