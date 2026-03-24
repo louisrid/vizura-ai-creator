@@ -41,15 +41,32 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
-        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-2">
-          {isLogin ? "log in" : "sign up"}
-        </h1>
-        <p className="text-foreground/50 text-sm font-extrabold lowercase text-center mb-6">
-          {isLogin ? "enter email & password" : "create account & get 1 free credit"}
-        </p>
+        {/* Toggle tabs */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => { setIsLogin(true); setError(""); }}
+            className={`flex-1 py-4 font-extrabold lowercase text-lg tracking-tight border-[3px] transition-all duration-0 ${
+              isLogin
+                ? "bg-background text-foreground border-foreground"
+                : "bg-foreground text-background border-foreground"
+            }`}
+          >
+            log in
+          </button>
+          <button
+            onClick={() => { setIsLogin(false); setError(""); }}
+            className={`flex-1 py-4 font-extrabold lowercase text-lg tracking-tight border-[3px] transition-all duration-0 ${
+              !isLogin
+                ? "bg-background text-foreground border-foreground"
+                : "bg-foreground text-background border-foreground"
+            }`}
+          >
+            create
+          </button>
+        </div>
 
         {signupSuccess ? (
-          <div className="border-2 border-foreground p-8 text-center">
+          <div className="border-[3px] border-foreground p-8 text-center">
             <h2 className="text-xl font-extrabold lowercase mb-3">check your email</h2>
             <p className="text-foreground/60 text-sm font-bold lowercase">
               we sent a link to <strong className="text-foreground">{email}</strong> — click to verify.
@@ -58,7 +75,7 @@ const Auth = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="border-2 border-destructive p-4 text-destructive font-semibold lowercase">
+              <div className="border-[3px] border-destructive p-4 text-destructive font-extrabold lowercase">
                 {error}
               </div>
             )}
@@ -70,7 +87,7 @@ const Auth = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="you@example.com"
               />
             </div>
@@ -83,25 +100,14 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="••••••••"
               />
             </div>
 
-            <Button size="xl" variant="hero" className="w-full text-lg" disabled={loading}>
+            <Button size="xl" variant="hero" className="w-full text-lg disabled:opacity-100" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create account"}
             </Button>
-
-            <p className="text-center text-foreground/50 font-extrabold text-sm">
-              {isLogin ? "don't have an account? " : "already have an account? "}
-              <button
-                type="button"
-                onClick={() => { setIsLogin(!isLogin); setError(""); }}
-                className="text-foreground underline font-extrabold lowercase"
-              >
-                {isLogin ? "sign up" : "log in"}
-              </button>
-            </p>
           </form>
         )}
       </main>
