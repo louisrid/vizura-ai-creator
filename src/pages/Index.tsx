@@ -27,6 +27,7 @@ const Index = () => {
   const [error, setError] = useState("");
   const [activeStyle, setActiveStyle] = useState<number>(0);
   const [bounceKey, setBounceKey] = useState(0);
+  const [btnBounceKey, setBtnBounceKey] = useState(0);
 
   const handleStyleChange = useCallback((i: number) => {
     if (i !== activeStyle) {
