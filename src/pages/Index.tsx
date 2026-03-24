@@ -161,6 +161,7 @@ const Index = () => {
             "create"
           )}
         </Button>
+        </motion.div>
 
         {/* Results */}
         <AnimatePresence>
