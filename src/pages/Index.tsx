@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Shuffle, Sparkles, Palette, User } from "lucide-react";
+import { Loader2, Shuffle, Camera, SmartphoneNfc, Brush } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -18,9 +18,9 @@ const randomPrompts = [
 ];
 
 const stylePresets = [
-  { label: "instagram photo", icon: Sparkles, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
-  { label: "instagram selfie", icon: User, suffix: ", instagram selfie style, front-facing camera, natural skin texture, soft ring light, photorealistic" },
-  { label: "freestyle", icon: Palette, suffix: ", photorealistic, hyperdetailed, cinematic lighting" },
+  { label: "instagram photo", icon: Camera, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
+  { label: "instagram selfie", icon: SmartphoneNfc, suffix: ", instagram selfie style, front-facing camera, natural skin texture, soft ring light, photorealistic" },
+  { label: "freestyle", icon: Brush, suffix: ", photorealistic, hyperdetailed, cinematic lighting" },
 ];
 
 const Index = () => {
