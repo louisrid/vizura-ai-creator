@@ -46,13 +46,13 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
             exit={{ scale: 0.9, opacity: 0 }}
             className="bg-background border-2 border-foreground p-10 md:p-14 max-w-lg w-full text-center"
           >
-            <h2 className="text-heading mb-4">you're out of credits</h2>
+            <h2 className="text-heading mb-4">you've used all your credits</h2>
             <p className="text-muted-foreground text-body-lg mb-8">
-              subscribe to keep generating beautiful characters.
+              subscribe now to unlock unlimited character generation and keep creating without interruption.
             </p>
             <div className="mb-8">
               <span className="text-display-sm">$7</span>
-              <p className="text-muted-foreground font-semibold mt-1">first month, then $20/mo</p>
+              <p className="text-muted-foreground font-semibold mt-1">introductory price for your first month, then $20 per month after</p>
             </div>
             <Button size="xl" variant="hero" className="w-full mb-4" onClick={handleSubscribe} disabled={loading}>
               {loading ? <><Loader2 className="animate-spin" /> loading…</> : "subscribe & continue"}

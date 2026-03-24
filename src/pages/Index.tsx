@@ -87,7 +87,10 @@ const Index = () => {
       <main className="container max-w-4xl py-8 md:py-14">
         {/* Top bar: credits + status */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-heading">create your character</h1>
+          <div>
+            <h1 className="text-heading">create your character</h1>
+            <p className="text-muted-foreground text-body-lg mt-1">describe a look and we'll generate three angles in seconds</p>
+          </div>
           {user && (
             <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-sm">
               {credits} credit{credits !== 1 ? "s" : ""}
@@ -100,7 +103,7 @@ const Index = () => {
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="describe her look, mood, style…"
+            placeholder="describe the character's appearance, outfit, mood, and setting in detail…"
             rows={5}
             className="w-full border-2 border-foreground bg-background text-foreground p-6 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
           />
@@ -108,7 +111,7 @@ const Index = () => {
 
         {/* Style presets */}
         <div className="mb-8">
-          <p className="font-extrabold lowercase text-sm text-muted-foreground mb-3">style preset</p>
+          <p className="font-extrabold lowercase text-sm text-muted-foreground mb-3">choose a style preset to shape the final look</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {stylePresets.map((style, i) => {
               const Icon = style.icon;
@@ -169,7 +172,8 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-heading mb-8 text-center">your character</h2>
+              <h2 className="text-heading mb-2 text-center">your character is ready</h2>
+              <p className="text-muted-foreground text-body-lg text-center mb-8">here are three angles generated from your description</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {images.map((src, i) => (
                   <motion.div

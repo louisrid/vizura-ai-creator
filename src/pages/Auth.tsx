@@ -41,15 +41,18 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container max-w-md py-22">
-        <h1 className="text-display-sm text-center mb-10">
-          {isLogin ? "log in" : "sign up"}
+        <h1 className="text-display-sm text-center mb-3">
+          {isLogin ? "welcome back" : "create your account"}
         </h1>
+        <p className="text-muted-foreground text-body-lg text-center mb-10">
+          {isLogin ? "log in to continue generating characters" : "sign up to get your first free credit and start creating"}
+        </p>
 
         {signupSuccess ? (
           <div className="border-2 border-foreground p-8 text-center">
-            <h2 className="text-heading mb-4">check your email</h2>
+            <h2 className="text-heading mb-4">almost there — check your inbox</h2>
             <p className="text-muted-foreground text-body-lg">
-              we sent a confirmation link to <strong>{email}</strong>. click it to activate your account.
+              we sent a confirmation link to <strong>{email}</strong>. click the link to verify your address and unlock your free credit.
             </p>
           </div>
         ) : (
