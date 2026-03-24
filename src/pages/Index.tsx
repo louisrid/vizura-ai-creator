@@ -111,14 +111,14 @@ const Index = () => {
               <button
                 key={style.label}
                 onClick={() => setActiveStyle(i)}
-                className={`flex items-center justify-center gap-2 border-[3px] px-3 py-3 font-extrabold lowercase text-sm transition-all ${
+                className={`flex flex-row items-center justify-center gap-2.5 border-[3px] px-4 py-4 font-extrabold lowercase text-base tracking-tight transition-all ${
                   isActive
                     ? "border-foreground bg-foreground text-background"
                     : "border-foreground text-foreground hover:bg-foreground/5"
                 }`}
               >
-                <Icon size={18} strokeWidth={2.5} />
-                {style.label}
+                <Icon size={24} strokeWidth={3} />
+                <span className="whitespace-nowrap">{style.label}</span>
               </button>
             );
           })}
