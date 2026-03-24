@@ -28,7 +28,14 @@ const Auth = () => {
     setError("");
     setLoading(true);
 
-    if (isLogin) {
+    if (isForgot) {
+      const { error } = await resetPassword(email);
+      if (error) {
+        setError(error.message);
+      } else {
+        setResetSent(true);
+      }
+    } else if (isLogin) {
       const { error } = await signIn(email, password);
       if (error) {
         setError(error.message);
@@ -45,6 +52,8 @@ const Auth = () => {
     }
     setLoading(false);
   };
+
+  const heading = isForgot ? "reset password" : isLogin ? "log in" : "create account";
 
   return (
     <div className="min-h-screen bg-background">
