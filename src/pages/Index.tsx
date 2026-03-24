@@ -84,35 +84,35 @@ const Index = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="container max-w-4xl py-8 md:py-14">
+      <main className="container max-w-4xl pt-16 md:pt-24 pb-8">
         {/* Top bar: credits + status */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-heading">configure & generate</h1>
-            <p className="text-muted-foreground text-body-lg mt-1">define attributes, select a style preset & render three orthographic angles</p>
+            <h1 className="text-heading">generate a character</h1>
+            <p className="text-muted-foreground text-sm font-semibold lowercase mt-0.5">describe a look, pick a style & hit generate</p>
           </div>
           {user && (
-            <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-sm">
+            <div className="border-2 border-foreground px-4 py-1.5 font-extrabold lowercase text-sm">
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
         </div>
 
         {/* Prompt input */}
-        <div className="mb-6">
+        <div className="mb-4">
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="specify facial features, outfit layers, pose dynamics & environment context…"
-            rows={5}
-            className="w-full border-2 border-foreground bg-background text-foreground p-6 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
+            placeholder="face shape, hair, outfit, pose, mood, background…"
+            rows={4}
+            className="w-full border-2 border-foreground bg-background text-foreground p-4 text-sm font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
           />
         </div>
 
         {/* Style presets */}
-        <div className="mb-8">
-          <p className="font-extrabold lowercase text-sm text-muted-foreground mb-3">apply a rendering style preset to modify output aesthetics</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="mb-5">
+          <p className="font-extrabold lowercase text-xs text-muted-foreground mb-2">style preset</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {stylePresets.map((style, i) => {
               const Icon = style.icon;
               const isActive = activeStyle === i;
@@ -120,13 +120,13 @@ const Index = () => {
                 <button
                   key={style.label}
                   onClick={() => setActiveStyle(isActive ? null : i)}
-                  className={`flex items-center gap-2 border-2 px-4 py-3 font-extrabold lowercase text-sm transition-all ${
+                  className={`flex items-center gap-2 border-2 px-3 py-2 font-extrabold lowercase text-xs transition-all ${
                     isActive
                       ? "border-accent-purple bg-accent-purple/10 text-foreground"
                       : "border-foreground/20 text-muted-foreground hover:border-foreground hover:text-foreground"
                   }`}
                 >
-                  <Icon size={16} />
+                  <Icon size={14} />
                   {style.label}
                 </button>
               );
@@ -135,15 +135,15 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="border-2 border-destructive p-4 mb-6 text-destructive font-semibold lowercase">
+          <div className="border-2 border-destructive p-3 mb-4 text-destructive font-semibold lowercase text-sm">
             {error}
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-14">
+        <div className="flex flex-col sm:flex-row gap-3 mb-10">
           <Button
-            size="xl"
+            size="lg"
             variant="hero"
             className="flex-1"
             onClick={handleGenerate}
@@ -158,7 +158,7 @@ const Index = () => {
               "generate"
             )}
           </Button>
-          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating}>
+          <Button size="lg" variant="outline" onClick={handleRandomize} disabled={isGenerating}>
             <Shuffle className="mr-2" />
             randomize
           </Button>
@@ -172,9 +172,9 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-heading mb-2 text-center">render complete</h2>
-              <p className="text-muted-foreground text-body-lg text-center mb-8">three orthographic projections generated from your prompt parameters</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <h2 className="text-heading mb-1 text-center">done</h2>
+              <p className="text-muted-foreground text-sm text-center mb-6">3 angles from your prompt</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {images.map((src, i) => (
                   <motion.div
                     key={i}

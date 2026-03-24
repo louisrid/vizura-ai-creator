@@ -40,23 +40,23 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-md py-22">
-        <h1 className="text-display-sm text-center mb-3">
-          {isLogin ? "authenticate" : "initialize account"}
+      <main className="container max-w-md pt-16 md:pt-24 pb-8">
+        <h1 className="text-display-sm text-center mb-2">
+          {isLogin ? "log in" : "sign up"}
         </h1>
-        <p className="text-muted-foreground text-body-lg text-center mb-10">
-          {isLogin ? "enter credentials to access the rendering pipeline" : "register to receive your initial credit allocation & start generating"}
+        <p className="text-muted-foreground text-sm text-center mb-8">
+          {isLogin ? "enter your email & password to continue" : "create an account & get your first free credit"}
         </p>
 
         {signupSuccess ? (
           <div className="border-2 border-foreground p-8 text-center">
-            <h2 className="text-heading mb-4">verification pending — check inbox</h2>
-            <p className="text-muted-foreground text-body-lg">
-              a confirmation token was dispatched to <strong>{email}</strong>. activate the link to verify your identity & unlock your initial credit.
+            <h2 className="text-heading mb-3">check your email</h2>
+            <p className="text-muted-foreground text-sm">
+              we sent a link to <strong>{email}</strong> — click it to verify & unlock your credit.
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <div className="border-2 border-destructive p-4 text-destructive font-semibold lowercase">
                 {error}
