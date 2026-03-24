@@ -111,7 +111,7 @@ const Index = () => {
 
         {/* Style presets */}
         <div className="mb-8">
-          <p className="font-extrabold lowercase text-sm text-muted-foreground mb-3">style preset</p>
+          <p className="font-extrabold lowercase text-sm text-muted-foreground mb-3">choose a style preset to shape the final look</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {stylePresets.map((style, i) => {
               const Icon = style.icon;
