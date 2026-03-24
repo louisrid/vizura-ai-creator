@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Shuffle, Sparkles, Zap, Palette, User } from "lucide-react";
+import { Loader2, Shuffle, Sparkles, Palette, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PaywallOverlay from "@/components/PaywallOverlay";
