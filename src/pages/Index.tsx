@@ -172,8 +172,8 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-heading mb-2 text-center">render complete</h2>
-              <p className="text-muted-foreground text-body-lg text-center mb-8">three orthographic projections generated from your prompt parameters</p>
+              <h2 className="text-heading mb-1 text-center">done</h2>
+              <p className="text-muted-foreground text-sm text-center mb-6">3 angles from your prompt</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {images.map((src, i) => (
                   <motion.div
