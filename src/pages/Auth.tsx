@@ -45,8 +45,8 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
-        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-6">
+      <main className="w-full max-w-md mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6">
+        <h1 className="text-[clamp(1.75rem,7vw,3.5rem)] font-extrabold lowercase tracking-tight leading-none text-center mb-6">
           {isLogin ? "log in" : "create account"}
         </h1>
 
