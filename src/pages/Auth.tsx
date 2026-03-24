@@ -64,7 +64,7 @@ const Auth = () => {
             )}
 
             <div>
-              <label className="block font-extrabold lowercase mb-2">email</label>
+              <label className="block font-extrabold lowercase text-sm mb-1">email</label>
               <input
                 type="email"
                 value={email}
