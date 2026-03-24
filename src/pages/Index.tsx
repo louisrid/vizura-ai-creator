@@ -135,21 +135,21 @@ const Index = () => {
           <Button
             size="xl"
             variant="hero"
-            className="flex-1 text-lg"
+            className="flex-1 text-xl [&_svg]:size-6"
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
           >
             {isGenerating ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2 className="animate-spin" strokeWidth={3} />
                 generating…
               </>
             ) : (
               "generate"
             )}
           </Button>
-          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating} className="text-lg">
-            <Shuffle className="mr-2" strokeWidth={2.5} />
+          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating} className="text-xl [&_svg]:size-6 border-[3px]">
+            <Shuffle className="mr-2" strokeWidth={3} />
             random
           </Button>
         </div>
