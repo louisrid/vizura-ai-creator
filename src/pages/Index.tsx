@@ -82,12 +82,12 @@ const Index = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="container max-w-4xl pt-14 md:pt-20 pb-8 px-5">
+      <main className="container max-w-4xl pt-10 md:pt-14 pb-8 px-5">
         {/* Top bar */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-extrabold lowercase tracking-tight">generate</h1>
+        <div className="flex items-center justify-between mb-5">
+          <h1 className="text-4xl md:text-5xl font-extrabold lowercase tracking-tight">generate</h1>
           {user && (
-            <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-base">
+            <div className="border-[3px] border-foreground px-5 py-2 font-extrabold lowercase text-base">
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
@@ -99,7 +99,7 @@ const Index = () => {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="describe your character…"
           rows={4}
-          className="w-full border-2 border-foreground bg-background text-foreground p-5 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
+          className="w-full border-[3px] border-foreground bg-background text-foreground p-5 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
         />
 
         {/* Style presets */}
@@ -110,14 +110,14 @@ const Index = () => {
             return (
               <button
                 key={style.label}
-                onClick={() => setActiveStyle(isActive ? null : i)}
-                className={`flex flex-col items-center gap-1.5 border-2 px-3 py-3 font-extrabold lowercase text-sm transition-all ${
+                onClick={() => setActiveStyle(i)}
+                className={`flex items-center justify-center gap-2 border-[3px] px-3 py-3 font-extrabold lowercase text-sm transition-all ${
                   isActive
                     ? "border-foreground bg-foreground text-background"
-                    : "border-foreground/30 text-foreground hover:border-foreground"
+                    : "border-foreground text-foreground hover:bg-foreground/5"
                 }`}
               >
-                <Icon size={20} strokeWidth={2.5} />
+                <Icon size={18} strokeWidth={2.5} />
                 {style.label}
               </button>
             );
