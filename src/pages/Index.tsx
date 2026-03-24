@@ -106,7 +106,12 @@ const Index = () => {
         />
 
         {/* Style presets */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        <motion.div
+          key={bounceKey}
+          animate={{ x: [0, -5, 5, -4, 3, -2, 1, 0] }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="grid grid-cols-3 gap-2 mb-4"
+        >
           {stylePresets.map((style, i) => {
             const Icon = style.icon;
             const isActive = activeStyle === i;
@@ -125,7 +130,7 @@ const Index = () => {
               </button>
             );
           })}
-        </div>
+        </motion.div>
 
         {error && (
           <div className="border-[3px] border-destructive p-3 mb-3 text-destructive font-extrabold lowercase text-sm">
