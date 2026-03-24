@@ -42,17 +42,17 @@ const Auth = () => {
       <Header />
       <main className="container max-w-md py-22">
         <h1 className="text-display-sm text-center mb-3">
-          {isLogin ? "welcome back" : "create your account"}
+          {isLogin ? "authenticate" : "initialize account"}
         </h1>
         <p className="text-muted-foreground text-body-lg text-center mb-10">
-          {isLogin ? "log in to continue generating characters" : "sign up to get your first free credit and start creating"}
+          {isLogin ? "enter credentials to access the rendering pipeline" : "register to receive your initial credit allocation & start generating"}
         </p>
 
         {signupSuccess ? (
           <div className="border-2 border-foreground p-8 text-center">
-            <h2 className="text-heading mb-4">almost there — check your inbox</h2>
+            <h2 className="text-heading mb-4">verification pending — check inbox</h2>
             <p className="text-muted-foreground text-body-lg">
-              we sent a confirmation link to <strong>{email}</strong>. click the link to verify your address and unlock your free credit.
+              a confirmation token was dispatched to <strong>{email}</strong>. activate the link to verify your identity & unlock your initial credit.
             </p>
           </div>
         ) : (
