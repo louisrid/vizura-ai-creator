@@ -70,7 +70,7 @@ const Auth = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="you@example.com"
               />
             </div>
