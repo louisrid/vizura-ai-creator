@@ -9,13 +9,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
-const randomPrompts = [
-  "cyberpunk warrior with neon tattoos, confident stance, leather jacket",
-  "ethereal elf princess, silver hair, glowing eyes, forest armor",
-  "street samurai, scarred face, katana, rain-soaked city backdrop",
-  "steampunk inventor, goggles, brass arm, wild curly hair",
-  "space bounty hunter, sleek helmet, dark bodysuit, holographic badge",
-];
 
 const stylePresets = [
   { label: "ig photo", icon: Camera, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
