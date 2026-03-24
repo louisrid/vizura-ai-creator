@@ -121,9 +121,15 @@ const Auth = () => {
               </div>
             )}
 
-            <Button size="xl" variant="hero" className="w-full text-[clamp(1rem,3vw,1.25rem)] disabled:opacity-100" disabled={loading}>
+            <motion.div
+              key={btnBounceKey}
+              animate={btnBounceKey > 0 ? { x: [0, -6, 5, -3, 1, 0] } : undefined}
+              transition={{ duration: 0.35, ease: [0.22, 0, 0.36, 1] }}
+            >
+            <Button size="xl" variant="hero" className="w-full text-[clamp(1rem,3vw,1.25rem)] disabled:opacity-100" disabled={loading} onClick={() => setBtnBounceKey((k) => k + 1)}>
               {loading ? "loading…" : isForgot ? "send reset link" : isLogin ? "log in" : "create"}
             </Button>
+            </motion.div>
 
             {isLogin && !isForgot && (
               <p className="text-center">
