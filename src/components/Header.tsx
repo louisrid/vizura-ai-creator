@@ -30,7 +30,7 @@ const Header = () => {
             </div>
           ) : (
             <Button variant="hero-outline" size="sm" onClick={() => navigate("/auth")}>
-              log in
+              create
             </Button>
           )}
         </nav>
