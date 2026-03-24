@@ -48,7 +48,7 @@ const Index = () => {
     setImages([]);
     setError("");
 
-    const styleSuffix = activeStyle !== null ? stylePresets[activeStyle].suffix : "";
+    const styleSuffix = stylePresets[activeStyle].suffix;
     const fullPrompt = prompt.trim() + styleSuffix;
 
     try {
