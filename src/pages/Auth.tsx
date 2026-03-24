@@ -46,6 +46,9 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
+        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-6">
+          {isLogin ? "log in" : "create account"}
+        </h1>
 
         {signupSuccess ? (
           <div className="border-[3px] border-foreground p-8 text-center">
