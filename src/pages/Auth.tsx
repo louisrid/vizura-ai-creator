@@ -50,9 +50,9 @@ const Auth = () => {
 
         {signupSuccess ? (
           <div className="border-2 border-foreground p-8 text-center">
-            <h2 className="text-heading mb-4">almost there — check your inbox</h2>
+            <h2 className="text-heading mb-4">verification pending — check inbox</h2>
             <p className="text-muted-foreground text-body-lg">
-              we sent a confirmation link to <strong>{email}</strong>. click the link to verify your address and unlock your free credit.
+              a confirmation token was dispatched to <strong>{email}</strong>. activate the link to verify your identity & unlock your initial credit.
             </p>
           </div>
         ) : (

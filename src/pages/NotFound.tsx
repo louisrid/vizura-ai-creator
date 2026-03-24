@@ -12,9 +12,9 @@ const NotFound = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <div className="text-center">
         <h1 className="mb-4 text-display-sm">404</h1>
-        <p className="mb-6 text-body-lg text-muted-foreground font-semibold lowercase">this page doesn't exist — it may have been moved or removed</p>
+        <p className="mb-6 text-body-lg text-muted-foreground font-semibold lowercase">route not resolved — the requested endpoint was not found or has been deprecated</p>
         <a href="/" className="text-foreground underline font-extrabold lowercase hover:text-foreground/80">
-          go back to the homepage
+          return to primary interface
         </a>
       </div>
     </div>

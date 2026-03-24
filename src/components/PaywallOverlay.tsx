@@ -52,7 +52,7 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
             </p>
             <div className="mb-8">
               <span className="text-display-sm">$7</span>
-              <p className="text-muted-foreground font-semibold mt-1">introductory price for your first month, then $20 per month after</p>
+              <p className="text-muted-foreground font-semibold mt-1">introductory rate for the first billing cycle, then $20 per month recurring</p>
             </div>
             <Button size="xl" variant="hero" className="w-full mb-4" onClick={handleSubscribe} disabled={loading}>
               {loading ? <><Loader2 className="animate-spin" /> loading…</> : "subscribe & continue"}
