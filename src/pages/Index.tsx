@@ -118,7 +118,7 @@ const Index = () => {
             return (
               <button
                 key={style.label}
-                onClick={() => setActiveStyle(i)}
+                onClick={() => handleStyleChange(i)}
                 className={`flex items-center justify-center gap-1.5 border-[3px] px-2 py-3 font-extrabold lowercase text-[clamp(0.65rem,2.5vw,1rem)] tracking-tight transition-all ${
                   isActive
                     ? "border-foreground bg-foreground text-background"
