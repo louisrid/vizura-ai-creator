@@ -46,29 +46,9 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
-        {/* Toggle tabs */}
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => { setIsLogin(true); setError(""); }}
-            className={`flex-1 py-4 font-extrabold lowercase text-lg tracking-tight border-[3px] transition-all duration-0 ${
-              isLogin
-                ? "bg-background text-foreground border-foreground"
-                : "bg-foreground text-background border-foreground"
-            }`}
-          >
-            log in
-          </button>
-          <button
-            onClick={() => { setIsLogin(false); setError(""); }}
-            className={`flex-1 py-4 font-extrabold lowercase text-lg tracking-tight border-[3px] transition-all duration-0 ${
-              !isLogin
-                ? "bg-background text-foreground border-foreground"
-                : "bg-foreground text-background border-foreground"
-            }`}
-          >
-            create
-          </button>
-        </div>
+        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-6">
+          {isLogin ? "log in" : "create account"}
+        </h1>
 
         {signupSuccess ? (
           <div className="border-[3px] border-foreground p-8 text-center">
@@ -113,6 +93,16 @@ const Auth = () => {
             <Button size="xl" variant="hero" className="w-full text-lg disabled:opacity-100" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create"}
             </Button>
+            <p className="text-center font-extrabold lowercase text-sm text-foreground/50 pt-2">
+              {isLogin ? "no account? " : "have an account? "}
+              <button
+                type="button"
+                onClick={() => { setIsLogin(!isLogin); setError(""); }}
+                className="text-foreground underline"
+              >
+                {isLogin ? "create one" : "log in"}
+              </button>
+            </p>
           </form>
         )}
       </main>
