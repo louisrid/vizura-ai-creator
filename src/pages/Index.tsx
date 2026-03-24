@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Shuffle, Sparkles, Zap, Palette, User } from "lucide-react";
+import { Loader2, Shuffle, Sparkles, Palette, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -18,10 +18,9 @@ const randomPrompts = [
 ];
 
 const stylePresets = [
-  { label: "anime", icon: Sparkles, suffix: ", anime art style, cel shaded" },
-  { label: "realistic", icon: User, suffix: ", photorealistic, hyperdetailed" },
-  { label: "comic", icon: Zap, suffix: ", comic book style, bold lines, halftone" },
-  { label: "painterly", icon: Palette, suffix: ", oil painting style, rich textures" },
+  { label: "instagram photo", icon: Sparkles, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
+  { label: "instagram selfie", icon: User, suffix: ", instagram selfie style, front-facing camera, natural skin texture, soft ring light, photorealistic" },
+  { label: "freestyle", icon: Palette, suffix: ", photorealistic, hyperdetailed, cinematic lighting" },
 ];
 
 const Index = () => {
@@ -112,7 +111,7 @@ const Index = () => {
         {/* Style presets */}
         <div className="mb-5">
           <p className="font-extrabold lowercase text-xs text-muted-foreground mb-2">style preset</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {stylePresets.map((style, i) => {
               const Icon = style.icon;
               const isActive = activeStyle === i;
