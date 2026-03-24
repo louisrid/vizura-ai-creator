@@ -62,7 +62,7 @@ const Auth = () => {
       <div className="flex justify-center pt-6 md:pt-10">
         <button
           onClick={() => navigate("/")}
-          className="w-10 h-10 rounded-full bg-foreground/15 flex items-center justify-center hover:bg-foreground/25 transition-colors"
+          className="w-10 h-10 rounded-full bg-foreground/30 flex items-center justify-center hover:bg-foreground/45 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-background" strokeWidth={3} />
         </button>
