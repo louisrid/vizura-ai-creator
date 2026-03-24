@@ -15,6 +15,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const [btnBounceKey, setBtnBounceKey] = useState(0);
   const { user, signIn, signUp, resetPassword } = useAuth();
   const navigate = useNavigate();
 
