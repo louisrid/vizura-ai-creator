@@ -174,7 +174,7 @@ const Index = () => {
             >
               <h2 className="text-heading mb-1 text-center">done</h2>
               <p className="text-muted-foreground text-sm text-center mb-6">3 angles from your prompt</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {images.map((src, i) => (
                   <motion.div
                     key={i}

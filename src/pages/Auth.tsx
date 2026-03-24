@@ -56,7 +56,7 @@ const Auth = () => {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <div className="border-2 border-destructive p-4 text-destructive font-semibold lowercase">
                 {error}
