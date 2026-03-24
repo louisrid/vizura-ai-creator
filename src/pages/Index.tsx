@@ -72,7 +72,12 @@ const Index = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="w-full max-w-4xl mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6">
+      <motion.main
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="w-full max-w-4xl mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6"
+      >
         {/* Top bar */}
         <div className="flex items-center justify-between mb-4 gap-3">
           <h1 className="text-[clamp(1.75rem,7vw,3.5rem)] font-extrabold lowercase tracking-tight leading-none">create a photo</h1>
