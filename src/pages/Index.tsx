@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Shuffle } from "lucide-react";
+import { Loader2, Shuffle, Sparkles, Zap, Palette, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -17,6 +17,13 @@ const randomPrompts = [
   "space bounty hunter, sleek helmet, dark bodysuit, holographic badge",
 ];
 
+const stylePresets = [
+  { label: "anime", icon: Sparkles, suffix: ", anime art style, cel shaded" },
+  { label: "realistic", icon: User, suffix: ", photorealistic, hyperdetailed" },
+  { label: "comic", icon: Zap, suffix: ", comic book style, bold lines, halftone" },
+  { label: "painterly", icon: Palette, suffix: ", oil painting style, rich textures" },
+];
+
 const Index = () => {
   const { user, loading: authLoading } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
@@ -26,6 +33,7 @@ const Index = () => {
   const [images, setImages] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
+  const [activeStyle, setActiveStyle] = useState<number | null>(null);
 
   const handleGenerate = async () => {
     if (!user) {
@@ -42,9 +50,12 @@ const Index = () => {
     setImages([]);
     setError("");
 
+    const styleSuffix = activeStyle !== null ? stylePresets[activeStyle].suffix : "";
+    const fullPrompt = prompt.trim() + styleSuffix;
+
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt: prompt.trim() },
+        body: { prompt: fullPrompt },
       });
 
       if (fnError) throw fnError;
@@ -73,25 +84,51 @@ const Index = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="container max-w-4xl py-10 md:py-18">
-        {/* Credits Badge */}
-        {user && (
-          <div className="flex justify-end mb-6">
+      <main className="container max-w-4xl py-8 md:py-14">
+        {/* Top bar: credits + status */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-heading">create</h1>
+          {user && (
             <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-sm">
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* Input */}
+        {/* Prompt input */}
         <div className="mb-6">
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="describe her look, mood, style…"
-            rows={4}
+            rows={5}
             className="w-full border-2 border-foreground bg-background text-foreground p-6 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
           />
+        </div>
+
+        {/* Style presets */}
+        <div className="mb-8">
+          <p className="font-extrabold lowercase text-sm text-muted-foreground mb-3">style preset</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {stylePresets.map((style, i) => {
+              const Icon = style.icon;
+              const isActive = activeStyle === i;
+              return (
+                <button
+                  key={style.label}
+                  onClick={() => setActiveStyle(isActive ? null : i)}
+                  className={`flex items-center gap-2 border-2 px-4 py-3 font-extrabold lowercase text-sm transition-all ${
+                    isActive
+                      ? "border-accent-purple bg-accent-purple/10 text-foreground"
+                      : "border-foreground/20 text-muted-foreground hover:border-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Icon size={16} />
+                  {style.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {error && (
