@@ -88,7 +88,7 @@ const Auth = () => {
               />
             </div>
 
-            <Button size="xl" variant="hero" className="w-full" disabled={loading}>
+            <Button size="xl" variant="hero" className="w-full text-lg" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create account"}
             </Button>
 
