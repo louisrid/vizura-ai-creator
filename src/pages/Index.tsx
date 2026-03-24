@@ -32,8 +32,7 @@ const Index = () => {
   const [images, setImages] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
-  const [activeStyle, setActiveStyle] = useState<number | null>(null);
-
+  const [activeStyle, setActiveStyle] = useState<number>(0);
   const handleGenerate = async () => {
     if (!user) {
       navigate("/auth");
