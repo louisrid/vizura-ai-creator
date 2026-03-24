@@ -140,11 +140,16 @@ const Index = () => {
         )}
 
         {/* Action */}
+        <motion.div
+          key={btnBounceKey}
+          animate={btnBounceKey > 0 ? { x: [0, -6, 5, -3, 1, 0] } : undefined}
+          transition={{ duration: 0.35, ease: [0.22, 0, 0.36, 1] }}
+        >
         <Button
           size="xl"
           variant="hero"
           className="w-full text-[clamp(1.1rem,4vw,1.5rem)] [&_svg]:w-[clamp(20px,4vw,28px)] [&_svg]:h-[clamp(20px,4vw,28px)] h-[clamp(3.5rem,10vw,5.5rem)] mb-8 disabled:opacity-100 disabled:bg-primary disabled:text-primary-foreground"
-          onClick={handleGenerate}
+          onClick={() => { setBtnBounceKey((k) => k + 1); handleGenerate(); }}
           disabled={isGenerating || !prompt.trim()}
         >
           {isGenerating ? (
