@@ -45,8 +45,8 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
-        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-6">
+      <main className="w-full max-w-md mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6">
+        <h1 className="text-[clamp(1.75rem,7vw,3.5rem)] font-extrabold lowercase tracking-tight leading-none text-center mb-6">
           {isLogin ? "log in" : "create account"}
         </h1>
 
@@ -66,34 +66,34 @@ const Auth = () => {
             )}
 
             <div>
-              <label className="block font-extrabold lowercase text-sm mb-1">email</label>
+              <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-[clamp(0.95rem,3vw,1.25rem)] font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label className="block font-extrabold lowercase text-sm mb-1">password</label>
+              <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-[clamp(0.95rem,3vw,1.25rem)] font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="••••••••"
               />
             </div>
 
-            <Button size="xl" variant="hero" className="w-full text-lg disabled:opacity-100" disabled={loading}>
+            <Button size="xl" variant="hero" className="w-full text-[clamp(1rem,3vw,1.25rem)] disabled:opacity-100" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create"}
             </Button>
-            <p className="text-center font-extrabold lowercase text-sm text-foreground/50 pt-2">
+            <p className="text-center font-extrabold lowercase text-[clamp(0.8rem,2.5vw,1rem)] text-foreground/50 pt-2">
               {isLogin ? "no account? " : "have an account? "}
               <button
                 type="button"
