@@ -40,19 +40,19 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container max-w-md pt-16 md:pt-24 pb-8">
-        <h1 className="text-display-sm text-center mb-2">
+      <main className="container max-w-md pt-14 md:pt-20 pb-8 px-5">
+        <h1 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-2">
           {isLogin ? "log in" : "sign up"}
         </h1>
-        <p className="text-muted-foreground text-sm text-center mb-8">
-          {isLogin ? "enter your email & password to continue" : "create an account & get your first free credit"}
+        <p className="text-foreground/50 text-sm font-extrabold lowercase text-center mb-6">
+          {isLogin ? "enter email & password" : "create account & get 1 free credit"}
         </p>
 
         {signupSuccess ? (
           <div className="border-2 border-foreground p-8 text-center">
-            <h2 className="text-heading mb-3">check your email</h2>
-            <p className="text-muted-foreground text-sm">
-              we sent a link to <strong>{email}</strong> — click it to verify & unlock your credit.
+            <h2 className="text-xl font-extrabold lowercase mb-3">check your email</h2>
+            <p className="text-foreground/60 text-sm font-bold lowercase">
+              we sent a link to <strong className="text-foreground">{email}</strong> — click to verify.
             </p>
           </div>
         ) : (
@@ -64,35 +64,35 @@ const Auth = () => {
             )}
 
             <div>
-              <label className="block font-extrabold lowercase mb-2">email</label>
+              <label className="block font-extrabold lowercase text-sm mb-1">email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label className="block font-extrabold lowercase mb-2">password</label>
+              <label className="block font-extrabold lowercase text-sm mb-1">password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-body-lg font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground"
+                className="w-full border-2 border-foreground bg-background text-foreground p-4 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
                 placeholder="••••••••"
               />
             </div>
 
-            <Button size="xl" variant="hero" className="w-full" disabled={loading}>
+            <Button size="xl" variant="hero" className="w-full text-lg" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create account"}
             </Button>
 
-            <p className="text-center text-muted-foreground font-semibold">
+            <p className="text-center text-foreground/50 font-extrabold text-sm">
               {isLogin ? "don't have an account? " : "already have an account? "}
               <button
                 type="button"
