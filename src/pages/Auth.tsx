@@ -47,7 +47,22 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="w-full max-w-md mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6">
+      {/* Back circle button */}
+      <div className="flex justify-center pt-6 md:pt-10">
+        <button
+          onClick={() => navigate("/")}
+          className="w-10 h-10 rounded-full bg-foreground/15 flex items-center justify-center hover:bg-foreground/25 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5 text-background" strokeWidth={3} />
+        </button>
+      </div>
+
+      <motion.main
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="w-full max-w-md mx-auto pt-6 md:pt-10 pb-8 px-4 sm:px-6"
+      >
         <h1 className="text-[clamp(1.75rem,7vw,3.5rem)] font-extrabold lowercase tracking-tight leading-none mb-6">
           {isLogin ? "log in" : "create account"}
         </h1>
