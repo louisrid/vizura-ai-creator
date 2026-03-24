@@ -89,7 +89,7 @@ const Index = () => {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="describe your character…"
           rows={4}
-          className="w-full border-[3px] border-foreground bg-background text-foreground p-4 sm:p-5 text-base sm:text-lg font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
+          className="w-full border-[3px] border-foreground bg-background text-foreground p-4 sm:p-5 text-lg sm:text-xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
         />
 
         {/* Style presets */}
