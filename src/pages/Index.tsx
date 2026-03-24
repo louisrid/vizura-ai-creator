@@ -124,7 +124,7 @@ const Index = () => {
         <Button
           size="xl"
           variant="hero"
-          className="w-full text-[clamp(1.1rem,4vw,1.5rem)] [&_svg]:w-[clamp(20px,4vw,28px)] [&_svg]:h-[clamp(20px,4vw,28px)] h-[clamp(3.5rem,10vw,5.5rem)] mb-8"
+          className="w-full text-[clamp(1.1rem,4vw,1.5rem)] [&_svg]:w-[clamp(20px,4vw,28px)] [&_svg]:h-[clamp(20px,4vw,28px)] h-[clamp(3.5rem,10vw,5.5rem)] mb-8 disabled:opacity-100 disabled:bg-primary disabled:text-primary-foreground"
           onClick={handleGenerate}
           disabled={isGenerating || !prompt.trim()}
         >
