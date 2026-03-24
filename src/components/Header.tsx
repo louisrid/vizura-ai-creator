@@ -17,16 +17,11 @@ const Header = () => {
         <Link to="/" className="text-nav-foreground text-2xl font-extrabold lowercase tracking-tight">
           vizura
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-3">
           {user ? (
-            <>
-              <Link to="/generate">
-                <Button variant="hero-outline" size="sm">generate</Button>
-              </Link>
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-nav-foreground hover:text-nav-foreground/80 hover:bg-nav-foreground/10">
-                log out
-              </Button>
-            </>
+            <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-nav-foreground hover:text-nav-foreground/80 hover:bg-nav-foreground/10">
+              log out
+            </Button>
           ) : (
             <Link to="/auth">
               <Button variant="hero-outline" size="sm">log in</Button>
