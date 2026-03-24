@@ -90,7 +90,7 @@ const Auth = () => {
               />
             </div>
 
-            <Button size="xl" variant="hero" className="w-full text-lg disabled:opacity-100" disabled={loading}>
+            <Button size="xl" variant="hero" className="w-full text-[clamp(1rem,3vw,1.25rem)] disabled:opacity-100" disabled={loading}>
               {loading ? "loading…" : isLogin ? "log in" : "create"}
             </Button>
             <p className="text-center font-extrabold lowercase text-sm text-foreground/50 pt-2">
