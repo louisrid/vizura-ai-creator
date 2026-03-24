@@ -123,35 +123,23 @@ const Index = () => {
           </div>
         )}
 
-        {/* Actions */}
-        <div className="flex gap-3 mb-10">
-          <Button
-            size="xl"
-            variant="hero"
-            className="flex-1 text-lg sm:text-xl [&_svg]:size-5 sm:[&_svg]:size-6 h-16 sm:h-20"
-            onClick={handleGenerate}
-            disabled={isGenerating || !prompt.trim()}
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="animate-spin" strokeWidth={3} />
-                generating…
-              </>
-            ) : (
-              "generate"
-            )}
-          </Button>
-          <Button
-            size="xl"
-            variant="outline"
-            onClick={handleRandomize}
-            disabled={isGenerating}
-            className="text-lg sm:text-xl [&_svg]:size-5 sm:[&_svg]:size-6 border-[3px] h-16 sm:h-20"
-          >
-            <Shuffle className="mr-1.5 sm:mr-2" strokeWidth={3} />
-            random
-          </Button>
-        </div>
+        {/* Action */}
+        <Button
+          size="xl"
+          variant="hero"
+          className="w-full text-lg sm:text-xl [&_svg]:size-5 sm:[&_svg]:size-6 h-16 sm:h-20 mb-10"
+          onClick={handleGenerate}
+          disabled={isGenerating || !prompt.trim()}
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="animate-spin" strokeWidth={3} />
+              generating…
+            </>
+          ) : (
+            "generate"
+          )}
+        </Button>
 
         {/* Results */}
         <AnimatePresence>
