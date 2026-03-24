@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Camera, SmartphoneNfc, Brush } from "lucide-react";
@@ -26,6 +26,14 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeStyle, setActiveStyle] = useState<number>(0);
+  const [bounceKey, setBounceKey] = useState(0);
+
+  const handleStyleChange = useCallback((i: number) => {
+    if (i !== activeStyle) {
+      setActiveStyle(i);
+      setBounceKey((k) => k + 1);
+    }
+  }, [activeStyle]);
   const handleGenerate = async () => {
     if (!user) {
       navigate("/auth");
@@ -73,9 +81,14 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <motion.main
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        key={bounceKey}
+        initial={bounceKey === 0 ? { opacity: 0, y: 10 } : { x: 12 }}
+        animate={bounceKey === 0 ? { opacity: 1, y: 0 } : { x: 0 }}
+        transition={
+          bounceKey === 0
+            ? { duration: 0.3, ease: "easeOut" }
+            : { type: "spring", stiffness: 200, damping: 12, mass: 1.2 }
+        }
         className="w-full max-w-4xl mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6"
       >
         {/* Top bar */}
@@ -105,7 +118,7 @@ const Index = () => {
             return (
               <button
                 key={style.label}
-                onClick={() => setActiveStyle(i)}
+                onClick={() => handleStyleChange(i)}
                 className={`flex items-center justify-center gap-1.5 border-[3px] px-2 py-3 font-extrabold lowercase text-[clamp(0.65rem,2.5vw,1rem)] tracking-tight transition-all ${
                   isActive
                     ? "border-foreground bg-foreground text-background"
