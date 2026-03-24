@@ -146,7 +146,7 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-6">results</h2>
+              <h2 className="text-3xl font-extrabold lowercase tracking-tight text-center mb-6">results</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {images.map((src, i) => (
                   <motion.div
