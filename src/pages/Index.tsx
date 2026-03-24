@@ -83,68 +83,60 @@ const Index = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="container max-w-4xl pt-16 md:pt-24 pb-8">
-        {/* Top bar: credits + status */}
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h1 className="text-heading">generate a character</h1>
-            <p className="text-muted-foreground text-sm font-semibold lowercase mt-0.5">describe a look, pick a style & hit generate</p>
-          </div>
+      <main className="container max-w-4xl pt-14 md:pt-20 pb-8 px-5">
+        {/* Top bar */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-extrabold lowercase tracking-tight">generate</h1>
           {user && (
-            <div className="border-2 border-foreground px-4 py-1.5 font-extrabold lowercase text-sm">
+            <div className="border-2 border-foreground px-5 py-2 font-extrabold lowercase text-base">
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
         </div>
 
         {/* Prompt input */}
-        <div className="mb-4">
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="face shape, hair, outfit, pose, mood, background…"
-            rows={4}
-            className="w-full border-2 border-foreground bg-background text-foreground p-4 text-sm font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground resize-none"
-          />
-        </div>
+        <textarea
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="describe your character…"
+          rows={4}
+          className="w-full border-2 border-foreground bg-background text-foreground p-5 text-base font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground resize-none mb-4"
+        />
 
         {/* Style presets */}
-        <div className="mb-5">
-          <p className="font-extrabold lowercase text-xs text-muted-foreground mb-2">style preset</p>
-          <div className="grid grid-cols-3 gap-2">
-            {stylePresets.map((style, i) => {
-              const Icon = style.icon;
-              const isActive = activeStyle === i;
-              return (
-                <button
-                  key={style.label}
-                  onClick={() => setActiveStyle(isActive ? null : i)}
-                  className={`flex items-center gap-2 border-2 px-3 py-2 font-extrabold lowercase text-xs transition-all ${
-                    isActive
-                      ? "border-accent-purple bg-accent-purple/10 text-foreground"
-                      : "border-foreground/20 text-muted-foreground hover:border-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Icon size={14} />
-                  {style.label}
-                </button>
-              );
-            })}
-          </div>
+        <div className="grid grid-cols-3 gap-2 mb-5">
+          {stylePresets.map((style, i) => {
+            const Icon = style.icon;
+            const isActive = activeStyle === i;
+            return (
+              <button
+                key={style.label}
+                onClick={() => setActiveStyle(isActive ? null : i)}
+                className={`flex flex-col items-center gap-1.5 border-2 px-3 py-3 font-extrabold lowercase text-sm transition-all ${
+                  isActive
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-foreground/30 text-foreground hover:border-foreground"
+                }`}
+              >
+                <Icon size={20} strokeWidth={2.5} />
+                {style.label}
+              </button>
+            );
+          })}
         </div>
 
         {error && (
-          <div className="border-2 border-destructive p-3 mb-4 text-destructive font-semibold lowercase text-sm">
+          <div className="border-2 border-destructive p-4 mb-4 text-destructive font-extrabold lowercase text-sm">
             {error}
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-10">
+        <div className="flex gap-3 mb-10">
           <Button
-            size="lg"
+            size="xl"
             variant="hero"
-            className="flex-1"
+            className="flex-1 text-lg"
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
           >
@@ -157,9 +149,9 @@ const Index = () => {
               "generate"
             )}
           </Button>
-          <Button size="lg" variant="outline" onClick={handleRandomize} disabled={isGenerating}>
-            <Shuffle className="mr-2" />
-            randomize
+          <Button size="xl" variant="outline" onClick={handleRandomize} disabled={isGenerating} className="text-lg">
+            <Shuffle className="mr-2" strokeWidth={2.5} />
+            random
           </Button>
         </div>
 
@@ -171,8 +163,7 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-heading mb-1 text-center">done</h2>
-              <p className="text-muted-foreground text-sm text-center mb-6">3 angles from your prompt</p>
+              <h2 className="text-2xl font-extrabold lowercase tracking-tight text-center mb-6">results</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {images.map((src, i) => (
                   <motion.div
@@ -187,7 +178,7 @@ const Index = () => {
                       alt={`character angle ${i + 1}`}
                       className="w-full aspect-[2/3] object-cover"
                     />
-                    <div className="p-4 text-center font-extrabold lowercase text-sm">
+                    <div className="p-3 text-center font-extrabold lowercase text-sm">
                       {["front", "left", "right"][i]}
                     </div>
                   </motion.div>

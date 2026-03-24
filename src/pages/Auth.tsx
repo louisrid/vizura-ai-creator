@@ -92,7 +92,7 @@ const Auth = () => {
               {loading ? "loading…" : isLogin ? "log in" : "create account"}
             </Button>
 
-            <p className="text-center text-muted-foreground font-semibold">
+            <p className="text-center text-foreground/50 font-extrabold text-sm">
               {isLogin ? "don't have an account? " : "already have an account? "}
               <button
                 type="button"
