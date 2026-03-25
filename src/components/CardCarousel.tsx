@@ -1,6 +1,6 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, useMotionValue, useTransform, animate, type PanInfo } from "framer-motion";
+import { animate, motion, useMotionValue, type PanInfo } from "framer-motion";
 
 interface CardCarouselProps {
   images: (string | null)[];
@@ -10,85 +10,205 @@ interface CardCarouselProps {
 }
 
 const CARD_COUNT = 3;
-const DRAG_THRESHOLD = 50;
+const VISIBLE_OFFSETS = [-2, -1, 0, 1, 2] as const;
+const SWIPE_DISTANCE = 180;
+const SWIPE_TRIGGER = 0.22;
+
+type SlideStyle = {
+  blur: number;
+  opacity: number;
+  rotateY: number;
+  scale: number;
+  x: number;
+  zIndex: number;
+};
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const interpolate = (value: number, input: number[], output: number[]) => {
+  if (value <= input[0]) return output[0];
+  if (value >= input[input.length - 1]) return output[output.length - 1];
+
+  for (let i = 0; i < input.length - 1; i += 1) {
+    const start = input[i];
+    const end = input[i + 1];
+
+    if (value >= start && value <= end) {
+      const progress = (value - start) / (end - start);
+      return output[i] + (output[i + 1] - output[i]) * progress;
+    }
+  }
+
+  return output[output.length - 1];
+};
+
+const getSlideStyle = (position: number): SlideStyle => {
+  const clampedPosition = clamp(position, -2, 2);
+  const anchors = [-2, -1, 0, 1, 2];
+
+  return {
+    x: interpolate(clampedPosition, anchors, [-280, -150, 0, 150, 280]),
+    scale: interpolate(clampedPosition, anchors, [0.54, 0.8, 1, 0.8, 0.54]),
+    rotateY: interpolate(clampedPosition, anchors, [58, 34, 0, -34, -58]),
+    opacity: interpolate(clampedPosition, anchors, [0, 0.48, 1, 0.48, 0]),
+    blur: interpolate(clampedPosition, anchors, [4, 1.5, 0, 1.5, 4]),
+    zIndex: Math.round(interpolate(Math.abs(clampedPosition), [0, 1, 2], [30, 20, 10])),
+  };
+};
 
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
   const total = images.length || CARD_COUNT;
-  const dragX = useMotionValue(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const progress = useMotionValue(0);
+  const [visualIndex, setVisualIndex] = useState(activeIndex);
+  const [progressValue, setProgressValue] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  // Normalize drag into -1…1 range for blending
-  const dragProgress = useTransform(dragX, [-200, 0, 200], [-1, 0, 1]);
+  useEffect(() => {
+    const unsubscribe = progress.on("change", (latest) => {
+      setProgressValue(latest);
+    });
+
+    return unsubscribe;
+  }, [progress]);
+
+  useEffect(() => {
+    if (!isAnimating && activeIndex !== visualIndex) {
+      setVisualIndex(activeIndex);
+      progress.jump(0);
+      setProgressValue(0);
+    }
+  }, [activeIndex, isAnimating, progress, visualIndex]);
+
+  const getIndex = useCallback(
+    (offset: number) => (visualIndex + offset + total) % total,
+    [total, visualIndex]
+  );
+
+  const settleTo = useCallback(
+    (step: 1 | -1) => {
+      setIsAnimating(true);
+
+      animate(progress, step === 1 ? -1 : 1, {
+        type: "spring",
+        stiffness: 220,
+        damping: 28,
+        mass: 0.8,
+        onComplete: () => {
+          progress.jump(0);
+          setProgressValue(0);
+          setVisualIndex((current) => (current + step + total) % total);
+          setIsAnimating(false);
+
+          if (step === 1) onNext();
+          else onPrevious();
+        },
+      });
+    },
+    [onNext, onPrevious, progress, total]
+  );
+
+  const resetPosition = useCallback(() => {
+    animate(progress, 0, {
+      type: "spring",
+      stiffness: 320,
+      damping: 30,
+      mass: 0.7,
+      onComplete: () => setProgressValue(0),
+    });
+  }, [progress]);
+
+  const handleDrag = useCallback(
+    (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      if (isAnimating) return;
+
+      const nextProgress = clamp(info.offset.x / SWIPE_DISTANCE, -1, 1);
+      progress.set(nextProgress);
+    },
+    [isAnimating, progress]
+  );
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      if (info.offset.x < -DRAG_THRESHOLD) {
-        onNext();
-      } else if (info.offset.x > DRAG_THRESHOLD) {
-        onPrevious();
+      if (isAnimating) return;
+
+      const endProgress = clamp(info.offset.x / SWIPE_DISTANCE, -1, 1);
+      const flick = Math.abs(info.velocity.x) > 600;
+      const crossedThreshold = Math.abs(endProgress) > SWIPE_TRIGGER;
+
+      if (crossedThreshold || flick) {
+        settleTo(endProgress < 0 ? 1 : -1);
+        return;
       }
-      animate(dragX, 0, { type: "spring", stiffness: 400, damping: 30 });
+
+      resetPosition();
     },
-    [onNext, onPrevious, dragX]
+    [isAnimating, resetPosition, settleTo]
   );
 
-  const getIdx = (offset: number) => (activeIndex + offset + total) % total;
+  const goPrevious = useCallback(() => {
+    if (!isAnimating) settleTo(-1);
+  }, [isAnimating, settleTo]);
+
+  const goNext = useCallback(() => {
+    if (!isAnimating) settleTo(1);
+  }, [isAnimating, settleTo]);
 
   return (
     <section className="flex flex-col items-center">
-      {/* 3D perspective container */}
-      <div
-        ref={containerRef}
-        className="relative w-full"
-        style={{ height: 320, perspective: 800 }}
+      <motion.div
+        className="relative w-full touch-pan-y cursor-grab active:cursor-grabbing"
+        style={{ height: 320, perspective: "1400px" }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.06}
+        dragMomentum={false}
+        onDrag={handleDrag}
+        onDragEnd={handleDragEnd}
       >
-        {/* Invisible drag layer */}
-        <motion.div
-          className="absolute inset-0 z-40 cursor-grab active:cursor-grabbing"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.4}
-          onDragEnd={handleDragEnd}
-          style={{ x: dragX }}
-        />
-
-        {/* Cards */}
-        {([-1, 0, 1] as const).map((offset) => {
-          const idx = getIdx(offset);
-          const isCenter = offset === 0;
+        {VISIBLE_OFFSETS.map((offset) => {
+          const index = getIndex(offset);
+          const slideStyle = getSlideStyle(offset + progressValue);
+          const isHighlighted = Math.abs(offset + progressValue) < 0.55;
 
           return (
-            <Card3D
-              key={`slot-${offset}`}
-              offset={offset}
-              dragProgress={dragProgress}
-              isCenter={isCenter}
+            <div
+              key={`${visualIndex}-${offset}-${index}`}
+              className="absolute top-1/2"
+              style={{
+                left: `calc(50% + ${slideStyle.x}px)`,
+                width: "56%",
+                opacity: slideStyle.opacity,
+                zIndex: slideStyle.zIndex,
+                transform: `translate(-50%, -50%) rotateY(${slideStyle.rotateY}deg) scale(${slideStyle.scale})`,
+                transformStyle: "preserve-3d",
+                filter: `blur(${slideStyle.blur}px)`,
+                willChange: "transform, opacity, filter",
+              }}
             >
-              <CardContent
-                index={idx + 1}
-                image={images[idx] ?? null}
-                isCenter={isCenter}
-              />
-            </Card3D>
+              <div className="aspect-[4/5]">
+                <CardContent image={images[index] ?? null} index={index + 1} isHighlighted={isHighlighted} />
+              </div>
+            </div>
           );
         })}
-      </div>
+      </motion.div>
 
-      {/* Arrow buttons */}
       <div className="mt-5 flex items-center gap-3">
         <button
           type="button"
-          onClick={onPrevious}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+          onClick={goPrevious}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80 disabled:opacity-50"
           aria-label="previous"
+          disabled={isAnimating}
         >
           <ChevronLeft size={16} strokeWidth={2.5} />
         </button>
         <button
           type="button"
-          onClick={onNext}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+          onClick={goNext}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80 disabled:opacity-50"
           aria-label="next"
+          disabled={isAnimating}
         >
           <ChevronRight size={16} strokeWidth={2.5} />
         </button>
@@ -97,70 +217,23 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
   );
 };
 
-/* ── 3D positioned card wrapper ── */
-
-interface Card3DProps {
-  offset: -1 | 0 | 1;
-  dragProgress: ReturnType<typeof useTransform>;
-  isCenter: boolean;
-  children: React.ReactNode;
-}
-
-const Card3D = ({ offset, isCenter, children }: Card3DProps) => {
-  // Position configs per slot
-  const configs: Record<number, { x: string; z: number; rotateY: number; scale: number; opacity: number }> = {
-    [-1]: { x: "-30%", z: -120, rotateY: 35, scale: 0.78, opacity: 0.55 },
-    [0]:  { x: "0%",   z: 0,    rotateY: 0,  scale: 1,    opacity: 1 },
-    [1]:  { x: "30%",  z: -120, rotateY: -35, scale: 0.78, opacity: 0.55 },
-  };
-
-  const cfg = configs[offset];
-
-  return (
-    <motion.div
-      className="absolute left-1/2 top-1/2"
-      style={{
-        width: "55%",
-        transformStyle: "preserve-3d",
-        zIndex: isCenter ? 30 : 10,
-      }}
-      animate={{
-        x: cfg.x,
-        translateX: "-50%",
-        translateY: "-50%",
-        translateZ: cfg.z,
-        rotateY: cfg.rotateY,
-        scale: cfg.scale,
-        opacity: cfg.opacity,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 28,
-      }}
-    >
-      <div className="aspect-[4/5]">{children}</div>
-    </motion.div>
-  );
-};
-
-/* ── Card content ── */
-
-const CardContent = ({ index, image, isCenter }: { index: number; image: string | null; isCenter?: boolean }) => (
+const CardContent = ({ image, index, isHighlighted }: { image: string | null; index: number; isHighlighted: boolean }) => (
   <div
-    className={`h-full w-full overflow-hidden rounded-2xl ${
-      isCenter ? "border-gradient-purple relative shadow-glow" : "border-2 border-border/40"
+    className={`relative h-full w-full overflow-hidden rounded-2xl ${
+      isHighlighted ? "border-gradient-purple shadow-glow" : "border-2 border-border/40"
     }`}
   >
     {image ? (
-      <img src={image} alt="generated character" className="h-full w-full object-cover" />
+      <img src={image} alt={`generated character ${index}`} className="h-full w-full object-cover" draggable={false} />
     ) : (
       <div className="flex h-full w-full items-center justify-center bg-card">
-        <span className={`font-extrabold text-muted-foreground ${isCenter ? "text-4xl" : "text-2xl"}`}>
-          {index}
-        </span>
+        <span className={`font-extrabold text-foreground ${isHighlighted ? "text-5xl" : "text-3xl"}`}>{index}</span>
       </div>
     )}
+
+    <div className="absolute left-3 top-3 flex h-8 min-w-8 items-center justify-center border-2 border-foreground bg-background px-2 text-sm font-extrabold text-foreground">
+      {index}
+    </div>
   </div>
 );
 
