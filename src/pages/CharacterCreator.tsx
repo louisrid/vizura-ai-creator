@@ -3,9 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
-import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
-import PageTitle from "@/components/PageTitle";
 import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
@@ -80,63 +78,61 @@ const CharacterCreator = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <PageTransition>
-        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-16 pb-12">
-          <h1 className="text-4xl font-extrabold lowercase tracking-tight text-foreground text-center mb-10">create character</h1>
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-16 pb-12">
+        <h1 className="text-4xl font-extrabold lowercase tracking-tight text-foreground text-center mb-10">create character</h1>
 
-          <CardCarousel
-            images={imageCards}
-            activeIndex={activeIndex}
-            onPrevious={cyclePrevious}
-            onNext={cycleNext}
+        <CardCarousel
+          images={imageCards}
+          activeIndex={activeIndex}
+          onPrevious={cyclePrevious}
+          onNext={cycleNext}
+        />
+
+        {/* Description textarea */}
+        <section className="mt-10 flex flex-col gap-2">
+          <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
+            describe your character
+          </label>
+          <textarea
+            id="character-description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
+            rows={4}
+            className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
+        </section>
 
-          {/* Description textarea */}
-          <section className="mt-10 flex flex-col gap-2">
-            <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
-              describe your character
-            </label>
-            <textarea
-              id="character-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
-              rows={4}
-              className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-            />
-          </section>
+        {/* Dropdowns */}
+        <section className="mt-8 flex flex-col gap-4">
+          <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
+          <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
+          <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
+        </section>
 
-          {/* Dropdowns */}
-          <section className="mt-8 flex flex-col gap-4">
-            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
-            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
-            <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
-          </section>
-
-          {error && (
-            <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
-              {error}
-            </div>
-          )}
-
-          {/* Create button */}
-          <div className="mt-8">
-            <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
-              {isGenerating ? (
-                <>
-                  <Loader2 className="animate-spin" size={18} />
-                  creating…
-                </>
-              ) : (
-                <>
-                  <Zap size={18} strokeWidth={2.5} />
-                  create
-                </>
-              )}
-            </Button>
+        {error && (
+          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+            {error}
           </div>
-        </main>
-      </PageTransition>
+        )}
+
+        {/* Create button */}
+        <div className="mt-8">
+          <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
+            {isGenerating ? (
+              <>
+                <Loader2 className="animate-spin" size={18} />
+                creating…
+              </>
+            ) : (
+              <>
+                <Zap size={18} strokeWidth={2.5} />
+                create
+              </>
+            )}
+          </Button>
+        </div>
+      </main>
     </div>
   );
 };
