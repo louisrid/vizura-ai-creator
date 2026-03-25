@@ -11,7 +11,8 @@ const menuItems = [
   { label: "create photo", icon: Camera, path: "/create" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
-  { label: "account", icon: UserRound, path: "/account" },
+  { label: "top-ups", icon: Zap, path: "/top-ups" },
+  { label: "my account", icon: UserRound, path: "/account" },
   { label: "help", icon: HelpCircle, path: "/help" },
 ];
 
@@ -20,9 +21,9 @@ const pageNames: Record<string, string> = {
   "/create": "create photo",
   "/characters": "my characters",
   "/storage": "storage",
-  "/account": "account",
+  "/top-ups": "top-ups",
+  "/account": "my account",
   "/help": "help",
-  "/settings": "settings",
   "/auth": "sign in",
   "/reset-password": "reset password",
 };
@@ -66,7 +67,7 @@ const Header = () => {
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
-          {user && <CreditsBadge />}
+          <CreditsBadge />
         </div>
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
@@ -118,10 +119,8 @@ const Header = () => {
                     </button>
                   ))}
 
-                  {/* Divider */}
                   <div className="mx-4 my-1.5 border-t border-nav-foreground/15" />
 
-                  {/* Sign in / Log out */}
                   <button
                     onClick={handleAuthAction}
                     className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${

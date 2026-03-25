@@ -14,12 +14,11 @@ export const CreditsProvider = ({ children }: { children: ReactNode }) => {
   const [credits, setCredits] = useState(0);
 
   useEffect(() => {
-    // Mock: give signed-in users 5 credits
-    setCredits(user ? 5 : 0);
+    setCredits(user ? 100 : 0);
   }, [user]);
 
   const refetch = async () => {
-    setCredits(user ? 5 : 0);
+    setCredits(user ? 100 : 0);
   };
 
   return (
