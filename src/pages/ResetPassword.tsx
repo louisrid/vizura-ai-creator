@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
+import PageTitle from "@/components/PageTitle";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -48,6 +49,7 @@ const ResetPassword = () => {
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
+          <PageTitle>reset password</PageTitle>
 
           {success ? (
             <div className="border-2 border-border rounded-xl p-6 text-center">

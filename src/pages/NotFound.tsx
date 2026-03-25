@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
+import PageTitle from "@/components/PageTitle";
 
 const NotFound = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const NotFound = () => {
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
+          <PageTitle>not found</PageTitle>
           <div className="border-2 border-border rounded-xl p-6 text-center">
             <p className="text-xs font-extrabold lowercase mb-3">page not found</p>
             <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">

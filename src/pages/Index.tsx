@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,6 +94,7 @@ const Index = () => {
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
+          <PageTitle>create photo</PageTitle>
 
           <div className="relative mb-10 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
             {primaryImage ? (
