@@ -94,7 +94,7 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-28 pb-12">
+        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-44 pb-12">
           {/* Large image cards */}
           <section className="flex items-center gap-3">
             <button
@@ -110,7 +110,7 @@ const CharacterCreator = () => {
               {imageCards.map((image, index) => (
                 <div
                   key={`${image ?? "placeholder"}-${index}`}
-                  className="aspect-[2/3] overflow-hidden rounded-xl border-2 border-border bg-card"
+                  className="aspect-[3/5] overflow-hidden rounded-xl border-2 border-border bg-card"
                 >
                   {image ? (
                     <img src={image} alt="generated character" className="h-full w-full object-cover" />

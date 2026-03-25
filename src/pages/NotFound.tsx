@@ -15,7 +15,7 @@ const NotFound = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-28 pb-12">
+        <main className="w-full max-w-lg mx-auto px-4 pt-44 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
