@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +16,7 @@ import Account from "./pages/Account";
 import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
+import PageTransition from "./components/PageTransition";
 
 const ScrollToTop = () => {
   const location = useLocation();
@@ -24,6 +26,25 @@ const ScrollToTop = () => {
     document.body.scrollTop = 0;
   }, [location.pathname, location.key]);
   return null;
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><CharacterCreator /></PageTransition>} />
+        <Route path="/create" element={<PageTransition><Index /></PageTransition>} />
+        <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/characters" element={<PageTransition><MyCharacters /></PageTransition>} />
+        <Route path="/storage" element={<PageTransition><Storage /></PageTransition>} />
+        <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
+        <Route path="/help" element={<PageTransition><Help /></PageTransition>} />
+        <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
 };
 
 const queryClient = new QueryClient();
