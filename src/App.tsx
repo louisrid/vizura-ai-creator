@@ -37,17 +37,7 @@ const App = () => (
         <CreditsProvider>
           <BrowserRouter>
             <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<CharacterCreator />} />
-              <Route path="/create" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/characters" element={<MyCharacters />} />
-              <Route path="/storage" element={<Storage />} />
-              <Route path="/account" element={<Account />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AnimatedRoutes />
           </BrowserRouter>
         </CreditsProvider>
       </AuthProvider>
