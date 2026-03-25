@@ -6,7 +6,7 @@ const BackButton = () => {
 
   return (
     <button
-      onClick={() => navigate(-1)}
+      onClick={() => navigate("/")}
       className="w-8 h-8 rounded-xl bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
       aria-label="go back"
     >
