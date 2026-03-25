@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
