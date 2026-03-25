@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 
 const Auth = () => {
@@ -22,7 +21,6 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <main className="w-full max-w-lg mx-auto px-4 pt-16 pb-12">
         <div className="flex items-center gap-3 mb-10">
           <BackButton />

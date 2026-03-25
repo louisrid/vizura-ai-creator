@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogOut, Mail, Zap, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
@@ -24,7 +23,6 @@ const Account = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
         <div className="flex items-center gap-3 mb-10">
           <BackButton />
@@ -32,7 +30,6 @@ const Account = () => {
         <PageTitle>my account</PageTitle>
 
         <div className="space-y-4">
-          {/* Email */}
           <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1 min-w-0">
@@ -43,7 +40,6 @@ const Account = () => {
             </div>
           </div>
 
-          {/* Member since */}
           <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
@@ -54,7 +50,6 @@ const Account = () => {
             </div>
           </div>
 
-          {/* Credits */}
           <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Zap size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
@@ -65,7 +60,6 @@ const Account = () => {
             </div>
           </div>
 
-          {/* Sign out */}
           <Button
             variant="outline"
             className="w-full h-14 text-sm mt-6"

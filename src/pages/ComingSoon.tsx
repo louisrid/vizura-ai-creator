@@ -1,11 +1,9 @@
 import { Sparkles } from "lucide-react";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 
 const ComingSoon = ({ title }: { title: string }) => (
   <div className="min-h-screen bg-background">
-    <Header />
     <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
       <div className="flex items-center gap-3 mb-10">
         <BackButton />
