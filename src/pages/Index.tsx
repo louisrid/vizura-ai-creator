@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
@@ -82,7 +81,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       

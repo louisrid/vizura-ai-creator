@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
+import Header from "@/components/Header";
 import CharacterCreator from "./pages/CharacterCreator";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -31,21 +32,27 @@ const ScrollToTop = () => {
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+
   return (
-    <AnimatePresence mode="sync" initial={false}>
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><CharacterCreator /></PageTransition>} />
-        <Route path="/create" element={<PageTransition><Index /></PageTransition>} />
-        <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
-        <Route path="/characters" element={<PageTransition><MyCharacters /></PageTransition>} />
-        <Route path="/storage" element={<PageTransition><Storage /></PageTransition>} />
-        <Route path="/top-ups" element={<PageTransition><TopUps /></PageTransition>} />
-        <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
-        <Route path="/help" element={<PageTransition><Help /></PageTransition>} />
-        <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
-        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
-      </Routes>
-    </AnimatePresence>
+    <>
+      <Header />
+      <AnimatePresence mode="wait" initial={false}>
+        <PageTransition key={location.pathname}>
+          <Routes location={location}>
+            <Route path="/" element={<CharacterCreator />} />
+            <Route path="/create" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/storage" element={<Storage />} />
+            <Route path="/top-ups" element={<TopUps />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </PageTransition>
+      </AnimatePresence>
+    </>
   );
 };
 

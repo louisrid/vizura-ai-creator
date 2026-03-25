@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Wand2, Pencil, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
@@ -78,7 +77,6 @@ const MyCharacters = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       

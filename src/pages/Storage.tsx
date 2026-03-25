@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Trash2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
@@ -96,8 +95,6 @@ const Storage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-
       
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">

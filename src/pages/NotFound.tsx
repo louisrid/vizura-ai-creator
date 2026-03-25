@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 
@@ -13,21 +12,18 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      
-        <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-          <div className="flex items-center gap-3 mb-10">
-            <BackButton />
-          </div>
-          <PageTitle>not found</PageTitle>
-          <div className="border-[5px] border-border rounded-2xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-3">page not found</p>
-            <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">
-              back to home
-            </a>
-          </div>
-        </main>
-      
+      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
+        <div className="flex items-center gap-3 mb-10">
+          <BackButton />
+        </div>
+        <PageTitle>not found</PageTitle>
+        <div className="border-[5px] border-border rounded-2xl p-6 text-center">
+          <p className="text-xs font-extrabold lowercase mb-3">page not found</p>
+          <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">
+            back to home
+          </a>
+        </div>
+      </main>
     </div>
   );
 };
