@@ -115,4 +115,14 @@ const Header = () => {
   );
 };
 
+const CreditsBadge = () => {
+  const { credits } = useCredits();
+  return (
+    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-nav-foreground/20 px-3 py-1.5">
+      <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
+      <span className="text-[11px] font-extrabold text-nav-foreground">{credits}</span>
+    </div>
+  );
+};
+
 export default Header;
