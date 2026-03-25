@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -55,38 +54,31 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="w-full max-w-sm mx-auto px-4 pt-6 pb-10">
-        <h1 className="text-xl font-extrabold lowercase tracking-tight text-center mb-1">
-          {heading}
-        </h1>
-        <p className="text-center text-muted-foreground text-xs font-bold lowercase mb-5">
-          {subheading}
-        </p>
+      <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+        <p className="text-sm font-extrabold lowercase text-center mb-1">{heading}</p>
+        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">{subheading}</p>
 
         {signupSuccess || resetSent ? (
           <div className="border-2 border-border rounded-xl p-6 text-center">
-            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center mx-auto mb-3">
-              <Mail size={18} className="text-muted-foreground" />
-            </div>
-            <h2 className="text-sm font-extrabold lowercase mb-1">check your email</h2>
-            <p className="text-muted-foreground text-xs font-bold lowercase">
+            <p className="text-xs font-extrabold lowercase mb-1">check your email</p>
+            <p className="text-[10px] font-bold lowercase text-muted-foreground">
               we sent a link to <strong className="text-foreground">{email}</strong> — {resetSent ? "click to reset your password." : "click to verify."}
             </p>
             {resetSent && (
               <button
                 type="button"
                 onClick={() => { setIsForgot(false); setResetSent(false); setError(""); }}
-                className="mt-3 font-extrabold lowercase text-foreground underline text-xs"
+                className="mt-3 font-extrabold lowercase text-foreground underline text-[10px]"
               >
                 back to log in
               </button>
             )}
           </div>
         ) : (
-          <div className="border-2 border-border rounded-xl p-5">
+          <div className="border-2 border-border rounded-xl p-4">
             <form onSubmit={handleSubmit} className="space-y-3">
               {error && (
-                <div className="border border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-bold lowercase rounded-xl text-xs">
+                <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase rounded-xl text-[10px]">
                   {error}
                 </div>
               )}
@@ -100,7 +92,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-bold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                    className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -117,7 +109,7 @@ const Auth = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-bold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                      className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
                       placeholder="••••••••"
                     />
                   </div>
@@ -136,12 +128,7 @@ const Auth = () => {
                 </div>
               )}
 
-              <Button
-                size="default"
-                variant="hero"
-                className="w-full h-12 text-sm rounded-xl"
-                disabled={loading}
-              >
+              <Button className="w-full h-12" disabled={loading}>
                 {loading ? "loading…" : isForgot ? "send reset link" : isLogin ? (
                   <>log in <ArrowRight size={14} /></>
                 ) : (
@@ -151,27 +138,13 @@ const Auth = () => {
 
               <p className="text-center font-bold lowercase text-[10px] text-muted-foreground pt-1">
                 {isForgot ? (
-                  <button
-                    type="button"
-                    onClick={() => { setIsForgot(false); setError(""); }}
-                    className="text-foreground underline"
-                  >
+                  <button type="button" onClick={() => { setIsForgot(false); setError(""); }} className="text-foreground underline">
                     back to log in
                   </button>
                 ) : isLogin ? (
-                  <>
-                    no account?{" "}
-                    <button type="button" onClick={() => { setIsLogin(false); setError(""); }} className="text-foreground underline">
-                      create one
-                    </button>
-                  </>
+                  <>no account?{" "}<button type="button" onClick={() => { setIsLogin(false); setError(""); }} className="text-foreground underline">create one</button></>
                 ) : (
-                  <>
-                    have an account?{" "}
-                    <button type="button" onClick={() => { setIsLogin(true); setError(""); }} className="text-foreground underline">
-                      log in
-                    </button>
-                  </>
+                  <>have an account?{" "}<button type="button" onClick={() => { setIsLogin(true); setError(""); }} className="text-foreground underline">log in</button></>
                 )}
               </p>
             </form>

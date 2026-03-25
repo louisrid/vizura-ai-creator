@@ -18,7 +18,6 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId: "price_vizura_monthly" },
       });
-
       if (error) throw error;
       if (data?.url) {
         window.location.href = data.url;
@@ -37,22 +36,22 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 8 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 8 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="bg-card border border-border rounded-2xl shadow-medium p-8 max-w-sm w-full text-center"
+            className="bg-card border-2 border-border rounded-xl shadow-medium p-6 max-w-sm w-full text-center"
           >
-            <p className="text-sm font-bold lowercase text-muted-foreground mb-4">
+            <p className="text-xs font-bold lowercase text-muted-foreground mb-4">
               start creating for $7/mo
             </p>
-            <Button size="lg" variant="hero" className="w-full mb-3" onClick={handleSubscribe} disabled={loading}>
-              {loading ? <><Loader2 className="animate-spin" /> loading…</> : "subscribe & generate"}
+            <Button className="w-full mb-3" onClick={handleSubscribe} disabled={loading}>
+              {loading ? <><Loader2 className="animate-spin" size={14} /> loading…</> : "subscribe & generate"}
             </Button>
-            <button onClick={onClose} className="w-full text-center text-muted-foreground font-semibold lowercase text-xs hover:underline py-1">
+            <button onClick={onClose} className="w-full text-center text-muted-foreground font-bold lowercase text-[10px] hover:underline py-1">
               maybe later
             </button>
           </motion.div>
