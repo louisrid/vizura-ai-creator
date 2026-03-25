@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Loader2, Zap, ChevronLeft, ChevronRight, Sparkles, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PageTransition from "@/components/PageTransition";
@@ -9,25 +9,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
-import charFront from "@/assets/character-front.png";
-import charLeft from "@/assets/character-left.png";
-import charRight from "@/assets/character-right.png";
-
-const placeholders = [charFront, charLeft, charRight];
-
-const hairColours = [
-  { l: "black", v: "#1a1a1a" }, { l: "brown", v: "#8B4513" }, { l: "blonde", v: "#F4D03F" },
-  { l: "red", v: "#C0392B" }, { l: "pink", v: "#E91E9C" }, { l: "white", v: "#E8E8E8" },
-];
-const eyeColours = [
-  { l: "brown", v: "#6B3A2A" }, { l: "blue", v: "#2E86DE" }, { l: "green", v: "#27AE60" },
-  { l: "hazel", v: "#B7950B" }, { l: "grey", v: "#95A5A6" },
-];
-const skinTones = [
-  { l: "light", v: "#FDEBD0" }, { l: "medium", v: "#D4A574" }, { l: "tan", v: "#B07C4B" },
-  { l: "brown", v: "#8D5524" }, { l: "dark", v: "#5C3A1E" },
-];
-const bodyTypes = ["slim", "regular", "curvy"];
+const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"];
+const eyeOptions = ["brown", "blue", "green", "hazel", "grey"];
+const bodyOptions = ["slim", "regular", "curvy"];
 
 const CharacterCreator = () => {
   const { user } = useAuth();
@@ -36,9 +20,8 @@ const CharacterCreator = () => {
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
 
-  const [hair, setHair] = useState(1);
+  const [hair, setHair] = useState(0);
   const [eye, setEye] = useState(0);
-  const [skin, setSkin] = useState(1);
   const [body, setBody] = useState(1);
   const [extra, setExtra] = useState(editPrompt || "");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -48,10 +31,9 @@ const CharacterCreator = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const hasGen = generated.length > 0;
-  const imgs = hasGen ? generated : placeholders;
 
   const buildPrompt = () => {
-    let p = `photorealistic portrait, young woman, ${bodyTypes[body]} build, ${skinTones[skin].l} skin, ${hairColours[hair].l} hair, ${eyeColours[eye].l} eyes`;
+    let p = `photorealistic portrait, young woman, ${bodyOptions[body]} build, ${hairOptions[hair]} hair, ${eyeOptions[eye]} eyes`;
     if (extra.trim()) p += `, ${extra.trim()}`;
     p += ", professional photography, natural lighting, shallow depth of field, hyperdetailed, instagram aesthetic";
     return p;
@@ -75,16 +57,8 @@ const CharacterCreator = () => {
     } finally { setIsGenerating(false); }
   };
 
-  const prev = () => setActiveIndex((i) => (i === 0 ? imgs.length - 1 : i - 1));
-  const next = () => setActiveIndex((i) => (i === imgs.length - 1 ? 0 : i + 1));
-
-  const getImageStyle = (i: number) => {
-    const diff = i - activeIndex;
-    const normalized = ((diff % 3) + 3) % 3;
-    if (normalized === 0) return "z-20 scale-100 opacity-100 translate-x-0";
-    if (normalized === 1) return "z-10 scale-[0.82] opacity-60 translate-x-[55%]";
-    return "z-10 scale-[0.82] opacity-60 -translate-x-[55%]";
-  };
+  const prev = () => setActiveIndex((i) => (i === 0 ? 2 : i - 1));
+  const next = () => setActiveIndex((i) => (i === 2 ? 0 : i + 1));
 
   return (
     <div className="min-h-screen bg-background">
@@ -92,75 +66,55 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+        <main className="w-full max-w-lg mx-auto px-4 pt-3 pb-8">
 
-          {/* Image viewer */}
-          <div className="relative w-full aspect-[4/5] mb-6">
-            <div className="absolute inset-0 flex items-center justify-center">
-              {imgs.map((src, i) => (
+          {/* Image row */}
+          <div className="flex items-center gap-1.5 mb-3">
+            <button
+              onClick={prev}
+              className="shrink-0 w-8 h-8 rounded-xl bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
+            >
+              <ChevronLeft size={14} strokeWidth={2.5} />
+            </button>
+
+            <div className="flex-1 grid grid-cols-3 gap-1.5">
+              {[0, 1, 2].map((i) => (
                 <div
                   key={i}
-                  className={`absolute w-[60%] aspect-[3/4] rounded-xl overflow-hidden transition-all duration-300 ease-out ${getImageStyle(i)} ${!hasGen ? "opacity-50" : ""}`}
+                  className={`rounded-xl border-2 overflow-hidden bg-card aspect-[3/4] ${
+                    i === activeIndex ? "border-foreground" : "border-border"
+                  }`}
                 >
-                  <img
-                    src={src}
-                    alt=""
-                    className={`w-full h-full object-cover ${isGenerating && !hasGen ? "animate-pulse" : ""}`}
-                    width={512}
-                    height={680}
-                  />
+                  {hasGen ? (
+                    <img src={generated[i]} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-muted">
+                      <User size={24} className="text-muted-foreground/30" />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
 
             <button
-              onClick={prev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-xl bg-foreground/80 flex items-center justify-center text-background hover:bg-foreground transition-colors"
-            >
-              <ChevronLeft size={18} strokeWidth={2.5} />
-            </button>
-            <button
               onClick={next}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-xl bg-foreground/80 flex items-center justify-center text-background hover:bg-foreground transition-colors"
+              className="shrink-0 w-8 h-8 rounded-xl bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
             >
-              <ChevronRight size={18} strokeWidth={2.5} />
+              <ChevronRight size={14} strokeWidth={2.5} />
             </button>
           </div>
 
           {/* Credits */}
           {user && (
-            <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-6">
+            <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-3">
               <Sparkles size={12} className="text-accent-purple" />
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
 
-          {/* Controls */}
-          <div className="space-y-6">
-            <Palette label="hair colour" items={hairColours} active={hair} onSelect={setHair} />
-            <Palette label="eye colour" items={eyeColours} active={eye} onSelect={setEye} />
-            <Palette label="skin tone" items={skinTones} active={skin} onSelect={setSkin} />
-            <ToggleRow label="body type" options={bodyTypes} active={body} onSelect={setBody} />
-
-            <div>
-              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">extra detail</span>
-              <input
-                value={extra}
-                onChange={(e) => setExtra(e.target.value)}
-                placeholder="tattoos, freckles, glasses…"
-                className="w-full border-2 border-border bg-background text-foreground px-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
-              />
-            </div>
-          </div>
-
-          {error && (
-            <div className="border-2 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase text-xs rounded-xl mt-6">
-              {error}
-            </div>
-          )}
-
+          {/* Create button */}
           <Button
-            className="w-full h-14 mt-6 text-xs"
+            className="w-full h-12 text-xs mb-3"
             onClick={generate}
             disabled={isGenerating}
           >
@@ -170,48 +124,73 @@ const CharacterCreator = () => {
               <><Zap size={16} strokeWidth={2.5} />create</>
             )}
           </Button>
+
+          {error && (
+            <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase text-xs rounded-xl mb-3">
+              {error}
+            </div>
+          )}
+
+          {/* Description textarea */}
+          <div className="mb-3">
+            <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-1.5">describe your character</span>
+            <textarea
+              value={extra}
+              onChange={(e) => setExtra(e.target.value)}
+              placeholder="tattoos, freckles, glasses, outfit details, pose, setting…"
+              rows={3}
+              className="w-full border-2 border-border bg-background text-foreground px-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors resize-none"
+            />
+          </div>
+
+          {/* Dropdown selectors */}
+          <div className="space-y-2">
+            <Dropdown label="hair colour" options={hairOptions} value={hair} onChange={setHair} />
+            <Dropdown label="eye colour" options={eyeOptions} value={eye} onChange={setEye} />
+            <Dropdown label="body type" options={bodyOptions} value={body} onChange={setBody} />
+          </div>
         </main>
       </PageTransition>
     </div>
   );
 };
 
-const Palette = ({ label, items, active, onSelect }: { label: string; items: { l: string; v: string }[]; active: number; onSelect: (i: number) => void }) => (
-  <div>
-    <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">{label}</span>
-    <div className="flex gap-2">
-      {items.map((c, i) => (
-        <button
-          key={c.l}
-          onClick={() => onSelect(i)}
-          title={c.l}
-          className={`w-11 h-11 rounded-xl border-2 transition-all ${
-            i === active ? "border-foreground scale-110 shadow-md" : "border-border hover:border-foreground/30"
-          }`}
-          style={{ backgroundColor: c.v }}
-        />
-      ))}
-    </div>
-  </div>
-);
+const Dropdown = ({ label, options, value, onChange }: { label: string; options: string[]; value: number; onChange: (i: number) => void }) => {
+  const [open, setOpen] = useState(false);
 
-const ToggleRow = ({ label, options, active, onSelect }: { label: string; options: string[]; active: number; onSelect: (i: number) => void }) => (
-  <div>
-    <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">{label}</span>
-    <div className="flex gap-2">
-      {options.map((o, i) => (
-        <button
-          key={o}
-          onClick={() => onSelect(i)}
-          className={`flex-1 py-3.5 rounded-xl font-extrabold lowercase text-xs border-2 transition-all ${
-            i === active ? "border-foreground bg-foreground text-background" : "border-border text-foreground hover:border-foreground/30"
-          }`}
-        >
-          {o}
-        </button>
-      ))}
+  return (
+    <div className="relative">
+      <span className="block text-[10px] font-extrabold lowercase text-muted-foreground mb-1">{label}</span>
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between border-2 border-border bg-background text-foreground px-3 py-2.5 rounded-xl text-xs font-extrabold lowercase hover:border-foreground/30 transition-colors"
+      >
+        {options[value]}
+        <ChevronDown />
+      </button>
+      {open && (
+        <div className="absolute z-30 left-0 right-0 mt-1 border-2 border-border bg-card rounded-xl overflow-hidden shadow-medium">
+          {options.map((o, i) => (
+            <button
+              key={o}
+              onClick={() => { onChange(i); setOpen(false); }}
+              className={`w-full text-left px-3 py-2 text-xs font-extrabold lowercase transition-colors ${
+                i === value ? "bg-foreground text-background" : "text-foreground hover:bg-muted"
+              }`}
+            >
+              {o}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
-  </div>
+  );
+};
+
+const ChevronDown = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m6 9 6 6 6-6" />
+  </svg>
 );
 
 export default CharacterCreator;
