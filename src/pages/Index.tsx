@@ -42,14 +42,8 @@ const Index = () => {
   }, [searchParams]);
 
   const handleCreate = async () => {
-    if (!user) {
-      navigate("/auth");
-      return;
-    }
-    if (credits <= 0) {
-      setShowPaywall(true);
-      return;
-    }
+    if (!user) { navigate("/auth"); return; }
+    if (credits <= 0) { setShowPaywall(true); return; }
     if (!prompt.trim()) return;
 
     setIsGenerating(true);
@@ -96,14 +90,14 @@ const Index = () => {
           </div>
           <PageTitle>create photo</PageTitle>
 
-          <div className="relative mb-10 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
+          <div className="relative mb-10 overflow-hidden rounded-2xl border-4 border-border bg-card aspect-[4/5]">
             {primaryImage ? (
               <>
                 <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />
                 <a
                   href={primaryImage}
                   download="vizura-photo.png"
-                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background transition-colors hover:bg-foreground/80"
+                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/80"
                   aria-label="download photo"
                 >
                   <Download size={14} />
@@ -125,17 +119,17 @@ const Index = () => {
 
           <div className="space-y-10">
             <div>
-              <span className="block text-sm font-extrabold lowercase text-muted-foreground mb-3">describe your photo</span>
+              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-3">describe your photo</span>
               <input
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="woman in golden hour light, rooftop…"
-                className="w-full border-2 border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                className="w-full border-4 border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
               />
             </div>
 
             <div>
-              <span className="block text-sm font-extrabold lowercase text-muted-foreground mb-3">style</span>
+              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-3">style</span>
               <div className="flex gap-2">
                 {stylePresets.map((style, i) => {
                   const Icon = style.icon;
@@ -143,7 +137,7 @@ const Index = () => {
                     <button
                       key={style.label}
                       onClick={() => setActiveStyle(i)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-xl font-extrabold lowercase text-sm border-2 transition-all ${
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl font-extrabold lowercase text-sm border-4 transition-all ${
                         activeStyle === i
                           ? "border-foreground bg-foreground text-background"
                           : "border-border text-foreground hover:border-foreground/30"
@@ -159,7 +153,7 @@ const Index = () => {
           </div>
 
           {error && (
-            <div className="border-2 border-destructive/30 bg-destructive/5 p-4 text-destructive font-extrabold lowercase text-sm rounded-xl mt-10">
+            <div className="border-4 border-destructive/30 bg-destructive/5 p-4 text-destructive font-extrabold lowercase text-sm rounded-2xl mt-10">
               {error}
             </div>
           )}
