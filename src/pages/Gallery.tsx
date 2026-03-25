@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Calendar, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import BackButton from "@/components/BackButton";
+import PageTransition from "@/components/PageTransition";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -45,10 +47,14 @@ const Gallery = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <PageTransition>
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">
-          your past generations
-        </p>
+        <div className="flex items-center gap-3 mb-4">
+          <BackButton />
+          <p className="text-[10px] font-bold lowercase text-muted-foreground">
+            your past generations
+          </p>
+        </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
@@ -102,6 +108,7 @@ const Gallery = () => {
           </div>
         )}
       </main>
+      </PageTransition>
     </div>
   );
 };
