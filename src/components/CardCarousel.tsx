@@ -71,8 +71,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
             >
               <CardContent image={current} index={activeIndex + 1} />
             </motion.div>
-          </motion.div>
-        </AnimatePresence>
+          </AnimatePresence>
         </div>
       </motion.div>
 
