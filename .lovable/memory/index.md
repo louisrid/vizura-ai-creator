@@ -1,11 +1,10 @@
-Design system: pure black (#000) + white (#fff), no colors/gradients. Plus Jakarta Sans ExtraBold. 0px border-radius. Thick spacing. Lowercase everything.
-Pages: Create (/), Generate (/generate), Auth (/auth), My Characters, Storage, Gallery, Account/Help/Settings (coming soon).
-Button variants: hero, hero-outline for on-dark surfaces.
-Nav token: --nav (black bg), --nav-foreground (white text).
+Design system: pure black (#000) + white (#fff) base. Plus Jakarta Sans ExtraBold. 12px border-radius. Thick spacing. Lowercase everything.
+Purple gradient accent: 260 60% 68% → 280 55% 78%. Used on buttons, menu icon, page titles, focus states, coming soon cards.
+CSS utilities: .gradient-purple (bg), .gradient-purple-text (text clip), shadow-glow (purple glow).
+Nav token: --nav (black bg), --nav-foreground (white text). Menu button uses gradient-purple.
 Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations.
 Auth: Supabase email/password. New users get 1 free credit via trigger.
-Edge functions: generate (AI image gen), create-checkout (Stripe), stripe-webhook (payment handling).
+Edge functions: generate (AI image gen), create-checkout (Stripe), stripe-webhook.
 Stripe: needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET secrets + real price IDs.
-Product: photorealistic AI women (Instagram aesthetic, influencer-style). NOT anime/cartoon.
-Create page controls: hair colour, eye colour, skin tone, body type (slim/regular/curvy), extra detail text input. No outfit, no age, no teen.
-Removed: showcase banner, popular prompts, guide dropdown, anime references.
+Menu order: create character (first/home), create photo, my characters, storage, account, help.
+Coming soon pages: create photo, my characters, storage, account, help, settings.

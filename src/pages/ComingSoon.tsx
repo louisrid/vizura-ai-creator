@@ -1,3 +1,4 @@
+import { Sparkles } from "lucide-react";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
@@ -12,8 +13,12 @@ const ComingSoon = ({ title }: { title: string }) => (
           <BackButton />
         </div>
         <PageTitle>{title}</PageTitle>
-        <div className="border-2 border-border rounded-xl p-6 text-center">
-          <p className="text-sm font-extrabold lowercase">coming soon</p>
+        <div className="border-2 border-accent-purple/20 rounded-xl p-8 text-center">
+          <div className="w-12 h-12 rounded-xl gradient-purple mx-auto mb-4 flex items-center justify-center">
+            <Sparkles size={20} className="text-white" />
+          </div>
+          <p className="text-sm font-extrabold lowercase gradient-purple-text">coming soon</p>
+          <p className="text-xs font-bold lowercase text-muted-foreground mt-2">this feature is on the way</p>
         </div>
       </main>
     </PageTransition>
