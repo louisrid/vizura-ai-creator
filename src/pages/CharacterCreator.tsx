@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap, Sparkles } from "lucide-react";
+import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PageTransition from "@/components/PageTransition";
@@ -81,19 +81,8 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-20 pb-12">
-          <svg width="0" height="0" className="absolute">
-            <defs>
-              <linearGradient id="page-gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(265 85% 75%)" />
-                <stop offset="100%" stopColor="hsl(280 75% 58%)" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div className="flex items-center justify-center gap-3 mb-10">
-            <Sparkles size={24} strokeWidth={2.5} className="shrink-0" style={{ stroke: "url(#page-gradient-purple)" }} />
-            <h1 className="text-3xl font-extrabold lowercase tracking-tight gradient-purple-text">create character</h1>
-          </div>
+        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-12 pb-12">
+          <h1 className="text-4xl font-extrabold lowercase tracking-tight text-foreground text-center mb-10">create character</h1>
 
           <CardCarousel
             images={imageCards}
