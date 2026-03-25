@@ -54,21 +54,21 @@ const Header = () => {
         <VizuraLogo className="text-nav-foreground text-2xl" />
 
         <div className="flex items-center gap-3" ref={menuRef}>
+          <svg width="0" height="0" className="absolute">
+            <defs>
+              <linearGradient id="icon-gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="hsl(255 65% 80%)" />
+                <stop offset="100%" stopColor="hsl(265 45% 60%)" />
+              </linearGradient>
+            </defs>
+          </svg>
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
-            <svg width="0" height="0" className="absolute">
-              <defs>
-                <linearGradient id="icon-gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="hsl(255 65% 80%)" />
-                  <stop offset="100%" stopColor="hsl(265 45% 60%)" />
-                </linearGradient>
-              </defs>
-            </svg>
             {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} style={{ stroke: "url(#icon-gradient-purple)" }} />}
             <span className="gradient-purple-text">{currentPage}</span>
           </span>
           <button
             onClick={() => setOpen(!open)}
-            className="w-10 h-10 rounded-xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
+            className="w-10 h-10 rounded-2xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
           >
             <Menu size={20} strokeWidth={2.5} />
           </button>
@@ -80,7 +80,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-2 border-nav-foreground/10 rounded-xl shadow-medium overflow-hidden"
+                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-4 border-nav-foreground/10 rounded-2xl shadow-medium overflow-hidden"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (
