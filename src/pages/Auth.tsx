@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,15 +10,15 @@ const Auth = () => {
   const { signIn, user } = useAuth();
   const navigate = useNavigate();
 
-  if (user) {
-    navigate("/", { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (user) navigate("/", { replace: true });
+  }, [user, navigate]);
 
   const handleSignIn = () => {
     signIn("demo@vizura.app", "demo");
-    navigate("/");
   };
+
+  if (user) return null;
 
   return (
     <div className="min-h-screen bg-background">
