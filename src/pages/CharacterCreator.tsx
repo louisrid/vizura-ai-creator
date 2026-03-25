@@ -125,7 +125,7 @@ const CharacterCreator = () => {
               onChange={(event) => setDescription(event.target.value)}
               placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
               rows={5}
-              className="min-h-40 w-full resize-none rounded-xl border-2 border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
+              className="min-h-40 w-full resize-none rounded-2xl border-4 border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
             />
           </section>
 
@@ -154,7 +154,7 @@ const SelectField = <T extends string>({ label, options, value, onChange }: Sele
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-14 w-full appearance-none rounded-xl border-2 border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
+      className="h-14 w-full appearance-none rounded-2xl border-4 border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
     >
       {options.map((option) => (
         <option key={option} value={option}>
