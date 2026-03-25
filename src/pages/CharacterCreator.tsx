@@ -169,9 +169,9 @@ const CharacterCreator = () => {
           </section>
 
           <section className="flex flex-col gap-2">
-            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={setHair} />
-            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={setEye} />
-            <SelectField label="body type" value={body} options={bodyOptions} onChange={setBody} />
+            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(value) => setHair(value)} />
+            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(value) => setEye(value)} />
+            <SelectField label="body type" value={body} options={bodyOptions} onChange={(value) => setBody(value)} />
           </section>
         </main>
       </PageTransition>
