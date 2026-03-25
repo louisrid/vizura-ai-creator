@@ -89,12 +89,12 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-          <div className="flex items-center gap-3 mb-6">
+        <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-10">
+          <div className="flex items-center gap-3 mb-8">
             <BackButton />
           </div>
 
-          <div className="relative mb-4 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
+          <div className="relative mb-8 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
             {primaryImage ? (
               <>
                 <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />
@@ -109,19 +109,19 @@ const Index = () => {
               </>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <Wand2 size={20} className="text-muted-foreground" />
+                <Wand2 size={24} className="text-muted-foreground" />
               </div>
             )}
           </div>
 
           {user && (
-            <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-6">
+            <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-8">
               <Sparkles size={12} className="text-accent-purple" />
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
               <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">describe your photo</span>
               <input
@@ -157,12 +157,12 @@ const Index = () => {
           </div>
 
           {error && (
-            <div className="border-2 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase text-xs rounded-xl mt-6">
+            <div className="border-2 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase text-xs rounded-xl mt-8">
               {error}
             </div>
           )}
 
-          <div className="flex gap-2 mt-6">
+          <div className="flex gap-2 mt-8">
             <Button
               className="flex-1 h-14 text-xs"
               onClick={handleCreate}

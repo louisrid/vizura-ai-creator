@@ -51,8 +51,8 @@ const Auth = () => {
       <Header />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-          <div className="flex items-center gap-3 mb-6">
+        <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-10">
+          <div className="flex items-center gap-3 mb-8">
             <BackButton />
           </div>
 
