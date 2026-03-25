@@ -82,8 +82,8 @@ const CharacterCreator = () => {
 
       <PageTransition>
         <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-12 pb-12">
-          <div className="flex items-center justify-center gap-4 mt-8 mb-14">
-            <Sparkles size={40} strokeWidth={2.5} className="text-foreground" />
+          <div className="flex items-center justify-center gap-4 mt-8 mb-14 whitespace-nowrap">
+            <Sparkles size={40} strokeWidth={2.5} className="text-foreground shrink-0" />
             <h1 className="text-5xl font-extrabold lowercase tracking-tight text-foreground">create character</h1>
           </div>
 
@@ -112,7 +112,7 @@ const CharacterCreator = () => {
           </div>
 
           {error && (
-            <div className="mt-8 rounded-2xl border-4 border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+            <div className="mt-8 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
               {error}
             </div>
           )}
@@ -128,7 +128,7 @@ const CharacterCreator = () => {
               onChange={(event) => setDescription(event.target.value)}
               placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
               rows={5}
-              className="min-h-40 w-full resize-none rounded-2xl border-4 border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
+              className="min-h-40 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
             />
           </section>
 
@@ -157,7 +157,7 @@ const SelectField = <T extends string>({ label, options, value, onChange }: Sele
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-14 w-full appearance-none rounded-2xl border-4 border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
+      className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
     >
       {options.map((option) => (
         <option key={option} value={option}>
