@@ -11,8 +11,8 @@ interface CardCarouselProps {
 
 const CARD_COUNT = 3;
 const VISIBLE_OFFSETS = [-2, -1, 0, 1, 2] as const;
-const SWIPE_DISTANCE = 80;
-const SWIPE_TRIGGER = 0.15;
+const SWIPE_DISTANCE = 50;
+const SWIPE_TRIGGER = 0.12;
 
 type SlideStyle = {
   blur: number;
