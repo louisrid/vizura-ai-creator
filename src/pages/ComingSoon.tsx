@@ -23,9 +23,4 @@ const ComingSoon = ({ title }: { title: string }) => (
   </div>
 );
 
-export const Account = () => <ComingSoon title="account" />;
 export const Help = () => <ComingSoon title="help" />;
-export const Settings = () => <ComingSoon title="settings" />;
-export const CreatePhoto = () => <ComingSoon title="create photo" />;
-export const MyCharactersPage = () => <ComingSoon title="my characters" />;
-export const StoragePage = () => <ComingSoon title="storage" />;
