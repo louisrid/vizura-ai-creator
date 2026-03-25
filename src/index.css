@@ -36,9 +36,9 @@
 
     --radius: 12px;
 
-    --accent-purple: 270 75% 65%;
-    --accent-purple-dark: 275 70% 55%;
-    --accent-purple-light: 265 85% 75%;
+    --accent-purple: 220 92% 60%;
+    --accent-purple-dark: 230 85% 50%;
+    --accent-purple-light: 210 100% 65%;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 98%;
@@ -55,17 +55,17 @@
     --surface-dark: 0 0% 6%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
-    --glow: 275 85% 50%;
+    --glow: 220 90% 55%;
   }
 }
 
 /* Purple gradient utilities — use sparingly for borders & accents only */
 .gradient-purple {
-  background: linear-gradient(135deg, hsl(265 85% 75%) 0%, hsl(280 75% 58%) 100%);
+  background: linear-gradient(135deg, hsl(210 100% 65%) 0%, hsl(230 85% 55%) 100%);
 }
 
 .gradient-purple-text {
-  background: linear-gradient(135deg, hsl(265 85% 75%) 0%, hsl(280 75% 58%) 100%);
+  background: linear-gradient(135deg, hsl(210 100% 65%) 0%, hsl(230 85% 55%) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -80,7 +80,7 @@
   inset: 0;
   padding: 5px;
   border-radius: inherit;
-  background: linear-gradient(135deg, hsl(265 85% 75%), hsl(280 75% 58%));
+  background: linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
