@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Trash2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import BackButton from "@/components/BackButton";
+import PageTransition from "@/components/PageTransition";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -96,10 +98,14 @@ const Storage = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
+      <PageTransition>
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">
-          storage
-        </p>
+        <div className="flex items-center gap-3 mb-4">
+          <BackButton />
+          <p className="text-[10px] font-bold lowercase text-muted-foreground">
+            storage
+          </p>
+        </div>
 
         {/* Filter pills */}
         <div className="flex gap-1.5 mb-4">
@@ -196,6 +202,7 @@ const Storage = () => {
           </div>
         )}
       </main>
+      </PageTransition>
 
       {/* Expanded full-size view */}
       <AnimatePresence>
@@ -208,10 +215,10 @@ const Storage = () => {
             onClick={() => setExpanded(null)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
               className="bg-card border-2 border-border rounded-xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >

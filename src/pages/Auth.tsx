@@ -5,6 +5,7 @@ import { Mail, Lock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
+import PageTransition from "@/components/PageTransition";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -54,6 +55,7 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
+      <PageTransition>
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
         <p className="text-sm font-extrabold lowercase text-center mb-1">{heading}</p>
         <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">{subheading}</p>
@@ -155,6 +157,7 @@ const Auth = () => {
           ✦ free credit on signup · ✦ no spam
         </p>
       </main>
+      </PageTransition>
     </div>
   );
 };

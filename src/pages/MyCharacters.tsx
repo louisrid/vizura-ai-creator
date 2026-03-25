@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Wand2, Pencil, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import BackButton from "@/components/BackButton";
+import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
@@ -81,36 +83,41 @@ const MyCharacters = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">
-          my characters
-        </p>
+      <PageTransition>
+        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+          <div className="flex items-center gap-3 mb-4">
+            <BackButton />
+            <p className="text-[10px] font-bold lowercase text-muted-foreground">
+              my characters
+            </p>
+          </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="animate-spin text-muted-foreground" size={24} />
-          </div>
-        ) : generations.length === 0 ? (
-          <div className="border-2 border-border rounded-xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-3">no characters yet</p>
-            <Button variant="outline" size="sm" onClick={() => navigate("/")}>
-              start creating
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-2">
-            {generations.map((gen) => (
-              <button
-                key={gen.id}
-                onClick={() => { setSelected(gen); setAngleIndex(0); }}
-                className="rounded-xl border-2 border-border overflow-hidden bg-background hover:border-foreground/30 transition-all active:scale-[0.98]"
-              >
-                <img src={gen.image_urls[0]} alt="" className="w-full aspect-[3/4] object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
-      </main>
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="animate-spin text-muted-foreground" size={24} />
+            </div>
+          ) : generations.length === 0 ? (
+            <div className="border-2 border-border rounded-xl p-6 text-center">
+              <p className="text-xs font-extrabold lowercase mb-3">no characters yet</p>
+              <Button variant="outline" size="sm" onClick={() => navigate("/")}>
+                start creating
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              {generations.map((gen) => (
+                <button
+                  key={gen.id}
+                  onClick={() => { setSelected(gen); setAngleIndex(0); }}
+                  className="rounded-xl border-2 border-border overflow-hidden bg-background hover:border-foreground/30 transition-all active:scale-[0.98]"
+                >
+                  <img src={gen.image_urls[0]} alt="" className="w-full aspect-[3/4] object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+        </main>
+      </PageTransition>
 
       {/* Expanded view modal */}
       <AnimatePresence>
@@ -119,14 +126,17 @@ const MyCharacters = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
+            onClick={() => setSelected(null)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 8 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 8 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
               className="bg-card border-2 border-border rounded-xl shadow-medium w-full max-w-sm overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
                 <img
