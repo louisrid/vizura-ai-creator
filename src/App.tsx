@@ -5,12 +5,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
-import CharacterCreator from "./pages/CharacterCreator.tsx";
-import Index from "./pages/Index.tsx";
-import Auth from "./pages/Auth.tsx";
-import { Account, Help, Settings, CreatePhoto, MyCharactersPage, StoragePage } from "./pages/ComingSoon.tsx";
-import ResetPassword from "./pages/ResetPassword.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import CharacterCreator from "./pages/CharacterCreator";
+import Index from "./pages/Index";
+import Auth from "./pages/Auth";
+import MyCharacters from "./pages/MyCharacters";
+import Storage from "./pages/Storage";
+import Account from "./pages/Account";
+import { Help } from "./pages/ComingSoon";
+import ResetPassword from "./pages/ResetPassword";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -24,13 +27,12 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<CharacterCreator />} />
-              <Route path="/create" element={<CreatePhoto />} />
+              <Route path="/create" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/characters" element={<MyCharactersPage />} />
-              <Route path="/storage" element={<StoragePage />} />
+              <Route path="/characters" element={<MyCharacters />} />
+              <Route path="/storage" element={<Storage />} />
               <Route path="/account" element={<Account />} />
               <Route path="/help" element={<Help />} />
-              <Route path="/settings" element={<Settings />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
