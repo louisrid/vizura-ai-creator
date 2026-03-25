@@ -1,11 +1,13 @@
-Design system: pure black + white base. Plus Jakarta Sans ExtraBold. 12px border-radius. Lowercase everything.
-Purple used SPARINGLY — only gradient borders, active menu selection, small accent icons. NOT for filled buttons/backgrounds.
-Purple gradient: deep 270 80% 30% → lighter 258 65% 62%. CSS: .gradient-purple, .gradient-purple-text, .border-gradient-purple (mask-based).
-Buttons: solid black (bg-primary). Menu icon: white on dark bg. Page titles: plain foreground text.
+# Memory: index.md
+Updated: now
+
+Design system: pure black (#000) + white (#fff), no colors/gradients on fills. Plus Jakarta Sans ExtraBold. 12px border-radius. Thick spacing. Lowercase everything.
+Purple gradient: ONLY for borders, active states, small accents. Lighter palette: dark 265/50%/55%, mid 260/55%/65%, light 255/60%/78%. Gradient border 3px thick.
+Border token --border: 0 0% 82% (darker/more visible).
+Pages: Landing (/), Generate (/generate), Auth (/auth), Paywall overlay component.
+Button variants: hero, hero-outline for on-dark surfaces. Solid black fills, no gradient fills.
 Nav token: --nav (black bg), --nav-foreground (white text).
-Backend: Lovable Cloud. Tables: profiles, credits, subscriptions, generations.
-Auth: email/password. New users get 1 free credit via trigger.
-Edge functions: generate, create-checkout, stripe-webhook.
-Stripe: needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET.
-Menu order: create character (first/home), create photo, my characters, storage, account, help.
-Coming soon pages: create photo, my characters, storage, account, help, settings.
+Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations.
+Auth: Supabase email/password. New users get 1 free credit via trigger.
+Edge functions: generate (AI image gen), create-checkout (Stripe), stripe-webhook (payment handling).
+Stripe: needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET secrets + real price IDs.
