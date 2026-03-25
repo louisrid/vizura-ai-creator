@@ -5,7 +5,6 @@ import { Loader2, Download, Trash2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
-import PageTransition from "@/components/PageTransition";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -99,7 +98,7 @@ const Storage = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <PageTransition>
+      
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
@@ -202,7 +201,7 @@ const Storage = () => {
             </div>
           )}
         </main>
-      </PageTransition>
+      
 
       {/* Expanded view */}
       <AnimatePresence>

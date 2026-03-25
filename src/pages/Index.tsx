@@ -4,7 +4,6 @@ import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
-import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
@@ -83,7 +82,7 @@ const Index = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <PageTransition>
+      
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
@@ -180,7 +179,7 @@ const Index = () => {
             </Button>
           </div>
         </main>
-      </PageTransition>
+      
     </div>
   );
 };

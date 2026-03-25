@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
-import PageTransition from "@/components/PageTransition";
 import PageTitle from "@/components/PageTitle";
 
 const ResetPassword = () => {
@@ -44,7 +43,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <PageTransition>
+      
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
@@ -111,7 +110,7 @@ const ResetPassword = () => {
             </div>
           )}
         </main>
-      </PageTransition>
+      
     </div>
   );
 };

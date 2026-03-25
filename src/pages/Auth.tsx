@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
-import PageTransition from "@/components/PageTransition";
 import PageTitle from "@/components/PageTitle";
 
 const Auth = () => {
@@ -51,7 +50,7 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <PageTransition>
+      
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
@@ -152,7 +151,7 @@ const Auth = () => {
             </div>
           )}
         </main>
-      </PageTransition>
+      
     </div>
   );
 };

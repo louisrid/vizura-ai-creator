@@ -5,7 +5,6 @@ import { Loader2, Wand2, Pencil, X, ChevronLeft, ChevronRight } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
-import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
@@ -82,7 +81,7 @@ const MyCharacters = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <PageTransition>
+      
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
@@ -114,7 +113,7 @@ const MyCharacters = () => {
             </div>
           )}
         </main>
-      </PageTransition>
+      
 
       {/* Expanded view */}
       <AnimatePresence>
