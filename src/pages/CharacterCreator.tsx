@@ -116,7 +116,7 @@ const CharacterCreator = () => {
 
           {/* Description textarea */}
           <section className="mt-12 flex flex-col gap-3">
-            <label htmlFor="character-description" className="text-sm font-extrabold lowercase text-muted-foreground">
+            <label htmlFor="character-description" className="text-sm font-extrabold lowercase text-foreground">
               describe your character
             </label>
             <textarea
@@ -150,7 +150,7 @@ type SelectFieldProps<T extends string> = {
 
 const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
   <label className="relative flex flex-col gap-2">
-    <span className="text-sm font-extrabold lowercase text-muted-foreground">{label}</span>
+    <span className="text-sm font-extrabold lowercase text-foreground">{label}</span>
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
