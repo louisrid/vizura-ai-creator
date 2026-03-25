@@ -11,8 +11,8 @@ interface CardCarouselProps {
 
 const CARD_COUNT = 3;
 const VISIBLE_OFFSETS = [-2, -1, 0, 1, 2] as const;
-const SWIPE_DISTANCE = 180;
-const SWIPE_TRIGGER = 0.22;
+const SWIPE_DISTANCE = 80;
+const SWIPE_TRIGGER = 0.15;
 
 type SlideStyle = {
   blur: number;
@@ -132,7 +132,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
       if (isAnimating) return;
 
       const endProgress = clamp(info.offset.x / SWIPE_DISTANCE, -1, 1);
-      const flick = Math.abs(info.velocity.x) > 600;
+      const flick = Math.abs(info.velocity.x) > 300;
       const crossedThreshold = Math.abs(endProgress) > SWIPE_TRIGGER;
 
       if (crossedThreshold || flick) {
