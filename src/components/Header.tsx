@@ -42,7 +42,7 @@ const Header = () => {
             onClick={() => setOpen(!open)}
             className="w-9 h-9 rounded-xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
           >
-            {open ? <X size={18} strokeWidth={2.5} /> : <Menu size={18} strokeWidth={2.5} />}
+            <Menu size={18} strokeWidth={2.5} />
           </button>
 
           <AnimatePresence>
