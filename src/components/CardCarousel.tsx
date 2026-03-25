@@ -34,13 +34,12 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
   return (
     <section className="flex flex-col items-center">
       <motion.div
-        className="relative w-full"
+        className="relative w-full cursor-grab active:cursor-grabbing"
         style={{ height: "320px" }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.15}
         onDragEnd={handleDragEnd}
-        className="relative w-full cursor-grab active:cursor-grabbing"
       >
         {cardPositions.map(({ offset, style, opacity }) => (
           <motion.div
