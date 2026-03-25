@@ -45,6 +45,8 @@ const Header = () => {
   };
 
   const currentPage = pageNames[location.pathname] || "";
+  const currentMenuItem = menuItems.find((item) => item.path === location.pathname);
+  const CurrentIcon = currentMenuItem?.icon;
 
   return (
     <header className="bg-nav sticky top-0 z-40">
@@ -52,7 +54,8 @@ const Header = () => {
         <VizuraLogo className="text-nav-foreground text-2xl" />
 
         <div className="flex items-center gap-3" ref={menuRef}>
-          <span className="text-sm font-extrabold lowercase text-nav-foreground">
+          <span className="gradient-purple-text flex items-center gap-1.5 text-sm font-extrabold lowercase">
+            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} />}
             {currentPage}
           </span>
           <button
