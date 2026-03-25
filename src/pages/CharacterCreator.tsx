@@ -109,7 +109,7 @@ const CharacterCreator = () => {
           </div>
 
           {error && (
-            <div className="mt-8 rounded-xl border-2 border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+            <div className="mt-8 rounded-2xl border-4 border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
               {error}
             </div>
           )}
