@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle, Zap, LogIn, LogOut } from "lucide-react";
+import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
