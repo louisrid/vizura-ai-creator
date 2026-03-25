@@ -143,7 +143,7 @@ const Index = () => {
               </button>
             );
           })}
-        </motion.div>
+        </div>
 
         {error && (
           <div className="border-[3px] border-destructive p-3 mb-3 text-destructive font-extrabold lowercase text-sm">
