@@ -13,11 +13,9 @@ const ComingSoon = ({ title }: { title: string }) => (
           <BackButton />
         </div>
         <PageTitle>{title}</PageTitle>
-        <div className="border-2 border-accent-purple/20 rounded-xl p-8 text-center">
-          <div className="w-12 h-12 rounded-xl gradient-purple mx-auto mb-4 flex items-center justify-center">
-            <Sparkles size={20} className="text-white" />
-          </div>
-          <p className="text-sm font-extrabold lowercase gradient-purple-text">coming soon</p>
+        <div className="border-gradient-purple rounded-xl p-8 text-center bg-card">
+          <Sparkles size={20} className="text-accent-purple mx-auto mb-3" />
+          <p className="text-sm font-extrabold lowercase text-foreground">coming soon</p>
           <p className="text-xs font-bold lowercase text-muted-foreground mt-2">this feature is on the way</p>
         </div>
       </main>

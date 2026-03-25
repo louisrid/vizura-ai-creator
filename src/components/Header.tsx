@@ -57,7 +57,7 @@ const Header = () => {
           </span>
           <button
             onClick={() => setOpen(!open)}
-            className="w-10 h-10 rounded-xl gradient-purple hover:opacity-90 flex items-center justify-center text-white transition-all"
+            className="w-10 h-10 rounded-xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
           >
             <Menu size={20} strokeWidth={2.5} />
           </button>

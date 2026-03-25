@@ -36,9 +36,9 @@
 
     --radius: 12px;
 
-    --accent-purple: 260 60% 68%;
-    --accent-purple-dark: 260 65% 55%;
-    --accent-purple-light: 260 55% 85%;
+    --accent-purple: 265 75% 45%;
+    --accent-purple-dark: 270 80% 30%;
+    --accent-purple-light: 258 65% 62%;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 98%;
@@ -55,24 +55,36 @@
     --surface-dark: 0 0% 6%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
-    --glow: 260 60% 68%;
+    --glow: 265 75% 45%;
   }
 }
 
-/* Purple gradient utilities */
+/* Purple gradient utilities — use sparingly for borders & accents only */
 .gradient-purple {
-  background: linear-gradient(135deg, hsl(260 60% 68%) 0%, hsl(280 55% 78%) 100%);
+  background: linear-gradient(135deg, hsl(270 80% 30%) 0%, hsl(258 65% 62%) 100%);
 }
 
 .gradient-purple-text {
-  background: linear-gradient(135deg, hsl(260 60% 68%) 0%, hsl(280 55% 78%) 100%);
+  background: linear-gradient(135deg, hsl(270 80% 30%) 0%, hsl(258 65% 62%) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .border-gradient-purple {
-  border-image: linear-gradient(135deg, hsl(260 60% 68%), hsl(280 55% 78%)) 1;
+  position: relative;
+}
+.border-gradient-purple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, hsl(270 80% 30%), hsl(258 65% 62%));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 @layer base {

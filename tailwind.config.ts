@@ -94,7 +94,7 @@ export default {
       boxShadow: {
         'soft': '0 2px 8px -2px hsl(0 0% 0% / 0.08), 0 4px 16px -4px hsl(0 0% 0% / 0.06)',
         'medium': '0 4px 16px -4px hsl(0 0% 0% / 0.12), 0 8px 32px -8px hsl(0 0% 0% / 0.08)',
-        'glow': '0 0 24px -4px hsl(260 60% 68% / 0.25)',
+        'glow': '0 0 20px -4px hsl(265 75% 45% / 0.2)',
       },
       keyframes: {
         "accordion-down": {
