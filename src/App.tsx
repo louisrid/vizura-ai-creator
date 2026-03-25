@@ -32,7 +32,7 @@ const ScrollToTop = () => {
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="popLayout">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageTransition><CharacterCreator /></PageTransition>} />
         <Route path="/create" element={<PageTransition><Index /></PageTransition>} />
