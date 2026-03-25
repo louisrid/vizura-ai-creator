@@ -2,14 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, X, UserRound, Sparkles, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
+import { Menu, X, UserRound, Sparkles, LayoutGrid, FolderOpen, HelpCircle, Settings } from "lucide-react";
 
 const menuItems = [
-  { label: "account", icon: UserRound, path: "/auth" },
+  { label: "account", icon: UserRound, path: "/account" },
   { label: "create", icon: Sparkles, path: "/" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
-  { label: "storage", icon: FolderOpen, path: "/gallery" },
-  { label: "help", icon: HelpCircle, path: "/" },
+  { label: "storage", icon: FolderOpen, path: "/storage" },
+  { label: "help", icon: HelpCircle, path: "/help" },
+  { label: "settings", icon: Settings, path: "/settings" },
 ];
 
 const Header = () => {
