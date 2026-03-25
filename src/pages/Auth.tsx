@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
+import PageTitle from "@/components/PageTitle";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -56,10 +57,10 @@ const Auth = () => {
             <BackButton />
           </div>
 
-          <h1 className="text-3xl font-extrabold lowercase text-foreground tracking-tight mb-10">{heading}</h1>
+          <PageTitle>{heading}</PageTitle>
 
           {signupSuccess || resetSent ? (
-            <div className="border-2 border-border rounded-xl p-6 text-center">
+            <div className="border-4 border-border rounded-2xl p-6 text-center">
               <p className="text-xs font-extrabold lowercase mb-1">check your email</p>
               <p className="text-[10px] font-bold lowercase text-muted-foreground">
                 we sent a link to <strong className="text-foreground">{email}</strong>
@@ -75,10 +76,10 @@ const Auth = () => {
               )}
             </div>
           ) : (
-            <div className="border-2 border-border rounded-xl p-4">
+            <div className="border-4 border-border rounded-2xl p-4">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="border-2 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-xl text-xs">
+                  <div className="border-4 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-2xl text-xs">
                     {error}
                   </div>
                 )}
@@ -92,7 +93,7 @@ const Auth = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full border-2 border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                      className="w-full border-4 border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
                       placeholder="you@example.com"
                     />
                   </div>
@@ -109,7 +110,7 @@ const Auth = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         minLength={6}
-                        className="w-full border-2 border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                        className="w-full border-4 border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
                         placeholder="••••••••"
                       />
                     </div>

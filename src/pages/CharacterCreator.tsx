@@ -81,7 +81,7 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-16 pb-12">
+        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-12 pb-12">
           <PageTitle>create character</PageTitle>
 
           <CardCarousel
@@ -109,7 +109,7 @@ const CharacterCreator = () => {
           </div>
 
           {error && (
-            <div className="mt-8 rounded-xl border-2 border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+            <div className="mt-8 rounded-2xl border-4 border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
               {error}
             </div>
           )}
