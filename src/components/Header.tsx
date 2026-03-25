@@ -89,11 +89,15 @@ const Header = () => {
                       onClick={() => handleNav(item.path)}
                       className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
                         location.pathname === item.path
-                          ? "text-accent-purple"
+                          ? "gradient-purple-text"
                           : "text-nav-foreground hover:text-nav-foreground/70"
                       }`}
                     >
-                      <item.icon size={14} strokeWidth={2.5} />
+                      <item.icon
+                        size={14}
+                        strokeWidth={2.5}
+                        style={location.pathname === item.path ? { stroke: "url(#icon-gradient-purple)" } : undefined}
+                      />
                       {item.label}
                     </button>
                   ))}
