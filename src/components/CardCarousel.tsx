@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useCallback } from "react";
 import { ChevronLeft, ChevronRight, User } from "lucide-react";
-import { motion, AnimatePresence, type PanInfo } from "framer-motion";
+import { type PanInfo } from "framer-motion";
 
 interface CardCarouselProps {
   images: (string | null)[];
@@ -10,103 +10,51 @@ interface CardCarouselProps {
 }
 
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
-  const [direction, setDirection] = useState(0);
-
-  const handlePrevious = useCallback(() => {
-    setDirection(-1);
-    onPrevious();
-  }, [onPrevious]);
-
-  const handleNext = useCallback(() => {
-    setDirection(1);
-    onNext();
-  }, [onNext]);
-
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      if (info.offset.x < -50) handleNext();
-      else if (info.offset.x > 50) handlePrevious();
+      if (info.offset.x < -50) onNext();
+      else if (info.offset.x > 50) onPrevious();
     },
-    [handleNext, handlePrevious]
+    [onNext, onPrevious]
   );
 
   const total = images.length || 3;
-  const prevIndex = (activeIndex - 1 + total) % total;
-  const nextIndex = (activeIndex + 1) % total;
 
-  const centerImage = images[activeIndex] ?? null;
-  const leftImage = images[prevIndex] ?? null;
-  const rightImage = images[nextIndex] ?? null;
+  const getCard = (offset: number) => {
+    const idx = (activeIndex + offset + total) % total;
+    return images[idx] ?? null;
+  };
 
   return (
     <section className="flex flex-col items-center">
-      {/* Carousel with perspective */}
-      <div
-        className="relative flex items-center justify-center w-full"
-        style={{ perspective: "800px", height: "320px" }}
-      >
+      <div className="relative flex items-center justify-center w-full" style={{ height: "320px" }}>
         {/* Left card */}
         <div
-          className="absolute z-10"
-          style={{
-            width: "42%",
-            left: "-4%",
-            top: "50%",
-            transform: "translateY(-50%) rotateY(30deg) scale(0.78)",
-            transformOrigin: "right center",
-          }}
+          className="absolute z-10 transition-all duration-300 ease-out"
+          style={{ width: "38%", left: "2%", top: "50%", transform: "translateY(-50%) scale(0.82)" }}
         >
-          <div className="aspect-[4/5]">
-            <CardContent image={leftImage} />
+          <div className="aspect-[4/5] opacity-50">
+            <CardContent image={getCard(-1)} />
           </div>
         </div>
 
         {/* Center card */}
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={`center-${activeIndex}`}
-            initial={{
-              x: direction > 0 ? 100 : -100,
-              scale: 0.8,
-              opacity: 0.5,
-            }}
-            animate={{
-              x: 0,
-              scale: 1,
-              opacity: 1,
-            }}
-            exit={{
-              x: direction > 0 ? -100 : 100,
-              scale: 0.8,
-              opacity: 0.5,
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="relative z-30 cursor-grab active:cursor-grabbing"
-            style={{ width: "58%" }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.3}
-            onDragEnd={handleDragEnd}
-          >
-            <div className="aspect-[4/5]">
-              <CardContent image={centerImage} isCenter />
-            </div>
-          </motion.div>
-        </AnimatePresence>
+        <div
+          className="relative z-30 cursor-grab active:cursor-grabbing transition-all duration-300 ease-out"
+          style={{ width: "56%" }}
+        >
+          <div className="aspect-[4/5]">
+            <CardContent image={getCard(0)} isCenter />
+          </div>
+        </div>
 
         {/* Right card */}
         <div
-          className="absolute z-10"
-          style={{
-            width: "42%",
-            right: "-4%",
-            top: "50%",
-            transform: "translateY(-50%) rotateY(-30deg) scale(0.78)",
-            transformOrigin: "left center",
-          }}
+          className="absolute z-10 transition-all duration-300 ease-out"
+          style={{ width: "38%", right: "2%", top: "50%", transform: "translateY(-50%) scale(0.82)" }}
         >
-          <div className="aspect-[4/5]">
-            <CardContent image={rightImage} />
+          <div className="aspect-[4/5] opacity-50">
+            <CardContent image={getCard(1)} />
           </div>
         </div>
       </div>
@@ -115,7 +63,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
       <div className="mt-5 flex items-center gap-3">
         <button
           type="button"
-          onClick={handlePrevious}
+          onClick={onPrevious}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
           aria-label="previous"
         >
@@ -123,7 +71,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         </button>
         <button
           type="button"
-          onClick={handleNext}
+          onClick={onNext}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
           aria-label="next"
         >
@@ -136,8 +84,8 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
 
 const CardContent = ({ image, isCenter }: { image: string | null; isCenter?: boolean }) => (
   <div
-    className={`h-full w-full overflow-hidden rounded-2xl border-2 bg-card ${
-      isCenter ? "border-border shadow-lg" : "border-border/60"
+    className={`h-full w-full overflow-hidden rounded-2xl ${
+      isCenter ? "border-gradient-purple relative shadow-glow" : "border-2 border-border/40"
     }`}
   >
     {image ? (
