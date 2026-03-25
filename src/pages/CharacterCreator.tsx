@@ -82,8 +82,8 @@ const CharacterCreator = () => {
 
       <PageTransition>
         <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-12 pb-12">
-          <div className="flex items-center justify-center gap-4 mt-8 mb-14">
-            <Sparkles size={40} strokeWidth={2.5} className="text-foreground" />
+          <div className="flex items-center justify-center gap-4 mt-8 mb-14 whitespace-nowrap">
+            <Sparkles size={40} strokeWidth={2.5} className="text-foreground shrink-0" />
             <h1 className="text-5xl font-extrabold lowercase tracking-tight text-foreground">create character</h1>
           </div>
 
