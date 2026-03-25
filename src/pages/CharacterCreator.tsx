@@ -96,17 +96,8 @@ const CharacterCreator = () => {
       <PageTransition>
         <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-44 pb-12">
           {/* Large image cards */}
-          <section className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={cyclePrevious}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
-              aria-label="previous images"
-            >
-              <ChevronLeft size={16} strokeWidth={2.5} />
-            </button>
-
-            <div className="grid flex-1 grid-cols-3 gap-3">
+          <section className="flex flex-col items-center">
+            <div className="grid w-full grid-cols-3 gap-3">
               {imageCards.map((image, index) => (
                 <div
                   key={`${image ?? "placeholder"}-${index}`}
@@ -125,14 +116,24 @@ const CharacterCreator = () => {
               ))}
             </div>
 
-            <button
-              type="button"
-              onClick={cycleNext}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
-              aria-label="next images"
-            >
-              <ChevronRight size={16} strokeWidth={2.5} />
-            </button>
+            <div className="mt-4 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={cyclePrevious}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+                aria-label="previous images"
+              >
+                <ChevronLeft size={16} strokeWidth={2.5} />
+              </button>
+              <button
+                type="button"
+                onClick={cycleNext}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+                aria-label="next images"
+              >
+                <ChevronRight size={16} strokeWidth={2.5} />
+              </button>
+            </div>
           </section>
 
           {/* Create button */}
