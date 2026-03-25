@@ -91,7 +91,7 @@ const MyCharacters = () => {
 
           {loading ? (
             <div className="flex items-center justify-center py-16">
-              <Loader2 className="animate-spin text-muted-foreground" size={24} />
+              <Loader2 className="animate-spin text-foreground" size={24} />
             </div>
           ) : generations.length === 0 ? (
             <div className="border-[5px] border-border rounded-2xl p-6 text-center">
@@ -106,7 +106,7 @@ const MyCharacters = () => {
                 <button
                   key={gen.id}
                   onClick={() => { setSelected(gen); setAngleIndex(0); }}
-                  className="rounded-2xl border-[5px] border-border overflow-hidden bg-background hover:border-foreground/30 transition-all active:scale-[0.98]"
+                  className="rounded-2xl border-[5px] border-border overflow-hidden bg-background hover:border-foreground/60 transition-all active:scale-[0.98]"
                 >
                   <img src={gen.image_urls[0]} alt="" className="w-full aspect-[3/4] object-cover" />
                 </button>

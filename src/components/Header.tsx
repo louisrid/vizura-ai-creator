@@ -72,7 +72,7 @@ const Header = () => {
           </span>
           <button
             onClick={() => setOpen(!open)}
-            className="w-10 h-10 rounded-2xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
+            className="w-10 h-10 rounded-2xl bg-nav-foreground/20 hover:bg-nav-foreground/30 flex items-center justify-center text-nav-foreground transition-colors"
           >
             <Menu size={20} strokeWidth={2.5} />
           </button>
@@ -84,7 +84,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-[5px] border-nav-foreground/10 rounded-2xl shadow-medium overflow-hidden"
+                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-[5px] border-nav-foreground/20 rounded-2xl shadow-medium overflow-hidden"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (
@@ -94,7 +94,7 @@ const Header = () => {
                       className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
                         location.pathname === item.path
                           ? "gradient-purple-text"
-                          : "text-nav-foreground hover:text-nav-foreground/70"
+                          : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
                     >
                       <item.icon
@@ -118,7 +118,7 @@ const Header = () => {
 const CreditsBadge = () => {
   const { credits } = useCredits();
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-nav-foreground/20 px-3 py-1.5">
+    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-nav-foreground/30 px-3 py-1.5">
       <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
       <span className="text-[11px] font-extrabold text-nav-foreground">{credits}</span>
     </div>

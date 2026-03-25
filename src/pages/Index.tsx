@@ -97,7 +97,7 @@ const Index = () => {
                 <a
                   href={primaryImage}
                   download="vizura-photo.png"
-                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
                   aria-label="download photo"
                 >
                   <Download size={14} />
@@ -105,13 +105,13 @@ const Index = () => {
               </>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <Wand2 size={28} className="text-muted-foreground" />
+                <Wand2 size={28} className="text-foreground" />
               </div>
             )}
           </div>
 
           {user && (
-            <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-muted-foreground lowercase mb-10">
+            <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-foreground lowercase mb-10">
               <Sparkles size={14} style={{ stroke: "url(#icon-gradient-purple)" }} />
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
@@ -119,17 +119,17 @@ const Index = () => {
 
           <div className="space-y-10">
             <div>
-              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-3">describe your photo</span>
+              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
               <input
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="woman in golden hour light, rooftop…"
-                className="w-full border-[5px] border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
+                className="w-full border-[5px] border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-foreground focus:outline-none focus:border-foreground rounded-2xl transition-colors"
               />
             </div>
 
             <div>
-              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-3">style</span>
+              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">style</span>
               <div className="flex gap-2">
                 {stylePresets.map((style, i) => {
                   const Icon = style.icon;
@@ -140,7 +140,7 @@ const Index = () => {
                       className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl font-extrabold lowercase text-sm border-[5px] transition-all ${
                         activeStyle === i
                           ? "border-foreground bg-foreground text-background"
-                          : "border-border text-foreground hover:border-foreground/30"
+                          : "border-border text-foreground hover:border-foreground/60"
                       }`}
                     >
                       <Icon size={16} strokeWidth={2.5} />

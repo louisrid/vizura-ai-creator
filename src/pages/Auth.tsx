@@ -62,7 +62,7 @@ const Auth = () => {
           {signupSuccess || resetSent ? (
             <div className="border-[5px] border-border rounded-2xl p-6 text-center">
               <p className="text-xs font-extrabold lowercase mb-1">check your email</p>
-              <p className="text-[10px] font-bold lowercase text-muted-foreground">
+              <p className="text-[10px] font-bold lowercase text-foreground">
                 we sent a link to <strong className="text-foreground">{email}</strong>
               </p>
               {resetSent && (
@@ -85,15 +85,15 @@ const Auth = () => {
                 )}
 
                 <div>
-                  <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">email</span>
+                  <span className="block text-xs font-extrabold lowercase text-foreground mb-2">email</span>
                   <div className="relative">
-                    <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                    <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
+                      className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                       placeholder="you@example.com"
                     />
                   </div>
@@ -101,16 +101,16 @@ const Auth = () => {
 
                 {!isForgot && (
                   <div>
-                    <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">password</span>
+                    <span className="block text-xs font-extrabold lowercase text-foreground mb-2">password</span>
                     <div className="relative">
-                      <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                      <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
                       <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         minLength={6}
-                        className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
+                        className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                         placeholder="••••••••"
                       />
                     </div>
@@ -122,7 +122,7 @@ const Auth = () => {
                     <button
                       type="button"
                       onClick={() => { setIsForgot(true); setError(""); }}
-                      className="font-bold lowercase text-[10px] text-muted-foreground hover:text-foreground transition-colors"
+                      className="font-bold lowercase text-[10px] text-foreground hover:text-foreground transition-colors"
                     >
                       forgot password?
                     </button>
@@ -137,7 +137,7 @@ const Auth = () => {
                   )}
                 </Button>
 
-                <p className="text-center font-bold lowercase text-[10px] text-muted-foreground">
+                <p className="text-center font-bold lowercase text-[10px] text-foreground">
                   {isForgot ? (
                     <button type="button" onClick={() => { setIsForgot(false); setError(""); }} className="text-foreground underline">
                       back to log in

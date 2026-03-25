@@ -80,7 +80,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         <button
           type="button"
           onClick={goPrev}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
           aria-label="previous"
         >
           <ChevronLeft size={16} strokeWidth={2.5} />
@@ -93,7 +93,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         <button
           type="button"
           onClick={goNext}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
           aria-label="next"
         >
           <ChevronRight size={16} strokeWidth={2.5} />
