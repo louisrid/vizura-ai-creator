@@ -37,9 +37,9 @@ const Account = () => {
           <div className="space-y-4">
             {/* Email */}
             <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-              <Mail size={16} strokeWidth={2.5} className="text-muted-foreground shrink-0" />
+              <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
               <div className="flex-1 min-w-0">
-                <span className="block text-xs font-extrabold lowercase text-muted-foreground">email</span>
+                <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
                 <span className="block text-sm font-extrabold lowercase text-foreground truncate">
                   {user?.email || "—"}
                 </span>
@@ -48,9 +48,9 @@ const Account = () => {
 
             {/* Credits */}
             <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-              <Zap size={16} strokeWidth={2.5} className="text-muted-foreground shrink-0" />
+              <Zap size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
               <div className="flex-1">
-                <span className="block text-xs font-extrabold lowercase text-muted-foreground">credits</span>
+                <span className="block text-xs font-extrabold lowercase text-foreground">credits</span>
                 <span className="block text-sm font-extrabold lowercase text-foreground">
                   {credits}
                 </span>

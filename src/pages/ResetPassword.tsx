@@ -54,7 +54,7 @@ const ResetPassword = () => {
           {success ? (
             <div className="border-[5px] border-border rounded-2xl p-6 text-center">
               <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
-              <p className="text-[10px] font-bold lowercase text-muted-foreground">redirecting…</p>
+              <p className="text-[10px] font-bold lowercase text-foreground">redirecting…</p>
             </div>
           ) : !isRecovery ? (
             <div className="border-[5px] border-border rounded-2xl p-6 text-center">
@@ -73,32 +73,32 @@ const ResetPassword = () => {
                 )}
 
                 <div>
-                  <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">new password</span>
+                  <span className="block text-xs font-extrabold lowercase text-foreground mb-2">new password</span>
                   <div className="relative">
-                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
                     <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
+                      className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                       placeholder="••••••••"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">confirm password</span>
+                  <span className="block text-xs font-extrabold lowercase text-foreground mb-2">confirm password</span>
                   <div className="relative">
-                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
                     <input
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-2xl transition-colors"
+                      className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                       placeholder="••••••••"
                     />
                   </div>

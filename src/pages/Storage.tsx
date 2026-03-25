@@ -115,7 +115,7 @@ const Storage = () => {
                 className={`flex-1 py-3.5 rounded-2xl font-extrabold lowercase text-xs border-[5px] transition-all ${
                   filter === f
                     ? "border-foreground bg-foreground text-background"
-                    : "border-border text-foreground hover:border-foreground/30"
+                    : "border-border text-foreground hover:border-foreground/60"
                 }`}
               >
                 {f}
@@ -134,7 +134,7 @@ const Storage = () => {
                 className="overflow-hidden mb-6"
               >
                 <div className="flex items-center gap-2 border-[5px] border-border rounded-2xl p-3">
-                  <span className="text-[10px] font-extrabold lowercase text-muted-foreground flex-1">
+                  <span className="text-[10px] font-extrabold lowercase text-foreground flex-1">
                     {selected.size} selected
                   </span>
                   <Button variant="outline" size="sm" className="h-10 px-4" onClick={handleDownload}>
@@ -150,7 +150,7 @@ const Storage = () => {
                   </Button>
                   <button
                     onClick={() => setSelected(new Set())}
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-foreground hover:text-foreground transition-colors"
                   >
                     <X size={14} strokeWidth={2.5} />
                   </button>
@@ -161,7 +161,7 @@ const Storage = () => {
 
           {loading ? (
             <div className="flex items-center justify-center py-16">
-              <Loader2 className="animate-spin text-muted-foreground" size={24} />
+              <Loader2 className="animate-spin text-foreground" size={24} />
             </div>
           ) : filtered.length === 0 ? (
             <div className="border-[5px] border-border rounded-2xl p-6 text-center">
@@ -184,7 +184,7 @@ const Storage = () => {
                     toggleSelect(img.id);
                   }}
                   className={`relative rounded-2xl border-[5px] overflow-hidden bg-background transition-all active:scale-[0.98] ${
-                    selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/30"
+                    selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/60"
                   }`}
                 >
                   <img src={img.url} alt="" className="w-full aspect-[3/4] object-cover" />

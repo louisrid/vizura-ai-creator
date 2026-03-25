@@ -93,7 +93,7 @@ const CharacterCreator = () => {
 
           {/* Description textarea */}
           <section className="mt-10 flex flex-col gap-2">
-            <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-muted-foreground">
+            <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
               describe your character
             </label>
             <textarea
@@ -102,7 +102,7 @@ const CharacterCreator = () => {
               onChange={(event) => setDescription(event.target.value)}
               placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
               rows={4}
-              className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
+              className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground focus:border-foreground focus:outline-none transition-colors"
             />
           </section>
 
@@ -150,11 +150,11 @@ type SelectFieldProps<T extends string> = {
 
 const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
   <label className="relative flex flex-col gap-2">
-    <span className="text-xs font-extrabold lowercase text-muted-foreground">{label}</span>
+    <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
+      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
     >
       {options.map((option) => (
         <option key={option} value={option}>
@@ -165,7 +165,7 @@ const SelectField = <T extends string>({ label, options, value, onChange }: Sele
     <ChevronDown
       size={16}
       strokeWidth={2.5}
-      className="pointer-events-none absolute right-4 bottom-3.5 text-muted-foreground"
+      className="pointer-events-none absolute right-4 bottom-3.5 text-foreground"
     />
   </label>
 );
