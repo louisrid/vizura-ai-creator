@@ -97,7 +97,7 @@ const Index = () => {
       <motion.main
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
         className="w-full max-w-4xl mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6"
       >
         {/* Top bar */}
