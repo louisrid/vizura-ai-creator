@@ -95,7 +95,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
 };
 
 const CardContent = ({ image, index }: { image: string | null; index: number }) => (
-  <div className="relative h-full w-full overflow-hidden border-2 border-foreground">
+  <div className="relative h-full w-full overflow-hidden rounded-2xl border-4 border-foreground">
     {image ? (
       <img src={image} alt={`generated character ${index}`} className="h-full w-full object-cover" draggable={false} />
     ) : (
