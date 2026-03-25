@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Image, Calendar, Download, Loader2 } from "lucide-react";
+import { Calendar, Download, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,7 +46,7 @@ const Gallery = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <p className="text-xs font-bold lowercase text-muted-foreground text-center mb-4">
+        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">
           your past generations
         </p>
 
@@ -54,33 +55,21 @@ const Gallery = () => {
             <Loader2 className="animate-spin text-muted-foreground" size={24} />
           </div>
         ) : generations.length === 0 ? (
-          <div className="border-2 border-border rounded-xl p-8 text-center">
-            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center mx-auto mb-3">
-              <Image size={18} className="text-muted-foreground" />
-            </div>
-            <h2 className="text-sm font-extrabold lowercase mb-1">no generations yet</h2>
-            <p className="text-muted-foreground text-xs font-bold lowercase mb-3">
-              create your first character to see it here
-            </p>
-            <button
-              onClick={() => navigate("/")}
-              className="font-extrabold lowercase text-xs text-foreground underline"
-            >
-              start creating →
-            </button>
+          <div className="border-2 border-border rounded-xl p-6 text-center">
+            <p className="text-xs font-extrabold lowercase mb-3">no generations yet</p>
+            <Button variant="outline" size="sm" onClick={() => navigate("/")}>
+              start creating
+            </Button>
           </div>
         ) : (
           <div className="space-y-3">
             {generations.map((gen) => (
-              <div
-                key={gen.id}
-                className="border-2 border-border rounded-xl overflow-hidden"
-              >
+              <div key={gen.id} className="border-2 border-border rounded-xl overflow-hidden">
                 <div className="px-3 py-2.5 border-b-2 border-border flex items-center justify-between">
-                  <p className="font-bold lowercase text-xs text-foreground truncate max-w-[70%]">
+                  <p className="font-extrabold lowercase text-[10px] text-foreground truncate max-w-[70%]">
                     "{gen.prompt.length > 60 ? gen.prompt.slice(0, 60) + "…" : gen.prompt}"
                   </p>
-                  <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-bold">
+                  <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-extrabold">
                     <Calendar size={10} />
                     {formatDate(gen.created_at)}
                   </div>
@@ -94,7 +83,7 @@ const Gallery = () => {
                         className="w-full aspect-[3/4] object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-2">
-                        <span className="text-white font-extrabold lowercase text-[11px]">
+                        <span className="text-white font-extrabold lowercase text-[10px]">
                           {["front", "left", "right"][i]}
                         </span>
                         <a

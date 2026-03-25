@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
@@ -16,9 +16,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        setIsRecovery(true);
-      }
+      if (event === "PASSWORD_RECOVERY") setIsRecovery(true);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -27,20 +25,13 @@ const ResetPassword = () => {
     e.preventDefault();
     setError("");
 
-    if (password !== confirmPassword) {
-      setError("passwords don't match");
-      return;
-    }
-    if (password.length < 6) {
-      setError("password must be at least 6 characters");
-      return;
-    }
+    if (password !== confirmPassword) { setError("passwords don't match"); return; }
+    if (password.length < 6) { setError("password must be at least 6 characters"); return; }
 
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
-    if (error) {
-      setError(error.message);
-    } else {
+    if (error) setError(error.message);
+    else {
       setSuccess(true);
       setTimeout(() => navigate("/", { replace: true }), 2000);
     }
@@ -50,76 +41,71 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <motion.main
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="w-full max-w-md mx-auto pt-16 md:pt-24 pb-8 px-4 sm:px-6"
-      >
-        <h1 className="text-[clamp(1.75rem,7vw,3.5rem)] font-extrabold lowercase tracking-tight leading-none mb-6">
-          new password
-        </h1>
+      <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+        <p className="text-sm font-extrabold lowercase text-center mb-1">new password</p>
+        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">set a new password for your account</p>
 
         {success ? (
-          <div className="border-[3px] border-foreground p-8 text-center">
-            <h2 className="text-xl font-extrabold lowercase mb-3">password updated</h2>
-            <p className="text-foreground/60 text-sm font-bold lowercase">
-              redirecting you now…
-            </p>
+          <div className="border-2 border-border rounded-xl p-6 text-center">
+            <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
+            <p className="text-[10px] font-bold lowercase text-muted-foreground">redirecting you now…</p>
           </div>
         ) : !isRecovery ? (
-          <div className="border-[3px] border-foreground p-8 text-center">
-            <h2 className="text-xl font-extrabold lowercase mb-3">invalid link</h2>
-            <p className="text-foreground/60 text-sm font-bold lowercase mb-4">
-              this reset link is expired or invalid.
-            </p>
-            <button
-              onClick={() => navigate("/auth")}
-              className="font-extrabold lowercase text-foreground underline text-sm"
-            >
+          <div className="border-2 border-border rounded-xl p-6 text-center">
+            <p className="text-xs font-extrabold lowercase mb-1">invalid link</p>
+            <p className="text-[10px] font-bold lowercase text-muted-foreground mb-3">this reset link is expired or invalid.</p>
+            <button onClick={() => navigate("/auth")} className="font-extrabold lowercase text-foreground underline text-[10px]">
               back to log in
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="border-[3px] border-destructive p-4 text-destructive font-extrabold lowercase">
-                {error}
+          <div className="border-2 border-border rounded-xl p-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {error && (
+                <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase rounded-xl text-[10px]">
+                  {error}
+                </div>
+              )}
+
+              <div>
+                <span className="block text-[10px] font-extrabold lowercase text-muted-foreground mb-1.5">new password</span>
+                <div className="relative">
+                  <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                    placeholder="••••••••"
+                  />
+                </div>
               </div>
-            )}
 
-            <div>
-              <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">new password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-[clamp(0.95rem,3vw,1.25rem)] font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
-                placeholder="••••••••"
-              />
-            </div>
+              <div>
+                <span className="block text-[10px] font-extrabold lowercase text-muted-foreground mb-1.5">confirm password</span>
+                <div className="relative">
+                  <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
 
-            <div>
-              <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">confirm password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-[clamp(0.95rem,3vw,1.25rem)] font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <Button size="xl" variant="hero" className="w-full text-[clamp(1rem,3vw,1.25rem)] disabled:opacity-100" disabled={loading}>
-              {loading ? "loading…" : "update password"}
-            </Button>
-          </form>
+              <Button className="w-full h-12" disabled={loading}>
+                {loading ? "loading…" : "update password"}
+              </Button>
+            </form>
+          </div>
         )}
-      </motion.main>
+      </main>
     </div>
   );
 };

@@ -88,7 +88,6 @@ const Storage = () => {
   };
 
   const handleDelete = () => {
-    // For now, just remove from local state (no DB delete permission)
     setImages((prev) => prev.filter((img) => !selected.has(img.id)));
     setSelected(new Set());
   };
@@ -98,7 +97,7 @@ const Storage = () => {
       <Header />
 
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <p className="text-xs font-bold lowercase text-muted-foreground text-center mb-4">
+        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-4">
           storage
         </p>
 
@@ -132,18 +131,13 @@ const Storage = () => {
                 <span className="text-[10px] font-extrabold lowercase text-muted-foreground flex-1">
                   {selected.size} selected
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-xl border-2 h-8 text-[10px] px-3"
-                  onClick={handleDownload}
-                >
+                <Button variant="outline" size="sm" className="h-8 px-3" onClick={handleDownload}>
                   <Download size={12} strokeWidth={2.5} /> download
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-xl border-2 h-8 text-[10px] px-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-8 px-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
                   onClick={handleDelete}
                 >
                   <Trash2 size={12} strokeWidth={2.5} /> delete
@@ -164,14 +158,9 @@ const Storage = () => {
             <Loader2 className="animate-spin text-muted-foreground" size={24} />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="border-2 border-border rounded-xl p-8 text-center">
-            <p className="text-sm font-extrabold lowercase mb-3">nothing here yet</p>
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-xl border-2 text-xs"
-              onClick={() => navigate("/")}
-            >
+          <div className="border-2 border-border rounded-xl p-6 text-center">
+            <p className="text-xs font-extrabold lowercase mb-3">nothing here yet</p>
+            <Button variant="outline" size="sm" onClick={() => navigate("/")}>
               start creating
             </Button>
           </div>
@@ -181,11 +170,8 @@ const Storage = () => {
               <button
                 key={img.id}
                 onClick={() => {
-                  if (isSelecting) {
-                    toggleSelect(img.id);
-                  } else {
-                    setExpanded(img);
-                  }
+                  if (isSelecting) toggleSelect(img.id);
+                  else setExpanded(img);
                 }}
                 onContextMenu={(e) => {
                   e.preventDefault();
@@ -195,12 +181,7 @@ const Storage = () => {
                   selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/30"
                 }`}
               >
-                <img
-                  src={img.url}
-                  alt=""
-                  className="w-full aspect-[3/4] object-cover"
-                />
-                {/* Select indicator */}
+                <img src={img.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 {isSelecting && (
                   <div className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                     selected.has(img.id)
@@ -231,15 +212,11 @@ const Storage = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-card border-2 border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              className="bg-card border-2 border-border rounded-xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
-                <img
-                  src={expanded.url}
-                  alt=""
-                  className="w-full aspect-[3/4] object-cover"
-                />
+                <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 <button
                   onClick={() => setExpanded(null)}
                   className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
@@ -247,14 +224,9 @@ const Storage = () => {
                   <X size={14} strokeWidth={2.5} />
                 </button>
               </div>
-              <div className="px-4 py-3">
-                <a
-                  href={expanded.url}
-                  download={`vizura-${expanded.id}.png`}
-                  target="_blank"
-                  className="block"
-                >
-                  <Button variant="outline" size="sm" className="w-full rounded-xl border-2 h-10 text-xs">
+              <div className="p-4">
+                <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="block">
+                  <Button variant="outline" size="sm" className="w-full">
                     <Download size={14} strokeWidth={2.5} /> download
                   </Button>
                 </a>

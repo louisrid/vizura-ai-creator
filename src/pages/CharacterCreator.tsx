@@ -94,7 +94,6 @@ const CharacterCreator = () => {
 
   const generate = async (refine = false) => {
     if (!user) { navigate("/auth"); return; }
-    // Paywall before first generation
     if (!hasEverGenerated) { setShowPaywall(true); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
     await runGeneration(refine);
@@ -132,12 +131,11 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        {/* 1. Instruction */}
-        <p className="text-xs font-bold lowercase text-muted-foreground text-center mb-3">
+        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-3">
           pick a style, tweak the details, hit generate
         </p>
 
-        {/* 2. Results — 3 images side by side (desktop) / swipeable (mobile) */}
+        {/* Results */}
         <div className="mb-3">
           <div className="hidden sm:grid grid-cols-3 gap-2">
             {imgs.map((src, i) => (
@@ -171,10 +169,10 @@ const CharacterCreator = () => {
         <div className="flex items-center gap-2 mb-4">
           {hasGen ? (
             <>
-              <Button variant="outline" size="sm" className="flex-1 rounded-xl border-2 h-10 text-xs" onClick={() => generate(false)} disabled={isGenerating}>
+              <Button variant="outline" size="sm" className="flex-1" onClick={() => generate(false)} disabled={isGenerating}>
                 <RotateCcw size={14} strokeWidth={2.5} /> continue
               </Button>
-              <Button variant="outline" size="sm" className="flex-1 rounded-xl border-2 h-10 text-xs" onClick={() => generate(true)} disabled={isGenerating}>
+              <Button variant="outline" size="sm" className="flex-1" onClick={() => generate(true)} disabled={isGenerating}>
                 <Wand2 size={14} strokeWidth={2.5} /> refine this
               </Button>
             </>
@@ -182,14 +180,14 @@ const CharacterCreator = () => {
             <div className="flex-1" />
           )}
           {user && (
-            <div className="flex items-center gap-1 text-xs font-bold text-muted-foreground lowercase shrink-0">
+            <div className="flex items-center gap-1 text-[10px] font-extrabold text-muted-foreground lowercase shrink-0">
               <Sparkles size={12} className="text-accent-purple" />
               {credits}
             </div>
           )}
         </div>
 
-        {/* 3. Controls — compact */}
+        {/* Controls */}
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <MiniPalette label="hair" items={hairColours} active={hair} onSelect={setHair} />
@@ -201,42 +199,41 @@ const CharacterCreator = () => {
           <ToggleRow label="age" options={ageRanges} active={age} onSelect={setAge} />
         </div>
 
-        {/* 4. Extra detail */}
+        {/* Extra detail */}
         <input
           value={extra}
           onChange={(e) => setExtra(e.target.value)}
           placeholder="tattoos, freckles, glasses…"
-          className="w-full border-2 border-border bg-background text-foreground px-3 py-2.5 text-xs font-bold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl mt-3 transition-colors"
+          className="w-full border-2 border-border bg-background text-foreground px-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl mt-3 transition-colors"
         />
 
         {error && (
-          <div className="border border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-bold lowercase text-xs rounded-xl mt-3">
+          <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase text-[10px] rounded-xl mt-3">
             {error}
           </div>
         )}
 
-        {/* 5. Generate button */}
+        {/* Generate button */}
         <Button
-          variant="hero"
-          className="w-full h-14 text-base rounded-2xl mt-4"
+          className="w-full h-12 mt-4"
           onClick={() => generate(false)}
           disabled={isGenerating}
         >
           {isGenerating ? (
-            <><Loader2 className="animate-spin" size={20} strokeWidth={2.5} />generating…</>
+            <><Loader2 className="animate-spin" size={14} />generating…</>
           ) : (
-            <><Zap size={20} strokeWidth={2.5} />generate</>
+            <><Zap size={14} strokeWidth={2.5} />generate</>
           )}
         </Button>
 
-        {/* 6. Collapsible guide */}
-        <div className="mt-4 border border-border rounded-xl overflow-hidden">
+        {/* Collapsible guide */}
+        <div className="mt-4 border-2 border-border rounded-xl overflow-hidden">
           <button
             onClick={() => setGuideOpen(!guideOpen)}
-            className="w-full flex items-center justify-between px-4 py-3 text-xs font-extrabold lowercase text-muted-foreground hover:text-foreground transition-colors"
+            className="w-full flex items-center justify-between px-3 py-2.5 text-[10px] font-extrabold lowercase text-muted-foreground hover:text-foreground transition-colors"
           >
             full guide for first-timers
-            {guideOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            {guideOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
           </button>
           <AnimatePresence>
             {guideOpen && (
@@ -247,15 +244,14 @@ const CharacterCreator = () => {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <div className="px-4 pb-4 text-xs font-semibold lowercase text-muted-foreground space-y-2.5">
-                  <GuideItem title="hair & eyes" text="tap a colour swatch to set hair or eye colour. the character preview updates after you generate." />
-                  <GuideItem title="skin tone" text="choose a skin tone from the palette. works the same as hair/eye selection." />
-                  <GuideItem title="body type" text="slim, regular, or curvy — affects the overall build of the generated character." />
-                  <GuideItem title="outfit" text="casual = everyday clothes. formal = suits/dresses. sporty = athletic wear. fantasy = armour, capes, etc." />
-                  <GuideItem title="age" text="teen = ~16-19. young adult = ~20-30. adult = ~30-45." />
-                  <GuideItem title="extra detail" text="add anything else — tattoos, freckles, glasses, scars, specific hairstyles, backgrounds." />
-                  <GuideItem title="continue vs refine" text="continue = completely new look with same settings. refine = tiny tweaks to the current result." />
-                  <GuideItem title="tips" text="start simple, then add detail. 'red hair, green eyes, freckles' works great. you don't need full sentences." />
+                <div className="px-3 pb-3 text-[10px] font-bold lowercase text-muted-foreground space-y-2">
+                  <GuideItem title="hair & eyes" text="tap a colour swatch to set hair or eye colour." />
+                  <GuideItem title="skin tone" text="choose a skin tone from the palette." />
+                  <GuideItem title="body type" text="slim, regular, or curvy." />
+                  <GuideItem title="outfit" text="casual, formal, sporty, or fantasy." />
+                  <GuideItem title="age" text="teen, young adult, or adult." />
+                  <GuideItem title="extra detail" text="tattoos, freckles, glasses, scars, hairstyles." />
+                  <GuideItem title="continue vs refine" text="continue = new look. refine = tiny tweaks." />
                 </div>
               </motion.div>
             )}
@@ -263,15 +259,15 @@ const CharacterCreator = () => {
         </div>
       </main>
 
-      {/* 7. Made with vizura — full-width black strip */}
+      {/* Made with vizura */}
       <section className="w-full bg-foreground py-6 mt-2">
         <div className="max-w-lg mx-auto px-4">
           <p className="text-[10px] font-extrabold lowercase text-background/50 mb-3">made with vizura</p>
         </div>
         <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-3 px-4 w-max">
+          <div className="flex gap-2 px-4 w-max">
             {showcaseImages.map((src, i) => (
-              <div key={i} className="w-28 shrink-0 rounded-xl overflow-hidden bg-background shadow-soft">
+              <div key={i} className="w-28 shrink-0 rounded-xl overflow-hidden bg-background">
                 <img src={src} alt="" loading="lazy" width={512} height={680} className="w-full aspect-[3/4] object-cover" />
               </div>
             ))}
@@ -279,7 +275,7 @@ const CharacterCreator = () => {
         </div>
       </section>
 
-      {/* 8. Popular prompts */}
+      {/* Popular prompts */}
       <section className="w-full max-w-lg mx-auto px-4 py-6">
         <p className="text-[10px] font-extrabold lowercase text-muted-foreground mb-3">popular prompts</p>
         <div className="overflow-x-auto scrollbar-hide">
@@ -288,7 +284,7 @@ const CharacterCreator = () => {
               <button
                 key={preset.label}
                 onClick={() => applyPreset(preset)}
-                className="shrink-0 px-4 py-2.5 rounded-full border-2 border-border bg-background text-xs font-extrabold lowercase text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95"
+                className="shrink-0 px-4 py-2.5 rounded-xl border-2 border-border bg-background text-xs font-extrabold lowercase text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95"
               >
                 {preset.label}
               </button>
@@ -300,13 +296,11 @@ const CharacterCreator = () => {
   );
 };
 
-// --- Sub-components ---
-
 const ResultImage = ({ src, label, isPlaceholder }: { src: string; label: string; isPlaceholder: boolean }) => (
-  <div className={`relative rounded-xl overflow-hidden border border-border shadow-soft ${isPlaceholder ? "opacity-60" : ""}`}>
+  <div className={`relative rounded-xl overflow-hidden border-2 border-border ${isPlaceholder ? "opacity-60" : ""}`}>
     <img src={src} alt={label} className="w-full aspect-[3/4] object-cover" />
     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/40 to-transparent px-2.5 pb-2 pt-6">
-      <span className="text-white font-extrabold lowercase text-[11px]">{label}</span>
+      <span className="text-white font-extrabold lowercase text-[10px]">{label}</span>
     </div>
   </div>
 );
@@ -320,8 +314,8 @@ const MiniPalette = ({ label, items, active, onSelect }: { label: string; items:
           key={c.l}
           onClick={() => onSelect(i)}
           title={c.l}
-          className={`w-8 h-8 rounded-lg border-2 transition-all ${
-            i === active ? "border-foreground scale-110 shadow-soft" : "border-border hover:border-foreground/30"
+          className={`w-8 h-8 rounded-xl border-2 transition-all ${
+            i === active ? "border-foreground scale-110" : "border-border hover:border-foreground/30"
           }`}
           style={{ backgroundColor: c.v }}
         />
