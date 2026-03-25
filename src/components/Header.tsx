@@ -2,15 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, X, UserRound, Sparkles, LayoutGrid, FolderOpen, HelpCircle, Settings } from "lucide-react";
+import { Menu, X, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
 
 const menuItems = [
   { label: "account", icon: UserRound, path: "/account" },
-  { label: "create", icon: Sparkles, path: "/" },
+  { label: "create character", icon: Sparkles, path: "/" },
+  { label: "create photo", icon: Camera, path: "/create" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
   { label: "help", icon: HelpCircle, path: "/help" },
-  { label: "settings", icon: Settings, path: "/settings" },
 ];
 
 const Header = () => {
@@ -48,9 +48,9 @@ const Header = () => {
           <AnimatePresence>
             {open && (
               <motion.div
-                initial={{ opacity: 0, y: 4, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 4, scale: 0.97 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
                 className="absolute right-0 mt-1.5 w-52 bg-nav border-2 border-nav-foreground/10 rounded-xl shadow-medium overflow-hidden"
               >

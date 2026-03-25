@@ -94,7 +94,7 @@ const CharacterCreator = () => {
       <PageTransition>
         <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
 
-          {/* Image viewer — all 3 visible, center large */}
+          {/* Image viewer */}
           <div className="relative w-full aspect-[4/5] mb-6">
             <div className="absolute inset-0 flex items-center justify-center">
               {imgs.map((src, i) => (
@@ -113,7 +113,6 @@ const CharacterCreator = () => {
               ))}
             </div>
 
-            {/* Navigation arrows */}
             <button
               onClick={prev}
               className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-xl bg-foreground/80 flex items-center justify-center text-background hover:bg-foreground transition-colors"
@@ -128,7 +127,7 @@ const CharacterCreator = () => {
             </button>
           </div>
 
-          {/* Credits badge */}
+          {/* Credits */}
           {user && (
             <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-6">
               <Sparkles size={12} className="text-accent-purple" />
@@ -143,14 +142,13 @@ const CharacterCreator = () => {
             <Palette label="skin tone" items={skinTones} active={skin} onSelect={setSkin} />
             <ToggleRow label="body type" options={bodyTypes} active={body} onSelect={setBody} />
 
-            {/* Extra detail */}
             <div>
               <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">extra detail</span>
               <input
                 value={extra}
                 onChange={(e) => setExtra(e.target.value)}
                 placeholder="tattoos, freckles, glasses…"
-                className="w-full border-2 border-border bg-background text-foreground px-4 py-3.5 text-sm font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                className="w-full border-2 border-border bg-background text-foreground px-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
               />
             </div>
           </div>
@@ -161,16 +159,15 @@ const CharacterCreator = () => {
             </div>
           )}
 
-          {/* Generate button */}
           <Button
-            className="w-full h-14 mt-6 text-sm"
+            className="w-full h-14 mt-6 text-xs"
             onClick={generate}
             disabled={isGenerating}
           >
             {isGenerating ? (
-              <><Loader2 className="animate-spin" size={16} />generating…</>
+              <><Loader2 className="animate-spin" size={16} />creating…</>
             ) : (
-              <><Zap size={16} strokeWidth={2.5} />generate</>
+              <><Zap size={16} strokeWidth={2.5} />create</>
             )}
           </Button>
         </main>
@@ -178,8 +175,6 @@ const CharacterCreator = () => {
     </div>
   );
 };
-
-/* ── Sub-components ── */
 
 const Palette = ({ label, items, active, onSelect }: { label: string; items: { l: string; v: string }[]; active: number; onSelect: (i: number) => void }) => (
   <div>
@@ -208,7 +203,7 @@ const ToggleRow = ({ label, options, active, onSelect }: { label: string; option
         <button
           key={o}
           onClick={() => onSelect(i)}
-          className={`flex-1 py-3.5 rounded-xl font-extrabold lowercase text-sm border-2 transition-all ${
+          className={`flex-1 py-3.5 rounded-xl font-extrabold lowercase text-xs border-2 transition-all ${
             i === active ? "border-foreground bg-foreground text-background" : "border-border text-foreground hover:border-foreground/30"
           }`}
         >

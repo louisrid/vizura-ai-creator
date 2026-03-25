@@ -7,11 +7,8 @@ const ComingSoon = ({ title }: { title: string }) => (
     <Header />
     <PageTransition>
       <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
-          <p className="text-[10px] font-bold lowercase text-muted-foreground">
-            {title}
-          </p>
         </div>
         <div className="border-2 border-border rounded-xl p-6 text-center">
           <p className="text-xs font-extrabold lowercase">coming soon</p>
