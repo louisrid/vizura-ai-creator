@@ -7,7 +7,7 @@ import { Menu, X, UserRound, Sparkles, LayoutGrid, FolderOpen, HelpCircle } from
 const menuItems = [
   { label: "account", icon: UserRound, path: "/auth" },
   { label: "create", icon: Sparkles, path: "/" },
-  { label: "my characters", icon: LayoutGrid, path: "/gallery" },
+  { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/gallery" },
   { label: "help", icon: HelpCircle, path: "/" },
 ];
