@@ -153,11 +153,11 @@ type SelectFieldProps<T extends string> = {
 
 const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
   <label className="relative flex flex-col gap-2">
-    <span className="text-sm font-extrabold lowercase text-foreground">{label}</span>
+    <span className="text-xs font-extrabold lowercase text-muted-foreground">{label}</span>
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
+      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
     >
       {options.map((option) => (
         <option key={option} value={option}>
