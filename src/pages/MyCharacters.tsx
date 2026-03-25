@@ -18,8 +18,6 @@ interface Generation {
   created_at: string;
 }
 
-const angleLabels = ["front", "left", "right"];
-
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
@@ -85,11 +83,8 @@ const MyCharacters = () => {
 
       <PageTransition>
         <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-6">
             <BackButton />
-            <p className="text-[10px] font-bold lowercase text-muted-foreground">
-              my characters
-            </p>
           </div>
 
           {loading ? (
@@ -99,7 +94,7 @@ const MyCharacters = () => {
           ) : generations.length === 0 ? (
             <div className="border-2 border-border rounded-xl p-6 text-center">
               <p className="text-xs font-extrabold lowercase mb-3">no characters yet</p>
-              <Button variant="outline" size="sm" onClick={() => navigate("/")}>
+              <Button variant="outline" className="h-10" onClick={() => navigate("/")}>
                 start creating
               </Button>
             </div>
@@ -119,7 +114,7 @@ const MyCharacters = () => {
         </main>
       </PageTransition>
 
-      {/* Expanded view modal */}
+      {/* Expanded view */}
       <AnimatePresence>
         {selected && (
           <motion.div
@@ -141,59 +136,45 @@ const MyCharacters = () => {
               <div className="relative">
                 <img
                   src={selected.image_urls[angleIndex] || selected.image_urls[0]}
-                  alt={angleLabels[angleIndex]}
+                  alt=""
                   className="w-full aspect-[3/4] object-cover"
                 />
-
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/40 to-transparent px-3 pb-2.5 pt-6">
-                  <span className="text-white font-extrabold lowercase text-[10px]">{angleLabels[angleIndex]}</span>
-                </div>
 
                 {angleIndex > 0 && (
                   <button
                     onClick={() => setAngleIndex(angleIndex - 1)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
                   >
-                    <ChevronLeft size={16} strokeWidth={2.5} />
+                    <ChevronLeft size={18} strokeWidth={2.5} />
                   </button>
                 )}
 
                 {angleIndex < (selected.image_urls.length - 1) && (
                   <button
                     onClick={() => setAngleIndex(angleIndex + 1)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
                   >
-                    <ChevronRight size={16} strokeWidth={2.5} />
+                    <ChevronRight size={18} strokeWidth={2.5} />
                   </button>
                 )}
 
                 <button
                   onClick={() => setSelected(null)}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                  className="absolute top-2 right-2 w-8 h-8 rounded-xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
                 >
                   <X size={14} strokeWidth={2.5} />
                 </button>
               </div>
 
-              <div className="flex justify-center gap-1.5 py-2.5">
-                {angleLabels.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setAngleIndex(i)}
-                    className={`h-1.5 rounded-full transition-all ${i === angleIndex ? "w-5 bg-foreground" : "w-1.5 bg-foreground/20"}`}
-                  />
-                ))}
-              </div>
-
-              <div className="flex gap-2 px-4 pb-4">
-                <Button variant="outline" size="sm" className="flex-1" onClick={() => handleEdit(selected)}>
+              <div className="flex gap-2 p-4">
+                <Button variant="outline" className="flex-1 h-10" onClick={() => handleEdit(selected)}>
                   <Pencil size={14} strokeWidth={2.5} /> edit
                 </Button>
-                <Button variant="outline" size="sm" className="flex-1" onClick={() => handleVariation(selected)} disabled={isGenerating}>
+                <Button variant="outline" className="flex-1 h-10" onClick={() => handleVariation(selected)} disabled={isGenerating}>
                   {isGenerating ? (
-                    <><Loader2 className="animate-spin" size={14} /> generating…</>
+                    <><Loader2 className="animate-spin" size={14} /> creating…</>
                   ) : (
-                    <><Wand2 size={14} strokeWidth={2.5} /> new variation</>
+                    <><Wand2 size={14} strokeWidth={2.5} /> variation</>
                   )}
                 </Button>
               </div>

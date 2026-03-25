@@ -36,20 +36,22 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
+          onClick={onClose}
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0, y: 8 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 8 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="bg-card border-2 border-border rounded-xl shadow-medium p-6 max-w-sm w-full text-center"
+            onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-xs font-bold lowercase text-muted-foreground mb-4">
-              start creating for $7/mo
-            </p>
-            <Button className="w-full mb-3" onClick={handleSubscribe} disabled={loading}>
-              {loading ? <><Loader2 className="animate-spin" size={14} /> loading…</> : "subscribe & generate"}
+            <p className="text-xs font-extrabold lowercase mb-1">$7/mo</p>
+            <p className="text-[10px] font-bold lowercase text-muted-foreground mb-6">unlimited creations</p>
+            <Button className="w-full h-14 text-xs mb-3" onClick={handleSubscribe} disabled={loading}>
+              {loading ? <><Loader2 className="animate-spin" size={16} /> loading…</> : "subscribe & create"}
             </Button>
             <button onClick={onClose} className="w-full text-center text-muted-foreground font-bold lowercase text-[10px] hover:underline py-1">
               maybe later

@@ -44,73 +44,71 @@ const ResetPassword = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <PageTransition>
-      <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <div className="flex items-center gap-3 mb-4">
-          <BackButton />
-          <p className="text-[10px] font-bold lowercase text-muted-foreground">new password</p>
-        </div>
-
-        {success ? (
-          <div className="border-2 border-border rounded-xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
-            <p className="text-[10px] font-bold lowercase text-muted-foreground">redirecting you now…</p>
+        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+          <div className="flex items-center gap-3 mb-6">
+            <BackButton />
           </div>
-        ) : !isRecovery ? (
-          <div className="border-2 border-border rounded-xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-1">invalid link</p>
-            <p className="text-[10px] font-bold lowercase text-muted-foreground mb-3">this reset link is expired or invalid.</p>
-            <button onClick={() => navigate("/auth")} className="font-extrabold lowercase text-foreground underline text-[10px]">
-              back to log in
-            </button>
-          </div>
-        ) : (
-          <div className="border-2 border-border rounded-xl p-4">
-            <form onSubmit={handleSubmit} className="space-y-3">
-              {error && (
-                <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase rounded-xl text-[10px]">
-                  {error}
-                </div>
-              )}
 
-              <div>
-                <span className="block text-[10px] font-extrabold lowercase text-muted-foreground mb-1.5">new password</span>
-                <div className="relative">
-                  <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
+          {success ? (
+            <div className="border-2 border-border rounded-xl p-6 text-center">
+              <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
+              <p className="text-[10px] font-bold lowercase text-muted-foreground">redirecting…</p>
+            </div>
+          ) : !isRecovery ? (
+            <div className="border-2 border-border rounded-xl p-6 text-center">
+              <p className="text-xs font-extrabold lowercase mb-3">invalid link</p>
+              <button onClick={() => navigate("/auth")} className="font-extrabold lowercase text-foreground underline text-[10px]">
+                back to log in
+              </button>
+            </div>
+          ) : (
+            <div className="border-2 border-border rounded-xl p-4">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="border-2 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-xl text-xs">
+                    {error}
+                  </div>
+                )}
 
-              <div>
-                <span className="block text-[10px] font-extrabold lowercase text-muted-foreground mb-1.5">confirm password</span>
-                <div className="relative">
-                  <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="w-full border-2 border-border bg-background text-foreground pl-9 pr-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
-                    placeholder="••••••••"
-                  />
+                <div>
+                  <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">new password</span>
+                  <div className="relative">
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className="w-full border-2 border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                      placeholder="••••••••"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <Button className="w-full h-12" disabled={loading}>
-                {loading ? "loading…" : "update password"}
-              </Button>
-            </form>
-          </div>
-        )}
-      </main>
+                <div>
+                  <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">confirm password</span>
+                  <div className="relative">
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className="w-full border-2 border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <Button className="w-full h-14 text-xs" disabled={loading}>
+                  {loading ? "loading…" : "update password"}
+                </Button>
+              </form>
+            </div>
+          )}
+        </main>
       </PageTransition>
     </div>
   );

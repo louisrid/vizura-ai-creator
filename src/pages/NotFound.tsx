@@ -16,13 +16,12 @@ const NotFound = () => {
       <Header />
       <PageTransition>
         <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-6">
             <BackButton />
           </div>
           <div className="border-2 border-border rounded-xl p-6 text-center">
-            <p className="text-sm font-extrabold lowercase mb-1">404</p>
-            <p className="text-[10px] font-bold lowercase text-muted-foreground mb-3">page not found</p>
-            <a href="/" className="text-xs font-extrabold lowercase text-foreground underline">
+            <p className="text-xs font-extrabold lowercase mb-3">page not found</p>
+            <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">
               back to home
             </a>
           </div>

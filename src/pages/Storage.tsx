@@ -13,11 +13,11 @@ interface StorageImage {
   id: string;
   url: string;
   prompt: string;
-  source: "character" | "image";
+  source: "character" | "photo";
   created_at: string;
 }
 
-const filters = ["all", "characters", "images"] as const;
+const filters = ["all", "characters", "photos"] as const;
 type Filter = (typeof filters)[number];
 
 const Storage = () => {
@@ -51,7 +51,7 @@ const Storage = () => {
             id: `${gen.id}-${i}`,
             url,
             prompt: gen.prompt,
-            source: isCharacter ? "character" : "image",
+            source: isCharacter ? "character" : "photo",
             created_at: gen.created_at,
           });
         });
@@ -64,7 +64,7 @@ const Storage = () => {
 
   const filtered = images.filter((img) => {
     if (filter === "characters") return img.source === "character";
-    if (filter === "images") return img.source === "image";
+    if (filter === "photos") return img.source === "photo";
     return true;
   });
 
@@ -99,118 +99,117 @@ const Storage = () => {
       <Header />
 
       <PageTransition>
-      <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <div className="flex items-center gap-3 mb-4">
-          <BackButton />
-          <p className="text-[10px] font-bold lowercase text-muted-foreground">
-            storage
-          </p>
-        </div>
-
-        {/* Filter pills */}
-        <div className="flex gap-1.5 mb-4">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`flex-1 py-2 rounded-xl font-extrabold lowercase text-xs border-2 transition-all ${
-                filter === f
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border text-foreground hover:border-foreground/30"
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-
-        {/* Selection action bar */}
-        <AnimatePresence>
-          {isSelecting && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden mb-3"
-            >
-              <div className="flex items-center gap-2 border-2 border-border rounded-xl p-2">
-                <span className="text-[10px] font-extrabold lowercase text-muted-foreground flex-1">
-                  {selected.size} selected
-                </span>
-                <Button variant="outline" size="sm" className="h-8 px-3" onClick={handleDownload}>
-                  <Download size={12} strokeWidth={2.5} /> download
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 px-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
-                  onClick={handleDelete}
-                >
-                  <Trash2 size={12} strokeWidth={2.5} /> delete
-                </Button>
-                <button
-                  onClick={() => setSelected(new Set())}
-                  className="w-8 h-8 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <X size={14} strokeWidth={2.5} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="animate-spin text-muted-foreground" size={24} />
+        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+          <div className="flex items-center gap-3 mb-6">
+            <BackButton />
           </div>
-        ) : filtered.length === 0 ? (
-          <div className="border-2 border-border rounded-xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-3">nothing here yet</p>
-            <Button variant="outline" size="sm" onClick={() => navigate("/")}>
-              start creating
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-2">
-            {filtered.map((img) => (
+
+          {/* Filter pills */}
+          <div className="flex gap-2 mb-6">
+            {filters.map((f) => (
               <button
-                key={img.id}
-                onClick={() => {
-                  if (isSelecting) toggleSelect(img.id);
-                  else setExpanded(img);
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  toggleSelect(img.id);
-                }}
-                className={`relative rounded-xl border-2 overflow-hidden bg-background transition-all active:scale-[0.98] ${
-                  selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/30"
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`flex-1 py-3.5 rounded-xl font-extrabold lowercase text-xs border-2 transition-all ${
+                  filter === f
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border text-foreground hover:border-foreground/30"
                 }`}
               >
-                <img src={img.url} alt="" className="w-full aspect-[3/4] object-cover" />
-                {isSelecting && (
-                  <div className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                    selected.has(img.id)
-                      ? "bg-foreground border-foreground"
-                      : "bg-black/20 backdrop-blur border-white/50"
-                  }`}>
-                    {selected.has(img.id) && <Check size={12} strokeWidth={3} className="text-background" />}
-                  </div>
-                )}
+                {f}
               </button>
             ))}
           </div>
-        )}
-      </main>
+
+          {/* Selection action bar */}
+          <AnimatePresence>
+            {isSelecting && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.15 }}
+                className="overflow-hidden mb-6"
+              >
+                <div className="flex items-center gap-2 border-2 border-border rounded-xl p-3">
+                  <span className="text-[10px] font-extrabold lowercase text-muted-foreground flex-1">
+                    {selected.size} selected
+                  </span>
+                  <Button variant="outline" size="sm" className="h-10 px-4" onClick={handleDownload}>
+                    <Download size={14} strokeWidth={2.5} /> download
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-10 px-4 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                    onClick={handleDelete}
+                  >
+                    <Trash2 size={14} strokeWidth={2.5} /> delete
+                  </Button>
+                  <button
+                    onClick={() => setSelected(new Set())}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X size={14} strokeWidth={2.5} />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="animate-spin text-muted-foreground" size={24} />
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="border-2 border-border rounded-xl p-6 text-center">
+              <p className="text-xs font-extrabold lowercase mb-3">nothing here yet</p>
+              <Button variant="outline" className="h-10" onClick={() => navigate("/")}>
+                start creating
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              {filtered.map((img) => (
+                <button
+                  key={img.id}
+                  onClick={() => {
+                    if (isSelecting) toggleSelect(img.id);
+                    else setExpanded(img);
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    toggleSelect(img.id);
+                  }}
+                  className={`relative rounded-xl border-2 overflow-hidden bg-background transition-all active:scale-[0.98] ${
+                    selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/30"
+                  }`}
+                >
+                  <img src={img.url} alt="" className="w-full aspect-[3/4] object-cover" />
+                  {isSelecting && (
+                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                      selected.has(img.id)
+                        ? "bg-foreground border-foreground"
+                        : "bg-black/20 backdrop-blur border-white/50"
+                    }`}>
+                      {selected.has(img.id) && <Check size={12} strokeWidth={3} className="text-background" />}
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </main>
       </PageTransition>
 
-      {/* Expanded full-size view */}
+      {/* Expanded view */}
       <AnimatePresence>
         {expanded && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
             onClick={() => setExpanded(null)}
           >
@@ -226,14 +225,14 @@ const Storage = () => {
                 <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 <button
                   onClick={() => setExpanded(null)}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                  className="absolute top-2 right-2 w-8 h-8 rounded-xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
                 >
                   <X size={14} strokeWidth={2.5} />
                 </button>
               </div>
               <div className="p-4">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="block">
-                  <Button variant="outline" size="sm" className="w-full">
+                  <Button variant="outline" className="w-full h-10">
                     <Download size={14} strokeWidth={2.5} /> download
                   </Button>
                 </a>
