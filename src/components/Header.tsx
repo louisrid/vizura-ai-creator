@@ -39,20 +39,20 @@ const Header = () => {
 
   return (
     <header className="bg-nav sticky top-0 z-40">
-      <div className="container flex items-center justify-between py-4">
-        <VizuraLogo className="text-nav-foreground text-2xl" />
-        <nav className="flex items-center gap-3">
+      <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-3">
+        <VizuraLogo className="text-nav-foreground text-xl" />
+        <nav className="flex items-center gap-2">
           {user ? (
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 bg-nav-foreground/10 hover:bg-nav-foreground/15 text-nav-foreground px-4 py-2.5 rounded-lg font-extrabold lowercase text-sm transition-colors"
+                className="flex items-center gap-1.5 bg-nav-foreground/10 hover:bg-nav-foreground/15 text-nav-foreground px-3 py-2 rounded-xl font-extrabold lowercase text-xs transition-colors"
               >
-                <div className="w-7 h-7 rounded-full bg-accent-purple flex items-center justify-center">
-                  <UserRound size={14} strokeWidth={2.5} className="text-white" />
+                <div className="w-6 h-6 rounded-full bg-accent-purple flex items-center justify-center">
+                  <UserRound size={12} strokeWidth={2.5} className="text-white" />
                 </div>
                 <span className="hidden sm:inline">{user.email?.split("@")[0]}</span>
-                <ChevronDown size={14} className={`transition-transform ${menuOpen ? "rotate-180" : ""}`} />
+                <ChevronDown size={12} className={`transition-transform ${menuOpen ? "rotate-180" : ""}`} />
               </button>
 
               <AnimatePresence>
@@ -62,27 +62,24 @@ const Header = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 4, scale: 0.97 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-64 bg-card border border-border rounded-xl shadow-medium overflow-hidden"
+                    className="absolute right-0 mt-1.5 w-56 bg-card border-2 border-border rounded-xl shadow-medium overflow-hidden"
                   >
-                    {/* User info */}
-                    <div className="px-4 py-3 border-b border-border">
-                      <p className="font-extrabold lowercase text-sm text-foreground truncate">{user.email}</p>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <Sparkles size={12} className="text-accent-purple" />
-                        <span className="text-xs font-bold text-muted-foreground">{credits} credit{credits !== 1 ? "s" : ""} remaining</span>
+                    <div className="px-3 py-2.5 border-b-2 border-border">
+                      <p className="font-extrabold lowercase text-xs text-foreground truncate">{user.email}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Sparkles size={10} className="text-accent-purple" />
+                        <span className="text-[10px] font-bold text-muted-foreground">{credits} credit{credits !== 1 ? "s" : ""}</span>
                       </div>
                     </div>
 
-                    {/* Nav links */}
-                    <div className="py-1.5">
+                    <div className="py-1">
                       <DropdownItem icon={Sparkles} label="character creator" onClick={() => handleNav("/")} active={location.pathname === "/"} />
                       <DropdownItem icon={Sparkles} label="prompt create" onClick={() => handleNav("/create")} active={location.pathname === "/create"} />
                       <DropdownItem icon={Image} label="gallery" onClick={() => handleNav("/gallery")} active={location.pathname === "/gallery"} />
                       <DropdownItem icon={CreditCard} label="get credits" onClick={() => handleNav("/?upgrade=true")} />
                     </div>
 
-                    {/* Logout */}
-                    <div className="border-t border-border py-1.5">
+                    <div className="border-t-2 border-border py-1">
                       <DropdownItem icon={LogOut} label="log out" onClick={handleSignOut} />
                     </div>
                   </motion.div>
@@ -90,11 +87,11 @@ const Header = () => {
               </AnimatePresence>
             </div>
           ) : isOnAuth ? (
-            <Button variant="hero-outline" size="sm" onClick={() => navigate("/")}>
+            <Button variant="hero-outline" size="sm" className="h-9 px-3 text-xs rounded-xl" onClick={() => navigate("/")}>
               home
             </Button>
           ) : (
-            <Button variant="hero-outline" size="sm" onClick={() => navigate("/auth")}>
+            <Button variant="hero-outline" size="sm" className="h-9 px-3 text-xs rounded-xl" onClick={() => navigate("/auth")}>
               login
             </Button>
           )}
@@ -117,11 +114,11 @@ const DropdownItem = ({
 }) => (
   <button
     onClick={onClick}
-    className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold lowercase transition-colors hover:bg-accent ${
+    className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold lowercase transition-colors hover:bg-accent ${
       active ? "text-accent-purple bg-accent-purple-light" : "text-foreground"
     }`}
   >
-    <Icon size={16} strokeWidth={2.5} />
+    <Icon size={14} strokeWidth={2.5} />
     {label}
   </button>
 );
