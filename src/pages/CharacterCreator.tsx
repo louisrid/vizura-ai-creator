@@ -82,9 +82,9 @@ const CharacterCreator = () => {
 
       <PageTransition>
         <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-12 pb-12">
-          <div className="flex items-center justify-center gap-4 mt-8 mb-14 whitespace-nowrap">
-            <Sparkles size={40} strokeWidth={2.5} className="text-foreground shrink-0" />
-            <h1 className="text-5xl font-extrabold lowercase tracking-tight text-foreground">create character</h1>
+          <div className="flex items-center justify-center gap-3 mb-10">
+            <Sparkles size={24} strokeWidth={2.5} className="text-foreground shrink-0" />
+            <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground">create character</h1>
           </div>
 
           <CardCarousel
@@ -94,9 +94,37 @@ const CharacterCreator = () => {
             onNext={cycleNext}
           />
 
+          {/* Description textarea */}
+          <section className="mt-10 flex flex-col gap-2">
+            <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-muted-foreground">
+              describe your character
+            </label>
+            <textarea
+              id="character-description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
+              rows={4}
+              className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
+            />
+          </section>
+
+          {/* Dropdowns */}
+          <section className="mt-8 flex flex-col gap-4">
+            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
+            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
+            <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
+          </section>
+
+          {error && (
+            <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+              {error}
+            </div>
+          )}
+
           {/* Create button */}
-          <div className="mt-12">
-            <Button className="h-16 w-full text-sm" onClick={generate} disabled={isGenerating}>
+          <div className="mt-8">
+            <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
               {isGenerating ? (
                 <>
                   <Loader2 className="animate-spin" size={18} />
@@ -110,34 +138,6 @@ const CharacterCreator = () => {
               )}
             </Button>
           </div>
-
-          {error && (
-            <div className="mt-8 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
-              {error}
-            </div>
-          )}
-
-          {/* Description textarea */}
-          <section className="mt-12 flex flex-col gap-3">
-            <label htmlFor="character-description" className="text-sm font-extrabold lowercase text-foreground">
-              describe your character
-            </label>
-            <textarea
-              id="character-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
-              rows={5}
-              className="min-h-40 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none transition-colors"
-            />
-          </section>
-
-          {/* Dropdowns */}
-          <section className="mt-12 flex flex-col gap-5">
-            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
-            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
-            <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
-          </section>
         </main>
       </PageTransition>
     </div>
