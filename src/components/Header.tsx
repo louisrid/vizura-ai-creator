@@ -75,7 +75,8 @@ const Header = () => {
 
                     {/* Nav links */}
                     <div className="py-1.5">
-                      <DropdownItem icon={Sparkles} label="create" onClick={() => handleNav("/")} active={location.pathname === "/"} />
+                      <DropdownItem icon={Sparkles} label="character creator" onClick={() => handleNav("/")} active={location.pathname === "/"} />
+                      <DropdownItem icon={Sparkles} label="prompt create" onClick={() => handleNav("/create")} active={location.pathname === "/create"} />
                       <DropdownItem icon={Image} label="gallery" onClick={() => handleNav("/gallery")} active={location.pathname === "/gallery"} />
                       <DropdownItem icon={CreditCard} label="get credits" onClick={() => handleNav("/?upgrade=true")} />
                     </div>
