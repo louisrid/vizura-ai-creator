@@ -9,7 +9,7 @@ interface CardCarouselProps {
   onNext: () => void;
 }
 
-const SWIPE_THRESHOLD = 30;
+const SWIPE_THRESHOLD = 25;
 
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
   const [direction, setDirection] = useState(0);
@@ -28,7 +28,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
   const handleDragEnd = useCallback(
     (_: never, info: { offset: { x: number }; velocity: { x: number } }) => {
       const { offset, velocity } = info;
-      if (Math.abs(offset.x) > SWIPE_THRESHOLD || Math.abs(velocity.x) > 200) {
+      if (Math.abs(offset.x) > SWIPE_THRESHOLD || Math.abs(velocity.x) > 150) {
         if (offset.x < 0) goNext();
         else goPrev();
       }
@@ -42,24 +42,24 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
     <section className="flex flex-col items-center">
       <div
         className="relative w-full overflow-hidden touch-pan-y"
-        style={{ height: 320 }}
+        style={{ height: 240 }}
       >
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={activeIndex}
             custom={direction}
-            initial={{ x: direction > 0 ? 260 : -260, opacity: 0 }}
+            initial={{ x: direction > 0 ? 200 : -200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction > 0 ? -260 : 260, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 400, damping: 35, mass: 0.6 }}
+            exit={{ x: direction > 0 ? -200 : 200, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
+            dragElastic={0.12}
             dragMomentum={false}
             onDragEnd={handleDragEnd as any}
             className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
           >
-            <div className="aspect-[4/5] h-full">
+            <div className="w-full h-full">
               <CardContent image={current} index={activeIndex + 1} />
             </div>
           </motion.div>
@@ -71,7 +71,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         <button
           type="button"
           onClick={goPrev}
-          className="flex h-10 w-10 shrink-0 items-center justify-center bg-foreground text-background transition-colors hover:bg-foreground/80"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
           aria-label="previous"
         >
           <ChevronLeft size={16} strokeWidth={2.5} />
@@ -84,7 +84,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         <button
           type="button"
           onClick={goNext}
-          className="flex h-10 w-10 shrink-0 items-center justify-center bg-foreground text-background transition-colors hover:bg-foreground/80"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
           aria-label="next"
         >
           <ChevronRight size={16} strokeWidth={2.5} />
@@ -100,7 +100,7 @@ const CardContent = ({ image, index }: { image: string | null; index: number }) 
       <img src={image} alt={`generated character ${index}`} className="h-full w-full object-cover" draggable={false} />
     ) : (
       <div className="flex h-full w-full items-center justify-center bg-card">
-        <span className="text-5xl font-extrabold text-foreground">{index}</span>
+        <span className="text-4xl font-extrabold text-foreground">{index}</span>
       </div>
     )}
   </div>

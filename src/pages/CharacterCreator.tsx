@@ -81,7 +81,7 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
+        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-10 pb-12">
           <PageTitle>create character</PageTitle>
 
           <CardCarousel
