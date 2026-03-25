@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Camera, SmartphoneNfc, Brush } from "lucide-react";
@@ -26,13 +26,27 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeStyle, setActiveStyle] = useState<number>(0);
-  const [bounceKey, setBounceKey] = useState(0);
+  const styleShakeRef = useRef<HTMLDivElement>(null);
   const [btnBounceKey, setBtnBounceKey] = useState(0);
 
   const handleStyleChange = useCallback((i: number) => {
     if (i !== activeStyle) {
       setActiveStyle(i);
-      setBounceKey((k) => k + 1);
+      // Trigger shake via direct animation API
+      const el = styleShakeRef.current;
+      if (el) {
+        el.animate(
+          [
+            { transform: 'translateX(0px)' },
+            { transform: 'translateX(-6px)' },
+            { transform: 'translateX(5px)' },
+            { transform: 'translateX(-3px)' },
+            { transform: 'translateX(1px)' },
+            { transform: 'translateX(0px)' },
+          ],
+          { duration: 350, easing: 'cubic-bezier(0.22, 0, 0.36, 1)' }
+        );
+      }
     }
   }, [activeStyle]);
   const handleGenerate = async () => {
@@ -107,10 +121,8 @@ const Index = () => {
         />
 
         {/* Style presets */}
-        <motion.div
-          key={bounceKey}
-          animate={bounceKey > 0 ? { x: [0, -6, 5, -3, 1, 0] } : undefined}
-          transition={{ duration: 0.35, ease: [0.22, 0, 0.36, 1] }}
+        <div
+          ref={styleShakeRef}
           className="grid grid-cols-3 gap-2 mb-4"
         >
           {stylePresets.map((style, i) => {
@@ -131,7 +143,7 @@ const Index = () => {
               </button>
             );
           })}
-        </motion.div>
+        </div>
 
         {error && (
           <div className="border-[3px] border-destructive p-3 mb-3 text-destructive font-extrabold lowercase text-sm">
