@@ -80,7 +80,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-4 border-nav-foreground/10 rounded-2xl shadow-medium overflow-hidden"
+                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-[5px] border-nav-foreground/10 rounded-2xl shadow-medium overflow-hidden"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (
