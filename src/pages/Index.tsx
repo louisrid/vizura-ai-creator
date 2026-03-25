@@ -41,6 +41,8 @@ const Index = () => {
   }, [searchParams]);
 
   const handleCreate = async () => {
+    toast({ title: "coming soon", description: "photo creation will be available soon" });
+    return;
     if (!user) { navigate("/auth"); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
     if (!prompt.trim()) return;
