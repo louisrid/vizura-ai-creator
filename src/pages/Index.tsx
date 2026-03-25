@@ -26,13 +26,27 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeStyle, setActiveStyle] = useState<number>(0);
-  const [bounceKey, setBounceKey] = useState(0);
+  const styleShakeRef = useRef<HTMLDivElement>(null);
   const [btnBounceKey, setBtnBounceKey] = useState(0);
 
   const handleStyleChange = useCallback((i: number) => {
     if (i !== activeStyle) {
       setActiveStyle(i);
-      setBounceKey((k) => k + 1);
+      // Trigger shake via direct animation API
+      const el = styleShakeRef.current;
+      if (el) {
+        el.animate(
+          [
+            { transform: 'translateX(0px)' },
+            { transform: 'translateX(-6px)' },
+            { transform: 'translateX(5px)' },
+            { transform: 'translateX(-3px)' },
+            { transform: 'translateX(1px)' },
+            { transform: 'translateX(0px)' },
+          ],
+          { duration: 350, easing: 'cubic-bezier(0.22, 0, 0.36, 1)' }
+        );
+      }
     }
   }, [activeStyle]);
   const handleGenerate = async () => {
