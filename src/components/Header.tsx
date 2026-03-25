@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
+import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle, Zap } from "lucide-react";
+import { useCredits } from "@/contexts/CreditsContext";
 
 const menuItems = [
   { label: "create character", icon: Sparkles, path: "/" },
@@ -51,7 +52,10 @@ const Header = () => {
   return (
     <header className="bg-nav sticky top-0 z-40">
       <div className="max-w-lg mx-auto flex items-center justify-between px-5 py-5">
-        <VizuraLogo className="text-nav-foreground text-2xl" />
+        <div className="flex items-center gap-3">
+          <VizuraLogo className="text-nav-foreground text-2xl" />
+          <CreditsBadge />
+        </div>
 
         <div className="flex items-center gap-3" ref={menuRef}>
           <svg width="0" height="0" className="absolute">
@@ -108,6 +112,16 @@ const Header = () => {
         </div>
       </div>
     </header>
+  );
+};
+
+const CreditsBadge = () => {
+  const { credits } = useCredits();
+  return (
+    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-nav-foreground/20 px-3 py-1.5">
+      <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
+      <span className="text-[11px] font-extrabold text-nav-foreground">{credits}</span>
+    </div>
   );
 };
 
