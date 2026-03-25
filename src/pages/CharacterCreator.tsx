@@ -94,30 +94,30 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-10 pb-10">
+        <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-28 pb-12">
           {/* Large image cards */}
-          <section className="flex items-center gap-2">
+          <section className="flex items-center gap-3">
             <button
               type="button"
               onClick={cyclePrevious}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
               aria-label="previous images"
             >
-              <ChevronLeft size={14} strokeWidth={2.5} />
+              <ChevronLeft size={16} strokeWidth={2.5} />
             </button>
 
             <div className="grid flex-1 grid-cols-3 gap-3">
               {imageCards.map((image, index) => (
                 <div
                   key={`${image ?? "placeholder"}-${index}`}
-                  className="aspect-[3/4] overflow-hidden rounded-xl border-2 border-border bg-card"
+                  className="aspect-[2/3] overflow-hidden rounded-xl border-2 border-border bg-card"
                 >
                   {image ? (
                     <img src={image} alt="generated character" className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-card">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                        <User size={26} strokeWidth={2} />
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <User size={32} strokeWidth={2} />
                       </div>
                     </div>
                   )}
@@ -128,24 +128,24 @@ const CharacterCreator = () => {
             <button
               type="button"
               onClick={cycleNext}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
               aria-label="next images"
             >
-              <ChevronRight size={14} strokeWidth={2.5} />
+              <ChevronRight size={16} strokeWidth={2.5} />
             </button>
           </section>
 
           {/* Create button */}
-          <div className="mt-8">
-            <Button className="h-14 w-full text-xs" onClick={generate} disabled={isGenerating}>
+          <div className="mt-12">
+            <Button className="h-16 w-full text-sm" onClick={generate} disabled={isGenerating}>
               {isGenerating ? (
                 <>
-                  <Loader2 className="animate-spin" size={16} />
+                  <Loader2 className="animate-spin" size={18} />
                   creating…
                 </>
               ) : (
                 <>
-                  <Zap size={16} strokeWidth={2.5} />
+                  <Zap size={18} strokeWidth={2.5} />
                   create
                 </>
               )}
@@ -153,14 +153,14 @@ const CharacterCreator = () => {
           </div>
 
           {error && (
-            <div className="mt-6 rounded-xl border-2 border-destructive/30 bg-destructive/5 p-3 text-xs font-extrabold lowercase text-destructive">
+            <div className="mt-8 rounded-xl border-2 border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
               {error}
             </div>
           )}
 
           {/* Description textarea */}
-          <section className="mt-8 flex flex-col gap-2">
-            <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-muted-foreground">
+          <section className="mt-12 flex flex-col gap-3">
+            <label htmlFor="character-description" className="text-sm font-extrabold lowercase text-muted-foreground">
               describe your character
             </label>
             <textarea
@@ -169,12 +169,12 @@ const CharacterCreator = () => {
               onChange={(event) => setDescription(event.target.value)}
               placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
               rows={5}
-              className="min-h-36 w-full resize-none rounded-xl border-2 border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none"
+              className="min-h-40 w-full resize-none rounded-xl border-2 border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none"
             />
           </section>
 
           {/* Dropdowns */}
-          <section className="mt-8 flex flex-col gap-4">
+          <section className="mt-12 flex flex-col gap-5">
             <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(value) => setHair(value)} />
             <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(value) => setEye(value)} />
             <SelectField label="body type" value={body} options={bodyOptions} onChange={(value) => setBody(value)} />
@@ -194,11 +194,11 @@ type SelectFieldProps<T extends string> = {
 
 const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
   <label className="relative flex flex-col gap-2">
-    <span className="text-xs font-extrabold lowercase text-muted-foreground">{label}</span>
+    <span className="text-sm font-extrabold lowercase text-muted-foreground">{label}</span>
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-xl border-2 border-border bg-card px-4 pr-10 text-xs font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
+      className="h-14 w-full appearance-none rounded-xl border-2 border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
     >
       {options.map((option) => (
         <option key={option} value={option}>

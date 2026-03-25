@@ -82,8 +82,8 @@ const MyCharacters = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-10">
-          <div className="flex items-center gap-3 mb-8">
+        <main className="w-full max-w-lg mx-auto px-4 pt-28 pb-12">
+          <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
 

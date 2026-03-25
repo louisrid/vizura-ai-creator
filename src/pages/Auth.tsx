@@ -51,12 +51,12 @@ const Auth = () => {
       <Header />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-10">
-          <div className="flex items-center gap-3 mb-8">
+        <main className="w-full max-w-lg mx-auto px-4 pt-28 pb-12">
+          <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
 
-          <p className="text-xs font-extrabold lowercase text-center mb-6">{heading}</p>
+          <p className="text-sm font-extrabold lowercase text-center mb-8">{heading}</p>
 
           {signupSuccess || resetSent ? (
             <div className="border-2 border-border rounded-xl p-6 text-center">
@@ -128,7 +128,7 @@ const Auth = () => {
                   </div>
                 )}
 
-                <Button className="w-full h-14 text-xs" disabled={loading}>
+                <Button className="w-full h-16 text-sm" disabled={loading}>
                   {loading ? "loading…" : isForgot ? "send reset link" : isLogin ? (
                     <>log in <ArrowRight size={14} /></>
                   ) : (
