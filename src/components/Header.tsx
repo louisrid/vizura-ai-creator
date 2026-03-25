@@ -52,7 +52,8 @@ const Header = () => {
         <VizuraLogo className="text-nav-foreground text-2xl" />
 
         <div className="flex items-center gap-3" ref={menuRef}>
-          <span className="text-xs font-extrabold lowercase text-nav-foreground/50">
+          <span className="flex items-center gap-1.5 text-sm font-extrabold lowercase text-nav-foreground">
+            <ChevronRight size={14} strokeWidth={3} />
             {currentPage}
           </span>
           <button
