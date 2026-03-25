@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle, Zap } from "lucide-react";
+import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle, Zap, LogIn, LogOut } from "lucide-react";
 import { useCredits } from "@/contexts/CreditsContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const menuItems = [
   { label: "create character", icon: Sparkles, path: "/" },
@@ -29,6 +30,7 @@ const pageNames: Record<string, string> = {
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -45,16 +47,26 @@ const Header = () => {
     navigate(path);
   };
 
+  const handleAuthAction = () => {
+    setOpen(false);
+    if (user) {
+      signOut();
+    } else {
+      navigate("/auth");
+    }
+  };
+
   const currentPage = pageNames[location.pathname] || "";
   const currentMenuItem = menuItems.find((item) => item.path === location.pathname);
-  const CurrentIcon = currentMenuItem?.icon;
+  const isAuthPage = location.pathname === "/auth";
+  const CurrentIcon = currentMenuItem?.icon || (isAuthPage ? LogIn : undefined);
 
   return (
     <header className="bg-nav sticky top-0 z-40 border-b-[3px] border-nav-foreground/15">
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
-          <CreditsBadge />
+          {user && <CreditsBadge />}
         </div>
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
@@ -105,6 +117,35 @@ const Header = () => {
                       {item.label}
                     </button>
                   ))}
+
+                  {/* Divider */}
+                  <div className="mx-4 my-1.5 border-t border-nav-foreground/15" />
+
+                  {/* Sign in / Log out */}
+                  <button
+                    onClick={handleAuthAction}
+                    className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
+                      isAuthPage
+                        ? "gradient-purple-text"
+                        : "text-nav-foreground hover:text-nav-foreground/80"
+                    }`}
+                  >
+                    {user ? (
+                      <>
+                        <LogOut size={14} strokeWidth={2.5} />
+                        log out
+                      </>
+                    ) : (
+                      <>
+                        <LogIn
+                          size={14}
+                          strokeWidth={2.5}
+                          style={isAuthPage ? { stroke: "url(#icon-gradient-purple)" } : undefined}
+                        />
+                        sign in
+                      </>
+                    )}
+                  </button>
                 </div>
               </motion.div>
             )}
