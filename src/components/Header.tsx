@@ -52,7 +52,10 @@ const Header = () => {
   return (
     <header className="bg-nav sticky top-0 z-40">
       <div className="max-w-lg mx-auto flex items-center justify-between px-5 py-5">
-        <VizuraLogo className="text-nav-foreground text-2xl" />
+        <div className="flex items-center gap-3">
+          <VizuraLogo className="text-nav-foreground text-2xl" />
+          <CreditsBadge />
+        </div>
 
         <div className="flex items-center gap-3" ref={menuRef}>
           <svg width="0" height="0" className="absolute">
