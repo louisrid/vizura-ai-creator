@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
+import CharacterCreator from "./pages/CharacterCreator.tsx";
 import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
 import Gallery from "./pages/Gallery.tsx";
@@ -22,7 +23,8 @@ const App = () => (
         <CreditsProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={<CharacterCreator />} />
+              <Route path="/create" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/reset-password" element={<ResetPassword />} />
