@@ -74,8 +74,8 @@ const Header = () => {
           <svg width="0" height="0" className="absolute">
             <defs>
               <linearGradient id="icon-gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(265 85% 75%)" />
-                <stop offset="100%" stopColor="hsl(280 75% 58%)" />
+                <stop offset="0%" stopColor="hsl(210 100% 65%)" />
+                <stop offset="100%" stopColor="hsl(230 85% 55%)" />
               </linearGradient>
             </defs>
           </svg>
