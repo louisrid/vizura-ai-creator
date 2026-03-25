@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
-import PageTransition from "@/components/PageTransition";
+import PageTitle from "@/components/PageTitle";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
 import CardCarousel from "@/components/CardCarousel";
