@@ -157,7 +157,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
     <section className="flex flex-col items-center">
       <motion.div
         className="relative w-full touch-pan-y cursor-grab active:cursor-grabbing select-none"
-        style={{ height: 320, perspective: "1400px" }}
+        style={{ height: 420, perspective: "1400px" }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.06}
