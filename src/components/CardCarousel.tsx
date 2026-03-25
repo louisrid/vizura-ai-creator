@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,26 +9,33 @@ interface CardCarouselProps {
   onNext: () => void;
 }
 
-const SWIPE_THRESHOLD = 25;
+const SWIPE_THRESHOLD = 20;
 
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
   const [direction, setDirection] = useState(0);
   const total = images.length || 3;
+  const swiping = useRef(false);
 
   const goPrev = useCallback(() => {
+    if (swiping.current) return;
+    swiping.current = true;
     setDirection(-1);
     onPrevious();
+    setTimeout(() => { swiping.current = false; }, 250);
   }, [onPrevious]);
 
   const goNext = useCallback(() => {
+    if (swiping.current) return;
+    swiping.current = true;
     setDirection(1);
     onNext();
+    setTimeout(() => { swiping.current = false; }, 250);
   }, [onNext]);
 
   const handleDragEnd = useCallback(
     (_: never, info: { offset: { x: number }; velocity: { x: number } }) => {
       const { offset, velocity } = info;
-      if (Math.abs(offset.x) > SWIPE_THRESHOLD || Math.abs(velocity.x) > 150) {
+      if (Math.abs(offset.x) > SWIPE_THRESHOLD || Math.abs(velocity.x) > 120) {
         if (offset.x < 0) goNext();
         else goPrev();
       }
@@ -40,34 +47,36 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
 
   return (
     <section className="flex flex-col items-center">
-      <div
-        className="relative w-full overflow-hidden touch-pan-y"
-        style={{ height: 240 }}
+      {/* Swipeable area — intentionally taller than the card for easy finger reach */}
+      <motion.div
+        className="relative w-full cursor-grab active:cursor-grabbing select-none"
+        style={{ height: 300, touchAction: "pan-y pinch-zoom" }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.08}
+        dragMomentum={false}
+        onDragEnd={handleDragEnd as any}
       >
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
-          <motion.div
-            key={activeIndex}
-            custom={direction}
-            initial={{ x: direction > 0 ? 200 : -200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction > 0 ? -200 : 200, opacity: 0 }}
-            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.12}
-            dragMomentum={false}
-            onDragEnd={handleDragEnd as any}
-            className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
-          >
-            <div className="w-full h-full">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <motion.div
+              key={activeIndex}
+              custom={direction}
+              initial={{ x: direction > 0 ? 160 : -160, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: direction > 0 ? -160 : 160, opacity: 0 }}
+              transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+              className="mx-auto"
+              style={{ width: "70%", aspectRatio: "1 / 1" }}
+            >
               <CardContent image={current} index={activeIndex + 1} />
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
 
       {/* Nav + counter */}
-      <div className="mt-4 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <button
           type="button"
           onClick={goPrev}
