@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, X, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
+import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
 
 const menuItems = [
   { label: "account", icon: UserRound, path: "/account" },
@@ -42,7 +42,7 @@ const Header = () => {
             onClick={() => setOpen(!open)}
             className="w-9 h-9 rounded-xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
           >
-            {open ? <X size={18} strokeWidth={2.5} /> : <Menu size={18} strokeWidth={2.5} />}
+            <Menu size={18} strokeWidth={2.5} />
           </button>
 
           <AnimatePresence>
