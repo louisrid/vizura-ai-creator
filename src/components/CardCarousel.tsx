@@ -11,7 +11,6 @@ interface CardCarouselProps {
 
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
   const [direction, setDirection] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const handlePrevious = useCallback(() => {
     setDirection(-1);
@@ -41,81 +40,78 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
 
   return (
     <section className="flex flex-col items-center">
-      {/* Carousel container with perspective */}
+      {/* Carousel with perspective */}
       <div
-        ref={containerRef}
-        className="relative w-full overflow-hidden"
-        style={{ perspective: "1000px", height: "280px" }}
+        className="relative flex items-center justify-center w-full"
+        style={{ perspective: "800px", height: "320px" }}
       >
-        {/* Left card — peeking from left, tilted */}
-        <motion.div
-          key={`left-${prevIndex}`}
-          className="absolute top-1/2 left-0 z-10"
+        {/* Left card */}
+        <div
+          className="absolute z-10"
           style={{
-            width: "45%",
-            aspectRatio: "4/5",
-            transform: "translateY(-50%) translateX(-35%) rotateY(25deg) scale(0.8)",
+            width: "42%",
+            left: "-4%",
+            top: "50%",
+            transform: "translateY(-50%) rotateY(30deg) scale(0.78)",
             transformOrigin: "right center",
           }}
         >
-          <CardContent image={leftImage} />
-        </motion.div>
+          <div className="aspect-[4/5]">
+            <CardContent image={leftImage} />
+          </div>
+        </div>
 
-        {/* Center card — big, front-facing */}
+        {/* Center card */}
         <AnimatePresence mode="popLayout">
           <motion.div
             key={`center-${activeIndex}`}
             initial={{
-              x: direction > 0 ? 120 : -120,
-              scale: 0.85,
-              rotateY: direction > 0 ? -20 : 20,
+              x: direction > 0 ? 100 : -100,
+              scale: 0.8,
               opacity: 0.5,
             }}
             animate={{
               x: 0,
               scale: 1,
-              rotateY: 0,
               opacity: 1,
             }}
             exit={{
-              x: direction > 0 ? -120 : 120,
-              scale: 0.85,
-              rotateY: direction > 0 ? 20 : -20,
+              x: direction > 0 ? -100 : 100,
+              scale: 0.8,
               opacity: 0.5,
             }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute top-1/2 left-1/2 z-30 cursor-grab active:cursor-grabbing"
-            style={{
-              width: "55%",
-              aspectRatio: "4/5",
-              transform: "translateX(-50%) translateY(-50%)",
-              transformOrigin: "center center",
-            }}
+            className="relative z-30 cursor-grab active:cursor-grabbing"
+            style={{ width: "58%" }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.3}
             onDragEnd={handleDragEnd}
           >
-            <CardContent image={centerImage} isCenter />
+            <div className="aspect-[4/5]">
+              <CardContent image={centerImage} isCenter />
+            </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Right card — peeking from right, tilted */}
-        <motion.div
-          key={`right-${nextIndex}`}
-          className="absolute top-1/2 right-0 z-10"
+        {/* Right card */}
+        <div
+          className="absolute z-10"
           style={{
-            width: "45%",
-            aspectRatio: "4/5",
-            transform: "translateY(-50%) translateX(35%) rotateY(-25deg) scale(0.8)",
+            width: "42%",
+            right: "-4%",
+            top: "50%",
+            transform: "translateY(-50%) rotateY(-30deg) scale(0.78)",
             transformOrigin: "left center",
           }}
         >
-          <CardContent image={rightImage} />
-        </motion.div>
+          <div className="aspect-[4/5]">
+            <CardContent image={rightImage} />
+          </div>
+        </div>
       </div>
 
-      {/* Arrow buttons below */}
+      {/* Arrow buttons */}
       <div className="mt-5 flex items-center gap-3">
         <button
           type="button"
