@@ -62,28 +62,27 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         </motion.div>
 
         {/* Center card — big, front-facing */}
-        <AnimatePresence mode="popLayout" custom={direction}>
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={`center-${activeIndex}`}
-            custom={direction}
-            initial={(d: number) => ({
-              x: d > 0 ? 120 : -120,
+            initial={{
+              x: direction > 0 ? 120 : -120,
               scale: 0.85,
-              rotateY: d > 0 ? -20 : 20,
+              rotateY: direction > 0 ? -20 : 20,
               opacity: 0.5,
-            })}
+            }}
             animate={{
               x: 0,
               scale: 1,
               rotateY: 0,
               opacity: 1,
             }}
-            exit={(d: number) => ({
-              x: d > 0 ? -120 : 120,
+            exit={{
+              x: direction > 0 ? -120 : 120,
               scale: 0.85,
-              rotateY: d > 0 ? 20 : -20,
+              rotateY: direction > 0 ? 20 : -20,
               opacity: 0.5,
-            })}
+            }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="absolute top-1/2 left-1/2 z-30 cursor-grab active:cursor-grabbing"
             style={{
