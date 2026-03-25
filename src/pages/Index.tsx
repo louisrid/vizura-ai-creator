@@ -89,12 +89,12 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-10">
-          <div className="flex items-center gap-3 mb-8">
+        <main className="w-full max-w-lg mx-auto px-4 pt-28 pb-12">
+          <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
 
-          <div className="relative mb-8 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
+          <div className="relative mb-10 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
             {primaryImage ? (
               <>
                 <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />
@@ -109,31 +109,31 @@ const Index = () => {
               </>
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <Wand2 size={24} className="text-muted-foreground" />
+                <Wand2 size={28} className="text-muted-foreground" />
               </div>
             )}
           </div>
 
           {user && (
-            <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-8">
-              <Sparkles size={12} className="text-accent-purple" />
+            <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-muted-foreground lowercase mb-10">
+              <Sparkles size={14} className="text-accent-purple" />
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
 
-          <div className="space-y-8">
+          <div className="space-y-10">
             <div>
-              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">describe your photo</span>
+              <span className="block text-sm font-extrabold lowercase text-muted-foreground mb-3">describe your photo</span>
               <input
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="woman in golden hour light, rooftop…"
-                className="w-full border-2 border-border bg-background text-foreground px-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
+                className="w-full border-2 border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors"
               />
             </div>
 
             <div>
-              <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">style</span>
+              <span className="block text-sm font-extrabold lowercase text-muted-foreground mb-3">style</span>
               <div className="flex gap-2">
                 {stylePresets.map((style, i) => {
                   const Icon = style.icon;
@@ -141,13 +141,13 @@ const Index = () => {
                     <button
                       key={style.label}
                       onClick={() => setActiveStyle(i)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-3.5 rounded-xl font-extrabold lowercase text-xs border-2 transition-all ${
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-xl font-extrabold lowercase text-sm border-2 transition-all ${
                         activeStyle === i
                           ? "border-foreground bg-foreground text-background"
                           : "border-border text-foreground hover:border-foreground/30"
                       }`}
                     >
-                      <Icon size={14} strokeWidth={2.5} />
+                      <Icon size={16} strokeWidth={2.5} />
                       {style.label}
                     </button>
                   );
@@ -157,30 +157,30 @@ const Index = () => {
           </div>
 
           {error && (
-            <div className="border-2 border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase text-xs rounded-xl mt-8">
+            <div className="border-2 border-destructive/30 bg-destructive/5 p-4 text-destructive font-extrabold lowercase text-sm rounded-xl mt-10">
               {error}
             </div>
           )}
 
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-2 mt-10">
             <Button
-              className="flex-1 h-14 text-xs"
+              className="flex-1 h-16 text-sm"
               onClick={handleCreate}
               disabled={isGenerating || !prompt.trim()}
             >
               {isGenerating ? (
-                <><Loader2 className="animate-spin" size={16} />creating…</>
+                <><Loader2 className="animate-spin" size={18} />creating…</>
               ) : (
-                <><Zap size={16} strokeWidth={2.5} />create</>
+                <><Zap size={18} strokeWidth={2.5} />create</>
               )}
             </Button>
             <Button
               variant="outline"
-              className="h-14 px-4"
+              className="h-16 px-5"
               onClick={handleRandom}
               disabled={isGenerating}
             >
-              <Shuffle size={16} strokeWidth={2.5} />
+              <Shuffle size={18} strokeWidth={2.5} />
             </Button>
           </div>
         </main>
