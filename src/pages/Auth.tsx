@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,7 +20,6 @@ const Auth = () => {
   const { user, signIn, signUp, resetPassword } = useAuth();
   const navigate = useNavigate();
 
-  // Already logged in — send back to generate
   useEffect(() => {
     if (user) navigate("/", { replace: true });
   }, [user, navigate]);
@@ -31,145 +31,179 @@ const Auth = () => {
 
     if (isForgot) {
       const { error } = await resetPassword(email);
-      if (error) {
-        setError(error.message);
-      } else {
-        setResetSent(true);
-      }
+      if (error) setError(error.message);
+      else setResetSent(true);
     } else if (isLogin) {
       const { error } = await signIn(email, password);
-      if (error) {
-        setError(error.message);
-      } else {
-        navigate("/");
-      }
+      if (error) setError(error.message);
+      else navigate("/");
     } else {
       const { error } = await signUp(email, password);
-      if (error) {
-        setError(error.message);
-      } else {
-        setSignupSuccess(true);
-      }
+      if (error) setError(error.message);
+      else setSignupSuccess(true);
     }
     setLoading(false);
   };
 
-  const heading = isForgot ? "reset password" : isLogin ? "log in" : "create account";
+  const heading = isForgot ? "reset password" : isLogin ? "welcome back" : "get started";
+  const subheading = isForgot
+    ? "enter your email and we'll send a reset link"
+    : isLogin
+    ? "log in to continue creating"
+    : "create an account to start generating";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen gradient-subtle">
       <Header />
 
       <motion.main
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-        className="w-full max-w-md mx-auto pt-6 md:pt-10 pb-8 px-4 sm:px-6"
+        className="w-full max-w-md mx-auto pt-10 md:pt-16 pb-8 px-4 sm:px-6"
       >
-        <h1 className="text-[clamp(1.75rem,7vw,3.5rem)] font-extrabold lowercase tracking-tight leading-none mb-6">
+        {/* Branding icon */}
+        <div className="flex justify-center mb-6">
+          <div className="w-14 h-14 rounded-2xl bg-foreground flex items-center justify-center shadow-medium">
+            <Sparkles size={24} className="text-background" />
+          </div>
+        </div>
+
+        <h1 className="text-[clamp(1.75rem,7vw,2.5rem)] font-extrabold lowercase tracking-tight leading-none text-center mb-2">
           {heading}
         </h1>
+        <p className="text-center text-muted-foreground text-sm font-semibold lowercase mb-8">
+          {subheading}
+        </p>
 
         {signupSuccess || resetSent ? (
-          <div className="border-[3px] border-foreground p-8 text-center">
-            <h2 className="text-xl font-extrabold lowercase mb-3">check your email</h2>
-            <p className="text-foreground/60 text-sm font-bold lowercase">
+          <div className="bg-card rounded-2xl border border-border shadow-soft p-8 text-center">
+            <div className="w-12 h-12 rounded-xl bg-accent-purple-light flex items-center justify-center mx-auto mb-4">
+              <Mail size={20} className="text-accent-purple" />
+            </div>
+            <h2 className="text-lg font-extrabold lowercase mb-2">check your email</h2>
+            <p className="text-muted-foreground text-sm font-semibold lowercase">
               we sent a link to <strong className="text-foreground">{email}</strong> — {resetSent ? "click to reset your password." : "click to verify."}
             </p>
             {resetSent && (
               <button
                 type="button"
                 onClick={() => { setIsForgot(false); setResetSent(false); setError(""); }}
-                className="mt-4 font-extrabold lowercase text-foreground underline text-sm"
+                className="mt-4 font-extrabold lowercase text-accent-purple underline text-sm"
               >
                 back to log in
               </button>
             )}
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="border-[3px] border-destructive p-4 text-destructive font-extrabold lowercase">
-                {error}
-              </div>
-            )}
-
-            <div>
-              <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-[clamp(0.95rem,3vw,1.25rem)] font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
-                placeholder="you@example.com"
-              />
-            </div>
-
-            {!isForgot && (
-              <div>
-                <label className="block font-extrabold lowercase text-[clamp(0.85rem,2.5vw,1rem)] mb-1">password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  className="w-full border-[3px] border-foreground bg-background text-foreground p-4 text-[clamp(0.95rem,3vw,1.25rem)] font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-foreground"
-                  placeholder="••••••••"
-                />
-              </div>
-            )}
-
-            <motion.div
-              key={btnBounceKey}
-              animate={btnBounceKey > 0 ? { x: [0, -6, 5, -3, 1, 0] } : undefined}
-              transition={{ duration: 0.35, ease: [0.22, 0, 0.36, 1] }}
-            >
-            <Button size="xl" variant="hero" className="w-full text-[clamp(1rem,3vw,1.25rem)] disabled:opacity-100" disabled={loading} onClick={() => setBtnBounceKey((k) => k + 1)}>
-              {loading ? "loading…" : isForgot ? "send reset link" : isLogin ? "log in" : "create"}
-            </Button>
-            </motion.div>
-
-            {isLogin && !isForgot && (
-              <p className="text-center">
-                <button
-                  type="button"
-                  onClick={() => { setIsForgot(true); setError(""); }}
-                  className="font-extrabold lowercase text-[clamp(0.8rem,2.5vw,1rem)] text-foreground/50 underline"
-                >
-                  forgot password?
-                </button>
-              </p>
-            )}
-
-            <p className="text-center font-extrabold lowercase text-[clamp(0.8rem,2.5vw,1rem)] text-foreground/50 pt-1">
-              {isForgot ? (
-                <button
-                  type="button"
-                  onClick={() => { setIsForgot(false); setError(""); }}
-                  className="text-foreground underline"
-                >
-                  back to log in
-                </button>
-              ) : isLogin ? (
-                <>
-                  no account?{" "}
-                  <button type="button" onClick={() => { setIsLogin(false); setError(""); }} className="text-foreground underline">
-                    create one
-                  </button>
-                </>
-              ) : (
-                <>
-                  have an account?{" "}
-                  <button type="button" onClick={() => { setIsLogin(true); setError(""); }} className="text-foreground underline">
-                    log in
-                  </button>
-                </>
+          <div className="bg-card rounded-2xl border border-border shadow-soft p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="border border-destructive/30 bg-destructive/5 p-4 text-destructive font-bold lowercase rounded-lg text-sm">
+                  {error}
+                </div>
               )}
-            </p>
-          </form>
+
+              <div>
+                <label className="block font-extrabold lowercase text-sm mb-1.5">email</label>
+                <div className="relative">
+                  <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full border border-border bg-background text-foreground pl-11 pr-4 py-3.5 text-sm font-bold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent-purple/30 focus:border-accent-purple/50 rounded-xl transition-shadow"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+
+              {!isForgot && (
+                <div>
+                  <label className="block font-extrabold lowercase text-sm mb-1.5">password</label>
+                  <div className="relative">
+                    <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className="w-full border border-border bg-background text-foreground pl-11 pr-4 py-3.5 text-sm font-bold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent-purple/30 focus:border-accent-purple/50 rounded-xl transition-shadow"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {isLogin && !isForgot && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => { setIsForgot(true); setError(""); }}
+                    className="font-bold lowercase text-xs text-muted-foreground hover:text-accent-purple transition-colors"
+                  >
+                    forgot password?
+                  </button>
+                </div>
+              )}
+
+              <motion.div
+                key={btnBounceKey}
+                animate={btnBounceKey > 0 ? { x: [0, -4, 3, -1.5, 0.5, 0] } : undefined}
+                transition={{ duration: 0.5, ease: [0.22, 0, 0.36, 1] }}
+              >
+                <Button
+                  size="lg"
+                  variant="hero"
+                  className="w-full text-base disabled:opacity-60"
+                  disabled={loading}
+                  onClick={() => setBtnBounceKey((k) => k + 1)}
+                >
+                  {loading ? "loading…" : isForgot ? "send reset link" : isLogin ? (
+                    <>log in <ArrowRight size={16} /></>
+                  ) : (
+                    <>create account <ArrowRight size={16} /></>
+                  )}
+                </Button>
+              </motion.div>
+
+              <p className="text-center font-bold lowercase text-xs text-muted-foreground pt-2">
+                {isForgot ? (
+                  <button
+                    type="button"
+                    onClick={() => { setIsForgot(false); setError(""); }}
+                    className="text-foreground underline hover:text-accent-purple transition-colors"
+                  >
+                    back to log in
+                  </button>
+                ) : isLogin ? (
+                  <>
+                    no account?{" "}
+                    <button type="button" onClick={() => { setIsLogin(false); setError(""); }} className="text-foreground underline hover:text-accent-purple transition-colors">
+                      create one
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    have an account?{" "}
+                    <button type="button" onClick={() => { setIsLogin(true); setError(""); }} className="text-foreground underline hover:text-accent-purple transition-colors">
+                      log in
+                    </button>
+                  </>
+                )}
+              </p>
+            </form>
+          </div>
         )}
+
+        {/* Trust signals */}
+        <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground font-semibold lowercase">
+          <span>✦ free credit on signup</span>
+          <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+          <span>✦ no spam, ever</span>
+        </div>
       </motion.main>
     </div>
   );
