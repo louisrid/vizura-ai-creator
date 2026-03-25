@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle, ChevronRight } from "lucide-react";
+import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
 
 const menuItems = [
   { label: "account", icon: UserRound, path: "/account" },
@@ -52,8 +52,7 @@ const Header = () => {
         <VizuraLogo className="text-nav-foreground text-2xl" />
 
         <div className="flex items-center gap-3" ref={menuRef}>
-          <span className="flex items-center gap-1.5 text-sm font-extrabold lowercase text-nav-foreground">
-            <ChevronRight size={14} strokeWidth={3} />
+          <span className="text-sm font-extrabold lowercase text-nav-foreground">
             {currentPage}
           </span>
           <button
