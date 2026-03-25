@@ -13,6 +13,18 @@ const menuItems = [
   { label: "help", icon: HelpCircle, path: "/help" },
 ];
 
+const pageNames: Record<string, string> = {
+  "/": "create character",
+  "/create": "create photo",
+  "/characters": "my characters",
+  "/storage": "storage",
+  "/account": "account",
+  "/help": "help",
+  "/settings": "settings",
+  "/auth": "sign in",
+  "/reset-password": "reset password",
+};
+
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,17 +44,22 @@ const Header = () => {
     navigate(path);
   };
 
+  const currentPage = pageNames[location.pathname] || "";
+
   return (
     <header className="bg-nav sticky top-0 z-40">
-      <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-3">
-        <VizuraLogo className="text-nav-foreground text-xl" />
+      <div className="max-w-lg mx-auto flex items-center justify-between px-5 py-5">
+        <VizuraLogo className="text-nav-foreground text-2xl" />
 
-        <div className="relative" ref={menuRef}>
+        <div className="flex items-center gap-3" ref={menuRef}>
+          <span className="text-xs font-extrabold lowercase text-nav-foreground/50">
+            {currentPage}
+          </span>
           <button
             onClick={() => setOpen(!open)}
-            className="w-9 h-9 rounded-xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
+            className="w-10 h-10 rounded-xl bg-nav-foreground/10 hover:bg-nav-foreground/15 flex items-center justify-center text-nav-foreground transition-colors"
           >
-            <Menu size={18} strokeWidth={2.5} />
+            <Menu size={20} strokeWidth={2.5} />
           </button>
 
           <AnimatePresence>
@@ -52,7 +69,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 mt-1.5 w-52 bg-nav border-2 border-nav-foreground/10 rounded-xl shadow-medium overflow-hidden"
+                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-2 border-nav-foreground/10 rounded-xl shadow-medium overflow-hidden"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (
