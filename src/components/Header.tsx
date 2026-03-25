@@ -54,9 +54,17 @@ const Header = () => {
         <VizuraLogo className="text-nav-foreground text-2xl" />
 
         <div className="flex items-center gap-3" ref={menuRef}>
-          <span className="gradient-purple-text flex items-center gap-1.5 text-sm font-extrabold lowercase">
-            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} />}
-            {currentPage}
+          <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
+            <svg width="0" height="0" className="absolute">
+              <defs>
+                <linearGradient id="icon-gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="hsl(255 65% 80%)" />
+                  <stop offset="100%" stopColor="hsl(265 45% 60%)" />
+                </linearGradient>
+              </defs>
+            </svg>
+            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} style={{ stroke: "url(#icon-gradient-purple)" }} />}
+            <span className="gradient-purple-text">{currentPage}</span>
           </span>
           <button
             onClick={() => setOpen(!open)}
