@@ -72,6 +72,7 @@ export default {
         },
         'accent-purple': {
           DEFAULT: "hsl(var(--accent-purple))",
+          dark: "hsl(var(--accent-purple-dark))",
           light: "hsl(var(--accent-purple-light))",
         },
         sidebar: {
