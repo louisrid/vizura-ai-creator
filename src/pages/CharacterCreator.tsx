@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Zap, RotateCcw, Wand2, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
@@ -65,6 +66,10 @@ const CharacterCreator = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Pre-fill from edit param
+  const editPrompt = searchParams.get("edit");
 
   const [hair, setHair] = useState(1);
   const [eye, setEye] = useState(0);
@@ -72,14 +77,13 @@ const CharacterCreator = () => {
   const [body, setBody] = useState(1);
   const [outfit, setOutfit] = useState(0);
   const [age, setAge] = useState(1);
-  const [extra, setExtra] = useState("");
+  const [extra, setExtra] = useState(editPrompt || "");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [swipeIndex, setSwipeIndex] = useState(0);
-  const [hasEverGenerated, setHasEverGenerated] = useState(false);
 
   const hasGen = generated.length > 0;
   const imgs = hasGen ? generated : placeholders;
@@ -94,7 +98,6 @@ const CharacterCreator = () => {
 
   const generate = async (refine = false) => {
     if (!user) { navigate("/auth"); return; }
-    if (!hasEverGenerated) { setShowPaywall(true); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
     await runGeneration(refine);
   };
@@ -107,7 +110,6 @@ const CharacterCreator = () => {
       if (e) throw e;
       if (data?.error) throw new Error(data.error);
       setGenerated(data.images || []);
-      setHasEverGenerated(true);
       await refetchCredits();
     } catch (e: any) {
       if (e.message?.includes("No credits") || e.message?.includes("402")) setShowPaywall(true);
@@ -130,175 +132,177 @@ const CharacterCreator = () => {
       <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
-        <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-3">
-          pick a style, tweak the details, hit generate
-        </p>
+      <PageTransition>
+        <main className="w-full max-w-lg mx-auto px-4 pt-4 pb-10">
+          <p className="text-[10px] font-bold lowercase text-muted-foreground text-center mb-3">
+            pick a style, tweak the details, hit generate
+          </p>
 
-        {/* Results */}
-        <div className="mb-3">
-          <div className="hidden sm:grid grid-cols-3 gap-2">
-            {imgs.map((src, i) => (
-              <ResultImage key={i} src={src} label={angleLabels[i]} isPlaceholder={!hasGen} />
-            ))}
-          </div>
-          <div className="sm:hidden">
-            <div
-              className="overflow-x-auto snap-x snap-mandatory flex gap-2 scrollbar-hide"
-              onScroll={(e) => {
-                const el = e.currentTarget;
-                const idx = Math.round(el.scrollLeft / el.clientWidth);
-                setSwipeIndex(idx);
-              }}
-            >
+          {/* Results */}
+          <div className="mb-3">
+            <div className="hidden sm:grid grid-cols-3 gap-2">
               {imgs.map((src, i) => (
-                <div key={i} className="snap-center shrink-0 w-[75%]">
-                  <ResultImage src={src} label={angleLabels[i]} isPlaceholder={!hasGen} />
-                </div>
+                <ResultImage key={i} src={src} label={angleLabels[i]} isPlaceholder={!hasGen} isGenerating={isGenerating && !hasGen} />
               ))}
             </div>
-            <div className="flex justify-center gap-1.5 mt-2">
-              {angleLabels.map((_, i) => (
-                <div key={i} className={`h-1.5 rounded-full transition-all ${i === swipeIndex ? "w-5 bg-foreground" : "w-1.5 bg-foreground/20"}`} />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Post-gen actions + credits */}
-        <div className="flex items-center gap-2 mb-4">
-          {hasGen ? (
-            <>
-              <Button variant="outline" size="sm" className="flex-1" onClick={() => generate(false)} disabled={isGenerating}>
-                <RotateCcw size={14} strokeWidth={2.5} /> continue
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1" onClick={() => generate(true)} disabled={isGenerating}>
-                <Wand2 size={14} strokeWidth={2.5} /> refine this
-              </Button>
-            </>
-          ) : (
-            <div className="flex-1" />
-          )}
-          {user && (
-            <div className="flex items-center gap-1 text-[10px] font-extrabold text-muted-foreground lowercase shrink-0">
-              <Sparkles size={12} className="text-accent-purple" />
-              {credits}
-            </div>
-          )}
-        </div>
-
-        {/* Controls */}
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <MiniPalette label="hair" items={hairColours} active={hair} onSelect={setHair} />
-            <MiniPalette label="eyes" items={eyeColours} active={eye} onSelect={setEye} />
-          </div>
-          <MiniPalette label="skin tone" items={skinTones} active={skin} onSelect={setSkin} />
-          <ToggleRow label="body" options={bodyTypes} active={body} onSelect={setBody} />
-          <ToggleRow label="outfit" options={outfitStyles} active={outfit} onSelect={setOutfit} />
-          <ToggleRow label="age" options={ageRanges} active={age} onSelect={setAge} />
-        </div>
-
-        {/* Extra detail */}
-        <input
-          value={extra}
-          onChange={(e) => setExtra(e.target.value)}
-          placeholder="tattoos, freckles, glasses…"
-          className="w-full border-2 border-border bg-background text-foreground px-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl mt-3 transition-colors"
-        />
-
-        {error && (
-          <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase text-[10px] rounded-xl mt-3">
-            {error}
-          </div>
-        )}
-
-        {/* Generate button */}
-        <Button
-          className="w-full h-12 mt-4"
-          onClick={() => generate(false)}
-          disabled={isGenerating}
-        >
-          {isGenerating ? (
-            <><Loader2 className="animate-spin" size={14} />generating…</>
-          ) : (
-            <><Zap size={14} strokeWidth={2.5} />generate</>
-          )}
-        </Button>
-
-        {/* Collapsible guide */}
-        <div className="mt-4 border-2 border-border rounded-xl overflow-hidden">
-          <button
-            onClick={() => setGuideOpen(!guideOpen)}
-            className="w-full flex items-center justify-between px-3 py-2.5 text-[10px] font-extrabold lowercase text-muted-foreground hover:text-foreground transition-colors"
-          >
-            full guide for first-timers
-            {guideOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          </button>
-          <AnimatePresence>
-            {guideOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden"
+            <div className="sm:hidden">
+              <div
+                className="overflow-x-auto snap-x snap-mandatory flex gap-2 scrollbar-hide"
+                onScroll={(e) => {
+                  const el = e.currentTarget;
+                  const idx = Math.round(el.scrollLeft / el.clientWidth);
+                  setSwipeIndex(idx);
+                }}
               >
-                <div className="px-3 pb-3 text-[10px] font-bold lowercase text-muted-foreground space-y-2">
-                  <GuideItem title="hair & eyes" text="tap a colour swatch to set hair or eye colour." />
-                  <GuideItem title="skin tone" text="choose a skin tone from the palette." />
-                  <GuideItem title="body type" text="slim, regular, or curvy." />
-                  <GuideItem title="outfit" text="casual, formal, sporty, or fantasy." />
-                  <GuideItem title="age" text="teen, young adult, or adult." />
-                  <GuideItem title="extra detail" text="tattoos, freckles, glasses, scars, hairstyles." />
-                  <GuideItem title="continue vs refine" text="continue = new look. refine = tiny tweaks." />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </main>
-
-      {/* Made with vizura */}
-      <section className="w-full bg-foreground py-6 mt-2">
-        <div className="max-w-lg mx-auto px-4">
-          <p className="text-[10px] font-extrabold lowercase text-background/50 mb-3">made with vizura</p>
-        </div>
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 px-4 w-max">
-            {showcaseImages.map((src, i) => (
-              <div key={i} className="w-28 shrink-0 rounded-xl overflow-hidden bg-background">
-                <img src={src} alt="" loading="lazy" width={512} height={680} className="w-full aspect-[3/4] object-cover" />
+                {imgs.map((src, i) => (
+                  <div key={i} className="snap-center shrink-0 w-[75%]">
+                    <ResultImage src={src} label={angleLabels[i]} isPlaceholder={!hasGen} isGenerating={isGenerating && !hasGen} />
+                  </div>
+                ))}
               </div>
-            ))}
+              <div className="flex justify-center gap-1.5 mt-2">
+                {angleLabels.map((_, i) => (
+                  <div key={i} className={`h-1.5 rounded-full transition-all ${i === swipeIndex ? "w-5 bg-foreground" : "w-1.5 bg-foreground/20"}`} />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Popular prompts */}
-      <section className="w-full max-w-lg mx-auto px-4 py-6">
-        <p className="text-[10px] font-extrabold lowercase text-muted-foreground mb-3">popular prompts</p>
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 w-max">
-            {popularPrompts.map((preset) => (
-              <button
-                key={preset.label}
-                onClick={() => applyPreset(preset)}
-                className="shrink-0 px-4 py-2.5 rounded-xl border-2 border-border bg-background text-xs font-extrabold lowercase text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95"
-              >
-                {preset.label}
-              </button>
-            ))}
+          {/* Post-gen actions + credits */}
+          <div className="flex items-center gap-2 mb-4">
+            {hasGen ? (
+              <>
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => generate(false)} disabled={isGenerating}>
+                  <RotateCcw size={14} strokeWidth={2.5} /> continue
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => generate(true)} disabled={isGenerating}>
+                  <Wand2 size={14} strokeWidth={2.5} /> refine this
+                </Button>
+              </>
+            ) : (
+              <div className="flex-1" />
+            )}
+            {user && (
+              <div className="flex items-center gap-1 text-[10px] font-extrabold text-muted-foreground lowercase shrink-0">
+                <Sparkles size={12} className="text-accent-purple" />
+                {credits}
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+
+          {/* Controls */}
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <MiniPalette label="hair" items={hairColours} active={hair} onSelect={setHair} />
+              <MiniPalette label="eyes" items={eyeColours} active={eye} onSelect={setEye} />
+            </div>
+            <MiniPalette label="skin tone" items={skinTones} active={skin} onSelect={setSkin} />
+            <ToggleRow label="body" options={bodyTypes} active={body} onSelect={setBody} />
+            <ToggleRow label="outfit" options={outfitStyles} active={outfit} onSelect={setOutfit} />
+            <ToggleRow label="age" options={ageRanges} active={age} onSelect={setAge} />
+          </div>
+
+          {/* Extra detail */}
+          <input
+            value={extra}
+            onChange={(e) => setExtra(e.target.value)}
+            placeholder="tattoos, freckles, glasses…"
+            className="w-full border-2 border-border bg-background text-foreground px-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl mt-3 transition-colors"
+          />
+
+          {error && (
+            <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase text-[10px] rounded-xl mt-3">
+              {error}
+            </div>
+          )}
+
+          {/* Generate button */}
+          <Button
+            className="w-full h-12 mt-4"
+            onClick={() => generate(false)}
+            disabled={isGenerating}
+          >
+            {isGenerating ? (
+              <><Loader2 className="animate-spin" size={14} />generating…</>
+            ) : (
+              <><Zap size={14} strokeWidth={2.5} />generate</>
+            )}
+          </Button>
+
+          {/* Collapsible guide */}
+          <div className="mt-4 border-2 border-border rounded-xl overflow-hidden">
+            <button
+              onClick={() => setGuideOpen(!guideOpen)}
+              className="w-full flex items-center justify-between px-3 py-2.5 text-[10px] font-extrabold lowercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              full guide for first-timers
+              {guideOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            </button>
+            <AnimatePresence>
+              {guideOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-3 pb-3 text-[10px] font-bold lowercase text-muted-foreground space-y-2">
+                    <GuideItem title="hair & eyes" text="tap a colour swatch to set hair or eye colour." />
+                    <GuideItem title="skin tone" text="choose a skin tone from the palette." />
+                    <GuideItem title="body type" text="slim, regular, or curvy." />
+                    <GuideItem title="outfit" text="casual, formal, sporty, or fantasy." />
+                    <GuideItem title="age" text="teen, young adult, or adult." />
+                    <GuideItem title="extra detail" text="tattoos, freckles, glasses, scars, hairstyles." />
+                    <GuideItem title="continue vs refine" text="continue = new look. refine = tiny tweaks." />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </main>
+
+        {/* Made with vizura */}
+        <section className="w-full bg-foreground py-6 mt-2">
+          <div className="max-w-lg mx-auto px-4">
+            <p className="text-[10px] font-extrabold lowercase text-background/50 mb-3">made with vizura</p>
+          </div>
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 px-4 w-max">
+              {showcaseImages.map((src, i) => (
+                <div key={i} className="w-28 shrink-0 rounded-xl overflow-hidden bg-background">
+                  <img src={src} alt="" loading="lazy" width={512} height={680} className="w-full aspect-[3/4] object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Popular prompts */}
+        <section className="w-full max-w-lg mx-auto px-4 py-6">
+          <p className="text-[10px] font-extrabold lowercase text-muted-foreground mb-3">popular prompts</p>
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 w-max">
+              {popularPrompts.map((preset) => (
+                <button
+                  key={preset.label}
+                  onClick={() => applyPreset(preset)}
+                  className="shrink-0 px-4 py-2.5 rounded-xl border-2 border-border bg-background text-xs font-extrabold lowercase text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      </PageTransition>
     </div>
   );
 };
 
-const ResultImage = ({ src, label, isPlaceholder }: { src: string; label: string; isPlaceholder: boolean }) => (
+const ResultImage = ({ src, label, isPlaceholder, isGenerating }: { src: string; label: string; isPlaceholder: boolean; isGenerating: boolean }) => (
   <div className={`relative rounded-xl overflow-hidden border-2 border-border ${isPlaceholder ? "opacity-60" : ""}`}>
-    <img src={src} alt={label} className="w-full aspect-[3/4] object-cover" />
+    <img src={src} alt={label} className={`w-full aspect-[3/4] object-cover ${isGenerating ? "animate-pulse" : ""}`} />
     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/40 to-transparent px-2.5 pb-2 pt-6">
       <span className="text-white font-extrabold lowercase text-[10px]">{label}</span>
     </div>
