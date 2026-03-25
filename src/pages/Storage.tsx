@@ -46,7 +46,7 @@ const Storage = () => {
 
       const allImages: StorageImage[] = [];
       (data || []).forEach((gen: any) => {
-        const isCharacter = gen.prompt?.includes("build,") && gen.prompt?.includes("skin,");
+        const isCharacter = gen.prompt?.includes("body type,") && gen.prompt?.includes("hair,") && gen.prompt?.includes("eyes");
         (gen.image_urls || []).forEach((url: string, i: number) => {
           allImages.push({
             id: `${gen.id}-${i}`,
