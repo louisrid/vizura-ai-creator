@@ -5,11 +5,11 @@ import VizuraLogo from "@/components/VizuraLogo";
 import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, HelpCircle } from "lucide-react";
 
 const menuItems = [
-  { label: "account", icon: UserRound, path: "/account" },
   { label: "create character", icon: Sparkles, path: "/" },
   { label: "create photo", icon: Camera, path: "/create" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
+  { label: "account", icon: UserRound, path: "/account" },
   { label: "help", icon: HelpCircle, path: "/help" },
 ];
 
