@@ -38,13 +38,12 @@ const Index = () => {
         el.animate(
           [
             { transform: 'translateX(0px)' },
-            { transform: 'translateX(-6px)' },
-            { transform: 'translateX(5px)' },
             { transform: 'translateX(-3px)' },
-            { transform: 'translateX(1px)' },
+            { transform: 'translateX(2px)' },
+            { transform: 'translateX(-1px)' },
             { transform: 'translateX(0px)' },
           ],
-          { duration: 350, easing: 'cubic-bezier(0.22, 0, 0.36, 1)' }
+          { duration: 700, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' }
         );
       }
     }
