@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle } from "lucide-react";
+import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
@@ -87,31 +86,25 @@ const Index = () => {
             <BackButton />
           </div>
 
-          {/* Results above controls */}
-          <AnimatePresence>
-            {images.length > 0 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }} className="mb-6">
-                <div className="grid grid-cols-3 gap-2">
-                  {images.map((src, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: i * 0.05, duration: 0.15 }}
-                      className="group relative rounded-xl overflow-hidden border-2 border-border"
-                    >
-                      <img src={src} alt="" className="w-full aspect-[3/4] object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-end p-2">
-                        <a href={src} download={`vizura-${i}.png`} className="w-6 h-6 rounded-full bg-black/30 backdrop-blur flex items-center justify-center hover:bg-black/50 transition-colors">
-                          <Download size={10} className="text-white" />
-                        </a>
-                      </div>
-                    </motion.div>
-                  ))}
+          {/* Result / Placeholder */}
+          {images.length > 0 ? (
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {images.map((src, i) => (
+                <div key={i} className="group relative rounded-xl overflow-hidden border-2 border-border">
+                  <img src={src} alt="" className="w-full aspect-[3/4] object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-end p-2">
+                    <a href={src} download={`vizura-${i}.png`} className="w-6 h-6 rounded-full bg-black/30 backdrop-blur flex items-center justify-center hover:bg-black/50 transition-colors">
+                      <Download size={10} className="text-white" />
+                    </a>
+                  </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border-2 border-border bg-muted aspect-[4/5] flex items-center justify-center mb-4">
+              <Wand2 size={28} className="text-muted-foreground/30" />
+            </div>
+          )}
 
           {/* Credits */}
           {user && (
