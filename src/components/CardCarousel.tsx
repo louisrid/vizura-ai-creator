@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, type PanInfo, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate, type PanInfo } from "framer-motion";
 
 interface CardCarouselProps {
   images: (string | null)[];
@@ -9,73 +9,67 @@ interface CardCarouselProps {
   onNext: () => void;
 }
 
+const CARD_COUNT = 3;
+const DRAG_THRESHOLD = 50;
+
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
-  const total = images.length || 3;
+  const total = images.length || CARD_COUNT;
   const dragX = useMotionValue(0);
-  const [dragging, setDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Normalize drag into -1…1 range for blending
+  const dragProgress = useTransform(dragX, [-200, 0, 200], [-1, 0, 1]);
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      setDragging(false);
-      if (info.offset.x < -40) onNext();
-      else if (info.offset.x > 40) onPrevious();
+      if (info.offset.x < -DRAG_THRESHOLD) {
+        onNext();
+      } else if (info.offset.x > DRAG_THRESHOLD) {
+        onPrevious();
+      }
+      animate(dragX, 0, { type: "spring", stiffness: 400, damping: 30 });
     },
-    [onNext, onPrevious]
+    [onNext, onPrevious, dragX]
   );
 
   const getIdx = (offset: number) => (activeIndex + offset + total) % total;
 
-  // Positions: left, center, right
-  const cards = [-1, 0, 1];
-
   return (
     <section className="flex flex-col items-center">
+      {/* 3D perspective container */}
       <div
-        className="relative w-full overflow-hidden"
-        style={{ height: 320 }}
+        ref={containerRef}
+        className="relative w-full"
+        style={{ height: 320, perspective: 800 }}
       >
+        {/* Invisible drag layer */}
         <motion.div
-          className="absolute inset-0 cursor-grab active:cursor-grabbing"
+          className="absolute inset-0 z-40 cursor-grab active:cursor-grabbing"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.3}
-          onDragStart={() => setDragging(true)}
+          dragElastic={0.4}
           onDragEnd={handleDragEnd}
           style={{ x: dragX }}
         />
 
-        {cards.map((offset) => {
+        {/* Cards */}
+        {([-1, 0, 1] as const).map((offset) => {
           const idx = getIdx(offset);
           const isCenter = offset === 0;
 
-          // Layout values
-          const width = isCenter ? 56 : 38;
-          const scale = isCenter ? 1 : 0.82;
-          const opacity = isCenter ? 1 : 0.5;
-          const left = offset === -1 ? 2 : offset === 0 ? 22 : 60;
-          const zIndex = isCenter ? 30 : 10;
-
           return (
-            <motion.div
+            <Card3D
               key={`slot-${offset}`}
-              className="absolute"
-              style={{
-                top: "50%",
-                width: `${width}%`,
-                zIndex,
-              }}
-              animate={{
-                left: `${left}%`,
-                scale,
-                opacity,
-                y: "-50%",
-              }}
-              transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              offset={offset}
+              dragProgress={dragProgress}
+              isCenter={isCenter}
             >
-              <div className="aspect-[4/5]">
-                <CardContent index={idx + 1} image={images[idx] ?? null} isCenter={isCenter} />
-              </div>
-            </motion.div>
+              <CardContent
+                index={idx + 1}
+                image={images[idx] ?? null}
+                isCenter={isCenter}
+              />
+            </Card3D>
           );
         })}
       </div>
@@ -102,6 +96,55 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
     </section>
   );
 };
+
+/* ── 3D positioned card wrapper ── */
+
+interface Card3DProps {
+  offset: -1 | 0 | 1;
+  dragProgress: ReturnType<typeof useTransform>;
+  isCenter: boolean;
+  children: React.ReactNode;
+}
+
+const Card3D = ({ offset, isCenter, children }: Card3DProps) => {
+  // Position configs per slot
+  const configs: Record<number, { x: string; z: number; rotateY: number; scale: number; opacity: number }> = {
+    [-1]: { x: "-30%", z: -120, rotateY: 35, scale: 0.78, opacity: 0.55 },
+    [0]:  { x: "0%",   z: 0,    rotateY: 0,  scale: 1,    opacity: 1 },
+    [1]:  { x: "30%",  z: -120, rotateY: -35, scale: 0.78, opacity: 0.55 },
+  };
+
+  const cfg = configs[offset];
+
+  return (
+    <motion.div
+      className="absolute left-1/2 top-1/2"
+      style={{
+        width: "55%",
+        transformStyle: "preserve-3d",
+        zIndex: isCenter ? 30 : 10,
+      }}
+      animate={{
+        x: cfg.x,
+        translateX: "-50%",
+        translateY: "-50%",
+        translateZ: cfg.z,
+        rotateY: cfg.rotateY,
+        scale: cfg.scale,
+        opacity: cfg.opacity,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 28,
+      }}
+    >
+      <div className="aspect-[4/5]">{children}</div>
+    </motion.div>
+  );
+};
+
+/* ── Card content ── */
 
 const CardContent = ({ index, image, isCenter }: { index: number; image: string | null; isCenter?: boolean }) => (
   <div
