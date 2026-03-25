@@ -39,22 +39,22 @@ const TopUps = () => {
             return (
               <div
                 key={plan.label}
-                className={`border-[5px] rounded-2xl p-5 ${
+                className={`rounded-2xl p-5 ${
                   plan.highlighted
-                    ? "border-transparent bg-gradient-to-br from-blue-500 to-blue-700"
-                    : "border-border bg-card"
+                    ? "border-gradient-blue bg-foreground"
+                    : "border-[5px] border-border bg-card"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span
                     className={`text-xs font-extrabold lowercase ${
-                      plan.highlighted ? "text-white" : "text-foreground"
+                      plan.highlighted ? "text-background" : "text-foreground"
                     }`}
                   >
                     {plan.label}
                   </span>
                   {plan.highlighted && (
-                    <span className="text-[10px] font-extrabold lowercase text-white bg-white/20 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-extrabold lowercase text-background bg-background/20 px-2 py-0.5 rounded-full">
                       best value
                     </span>
                   )}
@@ -63,7 +63,7 @@ const TopUps = () => {
                 <div className="flex items-baseline gap-2 mb-1">
                   <span
                     className={`text-xl font-extrabold lowercase ${
-                      plan.highlighted ? "text-white" : "text-foreground"
+                      plan.highlighted ? "text-background" : "text-foreground"
                     }`}
                   >
                     {plan.credits.toLocaleString()} credits
@@ -73,14 +73,14 @@ const TopUps = () => {
                 <div className="flex items-baseline justify-between mb-4">
                   <span
                     className={`text-2xl font-extrabold lowercase ${
-                      plan.highlighted ? "text-white" : "text-foreground"
+                      plan.highlighted ? "text-background" : "text-foreground"
                     }`}
                   >
                     ${plan.price}
                   </span>
                   <span
                     className={`text-[11px] font-extrabold lowercase ${
-                      plan.highlighted ? "text-white/60" : "text-foreground/50"
+                      plan.highlighted ? "text-background/60" : "text-foreground/50"
                     }`}
                   >
                     ${perCredit}/credit
@@ -88,12 +88,8 @@ const TopUps = () => {
                 </div>
 
                 <Button
-                  variant={plan.highlighted ? "outline" : "default"}
-                  className={`w-full h-12 text-sm ${
-                    plan.highlighted
-                      ? "border-white text-white hover:bg-white hover:text-blue-600"
-                      : ""
-                  }`}
+                  variant="outline"
+                  className="w-full h-12 text-sm"
                   onClick={handleBuy}
                 >
                   buy credits
