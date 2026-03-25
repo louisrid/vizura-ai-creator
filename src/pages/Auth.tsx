@@ -56,7 +56,7 @@ const Auth = () => {
             <BackButton />
           </div>
 
-          <p className="text-sm font-extrabold lowercase text-center mb-8">{heading}</p>
+          <h1 className="text-3xl font-extrabold lowercase text-foreground tracking-tight mb-10">{heading}</h1>
 
           {signupSuccess || resetSent ? (
             <div className="border-2 border-border rounded-xl p-6 text-center">

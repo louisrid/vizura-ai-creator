@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,6 +87,7 @@ const MyCharacters = () => {
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
+          <PageTitle>my characters</PageTitle>
 
           {loading ? (
             <div className="flex items-center justify-center py-16">

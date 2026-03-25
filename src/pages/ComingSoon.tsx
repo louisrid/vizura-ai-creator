@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
+import PageTitle from "@/components/PageTitle";
 
 const ComingSoon = ({ title }: { title: string }) => (
   <div className="min-h-screen bg-background">
@@ -10,8 +11,9 @@ const ComingSoon = ({ title }: { title: string }) => (
         <div className="flex items-center gap-3 mb-10">
           <BackButton />
         </div>
+        <PageTitle>{title}</PageTitle>
         <div className="border-2 border-border rounded-xl p-6 text-center">
-          <p className="text-xs font-extrabold lowercase">coming soon</p>
+          <p className="text-sm font-extrabold lowercase">coming soon</p>
         </div>
       </main>
     </PageTransition>

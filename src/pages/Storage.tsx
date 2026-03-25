@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import PageTransition from "@/components/PageTransition";
+import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -103,6 +104,7 @@ const Storage = () => {
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
+          <PageTitle>storage</PageTitle>
 
           {/* Filter pills */}
           <div className="flex gap-2 mb-6">

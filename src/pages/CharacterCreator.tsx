@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, ChevronLeft, ChevronRight, Loader2, User, Zap } from "lucide-react";
+import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PageTransition from "@/components/PageTransition";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import PageTitle from "@/components/PageTitle";
+import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,8 +34,8 @@ const CharacterCreator = () => {
 
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
-    return Array.from({ length: 3 }, (_, offset) => generated[(activeIndex + offset) % generated.length] ?? null);
-  }, [activeIndex, generated]);
+    return generated.map((img) => img ?? null);
+  }, [generated]);
 
   const buildPrompt = () => {
     let prompt = `photorealistic portrait, young woman, ${body} body type, ${hair} hair, ${eye} eyes`;
@@ -43,15 +45,8 @@ const CharacterCreator = () => {
   };
 
   const generate = async () => {
-    if (!user) {
-      navigate("/auth");
-      return;
-    }
-
-    if (credits <= 0) {
-      setShowPaywall(true);
-      return;
-    }
+    if (!user) { navigate("/auth"); return; }
+    if (credits <= 0) { setShowPaywall(true); return; }
 
     setIsGenerating(true);
     setError("");
@@ -60,10 +55,8 @@ const CharacterCreator = () => {
       const { data, error: functionError } = await supabase.functions.invoke("generate", {
         body: { prompt: buildPrompt() },
       });
-
       if (functionError) throw functionError;
       if (data?.error) throw new Error(data.error);
-
       setGenerated(data.images || []);
       setActiveIndex(0);
       await refetchCredits();
@@ -78,15 +71,9 @@ const CharacterCreator = () => {
     }
   };
 
-  const cyclePrevious = () => {
-    const total = generated.length || 3;
-    setActiveIndex((current) => (current - 1 + total) % total);
-  };
-
-  const cycleNext = () => {
-    const total = generated.length || 3;
-    setActiveIndex((current) => (current + 1) % total);
-  };
+  const total = imageCards.length || 3;
+  const cyclePrevious = () => setActiveIndex((c) => (c - 1 + total) % total);
+  const cycleNext = () => setActiveIndex((c) => (c + 1) % total);
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,46 +82,14 @@ const CharacterCreator = () => {
 
       <PageTransition>
         <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-44 pb-12">
-          {/* Large image cards */}
-          <section className="flex flex-col items-center">
-            <div className="grid w-full grid-cols-3 gap-3">
-              {imageCards.map((image, index) => (
-                <div
-                  key={`${image ?? "placeholder"}-${index}`}
-                  className="aspect-[3/5] overflow-hidden rounded-xl border-2 border-border bg-card"
-                >
-                  {image ? (
-                    <img src={image} alt="generated character" className="h-full w-full object-cover" />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-card">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                        <User size={32} strokeWidth={2} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+          <PageTitle>create character</PageTitle>
 
-            <div className="mt-4 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={cyclePrevious}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
-                aria-label="previous images"
-              >
-                <ChevronLeft size={16} strokeWidth={2.5} />
-              </button>
-              <button
-                type="button"
-                onClick={cycleNext}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
-                aria-label="next images"
-              >
-                <ChevronRight size={16} strokeWidth={2.5} />
-              </button>
-            </div>
-          </section>
+          <CardCarousel
+            images={imageCards}
+            activeIndex={activeIndex}
+            onPrevious={cyclePrevious}
+            onNext={cycleNext}
+          />
 
           {/* Create button */}
           <div className="mt-12">
@@ -176,9 +131,9 @@ const CharacterCreator = () => {
 
           {/* Dropdowns */}
           <section className="mt-12 flex flex-col gap-5">
-            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(value) => setHair(value)} />
-            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(value) => setEye(value)} />
-            <SelectField label="body type" value={body} options={bodyOptions} onChange={(value) => setBody(value)} />
+            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
+            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
+            <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
           </section>
         </main>
       </PageTransition>
