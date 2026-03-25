@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -41,8 +41,14 @@ const Index = () => {
   }, [searchParams]);
 
   const handleCreate = async () => {
-    if (!user) { navigate("/auth"); return; }
-    if (credits <= 0) { setShowPaywall(true); return; }
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    if (credits <= 0) {
+      setShowPaywall(true);
+      return;
+    }
     if (!prompt.trim()) return;
 
     setIsGenerating(true);
@@ -75,6 +81,8 @@ const Index = () => {
     setPrompt(randomPrompt);
   };
 
+  const primaryImage = images[0];
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -86,27 +94,26 @@ const Index = () => {
             <BackButton />
           </div>
 
-          {/* Result / Placeholder */}
-          {images.length > 0 ? (
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {images.map((src, i) => (
-                <div key={i} className="group relative rounded-xl overflow-hidden border-2 border-border">
-                  <img src={src} alt="" className="w-full aspect-[3/4] object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-end p-2">
-                    <a href={src} download={`vizura-${i}.png`} className="w-6 h-6 rounded-full bg-black/30 backdrop-blur flex items-center justify-center hover:bg-black/50 transition-colors">
-                      <Download size={10} className="text-white" />
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-xl border-2 border-border bg-muted aspect-[4/5] flex items-center justify-center mb-4">
-              <Wand2 size={28} className="text-muted-foreground/30" />
-            </div>
-          )}
+          <div className="relative mb-4 overflow-hidden rounded-xl border-2 border-border bg-card aspect-[4/5]">
+            {primaryImage ? (
+              <>
+                <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />
+                <a
+                  href={primaryImage}
+                  download="vizura-photo.png"
+                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background transition-colors hover:bg-foreground/80"
+                  aria-label="download photo"
+                >
+                  <Download size={14} />
+                </a>
+              </>
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <Wand2 size={20} className="text-muted-foreground" />
+              </div>
+            )}
+          </div>
 
-          {/* Credits */}
           {user && (
             <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-6">
               <Sparkles size={12} className="text-accent-purple" />
@@ -114,7 +121,6 @@ const Index = () => {
             </div>
           )}
 
-          {/* Prompt input */}
           <div className="space-y-6">
             <div>
               <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">describe your photo</span>
@@ -126,7 +132,6 @@ const Index = () => {
               />
             </div>
 
-            {/* Style toggles */}
             <div>
               <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-2">style</span>
               <div className="flex gap-2">
@@ -157,7 +162,6 @@ const Index = () => {
             </div>
           )}
 
-          {/* Action buttons */}
           <div className="flex gap-2 mt-6">
             <Button
               className="flex-1 h-14 text-xs"

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, ChevronLeft, ChevronRight, Sparkles, User } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Loader2, User, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PageTransition from "@/components/PageTransition";
@@ -9,9 +9,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
-const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"];
-const eyeOptions = ["brown", "blue", "green", "hazel", "grey"];
-const bodyOptions = ["slim", "regular", "curvy"];
+const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
+const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
+const bodyOptions = ["slim", "regular", "curvy"] as const;
 
 const CharacterCreator = () => {
   const { user } = useAuth();
@@ -20,45 +20,73 @@ const CharacterCreator = () => {
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
 
-  const [hair, setHair] = useState(0);
-  const [eye, setEye] = useState(0);
-  const [body, setBody] = useState(1);
-  const [extra, setExtra] = useState(editPrompt || "");
+  const [hair, setHair] = useState<(typeof hairOptions)[number]>("brunette");
+  const [eye, setEye] = useState<(typeof eyeOptions)[number]>("brown");
+  const [body, setBody] = useState<(typeof bodyOptions)[number]>("regular");
+  const [description, setDescription] = useState(editPrompt || "");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const hasGen = generated.length > 0;
+  const imageCards = useMemo(() => {
+    if (generated.length === 0) return [null, null, null];
+    return Array.from({ length: 3 }, (_, offset) => generated[(activeIndex + offset) % generated.length] ?? null);
+  }, [activeIndex, generated]);
 
   const buildPrompt = () => {
-    let p = `photorealistic portrait, young woman, ${bodyOptions[body]} build, ${hairOptions[hair]} hair, ${eyeOptions[eye]} eyes`;
-    if (extra.trim()) p += `, ${extra.trim()}`;
-    p += ", professional photography, natural lighting, shallow depth of field, hyperdetailed, instagram aesthetic";
-    return p;
+    let prompt = `photorealistic portrait, young woman, ${body} body type, ${hair} hair, ${eye} eyes`;
+    if (description.trim()) prompt += `, ${description.trim()}`;
+    prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
+    return prompt;
   };
 
   const generate = async () => {
-    if (!user) { navigate("/auth"); return; }
-    if (credits <= 0) { setShowPaywall(true); return; }
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    if (credits <= 0) {
+      setShowPaywall(true);
+      return;
+    }
+
     setIsGenerating(true);
     setError("");
+
     try {
-      const { data, error: e } = await supabase.functions.invoke("generate", { body: { prompt: buildPrompt() } });
-      if (e) throw e;
+      const { data, error: functionError } = await supabase.functions.invoke("generate", {
+        body: { prompt: buildPrompt() },
+      });
+
+      if (functionError) throw functionError;
       if (data?.error) throw new Error(data.error);
+
       setGenerated(data.images || []);
       setActiveIndex(0);
       await refetchCredits();
-    } catch (e: any) {
-      if (e.message?.includes("No credits") || e.message?.includes("402")) setShowPaywall(true);
-      else setError(e.message || "failed");
-    } finally { setIsGenerating(false); }
+    } catch (err: any) {
+      if (err.message?.includes("No credits") || err.message?.includes("402")) {
+        setShowPaywall(true);
+      } else {
+        setError(err.message || "creation failed");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
-  const prev = () => setActiveIndex((i) => (i === 0 ? 2 : i - 1));
-  const next = () => setActiveIndex((i) => (i === 2 ? 0 : i + 1));
+  const cyclePrevious = () => {
+    const total = generated.length || 3;
+    setActiveIndex((current) => (current - 1 + total) % total);
+  };
+
+  const cycleNext = () => {
+    const total = generated.length || 3;
+    setActiveIndex((current) => (current + 1) % total);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -66,30 +94,30 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <PageTransition>
-        <main className="w-full max-w-lg mx-auto px-4 pt-3 pb-8">
-
-          {/* Image row */}
-          <div className="flex items-center gap-1.5 mb-3">
+        <main className="mx-auto flex w-full max-w-lg flex-col gap-3 px-4 pb-8 pt-3">
+          <section className="flex items-center gap-2">
             <button
-              onClick={prev}
-              className="shrink-0 w-8 h-8 rounded-xl bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
+              type="button"
+              onClick={cyclePrevious}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+              aria-label="previous images"
             >
-              <ChevronLeft size={14} strokeWidth={2.5} />
+              <ChevronLeft size={16} strokeWidth={2.5} />
             </button>
 
-            <div className="flex-1 grid grid-cols-3 gap-1.5">
-              {[0, 1, 2].map((i) => (
+            <div className="grid flex-1 grid-cols-3 gap-2">
+              {imageCards.map((image, index) => (
                 <div
-                  key={i}
-                  className={`rounded-xl border-2 overflow-hidden bg-card aspect-[3/4] ${
-                    i === activeIndex ? "border-foreground" : "border-border"
-                  }`}
+                  key={`${image ?? "placeholder"}-${index}`}
+                  className="aspect-[4/5] overflow-hidden rounded-xl border border-border bg-card"
                 >
-                  {hasGen ? (
-                    <img src={generated[i]} alt="" className="w-full h-full object-cover" />
+                  {image ? (
+                    <img src={image} alt="generated character" className="h-full w-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-muted">
-                      <User size={24} className="text-muted-foreground/30" />
+                    <div className="flex h-full w-full items-center justify-center bg-card">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <User size={22} strokeWidth={2.2} />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -97,100 +125,87 @@ const CharacterCreator = () => {
             </div>
 
             <button
-              onClick={next}
-              className="shrink-0 w-8 h-8 rounded-xl bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
+              type="button"
+              onClick={cycleNext}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/80"
+              aria-label="next images"
             >
-              <ChevronRight size={14} strokeWidth={2.5} />
+              <ChevronRight size={16} strokeWidth={2.5} />
             </button>
-          </div>
+          </section>
 
-          {/* Credits */}
-          {user && (
-            <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold text-muted-foreground lowercase mb-3">
-              <Sparkles size={12} className="text-accent-purple" />
-              {credits} credit{credits !== 1 ? "s" : ""}
-            </div>
-          )}
-
-          {/* Create button */}
-          <Button
-            className="w-full h-12 text-xs mb-3"
-            onClick={generate}
-            disabled={isGenerating}
-          >
+          <Button className="h-14 w-full text-xs" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
-              <><Loader2 className="animate-spin" size={16} />creating…</>
+              <>
+                <Loader2 className="animate-spin" size={16} />
+                creating…
+              </>
             ) : (
-              <><Zap size={16} strokeWidth={2.5} />create</>
+              <>
+                <Zap size={16} strokeWidth={2.5} />
+                create
+              </>
             )}
           </Button>
 
           {error && (
-            <div className="border-2 border-destructive/30 bg-destructive/5 p-2.5 text-destructive font-extrabold lowercase text-xs rounded-xl mb-3">
+            <div className="rounded-xl border-2 border-destructive/30 bg-destructive/5 p-3 text-xs font-extrabold lowercase text-destructive">
               {error}
             </div>
           )}
 
-          {/* Description textarea */}
-          <div className="mb-3">
-            <span className="block text-xs font-extrabold lowercase text-muted-foreground mb-1.5">describe your character</span>
+          <section className="flex flex-col gap-1.5">
+            <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-muted-foreground">
+              describe your character
+            </label>
             <textarea
-              value={extra}
-              onChange={(e) => setExtra(e.target.value)}
-              placeholder="tattoos, freckles, glasses, outfit details, pose, setting…"
-              rows={3}
-              className="w-full border-2 border-border bg-background text-foreground px-3 py-2.5 text-xs font-extrabold lowercase placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/40 rounded-xl transition-colors resize-none"
+              id="character-description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
+              rows={5}
+              className="min-h-36 w-full resize-none rounded-xl border-2 border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground/50 focus:border-foreground/40 focus:outline-none"
             />
-          </div>
+          </section>
 
-          {/* Dropdown selectors */}
-          <div className="space-y-2">
-            <Dropdown label="hair colour" options={hairOptions} value={hair} onChange={setHair} />
-            <Dropdown label="eye colour" options={eyeOptions} value={eye} onChange={setEye} />
-            <Dropdown label="body type" options={bodyOptions} value={body} onChange={setBody} />
-          </div>
+          <section className="flex flex-col gap-2">
+            <SelectField label="hair colour" value={hair} options={hairOptions} onChange={setHair} />
+            <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={setEye} />
+            <SelectField label="body type" value={body} options={bodyOptions} onChange={setBody} />
+          </section>
         </main>
       </PageTransition>
     </div>
   );
 };
 
-const Dropdown = ({ label, options, value, onChange }: { label: string; options: string[]; value: number; onChange: (i: number) => void }) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="relative">
-      <span className="block text-[10px] font-extrabold lowercase text-muted-foreground mb-1">{label}</span>
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between border-2 border-border bg-background text-foreground px-3 py-2.5 rounded-xl text-xs font-extrabold lowercase hover:border-foreground/30 transition-colors"
-      >
-        {options[value]}
-        <ChevronDown />
-      </button>
-      {open && (
-        <div className="absolute z-30 left-0 right-0 mt-1 border-2 border-border bg-card rounded-xl overflow-hidden shadow-medium">
-          {options.map((o, i) => (
-            <button
-              key={o}
-              onClick={() => { onChange(i); setOpen(false); }}
-              className={`w-full text-left px-3 py-2 text-xs font-extrabold lowercase transition-colors ${
-                i === value ? "bg-foreground text-background" : "text-foreground hover:bg-muted"
-              }`}
-            >
-              {o}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+type SelectFieldProps<T extends string> = {
+  label: string;
+  options: readonly T[];
+  value: T;
+  onChange: (value: T) => void;
 };
 
-const ChevronDown = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m6 9 6 6 6-6" />
-  </svg>
+const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
+  <label className="relative flex flex-col gap-1.5">
+    <span className="text-xs font-extrabold lowercase text-muted-foreground">{label}</span>
+    <select
+      value={value}
+      onChange={(event) => onChange(event.target.value as T)}
+      className="h-12 w-full appearance-none rounded-xl border-2 border-border bg-card px-4 pr-10 text-xs font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground/40"
+    >
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+    <ChevronDown
+      size={16}
+      strokeWidth={2.5}
+      className="pointer-events-none absolute right-4 top-[2.4rem] text-muted-foreground"
+    />
+  </label>
 );
 
 export default CharacterCreator;
