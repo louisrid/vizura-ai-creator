@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { ChevronLeft, ChevronRight, User } from "lucide-react";
-import { type PanInfo } from "framer-motion";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 
 interface CardCarouselProps {
   images: (string | null)[];
@@ -10,54 +10,68 @@ interface CardCarouselProps {
 }
 
 const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselProps) => {
+  const total = images.length || 3;
+
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      if (info.offset.x < -50) onNext();
-      else if (info.offset.x > 50) onPrevious();
+      if (info.offset.x < -40) onNext();
+      else if (info.offset.x > 40) onPrevious();
     },
     [onNext, onPrevious]
   );
-
-  const total = images.length || 3;
 
   const getCard = (offset: number) => {
     const idx = (activeIndex + offset + total) % total;
     return images[idx] ?? null;
   };
 
+  const cardPositions = [
+    { offset: -1, style: { width: "38%", left: "2%", x: 0, scale: 0.82, zIndex: 10 }, opacity: 0.5 },
+    { offset: 0, style: { width: "56%", left: "22%", x: 0, scale: 1, zIndex: 30 }, opacity: 1 },
+    { offset: 1, style: { width: "38%", right: "2%", left: "60%", x: 0, scale: 0.82, zIndex: 10 }, opacity: 0.5 },
+  ];
+
   return (
     <section className="flex flex-col items-center">
-      <div className="relative flex items-center justify-center w-full" style={{ height: "320px" }}>
-        {/* Left card */}
-        <div
-          className="absolute z-10 transition-all duration-300 ease-out"
-          style={{ width: "38%", left: "2%", top: "50%", transform: "translateY(-50%) scale(0.82)" }}
-        >
-          <div className="aspect-[4/5] opacity-50">
-            <CardContent image={getCard(-1)} />
-          </div>
-        </div>
-
-        {/* Center card */}
-        <div
-          className="relative z-30 cursor-grab active:cursor-grabbing transition-all duration-300 ease-out"
-          style={{ width: "56%" }}
-        >
-          <div className="aspect-[4/5]">
-            <CardContent image={getCard(0)} isCenter />
-          </div>
-        </div>
-
-        {/* Right card */}
-        <div
-          className="absolute z-10 transition-all duration-300 ease-out"
-          style={{ width: "38%", right: "2%", top: "50%", transform: "translateY(-50%) scale(0.82)" }}
-        >
-          <div className="aspect-[4/5] opacity-50">
-            <CardContent image={getCard(1)} />
-          </div>
-        </div>
-      </div>
+      <motion.div
+        className="relative w-full cursor-grab active:cursor-grabbing"
+        style={{ height: "320px" }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.15}
+        onDragEnd={handleDragEnd}
+      >
+        {cardPositions.map(({ offset, style, opacity }) => (
+          <motion.div
+            key={`pos-${offset}`}
+            className="absolute"
+            style={{
+              top: "50%",
+              width: style.width,
+              left: style.left,
+            }}
+            animate={{
+              scale: style.scale,
+              opacity,
+              y: "-50%",
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={`card-${(activeIndex + offset + total) % total}`}
+                className="aspect-[4/5]"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.25 }}
+              >
+                <CardContent image={getCard(offset)} isCenter={offset === 0} />
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* Arrow buttons */}
       <div className="mt-5 flex items-center gap-3">
