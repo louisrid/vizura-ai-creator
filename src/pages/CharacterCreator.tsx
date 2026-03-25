@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap } from "lucide-react";
+import { ChevronDown, Loader2, Zap, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import PageTransition from "@/components/PageTransition";
@@ -82,7 +82,10 @@ const CharacterCreator = () => {
 
       <PageTransition>
         <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-12 pb-12">
-          <PageTitle>create character</PageTitle>
+          <div className="flex items-center justify-center gap-3 mb-10">
+            <Sparkles size={28} strokeWidth={2.5} style={{ stroke: "url(#icon-gradient-purple)" }} />
+            <h1 className="text-4xl font-extrabold lowercase tracking-tight gradient-purple-text">create character</h1>
+          </div>
 
           <CardCarousel
             images={imageCards}
