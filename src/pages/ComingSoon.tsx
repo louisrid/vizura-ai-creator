@@ -14,7 +14,7 @@ const ComingSoon = ({ title }: { title: string }) => (
         </div>
         <PageTitle>{title}</PageTitle>
         <div className="border-gradient-purple rounded-xl p-8 text-center bg-card">
-          <Sparkles size={20} className="text-accent-purple mx-auto mb-3" />
+          <Sparkles size={20} className="gradient-purple-text mx-auto mb-3" style={{ stroke: "url(#icon-gradient-purple)" }} />
           <p className="text-sm font-extrabold lowercase text-foreground">coming soon</p>
           <p className="text-xs font-bold lowercase text-muted-foreground mt-2">this feature is on the way</p>
         </div>
