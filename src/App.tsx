@@ -8,9 +8,7 @@ import { CreditsProvider } from "@/contexts/CreditsContext";
 import CharacterCreator from "./pages/CharacterCreator.tsx";
 import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
-import MyCharacters from "./pages/MyCharacters.tsx";
-import Storage from "./pages/Storage.tsx";
-import { Account, Help, Settings } from "./pages/ComingSoon.tsx";
+import { Account, Help, Settings, CreatePhoto, MyCharactersPage, StoragePage } from "./pages/ComingSoon.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -26,10 +24,10 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<CharacterCreator />} />
-              <Route path="/create" element={<Index />} />
+              <Route path="/create" element={<CreatePhoto />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/characters" element={<MyCharacters />} />
-              <Route path="/storage" element={<Storage />} />
+              <Route path="/characters" element={<MyCharactersPage />} />
+              <Route path="/storage" element={<StoragePage />} />
               <Route path="/account" element={<Account />} />
               <Route path="/help" element={<Help />} />
               <Route path="/settings" element={<Settings />} />
