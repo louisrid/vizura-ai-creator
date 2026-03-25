@@ -36,8 +36,9 @@
 
     --radius: 12px;
 
-    --accent-purple: 260 65% 55%;
-    --accent-purple-light: 260 60% 95%;
+    --accent-purple: 260 60% 68%;
+    --accent-purple-dark: 260 65% 55%;
+    --accent-purple-light: 260 55% 85%;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 98%;
@@ -54,8 +55,24 @@
     --surface-dark: 0 0% 6%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
-    --glow: 260 65% 55%;
+    --glow: 260 60% 68%;
   }
+}
+
+/* Purple gradient utilities */
+.gradient-purple {
+  background: linear-gradient(135deg, hsl(260 60% 68%) 0%, hsl(280 55% 78%) 100%);
+}
+
+.gradient-purple-text {
+  background: linear-gradient(135deg, hsl(260 60% 68%) 0%, hsl(280 55% 78%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-gradient-purple {
+  border-image: linear-gradient(135deg, hsl(260 60% 68%), hsl(280 55% 78%)) 1;
 }
 
 @layer base {
