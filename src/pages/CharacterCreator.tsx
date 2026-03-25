@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
@@ -75,7 +74,6 @@ const CharacterCreator = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-16 pb-12">
