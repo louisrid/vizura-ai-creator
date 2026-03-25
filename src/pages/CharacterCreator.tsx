@@ -13,6 +13,15 @@ import charFront from "@/assets/character-front.png";
 import charLeft from "@/assets/character-left.png";
 import charRight from "@/assets/character-right.png";
 
+import showcase1 from "@/assets/showcase-1.jpg";
+import showcase2 from "@/assets/showcase-2.jpg";
+import showcase3 from "@/assets/showcase-3.jpg";
+import showcase4 from "@/assets/showcase-4.jpg";
+import showcase5 from "@/assets/showcase-5.jpg";
+import showcase6 from "@/assets/showcase-6.jpg";
+
+const showcaseImages = [showcase1, showcase2, showcase3, showcase4, showcase5, showcase6];
+
 const placeholders = [charFront, charLeft, charRight];
 const angleLabels = ["front", "left", "right"];
 
@@ -32,6 +41,26 @@ const bodyTypes = ["slim", "regular", "curvy"];
 const outfitStyles = ["casual", "formal", "sporty", "fantasy"];
 const ageRanges = ["teen", "young adult", "adult"];
 
+interface PromptPreset {
+  label: string;
+  hair: number;
+  eye: number;
+  skin: number;
+  body: number;
+  outfit: number;
+  age: number;
+  extra: string;
+}
+
+const popularPrompts: PromptPreset[] = [
+  { label: "anime schoolgirl", hair: 4, eye: 1, skin: 0, body: 0, outfit: 0, age: 0, extra: "anime style, school uniform, big eyes" },
+  { label: "fantasy warrior", hair: 3, eye: 2, skin: 2, body: 2, outfit: 3, extra: "armor, cape, sword, battle-ready", age: 2 },
+  { label: "y2k aesthetic", hair: 2, eye: 1, skin: 1, body: 0, outfit: 0, age: 1, extra: "butterfly clips, beaded jewelry, low rise, 2000s" },
+  { label: "cyberpunk girl", hair: 4, eye: 1, skin: 0, body: 0, outfit: 3, age: 1, extra: "neon accents, tech visor, futuristic, glowing" },
+  { label: "cozy cottagecore", hair: 1, eye: 0, skin: 0, body: 1, outfit: 0, age: 1, extra: "floral dress, straw hat, soft light, pastoral" },
+  { label: "streetwear fit", hair: 0, eye: 0, skin: 3, body: 1, outfit: 2, age: 1, extra: "oversized hoodie, sneakers, urban, fresh" },
+];
+
 const CharacterCreator = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
@@ -50,6 +79,7 @@ const CharacterCreator = () => {
   const [error, setError] = useState("");
   const [guideOpen, setGuideOpen] = useState(false);
   const [swipeIndex, setSwipeIndex] = useState(0);
+  const [hasEverGenerated, setHasEverGenerated] = useState(false);
 
   const hasGen = generated.length > 0;
   const imgs = hasGen ? generated : placeholders;
@@ -64,7 +94,13 @@ const CharacterCreator = () => {
 
   const generate = async (refine = false) => {
     if (!user) { navigate("/auth"); return; }
+    // Paywall before first generation
+    if (!hasEverGenerated) { setShowPaywall(true); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
+    await runGeneration(refine);
+  };
+
+  const runGeneration = async (refine = false) => {
     setIsGenerating(true);
     setError("");
     try {
@@ -72,11 +108,22 @@ const CharacterCreator = () => {
       if (e) throw e;
       if (data?.error) throw new Error(data.error);
       setGenerated(data.images || []);
+      setHasEverGenerated(true);
       await refetchCredits();
     } catch (e: any) {
       if (e.message?.includes("No credits") || e.message?.includes("402")) setShowPaywall(true);
       else setError(e.message || "failed");
     } finally { setIsGenerating(false); }
+  };
+
+  const applyPreset = (preset: PromptPreset) => {
+    setHair(preset.hair);
+    setEye(preset.eye);
+    setSkin(preset.skin);
+    setBody(preset.body);
+    setOutfit(preset.outfit);
+    setAge(preset.age);
+    setExtra(preset.extra);
   };
 
   return (
@@ -92,13 +139,11 @@ const CharacterCreator = () => {
 
         {/* 2. Results — 3 images side by side (desktop) / swipeable (mobile) */}
         <div className="mb-3">
-          {/* Desktop: 3 across */}
           <div className="hidden sm:grid grid-cols-3 gap-2">
             {imgs.map((src, i) => (
               <ResultImage key={i} src={src} label={angleLabels[i]} isPlaceholder={!hasGen} />
             ))}
           </div>
-          {/* Mobile: swipeable */}
           <div className="sm:hidden">
             <div
               className="overflow-x-auto snap-x snap-mandatory flex gap-2 scrollbar-hide"
@@ -146,22 +191,13 @@ const CharacterCreator = () => {
 
         {/* 3. Controls — compact */}
         <div className="space-y-3">
-          {/* Hair + Eye on same row */}
           <div className="grid grid-cols-2 gap-3">
             <MiniPalette label="hair" items={hairColours} active={hair} onSelect={setHair} />
             <MiniPalette label="eyes" items={eyeColours} active={eye} onSelect={setEye} />
           </div>
-
-          {/* Skin tone */}
           <MiniPalette label="skin tone" items={skinTones} active={skin} onSelect={setSkin} />
-
-          {/* Body type */}
           <ToggleRow label="body" options={bodyTypes} active={body} onSelect={setBody} />
-
-          {/* Outfit */}
           <ToggleRow label="outfit" options={outfitStyles} active={outfit} onSelect={setOutfit} />
-
-          {/* Age */}
           <ToggleRow label="age" options={ageRanges} active={age} onSelect={setAge} />
         </div>
 
@@ -226,9 +262,45 @@ const CharacterCreator = () => {
           </AnimatePresence>
         </div>
       </main>
+
+      {/* 7. Made with vizura — full-width black strip */}
+      <section className="w-full bg-foreground py-6 mt-2">
+        <div className="max-w-lg mx-auto px-4">
+          <p className="text-[10px] font-extrabold lowercase text-background/50 mb-3">made with vizura</p>
+        </div>
+        <div className="overflow-x-auto scrollbar-hide">
+          <div className="flex gap-3 px-4 w-max">
+            {showcaseImages.map((src, i) => (
+              <div key={i} className="w-28 shrink-0 rounded-xl overflow-hidden bg-background shadow-soft">
+                <img src={src} alt="" loading="lazy" width={512} height={680} className="w-full aspect-[3/4] object-cover" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Popular prompts */}
+      <section className="w-full max-w-lg mx-auto px-4 py-6">
+        <p className="text-[10px] font-extrabold lowercase text-muted-foreground mb-3">popular prompts</p>
+        <div className="overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 w-max">
+            {popularPrompts.map((preset) => (
+              <button
+                key={preset.label}
+                onClick={() => applyPreset(preset)}
+                className="shrink-0 px-4 py-2.5 rounded-full border-2 border-border bg-background text-xs font-extrabold lowercase text-foreground hover:bg-foreground hover:text-background transition-all active:scale-95"
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
+
+// --- Sub-components ---
 
 const ResultImage = ({ src, label, isPlaceholder }: { src: string; label: string; isPlaceholder: boolean }) => (
   <div className={`relative rounded-xl overflow-hidden border border-border shadow-soft ${isPlaceholder ? "opacity-60" : ""}`}>
