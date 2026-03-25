@@ -121,10 +121,8 @@ const Index = () => {
         />
 
         {/* Style presets */}
-        <motion.div
-          key={bounceKey}
-          animate={bounceKey > 0 ? { x: [0, -6, 5, -3, 1, 0] } : undefined}
-          transition={{ duration: 0.35, ease: [0.22, 0, 0.36, 1] }}
+        <div
+          ref={styleShakeRef}
           className="grid grid-cols-3 gap-2 mb-4"
         >
           {stylePresets.map((style, i) => {
