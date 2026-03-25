@@ -32,6 +32,7 @@ const App = () => (
       <AuthProvider>
         <CreditsProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<CharacterCreator />} />
               <Route path="/create" element={<Index />} />
