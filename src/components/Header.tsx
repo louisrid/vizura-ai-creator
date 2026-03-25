@@ -50,8 +50,8 @@ const Header = () => {
   const CurrentIcon = currentMenuItem?.icon;
 
   return (
-    <header className="bg-nav sticky top-0 z-40">
-      <div className="max-w-lg mx-auto flex items-center justify-between px-5 py-5">
+    <header className="bg-nav sticky top-0 z-40 border-b-[3px] border-nav-foreground/15">
+      <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
           <CreditsBadge />
@@ -84,7 +84,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 top-full mt-1.5 w-52 bg-nav border-[5px] border-nav-foreground/20 rounded-2xl shadow-medium overflow-hidden"
+                className="absolute right-0 top-full mt-1.5 w-48 bg-nav border-[5px] border-nav-foreground/20 rounded-2xl shadow-medium overflow-hidden"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (
