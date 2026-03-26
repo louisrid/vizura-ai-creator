@@ -227,29 +227,17 @@ const ControlItem = ({ label, desc, n, delay }: { label: string; desc: string; n
    ═══════════════════════════════════════════════════════ */
 
 const Scene0 = () => (
-  <div className="flex flex-col items-center gap-4">
-    <div className="relative flex items-center justify-center" style={{ width: 120, height: 120 }}>
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{ width: 10, height: 10, background: dotColors[i] }}
-          animate={{
-            x: [Math.cos((i / 6) * Math.PI * 2) * 50, Math.cos((i / 6) * Math.PI * 2 + Math.PI) * 50, Math.cos((i / 6) * Math.PI * 2) * 50],
-            y: [Math.sin((i / 6) * Math.PI * 2) * 50, Math.sin((i / 6) * Math.PI * 2 + Math.PI) * 50, Math.sin((i / 6) * Math.PI * 2) * 50],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{ duration: 4, delay: i * 0.12, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ))}
+  <div className="flex flex-col items-center gap-3">
+    <motion.div
+      animate={{ rotate: [0, -8, 8, -6, 6, -3, 3, 0] }}
+      transition={{ duration: 0.6, delay: 0.3, ease: "easeInOut" }}
+    >
       <IconPop delay={0.15} size={96}>
         <span className="text-[5rem]">👋</span>
       </IconPop>
-    </div>
-    <BigTitle delay={0.25}><span style={{ color: dotColors[1] }}>welcome</span></BigTitle>
-    <Subtitle delay={0.4}>
-      <span>make </span><span style={{ color: dotColors[2] }}>characters</span><span> and </span><span style={{ color: dotColors[1] }}>photos</span><span> in a few taps</span>
-    </Subtitle>
+    </motion.div>
+    <BigTitle delay={0.25}>welcome</BigTitle>
+    <Subtitle delay={0.4}>make characters and photos in a few taps</Subtitle>
   </div>
 );
 
