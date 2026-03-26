@@ -8,6 +8,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
+const countryOptions = [
+  "any", "american", "british", "australian", "brazilian", "colombian", "french",
+  "german", "indian", "italian", "japanese", "korean", "mexican", "nigerian",
+  "russian", "scandinavian", "spanish", "thai", "turkish", "ukrainian",
+] as const;
+const ageOptions = Array.from({ length: 23 }, (_, i) => `${i + 18}`) as unknown as readonly string[];
 const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
 const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
@@ -19,6 +25,8 @@ const CharacterCreator = () => {
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
 
+  const [country, setCountry] = useState<string>("any");
+  const [age, setAge] = useState<string>("25");
   const [hair, setHair] = useState<(typeof hairOptions)[number]>("brunette");
   const [eye, setEye] = useState<(typeof eyeOptions)[number]>("brown");
   const [body, setBody] = useState<(typeof bodyOptions)[number]>("regular");
@@ -35,7 +43,8 @@ const CharacterCreator = () => {
   }, [generated]);
 
   const buildPrompt = () => {
-    let prompt = `photorealistic portrait, young woman, ${body} body type, ${hair} hair, ${eye} eyes`;
+    const ethnicityPart = country !== "any" ? `, ${country} ethnicity` : "";
+    let prompt = `photorealistic portrait, ${age} year old woman${ethnicityPart}, ${body} body type, ${hair} hair, ${eye} eyes`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -103,6 +112,8 @@ const CharacterCreator = () => {
 
         {/* Dropdowns */}
         <section className="mt-8 flex flex-col gap-4">
+          <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
+          <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
