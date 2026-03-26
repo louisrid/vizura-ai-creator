@@ -168,7 +168,7 @@ const CharacterCreator = () => {
         </section>
 
         {/* Dropdowns */}
-        <section className="mt-8 flex flex-col gap-4">
+        <section className="mt-6 flex flex-col gap-4">
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
           <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
@@ -177,13 +177,13 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-6 rounded-2xl border-[4px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-2xl border-[4px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
 
         {/* Create button */}
-        <div className="mt-8">
+        <div className="mt-6">
           <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
               <>
