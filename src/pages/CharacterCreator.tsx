@@ -112,6 +112,8 @@ const CharacterCreator = () => {
 
         {/* Dropdowns */}
         <section className="mt-8 flex flex-col gap-4">
+          <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
+          <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
