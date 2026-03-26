@@ -356,11 +356,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     };
   }, [open]);
 
-  useEffect(() => {
-    if (!open || step >= TOTAL_STEPS - 1) return;
-    const timer = window.setTimeout(advance, AUTO_ADVANCE_MS);
-    return () => window.clearTimeout(timer);
-  }, [advance, open, step]);
+  // no autoplay — only advance on tap
 
   const handleLetsGo = () => {
     setBurst(true);
