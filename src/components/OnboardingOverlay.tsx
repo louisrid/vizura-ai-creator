@@ -105,8 +105,8 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle: string }) =>
 
 const PhotoCard = ({ delay, rotation, scale = 1 }: { delay: number; rotation: number; scale?: number }) => (
   <motion.div
-    className="relative h-28 w-20 overflow-hidden rounded-[20px] border-[4px] shadow-soft"
-    style={{ borderColor: panelBorder, scale }}
+    className="relative overflow-hidden rounded-[24px] border-[4px] shadow-soft"
+    style={{ borderColor: panelBorder, scale, width: 104, height: 146 }}
     initial={{ opacity: 0, y: 28, rotate: rotation, scale: 0.86 }}
     animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale }}
     transition={{
@@ -181,7 +181,7 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
 };
 
 const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
-  const sceneClass = "relative flex min-h-[390px] flex-col items-center justify-center gap-5 overflow-hidden";
+  const sceneClass = "relative flex min-h-[440px] flex-col items-center justify-end gap-5 overflow-hidden pb-4";
 
   const scenes: Record<number, React.ReactNode> = {
     0: (
@@ -201,14 +201,14 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
         <SparkleEmoji emoji="✨" x="82%" y="18%" delay={0.65} />
         <SparkleEmoji emoji="💫" x="74%" y="70%" delay={1.05} />
         <motion.div
-          className="relative flex h-36 w-24 items-center justify-center overflow-hidden rounded-[24px] border-[4px]"
-          style={{ borderColor: panelBorder, background: panel }}
+          className="relative flex items-center justify-center overflow-hidden rounded-[28px] border-[4px]"
+          style={{ borderColor: panelBorder, background: panel, width: 125, height: 187 }}
           initial={{ opacity: 0, scale: 0.85, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.35, ease: "backOut" }}
         >
           <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.2, filter: "grayscale(1) blur(0.5px)" }} />
-          <motion.span className="relative z-10 text-5xl" animate={{ opacity: [0.45, 1, 0.55], scale: [0.94, 1.04, 0.98] }} transition={{ duration: 2.3, repeat: Infinity }}>
+          <motion.span className="relative z-10 text-6xl" animate={{ opacity: [0.45, 1, 0.55], scale: [0.94, 1.04, 0.98] }} transition={{ duration: 2.3, repeat: Infinity }}>
             🫶
           </motion.span>
         </motion.div>
@@ -227,8 +227,8 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
           ].map((item) => (
             <motion.div
               key={item.emoji}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border-[4px] text-2xl"
-              style={{ borderColor: panelBorder, background: panel }}
+              className="flex h-14 w-14 items-center justify-center rounded-2xl text-3xl"
+              style={{ background: panel }}
               initial={{ opacity: 0, y: 16, scale: 0.45 }}
               animate={{ opacity: 1, y: 0, scale: [0.45, 1.12, 1] }}
               transition={{ duration: 0.4, delay: item.delay, ease: "backOut" }}
@@ -374,7 +374,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end pb-[14vh]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end pb-[8vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
