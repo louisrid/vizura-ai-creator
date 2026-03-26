@@ -12,16 +12,12 @@ const panel = "hsl(0 0% 100% / 0.07)";
 const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 8% / 0.97)";
 
-/* pastel palette — saturated but light */
+/* bright saturated palette */
 const blue1 = "hsl(210 85% 72%)";
 const blue2 = "hsl(230 75% 68%)";
 const pink = "hsl(330 70% 72%)";
 const orange = "hsl(25 85% 70%)";
-const yellow = "hsl(45 85% 68%)";
 const green = "hsl(155 60% 58%)";
-const red = "hsl(0 70% 68%)";
-
-/* shapes removed — emoji-only scenes */
 
 /* ── single centered emoji ── */
 const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "20%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
