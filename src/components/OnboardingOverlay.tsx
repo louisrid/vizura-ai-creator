@@ -268,7 +268,7 @@ const Scene1 = () => (
     <IconPop delay={0.1} size={96}>
       <Sparkles size={60} strokeWidth={2} style={{ color: dotColors[2] }} />
     </IconPop>
-    <BigTitle delay={0.2}>create a character</BigTitle>
+    <BigTitle delay={0.2}>1. create a character</BigTitle>
     <Subtitle delay={0.35}>pick their look, name, and nationality</Subtitle>
     <motion.div
       className="mt-2 flex items-center gap-1 rounded-2xl border-[4px] px-3 py-2"
@@ -294,7 +294,7 @@ const Scene2 = () => (
     <IconPop delay={0.1} size={80}>
       <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
-    <BigTitle delay={0.2}>customise looks</BigTitle>
+    <BigTitle delay={0.2}>2. customise looks</BigTitle>
     <Subtitle delay={0.35}>fine-tune hair, eyes, body, and more</Subtitle>
     <div className="mt-1 flex w-full max-w-[17rem] flex-col gap-2.5">
       <ControlItem label="hair colour" desc="blonde, brunette, red" n={1} delay={0.5} />
@@ -310,7 +310,7 @@ const Scene3 = () => (
     <IconPop delay={0.1} size={88}>
       <Camera size={52} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
-    <BigTitle delay={0.2}>create photos</BigTitle>
+    <BigTitle delay={0.2}>3. create photos</BigTitle>
     <Subtitle delay={0.35}>generate realistic images in any style or setting</Subtitle>
     <motion.div
       className="flex items-end justify-center gap-3 pt-2"
@@ -331,7 +331,7 @@ const Scene4 = () => (
     <IconPop delay={0.1} size={80}>
       <PenLine size={48} strokeWidth={2} style={{ color: dotColors[5] }} />
     </IconPop>
-    <BigTitle delay={0.2}>write a prompt</BigTitle>
+    <BigTitle delay={0.2}>4. write a prompt</BigTitle>
     <Subtitle delay={0.35}>describe the pose, setting, and lighting you want</Subtitle>
     <motion.div
       className="mt-1 w-full max-w-[17rem] rounded-2xl border-[4px] px-4 py-3"
