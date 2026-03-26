@@ -137,7 +137,7 @@ const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode; delay?
 /* ── subtitle ── */
 const Subtitle = ({ children, delay = 0.2 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
-    className="max-w-[17rem] text-center text-sm font-bold lowercase leading-snug"
+    className="max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
     style={{ color: "hsl(0 0% 100% / 0.82)" }}
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
@@ -451,12 +451,9 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Scene content — held higher and centered consistently */}
-          <div className="flex-1 flex items-center justify-center overflow-hidden px-5 pt-4 pb-0">
-            <div
-              className="flex w-full max-w-sm items-center justify-center"
-              style={{ minHeight: "40vh", maxHeight: "60vh", transform: "translateY(4vh)" }}
-            >
+          {/* Scene content — true vertical centre between header and controls */}
+          <div className="flex-1 flex items-center justify-center overflow-hidden px-5">
+            <div className="flex w-full max-w-sm items-center justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
