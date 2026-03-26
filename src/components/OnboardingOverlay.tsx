@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, RefreshCw, Camera, Sparkles, Type, Wand2, Scissors, Eye, User } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-nature-collage.jpg";
 
 const TOTAL_STEPS = 7;
@@ -134,21 +134,21 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.5, repeat: Infinity }}
-        className="inline-block w-0.5 h-4 bg-white/60 ml-0.5 align-middle"
+        className="inline-block w-0.5 h-5 bg-white/60 ml-0.5 align-middle"
       />
     </span>
   );
 };
 
-/* ── pop-in icon for step 2 ── */
-const PopIcon = ({ children, delay }: { children: React.ReactNode; delay: number }) => (
+/* ── pop-in emoji icon for step 2 ── */
+const PopEmoji = ({ emoji, delay }: { emoji: string; delay: number }) => (
   <motion.div
-    className="w-10 h-10 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center"
+    className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl"
     initial={{ opacity: 0, scale: 0, y: 20 }}
     animate={{ opacity: 1, scale: [0, 1.3, 1], y: 0 }}
     transition={{ duration: 0.5, delay, ease: "backOut" }}
   >
-    {children}
+    {emoji}
   </motion.div>
 );
 
@@ -179,132 +179,107 @@ const TiltCard = ({ delay = 0, gradient }: { delay?: number; gradient: string })
   />
 );
 
-/* ── character silhouette ── */
-const Silhouette = () => (
-  <motion.div
-    className="relative w-24 h-32 mx-auto"
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-  >
-    <motion.div
-      className="absolute inset-0 rounded-full"
-      style={{
-        background: "radial-gradient(ellipse at center, rgba(212,168,67,0.2) 0%, transparent 70%)",
-        width: "120%", height: "120%", left: "-10%", top: "-10%",
-      }}
-      animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-      transition={{ duration: 3, repeat: Infinity }}
-    />
-    <svg viewBox="0 0 80 110" fill="none" className="w-full h-full">
-      <motion.ellipse cx="40" cy="28" rx="18" ry="22" fill="rgba(255,255,255,0.12)"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.8 }} />
-      <motion.path d="M12 110 C12 70 68 70 68 110" fill="rgba(255,255,255,0.08)"
-        initial={{ opacity: 0, pathLength: 0 }} animate={{ opacity: 1, pathLength: 1 }} transition={{ delay: 1, duration: 1 }} />
-    </svg>
-  </motion.div>
-);
-
 /* ── step content ── */
 const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
   const content: Record<number, React.ReactNode> = {
     /* ── 0: welcome — blobs + wave emoji ── */
     0: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative overflow-visible">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-4 relative overflow-visible">
         <Blob x="5%" y="10%" size={100} color="rgba(212,168,67,0.15)" delay={0.2} />
         <Blob x="75%" y="60%" size={80} color="rgba(124,156,245,0.12)" delay={0.6} />
         <Blob x="50%" y="85%" size={70} color="rgba(212,168,67,0.1)" delay={1} />
         <WobblingShape x="85%" y="15%" size={16} color="rgba(255,255,255,0.15)" delay={0.4} shape="diamond" />
         <WobblingShape x="8%" y="70%" size={12} color="rgba(212,168,67,0.25)" delay={0.8} shape="square" />
-        <BouncingEmoji emoji="👋" x="15%" y="20%" delay={0.5} size="text-4xl" />
-        <BouncingEmoji emoji="✨" x="78%" y="30%" delay={0.9} size="text-2xl" />
-        <BouncingEmoji emoji="🌊" x="70%" y="75%" delay={1.2} size="text-2xl" />
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center mt-4 relative z-10">
-          vizura how-to
+        <BouncingEmoji emoji="👋" x="15%" y="10%" delay={0.5} size="text-5xl" />
+        <BouncingEmoji emoji="✨" x="78%" y="20%" delay={0.9} size="text-3xl" />
+        <BouncingEmoji emoji="🌊" x="70%" y="75%" delay={1.2} size="text-3xl" />
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center relative z-10">
+          welcome to vizura
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center relative z-10">
+        <motion.p variants={fadeUp} className="text-base font-bold lowercase text-white/40 text-center relative z-10">
           quick walkthrough — takes 30 seconds
         </motion.p>
       </motion.div>
     ),
 
-    /* ── 1: any character — sparkles + silhouette ── */
+    /* ── 1: any character — sparkles ── */
     1: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative overflow-visible">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-4 relative overflow-visible">
         <Blob x="20%" y="15%" size={90} color="rgba(212,168,67,0.1)" delay={0.3} />
-        <TwinkleEmoji emoji="✨" x="10%" y="15%" delay={0.3} />
-        <TwinkleEmoji emoji="✨" x="82%" y="20%" delay={0.7} />
+        <TwinkleEmoji emoji="✨" x="10%" y="10%" delay={0.3} />
+        <TwinkleEmoji emoji="✨" x="82%" y="15%" delay={0.7} />
         <TwinkleEmoji emoji="💫" x="75%" y="65%" delay={1.1} />
         <TwinkleEmoji emoji="✨" x="15%" y="75%" delay={1.5} />
-        <Silhouette />
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center relative z-10">
-          make any character you want
+        <BouncingEmoji emoji="🧑‍🎨" x="50%" y="5%" delay={0.4} size="text-5xl" />
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center relative z-10 mt-8">
+          make any character
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center relative z-10">
+        <motion.p variants={fadeUp} className="text-base font-bold lowercase text-white/40 text-center relative z-10">
           dream her up — we'll bring her to life
         </motion.p>
       </motion.div>
     ),
 
-    /* ── 2: controls — icons popping in with bounce ── */
+    /* ── 2: controls — emoji icons popping in with bounce ── */
     2: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-4 relative">
         <Blob x="80%" y="10%" size={70} color="rgba(124,156,245,0.08)" delay={0.2} />
-        <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
           shape their look
         </motion.h2>
-        <motion.div className="flex gap-3 justify-center mt-1">
-          <PopIcon delay={0.5}><Scissors size={18} strokeWidth={2} className="text-white/70" /></PopIcon>
-          <PopIcon delay={0.7}><Eye size={18} strokeWidth={2} className="text-white/70" /></PopIcon>
-          <PopIcon delay={0.9}><User size={18} strokeWidth={2} className="text-white/70" /></PopIcon>
-          <PopIcon delay={1.1}><Sparkles size={18} strokeWidth={2} className="text-white/70" /></PopIcon>
+        <motion.div className="flex gap-3 justify-center mt-2">
+          <PopEmoji emoji="💇" delay={0.5} />
+          <PopEmoji emoji="👁️" delay={0.7} />
+          <PopEmoji emoji="🌍" delay={0.9} />
+          <PopEmoji emoji="✂️" delay={1.1} />
         </motion.div>
-        <motion.div variants={fadeUp} className="w-full flex flex-col gap-2 mt-1">
+        <motion.div variants={fadeUp} className="w-full flex flex-col gap-2 mt-2">
           {[
-            { label: "ethnicity", desc: "pick where she's from" },
-            { label: "age", desc: "18 to 40" },
-            { label: "hair", desc: "blonde, brunette, red…" },
-            { label: "eyes", desc: "brown, blue, green…" },
-            { label: "body", desc: "slim, regular, curvy" },
+            { emoji: "🌍", label: "ethnicity" },
+            { emoji: "🎂", label: "age" },
+            { emoji: "💇", label: "hair colour" },
+            { emoji: "👁️", label: "eye colour" },
+            { emoji: "🏋️", label: "body type" },
           ].map((item, i) => (
             <motion.div
               key={item.label}
-              className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-2"
+              className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-2.5"
               initial={{ opacity: 0, x: -20, scale: 0.9 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.6 + i * 0.12, ease: "backOut" }}
             >
-              <span className="text-xs font-[900] lowercase text-white/70 w-14">{item.label}</span>
-              <span className="text-xs font-bold lowercase text-white/30">{item.desc}</span>
+              <span className="text-lg">{item.emoji}</span>
+              <span className="text-sm font-[900] lowercase text-white/70">{item.label}</span>
             </motion.div>
           ))}
         </motion.div>
       </motion.div>
     ),
 
-    /* ── 3: regenerate — spinning refresh icon ── */
+    /* ── 3: regenerate — spinning emoji ── */
     3: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative overflow-visible">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-6 relative overflow-visible">
         <Blob x="30%" y="20%" size={90} color="rgba(212,168,67,0.1)" delay={0.3} />
         <Blob x="70%" y="70%" size={70} color="rgba(124,156,245,0.08)" delay={0.7} />
         <WobblingShape x="80%" y="25%" size={14} color="rgba(255,255,255,0.12)" delay={0.5} shape="circle" />
         <motion.div
-          className="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center"
+          className="text-5xl"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.5, ease: "backOut" }}
         >
-          <motion.div
+          <motion.span
+            className="inline-block"
             animate={{ rotate: 360 }}
             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           >
-            <RefreshCw size={28} strokeWidth={2} className="text-white/70" />
-          </motion.div>
+            🔄
+          </motion.span>
         </motion.div>
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
-          not perfect? regenerate
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
+          not perfect?
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center">
+        <motion.p variants={fadeUp} className="text-base font-bold lowercase text-white/40 text-center">
           hit create again — each attempt costs 1 credit
         </motion.p>
       </motion.div>
@@ -312,17 +287,17 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
 
     /* ── 4: photos — cards sliding in with tilt + depth ── */
     4: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative overflow-visible">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-5 relative overflow-visible">
         <Blob x="50%" y="20%" size={100} color="rgba(212,168,67,0.08)" delay={0.2} />
-        <BouncingEmoji emoji="📸" x="80%" y="15%" delay={0.5} size="text-2xl" />
-        <motion.div variants={fadeUp}>
-          <motion.div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center"
-            initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4, ease: "backOut" }}>
-            <Camera size={24} strokeWidth={2} className="text-white/70" />
-          </motion.div>
-        </motion.div>
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
-          create photos of them
+        <BouncingEmoji emoji="📸" x="80%" y="10%" delay={0.5} size="text-3xl" />
+        <motion.span
+          className="text-5xl"
+          variants={fadeUp}
+        >
+          🖼️
+        </motion.span>
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
+          create photos
         </motion.h2>
         <motion.div className="flex gap-5 mt-2" style={{ perspective: 800 }}>
           <TiltCard delay={0} gradient="linear-gradient(135deg, rgba(212,168,67,0.2) 0%, rgba(255,255,255,0.06) 100%)" />
@@ -334,36 +309,33 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
 
     /* ── 5: prompt — typing cursor in mock field ── */
     5: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative overflow-visible">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-5 relative overflow-visible">
         <Blob x="15%" y="25%" size={80} color="rgba(124,156,245,0.08)" delay={0.3} />
         <WobblingShape x="85%" y="70%" size={10} color="rgba(212,168,67,0.2)" delay={0.6} shape="diamond" />
-        <motion.div variants={fadeUp}>
-          <motion.div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center"
-            initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4, ease: "backOut" }}>
-            <Type size={24} strokeWidth={2} className="text-white/70" />
-          </motion.div>
-        </motion.div>
-        <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
+        <motion.span className="text-5xl" variants={fadeUp}>
+          ✍️
+        </motion.span>
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
           describe what you want
         </motion.h2>
         <motion.div
           variants={fadeUp}
-          className="w-full rounded-2xl border-[4px] border-white/15 bg-white/5 px-4 py-3 min-h-[72px] relative"
+          className="w-full rounded-2xl border-[4px] border-white/15 bg-white/5 px-4 py-4 min-h-[80px] relative"
         >
           <motion.div
-            className="absolute top-2 left-3 text-[10px] font-bold lowercase text-white/20"
+            className="absolute top-2.5 left-4 text-xs font-bold lowercase text-white/20"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
           >
             describe your character
           </motion.div>
-          <div className="mt-4">
+          <div className="mt-5">
             <TypingText
-              text="sitting in a cafe, golden hour lighting, wearing a sundress"
-              className="text-sm font-bold lowercase text-white/60"
+              text="sitting in a cafe, golden hour, sundress"
+              className="text-base font-bold lowercase text-white/60"
             />
           </div>
         </motion.div>
-        <motion.p variants={fadeUp} className="text-xs font-bold lowercase text-white/30 text-center">
+        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/30 text-center">
           the more detail, the better
         </motion.p>
       </motion.div>
@@ -371,16 +343,16 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
 
     /* ── 6: final CTA — particle burst + pulsing button ── */
     6: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-7 relative overflow-visible">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-6 relative overflow-visible">
         <ParticleBurst active={burst} />
         <Blob x="30%" y="20%" size={120} color="rgba(212,168,67,0.08)" delay={0.2} duration={8} />
         <Blob x="70%" y="60%" size={90} color="rgba(124,156,245,0.06)" delay={0.5} duration={7} />
-        <BouncingEmoji emoji="🚀" x="80%" y="20%" delay={0.6} size="text-3xl" />
-        <BouncingEmoji emoji="⚡" x="15%" y="70%" delay={1} size="text-2xl" />
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center relative z-10">
+        <BouncingEmoji emoji="🚀" x="80%" y="10%" delay={0.6} size="text-4xl" />
+        <BouncingEmoji emoji="⚡" x="15%" y="70%" delay={1} size="text-3xl" />
+        <motion.h2 variants={fadeUp} className="text-5xl font-[900] lowercase tracking-tighter text-white text-center relative z-10">
           ready to create?
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center relative z-10">
+        <motion.p variants={fadeUp} className="text-lg font-bold lowercase text-white/40 text-center relative z-10">
           sign up free — first creation on us
         </motion.p>
       </motion.div>
@@ -447,7 +419,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             {/* step content */}
-            <div className="w-full min-h-[360px] flex items-center justify-center px-4">
+            <div className="w-full min-h-[380px] flex items-center justify-center px-4">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
