@@ -115,7 +115,7 @@ const CharacterCreator = () => {
 
       {/* Faint background image with white fade */}
       <div className="mx-auto w-full max-w-lg relative">
-        <div className="relative w-full" style={{ aspectRatio: '4 / 3' }}>
+        <div className="relative w-full" style={{ aspectRatio: '4 / 2.2' }}>
           <img
             src={heroImage}
             alt=""
@@ -132,13 +132,13 @@ const CharacterCreator = () => {
             }}
           />
           {/* Page title centered on the faint image */}
-          <h1 className="absolute top-6 left-0 right-0 z-10 text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
+          <h1 className="absolute top-10 left-0 right-0 z-10 text-4xl font-black lowercase tracking-tighter text-foreground text-center" style={{ fontWeight: 950 }}>
             create character
           </h1>
         </div>
       </div>
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-6 pb-12">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-2 pb-12">
 
         <CardCarousel
           images={imageCards}
