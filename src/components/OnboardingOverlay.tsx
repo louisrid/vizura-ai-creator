@@ -10,84 +10,22 @@ const textBody = "hsl(0 0% 100% / 0.88)";
 const textMuted = "hsl(0 0% 100% / 0.52)";
 const panel = "hsl(0 0% 100% / 0.07)";
 const panelBorder = "hsl(0 0% 100% / 0.12)";
-const overlay = "hsl(0 0% 0% / 0.99)";
+const overlay = "hsl(0 0% 8% / 0.97)";
 
-/* pastel palette — saturated but light */
+/* bright saturated palette */
 const blue1 = "hsl(210 85% 72%)";
 const blue2 = "hsl(230 75% 68%)";
 const pink = "hsl(330 70% 72%)";
 const orange = "hsl(25 85% 70%)";
-const yellow = "hsl(45 85% 68%)";
 const green = "hsl(155 60% 58%)";
-const red = "hsl(0 70% 68%)";
-
-/* ── abstract shape components ── */
-
-const Splodge = ({ x, y, w, delay = 0, color = blue1 }: { x: string; y: string; w: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: w, height: w, background: color, opacity: 0.12 }}
-    initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 0.12, scale: [0.3, 1.05, 1] }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full rounded-full"
-      animate={{ scale: [1, 1.06, 0.96, 1] }}
-      transition={{ duration: 6, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
-);
-
-const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `3px solid ${color}`, opacity: 0.16 }}
-    initial={{ opacity: 0, scale: 0.2 }}
-    animate={{ opacity: 0.16, scale: [0.2, 1.08, 1] }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  />
-);
-
-const Dot = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.18 }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.18, scale: [0, 1.15, 1] }}
-    transition={{ duration: 0.35, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  />
-);
-
-const CrossMark = ({ x, y, size, delay = 0, color = orange }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: size, height: size, opacity: 0.3 }}
-    initial={{ opacity: 0, scale: 0.3, rotate: -45 }}
-    animate={{ opacity: 0.3, scale: 1, rotate: 0 }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="relative h-full w-full"
-      animate={{ rotate: [0, 90] }}
-      transition={{ duration: 8, delay: delay + 1, repeat: Infinity, ease: "linear" }}
-    >
-      <div className="absolute left-1/2 top-0 h-full w-[4px] -translate-x-1/2 rounded-full" style={{ background: color }} />
-      <div className="absolute left-0 top-1/2 h-[4px] w-full -translate-y-1/2 rounded-full" style={{ background: color }} />
-    </motion.div>
-  </motion.div>
-);
-
-/* ── gradient blob — vizura blue ── */
-/* GradientBlob removed — using solid shapes only */
 
 /* ── single centered emoji ── */
 const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "20%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
   <motion.div
     className="pointer-events-none absolute left-1/2 select-none"
-    style={{ top: y, transform: "translateX(-50%)", opacity: 0.7 }}
+    style={{ top: y, transform: "translateX(-50%)" }}
     initial={{ opacity: 0, scale: 0.3, y: 20, filter: "blur(4px)" }}
-    animate={{ opacity: 0.7, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
+    animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
     transition={{ duration: 0.45, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
@@ -200,7 +138,7 @@ const TypingLine = ({ text }: { text: string }) => {
 };
 
 const ParticleBurst = ({ active }: { active: boolean }) => {
-  const colors = [blue1, blue2, pink, orange, yellow, green, red];
+  const colors = [blue1, blue2, pink, orange, green, "hsl(45 85% 68%)", "hsl(0 70% 68%)"];
   const particles = useMemo(
     () => Array.from({ length: 24 }).map((_, index) => ({
       angle: (index / 24) * Math.PI * 2,
@@ -234,29 +172,18 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
   const scenes: Record<number, React.ReactNode> = {
     0: (
       <div className={sceneClass}>
-        <Splodge x="4%" y="8%" w={80} color={blue1} />
-        <Splodge x="72%" y="52%" w={60} delay={0.15} color={pink} />
-        <Ring x="76%" y="12%" size={44} delay={0.1} color={orange} />
-        <Dot x="20%" y="58%" size={12} delay={0.2} color={yellow} />
         <CenterEmoji emoji="👋" size="text-[5rem]" delay={0.1} y="18%" />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
     1: (
       <div className={sceneClass}>
-        <Splodge x="8%" y="10%" w={70} color={orange} />
-        <Ring x="74%" y="8%" size={40} delay={0.1} color={blue1} />
-        <Dot x="80%" y="52%" size={10} delay={0.2} color={green} />
-        <Dot x="16%" y="54%" size={14} delay={0.25} color={pink} />
         <CenterEmoji emoji="🫶" size="text-[5.5rem]" delay={0.1} y="16%" />
         <TitleBlock title="make any character" subtitle="start with a vibe, a face, a mood, or a whole fantasy and build from there" />
       </div>
     ),
     2: (
       <div className={sceneClass}>
-        <Splodge x="68%" y="6%" w={65} color={green} />
-        <Ring x="10%" y="14%" size={36} delay={0.1} color={pink} />
-        <Dot x="82%" y="50%" size={10} delay={0.15} color={yellow} />
         <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} y="14%" size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
         <div className="flex flex-col gap-2 text-center">
@@ -277,14 +204,10 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     ),
     3: (
       <div className={sceneClass}>
-        <Splodge x="6%" y="10%" w={70} color={yellow} />
-        <Ring x="78%" y="14%" size={42} delay={0.1} color={blue2} />
-        <Dot x="14%" y="52%" size={12} delay={0.2} color={red} />
         <motion.div
           className="text-[5.5rem]"
-          style={{ opacity: 0.7 }}
           initial={{ opacity: 0, scale: 0.3, y: 16, rotate: -30 }}
-          animate={{ opacity: 0.7, scale: 1, y: 0, rotate: 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
           transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "linear" }}>
@@ -296,9 +219,6 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     ),
     4: (
       <div className={sceneClass}>
-        <Splodge x="76%" y="8%" w={55} color={blue1} />
-        <Ring x="8%" y="12%" size={38} delay={0.1} color={orange} />
-        <Dot x="84%" y="50%" size={10} delay={0.2} color={green} />
         <CenterEmoji emoji="📸" size="text-[4.5rem]" delay={0.1} y="14%" />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-3">
@@ -324,9 +244,6 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     ),
     5: (
       <div className={sceneClass}>
-        <Splodge x="70%" y="8%" w={60} color={green} />
-        <Dot x="12%" y="14%" size={14} delay={0.1} color={pink} />
-        <Ring x="82%" y="48%" size={34} delay={0.15} color={yellow} />
         <CenterEmoji emoji="✍️" size="text-[4.5rem]" delay={0.1} y="14%" />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
         <motion.div
@@ -344,10 +261,6 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     6: (
       <div className={sceneClass}>
         <ParticleBurst active={burst} />
-        <Splodge x="6%" y="10%" w={75} color={blue1} />
-        <Splodge x="72%" y="48%" w={55} delay={0.15} color={pink} />
-        <Ring x="80%" y="12%" size={40} delay={0.1} color={yellow} />
-        <Dot x="18%" y="52%" size={14} delay={0.2} color={green} />
         <CenterEmoji emoji="🚀" size="text-[5rem]" delay={0.1} y="16%" />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
@@ -411,7 +324,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end pb-[8vh]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end overflow-hidden pb-[8vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
