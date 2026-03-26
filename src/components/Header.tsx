@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
+import { Menu, UserRound, CircleUserRound, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -75,7 +75,7 @@ const Header = () => {
           </svg>
           {user && (
             <button onClick={() => navigate("/account")} className="shrink-0">
-              <UserRound size={14} strokeWidth={2.5} fill="currentColor" className="text-nav-foreground" />
+              <CircleUserRound size={14} strokeWidth={2.5} className="text-nav-foreground" />
             </button>
           )}
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
