@@ -97,14 +97,13 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
   );
 };
 
-/* ── icon wrapper with delayed color entrance ── */
-const IconBlock = ({ children, color, delay = 0.6 }: { children: React.ReactNode; color: string; delay?: number }) => (
+/* ── icon wrapper — minimal, mature ── */
+const IconBlock = ({ children, delay = 0.6 }: { children: React.ReactNode; delay?: number }) => (
   <motion.div
-    className="flex items-center justify-center w-16 h-16 rounded-2xl"
-    style={{ background: color }}
-    initial={{ opacity: 0, scale: 0.5, y: 12 }}
-    animate={{ opacity: 1, scale: 1, y: 0 }}
-    transition={{ duration: 0.6, delay, ease: "easeOut" as const }}
+    className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 border border-white/10"
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, delay, ease: "easeOut" as const }}
   >
     {children}
   </motion.div>
