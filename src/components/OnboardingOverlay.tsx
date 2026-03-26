@@ -185,11 +185,11 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
   const scenes: Record<number, React.ReactNode> = {
     0: (
       <div className={sceneClass}>
-        <Blob x="4%" y="8%" size={108} delay={0.1} />
-        <Blob x="72%" y="64%" size={94} delay={0.5} opacity={0.09} />
-        <FloatEmoji emoji="👋" x="10%" y="20%" delay={0.25} size="text-5xl" />
-        <FloatEmoji emoji="🌊" x="78%" y="20%" delay={0.5} size="text-4xl" />
-        <FloatEmoji emoji="✨" x="16%" y="72%" delay={0.75} size="text-3xl" />
+        <Blob x="4%" y="8%" size={130} delay={0.1} />
+        <Blob x="72%" y="64%" size={108} delay={0.5} opacity={0.09} />
+        <FloatEmoji emoji="👋" x="8%" y="14%" delay={0.3} size="text-7xl" />
+        <FloatEmoji emoji="🌊" x="72%" y="16%" delay={0.7} size="text-6xl" />
+        <FloatEmoji emoji="✨" x="16%" y="68%" delay={1.0} size="text-5xl" />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
@@ -255,14 +255,15 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     3: (
       <div className={sceneClass}>
         <Blob x="14%" y="10%" size={116} delay={0.2} />
-        <FloatEmoji emoji="✨" x="76%" y="24%" delay={0.55} size="text-3xl" />
+        <FloatEmoji emoji="✨" x="76%" y="18%" delay={0.6} size="text-6xl" />
+        <FloatEmoji emoji="🔁" x="14%" y="68%" delay={0.9} size="text-5xl" />
         <motion.div
-          className="text-5xl"
-          initial={{ opacity: 0, scale: 0.6 }}
+          className="text-7xl"
+          initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.42, ease: "backOut" }}
+          transition={{ duration: 0.8, ease: "backOut" }}
         >
-          <motion.span className="inline-block" animate={{ rotate: 360 }} transition={{ duration: 2.6, repeat: Infinity, ease: "linear" }}>
+          <motion.span className="inline-block" animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
             🔄
           </motion.span>
         </motion.div>
@@ -272,7 +273,8 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     4: (
       <div className={sceneClass}>
         <Blob x="22%" y="10%" size={124} delay={0.1} />
-        <FloatEmoji emoji="📸" x="80%" y="18%" delay={0.45} size="text-4xl" />
+        <FloatEmoji emoji="📸" x="76%" y="14%" delay={0.5} size="text-6xl" />
+        <FloatEmoji emoji="🖼️" x="10%" y="68%" delay={0.8} size="text-5xl" />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-4">
           <PhotoCard delay={0.4} rotation={-10} scale={0.96} />
@@ -284,7 +286,8 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     5: (
       <div className={sceneClass}>
         <Blob x="8%" y="12%" size={118} delay={0.12} />
-        <FloatEmoji emoji="✍️" x="78%" y="20%" delay={0.4} size="text-4xl" />
+        <FloatEmoji emoji="✍️" x="74%" y="14%" delay={0.5} size="text-6xl" />
+        <FloatEmoji emoji="💬" x="10%" y="68%" delay={0.8} size="text-5xl" />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
         <motion.div
           className="w-full rounded-[24px] border-[4px] px-5 py-4"
@@ -303,8 +306,10 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
         <ParticleBurst active={burst} />
         <Blob x="14%" y="12%" size={122} delay={0.15} />
         <Blob x="70%" y="62%" size={104} delay={0.55} opacity={0.09} />
-        <FloatEmoji emoji="✨" x="12%" y="24%" delay={0.4} size="text-4xl" />
-        <FloatEmoji emoji="🚀" x="82%" y="20%" delay={0.62} size="text-4xl" />
+        <FloatEmoji emoji="✨" x="8%" y="18%" delay={0.5} size="text-6xl" />
+        <FloatEmoji emoji="🚀" x="76%" y="14%" delay={0.75} size="text-7xl" />
+        <FloatEmoji emoji="⚡" x="14%" y="68%" delay={1.0} size="text-5xl" />
+        <FloatEmoji emoji="🎉" x="72%" y="65%" delay={1.2} size="text-5xl" />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
     ),
@@ -396,7 +401,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                   <StepScene step={step} burst={burst} />
                 </motion.div>
