@@ -1,8 +1,11 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useCredits } from "@/contexts/CreditsContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
 const plans = [
@@ -13,6 +16,12 @@ const plans = [
 
 const TopUps = () => {
   const { credits } = useCredits();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) navigate("/auth");
+  }, [user, loading, navigate]);
 
   const handleBuy = () => {
     toast({ title: "coming soon", description: "top-ups will be available soon" });
