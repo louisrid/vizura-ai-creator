@@ -90,41 +90,28 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
       <OnboardingOverlay open={showOnboarding && !user} onDismiss={() => setShowOnboarding(false)} />
 
-      {/* Hero image with angular shield cutout + border */}
-      <div className="mx-auto w-full max-w-lg px-4 mt-2 relative">
-        <h1 className="absolute top-5 left-0 right-0 z-10 text-4xl font-[900] lowercase tracking-tighter text-white text-center" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4)' }}>create character</h1>
-        <div className="relative w-full" style={{ aspectRatio: '5 / 6' }}>
-          {/* Border outline — slightly larger shield behind */}
+      {/* Faint background image with white fade */}
+      <div className="mx-auto w-full max-w-lg relative">
+        <div className="relative w-full" style={{ aspectRatio: '4 / 3' }}>
+          <img
+            src={heroImage}
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ opacity: 0.12, filter: 'saturate(0.2)' }}
+            width={1024}
+            height={768}
+          />
+          {/* Strong white fade at bottom */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              clipPath: 'polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%)',
-              background: 'hsl(var(--foreground))',
+              background: 'linear-gradient(to bottom, hsl(var(--background) / 0.3) 0%, hsl(var(--background) / 0.5) 40%, hsl(var(--background)) 85%)',
             }}
           />
-          {/* Image shield — inset by 4px for border effect */}
-          <div
-            className="absolute"
-            style={{
-              inset: '4px',
-              clipPath: 'polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%)',
-            }}
-          >
-            <img
-              src={heroImage}
-              alt="nature scene"
-              className="w-full h-full object-cover"
-              width={1024}
-              height={768}
-            />
-            {/* Top gradient for title readability */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 'linear-gradient(to bottom, hsla(0,0%,0%,0.35) 0%, hsla(0,0%,0%,0) 30%, hsla(0,0%,0%,0) 60%, hsla(0,0%,0%,0.3) 100%)',
-              }}
-            />
-          </div>
+          {/* Page title centered on the faint image */}
+          <h1 className="absolute top-6 left-0 right-0 z-10 text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
+            create character
+          </h1>
         </div>
       </div>
 
