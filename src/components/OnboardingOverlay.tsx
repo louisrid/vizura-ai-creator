@@ -519,31 +519,31 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                 <span className="relative z-10">let's go</span>
               </motion.button>
             ) : (
-              <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center justify-center gap-3">
                 {step > 0 && (
                   <motion.button
                     onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
-                    className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                    style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
-                    whileTap={{ scale: 0.9 }}
+                    className="flex items-center justify-center rounded-2xl"
+                    style={{ cursor: "pointer" }}
+                    whileTap={{ scale: 1.15, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
+                    animate={{ width: 56, height: 56, background: "#000", borderWidth: 2, borderColor: "hsl(0 0% 100% / 0.12)", borderStyle: "solid" }}
                     initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
+                    <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                   </motion.button>
                 )}
                 <motion.button
                   onClick={(e) => { e.stopPropagation(); advance(); }}
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                  style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
-                  whileTap={{ scale: 0.9 }}
+                  className="flex items-center justify-center rounded-2xl"
+                  style={{ cursor: "pointer" }}
+                  whileTap={{ scale: 1.15, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
+                  animate={{ width: 56, height: 56, background: "#000", borderWidth: 2, borderColor: "hsl(0 0% 100% / 0.12)", borderStyle: "solid" }}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.25, delay: 0.1 }}
                   layout
                 >
-                  <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
+                  <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                 </motion.button>
               </div>
             )}
