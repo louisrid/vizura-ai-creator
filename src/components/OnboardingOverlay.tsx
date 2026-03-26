@@ -464,10 +464,10 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onTouchEnd={handleTouchEnd}
         >
           {/* Scene content — held higher and centered consistently */}
-          <div className="flex-1 flex items-center justify-center overflow-hidden px-4 pt-8 pb-2">
+          <div className="flex-1 flex items-center justify-center overflow-hidden px-5 pt-4 pb-0">
             <div
               className="flex w-full max-w-sm items-center justify-center"
-              style={{ minHeight: 320, transform: "translateY(6vh)" }}
+              style={{ minHeight: "40vh", maxHeight: "60vh", transform: "translateY(4vh)" }}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -490,7 +490,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           </div>
 
           {/* Controls — slightly raised from bottom */}
-          <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-4 pb-6 pt-2">
+          <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1">
             {step === TOTAL_STEPS - 1 ? (
               <motion.button
                 onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
