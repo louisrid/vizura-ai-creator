@@ -31,34 +31,59 @@ const Blob = ({ x, y, size, delay = 0, opacity = 0.12 }: { x: string; y: string;
   />
 );
 
-const FloatEmoji = ({ emoji, x, y, delay = 0, size = "text-6xl" }: { emoji: string; x: string; y: string; delay?: number; size?: string }) => (
-  <motion.span
-    className={`pointer-events-none absolute select-none ${size}`}
-    style={{ left: x, top: y }}
-    initial={{ opacity: 0, scale: 0.5, y: 24 }}
-    animate={{ opacity: 1, scale: [0.6, 1.1, 1], y: [24, -8, 0] }}
-    transition={{ duration: 1.2, delay: delay + 1, ease: "backOut" }}
-  >
-    <motion.span
-      className="inline-block"
-      animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
-      transition={{ duration: 4, delay: delay + 1.5, repeat: Infinity, ease: "easeInOut" }}
-    >
-      {emoji}
-    </motion.span>
-  </motion.span>
-);
+type SceneEmojiProps = {
+  emoji: string;
+  x: string;
+  y: string;
+  size?: string;
+  delay?: number;
+  enterX?: number;
+  enterY?: number;
+  driftX?: number;
+  driftY?: number;
+  rotate?: number;
+  glow?: string;
+  zIndex?: number;
+};
 
-const SparkleEmoji = ({ emoji, x, y, delay = 0 }: { emoji: string; x: string; y: string; delay?: number }) => (
-  <motion.span
-    className="pointer-events-none absolute select-none text-5xl"
-    style={{ left: x, top: y }}
-    initial={{ opacity: 0, scale: 0.4 }}
-    animate={{ opacity: [0, 1, 0.25, 1, 0], scale: [0.5, 1.15, 0.82, 1, 0.6] }}
-    transition={{ duration: 4.5, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
+const SceneEmoji = ({
+  emoji,
+  x,
+  y,
+  size = "text-[4.5rem]",
+  delay = 0,
+  enterX = 0,
+  enterY = 28,
+  driftX = 0,
+  driftY = -10,
+  rotate = 0,
+  glow = "linear-gradient(135deg, hsl(var(--accent-purple-light) / 0.55), hsl(var(--accent-purple-dark) / 0.2))",
+  zIndex = 0,
+}: SceneEmojiProps) => (
+  <motion.div
+    className="pointer-events-none absolute select-none"
+    style={{ left: x, top: y, zIndex }}
+    initial={{ opacity: 0, scale: 0.24, x: enterX, y: enterY, rotate: rotate - 16, filter: "blur(10px)" }}
+    animate={{ opacity: 1, scale: 1, x: 0, y: 0, rotate, filter: "blur(0px)" }}
+    transition={{ duration: 0.9, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   >
-    {emoji}
-  </motion.span>
+    <motion.div
+      className="relative"
+      animate={{ x: [0, driftX, 0], y: [0, driftY, 0], rotate: [rotate, rotate + 4, rotate - 3, rotate] }}
+      transition={{ duration: 6.8, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <div
+        className="absolute left-1/2 top-1/2 -z-10 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
+        style={{ background: glow, opacity: 0.9 }}
+      />
+      <span
+        className={`relative block ${size}`}
+        style={{ filter: "drop-shadow(0 10px 20px hsl(0 0% 0% / 0.45))" }}
+      >
+        {emoji}
+      </span>
+    </motion.div>
+  </motion.div>
 );
 
 const ProgressDots = ({ current }: { current: number }) => (
