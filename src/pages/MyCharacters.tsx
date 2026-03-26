@@ -14,8 +14,6 @@ const CartoonGirl = ({ size = 80 }: { size?: number }) => (
     {/* Side hair strands */}
     <path d="M10 32 Q8 50 14 62" stroke="#C85A2A" strokeWidth="8" strokeLinecap="round" fill="none" />
     <path d="M70 32 Q72 50 66 62" stroke="#C85A2A" strokeWidth="8" strokeLinecap="round" fill="none" />
-    {/* Top / bow */}
-    <ellipse cx="40" cy="6" rx="10" ry="6" fill="#FF69B4" />
     {/* No face — blank */}
     {/* Body / top — smaller relative to head */}
     <path d="M30 72 Q26 74 24 86 L56 86 Q54 74 50 72 Q46 70 40 70 Q34 70 30 72Z" fill="#FF69B4" />
@@ -65,8 +63,10 @@ const MyCharacters = () => {
               return (
                 <div key={i} className="flex flex-col items-center">
                   <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex items-center justify-center relative overflow-hidden">
-                    <CartoonGirl size={100} />
-                    <span className="absolute text-4xl leading-none" style={{ bottom: '10px', left: '8px' }}>🇺🇸</span>
+                    <span className="absolute text-5xl leading-none" style={{ bottom: '16px', left: '14px' }}>🇺🇸</span>
+                    <div className="relative z-10">
+                      <CartoonGirl size={100} />
+                    </div>
                   </div>
                   <span className="mt-1.5 text-xs font-[900] tracking-tight text-foreground">
                     Sarah, 24
