@@ -1,186 +1,87 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Wand2, Pencil, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import BackButton from "@/components/BackButton";
-import PaywallOverlay from "@/components/PaywallOverlay";
-import PageTitle from "@/components/PageTitle";
+import { Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCredits } from "@/contexts/CreditsContext";
-import { supabase } from "@/integrations/supabase/client";
+import BackButton from "@/components/BackButton";
 
-interface Generation {
-  id: string;
-  prompt: string;
-  image_urls: string[];
-  created_at: string;
-}
+const CartoonGirl = ({ size = 80 }: { size?: number }) => (
+  <svg width={size} height={size * 1.2} viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Hair behind */}
+    <ellipse cx="40" cy="38" rx="30" ry="34" fill="#C85A2A" />
+    {/* Head */}
+    <ellipse cx="40" cy="40" rx="24" ry="28" fill="#FFD93D" />
+    {/* Hair bangs */}
+    <path d="M16 30 Q20 10 40 8 Q60 10 64 30 Q58 18 40 16 Q22 18 16 30Z" fill="#C85A2A" />
+    {/* Top / bow */}
+    <ellipse cx="40" cy="10" rx="10" ry="6" fill="#FF69B4" />
+    {/* Eyes */}
+    <circle cx="32" cy="42" r="3" fill="#222" />
+    <circle cx="48" cy="42" r="3" fill="#222" />
+    {/* Mouth */}
+    <path d="M35 52 Q40 56 45 52" stroke="#222" strokeWidth="2" fill="none" strokeLinecap="round" />
+    {/* Body / top */}
+    <path d="M28 66 Q24 68 22 80 L58 80 Q56 68 52 66 Q46 64 40 64 Q34 64 28 66Z" fill="#FF69B4" />
+    {/* Neck */}
+    <rect x="36" y="62" width="8" height="6" rx="2" fill="#FFD93D" />
+  </svg>
+);
+
+const GRID_COLS = 3;
+const GRID_ROWS = 3;
 
 const MyCharacters = () => {
-  const { user, loading: authLoading } = useAuth();
-  const { credits, refetch: refetchCredits } = useCredits();
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const [generations, setGenerations] = useState<Generation[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<Generation | null>(null);
-  const [angleIndex, setAngleIndex] = useState(0);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
 
-  useEffect(() => {
-    if (!authLoading && !user) navigate("/auth");
-  }, [user, authLoading, navigate]);
-
-  useEffect(() => {
-    const fetch = async () => {
-      if (!user) return;
-      const { data } = await supabase
-        .from("generations")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setGenerations((data as Generation[]) || []);
-      setLoading(false);
-    };
-    if (user) fetch();
-  }, [user]);
-
-  const handleEdit = (gen: Generation) => {
-    navigate(`/?edit=${encodeURIComponent(gen.prompt)}`);
-  };
-
-  const handleVariation = async (gen: Generation) => {
-    if (!user) { navigate("/auth"); return; }
-    if (credits <= 0) { setShowPaywall(true); return; }
-    setIsGenerating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("generate", {
-        body: { prompt: gen.prompt + ", subtle variation, keep same overall appearance" },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      const { data: refreshed } = await supabase
-        .from("generations")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setGenerations((refreshed as Generation[]) || []);
-      await refetchCredits();
-      setSelected(null);
-    } catch (e: any) {
-      if (e.message?.includes("No credits") || e.message?.includes("402")) setShowPaywall(true);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  const cells = Array.from({ length: GRID_COLS * GRID_ROWS });
 
   return (
     <div className="min-h-screen bg-background">
-      <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
+      <main className="w-full max-w-lg mx-auto px-4 pt-28 pb-12">
+        <h1 className="text-5xl font-[900] lowercase tracking-tighter text-foreground text-center mb-12">
+          my characters
+        </h1>
 
-      
-        <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-          <div className="flex items-center gap-3 mb-10">
-            <BackButton />
-          </div>
-          <PageTitle>my characters</PageTitle>
-
-          {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="animate-spin text-foreground" size={24} />
-            </div>
-          ) : generations.length === 0 ? (
-            <div className="border-[4px] border-border rounded-2xl p-6 text-center">
-              <p className="text-xs font-extrabold lowercase mb-3">no characters yet</p>
-              <Button variant="outline" className="h-10" onClick={() => navigate("/")}>
-                start creating
-              </Button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2">
-              {generations.map((gen) => (
+        <div className="grid grid-cols-3 gap-2">
+          {cells.map((_, i) => {
+            // Top-left: add new character button
+            if (i === 0) {
+              return (
                 <button
-                  key={gen.id}
-                  onClick={() => { setSelected(gen); setAngleIndex(0); }}
-                  className="rounded-2xl border-[4px] border-border overflow-hidden bg-background hover:border-foreground/60 transition-all active:scale-[0.98]"
+                  key={i}
+                  onClick={() => navigate("/")}
+                  className="aspect-[3/4] rounded-2xl border-[4px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
                 >
-                  <img src={gen.image_urls[0]} alt="" className="w-full aspect-[3/4] object-cover" />
+                  <Plus size={32} strokeWidth={3} className="text-foreground" />
                 </button>
-              ))}
-            </div>
-          )}
-        </main>
-      
+              );
+            }
 
-      {/* Expanded view */}
-      <AnimatePresence>
-        {selected && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
-            onClick={() => setSelected(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="bg-card border-[4px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative">
-                <img
-                  src={selected.image_urls[angleIndex] || selected.image_urls[0]}
-                  alt=""
-                  className="w-full aspect-[3/4] object-cover"
-                />
+            // Top-middle: test character (only when logged in)
+            if (i === 1 && user) {
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex flex-col items-center justify-center relative overflow-hidden">
+                    <CartoonGirl size={64} />
+                    {/* Small American flag bottom-left */}
+                    <span className="absolute bottom-2 left-2 text-lg leading-none">🇺🇸</span>
+                  </div>
+                  <span className="mt-1.5 text-xs font-[900] lowercase tracking-tight text-foreground">
+                    sarah, 24
+                  </span>
+                </div>
+              );
+            }
 
-                {angleIndex > 0 && (
-                  <button
-                    onClick={() => setAngleIndex(angleIndex - 1)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
-                  >
-                    <ChevronLeft size={18} strokeWidth={2.5} />
-                  </button>
-                )}
-
-                {angleIndex < (selected.image_urls.length - 1) && (
-                  <button
-                    onClick={() => setAngleIndex(angleIndex + 1)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
-                  >
-                    <ChevronRight size={18} strokeWidth={2.5} />
-                  </button>
-                )}
-
-                <button
-                  onClick={() => setSelected(null)}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
-                >
-                  <X size={14} strokeWidth={2.5} />
-                </button>
-              </div>
-
-              <div className="flex gap-2 p-4">
-                <Button variant="outline" className="flex-1 h-10" onClick={() => handleEdit(selected)}>
-                  <Pencil size={14} strokeWidth={2.5} /> edit
-                </Button>
-                <Button variant="outline" className="flex-1 h-10" onClick={() => handleVariation(selected)} disabled={isGenerating}>
-                  {isGenerating ? (
-                    <><Loader2 className="animate-spin" size={14} /> creating…</>
-                  ) : (
-                    <><Wand2 size={14} strokeWidth={2.5} /> variation</>
-                  )}
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            // Empty cells
+            return (
+              <div
+                key={i}
+                className="aspect-[3/4] rounded-2xl bg-background"
+              />
+            );
+          })}
+        </div>
+      </main>
     </div>
   );
 };
