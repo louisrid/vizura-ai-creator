@@ -174,12 +174,12 @@ const PopEmoji = ({ emoji, delay }: { emoji: string; delay: number }) => (
 );
 
 const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) => (
-  <div className="relative z-10 flex flex-col items-center gap-3 text-center">
+  <div className="relative z-10 flex flex-col items-center gap-2 text-center">
     <motion.h2
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.42, ease: "easeOut" }}
-      className="max-w-[12ch] text-4xl font-[900] lowercase tracking-tighter text-white"
+      className="max-w-[12ch] text-3xl font-[900] lowercase tracking-tighter text-white"
     >
       {title}
     </motion.h2>
@@ -188,7 +188,7 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) =
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.42, delay: 0.1, ease: "easeOut" }}
-        className="max-w-[18rem] text-base font-extrabold lowercase text-white/42"
+        className="max-w-[18rem] text-sm font-extrabold lowercase text-white/42"
       >
         {subtitle}
       </motion.p>
@@ -390,7 +390,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-end pb-[18vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -407,7 +407,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             />
             <div
               className="absolute inset-0"
-              style={{ background: "linear-gradient(to bottom, hsl(0 0% 0% / 0.90), hsl(0 0% 0% / 0.95))" }}
+              style={{ background: "hsl(0 0% 0% / 0.98)" }}
             />
           </div>
 
