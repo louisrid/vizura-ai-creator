@@ -23,18 +23,17 @@ const red = "hsl(0 70% 68%)";
 
 /* ── abstract shape components ── */
 
-const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = blue1 }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; color?: string }) => (
+const Splodge = ({ x, y, w, delay = 0, color = blue1 }: { x: string; y: string; w: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: w, height: h, borderRadius: "50% 50% 50% 50%", background: color, opacity: 0.15, rotate, filter: "blur(8px)" }}
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: w, height: w, background: color, opacity: 0.12 }}
     initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 0.18, scale: [0.3, 1.06, 1] }}
-    transition={{ duration: 0.6, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+    animate={{ opacity: 0.12, scale: [0.3, 1.05, 1] }}
+    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
-      className="h-full w-full"
-      style={{ borderRadius: "inherit", background: "inherit" }}
-      animate={{ scale: [1, 1.08, 0.95, 1] }}
+      className="h-full w-full rounded-full"
+      animate={{ scale: [1, 1.06, 0.96, 1] }}
       transition={{ duration: 6, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
