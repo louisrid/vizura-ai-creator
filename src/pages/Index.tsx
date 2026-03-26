@@ -9,7 +9,7 @@ import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
-import heroImage from "@/assets/hero-nature-collage.jpg";
+
 
 const stylePresets = [
   { label: "ig photo", icon: Camera, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
@@ -85,22 +85,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      {/* Hero nature image with top-down fade to white */}
-      <div className="relative w-full" style={{ height: '40vh' }}>
-        <img
-          src={heroImage}
-          alt="lush green nature scene with bunny and ladybugs"
-          className="w-full h-full object-cover"
-          width={1024}
-          height={768}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'linear-gradient(to bottom, hsla(0,0%,100%,0.05) 0%, hsla(0,0%,100%,0.05) 50%, hsla(0,0%,100%,0.75) 80%, hsla(0,0%,100%,1) 100%)',
-          }}
-        />
-      </div>
 
         <main className="w-full max-w-lg mx-auto px-4 pt-6 pb-12">
           <div className="flex items-center gap-3 mb-10">
