@@ -181,7 +181,7 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
 };
 
 const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
-  const sceneClass = "relative flex min-h-[390px] flex-col items-center justify-center gap-5 overflow-hidden";
+  const sceneClass = "relative flex min-h-[440px] flex-col items-center justify-end gap-5 overflow-hidden pb-4";
 
   const scenes: Record<number, React.ReactNode> = {
     0: (
