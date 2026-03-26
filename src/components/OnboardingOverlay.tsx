@@ -14,46 +14,46 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-/* vivid candy palette */
-const pink = "hsl(330 85% 65%)";
-const coral = "hsl(12 90% 65%)";
-const sky = "hsl(200 90% 62%)";
-const mint = "hsl(165 70% 55%)";
-const lilac = "hsl(270 70% 72%)";
-const peach = "hsl(25 95% 70%)";
-const lemon = "hsl(50 90% 65%)";
+/* vivid saturated candy palette */
+const pink = "hsl(330 92% 62%)";
+const coral = "hsl(12 95% 62%)";
+const sky = "hsl(200 95% 58%)";
+const mint = "hsl(165 80% 50%)";
+const lilac = "hsl(270 80% 68%)";
+const peach = "hsl(25 100% 66%)";
+const lemon = "hsl(50 95% 60%)";
 
-/* ── bouncy filled ball ── */
+/* ── bouncy filled ball — always perfectly round, never jagged ── */
 const Ball = ({ x, y, size, delay = 0, color = sky }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color }}
-    initial={{ opacity: 0, scale: 0, y: 20 }}
-    animate={{ opacity: 0.85, scale: [0, 1.3, 0.9, 1.05, 1], y: 0 }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+    className="pointer-events-none absolute overflow-hidden rounded-full"
+    style={{ left: x, top: y, width: size, height: size, background: color, borderRadius: "50%" }}
+    initial={{ opacity: 0, scale: 0, y: 16 }}
+    animate={{ opacity: 0.9, scale: [0, 1.2, 0.92, 1.04, 1], y: 0 }}
+    transition={{ duration: 0.45, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
       className="h-full w-full rounded-full"
-      style={{ background: "inherit" }}
-      animate={{ scale: [1, 1.12, 0.92, 1.06, 1], y: [0, -4, 2, -2, 0] }}
-      transition={{ duration: 2.2, delay: delay + 1.2, repeat: Infinity, ease: "easeInOut" }}
+      style={{ background: "inherit", borderRadius: "50%" }}
+      animate={{ scale: [1, 1.08, 0.94, 1.03, 1] }}
+      transition={{ duration: 2.4, delay: delay + 1.2, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
 );
 
-/* ── bouncy ring ── */
+/* ── bouncy ring — always perfectly round ── */
 const BouncyRing = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}` }}
+    className="pointer-events-none absolute overflow-hidden rounded-full"
+    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}`, borderRadius: "50%" }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.7, scale: [0, 1.2, 0.85, 1.05, 1] }}
-    transition={{ duration: 0.5, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+    animate={{ opacity: 0.75, scale: [0, 1.15, 0.9, 1.03, 1] }}
+    transition={{ duration: 0.45, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
       className="h-full w-full rounded-full"
-      style={{ border: "inherit", borderColor: "inherit" }}
-      animate={{ scale: [1, 1.08, 0.94, 1], rotate: [0, 8, -6, 0] }}
+      style={{ borderRadius: "50%" }}
+      animate={{ scale: [1, 1.06, 0.95, 1] }}
       transition={{ duration: 2.8, delay: delay + 1.4, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
