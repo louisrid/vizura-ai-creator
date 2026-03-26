@@ -453,20 +453,24 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
               {step === TOTAL_STEPS - 1 ? (
                 <motion.button
                   onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                  className="relative h-14 w-full overflow-hidden rounded-2xl text-sm font-[900] lowercase tracking-tight"
-                  style={{ background: amber, color: "#000" }}
+                  className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
+                  style={{
+                    background: "linear-gradient(135deg, hsl(45 100% 60%), hsl(35 100% 50%))",
+                    borderColor: "hsl(40 100% 55%)",
+                    color: "#000",
+                  }}
                   whileTap={{ scale: 0.97 }}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.15 }}
                 >
                   <motion.div
-                    className="absolute inset-0 rounded-2xl"
+                    className="absolute inset-0 rounded-xl"
                     animate={{
                       boxShadow: [
-                        `0 0 0 0 ${amber}44`,
-                        `0 0 0 14px ${amber}00`,
-                        `0 0 0 0 ${amber}00`,
+                        "0 0 0 0 hsl(45 100% 60% / 0.4)",
+                        "0 0 0 14px hsl(45 100% 60% / 0)",
+                        "0 0 0 0 hsl(45 100% 60% / 0)",
                       ],
                     }}
                     transition={{ duration: 1.8, repeat: Infinity }}
