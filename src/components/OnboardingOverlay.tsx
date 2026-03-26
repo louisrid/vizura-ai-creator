@@ -231,8 +231,8 @@ const Scene0 = () => (
     <IconPop delay={0.15} size={96}>
       <span className="text-[5rem]">👋</span>
     </IconPop>
-    <BigTitle delay={0.25}>hey there</BigTitle>
-    <Subtitle delay={0.4}>here's how you make amazing characters in seconds</Subtitle>
+    <BigTitle delay={0.25}>welcome</BigTitle>
+    <Subtitle delay={0.4}>make characters and photos in a few taps</Subtitle>
   </div>
 );
 
@@ -277,8 +277,8 @@ const Scene1 = () => (
     <IconPop delay={0.1} size={96}>
       <Sparkles size={60} strokeWidth={2} style={{ color: dotColors[2] }} />
     </IconPop>
-    <BigTitle delay={0.2}>1. pick a vibe</BigTitle>
-    <Subtitle delay={0.35}>choose age, nationality, and style</Subtitle>
+    <BigTitle delay={0.2}>1. choose a look</BigTitle>
+    <Subtitle delay={0.35}>set age, ethnicity, and style</Subtitle>
     <motion.div
       className="mt-2 flex items-center gap-1 rounded-2xl border-[4px] px-3 py-2"
       style={{ borderColor: "hsl(0 0% 100% / 0.12)", background: "hsl(0 0% 100% / 0.04)" }}
@@ -303,8 +303,8 @@ const Scene2 = () => (
     <IconPop delay={0.1} size={80}>
       <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
-    <BigTitle delay={0.2}>2. dial in the details</BigTitle>
-    <Subtitle delay={0.35}>hair, eyes, body type, you name it</Subtitle>
+    <BigTitle delay={0.2}>2. set the details</BigTitle>
+    <Subtitle delay={0.35}>hair, eyes, body type, and more</Subtitle>
     <div className="mt-1 flex w-full max-w-[17rem] flex-col gap-2.5">
       <ControlItem label="hair colour" desc="blonde, brunette, red" n={1} delay={0.5} />
       <ControlItem label="eye colour" desc="blue, green, brown" n={2} delay={0.6} />
@@ -319,8 +319,8 @@ const Scene3 = () => (
     <IconPop delay={0.1} size={88}>
       <Camera size={52} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
-    <BigTitle delay={0.2}>3. snap photos</BigTitle>
-    <Subtitle delay={0.35}>get realistic shots in any style you want</Subtitle>
+    <BigTitle delay={0.2}>3. generate photos</BigTitle>
+    <Subtitle delay={0.35}>realistic images in any setting</Subtitle>
     <motion.div
       className="flex items-center justify-center gap-[-8px] pt-3"
       style={{ gap: 0 }}
@@ -347,8 +347,8 @@ const Scene4 = () => (
     <IconPop delay={0.1} size={80}>
       <PenLine size={48} strokeWidth={2} style={{ color: dotColors[5] }} />
     </IconPop>
-    <BigTitle delay={0.2}>4. describe the scene</BigTitle>
-    <Subtitle delay={0.35}>tell us the pose, place, and mood</Subtitle>
+    <BigTitle delay={0.2}>4. add a prompt</BigTitle>
+    <Subtitle delay={0.35}>describe the pose, place, and mood</Subtitle>
     <motion.div
       className="mt-1 w-full max-w-[17rem] rounded-2xl border-[4px] px-4 py-3"
       style={{ borderColor: "hsl(0 0% 100% / 0.1)", background: "hsl(0 0% 100% / 0.04)" }}
@@ -370,8 +370,8 @@ const Scene5 = ({ burst }: { burst: boolean }) => (
     <IconPop delay={0.1} size={96}>
       <span className="text-[5rem]">🚀</span>
     </IconPop>
-    <BigTitle delay={0.2}>you're ready</BigTitle>
-    <Subtitle delay={0.35}>sign up free and start creating now</Subtitle>
+    <BigTitle delay={0.2}>ready</BigTitle>
+    <Subtitle delay={0.35}>sign up free and start creating</Subtitle>
   </div>
 );
 
