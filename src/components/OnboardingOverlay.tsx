@@ -24,17 +24,18 @@ const Glow = ({ color, x, y, size = 120 }: { color: string; x: string; y: string
 
 /* ── progress dots ── */
 const ProgressDots = ({ current, total }: { current: number; total: number }) => (
-  <div className="flex gap-2 justify-center">
+  <div className="flex gap-2.5 justify-center pb-4">
     {Array.from({ length: total }).map((_, i) => (
       <motion.div
-        key={i}
+        key={`dot-${i}-${current}`}
         className="rounded-full"
+        initial={false}
         animate={{
-          width: i === current ? 24 : 8,
-          height: 8,
-          backgroundColor: i === current ? "white" : "rgba(255,255,255,0.2)",
+          width: i === current ? 28 : 10,
+          height: 10,
+          backgroundColor: i === current ? "#d4a843" : "rgba(255,255,255,0.15)",
         }}
-        transition={{ duration: 0.4, ease: "easeOut" as const }}
+        transition={{ duration: 0.3, ease: "easeOut" as const }}
       />
     ))}
   </div>
