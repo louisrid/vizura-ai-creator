@@ -200,20 +200,24 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) =
   </div>
 );
 
-const PhotoCard = ({ delay, rotation }: { delay: number; rotation: number }) => (
-  <motion.div
-    className="h-28 w-20 rounded-[20px] border-[4px] border-white/10 bg-white/5 shadow-soft"
-    style={{ background: "linear-gradient(180deg, hsl(0 0% 100% / 0.10), hsl(0 0% 100% / 0.03))" }}
-    initial={{ opacity: 0, y: 30, rotate: rotation, scale: 0.9 }}
-    animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale: 1 }}
-    transition={{
-      opacity: { duration: 0.45, delay },
-      y: { duration: 0.45, delay, ease: "backOut" },
-      scale: { duration: 0.45, delay, ease: "backOut" },
-      rotate: { duration: 4.2, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" },
-    }}
-  />
+const PhotoCard = forwardRef<HTMLDivElement, { delay: number; rotation: number }>(
+  ({ delay, rotation }, ref) => (
+    <motion.div
+      ref={ref}
+      className="h-28 w-20 rounded-[20px] border-[4px] border-white/10 bg-white/5 shadow-soft"
+      style={{ background: "linear-gradient(180deg, hsl(0 0% 100% / 0.10), hsl(0 0% 100% / 0.03))" }}
+      initial={{ opacity: 0, y: 30, rotate: rotation, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale: 1 }}
+      transition={{
+        opacity: { duration: 0.45, delay },
+        y: { duration: 0.45, delay, ease: "backOut" },
+        scale: { duration: 0.45, delay, ease: "backOut" },
+        rotate: { duration: 4.2, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" },
+      }}
+    />
+  ),
 );
+PhotoCard.displayName = "PhotoCard";
 
 const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
   const steps: Record<number, React.ReactNode> = {
