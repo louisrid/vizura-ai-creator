@@ -9,12 +9,12 @@ const TOTAL_STEPS = 8;
 /* ── palette ── */
 const dotColors = [
   "hsl(270 90% 62%)", // purple
-  "hsl(200 100% 55%)", // blue
+  "hsl(210 100% 65%)", // light blue
   "hsl(330 95% 58%)", // pink
-  "hsl(165 90% 45%)", // green
+  "hsl(145 80% 45%)", // green
   "hsl(240 85% 65%)", // indigo
   "hsl(285 80% 60%)", // violet
-  "hsl(195 95% 50%)", // cyan
+  "hsl(350 90% 58%)", // rose
 ];
 
 const amber = "#d4a843";
@@ -216,7 +216,7 @@ const ControlItem = ({ label, desc, n, delay }: { label: string; desc: string; n
    ═══════════════════════════════════════════════════════ */
 
 const Scene0 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.15} size={96}>
       <span className="text-[5rem]">👋</span>
     </IconPop>
@@ -226,7 +226,7 @@ const Scene0 = () => (
 );
 
 const Scene1 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={96}>
       <Sparkles size={60} strokeWidth={2} style={{ color: dotColors[2] }} />
     </IconPop>
@@ -260,7 +260,7 @@ const Scene1 = () => (
 );
 
 const Scene2 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
@@ -276,7 +276,7 @@ const Scene2 = () => (
 );
 
 const Scene3 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <motion.div
       initial={{ opacity: 0, scale: 0, rotate: -180 }}
       animate={{ opacity: 1, scale: [0, 1.3, 0.9, 1], rotate: 0 }}
@@ -335,7 +335,7 @@ const MockCharCard = ({ delay }: { delay: number }) => (
 );
 
 const Scene4 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <LayoutGrid size={48} strokeWidth={2} style={{ color: dotColors[4] }} />
     </IconPop>
@@ -346,7 +346,7 @@ const Scene4 = () => (
 );
 
 const Scene5 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={88}>
       <Camera size={52} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
@@ -366,7 +366,7 @@ const Scene5 = () => (
 );
 
 const Scene6 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <PenLine size={48} strokeWidth={2} style={{ color: dotColors[5] }} />
     </IconPop>
@@ -388,7 +388,7 @@ const Scene6 = () => (
 );
 
 const Scene7 = ({ burst }: { burst: boolean }) => (
-  <div className="relative flex flex-col items-center gap-5">
+  <div className="relative flex flex-col items-center gap-3">
     <ParticleBurst active={burst} />
     <IconPop delay={0.1} size={96}>
       <span className="text-[5rem]">🚀</span>
@@ -471,7 +471,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
         >
           {/* content */}
           <motion.div
-            className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center"
+            className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center pt-8"
             initial={{ y: 10, opacity: 0.95 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
