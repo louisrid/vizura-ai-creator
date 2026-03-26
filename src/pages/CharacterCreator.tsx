@@ -7,6 +7,7 @@ import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
+import heroImage from "@/assets/hero-nature-collage.jpg";
 
 const countryOptions = [
   "any", "american", "british", "australian", "brazilian", "colombian", "french",
@@ -86,7 +87,24 @@ const CharacterCreator = () => {
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-28 pb-12">
+      {/* Hero nature image — top 2/3 with fade to white */}
+      <div className="absolute top-0 left-0 w-full" style={{ height: '66vh' }}>
+        <img
+          src={heroImage}
+          alt="nature scene with bridge, bunny and ladybugs"
+          className="w-full h-full object-cover"
+          width={1024}
+          height={768}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, hsla(0,0%,100%,0.05) 0%, hsla(0,0%,100%,0.05) 66%, hsla(0,0%,100%,0.75) 85%, hsla(0,0%,100%,1) 100%)',
+          }}
+        />
+      </div>
+
+      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-28 pb-12">
         <h1 className="text-5xl font-[900] lowercase tracking-tighter text-foreground text-center mb-12">create character</h1>
 
         <CardCarousel
