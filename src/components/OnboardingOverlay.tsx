@@ -59,45 +59,45 @@ const BouncyRing = ({ x, y, size, delay = 0, color = pink }: { x: string; y: str
   </motion.div>
 );
 
-/* ── single centered emoji (flow-based, not absolute) ── */
+/* ── single centered emoji — snappy bounce ── */
 const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0 }: { emoji: string; size?: string; delay?: number }) => (
   <motion.div
     className="pointer-events-none select-none"
-    initial={{ opacity: 0, scale: 0.3, filter: "blur(8px)" }}
-    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-    transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+    initial={{ opacity: 0, scale: 0, y: 30 }}
+    animate={{ opacity: 1, scale: [0, 1.3, 0.9, 1.08, 1], y: 0 }}
+    transition={{ duration: 0.45, delay: delay + 0.3, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
       className={`block ${size}`}
-      animate={{ y: [0, -6, 0], scale: [1, 1.04, 1] }}
-      transition={{ duration: 5, delay: delay + 2.2, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ y: [0, -10, 0], scale: [1, 1.08, 1], rotate: [0, 3, -2, 0] }}
+      transition={{ duration: 1.8, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
     >
       {emoji}
     </motion.span>
   </motion.div>
 );
 
-/* ── row of emojis (flow-based) ── */
+/* ── row of emojis — snappy stagger ── */
 const EmojiRow = ({ emojis, delay = 0, size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; size?: string; gap?: number }) => (
   <motion.div
     className="pointer-events-none flex select-none"
     style={{ gap }}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.6, delay: delay + 1 }}
+    transition={{ duration: 0.2, delay: delay + 0.3 }}
   >
     {emojis.map((emoji, i) => (
       <motion.span
         key={i}
         className={`block ${size}`}
-        initial={{ opacity: 0, scale: 0.2, y: 24 }}
-        animate={{ opacity: 1, scale: [0.2, 1.1, 1], y: 0 }}
-        transition={{ duration: 0.85, delay: delay + 1 + i * 0.14, ease: [0.2, 0.9, 0.2, 1] }}
+        initial={{ opacity: 0, scale: 0, y: 30 }}
+        animate={{ opacity: 1, scale: [0, 1.25, 0.9, 1], y: 0 }}
+        transition={{ duration: 0.4, delay: delay + 0.35 + i * 0.08, ease: [0.2, 0.9, 0.2, 1] }}
       >
         <motion.span
           className="inline-block"
-          animate={{ y: [0, -5, 0] }}
-          transition={{ duration: 4.5, delay: delay + 2.2 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ y: [0, -8, 0], rotate: [0, 4, -3, 0] }}
+          transition={{ duration: 2, delay: delay + 1 + i * 0.2, repeat: Infinity, ease: "easeInOut" }}
         >
           {emoji}
         </motion.span>
@@ -127,18 +127,18 @@ const ProgressDots = ({ current }: { current: number }) => (
 const TitleBlock = ({ title, subtitle }: { title: string; subtitle: string }) => (
   <div className="relative z-10 flex flex-col items-center gap-3 text-center">
     <motion.h2
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.38, delay: 1, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 18, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.3, delay: 0.45, ease: [0.2, 0.9, 0.2, 1] }}
       className="max-w-[12ch] text-3xl font-[900] lowercase tracking-tighter"
       style={{ color: white }}
     >
       {title}
     </motion.h2>
     <motion.p
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.38, delay: 1.15, ease: "easeOut" }}
+      transition={{ duration: 0.3, delay: 0.55, ease: "easeOut" }}
       className="max-w-[18rem] text-sm font-extrabold lowercase leading-snug"
       style={{ color: whiteSoft }}
     >
