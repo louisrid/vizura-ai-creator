@@ -69,7 +69,7 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
             style={{
               left: "50%",
               top: "50%",
-              background: i % 3 === 0 ? "#d4a843" : i % 3 === 1 ? "hsl(var(--accent-purple))" : "hsl(var(--foreground))",
+              background: i % 3 === 0 ? "#d4a843" : i % 3 === 1 ? "hsl(var(--accent-purple))" : "white",
             }}
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
             animate={{
@@ -105,7 +105,7 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.5, repeat: Infinity }}
-        className="inline-block w-0.5 h-5 bg-foreground/60 ml-0.5 align-middle"
+        className="inline-block w-0.5 h-5 bg-white/60 ml-0.5 align-middle"
       />
     </span>
   );
@@ -121,7 +121,7 @@ const ProgressDots = ({ current, total }: { current: number; total: number }) =>
         animate={{
           width: i === current ? 24 : 8,
           height: 8,
-          backgroundColor: i === current ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.3)",
+          backgroundColor: i === current ? "white" : "rgba(255,255,255,0.3)",
         }}
         transition={{ duration: 0.3 }}
       />
@@ -174,10 +174,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <Blob size={50} color="hsl(var(--accent-purple-light) / 0.5)" x={-30} y={60} delay={1} />
         <MorphBlob step={0} />
         <motion.div variants={fadeUp} className="text-5xl">👋</motion.div>
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
           vizura how-to
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-foreground/50 text-center">
+        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-white/50 text-center">
           quick walkthrough — takes 30 seconds
         </motion.p>
       </motion.div>
@@ -190,10 +190,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <motion.div variants={fadeUp} className="text-5xl">
           <WobbleShape>✨</WobbleShape>
         </motion.div>
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
           make any character you want
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-foreground/50 text-center">
+        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-white/50 text-center">
           dream her up — we'll bring her to life
         </motion.p>
         <motion.div variants={fadeUp} className="flex gap-3 mt-2">
@@ -213,7 +213,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     2: (
       <motion.div variants={staggerContainer} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative">
         <MorphBlob step={2} />
-        <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
           use the controls to shape their look
         </motion.h2>
         <motion.div variants={fadeUp} className="w-full flex flex-col gap-3 mt-2">
@@ -227,10 +227,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
             <motion.div
               key={item.label}
               variants={fadeUp}
-              className="flex items-center gap-3 rounded-xl bg-foreground/5 px-4 py-2.5"
+              className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-2.5"
             >
-              <span className="text-xs font-[900] lowercase text-foreground w-16">{item.label}</span>
-              <span className="text-xs font-extrabold lowercase text-foreground/40">{item.desc}</span>
+              <span className="text-xs font-[900] lowercase text-white w-16">{item.label}</span>
+              <span className="text-xs font-extrabold lowercase text-white/40">{item.desc}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -246,14 +246,14 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
               animate={{ rotate: [0, 360] }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             >
-              <RefreshCw size={48} strokeWidth={3} className="text-foreground" />
+              <RefreshCw size={48} strokeWidth={3} className="text-white" />
             </motion.div>
           </WobbleShape>
         </motion.div>
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
           not perfect? regenerate
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-foreground/50 text-center">
+        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-white/50 text-center">
           hit create again for better results — each attempt costs 1 credit
         </motion.p>
       </motion.div>
@@ -264,10 +264,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <MorphBlob step={1} />
         <motion.div variants={fadeUp} className="text-5xl">
           <WobbleShape>
-            <Camera size={48} strokeWidth={3} className="text-foreground" />
+            <Camera size={48} strokeWidth={3} className="text-white" />
           </WobbleShape>
         </motion.div>
-        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
           now create photos of them
         </motion.h2>
         <motion.div variants={fadeUp} className="flex gap-4 mt-4" style={{ perspective: 600 }}>
@@ -281,16 +281,16 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       <motion.div variants={staggerContainer} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
         <Blob size={60} color="hsl(var(--accent-purple) / 0.3)" x={-70} y={30} delay={0.4} />
         <MorphBlob step={2} />
-        <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
           describe what you want in the prompt
         </motion.h2>
-        <motion.div variants={fadeUp} className="w-full rounded-2xl border-[4px] border-foreground/20 bg-foreground/5 px-4 py-3 min-h-[80px]">
+        <motion.div variants={fadeUp} className="w-full rounded-2xl border-[4px] border-white/20 bg-white/10 px-4 py-3 min-h-[80px]">
           <TypingText
             text="sitting in a cafe, golden hour lighting, wearing a white summer dress"
-            className="text-sm font-extrabold lowercase text-foreground/70"
+            className="text-sm font-extrabold lowercase text-white/70"
           />
         </motion.div>
-        <motion.p variants={fadeUp} className="text-xs font-extrabold lowercase text-foreground/40 text-center">
+        <motion.p variants={fadeUp} className="text-xs font-extrabold lowercase text-white/40 text-center">
           the more detail, the better the result
         </motion.p>
       </motion.div>
@@ -300,10 +300,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <ParticleBurst active={burst} />
         <Blob size={100} color="#d4a84366" x={-40} y={-50} delay={0} />
         <Blob size={80} color="hsl(var(--accent-purple) / 0.3)" x={50} y={30} delay={0.3} />
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
+        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
           ready to create?
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-foreground/50 text-center">
+        <motion.p variants={fadeUp} className="text-sm font-extrabold lowercase text-white/50 text-center">
           sign up free — your first creation is on us
         </motion.p>
       </motion.div>
@@ -343,8 +343,6 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     setTimeout(onDismiss, 900);
   };
 
-  if (!open) return null;
-
   return (
     <AnimatePresence>
       {open && (
@@ -357,8 +355,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
           style={{ cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
-          {/* backdrop */}
-          <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
+          {/* backdrop — 95% dark, no backdrop-blur for perf */}
+          <div className="absolute inset-0 bg-foreground/95" />
 
           {/* content card */}
           <motion.div
@@ -408,7 +406,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                 </motion.button>
               ) : (
                 <motion.div
-                  className="flex items-center justify-center w-14 h-14 rounded-2xl bg-foreground text-background pointer-events-none"
+                  className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white text-foreground pointer-events-none"
                   animate={{ scale: [1, 1.08, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                   aria-hidden
@@ -420,7 +418,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
               {/* tap hint */}
               {step < TOTAL_STEPS - 1 && (
                 <motion.p
-                  className="text-[10px] font-extrabold lowercase text-foreground/30"
+                  className="text-[10px] font-extrabold lowercase text-white/30"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.5 }}
