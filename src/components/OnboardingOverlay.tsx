@@ -14,75 +14,121 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-const Blob = ({ x, y, size, delay = 0, opacity = 0.12 }: { x: string; y: string; size: number; delay?: number; opacity?: number }) => (
+/* ── abstract shape components ── */
+
+const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = "hsl(0 0% 100% / 0.06)" }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{
-      left: x,
-      top: y,
-      width: size,
-      height: size,
-      background: `hsl(0 0% 100% / ${opacity})`,
-      filter: "blur(34px)",
-    }}
-    initial={{ opacity: 0, scale: 0.75 }}
-    animate={{ opacity: [opacity * 0.5, opacity, opacity * 0.55], scale: [0.92, 1.06, 0.95], x: [0, 10, -8, 0], y: [0, -10, 8, 0] }}
-    transition={{ duration: 10, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
-  />
+    className="pointer-events-none absolute"
+    style={{ left: x, top: y, width: w, height: h, borderRadius: "42% 58% 62% 38% / 46% 54% 46% 54%", background: color, rotate }}
+    initial={{ opacity: 0, scale: 0.3 }}
+    animate={{ opacity: 1, scale: [0.3, 1.06, 1] }}
+    transition={{ duration: 1.1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  >
+    <motion.div
+      className="h-full w-full"
+      style={{ borderRadius: "inherit", background: "inherit" }}
+      animate={{ borderRadius: ["42% 58% 62% 38% / 46% 54% 46% 54%", "56% 44% 38% 62% / 52% 48% 52% 48%", "42% 58% 62% 38% / 46% 54% 46% 54%"] }}
+      transition={{ duration: 8, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </motion.div>
 );
 
-type SceneEmojiProps = {
-  emoji: string;
-  x: string;
-  y: string;
-  size?: string;
-  delay?: number;
-  enterX?: number;
-  enterY?: number;
-  driftX?: number;
-  driftY?: number;
-  rotate?: number;
-  glow?: string;
-  zIndex?: number;
-};
-
-const SceneEmoji = ({
-  emoji,
-  x,
-  y,
-  size = "text-[4.5rem]",
-  delay = 0,
-  enterX = 0,
-  enterY = 28,
-  driftX = 0,
-  driftY = -10,
-  rotate = 0,
-  glow = "linear-gradient(135deg, hsl(var(--accent-purple-light) / 0.55), hsl(var(--accent-purple-dark) / 0.2))",
-  zIndex = 0,
-}: SceneEmojiProps) => (
+const Ring = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.1)", strokeWidth = 4 }: { x: string; y: string; size: number; delay?: number; color?: string; strokeWidth?: number }) => (
   <motion.div
-    className="pointer-events-none absolute select-none"
-    style={{ left: x, top: y, zIndex }}
-    initial={{ opacity: 0, scale: 0.24, x: enterX, y: enterY, rotate: rotate - 16, filter: "blur(10px)" }}
-    animate={{ opacity: 1, scale: 1, x: 0, y: 0, rotate, filter: "blur(0px)" }}
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, border: `${strokeWidth}px solid ${color}` }}
+    initial={{ opacity: 0, scale: 0.2 }}
+    animate={{ opacity: 1, scale: [0.2, 1.08, 1] }}
+    transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  >
+    <motion.div
+      className="h-full w-full"
+      animate={{ rotate: [0, 360] }}
+      transition={{ duration: 24, delay: delay + 2, repeat: Infinity, ease: "linear" }}
+    />
+  </motion.div>
+);
+
+const Dot = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.14)" }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+  <motion.div
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, background: color }}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 1, scale: [0, 1.2, 1] }}
+    transition={{ duration: 0.7, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  >
+    <motion.div
+      className="h-full w-full rounded-full"
+      animate={{ scale: [1, 1.15, 0.92, 1] }}
+      transition={{ duration: 5, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </motion.div>
+);
+
+const CrossMark = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.1)" }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+  <motion.div
+    className="pointer-events-none absolute"
+    style={{ left: x, top: y, width: size, height: size }}
+    initial={{ opacity: 0, scale: 0.3, rotate: -45 }}
+    animate={{ opacity: 1, scale: 1, rotate: 0 }}
     transition={{ duration: 0.9, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
-      className="relative"
-      animate={{ x: [0, driftX, 0], y: [0, driftY, 0], rotate: [rotate, rotate + 4, rotate - 3, rotate] }}
-      transition={{ duration: 6.8, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
+      className="relative h-full w-full"
+      animate={{ rotate: [0, 90] }}
+      transition={{ duration: 12, delay: delay + 2, repeat: Infinity, ease: "linear" }}
     >
-      <div
-        className="absolute left-1/2 top-1/2 -z-10 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
-        style={{ background: glow, opacity: 0.9 }}
-      />
-      <span
-        className={`relative block ${size}`}
-        style={{ filter: "drop-shadow(0 10px 20px hsl(0 0% 0% / 0.45))" }}
-      >
-        {emoji}
-      </span>
+      <div className="absolute left-1/2 top-0 h-full w-[4px] -translate-x-1/2 rounded-full" style={{ background: color }} />
+      <div className="absolute left-0 top-1/2 h-[4px] w-full -translate-y-1/2 rounded-full" style={{ background: color }} />
     </motion.div>
+  </motion.div>
+);
+
+/* ── single centered emoji (no glow, no gradient) ── */
+const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
+  <motion.div
+    className="pointer-events-none absolute left-1/2 select-none"
+    style={{ top: y, transform: "translateX(-50%)" }}
+    initial={{ opacity: 0, scale: 0.3, y: 30, filter: "blur(8px)" }}
+    animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
+    transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  >
+    <motion.span
+      className={`block ${size}`}
+      animate={{ y: [0, -6, 0], scale: [1, 1.04, 1] }}
+      transition={{ duration: 5, delay: delay + 2.2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      {emoji}
+    </motion.span>
+  </motion.div>
+);
+
+/* ── row of emojis centered together ── */
+const EmojiRow = ({ emojis, delay = 0, y = "32%", size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; y?: string; size?: string; gap?: number }) => (
+  <motion.div
+    className="pointer-events-none absolute left-1/2 flex select-none"
+    style={{ top: y, transform: "translateX(-50%)", gap }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1, x: "-50%" }}
+    transition={{ duration: 0.6, delay: delay + 1 }}
+  >
+    {emojis.map((emoji, i) => (
+      <motion.span
+        key={i}
+        className={`block ${size}`}
+        initial={{ opacity: 0, scale: 0.2, y: 24 }}
+        animate={{ opacity: 1, scale: [0.2, 1.1, 1], y: 0 }}
+        transition={{ duration: 0.85, delay: delay + 1 + i * 0.14, ease: [0.2, 0.9, 0.2, 1] }}
+      >
+        <motion.span
+          className="inline-block"
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 4.5, delay: delay + 2.2 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {emoji}
+        </motion.span>
+      </motion.span>
+    ))}
   </motion.div>
 );
 
