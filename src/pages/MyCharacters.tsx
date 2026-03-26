@@ -30,7 +30,7 @@ const GRID_ROWS = 3;
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
