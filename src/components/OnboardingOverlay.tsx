@@ -14,49 +14,85 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-/* vivid saturated candy palette */
-const pink = "hsl(330 92% 62%)";
-const coral = "hsl(12 95% 62%)";
-const sky = "hsl(200 95% 58%)";
-const mint = "hsl(165 80% 50%)";
-const lilac = "hsl(270 80% 68%)";
-const peach = "hsl(25 100% 66%)";
-const lemon = "hsl(50 95% 60%)";
+/* vivid saturated palette — no orange */
+const pink = "hsl(335 95% 60%)";
+const sky = "hsl(200 100% 55%)";
+const mint = "hsl(165 90% 48%)";
+const lilac = "hsl(270 85% 65%)";
+const lemon = "hsl(52 100% 55%)";
+const ruby = "hsl(350 90% 55%)";
+const cyan = "hsl(185 95% 50%)";
 
-/* ── bouncy filled ball — always perfectly round, never jagged ── */
+/* ── soft filled ball ── */
 const Ball = ({ x, y, size, delay = 0, color = sky }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute overflow-hidden rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, borderRadius: "50%" }}
-    initial={{ opacity: 0, scale: 0, y: 16 }}
-    animate={{ opacity: 0.9, scale: [0, 1.2, 0.92, 1.04, 1], y: 0 }}
-    transition={{ duration: 0.45, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, background: color }}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 0.9, scale: [0, 1.2, 0.92, 1] }}
+    transition={{ duration: 0.4, delay: delay + 0.3, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
       className="h-full w-full rounded-full"
-      style={{ background: "inherit", borderRadius: "50%" }}
-      animate={{ scale: [1, 1.08, 0.94, 1.03, 1] }}
-      transition={{ duration: 2.4, delay: delay + 1.2, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ scale: [1, 1.06, 0.96, 1] }}
+      transition={{ duration: 2.5, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
 );
 
-/* ── bouncy ring — always perfectly round ── */
-const BouncyRing = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+/* ── paint stroke line — draws horizontally ── */
+const PaintStroke = ({ x, y, width, color = pink, delay = 0, rotate = 0 }: { x: string; y: string; width: number; color?: string; delay?: number; rotate?: number }) => (
   <motion.div
-    className="pointer-events-none absolute overflow-hidden rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}`, borderRadius: "50%" }}
+    className="pointer-events-none absolute"
+    style={{ left: x, top: y, height: 8, borderRadius: 9999, background: color, rotate, transformOrigin: "left center" }}
+    initial={{ opacity: 0, width: 0 }}
+    animate={{ opacity: 0.8, width }}
+    transition={{ duration: 0.35, delay: delay + 0.3, ease: [0.2, 0.9, 0.2, 1] }}
+  />
+);
+
+/* ── confetti dots that fall down ── */
+const FallingDots = ({ count = 8, colors, delay = 0 }: { count?: number; colors: string[]; delay?: number }) => (
+  <>
+    {Array.from({ length: count }).map((_, i) => (
+      <motion.div
+        key={i}
+        className="pointer-events-none absolute rounded-full"
+        style={{
+          left: `${12 + (i * 76) / count + ((i * 7) % 12)}%`,
+          top: "-4%",
+          width: 6 + (i % 3) * 3,
+          height: 6 + (i % 3) * 3,
+          background: colors[i % colors.length],
+        }}
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: [0, 0.9, 0.9, 0], y: [0, 120 + (i % 4) * 40, 260 + (i % 3) * 30, 400] }}
+        transition={{ duration: 2.5, delay: delay + 0.3 + i * 0.06, ease: "easeIn", repeat: Infinity, repeatDelay: 1 }}
+      />
+    ))}
+  </>
+);
+
+/* ── bouncing trail — a ball bounces across in an arc ── */
+const BouncePath = ({ color = sky, delay = 0, fromX = "10%", toX = "80%" }: { color?: string; delay?: number; fromX?: string; toX?: string }) => (
+  <motion.div
+    className="pointer-events-none absolute rounded-full"
+    style={{ width: 16, height: 16, background: color, top: "50%" }}
+    initial={{ left: fromX, opacity: 0, y: 0 }}
+    animate={{ left: [fromX, "30%", "50%", "70%", toX], opacity: [0, 1, 1, 1, 0], y: [0, -60, 0, -40, 0] }}
+    transition={{ duration: 1.6, delay: delay + 0.4, ease: "easeInOut" }}
+  />
+);
+
+/* ── expanding ring pulse ── */
+const RingPulse = ({ x, y, size, color = lilac, delay = 0 }: { x: string; y: string; size: number; color?: string; delay?: number }) => (
+  <motion.div
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, border: `3px solid ${color}` }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.75, scale: [0, 1.15, 0.9, 1.03, 1] }}
-    transition={{ duration: 0.45, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full rounded-full"
-      style={{ borderRadius: "50%" }}
-      animate={{ scale: [1, 1.06, 0.95, 1] }}
-      transition={{ duration: 2.8, delay: delay + 1.4, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
+    animate={{ opacity: [0, 0.8, 0], scale: [0.3, 1.4, 2] }}
+    transition={{ duration: 1.5, delay: delay + 0.4, ease: "easeOut", repeat: Infinity, repeatDelay: 2 }}
+  />
 );
 
 /* ── single centered emoji — snappy bounce ── */
@@ -160,19 +196,13 @@ const PhotoCard = ({ delay, rotation, scale = 1 }: { delay: number; rotation: nu
       rotate: { duration: 4.1, delay: delay + 0.35, repeat: Infinity, ease: "easeInOut" },
     }}
   >
-    <img
-      src={heroImage}
-      alt=""
-      className="h-full w-full object-cover"
-      style={{ opacity: 0.26, filter: "grayscale(1) contrast(0.95) brightness(0.95)" }}
-    />
+    <img src={heroImage} alt="" className="h-full w-full object-cover" style={{ opacity: 0.26, filter: "grayscale(1) contrast(0.95) brightness(0.95)" }} />
     <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsl(0 0% 100% / 0.05), hsl(0 0% 0% / 0.34))" }} />
   </motion.div>
 );
 
 const TypingLine = ({ text }: { text: string }) => {
   const [displayed, setDisplayed] = useState("");
-
   useEffect(() => {
     setDisplayed("");
     let index = 0;
@@ -183,79 +213,54 @@ const TypingLine = ({ text }: { text: string }) => {
         if (index >= text.length) window.clearInterval(interval);
       }, 38);
     }, 550);
-
     return () => window.clearTimeout(startTimer);
   }, [text]);
-
   return (
     <span className="text-sm font-extrabold lowercase" style={{ color: "hsl(0 0% 100% / 0.66)" }}>
       {displayed}
-      <motion.span
-        className="ml-1 inline-block h-4 w-0.5 align-middle"
-        style={{ background: "hsl(0 0% 100% / 0.52)" }}
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.55, repeat: Infinity }}
-      />
+      <motion.span className="ml-1 inline-block h-4 w-0.5 align-middle" style={{ background: "hsl(0 0% 100% / 0.52)" }} animate={{ opacity: [1, 0] }} transition={{ duration: 0.55, repeat: Infinity }} />
     </span>
   );
 };
 
 const ParticleBurst = ({ active }: { active: boolean }) => {
   const particles = useMemo(
-    () => Array.from({ length: 20 }).map((_, index) => ({ angle: (index / 20) * Math.PI * 2, distance: 42 + ((index * 13) % 64), color: index % 3 === 0 ? amber : white })),
+    () => Array.from({ length: 20 }).map((_, i) => ({ angle: (i / 20) * Math.PI * 2, distance: 42 + ((i * 13) % 64), color: i % 4 === 0 ? pink : i % 4 === 1 ? sky : i % 4 === 2 ? lemon : mint })),
     [],
   );
-
   if (!active) return null;
-
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {particles.map((particle, index) => (
-        <motion.div
-          key={index}
-          className="absolute rounded-full"
-          style={{ left: "50%", top: "50%", width: 4, height: 4, background: particle.color }}
-          initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-          animate={{ x: Math.cos(particle.angle) * particle.distance, y: Math.sin(particle.angle) * particle.distance, opacity: 0, scale: 0 }}
-          transition={{ duration: 0.72, ease: "easeOut" }}
-        />
+    <div className="pointer-events-none absolute inset-0">
+      {particles.map((p, i) => (
+        <motion.div key={i} className="absolute rounded-full" style={{ left: "50%", top: "50%", width: 6, height: 6, background: p.color }} initial={{ x: 0, y: 0, opacity: 1, scale: 1 }} animate={{ x: Math.cos(p.angle) * p.distance * 1.5, y: Math.sin(p.angle) * p.distance * 1.5, opacity: 0, scale: 0 }} transition={{ duration: 0.72, ease: "easeOut" }} />
       ))}
     </div>
   );
 };
 
 const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
-  /* layout: visual area on top, text below — no absolute overlap */
-  const sceneClass = "relative flex flex-col items-center gap-6 overflow-hidden";
-  /* background shapes layer behind everything */
-  const shapesClass = "pointer-events-none absolute inset-0";
+  const sceneClass = "relative flex flex-col items-center gap-6";
 
   const scenes: Record<number, React.ReactNode> = {
-    /* ── 0: welcome ── */
+    /* ── 0: welcome — paint strokes draw out from sides ── */
     0: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <Ball x="-2%" y="-2%" size={28} color={sky} delay={0} />
-          <Ball x="86%" y="78%" size={20} color={pink} delay={0.1} />
-          <Ball x="88%" y="0%" size={14} color={lemon} delay={0.2} />
-          <BouncyRing x="78%" y="-4%" size={24} color={lilac} delay={0.15} />
-          <Ball x="0%" y="80%" size={10} color={coral} delay={0.25} />
-          <Ball x="92%" y="42%" size={8} color={mint} delay={0.3} />
-        </div>
+        <PaintStroke x="8%" y="18%" width={90} color={pink} delay={0} rotate={-8} />
+        <PaintStroke x="55%" y="28%" width={70} color={sky} delay={0.1} rotate={5} />
+        <PaintStroke x="20%" y="72%" width={60} color={mint} delay={0.15} rotate={-3} />
+        <Ball x="82%" y="12%" size={32} color={lilac} delay={0.08} />
+        <Ball x="6%" y="62%" size={24} color={lemon} delay={0.18} />
         <CenterEmoji emoji="👋" size="text-[5.5rem]" delay={0.1} />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
-    /* ── 1: make any character ── */
+    /* ── 1: make any character — bouncing ball trail across ── */
     1: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <Ball x="-1%" y="-1%" size={26} color={lilac} delay={0} />
-          <Ball x="88%" y="76%" size={18} color={sky} delay={0.1} />
-          <BouncyRing x="84%" y="-2%" size={22} color={coral} delay={0.12} />
-          <Ball x="0%" y="78%" size={12} color={peach} delay={0.2} />
-          <Ball x="92%" y="40%" size={8} color={mint} delay={0.25} />
-        </div>
+        <BouncePath color={pink} delay={0} fromX="5%" toX="90%" />
+        <BouncePath color={sky} delay={0.3} fromX="90%" toX="5%" />
+        <Ball x="8%" y="8%" size={28} color={lilac} delay={0.1} />
+        <Ball x="80%" y="68%" size={22} color={cyan} delay={0.2} />
         <motion.div
           className="relative flex items-center justify-center overflow-hidden rounded-[28px] border-[4px]"
           style={{ borderColor: panelBorder, background: panel, width: 125, height: 187 }}
@@ -264,78 +269,51 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
           transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.2, filter: "grayscale(1) blur(0.5px)" }} />
-          <motion.span
-            className="relative z-10 text-7xl"
-            animate={{ scale: [1, 1.15, 0.95, 1.05, 1], rotate: [0, 5, -3, 0] }}
-            transition={{ duration: 2, delay: 1.2, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <motion.span className="relative z-10 text-7xl" animate={{ scale: [1, 1.15, 0.95, 1.05, 1], rotate: [0, 5, -3, 0] }} transition={{ duration: 2, delay: 1.2, repeat: Infinity, ease: "easeInOut" }}>
             🫶
           </motion.span>
         </motion.div>
         <TitleBlock title="make any character" subtitle="start with a vibe, a face, a mood, or a whole fantasy and build from there" />
       </div>
     ),
-    /* ── 2: shape their look ── */
+    /* ── 2: shape their look — confetti dots rain down ── */
     2: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <Ball x="86%" y="-2%" size={24} color={coral} delay={0} />
-          <Ball x="-2%" y="76%" size={20} color={sky} delay={0.08} />
-          <BouncyRing x="88%" y="72%" size={20} color={mint} delay={0.15} />
-          <Ball x="0%" y="-2%" size={14} color={lemon} delay={0.12} />
-          <Ball x="92%" y="38%" size={8} color={lilac} delay={0.2} />
-        </div>
+        <FallingDots count={10} colors={[pink, sky, lilac, mint, lemon]} delay={0} />
+        <Ball x="84%" y="10%" size={26} color={ruby} delay={0.1} />
+        <Ball x="4%" y="65%" size={20} color={cyan} delay={0.15} />
         <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.05} size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
         <div className="flex flex-col gap-2 text-center">
           {["hair colour", "eye colour", "body type"].map((item, index) => (
-            <motion.div
-              key={item}
-              className="rounded-2xl px-5 py-2.5 text-sm font-extrabold lowercase"
-              style={{ background: panel, color: whiteSoft }}
-              initial={{ opacity: 0, y: 16, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.25, delay: 0.7 + index * 0.08, ease: [0.2, 0.9, 0.2, 1] }}
-            >
+            <motion.div key={item} className="rounded-2xl px-5 py-2.5 text-sm font-extrabold lowercase" style={{ background: panel, color: whiteSoft }} initial={{ opacity: 0, y: 16, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.25, delay: 0.7 + index * 0.08, ease: [0.2, 0.9, 0.2, 1] }}>
               {item}
             </motion.div>
           ))}
         </div>
       </div>
     ),
-    /* ── 3: not perfect? ── */
+    /* ── 3: not perfect? — expanding ring pulses ── */
     3: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <Ball x="-1%" y="-1%" size={28} color={peach} delay={0} />
-          <Ball x="88%" y="78%" size={16} color={sky} delay={0.1} />
-          <BouncyRing x="84%" y="-2%" size={24} color={pink} delay={0.08} />
-          <Ball x="0%" y="80%" size={10} color={mint} delay={0.18} />
-          <Ball x="92%" y="34%" size={8} color={lemon} delay={0.22} />
-        </div>
-        <motion.div
-          className="text-[5.5rem]"
-          initial={{ opacity: 0, scale: 0, rotate: -180 }}
-          animate={{ opacity: 1, scale: [0, 1.2, 0.9, 1], rotate: 0 }}
-          transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
-        >
-          <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 3, delay: 1.2, repeat: Infinity, ease: "linear" }}>
-            🔄
-          </motion.span>
+        <RingPulse x="20%" y="15%" size={50} color={pink} delay={0} />
+        <RingPulse x="60%" y="60%" size={40} color={sky} delay={0.4} />
+        <RingPulse x="75%" y="20%" size={35} color={mint} delay={0.8} />
+        <Ball x="6%" y="65%" size={24} color={lilac} delay={0.1} />
+        <Ball x="85%" y="8%" size={20} color={lemon} delay={0.15} />
+        <motion.div className="text-[5.5rem]" initial={{ opacity: 0, scale: 0, rotate: -180 }} animate={{ opacity: 1, scale: [0, 1.2, 0.9, 1], rotate: 0 }} transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}>
+          <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 3, delay: 1.2, repeat: Infinity, ease: "linear" }}>🔄</motion.span>
         </motion.div>
         <TitleBlock title="not perfect?" subtitle="run it again anytime — every new attempt costs one credit and gives fresh options" />
       </div>
     ),
-    /* ── 4: create photos ── */
+    /* ── 4: create photos — paint strokes frame the photos ── */
     4: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <Ball x="-1%" y="-1%" size={24} color={sky} delay={0} />
-          <Ball x="88%" y="76%" size={18} color={coral} delay={0.1} />
-          <BouncyRing x="86%" y="-2%" size={22} color={lilac} delay={0.08} />
-          <Ball x="0%" y="78%" size={10} color={lemon} delay={0.18} />
-          <Ball x="92%" y="36%" size={8} color={pink} delay={0.22} />
-        </div>
+        <PaintStroke x="4%" y="10%" width={80} color={sky} delay={0} rotate={2} />
+        <PaintStroke x="60%" y="70%" width={100} color={pink} delay={0.1} rotate={-4} />
+        <Ball x="86%" y="6%" size={26} color={mint} delay={0.08} />
+        <Ball x="4%" y="72%" size={20} color={lilac} delay={0.15} />
         <CenterEmoji emoji="📸" size="text-[5rem]" delay={0.05} />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-4">
@@ -345,43 +323,30 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
         </div>
       </div>
     ),
-    /* ── 5: describe what you want ── */
+    /* ── 5: describe — bouncing ball + paint stroke ── */
     5: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <Ball x="84%" y="-2%" size={26} color={mint} delay={0} />
-          <Ball x="-2%" y="74%" size={18} color={pink} delay={0.08} />
-          <BouncyRing x="-1%" y="-2%" size={22} color={sky} delay={0.1} />
-          <Ball x="92%" y="70%" size={12} color={peach} delay={0.18} />
-          <Ball x="0%" y="36%" size={8} color={lilac} delay={0.22} />
-        </div>
+        <BouncePath color={lilac} delay={0} fromX="15%" toX="85%" />
+        <Ball x="82%" y="8%" size={28} color={pink} delay={0.08} />
+        <Ball x="4%" y="68%" size={22} color={cyan} delay={0.12} />
+        <PaintStroke x="10%" y="80%" width={70} color={mint} delay={0.15} rotate={-2} />
         <CenterEmoji emoji="✍️" size="text-[5rem]" delay={0.05} />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
-        <motion.div
-          className="w-full rounded-[24px] border-[4px] px-5 py-4"
-          style={{ borderColor: panelBorder, background: panel }}
-          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.3, delay: 0.6, ease: [0.2, 0.9, 0.2, 1] }}
-        >
+        <motion.div className="w-full rounded-[24px] border-[4px] px-5 py-4" style={{ borderColor: panelBorder, background: panel }} initial={{ opacity: 0, y: 20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.3, delay: 0.6, ease: [0.2, 0.9, 0.2, 1] }}>
           <div className="mb-3 text-xs font-extrabold lowercase" style={{ color: "hsl(0 0% 100% / 0.4)" }}>example prompt</div>
           <TypingLine text="golden hour portrait, soft dress, cafe mood" />
         </motion.div>
       </div>
     ),
-    /* ── 6: ready to create? ── */
+    /* ── 6: ready to create? — full celebration ── */
     6: (
       <div className={sceneClass}>
-        <div className={shapesClass}>
-          <ParticleBurst active={burst} />
-          <Ball x="-1%" y="-1%" size={30} color={coral} delay={0} />
-          <Ball x="86%" y="74%" size={22} color={sky} delay={0.08} />
-          <Ball x="88%" y="-2%" size={16} color={lemon} delay={0.12} />
-          <BouncyRing x="84%" y="36%" size={22} color={pink} delay={0.1} />
-          <BouncyRing x="-2%" y="70%" size={18} color={mint} delay={0.18} />
-          <Ball x="0%" y="36%" size={10} color={lilac} delay={0.22} />
-          <Ball x="92%" y="72%" size={8} color={peach} delay={0.26} />
-        </div>
+        <ParticleBurst active={burst} />
+        <FallingDots count={12} colors={[pink, sky, lilac, mint, lemon, ruby, cyan]} delay={0} />
+        <RingPulse x="40%" y="20%" size={60} color={pink} delay={0.2} />
+        <RingPulse x="25%" y="50%" size={45} color={sky} delay={0.6} />
+        <Ball x="8%" y="10%" size={30} color={lilac} delay={0.05} />
+        <Ball x="82%" y="65%" size={24} color={mint} delay={0.1} />
         <CenterEmoji emoji="🚀" size="text-[5.5rem]" delay={0.1} />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
