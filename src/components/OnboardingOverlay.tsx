@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Camera, RefreshCw, Sparkles, SlidersHorizontal, PenLine } from "lucide-react";
 
 const TOTAL_STEPS = 7;
-const AUTO_ADVANCE_MS = [3000, 2500, 3000, 2500, 2500, 3500, 0]; // 0 = no auto on final
+
 
 /* ── palette ── */
 const dotColors = [
@@ -19,20 +19,21 @@ const dotColors = [
 
 const amber = "#d4a843";
 
-/* ── progress dots ── */
+/* ── progress dots — active = light blue gradient ── */
 const ProgressDots = ({ current }: { current: number }) => (
   <div className="flex items-center justify-center gap-3 pt-2 pb-1">
     {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
       <motion.div
         key={i}
         className="rounded-full"
+        style={i === current ? { background: "linear-gradient(135deg, hsl(200 100% 65%), hsl(220 100% 55%))" } : {}}
         initial={false}
         animate={{
-          width: i === current ? 32 : 12,
-          height: 12,
-          backgroundColor: i === current ? dotColors[i % dotColors.length] : "hsl(0 0% 100% / 0.15)",
+          width: i === current ? 32 : 10,
+          height: 10,
+          ...(i !== current ? { backgroundColor: "hsl(0 0% 100% / 0.15)" } : {}),
         }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
       />
     ))}
   </div>
@@ -355,7 +356,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
   const [step, setStep] = useState(0);
   const [burst, setBurst] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const timerRef = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const advance = useCallback(() => {
     setStep((s) => (s < TOTAL_STEPS - 1 ? s + 1 : s));
@@ -363,7 +364,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
 
   useEffect(() => { setMounted(true); }, []);
 
-  /* lock scroll */
+  /* lock scroll & reset */
   useEffect(() => {
     if (!open) return;
     setStep(0);
@@ -386,16 +387,17 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     };
   }, [open]);
 
-  /* auto-advance */
-  useEffect(() => {
-    if (!open) return;
-    if (timerRef.current) clearTimeout(timerRef.current);
-    const ms = AUTO_ADVANCE_MS[step];
-    if (ms > 0) {
-      timerRef.current = window.setTimeout(advance, ms);
-    }
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [open, step, advance]);
+  /* swipe handling */
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (diff > 50 && step < TOTAL_STEPS - 1) advance();
+    if (diff < -50 && step > 0) setStep((s) => s - 1);
+    touchStartX.current = null;
+  };
 
   const handleLetsGo = () => {
     setBurst(true);
@@ -409,12 +411,13 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
       {open ? (
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
-          style={{ background: "hsl(0 0% 0% / 0.97)", cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
+          style={{ background: "hsl(0 0% 0% / 0.97)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22 }}
-          onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           {/* content */}
           <motion.div
@@ -471,16 +474,17 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   <span className="relative z-10">let's go</span>
                 </motion.button>
               ) : (
-                <motion.div
+                <motion.button
+                  onClick={(e) => { e.stopPropagation(); advance(); }}
                   className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                  style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)" }}
+                  style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
+                  whileTap={{ scale: 0.92 }}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.25, delay: 0.15 }}
-                  aria-hidden
                 >
                   <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
-                </motion.div>
+                </motion.button>
               )}
 
               {step < TOTAL_STEPS - 1 && (
@@ -491,7 +495,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.2, delay: 0.4 }}
                 >
-                  tap anywhere
+                  swipe or tap arrow
                 </motion.p>
               )}
 
