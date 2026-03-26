@@ -216,7 +216,7 @@ const ControlItem = ({ label, desc, n, delay }: { label: string; desc: string; n
    ═══════════════════════════════════════════════════════ */
 
 const Scene0 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.15} size={96}>
       <span className="text-[5rem]">👋</span>
     </IconPop>
@@ -226,7 +226,7 @@ const Scene0 = () => (
 );
 
 const Scene1 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={96}>
       <Sparkles size={60} strokeWidth={2} style={{ color: dotColors[2] }} />
     </IconPop>
@@ -260,7 +260,7 @@ const Scene1 = () => (
 );
 
 const Scene2 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
@@ -276,7 +276,7 @@ const Scene2 = () => (
 );
 
 const Scene3 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <motion.div
       initial={{ opacity: 0, scale: 0, rotate: -180 }}
       animate={{ opacity: 1, scale: [0, 1.3, 0.9, 1], rotate: 0 }}
@@ -335,7 +335,7 @@ const MockCharCard = ({ delay }: { delay: number }) => (
 );
 
 const Scene4 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <LayoutGrid size={48} strokeWidth={2} style={{ color: dotColors[4] }} />
     </IconPop>
@@ -346,7 +346,7 @@ const Scene4 = () => (
 );
 
 const Scene5 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={88}>
       <Camera size={52} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
@@ -366,7 +366,7 @@ const Scene5 = () => (
 );
 
 const Scene6 = () => (
-  <div className="flex flex-col items-center gap-5">
+  <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <PenLine size={48} strokeWidth={2} style={{ color: dotColors[5] }} />
     </IconPop>
@@ -388,7 +388,7 @@ const Scene6 = () => (
 );
 
 const Scene7 = ({ burst }: { burst: boolean }) => (
-  <div className="relative flex flex-col items-center gap-5">
+  <div className="relative flex flex-col items-center gap-3">
     <ParticleBurst active={burst} />
     <IconPop delay={0.1} size={96}>
       <span className="text-[5rem]">🚀</span>
