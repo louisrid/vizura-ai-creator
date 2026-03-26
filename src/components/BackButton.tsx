@@ -7,7 +7,7 @@ const BackButton = () => {
   return (
     <button
       onClick={() => navigate("/")}
-      className="w-9 h-9 rounded-lg bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
+      className="w-9 h-9 rounded-2xl bg-foreground flex items-center justify-center text-background hover:bg-foreground/80 transition-colors"
       aria-label="go back"
     >
       <ArrowLeft size={14} strokeWidth={2.5} />
