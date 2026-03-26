@@ -75,7 +75,7 @@ const Header = () => {
           </svg>
           {user && (
             <button onClick={() => navigate("/account")} className="shrink-0">
-              <UserRound size={14} strokeWidth={0} fill="currentColor" className="text-nav-foreground" />
+              <UserRound size={14} strokeWidth={2} fill="currentColor" stroke="currentColor" className="text-nav-foreground" />
             </button>
           )}
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
