@@ -30,7 +30,7 @@ const Storage = () => {
   const isSelecting = selected.size > 0;
 
   useEffect(() => {
-    if (!authLoading && !user) navigate("/auth");
+    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate]);
 
   useEffect(() => {

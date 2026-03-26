@@ -51,7 +51,7 @@ const CharacterCreator = () => {
   };
 
   const generate = async () => {
-    if (!user) { navigate("/auth"); return; }
+    if (!user) { navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
 
     setIsGenerating(true);

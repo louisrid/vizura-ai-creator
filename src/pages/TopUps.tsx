@@ -20,7 +20,7 @@ const TopUps = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !user) navigate("/auth");
+    if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, loading, navigate]);
 
   const handleBuy = () => {

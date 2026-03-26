@@ -45,7 +45,7 @@ const Header = () => {
   const handleNav = (path: string) => {
     setOpen(false);
     if (path === "/account" && !user) {
-      navigate("/auth");
+      navigate(`/auth?redirect=${encodeURIComponent(path)}`);
     } else {
       navigate(path);
     }

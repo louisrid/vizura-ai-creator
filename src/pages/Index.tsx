@@ -43,7 +43,7 @@ const Index = () => {
   const handleCreate = async () => {
     toast({ title: "coming soon", description: "photo creation will be available soon" });
     return;
-    if (!user) { navigate("/auth"); return; }
+    if (!user) { navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
     if (!prompt.trim()) return;
 
