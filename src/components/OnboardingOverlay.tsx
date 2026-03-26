@@ -14,85 +14,44 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-/* shape palette: 70% light-blue, 30% white */
-const shapeBlue1 = "hsl(210 60% 65% / 0.1)";
-const shapeBlue2 = "hsl(200 55% 60% / 0.08)";
-const shapeBlue3 = "hsl(215 50% 70% / 0.12)";
-const shapeWhite1 = "hsl(0 0% 100% / 0.08)";
-const shapeWhite2 = "hsl(0 0% 100% / 0.06)";
-const ringBlue = "hsl(210 55% 65% / 0.14)";
-const ringWhite = "hsl(0 0% 100% / 0.1)";
-const dotBlue = "hsl(205 60% 68% / 0.18)";
-const dotWhite = "hsl(0 0% 100% / 0.14)";
+/* shape palette: bright, solid */
+const blue1 = "hsl(210 80% 72%)";
+const blue2 = "hsl(200 75% 68%)";
+const blue3 = "hsl(220 70% 76%)";
+const whi1 = "hsl(0 0% 100%)";
+const whi2 = "hsl(0 0% 92%)";
 
-/* ── abstract shape components ── */
-
-const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = "hsl(0 0% 100% / 0.06)" }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: w, height: h, borderRadius: "42% 58% 62% 38% / 46% 54% 46% 54%", background: color, rotate }}
-    initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 1, scale: [0.3, 1.06, 1] }}
-    transition={{ duration: 1.1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full"
-      style={{ borderRadius: "inherit", background: "inherit" }}
-      animate={{ borderRadius: ["42% 58% 62% 38% / 46% 54% 46% 54%", "56% 44% 38% 62% / 52% 48% 52% 48%", "42% 58% 62% 38% / 46% 54% 46% 54%"] }}
-      transition={{ duration: 8, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
-);
-
-const Ring = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.1)", strokeWidth = 4 }: { x: string; y: string; size: number; delay?: number; color?: string; strokeWidth?: number }) => (
+/* ── clean circle ── */
+const Circle = ({ x, y, size, delay = 0, color = blue1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `${strokeWidth}px solid ${color}` }}
-    initial={{ opacity: 0, scale: 0.2 }}
-    animate={{ opacity: 1, scale: [0.2, 1.08, 1] }}
-    transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full"
-      animate={{ rotate: [0, 360] }}
-      transition={{ duration: 24, delay: delay + 2, repeat: Infinity, ease: "linear" }}
-    />
-  </motion.div>
-);
-
-const Dot = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.14)" }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color }}
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.18 }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 1, scale: [0, 1.2, 1] }}
+    animate={{ opacity: 0.18, scale: 1 }}
     transition={{ duration: 0.7, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full rounded-full"
-      animate={{ scale: [1, 1.15, 0.92, 1] }}
-      transition={{ duration: 5, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
+  />
 );
 
-const CrossMark = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.1)" }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+/* ── ring (no rotation) ── */
+const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: size, height: size }}
-    initial={{ opacity: 0, scale: 0.3, rotate: -45 }}
-    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-    transition={{ duration: 0.9, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="relative h-full w-full"
-      animate={{ rotate: [0, 90] }}
-      transition={{ duration: 12, delay: delay + 2, repeat: Infinity, ease: "linear" }}
-    >
-      <div className="absolute left-1/2 top-0 h-full w-[4px] -translate-x-1/2 rounded-full" style={{ background: color }} />
-      <div className="absolute left-0 top-1/2 h-[4px] w-full -translate-y-1/2 rounded-full" style={{ background: color }} />
-    </motion.div>
-  </motion.div>
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}`, opacity: 0.22 }}
+    initial={{ opacity: 0, scale: 0.3 }}
+    animate={{ opacity: 0.22, scale: 1 }}
+    transition={{ duration: 0.8, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  />
+);
+
+/* ── small dot ── */
+const Dot = ({ x, y, size, delay = 0, color = whi1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+  <motion.div
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.24 }}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 0.24, scale: 1 }}
+    transition={{ duration: 0.5, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  />
 );
 
 /* ── single centered emoji (no glow, no gradient) ── */
