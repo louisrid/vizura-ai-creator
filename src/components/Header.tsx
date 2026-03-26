@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
+import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -12,7 +12,7 @@ const menuItems = [
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
   { label: "top-ups", icon: Zap, path: "/top-ups" },
-  { label: "my account", icon: UserRound, path: "/account" },
+  { label: "my account", icon: Settings, path: "/account" },
 ];
 
 const pageNames: Record<string, string> = {
@@ -75,10 +75,7 @@ const Header = () => {
           </svg>
           {user && (
             <button onClick={() => navigate("/account")} className="shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-nav-foreground">
-                <circle cx="12" cy="8" r="5" />
-                <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-              </svg>
+              <Settings size={14} strokeWidth={2.5} className="text-nav-foreground" />
             </button>
           )}
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
