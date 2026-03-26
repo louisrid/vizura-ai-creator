@@ -261,8 +261,8 @@ const Scene1 = () => (
 
 const Scene2 = () => (
   <div className="flex flex-col items-center gap-5">
-    <IconPop delay={0.1} size={56}>
-      <SlidersHorizontal size={36} strokeWidth={2.2} style={{ color: dotColors[3] }} />
+    <IconPop delay={0.1} size={80}>
+      <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
     <BigTitle delay={0.2}>shape their look</BigTitle>
     <Subtitle delay={0.35}>use the controls to fine-tune every detail</Subtitle>
