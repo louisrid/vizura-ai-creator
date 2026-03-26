@@ -57,7 +57,7 @@ const Header = () => {
   const CurrentIcon = currentMenuItem?.icon || (isAuthPage ? LogIn : undefined);
 
   return (
-    <header className="bg-nav sticky top-0 z-40 border-b-[3px] border-nav-foreground/15">
+    <header className="bg-nav sticky top-0 z-40 border-b-2 border-nav-foreground/15">
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
@@ -96,7 +96,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 top-full mt-2 mr-0 w-48 bg-nav border-[5px] border-nav-foreground/20 rounded-2xl shadow-medium overflow-hidden"
+                className="absolute right-0 top-full mt-2 mr-0 w-48 bg-nav border-[3px] border-nav-foreground/20 rounded-2xl shadow-medium overflow-hidden"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (
@@ -130,7 +130,7 @@ const Header = () => {
 const CreditsBadge = () => {
   const { credits } = useCredits();
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-nav-foreground/30 px-3 py-1.5">
+    <div className="flex items-center gap-1.5 rounded-2xl border-2 border-nav-foreground/30 px-3 py-1.5">
       <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
       <span className="text-[11px] font-extrabold text-nav-foreground">{credits}</span>
     </div>
