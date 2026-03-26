@@ -25,6 +25,8 @@ const CharacterCreator = () => {
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
 
+  const [country, setCountry] = useState<string>("any");
+  const [age, setAge] = useState<string>("25");
   const [hair, setHair] = useState<(typeof hairOptions)[number]>("brunette");
   const [eye, setEye] = useState<(typeof eyeOptions)[number]>("brown");
   const [body, setBody] = useState<(typeof bodyOptions)[number]>("regular");
