@@ -8,6 +8,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
+const countryOptions = [
+  "any", "american", "british", "australian", "brazilian", "colombian", "french",
+  "german", "indian", "italian", "japanese", "korean", "mexican", "nigerian",
+  "russian", "scandinavian", "spanish", "thai", "turkish", "ukrainian",
+] as const;
+const ageOptions = Array.from({ length: 23 }, (_, i) => `${i + 18}`) as unknown as readonly string[];
 const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
 const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
