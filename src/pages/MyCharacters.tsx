@@ -64,11 +64,9 @@ const MyCharacters = () => {
             if (i === 1 && user) {
               return (
                 <div key={i} className="flex flex-col items-center">
-                  <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex flex-col items-end justify-end relative overflow-hidden">
-                    <div className="absolute bottom-0 right-0 translate-x-[10%] translate-y-[10%]">
-                      <CartoonGirl size={80} />
-                    </div>
-                    <span className="absolute bottom-0 left-0 text-3xl leading-none">🇺🇸</span>
+                  <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex items-center justify-center relative overflow-hidden">
+                    <CartoonGirl size={100} />
+                    <span className="absolute text-4xl leading-none" style={{ bottom: '-3px', left: '-3px' }}>🇺🇸</span>
                   </div>
                   <span className="mt-1.5 text-xs font-[900] tracking-tight text-foreground">
                     Sarah, 24
