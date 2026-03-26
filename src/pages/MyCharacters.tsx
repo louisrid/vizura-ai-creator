@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import BackButton from "@/components/BackButton";
 
 const CartoonGirl = ({ size = 80 }: { size?: number }) => (
   <svg width={size} height={size * 1.2} viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
