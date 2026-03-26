@@ -107,7 +107,7 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
             rows={4}
-            className="min-h-32 w-full resize-none rounded-2xl border-[6px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -121,7 +121,7 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-6 rounded-2xl border-[6px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -160,7 +160,7 @@ const SelectField = <T extends string>({ label, options, value, onChange }: Sele
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-2xl border-[6px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
     >
       {options.map((option) => (
         <option key={option} value={option}>
