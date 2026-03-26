@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -30,10 +30,11 @@ const GRID_ROWS = 3;
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate, useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!authLoading && !user) navigate("/auth");
+    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate]);
 
   const cells = Array.from({ length: GRID_COLS * GRID_ROWS });

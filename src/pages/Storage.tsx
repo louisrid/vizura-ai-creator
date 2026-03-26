@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Trash2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,8 @@ type Filter = (typeof filters)[number];
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate, useLocation();
+  const location = useLocation();
   const [images, setImages] = useState<StorageImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
@@ -30,7 +31,7 @@ const Storage = () => {
   const isSelecting = selected.size > 0;
 
   useEffect(() => {
-    if (!authLoading && !user) navigate("/auth");
+    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate]);
 
   useEffect(() => {

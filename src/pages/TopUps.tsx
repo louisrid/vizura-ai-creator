@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -17,10 +17,11 @@ const plans = [
 const TopUps = () => {
   const { credits } = useCredits();
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate, useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!loading && !user) navigate("/auth");
+    if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, loading, navigate]);
 
   const handleBuy = () => {
