@@ -141,11 +141,11 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── welcome ── */
     0: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#7c9cf5" x="30%" y="20%" />
-        <Glow color="#d4a843" x="70%" y="70%" size={100} />
+        <Glow color="rgba(255,255,255,0.06)" x="30%" y="20%" />
+        <Glow color="rgba(255,255,255,0.04)" x="70%" y="70%" size={100} />
         <motion.div variants={fadeUp}>
           <IconBlock delay={0.5}>
-            <Wand2 size={28} strokeWidth={2.5} className="text-white" />
+            <Wand2 size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -160,10 +160,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── any character ── */
     1: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#d4a843" x="25%" y="30%" size={90} />
+        <Glow color="rgba(255,255,255,0.04)" x="25%" y="30%" size={90} />
         <motion.div variants={fadeUp}>
           <IconBlock delay={0.5}>
-            <Sparkles size={28} strokeWidth={2.5} className="text-white" />
+            <Sparkles size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -207,10 +207,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── regenerate ── */
     3: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#7c9cf5" x="60%" y="25%" size={100} />
+        <Glow color="rgba(255,255,255,0.06)" x="60%" y="25%" size={100} />
         <motion.div variants={fadeUp}>
           <IconBlock delay={0.5}>
-            <RefreshCw size={28} strokeWidth={2.5} className="text-white" />
+            <RefreshCw size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -225,10 +225,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── photos ── */
     4: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#d4a843" x="40%" y="60%" size={90} />
+        <Glow color="rgba(255,255,255,0.04)" x="40%" y="60%" size={90} />
         <motion.div variants={fadeUp}>
           <IconBlock delay={0.5}>
-            <Camera size={28} strokeWidth={2.5} className="text-white" />
+            <Camera size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -245,10 +245,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── prompt ── */
     5: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative">
-        <Glow color="#c49cf5" x="70%" y="30%" size={80} />
+        <Glow color="rgba(255,255,255,0.05)" x="70%" y="30%" size={80} />
         <motion.div variants={fadeUp}>
           <IconBlock delay={0.5}>
-            <Type size={28} strokeWidth={2.5} className="text-white" />
+            <Type size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -270,7 +270,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     6: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-7 relative">
         <ParticleBurst active={burst} />
-        <Glow color="#d4a843" x="50%" y="30%" size={160} />
+        <Glow color="rgba(255,255,255,0.04)" x="50%" y="30%" size={160} />
         <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
           ready to create?
         </motion.h2>
