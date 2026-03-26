@@ -5,23 +5,22 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const CartoonGirl = ({ size = 80 }: { size?: number }) => (
   <svg width={size} height={size * 1.2} viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Hair behind */}
-    <ellipse cx="40" cy="38" rx="30" ry="34" fill="#C85A2A" />
-    {/* Head */}
-    <ellipse cx="40" cy="40" rx="24" ry="28" fill="#FFD93D" />
-    {/* Hair bangs */}
-    <path d="M16 30 Q20 10 40 8 Q60 10 64 30 Q58 18 40 16 Q22 18 16 30Z" fill="#C85A2A" />
+    {/* Hair behind — bigger, fuller */}
+    <ellipse cx="40" cy="32" rx="34" ry="36" fill="#C85A2A" />
+    {/* Head — bigger ratio */}
+    <ellipse cx="40" cy="36" rx="26" ry="30" fill="#FFD93D" />
+    {/* Hair bangs — fuller */}
+    <path d="M12 28 Q18 4 40 2 Q62 4 68 28 Q60 12 40 10 Q20 12 12 28Z" fill="#C85A2A" />
+    {/* Side hair strands */}
+    <path d="M10 32 Q8 50 14 62" stroke="#C85A2A" strokeWidth="8" strokeLinecap="round" fill="none" />
+    <path d="M70 32 Q72 50 66 62" stroke="#C85A2A" strokeWidth="8" strokeLinecap="round" fill="none" />
     {/* Top / bow */}
-    <ellipse cx="40" cy="10" rx="10" ry="6" fill="#FF69B4" />
-    {/* Eyes */}
-    <circle cx="32" cy="42" r="3" fill="#222" />
-    <circle cx="48" cy="42" r="3" fill="#222" />
-    {/* Mouth */}
-    <path d="M35 52 Q40 56 45 52" stroke="#222" strokeWidth="2" fill="none" strokeLinecap="round" />
-    {/* Body / top */}
-    <path d="M28 66 Q24 68 22 80 L58 80 Q56 68 52 66 Q46 64 40 64 Q34 64 28 66Z" fill="#FF69B4" />
+    <ellipse cx="40" cy="6" rx="10" ry="6" fill="#FF69B4" />
+    {/* No face — blank */}
+    {/* Body / top — smaller relative to head */}
+    <path d="M30 72 Q26 74 24 86 L56 86 Q54 74 50 72 Q46 70 40 70 Q34 70 30 72Z" fill="#FF69B4" />
     {/* Neck */}
-    <rect x="36" y="62" width="8" height="6" rx="2" fill="#FFD93D" />
+    <rect x="36" y="66" width="8" height="6" rx="2" fill="#FFD93D" />
   </svg>
 );
 
@@ -65,13 +64,14 @@ const MyCharacters = () => {
             if (i === 1 && user) {
               return (
                 <div key={i} className="flex flex-col items-center">
-                  <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex flex-col items-center justify-center relative overflow-hidden">
-                    <CartoonGirl size={64} />
-                    {/* Small American flag bottom-left */}
-                    <span className="absolute bottom-2 left-2 text-lg leading-none">🇺🇸</span>
+                  <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex flex-col items-end justify-end relative overflow-hidden">
+                    <div className="absolute bottom-0 right-0 translate-x-[10%] translate-y-[10%]">
+                      <CartoonGirl size={80} />
+                    </div>
+                    <span className="absolute bottom-0 left-0 text-3xl leading-none">🇺🇸</span>
                   </div>
-                  <span className="mt-1.5 text-xs font-[900] lowercase tracking-tight text-foreground">
-                    sarah, 24
+                  <span className="mt-1.5 text-xs font-[900] tracking-tight text-foreground">
+                    Sarah, 24
                   </span>
                 </div>
               );
