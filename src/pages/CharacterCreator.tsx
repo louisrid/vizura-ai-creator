@@ -7,6 +7,7 @@ import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
+import heroImage from "@/assets/hero-nature-collage.jpg";
 
 const countryOptions = [
   "any", "american", "british", "australian", "brazilian", "colombian", "french",
