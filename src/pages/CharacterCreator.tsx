@@ -132,7 +132,7 @@ const CharacterCreator = () => {
       <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-20 pb-0">
         <h1
           className="text-4xl lowercase tracking-tighter text-foreground text-center"
-          style={{ fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif", fontWeight: 900 }}
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800 }}
         >
           create character
         </h1>
