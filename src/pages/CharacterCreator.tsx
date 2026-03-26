@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -21,7 +21,8 @@ const bodyOptions = ["slim", "regular", "curvy"] as const;
 const CharacterCreator = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
-  const navigate = useNavigate();
+  const navigate = useNavigate, useLocation();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,8 @@ const randomPrompts = [
 const Index = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
-  const navigate = useNavigate();
+  const navigate = useNavigate, useLocation();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
