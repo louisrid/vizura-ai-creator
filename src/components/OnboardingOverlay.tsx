@@ -343,8 +343,6 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     setTimeout(onDismiss, 900);
   };
 
-  if (!open) return null;
-
   return (
     <AnimatePresence>
       {open && (
@@ -357,8 +355,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
           style={{ cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
-          {/* backdrop */}
-          <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
+          {/* backdrop — 95% dark, no backdrop-blur for perf */}
+          <div className="absolute inset-0 bg-foreground/95" />
 
           {/* content card */}
           <motion.div
