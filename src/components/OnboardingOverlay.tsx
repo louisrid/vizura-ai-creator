@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Camera, RefreshCw, Sparkles, SlidersHorizontal, PenLine } from "lucide-react";
+import { ArrowRight, ArrowLeft, Camera, RefreshCw, Sparkles, SlidersHorizontal, PenLine } from "lucide-react";
 
 const TOTAL_STEPS = 7;
 
@@ -217,8 +217,8 @@ const ControlItem = ({ label, desc, n, delay }: { label: string; desc: string; n
 
 const Scene0 = () => (
   <div className="flex flex-col items-center gap-5">
-    <IconPop delay={0.15} size={72}>
-      <span className="text-6xl">👋</span>
+    <IconPop delay={0.15} size={96}>
+      <span className="text-[5rem]">👋</span>
     </IconPop>
     <BigTitle delay={0.25}>vizura how-to</BigTitle>
     <Subtitle delay={0.4}>quick walkthrough so you instantly get how character creation works</Subtitle>
@@ -227,8 +227,8 @@ const Scene0 = () => (
 
 const Scene1 = () => (
   <div className="flex flex-col items-center gap-5">
-    <IconPop delay={0.1} size={64}>
-      <Sparkles size={40} strokeWidth={2.2} style={{ color: dotColors[2] }} />
+    <IconPop delay={0.1} size={96}>
+      <Sparkles size={60} strokeWidth={2} style={{ color: dotColors[2] }} />
     </IconPop>
     <BigTitle delay={0.2}>make any character you want</BigTitle>
     <Subtitle delay={0.35}>start with a vibe, a face, a mood, or a whole fantasy and build from there</Subtitle>
@@ -241,7 +241,7 @@ const Scene1 = () => (
       {["🫶", "✨", "🎨"].map((e, i) => (
         <motion.span
           key={i}
-          className="text-3xl"
+          className="text-4xl"
           initial={{ opacity: 0, y: 16, scale: 0 }}
           animate={{ opacity: 1, y: 0, scale: [0, 1.3, 0.9, 1] }}
           transition={{ duration: 0.35, delay: 0.55 + i * 0.1, ease: [0.2, 0.9, 0.2, 1] }}
@@ -261,8 +261,8 @@ const Scene1 = () => (
 
 const Scene2 = () => (
   <div className="flex flex-col items-center gap-5">
-    <IconPop delay={0.1} size={56}>
-      <SlidersHorizontal size={36} strokeWidth={2.2} style={{ color: dotColors[3] }} />
+    <IconPop delay={0.1} size={80}>
+      <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
     <BigTitle delay={0.2}>shape their look</BigTitle>
     <Subtitle delay={0.35}>use the controls to fine-tune every detail</Subtitle>
@@ -286,7 +286,7 @@ const Scene3 = () => (
         animate={{ rotate: [0, 360] }}
         transition={{ duration: 2.5, delay: 0.8, repeat: Infinity, ease: "linear" }}
       >
-        <RefreshCw size={44} strokeWidth={2.5} style={{ color: dotColors[0] }} />
+        <RefreshCw size={56} strokeWidth={2.5} style={{ color: dotColors[0] }} />
       </motion.div>
     </motion.div>
     <BigTitle delay={0.25}>not perfect?</BigTitle>
@@ -297,8 +297,8 @@ const Scene3 = () => (
 
 const Scene4 = () => (
   <div className="flex flex-col items-center gap-5">
-    <IconPop delay={0.1} size={64}>
-      <Camera size={40} strokeWidth={2.2} style={{ color: dotColors[1] }} />
+    <IconPop delay={0.1} size={88}>
+      <Camera size={52} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
     <BigTitle delay={0.2}>now create photos of them</BigTitle>
     <Subtitle delay={0.35}>polished image sets with depth, variation, and style</Subtitle>
@@ -317,8 +317,8 @@ const Scene4 = () => (
 
 const Scene5 = () => (
   <div className="flex flex-col items-center gap-5">
-    <IconPop delay={0.1} size={56}>
-      <PenLine size={36} strokeWidth={2.2} style={{ color: dotColors[5] }} />
+    <IconPop delay={0.1} size={80}>
+      <PenLine size={48} strokeWidth={2} style={{ color: dotColors[5] }} />
     </IconPop>
     <BigTitle delay={0.2}>describe what you want</BigTitle>
     <Subtitle delay={0.35}>add details like lighting, pose, setting, outfit, or mood</Subtitle>
@@ -340,8 +340,8 @@ const Scene5 = () => (
 const Scene6 = ({ burst }: { burst: boolean }) => (
   <div className="relative flex flex-col items-center gap-5">
     <ParticleBurst active={burst} />
-    <IconPop delay={0.1} size={72}>
-      <span className="text-6xl">🚀</span>
+    <IconPop delay={0.1} size={96}>
+      <span className="text-[5rem]">🚀</span>
     </IconPop>
     <BigTitle delay={0.2}>ready to create?</BigTitle>
     <Subtitle delay={0.35}>sign up free and jump straight into your first character</Subtitle>
@@ -474,17 +474,33 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   <span className="relative z-10">let's go</span>
                 </motion.button>
               ) : (
-                <motion.button
-                  onClick={(e) => { e.stopPropagation(); advance(); }}
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                  style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
-                  whileTap={{ scale: 0.92 }}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.25, delay: 0.15 }}
-                >
-                  <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
-                </motion.button>
+                <div className="flex items-center justify-center gap-4">
+                  {step > 0 && (
+                    <motion.button
+                      onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
+                      className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                      style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
+                    </motion.button>
+                  )}
+                  <motion.button
+                    onClick={(e) => { e.stopPropagation(); advance(); }}
+                    className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                    style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
+                    whileTap={{ scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.25, delay: 0.1 }}
+                    layout
+                  >
+                    <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
+                  </motion.button>
+                </div>
               )}
 
               {step < TOTAL_STEPS - 1 && (
@@ -493,7 +509,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   style={{ color: "hsl(0 0% 100%)" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.4 }}
+                  transition={{ duration: 0.2, delay: 0.3 }}
                 >
                   swipe or tap arrow
                 </motion.p>
