@@ -109,36 +109,38 @@ const CharacterCreator = () => {
   const cycleNext = () => setActiveIndex((c) => (c + 1) % total);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
       <OnboardingOverlay open={showOnboarding && !user} onDismiss={handleDismissOnboarding} />
 
-      {/* Faint background image with white fade */}
-      <div className="mx-auto w-full max-w-lg relative">
+      {/* Faint background image behind everything at top */}
+      <div className="absolute top-0 left-1/2 z-0 w-full max-w-lg -translate-x-1/2">
         <div className="relative w-full" style={{ aspectRatio: '4 / 2.2' }}>
           <img
             src={heroImage}
             alt=""
             className="w-full h-full object-cover"
-            style={{ opacity: 0.08, filter: 'saturate(0.12) blur(0.4px)' }}
+            style={{ opacity: 0.04, filter: 'saturate(0.08) blur(0.5px)' }}
             width={1024}
             height={768}
           />
-          {/* Strong white fade at bottom */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: 'linear-gradient(to bottom, hsl(var(--background) / 0.15) 0%, hsl(var(--background) / 0.55) 42%, hsl(var(--background) / 0.92) 72%, hsl(var(--background)) 92%)',
+              background: 'linear-gradient(to bottom, hsl(var(--background) / 0.4) 0%, hsl(var(--background) / 0.7) 50%, hsl(var(--background)) 85%)',
             }}
           />
-          {/* Page title centered on the faint image */}
-          <h1 className="absolute top-10 left-0 right-0 z-10 text-4xl font-black lowercase tracking-tighter text-foreground text-center" style={{ fontWeight: 950 }}>
-            create character
-          </h1>
         </div>
       </div>
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-2 pb-12">
+      {/* Page title */}
+      <div className="relative z-10 mx-auto w-full max-w-lg pt-10 pb-2">
+        <h1 className="text-4xl font-black lowercase tracking-tighter text-foreground text-center" style={{ fontWeight: 950 }}>
+          create character
+        </h1>
+      </div>
+
+      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-2 pb-12">
 
         <CardCarousel
           images={imageCards}
