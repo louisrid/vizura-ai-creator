@@ -86,7 +86,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Hero nature image with top-down fade to white */}
-      <div className="relative w-full" style={{ height: '66vh' }}>
+      <div className="relative w-full" style={{ height: '40vh' }}>
         <img
           src={heroImage}
           alt="lush green nature scene with bunny and ladybugs"
@@ -94,16 +94,15 @@ const Index = () => {
           width={1024}
           height={768}
         />
-        {/* Gradient overlay: 5% white at top 2/3, ramps to 75% at ~85%, then 100% white at bottom */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, hsla(0,0%,100%,0.05) 0%, hsla(0,0%,100%,0.05) 66%, hsla(0,0%,100%,0.75) 85%, hsla(0,0%,100%,1) 100%)',
+            background: 'linear-gradient(to bottom, hsla(0,0%,100%,0.05) 0%, hsla(0,0%,100%,0.05) 50%, hsla(0,0%,100%,0.75) 80%, hsla(0,0%,100%,1) 100%)',
           }}
         />
       </div>
 
-        <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
+        <main className="w-full max-w-lg mx-auto px-4 pt-6 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
           </div>
