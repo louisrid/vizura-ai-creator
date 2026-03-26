@@ -66,7 +66,7 @@ const MyCharacters = () => {
                 <div key={i} className="flex flex-col items-center">
                   <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex items-center justify-center relative overflow-hidden">
                     <CartoonGirl size={100} />
-                    <span className="absolute text-4xl leading-none" style={{ bottom: '-3px', left: '-3px' }}>🇺🇸</span>
+                    <span className="absolute text-4xl leading-none" style={{ bottom: '10px', left: '8px' }}>🇺🇸</span>
                   </div>
                   <span className="mt-1.5 text-xs font-[900] tracking-tight text-foreground">
                     Sarah, 24
