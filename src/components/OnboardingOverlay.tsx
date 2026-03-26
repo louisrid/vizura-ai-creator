@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import heroImage from "@/assets/hero-nature-collage.jpg";
 
 const TOTAL_STEPS = 7;
 const AUTO_ADVANCE_MS = 5200;
@@ -16,14 +17,14 @@ const Blob = forwardRef<HTMLDivElement, { x: string; y: string; size: number; de
         left: x,
         top: y,
         background: "hsl(0 0% 100% / 0.08)",
-        filter: "blur(38px)",
+        filter: "blur(34px)",
       }}
-      initial={{ opacity: 0, scale: 0.7 }}
+      initial={{ opacity: 0, scale: 0.75 }}
       animate={{
         opacity: [0.12, 0.28, 0.14],
-        scale: [0.9, 1.06, 0.94],
-        x: [0, 12, -10, 0],
-        y: [0, -10, 8, 0],
+        scale: [0.92, 1.05, 0.96],
+        x: [0, 10, -8, 0],
+        y: [0, -8, 6, 0],
       }}
       transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
     />
@@ -37,14 +38,14 @@ const FloatingEmoji = forwardRef<HTMLSpanElement, { emoji: string; x: string; y:
       ref={ref}
       className={`absolute select-none pointer-events-none ${size}`}
       style={{ left: x, top: y }}
-      initial={{ opacity: 0, scale: 0.6, y: 18 }}
-      animate={{ opacity: 1, scale: [0.7, 1.08, 1], y: [18, -6, 0] }}
-      transition={{ duration: 0.7, delay, ease: "backOut" }}
+      initial={{ opacity: 0, scale: 0.65, y: 18 }}
+      animate={{ opacity: 1, scale: [0.75, 1.06, 1], y: [18, -6, 0] }}
+      transition={{ duration: 0.65, delay, ease: "backOut" }}
     >
       <motion.span
         className="inline-block"
         animate={{ y: [0, -5, 0], rotate: [0, 4, -4, 0] }}
-        transition={{ duration: 2.8, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 2.6, delay: delay + 0.35, repeat: Infinity, ease: "easeInOut" }}
       >
         {emoji}
       </motion.span>
@@ -58,7 +59,7 @@ const TwinkleEmoji = ({ emoji, x, y, delay = 0 }: { emoji: string; x: string; y:
     className="absolute text-3xl select-none pointer-events-none"
     style={{ left: x, top: y }}
     initial={{ opacity: 0, scale: 0.5 }}
-    animate={{ opacity: [0, 1, 0.35, 1, 0], scale: [0.6, 1.15, 0.85, 1, 0.7] }}
+    animate={{ opacity: [0, 1, 0.3, 1, 0], scale: [0.65, 1.14, 0.86, 1, 0.72] }}
     transition={{ duration: 3, delay, repeat: Infinity, ease: "easeInOut" }}
   >
     {emoji}
@@ -69,9 +70,9 @@ const WobbleShape = ({ x, y, size, delay = 0 }: { x: string; y: string; size: nu
   <motion.div
     className="absolute rounded-2xl pointer-events-none"
     style={{ left: x, top: y, width: size, height: size, background: "hsl(0 0% 100% / 0.08)" }}
-    initial={{ opacity: 0, scale: 0.5, rotate: -8 }}
-    animate={{ opacity: [0.14, 0.26, 0.16], scale: [0.85, 1, 0.9], rotate: [-8, 6, -4, -8] }}
-    transition={{ duration: 4.6, delay, repeat: Infinity, ease: "easeInOut" }}
+    initial={{ opacity: 0, scale: 0.55, rotate: -8 }}
+    animate={{ opacity: [0.12, 0.24, 0.14], scale: [0.88, 1, 0.92], rotate: [-8, 5, -4, -8] }}
+    transition={{ duration: 4.4, delay, repeat: Infinity, ease: "easeInOut" }}
   />
 );
 
@@ -83,7 +84,7 @@ const ProgressDots = ({ current, total }: { current: number; total: number }) =>
         className="rounded-full"
         initial={false}
         animate={{
-          width: index === current ? 30 : 10,
+          width: index === current ? 28 : 10,
           height: 10,
           backgroundColor: index === current ? "hsl(0 0% 100%)" : "hsl(0 0% 100% / 0.16)",
         }}
@@ -111,15 +112,10 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
               top: "50%",
               width: 4,
               height: 4,
-              background: index % 2 === 0 ? "hsl(0 0% 100%)" : "hsl(0 0% 100% / 0.45)",
+              background: index % 2 === 0 ? "hsl(0 0% 100%)" : "hsl(39 63% 55%)",
             }}
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-            animate={{
-              x: Math.cos(angle) * distance,
-              y: Math.sin(angle) * distance,
-              opacity: 0,
-              scale: 0,
-            }}
+            animate={{ x: Math.cos(angle) * distance, y: Math.sin(angle) * distance, opacity: 0, scale: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           />
         );
@@ -168,10 +164,10 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
 
 const PopEmoji = ({ emoji, delay }: { emoji: string; delay: number }) => (
   <motion.div
-    className="flex h-12 w-12 items-center justify-center rounded-2xl border-[4px] border-white/10 bg-white/5 text-2xl"
-    initial={{ opacity: 0, scale: 0.4, y: 18 }}
-    animate={{ opacity: 1, scale: [0.4, 1.15, 1], y: 0 }}
-    transition={{ duration: 0.45, delay, ease: "backOut" }}
+    className="flex h-11 w-11 items-center justify-center rounded-2xl border-[4px] border-white/10 bg-white/5 text-2xl"
+    initial={{ opacity: 0, scale: 0.4, y: 16 }}
+    animate={{ opacity: 1, scale: [0.4, 1.12, 1], y: 0 }}
+    transition={{ duration: 0.42, delay, ease: "backOut" }}
   >
     {emoji}
   </motion.div>
@@ -180,19 +176,19 @@ const PopEmoji = ({ emoji, delay }: { emoji: string; delay: number }) => (
 const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) => (
   <div className="relative z-10 flex flex-col items-center gap-3 text-center">
     <motion.h2
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
-      className="max-w-[11ch] text-5xl font-[900] lowercase tracking-tighter text-white"
+      transition={{ duration: 0.42, ease: "easeOut" }}
+      className="max-w-[12ch] text-4xl font-[900] lowercase tracking-tighter text-white"
     >
       {title}
     </motion.h2>
     {subtitle ? (
       <motion.p
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
-        className="max-w-xs text-lg font-extrabold lowercase text-white/42"
+        transition={{ duration: 0.42, delay: 0.1, ease: "easeOut" }}
+        className="max-w-[18rem] text-base font-extrabold lowercase text-white/42"
       >
         {subtitle}
       </motion.p>
@@ -204,8 +200,7 @@ const PhotoCard = forwardRef<HTMLDivElement, { delay: number; rotation: number }
   ({ delay, rotation }, ref) => (
     <motion.div
       ref={ref}
-      className="h-28 w-20 rounded-[20px] border-[4px] border-white/10 bg-white/5 shadow-soft"
-      style={{ background: "linear-gradient(180deg, hsl(0 0% 100% / 0.10), hsl(0 0% 100% / 0.03))" }}
+      className="relative h-28 w-20 overflow-hidden rounded-[20px] border-[4px] border-white/10 shadow-soft"
       initial={{ opacity: 0, y: 30, rotate: rotation, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale: 1 }}
       transition={{
@@ -214,7 +209,18 @@ const PhotoCard = forwardRef<HTMLDivElement, { delay: number; rotation: number }
         scale: { duration: 0.45, delay, ease: "backOut" },
         rotate: { duration: 4.2, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" },
       }}
-    />
+    >
+      <img
+        src={heroImage}
+        alt=""
+        className="h-full w-full object-cover"
+        style={{ opacity: 0.22, filter: "grayscale(1) contrast(0.9)" }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{ background: "linear-gradient(180deg, hsl(0 0% 100% / 0.06), hsl(0 0% 0% / 0.28))" }}
+      />
+    </motion.div>
   ),
 );
 PhotoCard.displayName = "PhotoCard";
@@ -222,18 +228,18 @@ PhotoCard.displayName = "PhotoCard";
 const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
   const steps: Record<number, React.ReactNode> = {
     0: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
-        <Blob x="6%" y="8%" size={120} delay={0.1} />
-        <Blob x="72%" y="70%" size={92} delay={0.6} />
-        <WobbleShape x="80%" y="18%" size={24} delay={0.4} />
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
+        <Blob x="6%" y="8%" size={110} delay={0.1} />
+        <Blob x="72%" y="70%" size={88} delay={0.6} />
+        <WobbleShape x="80%" y="18%" size={22} delay={0.4} />
         <FloatingEmoji emoji="👋" x="10%" y="18%" delay={0.3} size="text-5xl" />
         <FloatingEmoji emoji="🌊" x="78%" y="22%" delay={0.6} size="text-4xl" />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough — takes 30 seconds" />
       </div>
     ),
     1: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
-        <Blob x="14%" y="14%" size={120} delay={0.2} />
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
+        <Blob x="14%" y="14%" size={110} delay={0.2} />
         <TwinkleEmoji emoji="✨" x="12%" y="20%" delay={0.2} />
         <TwinkleEmoji emoji="✨" x="80%" y="18%" delay={0.7} />
         <TwinkleEmoji emoji="💫" x="74%" y="70%" delay={1.1} />
@@ -242,24 +248,20 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       </div>
     ),
     2: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
-        <Blob x="70%" y="12%" size={106} delay={0.3} />
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
+        <Blob x="70%" y="12%" size={102} delay={0.3} />
         <TitleBlock title="shape their look" subtitle="pick a few traits and build the vibe fast" />
         <div className="flex items-center justify-center gap-3">
           <PopEmoji emoji="💇" delay={0.4} />
           <PopEmoji emoji="👁️" delay={0.52} />
           <PopEmoji emoji="🧍" delay={0.64} />
         </div>
-        <div className="flex flex-col gap-2.5 text-center">
-          {[
-            "hair colour",
-            "eye colour",
-            "body type",
-          ].map((item, index) => (
+        <div className="flex flex-col gap-2 text-center">
+          {["hair colour", "eye colour", "body type"].map((item, index) => (
             <motion.div
               key={item}
-              className="rounded-2xl bg-white/5 px-5 py-3 text-base font-extrabold lowercase text-white/60"
-              initial={{ opacity: 0, y: 14 }}
+              className="rounded-2xl bg-white/5 px-5 py-2.5 text-sm font-extrabold lowercase text-white/60"
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.7 + index * 0.1, ease: "easeOut" }}
             >
@@ -270,9 +272,9 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       </div>
     ),
     3: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
-        <Blob x="18%" y="12%" size={118} delay={0.2} />
-        <WobbleShape x="78%" y="20%" size={22} delay={0.5} />
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
+        <Blob x="18%" y="12%" size={112} delay={0.2} />
+        <WobbleShape x="78%" y="20%" size={20} delay={0.5} />
         <motion.div
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -291,8 +293,8 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       </div>
     ),
     4: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
-        <Blob x="24%" y="10%" size={132} delay={0.2} />
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
+        <Blob x="24%" y="10%" size={126} delay={0.2} />
         <FloatingEmoji emoji="📸" x="80%" y="18%" delay={0.5} size="text-4xl" />
         <TitleBlock title="create photos" subtitle="you get multiple polished options every time" />
         <div className="flex items-center justify-center gap-4">
@@ -303,26 +305,26 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       </div>
     ),
     5: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
-        <Blob x="10%" y="12%" size={118} delay={0.15} />
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
+        <Blob x="10%" y="12%" size={112} delay={0.15} />
         <FloatingEmoji emoji="✍️" x="78%" y="18%" delay={0.4} size="text-4xl" />
         <TitleBlock title="describe what you want" subtitle="the more detail, the better" />
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.45, ease: "easeOut" }}
           className="w-full rounded-[24px] border-[4px] border-white/10 bg-white/5 px-5 py-4"
         >
           <div className="mb-3 text-xs font-extrabold lowercase text-white/25">example prompt</div>
-          <TypingText text="golden hour portrait, soft dress, cafe mood" className="text-base font-extrabold lowercase text-white/58" />
+          <TypingText text="golden hour portrait, soft dress, cafe mood" className="text-sm font-extrabold lowercase text-white/58" />
         </motion.div>
       </div>
     ),
     6: (
-      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+      <div className="relative flex min-h-[360px] flex-col items-center justify-center gap-5 overflow-hidden">
         <ParticleBurst active={burst} />
-        <Blob x="18%" y="12%" size={128} delay={0.15} duration={8} />
-        <Blob x="68%" y="62%" size={104} delay={0.5} duration={7.5} />
+        <Blob x="18%" y="12%" size={120} delay={0.15} duration={8} />
+        <Blob x="68%" y="62%" size={100} delay={0.5} duration={7.5} />
         <FloatingEmoji emoji="✨" x="14%" y="22%" delay={0.45} size="text-4xl" />
         <FloatingEmoji emoji="🚀" x="80%" y="20%" delay={0.65} size="text-4xl" />
         <TitleBlock title="ready to create?" subtitle="sign up free — first creation on us" />
@@ -344,29 +346,37 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
   }, [step]);
 
   useEffect(() => {
-    if (!open) {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-      return;
-    }
+    if (!open) return;
 
     setStep(0);
     setBurst(false);
 
+    const root = document.getElementById("root");
     const previousBodyOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousRootOverflow = root?.style.overflow ?? "";
+    const previousRootTouchAction = root?.style.touchAction ?? "";
+
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+
+    if (root) {
+      root.style.overflow = "hidden";
+      root.style.touchAction = "none";
+    }
 
     return () => {
       document.body.style.overflow = previousBodyOverflow;
       document.documentElement.style.overflow = previousHtmlOverflow;
+      if (root) {
+        root.style.overflow = previousRootOverflow;
+        root.style.touchAction = previousRootTouchAction;
+      }
     };
   }, [open]);
 
   useEffect(() => {
     if (!open || step >= TOTAL_STEPS - 1) return;
-
     const timer = window.setTimeout(advance, AUTO_ADVANCE_MS);
     return () => window.clearTimeout(timer);
   }, [advance, open, step]);
@@ -380,7 +390,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -388,13 +398,26 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
           style={{ cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
+          <div className="absolute inset-0 overflow-hidden">
+            <img
+              src={heroImage}
+              alt=""
+              className="h-full w-full object-cover"
+              style={{ opacity: 0.08, filter: "grayscale(1) blur(5px) contrast(0.9)" }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(to bottom, hsl(0 0% 0% / 0.90), hsl(0 0% 0% / 0.95))" }}
+            />
+          </div>
+
           <motion.div
             className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center"
             initial={{ y: 14, opacity: 0.96 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
           >
-            <div className="flex min-h-[430px] w-full items-center justify-center px-2">
+            <div className="flex min-h-[410px] w-full items-center justify-center px-2">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
