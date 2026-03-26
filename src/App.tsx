@@ -35,7 +35,6 @@ const AnimatedRoutes = () => {
   return (
     <>
       <Header />
-      <AnimatePresence mode="wait" initial={false}>
         <PageTransition key={location.pathname}>
           <Routes location={location}>
             <Route path="/" element={<CharacterCreator />} />
@@ -50,7 +49,6 @@ const AnimatedRoutes = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PageTransition>
-      </AnimatePresence>
     </>
   );
 };
