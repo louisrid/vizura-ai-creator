@@ -453,8 +453,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   {step === 2 && <Scene2 />}
                   {step === 3 && <Scene3 />}
                   {step === 4 && <Scene4 />}
-                  {step === 5 && <Scene5 />}
-                  {step === 6 && <Scene6 burst={burst} />}
+                  {step === 5 && <Scene5 burst={burst} />}
                 </motion.div>
               </AnimatePresence>
             </div>
