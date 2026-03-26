@@ -458,7 +458,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.34, ease: "easeOut" }}
           >
-            <div className="flex min-h-[420px] w-full items-center justify-center px-2">
+            <div className="flex w-full items-center justify-center px-2">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
