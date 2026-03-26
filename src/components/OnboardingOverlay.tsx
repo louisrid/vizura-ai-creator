@@ -7,7 +7,7 @@ import heroImage from "@/assets/hero-nature-collage.jpg";
 const TOTAL_STEPS = 7;
 
 const white = "hsl(0 0% 100%)";
-const whiteSoft = "hsl(0 0% 100% / 0.64)";
+const whiteSoft = "hsl(0 0% 100% / 0.82)";
 const whiteMuted = "hsl(0 0% 100% / 0.24)";
 const panel = "hsl(0 0% 100% / 0.06)";
 const panelBorder = "hsl(0 0% 100% / 0.12)";
@@ -21,13 +21,13 @@ const blue3 = "hsl(220 70% 76%)";
 const whi1 = "hsl(0 0% 100%)";
 const whi2 = "hsl(0 0% 92%)";
 
-/* ── clean circle ── */
+/* ── clean circle — small, subtle, decorative only ── */
 const Circle = ({ x, y, size, delay = 0, color = blue1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.18 }}
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.08 }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.18, scale: 1 }}
+    animate={{ opacity: 0.08, scale: 1 }}
     transition={{ duration: 0.7, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   />
 );
@@ -36,9 +36,9 @@ const Circle = ({ x, y, size, delay = 0, color = blue1 }: { x: string; y: string
 const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}`, opacity: 0.22 }}
+    style={{ left: x, top: y, width: size, height: size, border: `3px solid ${color}`, opacity: 0.12 }}
     initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 0.22, scale: 1 }}
+    animate={{ opacity: 0.12, scale: 1 }}
     transition={{ duration: 0.8, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   />
 );
@@ -47,9 +47,9 @@ const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; 
 const Dot = ({ x, y, size, delay = 0, color = whi1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.24 }}
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.12 }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.24, scale: 1 }}
+    animate={{ opacity: 0.12, scale: 1 }}
     transition={{ duration: 0.5, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   />
 );
