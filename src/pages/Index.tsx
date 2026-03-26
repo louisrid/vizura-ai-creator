@@ -86,7 +86,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Hero nature image with top-down fade to white */}
-      <div className="relative w-full" style={{ height: '60vh' }}>
+      <div className="relative w-full" style={{ height: '66vh' }}>
         <img
           src={heroImage}
           alt="lush green nature scene with bunny and ladybugs"
