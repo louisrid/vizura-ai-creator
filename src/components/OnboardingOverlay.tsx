@@ -235,13 +235,14 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     0: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Circle x="2%" y="2%" size={40} color={blue1} delay={0} />
-          <Circle x="82%" y="70%" size={28} color={whi2} delay={0.15} />
-          <Ring x="80%" y="2%" size={32} color={blue2} delay={0.1} />
-          <Dot x="6%" y="72%" size={8} color={blue3} delay={0.25} />
-          <Dot x="90%" y="40%" size={6} color={whi1} delay={0.3} />
+          <Ball x="2%" y="2%" size={36} color={sky} delay={0} />
+          <Ball x="80%" y="65%" size={24} color={pink} delay={0.1} />
+          <Ball x="85%" y="5%" size={18} color={lemon} delay={0.2} />
+          <BouncyRing x="70%" y="2%" size={32} color={lilac} delay={0.15} />
+          <Ball x="5%" y="68%" size={14} color={coral} delay={0.25} />
+          <Ball x="88%" y="38%" size={10} color={mint} delay={0.3} />
         </div>
-        <CenterEmoji emoji="👋" size="text-[5.5rem]" delay={0.15} />
+        <CenterEmoji emoji="👋" size="text-[5.5rem]" delay={0.1} />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
@@ -249,20 +250,25 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     1: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Circle x="4%" y="4%" size={36} color={blue2} delay={0} />
-          <Ring x="84%" y="4%" size={30} color={blue1} delay={0.1} />
-          <Dot x="88%" y="68%" size={8} color={whi1} delay={0.2} />
-          <Dot x="4%" y="65%" size={6} color={blue3} delay={0.3} />
+          <Ball x="3%" y="3%" size={32} color={lilac} delay={0} />
+          <Ball x="82%" y="60%" size={22} color={sky} delay={0.1} />
+          <BouncyRing x="80%" y="3%" size={28} color={coral} delay={0.12} />
+          <Ball x="5%" y="62%" size={16} color={peach} delay={0.2} />
+          <Ball x="88%" y="35%" size={12} color={mint} delay={0.25} />
         </div>
         <motion.div
           className="relative flex items-center justify-center overflow-hidden rounded-[28px] border-[4px]"
           style={{ borderColor: panelBorder, background: panel, width: 125, height: 187 }}
-          initial={{ opacity: 0, scale: 0.85, y: 18 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 1.25, ease: [0.2, 0.9, 0.2, 1] }}
+          initial={{ opacity: 0, scale: 0.7, y: 30 }}
+          animate={{ opacity: 1, scale: [0.7, 1.08, 0.96, 1], y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0.2, filter: "grayscale(1) blur(0.5px)" }} />
-          <motion.span className="relative z-10 text-7xl" animate={{ scale: [0.96, 1.05, 0.98] }} transition={{ duration: 3.4, delay: 2.1, repeat: Infinity }}>
+          <motion.span
+            className="relative z-10 text-7xl"
+            animate={{ scale: [1, 1.15, 0.95, 1.05, 1], rotate: [0, 5, -3, 0] }}
+            transition={{ duration: 2, delay: 1.2, repeat: Infinity, ease: "easeInOut" }}
+          >
             🫶
           </motion.span>
         </motion.div>
@@ -273,12 +279,13 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     2: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Circle x="82%" y="2%" size={34} color={blue1} delay={0} />
-          <Circle x="2%" y="65%" size={28} color={blue3} delay={0.1} />
-          <Ring x="86%" y="60%" size={26} color={whi2} delay={0.2} />
-          <Dot x="6%" y="6%" size={8} color={blue2} delay={0.15} />
+          <Ball x="80%" y="2%" size={30} color={coral} delay={0} />
+          <Ball x="2%" y="60%" size={24} color={sky} delay={0.08} />
+          <BouncyRing x="84%" y="55%" size={26} color={mint} delay={0.15} />
+          <Ball x="5%" y="5%" size={16} color={lemon} delay={0.12} />
+          <Ball x="90%" y="35%" size={12} color={lilac} delay={0.2} />
         </div>
-        <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} size="text-[3.8rem]" gap={16} />
+        <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.05} size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
         <div className="flex flex-col gap-2 text-center">
           {["hair colour", "eye colour", "body type"].map((item, index) => (
@@ -286,9 +293,9 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
               key={item}
               className="rounded-2xl px-5 py-2.5 text-sm font-extrabold lowercase"
               style={{ background: panel, color: whiteSoft }}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.32, delay: 1.4 + index * 0.12, ease: "easeOut" }}
+              initial={{ opacity: 0, y: 16, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.25, delay: 0.7 + index * 0.08, ease: [0.2, 0.9, 0.2, 1] }}
             >
               {item}
             </motion.div>
@@ -300,18 +307,19 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     3: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Circle x="4%" y="4%" size={38} color={blue3} delay={0} />
-          <Ring x="82%" y="6%" size={34} color={blue1} delay={0.1} />
-          <Dot x="88%" y="68%" size={8} color={whi1} delay={0.2} />
-          <Dot x="6%" y="66%" size={6} color={blue2} delay={0.3} />
+          <Ball x="3%" y="3%" size={34} color={peach} delay={0} />
+          <Ball x="82%" y="62%" size={20} color={sky} delay={0.1} />
+          <BouncyRing x="80%" y="4%" size={30} color={pink} delay={0.08} />
+          <Ball x="6%" y="64%" size={14} color={mint} delay={0.18} />
+          <Ball x="88%" y="30%" size={10} color={lemon} delay={0.22} />
         </div>
         <motion.div
           className="text-[5.5rem]"
-          initial={{ opacity: 0, scale: 0.3, rotate: -30 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, delay: 1.2, ease: [0.2, 0.9, 0.2, 1] }}
+          initial={{ opacity: 0, scale: 0, rotate: -180 }}
+          animate={{ opacity: 1, scale: [0, 1.2, 0.9, 1], rotate: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
         >
-          <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 5.5, delay: 2.5, repeat: Infinity, ease: "linear" }}>
+          <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 3, delay: 1.2, repeat: Infinity, ease: "linear" }}>
             🔄
           </motion.span>
         </motion.div>
@@ -322,17 +330,18 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     4: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Circle x="4%" y="4%" size={36} color={blue1} delay={0} />
-          <Ring x="84%" y="4%" size={30} color={blue2} delay={0.1} />
-          <Dot x="6%" y="65%" size={8} color={whi1} delay={0.2} />
-          <Dot x="90%" y="62%" size={6} color={blue3} delay={0.25} />
+          <Ball x="3%" y="3%" size={30} color={sky} delay={0} />
+          <Ball x="84%" y="60%" size={22} color={coral} delay={0.1} />
+          <BouncyRing x="82%" y="3%" size={28} color={lilac} delay={0.08} />
+          <Ball x="5%" y="62%" size={14} color={lemon} delay={0.18} />
+          <Ball x="90%" y="32%" size={10} color={pink} delay={0.22} />
         </div>
-        <CenterEmoji emoji="📸" size="text-[5rem]" delay={0.1} />
+        <CenterEmoji emoji="📸" size="text-[5rem]" delay={0.05} />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-4">
-          <PhotoCard delay={1.15} rotation={-10} scale={0.96} />
-          <PhotoCard delay={1.31} rotation={0} scale={1.02} />
-          <PhotoCard delay={1.47} rotation={10} scale={0.96} />
+          <PhotoCard delay={0.55} rotation={-10} scale={0.96} />
+          <PhotoCard delay={0.65} rotation={0} scale={1.02} />
+          <PhotoCard delay={0.75} rotation={10} scale={0.96} />
         </div>
       </div>
     ),
@@ -340,19 +349,20 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     5: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Circle x="80%" y="2%" size={34} color={blue2} delay={0} />
-          <Circle x="2%" y="62%" size={28} color={whi2} delay={0.1} />
-          <Ring x="4%" y="4%" size={30} color={blue1} delay={0.15} />
-          <Dot x="90%" y="60%" size={8} color={blue3} delay={0.2} />
+          <Ball x="78%" y="2%" size={32} color={mint} delay={0} />
+          <Ball x="2%" y="58%" size={22} color={pink} delay={0.08} />
+          <BouncyRing x="3%" y="3%" size={28} color={sky} delay={0.1} />
+          <Ball x="88%" y="55%" size={14} color={peach} delay={0.18} />
+          <Ball x="5%" y="30%" size={10} color={lilac} delay={0.22} />
         </div>
-        <CenterEmoji emoji="✍️" size="text-[5rem]" delay={0.1} />
+        <CenterEmoji emoji="✍️" size="text-[5rem]" delay={0.05} />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
         <motion.div
           className="w-full rounded-[24px] border-[4px] px-5 py-4"
           style={{ borderColor: panelBorder, background: panel }}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 1.2, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.6, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <div className="mb-3 text-xs font-extrabold lowercase" style={{ color: "hsl(0 0% 100% / 0.4)" }}>example prompt</div>
           <TypingLine text="golden hour portrait, soft dress, cafe mood" />
@@ -364,14 +374,15 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
       <div className={sceneClass}>
         <div className={shapesClass}>
           <ParticleBurst active={burst} />
-          <Circle x="4%" y="4%" size={40} color={blue3} delay={0} />
-          <Circle x="82%" y="64%" size={30} color={whi2} delay={0.15} />
-          <Ring x="84%" y="4%" size={34} color={blue1} delay={0.1} />
-          <Ring x="2%" y="62%" size={26} color={blue2} delay={0.25} />
-          <Dot x="8%" y="30%" size={8} color={whi1} delay={0.2} />
-          <Dot x="90%" y="40%" size={6} color={blue3} delay={0.3} />
+          <Ball x="3%" y="3%" size={36} color={coral} delay={0} />
+          <Ball x="80%" y="58%" size={26} color={sky} delay={0.08} />
+          <Ball x="84%" y="3%" size={20} color={lemon} delay={0.12} />
+          <BouncyRing x="78%" y="30%" size={30} color={pink} delay={0.1} />
+          <BouncyRing x="2%" y="55%" size={24} color={mint} delay={0.18} />
+          <Ball x="8%" y="32%" size={12} color={lilac} delay={0.22} />
+          <Ball x="90%" y="60%" size={10} color={peach} delay={0.26} />
         </div>
-        <CenterEmoji emoji="🚀" size="text-[5.5rem]" delay={0.15} />
+        <CenterEmoji emoji="🚀" size="text-[5.5rem]" delay={0.1} />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
     ),
