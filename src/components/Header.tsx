@@ -75,7 +75,7 @@ const Header = () => {
           </svg>
           {user && (
             <button onClick={() => navigate("/account")} className="shrink-0">
-              <UserRound size={14} strokeWidth={2.5} fill="currentColor" className="text-nav-foreground" />
+              <CircleUserRound size={14} strokeWidth={2.5} className="text-nav-foreground" />
             </button>
           )}
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
