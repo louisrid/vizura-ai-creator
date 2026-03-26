@@ -97,14 +97,13 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
   );
 };
 
-/* ── icon wrapper with delayed color entrance ── */
-const IconBlock = ({ children, color, delay = 0.6 }: { children: React.ReactNode; color: string; delay?: number }) => (
+/* ── icon wrapper — minimal, mature ── */
+const IconBlock = ({ children, delay = 0.6 }: { children: React.ReactNode; delay?: number }) => (
   <motion.div
-    className="flex items-center justify-center w-16 h-16 rounded-2xl"
-    style={{ background: color }}
-    initial={{ opacity: 0, scale: 0.5, y: 12 }}
-    animate={{ opacity: 1, scale: 1, y: 0 }}
-    transition={{ duration: 0.6, delay, ease: "easeOut" as const }}
+    className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 border border-white/10"
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, delay, ease: "easeOut" as const }}
   >
     {children}
   </motion.div>
@@ -142,11 +141,11 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── welcome ── */
     0: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#7c9cf5" x="30%" y="20%" />
-        <Glow color="#d4a843" x="70%" y="70%" size={100} />
+        <Glow color="rgba(255,255,255,0.06)" x="30%" y="20%" />
+        <Glow color="rgba(255,255,255,0.04)" x="70%" y="70%" size={100} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#d4a843" delay={0.5}>
-            <Wand2 size={28} strokeWidth={2.5} className="text-white" />
+          <IconBlock delay={0.5}>
+            <Wand2 size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -161,10 +160,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── any character ── */
     1: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#d4a843" x="25%" y="30%" size={90} />
+        <Glow color="rgba(255,255,255,0.04)" x="25%" y="30%" size={90} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#7c9cf5" delay={0.5}>
-            <Sparkles size={28} strokeWidth={2.5} className="text-white" />
+          <IconBlock delay={0.5}>
+            <Sparkles size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -184,22 +183,21 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         </motion.h2>
         <motion.div variants={fadeUp} className="w-full flex flex-col gap-2.5 mt-1">
           {[
-            { label: "ethnicity", desc: "pick where she's from", color: "#d4a843" },
-            { label: "age", desc: "18 to 40", color: "#7c9cf5" },
-            { label: "hair", desc: "blonde, brunette, red…", color: "#e87c7c" },
-            { label: "eyes", desc: "brown, blue, green…", color: "#6bcf9a" },
-            { label: "body", desc: "slim, regular, curvy", color: "#c49cf5" },
+            { label: "ethnicity", desc: "pick where she's from" },
+            { label: "age", desc: "18 to 40" },
+            { label: "hair", desc: "blonde, brunette, red…" },
+            { label: "eyes", desc: "brown, blue, green…" },
+            { label: "body", desc: "slim, regular, curvy" },
           ].map((item, i) => (
             <motion.div
               key={item.label}
-              className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-2.5"
+              className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-2.5"
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 0.7 + i * 0.12, ease: "easeOut" as const }}
             >
-              <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
-              <span className="text-xs font-[900] lowercase text-white w-14">{item.label}</span>
-              <span className="text-xs font-bold lowercase text-white/35">{item.desc}</span>
+              <span className="text-xs font-[900] lowercase text-white/70 w-14">{item.label}</span>
+              <span className="text-xs font-bold lowercase text-white/30">{item.desc}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -209,10 +207,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── regenerate ── */
     3: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#7c9cf5" x="60%" y="25%" size={100} />
+        <Glow color="rgba(255,255,255,0.06)" x="60%" y="25%" size={100} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#e87c7c" delay={0.5}>
-            <RefreshCw size={28} strokeWidth={2.5} className="text-white" />
+          <IconBlock delay={0.5}>
+            <RefreshCw size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -227,19 +225,19 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── photos ── */
     4: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
-        <Glow color="#d4a843" x="40%" y="60%" size={90} />
+        <Glow color="rgba(255,255,255,0.04)" x="40%" y="60%" size={90} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#6bcf9a" delay={0.5}>
-            <Camera size={28} strokeWidth={2.5} className="text-white" />
+          <IconBlock delay={0.5}>
+            <Camera size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
           create photos of them
         </motion.h2>
         <motion.div variants={fadeUp} className="flex gap-4 mt-2" style={{ perspective: 600 }}>
-          <TiltCard delay={0} color="rgba(124,156,245,0.25)" />
-          <TiltCard delay={0.12} color="rgba(212,168,67,0.3)" />
-          <TiltCard delay={0.24} color="rgba(255,255,255,0.08)" />
+          <TiltCard delay={0} color="rgba(255,255,255,0.06)" />
+          <TiltCard delay={0.12} color="rgba(255,255,255,0.12)" />
+          <TiltCard delay={0.24} color="rgba(255,255,255,0.06)" />
         </motion.div>
       </motion.div>
     ),
@@ -247,10 +245,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── prompt ── */
     5: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative">
-        <Glow color="#c49cf5" x="70%" y="30%" size={80} />
+        <Glow color="rgba(255,255,255,0.05)" x="70%" y="30%" size={80} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#c49cf5" delay={0.5}>
-            <Type size={28} strokeWidth={2.5} className="text-white" />
+          <IconBlock delay={0.5}>
+            <Type size={24} strokeWidth={2} className="text-white/70" />
           </IconBlock>
         </motion.div>
         <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
@@ -272,7 +270,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
     6: (
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-7 relative">
         <ParticleBurst active={burst} />
-        <Glow color="#d4a843" x="50%" y="30%" size={160} />
+        <Glow color="rgba(255,255,255,0.04)" x="50%" y="30%" size={160} />
         <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center">
           ready to create?
         </motion.h2>
