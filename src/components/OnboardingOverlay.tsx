@@ -73,7 +73,7 @@ const TypingLine = ({ text, delay = 0.5 }: { text: string; delay?: number }) => 
     return () => clearTimeout(t);
   }, [text, delay]);
   return (
-    <span className="text-sm font-bold lowercase" style={{ color: "hsl(0 0% 100% / 0.6)" }}>
+    <span className="text-sm font-bold lowercase" style={{ color: "hsl(0 0% 100% / 0.78)" }}>
       {displayed}
       <motion.span
         className="ml-0.5 inline-block h-4 w-[2px] align-middle"
@@ -135,7 +135,7 @@ const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode; delay?
 const Subtitle = ({ children, delay = 0.2 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
     className="max-w-[17rem] text-center text-sm font-bold lowercase leading-snug"
-    style={{ color: "hsl(0 0% 100% / 0.55)" }}
+    style={{ color: "hsl(0 0% 100% / 0.82)" }}
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.25, delay, ease: "easeOut" }}
@@ -203,7 +203,7 @@ const ControlItem = ({ label, desc, n, delay }: { label: string; desc: string; n
       <span className="text-sm font-[800] lowercase" style={{ color: "hsl(0 0% 100% / 0.9)" }}>
         {label}
       </span>
-      <span className="ml-1.5 text-xs font-bold lowercase" style={{ color: "hsl(0 0% 100% / 0.4)" }}>
+      <span className="ml-1.5 text-xs font-bold lowercase" style={{ color: "hsl(0 0% 100% / 0.6)" }}>
         — {desc}
       </span>
     </div>
@@ -328,7 +328,7 @@ const Scene5 = () => (
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.3, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
     >
-      <div className="mb-2 text-[10px] font-extrabold uppercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.25)" }}>
+      <div className="mb-2 text-[10px] font-extrabold uppercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.45)" }}>
         prompt
       </div>
       <TypingLine text="sitting in a cafe, golden hour lighting" delay={0.8} />
