@@ -133,14 +133,17 @@ const CharacterCreator = () => {
         </div>
       </div>
 
-      {/* Page title */}
-      <div className="relative z-10 mx-auto w-full max-w-lg pt-10 pb-2">
-        <h1 className="text-4xl font-black lowercase tracking-tighter text-foreground text-center" style={{ fontWeight: 950 }}>
+      {/* Page title — more top padding, minimal bottom gap, heaviest weight */}
+      <div className="relative z-10 mx-auto w-full max-w-lg pt-14 pb-0">
+        <h1
+          className="text-4xl lowercase tracking-tighter text-foreground text-center"
+          style={{ fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif", fontWeight: 900 }}
+        >
           create character
         </h1>
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-2 pb-12">
+      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
 
         <CardCarousel
           images={imageCards}
