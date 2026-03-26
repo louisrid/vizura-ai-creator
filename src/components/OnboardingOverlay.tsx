@@ -415,7 +415,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22 }}
           onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
-          style2-cursor={step < TOTAL_STEPS - 1 ? "pointer" : "default"}
+          style={{ background: "hsl(0 0% 0% / 0.97)", cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
           {/* content */}
           <motion.div
