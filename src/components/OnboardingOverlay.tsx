@@ -27,7 +27,7 @@ const Blob = ({ x, y, size, delay = 0, opacity = 0.12 }: { x: string; y: string;
     }}
     initial={{ opacity: 0, scale: 0.75 }}
     animate={{ opacity: [opacity * 0.5, opacity, opacity * 0.55], scale: [0.92, 1.06, 0.95], x: [0, 10, -8, 0], y: [0, -10, 8, 0] }}
-    transition={{ duration: 10, delay, repeat: Infinity, ease: "easeInOut" }}
+    transition={{ duration: 10, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
   />
 );
 
@@ -37,12 +37,12 @@ const FloatEmoji = ({ emoji, x, y, delay = 0, size = "text-6xl" }: { emoji: stri
     style={{ left: x, top: y }}
     initial={{ opacity: 0, scale: 0.5, y: 24 }}
     animate={{ opacity: 1, scale: [0.6, 1.1, 1], y: [24, -8, 0] }}
-    transition={{ duration: 1.2, delay, ease: "backOut" }}
+    transition={{ duration: 1.2, delay: delay + 1, ease: "backOut" }}
   >
     <motion.span
       className="inline-block"
       animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
-      transition={{ duration: 4, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
+      transition={{ duration: 4, delay: delay + 1.5, repeat: Infinity, ease: "easeInOut" }}
     >
       {emoji}
     </motion.span>
@@ -55,7 +55,7 @@ const SparkleEmoji = ({ emoji, x, y, delay = 0 }: { emoji: string; x: string; y:
     style={{ left: x, top: y }}
     initial={{ opacity: 0, scale: 0.4 }}
     animate={{ opacity: [0, 1, 0.25, 1, 0], scale: [0.5, 1.15, 0.82, 1, 0.6] }}
-    transition={{ duration: 4.5, delay, repeat: Infinity, ease: "easeInOut" }}
+    transition={{ duration: 4.5, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
   >
     {emoji}
   </motion.span>
@@ -84,7 +84,7 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle: string }) =>
     <motion.h2
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.38, ease: "easeOut" }}
+      transition={{ duration: 0.38, delay: 1, ease: "easeOut" }}
       className="max-w-[12ch] text-3xl font-[900] lowercase tracking-tighter"
       style={{ color: white }}
     >
@@ -93,7 +93,7 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle: string }) =>
     <motion.p
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.38, delay: 0.08, ease: "easeOut" }}
+      transition={{ duration: 0.38, delay: 1.15, ease: "easeOut" }}
       className="max-w-[18rem] text-sm font-extrabold lowercase leading-snug"
       style={{ color: whiteSoft }}
     >
