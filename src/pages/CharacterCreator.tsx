@@ -134,19 +134,12 @@ const CharacterCreator = () => {
       </div>
 
       {/* Page title */}
-      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-10 pb-0">
+      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-20 pb-0">
         <h1
           className="text-4xl lowercase tracking-tighter text-foreground text-center"
           style={{ fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif", fontWeight: 900 }}
         >
-          create{" "}
-          <span
-            className="bg-clip-text text-transparent"
-            style={{ backgroundImage: "linear-gradient(135deg, hsl(52 100% 58%), hsl(44 95% 52%))" }}
-          >
-            any
-          </span>
-          {" "}character
+          create character
         </h1>
       </div>
 
