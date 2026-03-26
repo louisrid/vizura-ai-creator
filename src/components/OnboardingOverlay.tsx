@@ -11,7 +11,7 @@ const dotColors = [
   "hsl(270 90% 62%)", // purple
   "hsl(210 100% 65%)", // light blue
   "hsl(330 95% 58%)", // pink
-  "hsl(145 80% 45%)", // green
+  "hsl(150 100% 40%)", // vivid green
   "hsl(240 85% 65%)", // indigo
   "hsl(285 80% 60%)", // violet
   "hsl(350 90% 58%)", // rose
