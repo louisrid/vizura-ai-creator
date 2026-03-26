@@ -40,28 +40,23 @@ const CharacterCreator = () => {
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
+    return localStorage.getItem("onboarding_seen") === "true";
+  });
 
-  // Show onboarding when logged-out user scrolls a little
+  // Auto-trigger onboarding with a small delay for non-logged-in or first-time users
   useEffect(() => {
-    if (user || onboardingDismissed) return;
-    let scrollCount = 0;
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        scrollCount++;
-        if (scrollCount >= 1) {
-          setShowOnboarding(true);
-          window.removeEventListener("scroll", handleScroll);
-        }
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [user, onboardingDismissed]);
+    if (onboardingDismissed) return;
+    const timer = window.setTimeout(() => {
+      setShowOnboarding(true);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [onboardingDismissed]);
 
   const handleDismissOnboarding = useCallback(() => {
     setShowOnboarding(false);
     setOnboardingDismissed(true);
+    localStorage.setItem("onboarding_seen", "true");
   }, []);
 
   const imageCards = useMemo(() => {
