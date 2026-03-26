@@ -29,8 +29,12 @@ const GRID_COLS = 3;
 const GRID_ROWS = 3;
 
 const MyCharacters = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authLoading && !user) navigate("/auth");
+  }, [user, authLoading, navigate]);
 
   const cells = Array.from({ length: GRID_COLS * GRID_ROWS });
 
