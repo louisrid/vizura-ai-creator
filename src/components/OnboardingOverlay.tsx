@@ -235,9 +235,9 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
           create photos of them
         </motion.h2>
         <motion.div variants={fadeUp} className="flex gap-4 mt-2" style={{ perspective: 600 }}>
-          <TiltCard delay={0} color="rgba(124,156,245,0.25)" />
-          <TiltCard delay={0.12} color="rgba(212,168,67,0.3)" />
-          <TiltCard delay={0.24} color="rgba(255,255,255,0.08)" />
+          <TiltCard delay={0} color="rgba(255,255,255,0.06)" />
+          <TiltCard delay={0.12} color="rgba(255,255,255,0.12)" />
+          <TiltCard delay={0.24} color="rgba(255,255,255,0.06)" />
         </motion.div>
       </motion.div>
     ),
