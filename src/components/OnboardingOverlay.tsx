@@ -12,14 +12,14 @@ const panel = "hsl(0 0% 100% / 0.07)";
 const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.99)";
 
-/* vizura palette */
-const blue1 = "hsl(210 100% 65%)";
-const blue2 = "hsl(230 85% 55%)";
-const pink = "hsl(330 80% 60%)";
-const orange = "hsl(25 95% 58%)";
-const yellow = "hsl(45 95% 58%)";
-const green = "hsl(155 70% 45%)";
-const red = "hsl(0 80% 58%)";
+/* pastel palette — saturated but light */
+const blue1 = "hsl(210 85% 72%)";
+const blue2 = "hsl(230 75% 68%)";
+const pink = "hsl(330 70% 72%)";
+const orange = "hsl(25 85% 70%)";
+const yellow = "hsl(45 85% 68%)";
+const green = "hsl(155 60% 58%)";
+const red = "hsl(0 70% 68%)";
 
 /* ── abstract shape components ── */
 
@@ -40,36 +40,24 @@ const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = blue1 }: { x: stri
   </motion.div>
 );
 
-const Ring = ({ x, y, size, delay = 0, color = blue2, strokeWidth = 4 }: { x: string; y: string; size: number; delay?: number; color?: string; strokeWidth?: number }) => (
+const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `${strokeWidth}px solid ${color}`, opacity: 0.25 }}
+    style={{ left: x, top: y, width: size, height: size, border: `3px solid ${color}`, opacity: 0.16 }}
     initial={{ opacity: 0, scale: 0.2 }}
-    animate={{ opacity: 0.25, scale: [0.2, 1.08, 1] }}
-    transition={{ duration: 0.55, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full"
-      animate={{ rotate: [0, 360] }}
-      transition={{ duration: 16, delay: delay + 1, repeat: Infinity, ease: "linear" }}
-    />
-  </motion.div>
+    animate={{ opacity: 0.16, scale: [0.2, 1.08, 1] }}
+    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+  />
 );
 
 const Dot = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.35 }}
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.18 }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.35, scale: [0, 1.2, 1] }}
-    transition={{ duration: 0.4, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full rounded-full"
-      animate={{ scale: [1, 1.15, 0.92, 1] }}
-      transition={{ duration: 4, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
+    animate={{ opacity: 0.18, scale: [0, 1.15, 1] }}
+    transition={{ duration: 0.35, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+  />
 );
 
 const CrossMark = ({ x, y, size, delay = 0, color = orange }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
