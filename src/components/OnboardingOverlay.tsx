@@ -222,7 +222,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center mt-4 relative z-10">
           vizura how-to
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center relative z-10">
+        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/70 text-center relative z-10">
           quick walkthrough — takes 30 seconds
         </motion.p>
       </motion.div>
@@ -240,7 +240,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center relative z-10">
           make any character you want
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center relative z-10">
+        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/70 text-center relative z-10">
           dream her up — we'll bring her to life
         </motion.p>
       </motion.div>
@@ -275,7 +275,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
               transition={{ duration: 0.4, delay: 0.6 + i * 0.12, ease: "backOut" }}
             >
               <span className="text-xs font-[900] lowercase text-white/70 w-14">{item.label}</span>
-              <span className="text-xs font-bold lowercase text-white/30">{item.desc}</span>
+              <span className="text-xs font-bold lowercase text-white/55">{item.desc}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -304,7 +304,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <motion.h2 variants={fadeUp} className="text-3xl font-[900] lowercase tracking-tighter text-white text-center">
           not perfect? regenerate
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center">
+        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/70 text-center">
           hit create again — each attempt costs 1 credit
         </motion.p>
       </motion.div>
@@ -351,7 +351,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
           className="w-full rounded-2xl border-[4px] border-white/15 bg-white/5 px-4 py-3 min-h-[72px] relative"
         >
           <motion.div
-            className="absolute top-2 left-3 text-[10px] font-bold lowercase text-white/20"
+            className="absolute top-2 left-3 text-[10px] font-bold lowercase text-white/40"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
           >
             describe your character
@@ -363,7 +363,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
             />
           </div>
         </motion.div>
-        <motion.p variants={fadeUp} className="text-xs font-bold lowercase text-white/30 text-center">
+        <motion.p variants={fadeUp} className="text-xs font-bold lowercase text-white/55 text-center">
           the more detail, the better
         </motion.p>
       </motion.div>
@@ -380,7 +380,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-white text-center relative z-10">
           ready to create?
         </motion.h2>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/40 text-center relative z-10">
+        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-white/70 text-center relative z-10">
           sign up free — first creation on us
         </motion.p>
       </motion.div>
@@ -509,7 +509,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
 
               {step < TOTAL_STEPS - 1 && (
                 <motion.p
-                  className="text-[10px] font-bold lowercase text-white/20"
+                  className="text-[10px] font-bold lowercase text-white/40"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 2 }}
