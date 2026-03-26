@@ -105,7 +105,7 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.5, repeat: Infinity }}
-        className="inline-block w-0.5 h-5 bg-foreground/60 ml-0.5 align-middle"
+        className="inline-block w-0.5 h-5 bg-white/60 ml-0.5 align-middle"
       />
     </span>
   );
