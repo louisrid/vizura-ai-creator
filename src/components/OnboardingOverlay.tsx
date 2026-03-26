@@ -450,7 +450,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           <div className="flex-1 flex items-center justify-center overflow-hidden px-4 pt-8 pb-2">
             <div
               className="flex w-full max-w-sm items-center justify-center"
-              style={{ minHeight: 320, transform: "translateY(-7vh)" }}
+              style={{ minHeight: 320, transform: "translateY(6vh)" }}
             >
               <AnimatePresence mode="wait">
                 <motion.div
