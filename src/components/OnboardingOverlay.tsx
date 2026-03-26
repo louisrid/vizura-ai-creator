@@ -14,44 +14,49 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-/* shape palette: bright, solid */
-const blue1 = "hsl(210 80% 72%)";
-const blue2 = "hsl(200 75% 68%)";
-const blue3 = "hsl(220 70% 76%)";
-const whi1 = "hsl(0 0% 100%)";
-const whi2 = "hsl(0 0% 92%)";
+/* vivid candy palette */
+const pink = "hsl(330 85% 65%)";
+const coral = "hsl(12 90% 65%)";
+const sky = "hsl(200 90% 62%)";
+const mint = "hsl(165 70% 55%)";
+const lilac = "hsl(270 70% 72%)";
+const peach = "hsl(25 95% 70%)";
+const lemon = "hsl(50 90% 65%)";
 
-/* ── clean circle — small, subtle, decorative only ── */
-const Circle = ({ x, y, size, delay = 0, color = blue1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+/* ── bouncy filled ball ── */
+const Ball = ({ x, y, size, delay = 0, color = sky }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.08 }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.08, scale: 1 }}
-    transition={{ duration: 0.7, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  />
+    style={{ left: x, top: y, width: size, height: size, background: color }}
+    initial={{ opacity: 0, scale: 0, y: 20 }}
+    animate={{ opacity: 0.85, scale: [0, 1.3, 0.9, 1.05, 1], y: 0 }}
+    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+  >
+    <motion.div
+      className="h-full w-full rounded-full"
+      style={{ background: "inherit" }}
+      animate={{ scale: [1, 1.12, 0.92, 1.06, 1], y: [0, -4, 2, -2, 0] }}
+      transition={{ duration: 2.2, delay: delay + 1.2, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </motion.div>
 );
 
-/* ── ring (no rotation) ── */
-const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+/* ── bouncy ring ── */
+const BouncyRing = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `3px solid ${color}`, opacity: 0.12 }}
-    initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 0.12, scale: 1 }}
-    transition={{ duration: 0.8, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  />
-);
-
-/* ── small dot ── */
-const Dot = ({ x, y, size, delay = 0, color = whi1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.12 }}
+    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}` }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.12, scale: 1 }}
-    transition={{ duration: 0.5, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  />
+    animate={{ opacity: 0.7, scale: [0, 1.2, 0.85, 1.05, 1] }}
+    transition={{ duration: 0.5, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+  >
+    <motion.div
+      className="h-full w-full rounded-full"
+      style={{ border: "inherit", borderColor: "inherit" }}
+      animate={{ scale: [1, 1.08, 0.94, 1], rotate: [0, 8, -6, 0] }}
+      transition={{ duration: 2.8, delay: delay + 1.4, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </motion.div>
 );
 
 /* ── single centered emoji (flow-based, not absolute) ── */
