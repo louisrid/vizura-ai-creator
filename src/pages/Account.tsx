@@ -30,7 +30,7 @@ const Account = () => {
         <PageTitle>my account</PageTitle>
 
         <div className="space-y-4">
-          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="border-[3px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
@@ -40,7 +40,7 @@ const Account = () => {
             </div>
           </div>
 
-          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="border-[3px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
               <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
@@ -50,7 +50,7 @@ const Account = () => {
             </div>
           </div>
 
-          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="border-[3px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Zap size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
               <span className="block text-xs font-extrabold lowercase text-foreground">credits</span>

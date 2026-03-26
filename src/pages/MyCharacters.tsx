@@ -91,7 +91,7 @@ const MyCharacters = () => {
               <Loader2 className="animate-spin text-foreground" size={24} />
             </div>
           ) : generations.length === 0 ? (
-            <div className="border-[5px] border-border rounded-2xl p-6 text-center">
+            <div className="border-[3px] border-border rounded-2xl p-6 text-center">
               <p className="text-xs font-extrabold lowercase mb-3">no characters yet</p>
               <Button variant="outline" className="h-10" onClick={() => navigate("/")}>
                 start creating
@@ -103,7 +103,7 @@ const MyCharacters = () => {
                 <button
                   key={gen.id}
                   onClick={() => { setSelected(gen); setAngleIndex(0); }}
-                  className="rounded-2xl border-[5px] border-border overflow-hidden bg-background hover:border-foreground/60 transition-all active:scale-[0.98]"
+                  className="rounded-2xl border-[3px] border-border overflow-hidden bg-background hover:border-foreground/60 transition-all active:scale-[0.98]"
                 >
                   <img src={gen.image_urls[0]} alt="" className="w-full aspect-[3/4] object-cover" />
                 </button>
@@ -129,7 +129,7 @@ const MyCharacters = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="bg-card border-[5px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              className="bg-card border-[3px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
