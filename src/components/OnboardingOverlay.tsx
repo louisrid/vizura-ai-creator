@@ -10,7 +10,7 @@ const textBody = "hsl(0 0% 100% / 0.88)";
 const textMuted = "hsl(0 0% 100% / 0.52)";
 const panel = "hsl(0 0% 100% / 0.07)";
 const panelBorder = "hsl(0 0% 100% / 0.12)";
-const overlay = "hsl(0 0% 0% / 0.99)";
+const overlay = "hsl(0 0% 8% / 0.97)";
 
 /* pastel palette — saturated but light */
 const blue1 = "hsl(210 85% 72%)";
@@ -21,73 +21,15 @@ const yellow = "hsl(45 85% 68%)";
 const green = "hsl(155 60% 58%)";
 const red = "hsl(0 70% 68%)";
 
-/* ── abstract shape components ── */
-
-const Splodge = ({ x, y, w, delay = 0, color = blue1 }: { x: string; y: string; w: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: w, height: w, background: color, opacity: 0.12 }}
-    initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 0.12, scale: [0.3, 1.05, 1] }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full rounded-full"
-      animate={{ scale: [1, 1.06, 0.96, 1] }}
-      transition={{ duration: 6, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
-);
-
-const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `3px solid ${color}`, opacity: 0.16 }}
-    initial={{ opacity: 0, scale: 0.2 }}
-    animate={{ opacity: 0.16, scale: [0.2, 1.08, 1] }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  />
-);
-
-const Dot = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.18 }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.18, scale: [0, 1.15, 1] }}
-    transition={{ duration: 0.35, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  />
-);
-
-const CrossMark = ({ x, y, size, delay = 0, color = orange }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: size, height: size, opacity: 0.3 }}
-    initial={{ opacity: 0, scale: 0.3, rotate: -45 }}
-    animate={{ opacity: 0.3, scale: 1, rotate: 0 }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="relative h-full w-full"
-      animate={{ rotate: [0, 90] }}
-      transition={{ duration: 8, delay: delay + 1, repeat: Infinity, ease: "linear" }}
-    >
-      <div className="absolute left-1/2 top-0 h-full w-[4px] -translate-x-1/2 rounded-full" style={{ background: color }} />
-      <div className="absolute left-0 top-1/2 h-[4px] w-full -translate-y-1/2 rounded-full" style={{ background: color }} />
-    </motion.div>
-  </motion.div>
-);
-
-/* ── gradient blob — vizura blue ── */
-/* GradientBlob removed — using solid shapes only */
+/* shapes removed — emoji-only scenes */
 
 /* ── single centered emoji ── */
 const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "20%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
   <motion.div
     className="pointer-events-none absolute left-1/2 select-none"
-    style={{ top: y, transform: "translateX(-50%)", opacity: 0.7 }}
+    style={{ top: y, transform: "translateX(-50%)" }}
     initial={{ opacity: 0, scale: 0.3, y: 20, filter: "blur(4px)" }}
-    animate={{ opacity: 0.7, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
+    animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
     transition={{ duration: 0.45, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
@@ -411,7 +353,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end pb-[8vh]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end overflow-hidden pb-[8vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
