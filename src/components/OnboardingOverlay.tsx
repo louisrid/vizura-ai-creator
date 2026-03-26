@@ -512,8 +512,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   {step === 3 && <Scene3 />}
                   {step === 4 && <Scene4 />}
                   {step === 5 && <Scene5 />}
-                  {step === 6 && <Scene6 />}
-                  {step === 7 && <Scene7 burst={burst} />}
+                  {step === 6 && <Scene6 burst={burst} />}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -525,8 +524,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
                   className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
                   style={{
-                    background: "linear-gradient(135deg, hsl(45 100% 60%), hsl(35 100% 50%))",
-                    borderColor: "hsl(40 100% 55%)",
+                    background: "linear-gradient(135deg, hsl(50 100% 60%), hsl(42 100% 52%))",
+                    borderColor: "hsl(48 100% 56%)",
                     color: "#000",
                   }}
                   whileTap={{ scale: 0.97 }}
