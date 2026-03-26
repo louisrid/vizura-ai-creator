@@ -6,11 +6,11 @@ import { ArrowRight } from "lucide-react";
 const TOTAL_STEPS = 7;
 
 const white = "hsl(0 0% 100%)";
-const textBody = "hsl(0 0% 100% / 0.82)";
-const textMuted = "hsl(0 0% 100% / 0.44)";
+const textBody = "hsl(0 0% 100% / 0.88)";
+const textMuted = "hsl(0 0% 100% / 0.52)";
 const panel = "hsl(0 0% 100% / 0.07)";
 const panelBorder = "hsl(0 0% 100% / 0.12)";
-const overlay = "hsl(0 0% 0% / 0.96)";
+const overlay = "hsl(0 0% 0% / 0.99)";
 
 /* vizura palette */
 const blue1 = "hsl(210 100% 65%)";
@@ -26,7 +26,7 @@ const red = "hsl(0 80% 58%)";
 const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = blue1 }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: w, height: h, borderRadius: "42% 58% 62% 38% / 46% 54% 46% 54%", background: color, opacity: 0.18, rotate }}
+    style={{ left: x, top: y, width: w, height: h, borderRadius: "50% 50% 50% 50%", background: color, opacity: 0.15, rotate, filter: "blur(8px)" }}
     initial={{ opacity: 0, scale: 0.3 }}
     animate={{ opacity: 0.18, scale: [0.3, 1.06, 1] }}
     transition={{ duration: 0.6, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
@@ -34,7 +34,7 @@ const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = blue1 }: { x: stri
     <motion.div
       className="h-full w-full"
       style={{ borderRadius: "inherit", background: "inherit" }}
-      animate={{ borderRadius: ["42% 58% 62% 38% / 46% 54% 46% 54%", "56% 44% 38% 62% / 52% 48% 52% 48%", "42% 58% 62% 38% / 46% 54% 46% 54%"] }}
+      animate={{ scale: [1, 1.08, 0.95, 1] }}
       transition={{ duration: 6, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
@@ -97,9 +97,9 @@ const GradientBlob = ({ x, y, w, h, delay = 0, rotate = 0, colors = [blue1, blue
     className="pointer-events-none absolute"
     style={{
       left: x, top: y, width: w, height: h,
-      borderRadius: "42% 58% 62% 38% / 46% 54% 46% 54%",
+      borderRadius: "50%",
       background: `linear-gradient(135deg, ${colors[0]}, ${colors[1] || colors[0]})`,
-      opacity: 0.22, rotate, filter: "blur(2px)",
+      opacity: 0.18, rotate, filter: "blur(12px)",
     }}
     initial={{ opacity: 0, scale: 0.2 }}
     animate={{ opacity: 0.22, scale: [0.2, 1.1, 1] }}
@@ -108,7 +108,7 @@ const GradientBlob = ({ x, y, w, h, delay = 0, rotate = 0, colors = [blue1, blue
     <motion.div
       className="h-full w-full"
       style={{ borderRadius: "inherit", background: "inherit" }}
-      animate={{ borderRadius: ["42% 58% 62% 38% / 46% 54% 46% 54%", "58% 42% 36% 64% / 50% 50% 50% 50%", "42% 58% 62% 38% / 46% 54% 46% 54%"] }}
+      animate={{ scale: [1, 1.12, 0.94, 1] }}
       transition={{ duration: 5, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
@@ -181,12 +181,12 @@ const ProgressDots = ({ current }: { current: number }) => (
 );
 
 const TitleBlock = ({ title, subtitle }: { title: string; subtitle: string }) => (
-  <div className="relative z-10 flex flex-col items-center gap-3 text-center">
+  <div className="relative z-10 flex flex-col items-center gap-2.5 pt-6 text-center">
     <motion.h2
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, delay: 0.5, ease: "easeOut" }}
-      className="max-w-[12ch] text-3xl font-[900] lowercase tracking-tighter"
+      className="max-w-[14ch] text-[2rem] font-[900] lowercase leading-[1.1] tracking-tighter"
       style={{ color: white }}
     >
       {title}
@@ -195,7 +195,7 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle: string }) =>
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, delay: 0.62, ease: "easeOut" }}
-      className="max-w-[18rem] text-sm font-extrabold lowercase leading-snug"
+      className="max-w-[18rem] text-[0.8rem] font-extrabold lowercase leading-snug"
       style={{ color: textBody }}
     >
       {subtitle}
@@ -262,7 +262,7 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
 };
 
 const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
-  const sceneClass = "relative flex min-h-[440px] flex-col items-center justify-end gap-5 overflow-hidden pb-4";
+  const sceneClass = "relative flex min-h-[420px] flex-col items-center justify-center gap-4 overflow-hidden";
 
   const scenes: Record<number, React.ReactNode> = {
     /* ── 0: welcome ── */
