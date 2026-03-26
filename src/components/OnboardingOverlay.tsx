@@ -5,7 +5,6 @@ import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-nature-collage.jpg";
 
 const TOTAL_STEPS = 7;
-const AUTO_ADVANCE_MS = 5200;
 
 const white = "hsl(0 0% 100%)";
 const whiteSoft = "hsl(0 0% 100% / 0.64)";
@@ -32,18 +31,18 @@ const Blob = ({ x, y, size, delay = 0, opacity = 0.12 }: { x: string; y: string;
   />
 );
 
-const FloatEmoji = ({ emoji, x, y, delay = 0, size = "text-4xl" }: { emoji: string; x: string; y: string; delay?: number; size?: string }) => (
+const FloatEmoji = ({ emoji, x, y, delay = 0, size = "text-6xl" }: { emoji: string; x: string; y: string; delay?: number; size?: string }) => (
   <motion.span
     className={`pointer-events-none absolute select-none ${size}`}
     style={{ left: x, top: y }}
-    initial={{ opacity: 0, scale: 0.6, y: 18 }}
-    animate={{ opacity: 1, scale: [0.72, 1.08, 1], y: [18, -7, 0] }}
-    transition={{ duration: 0.65, delay, ease: "backOut" }}
+    initial={{ opacity: 0, scale: 0.5, y: 24 }}
+    animate={{ opacity: 1, scale: [0.6, 1.1, 1], y: [24, -8, 0] }}
+    transition={{ duration: 1.2, delay, ease: "backOut" }}
   >
     <motion.span
       className="inline-block"
-      animate={{ y: [0, -6, 0], rotate: [0, 6, -6, 0] }}
-      transition={{ duration: 2.7, delay: delay + 0.35, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
+      transition={{ duration: 4, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
     >
       {emoji}
     </motion.span>
@@ -52,11 +51,11 @@ const FloatEmoji = ({ emoji, x, y, delay = 0, size = "text-4xl" }: { emoji: stri
 
 const SparkleEmoji = ({ emoji, x, y, delay = 0 }: { emoji: string; x: string; y: string; delay?: number }) => (
   <motion.span
-    className="pointer-events-none absolute select-none text-3xl"
+    className="pointer-events-none absolute select-none text-5xl"
     style={{ left: x, top: y }}
     initial={{ opacity: 0, scale: 0.4 }}
     animate={{ opacity: [0, 1, 0.25, 1, 0], scale: [0.5, 1.15, 0.82, 1, 0.6] }}
-    transition={{ duration: 2.8, delay, repeat: Infinity, ease: "easeInOut" }}
+    transition={{ duration: 4.5, delay, repeat: Infinity, ease: "easeInOut" }}
   >
     {emoji}
   </motion.span>
