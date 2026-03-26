@@ -165,26 +165,35 @@ const IconPop = ({ children, delay = 0.15, size = 56 }: { children: React.ReactN
   </motion.div>
 );
 
-/* ── photo card for screen 5 ── */
-const PhotoCard = ({ delay, rotate }: { delay: number; rotate: number }) => (
+/* ── photo card for screen 3 ── */
+const photoEmojis = ["🌅", "📸", "✨"];
+const photoGradients = [
+  "linear-gradient(145deg, hsl(270 50% 18%), hsl(320 40% 22%))",
+  "linear-gradient(145deg, hsl(210 50% 18%), hsl(250 40% 22%))",
+  "linear-gradient(145deg, hsl(340 50% 18%), hsl(20 40% 22%))",
+];
+
+const PhotoCard = ({ delay, rotate, index }: { delay: number; rotate: number; index: number }) => (
   <motion.div
-    className="rounded-2xl border-[4px]"
+    className="rounded-2xl border-[4px] overflow-hidden flex items-center justify-center"
     style={{
-      borderColor: "hsl(0 0% 100% / 0.1)",
-      background: "hsl(0 0% 100% / 0.06)",
-      width: 80,
-      height: 112,
+      borderColor: "hsl(0 0% 100% / 0.12)",
+      background: photoGradients[index % photoGradients.length],
+      width: 82,
+      height: 116,
+      transformOrigin: "bottom center",
     }}
-    initial={{ opacity: 0, y: 40, rotate: rotate * 0.5, scale: 0.8 }}
+    initial={{ opacity: 0, y: 50, rotate: rotate * 0.5, scale: 0.7 }}
     animate={{ opacity: 1, y: 0, rotate, scale: 1 }}
-    transition={{ duration: 0.4, delay, ease: [0.2, 0.9, 0.2, 1] }}
+    transition={{ duration: 0.45, delay, ease: [0.2, 0.9, 0.2, 1] }}
   >
-    <motion.div
-      className="h-full w-full rounded-xl"
-      style={{ background: "linear-gradient(135deg, hsl(270 60% 30% / 0.4), hsl(200 60% 30% / 0.3))" }}
-      animate={{ rotate: [rotate, rotate + 1, rotate - 0.5, rotate] }}
-      transition={{ duration: 3, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
-    />
+    <motion.span
+      className="text-4xl select-none"
+      animate={{ scale: [1, 1.1, 1] }}
+      transition={{ duration: 2.5, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
+    >
+      {photoEmojis[index % photoEmojis.length]}
+    </motion.span>
   </motion.div>
 );
 
@@ -313,14 +322,21 @@ const Scene3 = () => (
     <BigTitle delay={0.2}>3. snap photos</BigTitle>
     <Subtitle delay={0.35}>get realistic shots in any style you want</Subtitle>
     <motion.div
-      className="flex items-end justify-center gap-3 pt-2"
+      className="flex items-center justify-center gap-[-8px] pt-3"
+      style={{ gap: 0 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.45 }}
     >
-      <PhotoCard delay={0.5} rotate={-8} />
-      <PhotoCard delay={0.6} rotate={0} />
-      <PhotoCard delay={0.7} rotate={8} />
+      <div style={{ transform: "translateY(12px)" }}>
+        <PhotoCard delay={0.5} rotate={-10} index={0} />
+      </div>
+      <div style={{ transform: "translateY(0px)", zIndex: 2, marginLeft: -10, marginRight: -10 }}>
+        <PhotoCard delay={0.6} rotate={0} index={1} />
+      </div>
+      <div style={{ transform: "translateY(12px)" }}>
+        <PhotoCard delay={0.7} rotate={10} index={2} />
+      </div>
     </motion.div>
   </div>
 );
