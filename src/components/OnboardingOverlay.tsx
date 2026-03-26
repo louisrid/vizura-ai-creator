@@ -437,7 +437,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          className="fixed inset-0 z-[9999] flex flex-col"
           style={{ background: "hsl(0 0% 0% / 0.97)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -446,15 +446,9 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* content */}
-          <motion.div
-            className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center pt-20"
-            initial={{ y: 10, opacity: 0.95 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            {/* scene area */}
-            <div className="flex w-full items-center justify-center px-2">
+          {/* Scene content area — grows to fill, pushes controls down */}
+          <div className="flex flex-1 items-end justify-center px-4 pb-4" style={{ paddingTop: "28vh" }}>
+            <div className="w-full max-w-sm">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
@@ -473,81 +467,81 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                 </motion.div>
               </AnimatePresence>
             </div>
+          </div>
 
-            {/* controls */}
-            <div className="mt-6 flex w-full flex-col items-center gap-4">
-              {step === TOTAL_STEPS - 1 ? (
-                <motion.button
-                  onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                  className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
-                  style={{
-                    background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
-                    borderColor: "hsl(50 100% 54%)",
-                    color: "#000",
+          {/* Controls — fixed to bottom, never moves */}
+          <div className="shrink-0 flex flex-col items-center gap-3 px-4 pb-10 pt-4 w-full max-w-sm mx-auto">
+            {step === TOTAL_STEPS - 1 ? (
+              <motion.button
+                onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
+                className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
+                style={{
+                  background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
+                  borderColor: "hsl(50 100% 54%)",
+                  color: "#000",
+                }}
+                whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.15 }}
+              >
+                <motion.div
+                  className="absolute inset-0 rounded-xl"
+                  animate={{
+                    boxShadow: [
+                      "0 0 0 0 hsl(52 100% 58% / 0.4)",
+                      "0 0 0 14px hsl(52 100% 58% / 0)",
+                      "0 0 0 0 hsl(52 100% 58% / 0)",
+                    ],
                   }}
-                  whileTap={{ scale: 0.97 }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.15 }}
-                >
-                  <motion.div
-                    className="absolute inset-0 rounded-xl"
-                    animate={{
-                      boxShadow: [
-                        "0 0 0 0 hsl(52 100% 58% / 0.4)",
-                        "0 0 0 14px hsl(52 100% 58% / 0)",
-                        "0 0 0 0 hsl(52 100% 58% / 0)",
-                      ],
-                    }}
-                    transition={{ duration: 1.8, repeat: Infinity }}
-                  />
-                  <span className="relative z-10">let's go</span>
-                </motion.button>
-              ) : (
-                <div className="flex items-center justify-center gap-4">
-                  {step > 0 && (
-                    <motion.button
-                      onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
-                      className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                      style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
-                      whileTap={{ scale: 0.9 }}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
-                    </motion.button>
-                  )}
+                  transition={{ duration: 1.8, repeat: Infinity }}
+                />
+                <span className="relative z-10">let's go</span>
+              </motion.button>
+            ) : (
+              <div className="flex items-center justify-center gap-4">
+                {step > 0 && (
                   <motion.button
-                    onClick={(e) => { e.stopPropagation(); advance(); }}
+                    onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
                     className="flex h-14 w-14 items-center justify-center rounded-2xl"
                     style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
                     whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.25, delay: 0.1 }}
-                    layout
+                    transition={{ duration: 0.2 }}
                   >
-                    <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
+                    <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
                   </motion.button>
-                </div>
-              )}
-
-              {step < TOTAL_STEPS - 1 && (
-                <motion.p
-                  className="text-[11px] font-bold lowercase"
-                  style={{ color: "hsl(0 0% 100%)" }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, delay: 0.3 }}
+                )}
+                <motion.button
+                  onClick={(e) => { e.stopPropagation(); advance(); }}
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                  style={{ background: "#000", border: "2px solid hsl(0 0% 100% / 0.12)", cursor: "pointer" }}
+                  whileTap={{ scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.25, delay: 0.1 }}
+                  layout
                 >
-                  swipe or tap arrow
-                </motion.p>
-              )}
+                  <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
+                </motion.button>
+              </div>
+            )}
 
-              <ProgressDots current={step} />
-            </div>
-          </motion.div>
+            {step < TOTAL_STEPS - 1 && (
+              <motion.p
+                className="text-[11px] font-bold lowercase"
+                style={{ color: "hsl(0 0% 100%)" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2, delay: 0.3 }}
+              >
+                swipe or tap arrow
+              </motion.p>
+            )}
+
+            <ProgressDots current={step} />
+          </div>
         </motion.div>
       ) : null}
     </AnimatePresence>,
