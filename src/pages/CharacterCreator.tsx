@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,30 @@ const CharacterCreator = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
-  const [showOnboarding, setShowOnboarding] = useState(!user);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+
+  // Show onboarding when logged-out user scrolls a little
+  useEffect(() => {
+    if (user || onboardingDismissed) return;
+    let scrollCount = 0;
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        scrollCount++;
+        if (scrollCount >= 1) {
+          setShowOnboarding(true);
+          window.removeEventListener("scroll", handleScroll);
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [user, onboardingDismissed]);
+
+  const handleDismissOnboarding = useCallback(() => {
+    setShowOnboarding(false);
+    setOnboardingDismissed(true);
+  }, []);
 
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
