@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ArrowLeft, Camera, RefreshCw, Sparkles, SlidersHorizontal, PenLine, LayoutGrid } from "lucide-react";
+import { ArrowRight, ArrowLeft, Camera, RefreshCw, Sparkles, SlidersHorizontal, PenLine } from "lucide-react";
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 7;
 
 
 /* ── palette ── */
@@ -19,21 +19,23 @@ const dotColors = [
 
 const amber = "#d4a843";
 
-/* ── progress dots — active = light blue gradient ── */
+/* ── progress dots — active = circular light blue gradient, smooth transition ── */
 const ProgressDots = ({ current }: { current: number }) => (
-  <div className="flex items-center justify-center gap-3 pt-2 pb-1">
+  <div className="flex items-center justify-center gap-2.5 pt-2 pb-1">
     {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
       <motion.div
         key={i}
         className="rounded-full"
-        style={i === current ? { background: "linear-gradient(135deg, hsl(200 100% 65%), hsl(220 100% 55%))" } : {}}
-        initial={false}
-        animate={{
-          width: i === current ? 32 : 10,
-          height: 10,
-          ...(i !== current ? { backgroundColor: "hsl(0 0% 100% / 0.15)" } : {}),
+        style={{
+          background: i === current
+            ? "linear-gradient(135deg, hsl(210 100% 70%), hsl(225 100% 58%))"
+            : "hsl(0 0% 100% / 0.15)",
         }}
-        transition={{ type: "spring", stiffness: 400, damping: 28 }}
+        animate={{
+          width: i === current ? 14 : 10,
+          height: i === current ? 14 : 10,
+        }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
     ))}
   </div>
@@ -220,8 +222,8 @@ const Scene0 = () => (
     <IconPop delay={0.15} size={96}>
       <span className="text-[5rem]">👋</span>
     </IconPop>
-    <BigTitle delay={0.25}>here's how vizura works</BigTitle>
-    <Subtitle delay={0.4}>takes 30 seconds — we'll show you everything step by step</Subtitle>
+    <BigTitle delay={0.25}>how vizura works</BigTitle>
+    <Subtitle delay={0.4}>a quick look at how you create characters and photos</Subtitle>
   </div>
 );
 
@@ -293,12 +295,12 @@ const Scene2 = () => (
       <SlidersHorizontal size={48} strokeWidth={2} style={{ color: dotColors[3] }} />
     </IconPop>
     <BigTitle delay={0.2}>customise their look</BigTitle>
-    <Subtitle delay={0.35}>use the controls to set exactly how they look</Subtitle>
+    <Subtitle delay={0.35}>set exactly how your character looks</Subtitle>
     <div className="mt-1 flex w-full max-w-[17rem] flex-col gap-2.5">
-      <ControlItem label="hair colour" desc="blonde, brunette, red…" n={1} delay={0.5} />
-      <ControlItem label="eye colour" desc="blue, green, brown…" n={2} delay={0.6} />
-      <ControlItem label="body type" desc="slim, athletic, curvy…" n={3} delay={0.7} />
-      <ControlItem label="extra details" desc="tattoos, freckles…" n={4} delay={0.8} />
+      <ControlItem label="hair colour" desc="blonde, brunette, red" n={1} delay={0.5} />
+      <ControlItem label="eye colour" desc="blue, green, brown" n={2} delay={0.6} />
+      <ControlItem label="body type" desc="slim, athletic, curvy" n={3} delay={0.7} />
+      <ControlItem label="extra details" desc="tattoos, freckles" n={4} delay={0.8} />
     </div>
   </div>
 );
@@ -317,69 +319,20 @@ const Scene3 = () => (
         <RefreshCw size={56} strokeWidth={2.5} style={{ color: dotColors[0] }} />
       </motion.div>
     </motion.div>
-    <BigTitle delay={0.25}>don't like it? try again</BigTitle>
-    <Subtitle delay={0.4}>hit regenerate for a completely new version — costs 1 credit each time</Subtitle>
+    <BigTitle delay={0.25}>not happy? regenerate</BigTitle>
+    <Subtitle delay={0.4}>try again for a new version, costs 1 credit each time</Subtitle>
     <StepCircle n={1} delay={0.55} />
   </div>
 );
 
-/* ── mock character card for "saved to account" scene ── */
-const MockCharCard = ({ delay }: { delay: number }) => (
-  <motion.div
-    className="flex flex-col items-center"
-    initial={{ opacity: 0, y: 24, scale: 0.9 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ duration: 0.4, delay, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="relative w-[120px] rounded-2xl border-[4px] overflow-hidden"
-      style={{ borderColor: "hsl(0 0% 100% / 0.15)", background: "hsl(0 0% 100% / 0.06)", aspectRatio: "3/4" }}
-      animate={{ y: [0, -3, 0] }}
-      transition={{ duration: 3, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
-    >
-      {/* flag */}
-      <span className="absolute bottom-2 left-2 text-2xl">🇺🇸</span>
-      {/* silhouette placeholder */}
-      <div className="flex h-full w-full items-center justify-center">
-        <svg width="60" height="72" viewBox="0 0 80 96" fill="none">
-          <ellipse cx="40" cy="32" rx="34" ry="36" fill="hsl(0 0% 100% / 0.12)" />
-          <ellipse cx="40" cy="36" rx="26" ry="30" fill="hsl(0 0% 100% / 0.18)" />
-          <path d="M12 28 Q18 4 40 2 Q62 4 68 28 Q60 12 40 10 Q20 12 12 28Z" fill="hsl(0 0% 100% / 0.12)" />
-          <path d="M30 72 Q26 74 24 86 L56 86 Q54 74 50 72 Q46 70 40 70 Q34 70 30 72Z" fill="hsl(0 0% 100% / 0.15)" />
-          <rect x="36" y="66" width="8" height="6" rx="2" fill="hsl(0 0% 100% / 0.18)" />
-        </svg>
-      </div>
-    </motion.div>
-    <motion.span
-      className="mt-2 text-xs font-[900] lowercase tracking-tight"
-      style={{ color: "hsl(0 0% 100% / 0.9)" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: delay + 0.2 }}
-    >
-      sarah, 24
-    </motion.span>
-  </motion.div>
-);
 
 const Scene4 = () => (
-  <div className="flex flex-col items-center gap-3">
-    <IconPop delay={0.1} size={80}>
-      <LayoutGrid size={48} strokeWidth={2} style={{ color: dotColors[4] }} />
-    </IconPop>
-    <BigTitle delay={0.2}>saved to your account</BigTitle>
-    <Subtitle delay={0.35}>every character you make is saved in "my characters" with their name, age, and nationality</Subtitle>
-    <MockCharCard delay={0.5} />
-  </div>
-);
-
-const Scene5 = () => (
   <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={88}>
       <Camera size={52} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
-    <BigTitle delay={0.2}>then create photos of them</BigTitle>
-    <Subtitle delay={0.35}>generate realistic photos in any setting, outfit, or style you want</Subtitle>
+    <BigTitle delay={0.2}>create photos</BigTitle>
+    <Subtitle delay={0.35}>generate realistic photos in any setting or style</Subtitle>
     <motion.div
       className="flex items-end justify-center gap-3 pt-2"
       initial={{ opacity: 0 }}
@@ -393,13 +346,13 @@ const Scene5 = () => (
   </div>
 );
 
-const Scene6 = () => (
+const Scene5 = () => (
   <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={80}>
       <PenLine size={48} strokeWidth={2} style={{ color: dotColors[5] }} />
     </IconPop>
-    <BigTitle delay={0.2}>tell us what you want</BigTitle>
-    <Subtitle delay={0.35}>write a prompt describing the photo — pose, setting, lighting, outfit</Subtitle>
+    <BigTitle delay={0.2}>write a prompt</BigTitle>
+    <Subtitle delay={0.35}>describe the photo you want: pose, setting, lighting</Subtitle>
     <motion.div
       className="mt-1 w-full max-w-[17rem] rounded-2xl border-[4px] px-4 py-3"
       style={{ borderColor: "hsl(0 0% 100% / 0.1)", background: "hsl(0 0% 100% / 0.04)" }}
@@ -415,14 +368,14 @@ const Scene6 = () => (
   </div>
 );
 
-const Scene7 = ({ burst }: { burst: boolean }) => (
+const Scene6 = ({ burst }: { burst: boolean }) => (
   <div className="relative flex flex-col items-center gap-3">
     <ParticleBurst active={burst} />
     <IconPop delay={0.1} size={96}>
       <span className="text-[5rem]">🚀</span>
     </IconPop>
-    <BigTitle delay={0.2}>that's it — let's go!</BigTitle>
-    <Subtitle delay={0.35}>sign up free and start creating your first character right now</Subtitle>
+    <BigTitle delay={0.2}>ready? let's go</BigTitle>
+    <Subtitle delay={0.35}>sign up free and create your first character now</Subtitle>
   </div>
 );
 
@@ -521,8 +474,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   {step === 3 && <Scene3 />}
                   {step === 4 && <Scene4 />}
                   {step === 5 && <Scene5 />}
-                  {step === 6 && <Scene6 />}
-                  {step === 7 && <Scene7 burst={burst} />}
+                  {step === 6 && <Scene6 burst={burst} />}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -534,8 +486,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
                   className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
                   style={{
-                    background: "linear-gradient(135deg, hsl(45 100% 60%), hsl(35 100% 50%))",
-                    borderColor: "hsl(40 100% 55%)",
+                    background: "linear-gradient(135deg, hsl(50 100% 60%), hsl(42 100% 52%))",
+                    borderColor: "hsl(48 100% 56%)",
                     color: "#000",
                   }}
                   whileTap={{ scale: 0.97 }}
