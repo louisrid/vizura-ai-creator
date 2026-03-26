@@ -7,32 +7,32 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 0 0% 4%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 0 0% 4%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover-foreground: 0 0% 4%;
 
-    --primary: 0 0% 0%;
+    --primary: 0 0% 4%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 94%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary-foreground: 0 0% 4%;
 
     --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 4%;
 
     --accent: 0 0% 94%;
-    --accent-foreground: 0 0% 0%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 0%;
-    --input: 0 0% 0%;
-    --ring: 0 0% 0%;
+    --border: 0 0% 4%;
+    --input: 0 0% 4%;
+    --ring: 0 0% 4%;
 
     --radius: 12px;
 
@@ -40,7 +40,7 @@
     --accent-purple-dark: 230 85% 50%;
     --accent-purple-light: 210 100% 65%;
 
-    --sidebar-background: 0 0% 5%;
+    --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
     --sidebar-primary-foreground: 0 0% 5%;
@@ -50,9 +50,9 @@
     --sidebar-ring: 0 0% 98%;
 
     /* custom tokens */
-    --nav: 0 0% 5%;
+    --nav: 0 0% 4%;
     --nav-foreground: 0 0% 98%;
-    --surface-dark: 0 0% 6%;
+    --surface-dark: 0 0% 4%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
     --glow: 220 90% 55%;
