@@ -85,7 +85,17 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      
+      {/* Hero nature image — top 60% of viewport */}
+      <div className="relative w-full" style={{ height: '60vh' }}>
+        <img
+          src={heroImage}
+          alt="lush green nature collage with butterfly, bird and flowers"
+          className="w-full h-full object-cover"
+          width={1024}
+          height={768}
+        />
+      </div>
+
         <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
           <div className="flex items-center gap-3 mb-10">
             <BackButton />
