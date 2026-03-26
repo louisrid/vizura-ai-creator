@@ -14,6 +14,17 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
+/* shape palette: 70% light-blue, 30% white */
+const shapeBlue1 = "hsl(210 60% 65% / 0.1)";
+const shapeBlue2 = "hsl(200 55% 60% / 0.08)";
+const shapeBlue3 = "hsl(215 50% 70% / 0.12)";
+const shapeWhite1 = "hsl(0 0% 100% / 0.08)";
+const shapeWhite2 = "hsl(0 0% 100% / 0.06)";
+const ringBlue = "hsl(210 55% 65% / 0.14)";
+const ringWhite = "hsl(0 0% 100% / 0.1)";
+const dotBlue = "hsl(205 60% 68% / 0.18)";
+const dotWhite = "hsl(0 0% 100% / 0.14)";
+
 /* ── abstract shape components ── */
 
 const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = "hsl(0 0% 100% / 0.06)" }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; color?: string }) => (
@@ -251,31 +262,31 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
 };
 
 const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
-  const sceneClass = "relative flex min-h-[440px] flex-col items-center justify-end gap-5 overflow-hidden pb-4";
+  const sceneClass = "relative flex min-h-[440px] flex-col items-center justify-center gap-5 overflow-hidden";
 
   const scenes: Record<number, React.ReactNode> = {
     /* ── 0: welcome ── */
     0: (
       <div className={sceneClass}>
-        <Splodge x="6%" y="8%" w={120} h={100} delay={0} rotate={-12} color="hsl(0 0% 100% / 0.05)" />
-        <Splodge x="68%" y="58%" w={90} h={80} delay={0.2} rotate={20} color="hsl(0 0% 100% / 0.04)" />
-        <Ring x="72%" y="12%" size={56} delay={0.1} />
-        <Dot x="18%" y="62%" size={14} delay={0.25} />
-        <Dot x="82%" y="55%" size={10} delay={0.35} />
-        <CrossMark x="62%" y="64%" size={22} delay={0.4} />
-        <CenterEmoji emoji="👋" size="text-[5rem]" delay={0.15} y="30%" />
+        <Splodge x="6%" y="12%" w={120} h={100} delay={0} rotate={-12} color={shapeBlue1} />
+        <Splodge x="68%" y="56%" w={90} h={80} delay={0.2} rotate={20} color={shapeWhite1} />
+        <Ring x="72%" y="16%" size={56} delay={0.1} color={ringBlue} />
+        <Dot x="18%" y="58%" size={14} delay={0.25} color={dotBlue} />
+        <Dot x="82%" y="52%" size={10} delay={0.35} color={dotWhite} />
+        <CrossMark x="62%" y="60%" size={22} delay={0.4} color={ringBlue} />
+        <CenterEmoji emoji="👋" size="text-[5rem]" delay={0.15} y="34%" />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
     /* ── 1: make any character ── */
     1: (
       <div className={sceneClass}>
-        <Splodge x="10%" y="14%" w={100} h={90} delay={0} rotate={10} color="hsl(0 0% 100% / 0.05)" />
-        <Ring x="74%" y="10%" size={48} delay={0.1} />
-        <Ring x="14%" y="58%" size={34} delay={0.3} />
-        <Dot x="80%" y="56%" size={12} delay={0.2} />
-        <CrossMark x="24%" y="14%" size={20} delay={0.35} />
-        <Dot x="66%" y="62%" size={8} delay={0.4} />
+        <Splodge x="10%" y="18%" w={100} h={90} delay={0} rotate={10} color={shapeBlue2} />
+        <Ring x="74%" y="14%" size={48} delay={0.1} color={ringBlue} />
+        <Ring x="14%" y="54%" size={34} delay={0.3} color={ringWhite} />
+        <Dot x="80%" y="52%" size={12} delay={0.2} color={dotBlue} />
+        <CrossMark x="24%" y="18%" size={20} delay={0.35} color={ringBlue} />
+        <Dot x="66%" y="58%" size={8} delay={0.4} color={dotWhite} />
         <motion.div
           className="relative flex items-center justify-center overflow-hidden rounded-[28px] border-[4px]"
           style={{ borderColor: panelBorder, background: panel, width: 125, height: 187 }}
@@ -294,13 +305,13 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 2: shape their look ── */
     2: (
       <div className={sceneClass}>
-        <Splodge x="64%" y="6%" w={110} h={90} delay={0} rotate={-8} color="hsl(0 0% 100% / 0.04)" />
-        <Splodge x="4%" y="50%" w={80} h={70} delay={0.15} rotate={15} color="hsl(0 0% 100% / 0.04)" />
-        <Ring x="78%" y="54%" size={42} delay={0.2} />
-        <Dot x="16%" y="18%" size={12} delay={0.1} />
-        <CrossMark x="80%" y="16%" size={18} delay={0.3} />
-        <Dot x="8%" y="40%" size={8} delay={0.35} />
-        <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} y="28%" size="text-[3.8rem]" gap={16} />
+        <Splodge x="64%" y="10%" w={110} h={90} delay={0} rotate={-8} color={shapeBlue1} />
+        <Splodge x="4%" y="48%" w={80} h={70} delay={0.15} rotate={15} color={shapeBlue2} />
+        <Ring x="78%" y="50%" size={42} delay={0.2} color={ringWhite} />
+        <Dot x="16%" y="22%" size={12} delay={0.1} color={dotBlue} />
+        <CrossMark x="80%" y="20%" size={18} delay={0.3} color={ringBlue} />
+        <Dot x="8%" y="38%" size={8} delay={0.35} color={dotBlue} />
+        <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} y="32%" size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
         <div className="flex flex-col gap-2 text-center">
           {["hair colour", "eye colour", "body type"].map((item, index) => (
@@ -321,12 +332,12 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 3: not perfect? ── */
     3: (
       <div className={sceneClass}>
-        <Splodge x="8%" y="10%" w={100} h={88} delay={0} rotate={-6} color="hsl(0 0% 100% / 0.05)" />
-        <Ring x="76%" y="14%" size={52} delay={0.1} />
-        <Ring x="18%" y="56%" size={38} delay={0.25} />
-        <Dot x="78%" y="58%" size={14} delay={0.3} />
-        <CrossMark x="10%" y="16%" size={20} delay={0.2} />
-        <Dot x="68%" y="46%" size={8} delay={0.4} />
+        <Splodge x="8%" y="14%" w={100} h={88} delay={0} rotate={-6} color={shapeBlue3} />
+        <Ring x="76%" y="18%" size={52} delay={0.1} color={ringBlue} />
+        <Ring x="18%" y="52%" size={38} delay={0.25} color={ringWhite} />
+        <Dot x="78%" y="54%" size={14} delay={0.3} color={dotWhite} />
+        <CrossMark x="10%" y="20%" size={20} delay={0.2} color={ringBlue} />
+        <Dot x="68%" y="44%" size={8} delay={0.4} color={dotBlue} />
         <motion.div
           className="text-[5.5rem]"
           initial={{ opacity: 0, scale: 0.3, y: 20, rotate: -30 }}
@@ -343,12 +354,12 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 4: create photos ── */
     4: (
       <div className={sceneClass}>
-        <Splodge x="12%" y="8%" w={104} h={86} delay={0} rotate={12} color="hsl(0 0% 100% / 0.04)" />
-        <Ring x="80%" y="10%" size={44} delay={0.15} />
-        <Dot x="10%" y="54%" size={12} delay={0.2} />
-        <Dot x="84%" y="50%" size={10} delay={0.3} />
-        <CrossMark x="6%" y="18%" size={18} delay={0.25} />
-        <CenterEmoji emoji="📸" size="text-[4.5rem]" delay={0.1} y="26%" />
+        <Splodge x="12%" y="12%" w={104} h={86} delay={0} rotate={12} color={shapeBlue1} />
+        <Ring x="80%" y="14%" size={44} delay={0.15} color={ringBlue} />
+        <Dot x="10%" y="50%" size={12} delay={0.2} color={dotBlue} />
+        <Dot x="84%" y="48%" size={10} delay={0.3} color={dotWhite} />
+        <CrossMark x="6%" y="22%" size={18} delay={0.25} color={ringWhite} />
+        <CenterEmoji emoji="📸" size="text-[4.5rem]" delay={0.1} y="30%" />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-4">
           <PhotoCard delay={1.15} rotation={-10} scale={0.96} />
@@ -360,12 +371,12 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 5: describe what you want ── */
     5: (
       <div className={sceneClass}>
-        <Splodge x="66%" y="8%" w={100} h={84} delay={0} rotate={-14} color="hsl(0 0% 100% / 0.04)" />
-        <Splodge x="6%" y="52%" w={80} h={68} delay={0.15} rotate={10} color="hsl(0 0% 100% / 0.04)" />
-        <Ring x="16%" y="12%" size={40} delay={0.1} />
-        <Dot x="80%" y="52%" size={12} delay={0.25} />
-        <CrossMark x="78%" y="18%" size={20} delay={0.3} />
-        <CenterEmoji emoji="✍️" size="text-[4.5rem]" delay={0.1} y="28%" />
+        <Splodge x="66%" y="12%" w={100} h={84} delay={0} rotate={-14} color={shapeBlue2} />
+        <Splodge x="6%" y="48%" w={80} h={68} delay={0.15} rotate={10} color={shapeWhite2} />
+        <Ring x="16%" y="16%" size={40} delay={0.1} color={ringBlue} />
+        <Dot x="80%" y="48%" size={12} delay={0.25} color={dotBlue} />
+        <CrossMark x="78%" y="22%" size={20} delay={0.3} color={ringBlue} />
+        <CenterEmoji emoji="✍️" size="text-[4.5rem]" delay={0.1} y="32%" />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
         <motion.div
           className="w-full rounded-[24px] border-[4px] px-5 py-4"
@@ -383,14 +394,14 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     6: (
       <div className={sceneClass}>
         <ParticleBurst active={burst} />
-        <Splodge x="8%" y="10%" w={110} h={96} delay={0} rotate={-10} color="hsl(0 0% 100% / 0.05)" />
-        <Splodge x="66%" y="54%" w={90} h={78} delay={0.2} rotate={16} color="hsl(0 0% 100% / 0.04)" />
-        <Ring x="78%" y="12%" size={50} delay={0.1} />
-        <Ring x="12%" y="56%" size={36} delay={0.3} />
-        <Dot x="24%" y="16%" size={14} delay={0.15} />
-        <Dot x="80%" y="50%" size={10} delay={0.35} />
-        <CrossMark x="68%" y="60%" size={22} delay={0.4} />
-        <CenterEmoji emoji="🚀" size="text-[5rem]" delay={0.15} y="28%" />
+        <Splodge x="8%" y="14%" w={110} h={96} delay={0} rotate={-10} color={shapeBlue3} />
+        <Splodge x="66%" y="50%" w={90} h={78} delay={0.2} rotate={16} color={shapeWhite1} />
+        <Ring x="78%" y="16%" size={50} delay={0.1} color={ringBlue} />
+        <Ring x="12%" y="52%" size={36} delay={0.3} color={ringWhite} />
+        <Dot x="24%" y="20%" size={14} delay={0.15} color={dotBlue} />
+        <Dot x="80%" y="48%" size={10} delay={0.35} color={dotWhite} />
+        <CrossMark x="68%" y="56%" size={22} delay={0.4} color={ringBlue} />
+        <CenterEmoji emoji="🚀" size="text-[5rem]" delay={0.15} y="32%" />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
     ),
