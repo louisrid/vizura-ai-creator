@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import BackButton from "@/components/BackButton";
 
 const CartoonGirl = ({ size = 80 }: { size?: number }) => (
   <svg width={size} height={size * 1.2} viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,8 +29,12 @@ const GRID_COLS = 3;
 const GRID_ROWS = 3;
 
 const MyCharacters = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authLoading && !user) navigate("/auth");
+  }, [user, authLoading, navigate]);
 
   const cells = Array.from({ length: GRID_COLS * GRID_ROWS });
 
