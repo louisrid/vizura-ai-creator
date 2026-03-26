@@ -227,8 +227,8 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
           ].map((item) => (
             <motion.div
               key={item.emoji}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border-[4px] text-2xl"
-              style={{ borderColor: panelBorder, background: panel }}
+              className="flex h-14 w-14 items-center justify-center rounded-2xl text-3xl"
+              style={{ background: panel }}
               initial={{ opacity: 0, y: 16, scale: 0.45 }}
               animate={{ opacity: 1, y: 0, scale: [0.45, 1.12, 1] }}
               transition={{ duration: 0.4, delay: item.delay, ease: "backOut" }}
