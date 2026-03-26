@@ -79,36 +79,16 @@ const CrossMark = ({ x, y, size, delay = 0, color = orange }: { x: string; y: st
 );
 
 /* ── gradient blob — vizura blue ── */
-const GradientBlob = ({ x, y, w, h, delay = 0, rotate = 0, colors = [blue1, blue2] }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; colors?: string[] }) => (
-  <motion.div
-    className="pointer-events-none absolute"
-    style={{
-      left: x, top: y, width: w, height: h,
-      borderRadius: "50%",
-      background: `linear-gradient(135deg, ${colors[0]}, ${colors[1] || colors[0]})`,
-      opacity: 0.18, rotate, filter: "blur(12px)",
-    }}
-    initial={{ opacity: 0, scale: 0.2 }}
-    animate={{ opacity: 0.22, scale: [0.2, 1.1, 1] }}
-    transition={{ duration: 0.65, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full"
-      style={{ borderRadius: "inherit", background: "inherit" }}
-      animate={{ scale: [1, 1.12, 0.94, 1] }}
-      transition={{ duration: 5, delay: delay + 1, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
-);
+/* GradientBlob removed — using solid shapes only */
 
 /* ── single centered emoji ── */
-const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
+const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "20%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
   <motion.div
     className="pointer-events-none absolute left-1/2 select-none"
-    style={{ top: y, transform: "translateX(-50%)" }}
-    initial={{ opacity: 0, scale: 0.3, y: 30, filter: "blur(6px)" }}
-    animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
-    transition={{ duration: 0.5, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+    style={{ top: y, transform: "translateX(-50%)", opacity: 0.7 }}
+    initial={{ opacity: 0, scale: 0.3, y: 20, filter: "blur(4px)" }}
+    animate={{ opacity: 0.7, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
+    transition={{ duration: 0.45, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
       className={`block ${size}`}
@@ -121,7 +101,7 @@ const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { 
 );
 
 /* ── row of emojis ── */
-const EmojiRow = ({ emojis, delay = 0, y = "32%", size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; y?: string; size?: string; gap?: number }) => (
+const EmojiRow = ({ emojis, delay = 0, y = "18%", size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; y?: string; size?: string; gap?: number }) => (
   <motion.div
     className="pointer-events-none absolute left-1/2 flex select-none"
     style={{ top: y, transform: "translateX(-50%)", gap }}
