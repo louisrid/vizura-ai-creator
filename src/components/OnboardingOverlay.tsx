@@ -471,10 +471,10 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                 <motion.div
                   key={step}
                   className="w-full"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  initial={{ opacity: 0, x: 40, scale: 0.95 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -40, scale: 0.95 }}
+                  transition={{ duration: 0.25, ease: [0.2, 0.9, 0.2, 1] }}
                 >
                   <StepScene step={step} burst={burst} />
                 </motion.div>
