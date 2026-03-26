@@ -486,7 +486,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
               {step < TOTAL_STEPS - 1 && (
                 <motion.p
                   className="text-[11px] font-bold lowercase"
-                  style={{ color: "hsl(0 0% 100% / 0.12)" }}
+                  style={{ color: "hsl(0 0% 100%)" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.2, delay: 0.4 }}
