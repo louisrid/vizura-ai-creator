@@ -465,8 +465,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
                   className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
                   style={{
-                    background: "linear-gradient(135deg, hsl(50 100% 60%), hsl(42 100% 52%))",
-                    borderColor: "hsl(48 100% 56%)",
+                    background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
+                    borderColor: "hsl(50 100% 54%)",
                     color: "#000",
                   }}
                   whileTap={{ scale: 0.97 }}
@@ -478,9 +478,9 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                     className="absolute inset-0 rounded-xl"
                     animate={{
                       boxShadow: [
-                        "0 0 0 0 hsl(45 100% 60% / 0.4)",
-                        "0 0 0 14px hsl(45 100% 60% / 0)",
-                        "0 0 0 0 hsl(45 100% 60% / 0)",
+                        "0 0 0 0 hsl(52 100% 58% / 0.4)",
+                        "0 0 0 14px hsl(52 100% 58% / 0)",
+                        "0 0 0 0 hsl(52 100% 58% / 0)",
                       ],
                     }}
                     transition={{ duration: 1.8, repeat: Infinity }}
