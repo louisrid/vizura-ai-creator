@@ -56,6 +56,7 @@ const CharacterCreator = () => {
   const handleDismissOnboarding = useCallback(() => {
     setShowOnboarding(false);
     setOnboardingDismissed(true);
+    localStorage.setItem("onboarding_seen", "true");
   }, []);
 
   const imageCards = useMemo(() => {
