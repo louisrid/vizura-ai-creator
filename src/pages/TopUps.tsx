@@ -17,7 +17,7 @@ const plans = [
 const TopUps = () => {
   const { credits } = useCredits();
   const { user, loading } = useAuth();
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const TopUps = () => {
                 className={`rounded-2xl p-5 ${
                   plan.highlighted
                     ? "border-gradient-blue bg-foreground"
-                    : "border-[6px] border-border bg-card"
+                    : "border-[5px] border-border bg-card"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
