@@ -409,13 +409,12 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
       {open ? (
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
-          style={{ background: "hsl(0 0% 0% / 0.97)" }}
+          style={{ background: "hsl(0 0% 0% / 0.97)", cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22 }}
           onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
-          style={{ background: "hsl(0 0% 0% / 0.97)", cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
           {/* content */}
           <motion.div
