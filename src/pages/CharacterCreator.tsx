@@ -90,38 +90,32 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
       <OnboardingOverlay open={showOnboarding && !user} onDismiss={() => setShowOnboarding(false)} />
 
-      {/* Hero nature image — square with crown/shield bottom */}
-      <div className="mx-auto w-full max-w-lg px-4 mt-6">
+      {/* Hero image with angular shield cutout */}
+      <div className="mx-auto w-full max-w-lg px-4 mt-6 relative">
+        <h1 className="absolute top-4 left-0 right-0 z-10 text-5xl font-[900] lowercase tracking-tighter text-white text-center drop-shadow-lg">create character</h1>
         <div className="relative w-full" style={{ aspectRatio: '1 / 1' }}>
-          <img
-            src={heroImage}
-            alt="nature scene with bridge, bunny and ladybugs"
-            className="w-full h-full object-cover rounded-t-2xl"
-            width={1024}
-            height={768}
-          />
-          {/* Fade overlay */}
           <div
-            className="absolute inset-0 pointer-events-none rounded-t-2xl"
-            style={{
-              background: 'linear-gradient(to bottom, hsla(0,0%,100%,0.05) 0%, hsla(0,0%,100%,0.05) 66%, hsla(0,0%,100%,0.75) 85%, hsla(0,0%,100%,1) 100%)',
-            }}
-          />
-          {/* Crown/shield bottom edge */}
-          <svg
-            className="absolute left-0 w-full"
-            style={{ bottom: '-1px' }}
-            viewBox="0 0 400 30"
-            preserveAspectRatio="none"
-            fill="hsl(var(--background))"
+            className="w-full h-full relative"
+            style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%)' }}
           >
-            <path d="M0,0 L0,30 L200,20 L400,30 L400,0 L300,10 L200,0 L100,10 Z" />
-          </svg>
+            <img
+              src={heroImage}
+              alt="nature scene"
+              className="w-full h-full object-cover"
+              width={1024}
+              height={768}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to bottom, hsla(0,0%,0%,0) 0%, hsla(0,0%,0%,0) 50%, hsla(0,0%,0%,0.4) 100%)',
+              }}
+            />
+          </div>
         </div>
       </div>
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-8 pb-12">
-        <h1 className="text-5xl font-[900] lowercase tracking-tighter text-foreground text-center mb-12">create character</h1>
 
         <CardCarousel
           images={imageCards}
