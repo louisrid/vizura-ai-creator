@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -36,7 +35,6 @@ const AnimatedRoutes = () => {
   return (
     <>
       <Header />
-      <AnimatePresence mode="wait" initial={false}>
         <PageTransition key={location.pathname}>
           <Routes location={location}>
             <Route path="/" element={<CharacterCreator />} />
@@ -51,7 +49,6 @@ const AnimatedRoutes = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PageTransition>
-      </AnimatePresence>
     </>
   );
 };
