@@ -349,11 +349,13 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          className="fixed inset-0 z-[100] flex items-center justify-center touch-manipulation select-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
+          onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
+          style={{ cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
           {/* backdrop */}
           <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
@@ -363,7 +365,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             className="relative z-10 w-full max-w-sm mx-4 flex flex-col items-center"
             initial={{ scale: 0.95, y: 20 }}
             animate={{ scale: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.4, ease: "easeOut" as const }}
           >
             {/* step content */}
             <div className="w-full min-h-[340px] flex items-center justify-center px-4">
@@ -385,7 +387,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             <div className="mt-8 flex flex-col items-center gap-6 w-full">
               {step === TOTAL_STEPS - 1 ? (
                 <motion.button
-                  onClick={handleLetsGo}
+                  onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
                   className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight text-background overflow-hidden"
                   style={{ background: "#d4a843" }}
                   whileTap={{ scale: 0.97 }}
@@ -405,15 +407,26 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   <span className="relative z-10">let's go 🚀</span>
                 </motion.button>
               ) : (
-                <motion.button
-                  onClick={advance}
-                  className="flex items-center justify-center w-14 h-14 rounded-2xl bg-foreground text-background"
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.93 }}
-                  aria-label="next step"
+                <motion.div
+                  className="flex items-center justify-center w-14 h-14 rounded-2xl bg-foreground text-background pointer-events-none"
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  aria-hidden
                 >
                   <ArrowRight size={24} strokeWidth={3} />
-                </motion.button>
+                </motion.div>
+              )}
+
+              {/* tap hint */}
+              {step < TOTAL_STEPS - 1 && (
+                <motion.p
+                  className="text-[10px] font-extrabold lowercase text-foreground/30"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.5 }}
+                >
+                  tap anywhere to continue
+                </motion.p>
               )}
 
               <ProgressDots current={step} total={TOTAL_STEPS} />
