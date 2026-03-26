@@ -95,8 +95,12 @@ const TopUps = () => {
                 </div>
 
                 <Button
-                  variant="outline"
-                  className="w-full h-12 text-sm"
+                  className={`w-full h-12 text-sm ${
+                    plan.highlighted
+                      ? "bg-background text-foreground hover:bg-background/90"
+                      : ""
+                  }`}
+                  variant={plan.highlighted ? "default" : "outline"}
                   onClick={handleBuy}
                 >
                   buy credits
