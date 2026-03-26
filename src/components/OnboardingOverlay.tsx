@@ -27,7 +27,7 @@ const Blob = ({ x, y, size, delay = 0, opacity = 0.12 }: { x: string; y: string;
     }}
     initial={{ opacity: 0, scale: 0.75 }}
     animate={{ opacity: [opacity * 0.5, opacity, opacity * 0.55], scale: [0.92, 1.06, 0.95], x: [0, 10, -8, 0], y: [0, -10, 8, 0] }}
-    transition={{ duration: 6.5, delay, repeat: Infinity, ease: "easeInOut" }}
+    transition={{ duration: 10, delay, repeat: Infinity, ease: "easeInOut" }}
   />
 );
 
