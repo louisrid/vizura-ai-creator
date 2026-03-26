@@ -57,7 +57,7 @@ const Header = () => {
   const CurrentIcon = currentMenuItem?.icon || (isAuthPage ? LogIn : undefined);
 
   return (
-    <header className="bg-nav sticky top-0 z-40 <header className="bg-nav sticky top-0 z-40 border-b-[2.5px] border-nav-foreground/15">">
+    <header className="<header className="bg-nav sticky top-0 z-40 border-b-[2.5px] border-nav-foreground/15"> className="bg-nav sticky top-0 z-40 border-b-[2.5px] border-nav-foreground/15">">
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
@@ -130,7 +130,7 @@ const Header = () => {
 const CreditsBadge = () => {
   const { credits } = useCredits();
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl <div className="flex items-center gap-1.5 rounded-2xl border-[2.5px] border-nav-foreground/30 px-3 py-1.5">">
+    <div className="flex items-center gap-1.5 <div className="flex items-center gap-1.5 rounded-2xl border-[2.5px] border-nav-foreground/30 px-3 py-1.5"> className="flex items-center gap-1.5 rounded-2xl border-[2.5px] border-nav-foreground/30 px-3 py-1.5">">
       <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
       <span className="text-[11px] font-extrabold text-nav-foreground">{credits}</span>
     </div>
