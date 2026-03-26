@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-nature-collage.jpg";
+import OnboardingOverlay from "@/components/OnboardingOverlay";
 
 const countryOptions = [
   "any", "american", "british", "australian", "brazilian", "colombian", "french",
