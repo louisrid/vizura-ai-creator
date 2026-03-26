@@ -135,7 +135,7 @@ const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode; delay?
 const Subtitle = ({ children, delay = 0.2 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
     className="max-w-[17rem] text-center text-sm font-bold lowercase leading-snug"
-    style={{ color: "hsl(0 0% 100% / 0.55)" }}
+    style={{ color: "hsl(0 0% 100% / 0.82)" }}
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.25, delay, ease: "easeOut" }}
