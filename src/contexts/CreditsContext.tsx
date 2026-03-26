@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CreditsContextType {
   credits: number;
@@ -12,17 +13,40 @@ const CreditsContext = createContext<CreditsContextType | undefined>(undefined);
 export const CreditsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [credits, setCredits] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setCredits(user ? 100 : 0);
+  const fetchCredits = useCallback(async () => {
+    if (!user) {
+      setCredits(0);
+      setLoading(false);
+      return;
+    }
+    try {
+      const { data, error } = await supabase
+        .from("credits")
+        .select("balance")
+        .eq("user_id", user.id)
+        .single();
+      if (error) {
+        console.error("Failed to fetch credits:", error);
+        setCredits(0);
+      } else {
+        setCredits(data?.balance ?? 0);
+      }
+    } catch (e) {
+      console.error("Credits fetch error:", e);
+      setCredits(0);
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
 
-  const refetch = async () => {
-    setCredits(user ? 100 : 0);
-  };
+  useEffect(() => {
+    fetchCredits();
+  }, [fetchCredits]);
 
   return (
-    <CreditsContext.Provider value={{ credits, loading: false, refetch }}>
+    <CreditsContext.Provider value={{ credits, loading, refetch: fetchCredits }}>
       {children}
     </CreditsContext.Provider>
   );
