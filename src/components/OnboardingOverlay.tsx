@@ -1,110 +1,126 @@
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { forwardRef, useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 const TOTAL_STEPS = 7;
-const AUTO_ADVANCE_MS = 5500;
+const AUTO_ADVANCE_MS = 5200;
 
-/* ── floating blob ── */
-const Blob = ({ x, y, size, color, delay = 0, duration = 6 }: { x: string; y: string; size: number; color: string; delay?: number; duration?: number }) => (
-  <motion.div
-    className="absolute rounded-full pointer-events-none"
-    style={{ width: size, height: size, background: color, left: x, top: y, filter: "blur(40px)" }}
-    initial={{ opacity: 0, scale: 0.3 }}
-    animate={{
-      opacity: [0, 0.5, 0.3, 0.5, 0.3],
-      scale: [0.3, 1, 0.85, 1.1, 0.9],
-      x: [0, 15, -10, 8, 0],
-      y: [0, -12, 8, -5, 0],
-    }}
-    transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
-  />
+const Blob = forwardRef<HTMLDivElement, { x: string; y: string; size: number; delay?: number; duration?: number }>(
+  ({ x, y, size, delay = 0, duration = 7 }, ref) => (
+    <motion.div
+      ref={ref}
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        width: size,
+        height: size,
+        left: x,
+        top: y,
+        background: "hsl(var(--foreground) / 0.05)",
+        filter: "blur(38px)",
+      }}
+      initial={{ opacity: 0, scale: 0.7 }}
+      animate={{
+        opacity: [0.15, 0.35, 0.18],
+        scale: [0.9, 1.06, 0.94],
+        x: [0, 12, -10, 0],
+        y: [0, -10, 8, 0],
+      }}
+      transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
+    />
+  ),
 );
+Blob.displayName = "Blob";
 
-/* ── bouncing emoji ── */
-const BouncingEmoji = ({ emoji, x, y, delay = 0, size = "text-3xl" }: { emoji: string; x: string; y: string; delay?: number; size?: string }) => (
-  <motion.span
-    className={`absolute pointer-events-none select-none ${size}`}
-    style={{ left: x, top: y }}
-    initial={{ opacity: 0, scale: 0, y: 30 }}
-    animate={{ opacity: 1, scale: [0, 1.2, 1], y: [30, -8, 0] }}
-    transition={{ duration: 0.7, delay, ease: "backOut" }}
-  >
+const FloatingEmoji = forwardRef<HTMLSpanElement, { emoji: string; x: string; y: string; delay?: number; size?: string }>(
+  ({ emoji, x, y, delay = 0, size = "text-4xl" }, ref) => (
     <motion.span
-      className="inline-block"
-      animate={{ y: [0, -6, 0], rotate: [0, 8, -8, 0] }}
-      transition={{ duration: 2.5, repeat: Infinity, delay: delay + 0.5, ease: "easeInOut" }}
+      ref={ref}
+      className={`absolute select-none pointer-events-none ${size}`}
+      style={{ left: x, top: y }}
+      initial={{ opacity: 0, scale: 0.6, y: 18 }}
+      animate={{ opacity: 1, scale: [0.7, 1.08, 1], y: [18, -6, 0] }}
+      transition={{ duration: 0.7, delay, ease: "backOut" }}
     >
-      {emoji}
+      <motion.span
+        className="inline-block"
+        animate={{ y: [0, -5, 0], rotate: [0, 4, -4, 0] }}
+        transition={{ duration: 2.8, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" }}
+      >
+        {emoji}
+      </motion.span>
     </motion.span>
-  </motion.span>
+  ),
 );
+FloatingEmoji.displayName = "FloatingEmoji";
 
-/* ── wobbling shape ── */
-const WobblingShape = ({ x, y, size, color, delay = 0, shape = "circle" }: { x: string; y: string; size: number; color: string; delay?: number; shape?: "circle" | "diamond" | "square" }) => (
-  <motion.div
-    className={`absolute pointer-events-none ${shape === "circle" ? "rounded-full" : shape === "diamond" ? "rotate-45 rounded-lg" : "rounded-lg"}`}
-    style={{ left: x, top: y, width: size, height: size, background: color }}
-    initial={{ opacity: 0, scale: 0, rotate: shape === "diamond" ? 45 : 0 }}
-    animate={{ opacity: [0, 0.5, 0.3], scale: [0, 1, 0.9], rotate: shape === "diamond" ? [45, 55, 35, 45] : [0, 6, -6, 0] }}
-    transition={{ duration: 4, delay, repeat: Infinity, ease: "easeInOut" }}
-  />
-);
-
-/* ── twinkling sparkle emoji ── */
 const TwinkleEmoji = ({ emoji, x, y, delay = 0 }: { emoji: string; x: string; y: string; delay?: number }) => (
   <motion.span
-    className="absolute pointer-events-none select-none text-2xl"
+    className="absolute text-3xl select-none pointer-events-none"
     style={{ left: x, top: y }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: [0, 1, 0.3, 1, 0], scale: [0, 1.2, 0.8, 1.1, 0] }}
+    initial={{ opacity: 0, scale: 0.5 }}
+    animate={{ opacity: [0, 1, 0.35, 1, 0], scale: [0.6, 1.15, 0.85, 1, 0.7] }}
     transition={{ duration: 3, delay, repeat: Infinity, ease: "easeInOut" }}
   >
     {emoji}
   </motion.span>
 );
 
-/* ── progress dots ── */
+const WobbleShape = ({ x, y, size, delay = 0 }: { x: string; y: string; size: number; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-2xl pointer-events-none"
+    style={{ left: x, top: y, width: size, height: size, background: "hsl(var(--foreground) / 0.06)" }}
+    initial={{ opacity: 0, scale: 0.5, rotate: -8 }}
+    animate={{ opacity: [0.18, 0.35, 0.2], scale: [0.85, 1, 0.9], rotate: [-8, 6, -4, -8] }}
+    transition={{ duration: 4.6, delay, repeat: Infinity, ease: "easeInOut" }}
+  />
+);
+
 const ProgressDots = ({ current, total }: { current: number; total: number }) => (
-  <div className="flex gap-2.5 justify-center pb-4">
-    {Array.from({ length: total }).map((_, i) => (
+  <div className="flex items-center justify-center gap-2.5 pb-4">
+    {Array.from({ length: total }).map((_, index) => (
       <motion.div
-        key={`dot-${i}-${current}`}
+        key={`dot-${index}-${current}`}
         className="rounded-full"
         initial={false}
         animate={{
-          width: i === current ? 28 : 10,
+          width: index === current ? 30 : 10,
           height: 10,
-          backgroundColor: i === current ? "hsl(0 0% 4%)" : "hsl(0 0% 4% / 0.12)",
+          backgroundColor: index === current ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.14)",
         }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.24, ease: "easeOut" }}
       />
     ))}
   </div>
 );
 
-/* ── particle burst on final screen ── */
 const ParticleBurst = ({ active }: { active: boolean }) => {
   if (!active) return null;
+
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {Array.from({ length: 30 }).map((_, i) => {
-        const angle = (i / 30) * 360;
-        const dist = 50 + Math.random() * 130;
-        const rad = (angle * Math.PI) / 180;
-        const colors = ["hsl(0 0% 4%)", "hsl(0 0% 30%)", "hsl(0 0% 60%)", "hsl(0 0% 15%)"];
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {Array.from({ length: 22 }).map((_, index) => {
+        const angle = (index / 22) * Math.PI * 2;
+        const distance = 50 + ((index * 11) % 70);
+
         return (
           <motion.div
-            key={i}
+            key={index}
             className="absolute rounded-full"
             style={{
-              left: "50%", top: "50%",
-              width: 2 + Math.random() * 4, height: 2 + Math.random() * 4,
-              background: colors[i % colors.length],
+              left: "50%",
+              top: "50%",
+              width: 4,
+              height: 4,
+              background: index % 2 === 0 ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.45)",
             }}
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-            animate={{ x: Math.cos(rad) * dist, y: Math.sin(rad) * dist, opacity: 0, scale: 0 }}
-            transition={{ duration: 0.8 + Math.random() * 0.4, ease: "easeOut" }}
+            animate={{
+              x: Math.cos(angle) * distance,
+              y: Math.sin(angle) * distance,
+              opacity: 0,
+              scale: 0,
+            }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
           />
         );
       })}
@@ -112,346 +128,312 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
   );
 };
 
-/* ── typing text with cursor ── */
 const TypingText = ({ text, className }: { text: string; className?: string }) => {
   const [displayed, setDisplayed] = useState("");
+
   useEffect(() => {
     setDisplayed("");
-    let i = 0;
+    let index = 0;
     const startTimer = setTimeout(() => {
-      const iv = setInterval(() => {
-        i++;
-        setDisplayed(text.slice(0, i));
-        if (i >= text.length) clearInterval(iv);
-      }, 45);
-    }, 800);
-    return () => clearTimeout(startTimer);
+      const intervalId = window.setInterval(() => {
+        index += 1;
+        setDisplayed(text.slice(0, index));
+        if (index >= text.length) {
+          window.clearInterval(intervalId);
+        }
+      }, 42);
+    }, 700);
+
+    return () => {
+      clearTimeout(startTimer);
+    };
   }, [text]);
+
   return (
     <span className={className}>
       {displayed}
       <motion.span
+        className="ml-1 inline-block h-5 w-0.5 align-middle bg-foreground/45"
         animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.5, repeat: Infinity }}
-        className="inline-block w-0.5 h-5 bg-foreground/40 ml-0.5 align-middle"
+        transition={{ duration: 0.6, repeat: Infinity }}
       />
     </span>
   );
 };
 
-/* ── pop-in emoji for step 2 ── */
 const PopEmoji = ({ emoji, delay }: { emoji: string; delay: number }) => (
   <motion.div
-    className="w-12 h-12 rounded-2xl bg-foreground/5 border-[4px] border-border/10 flex items-center justify-center text-2xl"
-    initial={{ opacity: 0, scale: 0, y: 20 }}
-    animate={{ opacity: 1, scale: [0, 1.3, 1], y: 0 }}
-    transition={{ duration: 0.5, delay, ease: "backOut" }}
+    className="flex h-12 w-12 items-center justify-center rounded-2xl border-[4px] border-border/10 bg-card text-2xl"
+    initial={{ opacity: 0, scale: 0.4, y: 18 }}
+    animate={{ opacity: 1, scale: [0.4, 1.15, 1], y: 0 }}
+    transition={{ duration: 0.45, delay, ease: "backOut" }}
   >
     {emoji}
   </motion.div>
 );
 
-/* ── stagger + fade variants ── */
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } },
-};
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
-};
+const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) => (
+  <div className="relative z-10 flex flex-col items-center gap-3 text-center">
+    <motion.h2
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+      className="max-w-[11ch] text-5xl font-[900] lowercase tracking-tighter text-foreground"
+    >
+      {title}
+    </motion.h2>
+    {subtitle ? (
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
+        className="max-w-xs text-lg font-extrabold lowercase text-foreground/45"
+      >
+        {subtitle}
+      </motion.p>
+    ) : null}
+  </div>
+);
 
-/* ── tilt card for photo step ── */
-const TiltCard = ({ delay = 0, gradient }: { delay?: number; gradient: string }) => (
+const PhotoCard = ({ delay, rotation }: { delay: number; rotation: number }) => (
   <motion.div
-    className="w-20 h-28 rounded-xl border-[4px] border-border/10"
-    style={{ background: gradient, transformStyle: "preserve-3d" }}
-    initial={{ opacity: 0, x: delay < 0.15 ? -60 : delay > 0.25 ? 60 : 0, y: 40, rotateZ: delay < 0.15 ? -12 : delay > 0.25 ? 12 : 0 }}
-    animate={{ opacity: 1, x: 0, y: 0, rotateZ: [0, 3, -3, 0], rotateY: [0, 8, -5, 3, 0] }}
+    className="h-28 w-20 rounded-[20px] border-[4px] border-border/10 bg-card shadow-soft"
+    style={{ background: "linear-gradient(180deg, hsl(var(--foreground) / 0.07), hsl(var(--foreground) / 0.02))" }}
+    initial={{ opacity: 0, y: 30, rotate: rotation, scale: 0.9 }}
+    animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale: 1 }}
     transition={{
-      opacity: { duration: 0.5, delay: 0.6 + delay },
-      x: { duration: 0.6, delay: 0.6 + delay, ease: "backOut" },
-      y: { duration: 0.6, delay: 0.6 + delay, ease: "backOut" },
-      rotateZ: { duration: 4, repeat: Infinity, delay: 1.5 + delay, ease: "easeInOut" },
-      rotateY: { duration: 5, repeat: Infinity, delay: 1.5 + delay, ease: "easeInOut" },
+      opacity: { duration: 0.45, delay },
+      y: { duration: 0.45, delay, ease: "backOut" },
+      scale: { duration: 0.45, delay, ease: "backOut" },
+      rotate: { duration: 4.2, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" },
     }}
   />
 );
 
-/* ── step content ── */
 const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
-  const content: Record<number, React.ReactNode> = {
-    /* ── 0: welcome ── */
+  const steps: Record<number, React.ReactNode> = {
     0: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-4 relative overflow-visible">
-        <Blob x="5%" y="10%" size={100} color="hsl(0 0% 4% / 0.06)" delay={0.2} />
-        <Blob x="75%" y="60%" size={80} color="hsl(0 0% 4% / 0.04)" delay={0.6} />
-        <WobblingShape x="85%" y="15%" size={16} color="hsl(0 0% 4% / 0.08)" delay={0.4} shape="diamond" />
-        <WobblingShape x="8%" y="70%" size={12} color="hsl(0 0% 4% / 0.06)" delay={0.8} shape="square" />
-        <BouncingEmoji emoji="👋" x="15%" y="10%" delay={0.5} size="text-5xl" />
-        <BouncingEmoji emoji="✨" x="78%" y="20%" delay={0.9} size="text-3xl" />
-        <BouncingEmoji emoji="🌊" x="70%" y="75%" delay={1.2} size="text-3xl" />
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center relative z-10">
-          welcome to vizura
-        </motion.h2>
-        <motion.p variants={fadeUp} className="text-base font-bold lowercase text-foreground/40 text-center relative z-10">
-          quick walkthrough — 30 seconds
-        </motion.p>
-      </motion.div>
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+        <Blob x="6%" y="8%" size={120} delay={0.1} />
+        <Blob x="72%" y="70%" size={92} delay={0.6} />
+        <WobbleShape x="80%" y="18%" size={24} delay={0.4} />
+        <FloatingEmoji emoji="👋" x="10%" y="18%" delay={0.3} size="text-5xl" />
+        <FloatingEmoji emoji="🌊" x="78%" y="22%" delay={0.6} size="text-4xl" />
+        <TitleBlock title="welcome to vizura" subtitle="quick walkthrough — takes 30 seconds" />
+      </div>
     ),
-
-    /* ── 1: any character ── */
     1: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-4 relative overflow-visible">
-        <Blob x="20%" y="15%" size={90} color="hsl(0 0% 4% / 0.05)" delay={0.3} />
-        <TwinkleEmoji emoji="✨" x="10%" y="10%" delay={0.3} />
-        <TwinkleEmoji emoji="✨" x="82%" y="15%" delay={0.7} />
-        <TwinkleEmoji emoji="💫" x="75%" y="65%" delay={1.1} />
-        <TwinkleEmoji emoji="✨" x="15%" y="75%" delay={1.5} />
-        <BouncingEmoji emoji="🧑‍🎨" x="50%" y="5%" delay={0.4} size="text-5xl" />
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center relative z-10 mt-8">
-          make any character
-        </motion.h2>
-        <motion.p variants={fadeUp} className="text-base font-bold lowercase text-foreground/40 text-center relative z-10">
-          dream her up — we'll bring her to life
-        </motion.p>
-      </motion.div>
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+        <Blob x="14%" y="14%" size={120} delay={0.2} />
+        <TwinkleEmoji emoji="✨" x="12%" y="20%" delay={0.2} />
+        <TwinkleEmoji emoji="✨" x="80%" y="18%" delay={0.7} />
+        <TwinkleEmoji emoji="💫" x="74%" y="70%" delay={1.1} />
+        <FloatingEmoji emoji="🫶" x="44%" y="14%" delay={0.4} size="text-5xl" />
+        <TitleBlock title="make any character" subtitle="dream her up — we bring her to life" />
+      </div>
     ),
-
-    /* ── 2: controls ── */
     2: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-4 relative">
-        <Blob x="80%" y="10%" size={70} color="hsl(0 0% 4% / 0.04)" delay={0.2} />
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
-          shape their look
-        </motion.h2>
-        <motion.div className="flex gap-3 justify-center mt-2">
-          <PopEmoji emoji="💇" delay={0.5} />
-          <PopEmoji emoji="👁️" delay={0.7} />
-          <PopEmoji emoji="🌍" delay={0.9} />
-          <PopEmoji emoji="✂️" delay={1.1} />
-        </motion.div>
-        <motion.div variants={fadeUp} className="w-full flex flex-col gap-2 mt-2">
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+        <Blob x="70%" y="12%" size={106} delay={0.3} />
+        <TitleBlock title="shape their look" subtitle="pick a few traits and build the vibe fast" />
+        <div className="flex items-center justify-center gap-3">
+          <PopEmoji emoji="💇" delay={0.4} />
+          <PopEmoji emoji="👁️" delay={0.52} />
+          <PopEmoji emoji="🧍" delay={0.64} />
+        </div>
+        <div className="flex flex-col gap-2.5 text-center">
           {[
-            { emoji: "🌍", label: "ethnicity" },
-            { emoji: "🎂", label: "age" },
-            { emoji: "💇", label: "hair colour" },
-            { emoji: "👁️", label: "eye colour" },
-            { emoji: "🏋️", label: "body type" },
-          ].map((item, i) => (
+            "hair colour",
+            "eye colour",
+            "body type",
+          ].map((item, index) => (
             <motion.div
-              key={item.label}
-              className="flex items-center gap-3 rounded-xl bg-foreground/[0.04] px-4 py-2.5"
-              initial={{ opacity: 0, x: -20, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.6 + i * 0.12, ease: "backOut" }}
+              key={item}
+              className="rounded-2xl bg-foreground/[0.04] px-5 py-3 text-base font-extrabold lowercase text-foreground/55"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.7 + index * 0.1, ease: "easeOut" }}
             >
-              <span className="text-lg">{item.emoji}</span>
-              <span className="text-sm font-[900] lowercase text-foreground/60">{item.label}</span>
+              {item}
             </motion.div>
           ))}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     ),
-
-    /* ── 3: regenerate ── */
     3: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-6 relative overflow-visible">
-        <Blob x="30%" y="20%" size={90} color="hsl(0 0% 4% / 0.05)" delay={0.3} />
-        <Blob x="70%" y="70%" size={70} color="hsl(0 0% 4% / 0.04)" delay={0.7} />
-        <WobblingShape x="80%" y="25%" size={14} color="hsl(0 0% 4% / 0.06)" delay={0.5} shape="circle" />
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+        <Blob x="18%" y="12%" size={118} delay={0.2} />
+        <WobbleShape x="78%" y="20%" size={22} delay={0.5} />
         <motion.div
-          className="text-5xl"
-          initial={{ opacity: 0, scale: 0 }}
+          initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, duration: 0.5, ease: "backOut" }}
+          transition={{ duration: 0.4, ease: "backOut" }}
+          className="text-5xl"
         >
           <motion.span
             className="inline-block"
             animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }}
           >
             🔄
           </motion.span>
         </motion.div>
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
-          not perfect?
-        </motion.h2>
-        <motion.p variants={fadeUp} className="text-base font-bold lowercase text-foreground/40 text-center">
-          hit create again — each attempt costs 1 credit
-        </motion.p>
-      </motion.div>
+        <TitleBlock title="not perfect?" subtitle="hit create again — each attempt costs 1 credit" />
+      </div>
     ),
-
-    /* ── 4: photos ── */
     4: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-5 relative overflow-visible">
-        <Blob x="50%" y="20%" size={100} color="hsl(0 0% 4% / 0.04)" delay={0.2} />
-        <BouncingEmoji emoji="📸" x="80%" y="10%" delay={0.5} size="text-3xl" />
-        <motion.span className="text-5xl" variants={fadeUp}>🖼️</motion.span>
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
-          create photos
-        </motion.h2>
-        <motion.div className="flex gap-5 mt-2" style={{ perspective: 800 }}>
-          <TiltCard delay={0} gradient="hsl(0 0% 4% / 0.06)" />
-          <TiltCard delay={0.15} gradient="hsl(0 0% 4% / 0.04)" />
-          <TiltCard delay={0.3} gradient="hsl(0 0% 4% / 0.06)" />
-        </motion.div>
-      </motion.div>
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+        <Blob x="24%" y="10%" size={132} delay={0.2} />
+        <FloatingEmoji emoji="📸" x="80%" y="18%" delay={0.5} size="text-4xl" />
+        <TitleBlock title="create photos" subtitle="you get multiple polished options every time" />
+        <div className="flex items-center justify-center gap-4">
+          <PhotoCard delay={0.45} rotation={-9} />
+          <PhotoCard delay={0.58} rotation={0} />
+          <PhotoCard delay={0.7} rotation={9} />
+        </div>
+      </div>
     ),
-
-    /* ── 5: prompt ── */
     5: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-5 relative overflow-visible">
-        <Blob x="15%" y="25%" size={80} color="hsl(0 0% 4% / 0.04)" delay={0.3} />
-        <WobblingShape x="85%" y="70%" size={10} color="hsl(0 0% 4% / 0.06)" delay={0.6} shape="diamond" />
-        <motion.span className="text-5xl" variants={fadeUp}>✍️</motion.span>
-        <motion.h2 variants={fadeUp} className="text-4xl font-[900] lowercase tracking-tighter text-foreground text-center">
-          describe what you want
-        </motion.h2>
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
+        <Blob x="10%" y="12%" size={118} delay={0.15} />
+        <FloatingEmoji emoji="✍️" x="78%" y="18%" delay={0.4} size="text-4xl" />
+        <TitleBlock title="describe what you want" subtitle="the more detail, the better" />
         <motion.div
-          variants={fadeUp}
-          className="w-full rounded-2xl border-[4px] border-border/15 bg-foreground/[0.03] px-4 py-4 min-h-[80px] relative"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.45, ease: "easeOut" }}
+          className="w-full rounded-[24px] border-[4px] border-border/10 bg-card px-5 py-4"
         >
-          <motion.div
-            className="absolute top-2.5 left-4 text-xs font-bold lowercase text-foreground/20"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          >
-            describe your character
-          </motion.div>
-          <div className="mt-5">
-            <TypingText
-              text="sitting in a cafe, golden hour, sundress"
-              className="text-base font-bold lowercase text-foreground/50"
-            />
-          </div>
+          <div className="mb-3 text-xs font-extrabold lowercase text-foreground/25">example prompt</div>
+          <TypingText text="golden hour portrait, soft dress, cafe mood" className="text-base font-extrabold lowercase text-foreground/55" />
         </motion.div>
-        <motion.p variants={fadeUp} className="text-sm font-bold lowercase text-foreground/30 text-center">
-          the more detail, the better
-        </motion.p>
-      </motion.div>
+      </div>
     ),
-
-    /* ── 6: final CTA ── */
     6: (
-      <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center justify-center gap-6 relative overflow-visible">
+      <div className="relative flex min-h-[400px] flex-col items-center justify-center gap-6 overflow-hidden">
         <ParticleBurst active={burst} />
-        <Blob x="30%" y="20%" size={120} color="hsl(0 0% 4% / 0.04)" delay={0.2} duration={8} />
-        <Blob x="70%" y="60%" size={90} color="hsl(0 0% 4% / 0.03)" delay={0.5} duration={7} />
-        <BouncingEmoji emoji="🚀" x="80%" y="10%" delay={0.6} size="text-4xl" />
-        <BouncingEmoji emoji="⚡" x="15%" y="70%" delay={1} size="text-3xl" />
-        <motion.h2 variants={fadeUp} className="text-5xl font-[900] lowercase tracking-tighter text-foreground text-center relative z-10">
-          ready to create?
-        </motion.h2>
-        <motion.p variants={fadeUp} className="text-lg font-bold lowercase text-foreground/40 text-center relative z-10">
-          sign up free — first creation on us
-        </motion.p>
-      </motion.div>
+        <Blob x="18%" y="12%" size={128} delay={0.15} duration={8} />
+        <Blob x="68%" y="62%" size={104} delay={0.5} duration={7.5} />
+        <FloatingEmoji emoji="✨" x="14%" y="22%" delay={0.45} size="text-4xl" />
+        <FloatingEmoji emoji="🚀" x="80%" y="20%" delay={0.65} size="text-4xl" />
+        <TitleBlock title="ready to create?" subtitle="sign up free — first creation on us" />
+      </div>
     ),
   };
-  return <>{content[step]}</>;
+
+  return <>{steps[step]}</>;
 };
 
-/* ── main overlay ── */
 const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () => void }) => {
   const [step, setStep] = useState(0);
   const [burst, setBurst] = useState(false);
 
   const advance = useCallback(() => {
-    if (step < TOTAL_STEPS - 1) setStep((s) => s + 1);
+    if (step < TOTAL_STEPS - 1) {
+      setStep((currentStep) => currentStep + 1);
+    }
   }, [step]);
 
   useEffect(() => {
-    if (open) { setStep(0); setBurst(false); }
+    if (open) {
+      setStep(0);
+      setBurst(false);
+    }
   }, [open]);
 
   useEffect(() => {
     if (!open || step >= TOTAL_STEPS - 1) return;
-    const timer = setTimeout(advance, AUTO_ADVANCE_MS);
-    return () => clearTimeout(timer);
-  }, [open, step, advance]);
+
+    const timer = window.setTimeout(advance, AUTO_ADVANCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [advance, open, step]);
 
   const handleLetsGo = () => {
     setBurst(true);
-    setTimeout(onDismiss, 800);
+    window.setTimeout(onDismiss, 700);
   };
 
   return (
     <AnimatePresence>
-      {open && (
+      {open ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center touch-manipulation select-none bg-background"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.25 }}
           onClick={step < TOTAL_STEPS - 1 ? advance : undefined}
           style={{ cursor: step < TOTAL_STEPS - 1 ? "pointer" : "default" }}
         >
-          {/* content */}
           <motion.div
-            className="relative z-10 w-full max-w-sm mx-4 flex flex-col items-center"
-            initial={{ y: 16 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center"
+            initial={{ y: 14, opacity: 0.96 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
           >
-            {/* step content */}
-            <div className="w-full min-h-[380px] flex items-center justify-center px-4">
+            <div className="flex min-h-[430px] w-full items-center justify-center px-2">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.3 }}
                   className="w-full"
+                  initial={{ opacity: 0, x: 22 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -22 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
                 >
                   <StepContent step={step} burst={burst} />
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* bottom controls */}
-            <div className="mt-6 flex flex-col items-center gap-5 w-full">
+            <div className="mt-2 flex w-full flex-col items-center gap-5">
               {step === TOTAL_STEPS - 1 ? (
                 <motion.button
-                  onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                  className="relative h-14 w-full rounded-2xl bg-foreground text-background text-sm font-[900] lowercase tracking-tight overflow-hidden"
-                  whileTap={{ scale: 0.97 }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleLetsGo();
+                  }}
+                  className="relative h-14 w-full overflow-hidden rounded-2xl bg-foreground text-sm font-[900] lowercase tracking-tight text-background"
+                  whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
+                  transition={{ duration: 0.35, delay: 0.18 }}
                 >
-                  <span className="relative z-10">let's go</span>
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl"
+                    animate={{ boxShadow: ["0 0 0 0 hsl(var(--foreground) / 0.08)", "0 0 0 12px hsl(var(--foreground) / 0)", "0 0 0 0 hsl(var(--foreground) / 0)"] }}
+                    transition={{ duration: 1.8, repeat: Infinity }}
+                  />
+                  <span className="relative z-10">let’s go</span>
                 </motion.button>
               ) : (
                 <motion.div
-                  className="flex items-center justify-center w-14 h-14 rounded-2xl bg-foreground"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.5 }}
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground"
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
                   aria-hidden
                 >
                   <ArrowRight size={22} strokeWidth={2.5} className="text-background" />
                 </motion.div>
               )}
 
-              {step < TOTAL_STEPS - 1 && (
+              {step < TOTAL_STEPS - 1 ? (
                 <motion.p
-                  className="text-[10px] font-bold lowercase text-foreground/20"
+                  className="text-xs font-extrabold lowercase text-foreground/22"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 2 }}
+                  transition={{ duration: 0.3, delay: 0.45 }}
                 >
                   tap anywhere
                 </motion.p>
-              )}
+              ) : null}
 
               <ProgressDots current={step} total={TOTAL_STEPS} />
             </div>
           </motion.div>
         </motion.div>
-      )}
+      ) : null}
     </AnimatePresence>
   );
 };

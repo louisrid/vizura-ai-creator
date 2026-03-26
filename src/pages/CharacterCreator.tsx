@@ -97,7 +97,7 @@ const CharacterCreator = () => {
             src={heroImage}
             alt=""
             className="w-full h-full object-cover"
-            style={{ opacity: 0.12, filter: 'saturate(0.2)' }}
+            style={{ opacity: 0.08, filter: 'saturate(0.12) blur(0.4px)' }}
             width={1024}
             height={768}
           />
@@ -105,7 +105,7 @@ const CharacterCreator = () => {
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: 'linear-gradient(to bottom, hsl(var(--background) / 0.3) 0%, hsl(var(--background) / 0.5) 40%, hsl(var(--background)) 85%)',
+              background: 'linear-gradient(to bottom, hsl(var(--background) / 0.15) 0%, hsl(var(--background) / 0.55) 42%, hsl(var(--background) / 0.92) 72%, hsl(var(--background)) 92%)',
             }}
           />
           {/* Page title centered on the faint image */}
