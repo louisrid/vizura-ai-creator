@@ -17,7 +17,7 @@ const plans = [
 const TopUps = () => {
   const { credits } = useCredits();
   const { user, loading } = useAuth();
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {

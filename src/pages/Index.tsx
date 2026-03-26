@@ -27,7 +27,7 @@ const randomPrompts = [
 const Index = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [prompt, setPrompt] = useState("");

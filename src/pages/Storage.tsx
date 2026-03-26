@@ -21,7 +21,7 @@ type Filter = (typeof filters)[number];
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
   const [images, setImages] = useState<StorageImage[]>([]);
   const [loading, setLoading] = useState(true);

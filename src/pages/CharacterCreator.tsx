@@ -21,7 +21,7 @@ const bodyOptions = ["slim", "regular", "curvy"] as const;
 const CharacterCreator = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
