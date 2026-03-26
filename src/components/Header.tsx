@@ -73,6 +73,11 @@ const Header = () => {
               </linearGradient>
             </defs>
           </svg>
+          {user && (
+            <button onClick={() => navigate("/account")} className="shrink-0">
+              <UserRound size={14} strokeWidth={2.5} fill="currentColor" className="text-nav-foreground" />
+            </button>
+          )}
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
             {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} style={{ stroke: "url(#icon-gradient-purple)" }} />}
             <span className="gradient-purple-text">{currentPage}</span>
