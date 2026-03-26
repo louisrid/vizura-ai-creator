@@ -117,7 +117,7 @@ const CharacterCreator = () => {
         </div>
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-28 pb-12">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-8 pb-12">
         <h1 className="text-5xl font-[900] lowercase tracking-tighter text-foreground text-center mb-12">create character</h1>
 
         <CardCarousel
