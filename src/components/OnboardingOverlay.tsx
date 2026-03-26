@@ -15,12 +15,12 @@ const Blob = forwardRef<HTMLDivElement, { x: string; y: string; size: number; de
         height: size,
         left: x,
         top: y,
-        background: "hsl(var(--foreground) / 0.05)",
+        background: "hsl(0 0% 100% / 0.08)",
         filter: "blur(38px)",
       }}
       initial={{ opacity: 0, scale: 0.7 }}
       animate={{
-        opacity: [0.15, 0.35, 0.18],
+        opacity: [0.12, 0.28, 0.14],
         scale: [0.9, 1.06, 0.94],
         x: [0, 12, -10, 0],
         y: [0, -10, 8, 0],
@@ -68,9 +68,9 @@ const TwinkleEmoji = ({ emoji, x, y, delay = 0 }: { emoji: string; x: string; y:
 const WobbleShape = ({ x, y, size, delay = 0 }: { x: string; y: string; size: number; delay?: number }) => (
   <motion.div
     className="absolute rounded-2xl pointer-events-none"
-    style={{ left: x, top: y, width: size, height: size, background: "hsl(var(--foreground) / 0.06)" }}
+    style={{ left: x, top: y, width: size, height: size, background: "hsl(0 0% 100% / 0.08)" }}
     initial={{ opacity: 0, scale: 0.5, rotate: -8 }}
-    animate={{ opacity: [0.18, 0.35, 0.2], scale: [0.85, 1, 0.9], rotate: [-8, 6, -4, -8] }}
+    animate={{ opacity: [0.14, 0.26, 0.16], scale: [0.85, 1, 0.9], rotate: [-8, 6, -4, -8] }}
     transition={{ duration: 4.6, delay, repeat: Infinity, ease: "easeInOut" }}
   />
 );
@@ -85,7 +85,7 @@ const ProgressDots = ({ current, total }: { current: number; total: number }) =>
         animate={{
           width: index === current ? 30 : 10,
           height: 10,
-          backgroundColor: index === current ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.14)",
+          backgroundColor: index === current ? "hsl(0 0% 100%)" : "hsl(0 0% 100% / 0.16)",
         }}
         transition={{ duration: 0.24, ease: "easeOut" }}
       />
@@ -111,7 +111,7 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
               top: "50%",
               width: 4,
               height: 4,
-              background: index % 2 === 0 ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.45)",
+              background: index % 2 === 0 ? "hsl(0 0% 100%)" : "hsl(0 0% 100% / 0.45)",
             }}
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
             animate={{
@@ -134,18 +134,23 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
   useEffect(() => {
     setDisplayed("");
     let index = 0;
-    const startTimer = setTimeout(() => {
-      const intervalId = window.setInterval(() => {
+    let intervalId: number | undefined;
+
+    const startTimer = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
         index += 1;
         setDisplayed(text.slice(0, index));
-        if (index >= text.length) {
+        if (index >= text.length && intervalId) {
           window.clearInterval(intervalId);
         }
       }, 42);
     }, 700);
 
     return () => {
-      clearTimeout(startTimer);
+      window.clearTimeout(startTimer);
+      if (intervalId) {
+        window.clearInterval(intervalId);
+      }
     };
   }, [text]);
 
@@ -153,7 +158,7 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
     <span className={className}>
       {displayed}
       <motion.span
-        className="ml-1 inline-block h-5 w-0.5 align-middle bg-foreground/45"
+        className="ml-1 inline-block h-5 w-0.5 align-middle bg-white/45"
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.6, repeat: Infinity }}
       />
@@ -163,7 +168,7 @@ const TypingText = ({ text, className }: { text: string; className?: string }) =
 
 const PopEmoji = ({ emoji, delay }: { emoji: string; delay: number }) => (
   <motion.div
-    className="flex h-12 w-12 items-center justify-center rounded-2xl border-[4px] border-border/10 bg-card text-2xl"
+    className="flex h-12 w-12 items-center justify-center rounded-2xl border-[4px] border-white/10 bg-white/5 text-2xl"
     initial={{ opacity: 0, scale: 0.4, y: 18 }}
     animate={{ opacity: 1, scale: [0.4, 1.15, 1], y: 0 }}
     transition={{ duration: 0.45, delay, ease: "backOut" }}
@@ -178,7 +183,7 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) =
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="max-w-[11ch] text-5xl font-[900] lowercase tracking-tighter text-foreground"
+      className="max-w-[11ch] text-5xl font-[900] lowercase tracking-tighter text-white"
     >
       {title}
     </motion.h2>
@@ -187,7 +192,7 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) =
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
-        className="max-w-xs text-lg font-extrabold lowercase text-foreground/45"
+        className="max-w-xs text-lg font-extrabold lowercase text-white/42"
       >
         {subtitle}
       </motion.p>
@@ -195,20 +200,24 @@ const TitleBlock = ({ title, subtitle }: { title: string; subtitle?: string }) =
   </div>
 );
 
-const PhotoCard = ({ delay, rotation }: { delay: number; rotation: number }) => (
-  <motion.div
-    className="h-28 w-20 rounded-[20px] border-[4px] border-border/10 bg-card shadow-soft"
-    style={{ background: "linear-gradient(180deg, hsl(var(--foreground) / 0.07), hsl(var(--foreground) / 0.02))" }}
-    initial={{ opacity: 0, y: 30, rotate: rotation, scale: 0.9 }}
-    animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale: 1 }}
-    transition={{
-      opacity: { duration: 0.45, delay },
-      y: { duration: 0.45, delay, ease: "backOut" },
-      scale: { duration: 0.45, delay, ease: "backOut" },
-      rotate: { duration: 4.2, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" },
-    }}
-  />
+const PhotoCard = forwardRef<HTMLDivElement, { delay: number; rotation: number }>(
+  ({ delay, rotation }, ref) => (
+    <motion.div
+      ref={ref}
+      className="h-28 w-20 rounded-[20px] border-[4px] border-white/10 bg-white/5 shadow-soft"
+      style={{ background: "linear-gradient(180deg, hsl(0 0% 100% / 0.10), hsl(0 0% 100% / 0.03))" }}
+      initial={{ opacity: 0, y: 30, rotate: rotation, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, rotate: [rotation, rotation + 2, rotation - 1, rotation], scale: 1 }}
+      transition={{
+        opacity: { duration: 0.45, delay },
+        y: { duration: 0.45, delay, ease: "backOut" },
+        scale: { duration: 0.45, delay, ease: "backOut" },
+        rotate: { duration: 4.2, delay: delay + 0.4, repeat: Infinity, ease: "easeInOut" },
+      }}
+    />
+  ),
 );
+PhotoCard.displayName = "PhotoCard";
 
 const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
   const steps: Record<number, React.ReactNode> = {
@@ -249,7 +258,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
           ].map((item, index) => (
             <motion.div
               key={item}
-              className="rounded-2xl bg-foreground/[0.04] px-5 py-3 text-base font-extrabold lowercase text-foreground/55"
+              className="rounded-2xl bg-white/5 px-5 py-3 text-base font-extrabold lowercase text-white/60"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.7 + index * 0.1, ease: "easeOut" }}
@@ -302,10 +311,10 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.45, ease: "easeOut" }}
-          className="w-full rounded-[24px] border-[4px] border-border/10 bg-card px-5 py-4"
+          className="w-full rounded-[24px] border-[4px] border-white/10 bg-white/5 px-5 py-4"
         >
-          <div className="mb-3 text-xs font-extrabold lowercase text-foreground/25">example prompt</div>
-          <TypingText text="golden hour portrait, soft dress, cafe mood" className="text-base font-extrabold lowercase text-foreground/55" />
+          <div className="mb-3 text-xs font-extrabold lowercase text-white/25">example prompt</div>
+          <TypingText text="golden hour portrait, soft dress, cafe mood" className="text-base font-extrabold lowercase text-white/58" />
         </motion.div>
       </div>
     ),
@@ -335,10 +344,24 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
   }, [step]);
 
   useEffect(() => {
-    if (open) {
-      setStep(0);
-      setBurst(false);
+    if (!open) {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      return;
     }
+
+    setStep(0);
+    setBurst(false);
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
   }, [open]);
 
   useEffect(() => {
@@ -357,7 +380,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -393,7 +416,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                     event.stopPropagation();
                     handleLetsGo();
                   }}
-                  className="relative h-14 w-full overflow-hidden rounded-2xl bg-foreground text-sm font-[900] lowercase tracking-tight text-background"
+                  className="relative h-14 w-full overflow-hidden rounded-2xl bg-white text-sm font-[900] lowercase tracking-tight text-black"
                   whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -401,26 +424,26 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                 >
                   <motion.div
                     className="absolute inset-0 rounded-2xl"
-                    animate={{ boxShadow: ["0 0 0 0 hsl(var(--foreground) / 0.08)", "0 0 0 12px hsl(var(--foreground) / 0)", "0 0 0 0 hsl(var(--foreground) / 0)"] }}
+                    animate={{ boxShadow: ["0 0 0 0 hsl(39 63% 55% / 0.28)", "0 0 0 12px hsl(39 63% 55% / 0)", "0 0 0 0 hsl(39 63% 55% / 0)"] }}
                     transition={{ duration: 1.8, repeat: Infinity }}
                   />
                   <span className="relative z-10">let’s go</span>
                 </motion.button>
               ) : (
                 <motion.div
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black"
                   initial={{ opacity: 0, scale: 0.92 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
                   aria-hidden
                 >
-                  <ArrowRight size={22} strokeWidth={2.5} className="text-background" />
+                  <ArrowRight size={22} strokeWidth={2.5} className="text-white" />
                 </motion.div>
               )}
 
               {step < TOTAL_STEPS - 1 ? (
                 <motion.p
-                  className="text-xs font-extrabold lowercase text-foreground/22"
+                  className="text-xs font-extrabold lowercase text-white/22"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3, delay: 0.45 }}
