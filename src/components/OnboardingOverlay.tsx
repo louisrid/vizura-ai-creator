@@ -446,8 +446,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Scene content area — fixed height, vertically centered */}
-          <div className="flex-1 flex items-center justify-center px-4 overflow-hidden">
+          {/* Scene content area — vertically centered between top and controls */}
+          <div className="flex-1 flex items-end justify-center px-4 overflow-hidden" style={{ paddingBottom: "4vh" }}>
             <div className="w-full max-w-sm" style={{ minHeight: 320, maxHeight: 420 }}>
               <AnimatePresence mode="wait">
                 <motion.div
