@@ -14,46 +14,46 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-/* vivid candy palette */
-const pink = "hsl(330 85% 65%)";
-const coral = "hsl(12 90% 65%)";
-const sky = "hsl(200 90% 62%)";
-const mint = "hsl(165 70% 55%)";
-const lilac = "hsl(270 70% 72%)";
-const peach = "hsl(25 95% 70%)";
-const lemon = "hsl(50 90% 65%)";
+/* vivid saturated candy palette */
+const pink = "hsl(330 92% 62%)";
+const coral = "hsl(12 95% 62%)";
+const sky = "hsl(200 95% 58%)";
+const mint = "hsl(165 80% 50%)";
+const lilac = "hsl(270 80% 68%)";
+const peach = "hsl(25 100% 66%)";
+const lemon = "hsl(50 95% 60%)";
 
-/* ── bouncy filled ball ── */
+/* ── bouncy filled ball — always perfectly round, never jagged ── */
 const Ball = ({ x, y, size, delay = 0, color = sky }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color }}
-    initial={{ opacity: 0, scale: 0, y: 20 }}
-    animate={{ opacity: 0.85, scale: [0, 1.3, 0.9, 1.05, 1], y: 0 }}
-    transition={{ duration: 0.5, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+    className="pointer-events-none absolute overflow-hidden rounded-full"
+    style={{ left: x, top: y, width: size, height: size, background: color, borderRadius: "50%" }}
+    initial={{ opacity: 0, scale: 0, y: 16 }}
+    animate={{ opacity: 0.9, scale: [0, 1.2, 0.92, 1.04, 1], y: 0 }}
+    transition={{ duration: 0.45, delay: delay + 0.4, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
       className="h-full w-full rounded-full"
-      style={{ background: "inherit" }}
-      animate={{ scale: [1, 1.12, 0.92, 1.06, 1], y: [0, -4, 2, -2, 0] }}
-      transition={{ duration: 2.2, delay: delay + 1.2, repeat: Infinity, ease: "easeInOut" }}
+      style={{ background: "inherit", borderRadius: "50%" }}
+      animate={{ scale: [1, 1.08, 0.94, 1.03, 1] }}
+      transition={{ duration: 2.4, delay: delay + 1.2, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
 );
 
-/* ── bouncy ring ── */
+/* ── bouncy ring — always perfectly round ── */
 const BouncyRing = ({ x, y, size, delay = 0, color = pink }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}` }}
+    className="pointer-events-none absolute overflow-hidden rounded-full"
+    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}`, borderRadius: "50%" }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 0.7, scale: [0, 1.2, 0.85, 1.05, 1] }}
-    transition={{ duration: 0.5, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+    animate={{ opacity: 0.75, scale: [0, 1.15, 0.9, 1.03, 1] }}
+    transition={{ duration: 0.45, delay: delay + 0.5, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
       className="h-full w-full rounded-full"
-      style={{ border: "inherit", borderColor: "inherit" }}
-      animate={{ scale: [1, 1.08, 0.94, 1], rotate: [0, 8, -6, 0] }}
+      style={{ borderRadius: "50%" }}
+      animate={{ scale: [1, 1.06, 0.95, 1] }}
       transition={{ duration: 2.8, delay: delay + 1.4, repeat: Infinity, ease: "easeInOut" }}
     />
   </motion.div>
@@ -235,12 +235,12 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     0: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Ball x="2%" y="2%" size={36} color={sky} delay={0} />
-          <Ball x="80%" y="65%" size={24} color={pink} delay={0.1} />
-          <Ball x="85%" y="5%" size={18} color={lemon} delay={0.2} />
-          <BouncyRing x="70%" y="2%" size={32} color={lilac} delay={0.15} />
-          <Ball x="5%" y="68%" size={14} color={coral} delay={0.25} />
-          <Ball x="88%" y="38%" size={10} color={mint} delay={0.3} />
+          <Ball x="-2%" y="-2%" size={28} color={sky} delay={0} />
+          <Ball x="86%" y="78%" size={20} color={pink} delay={0.1} />
+          <Ball x="88%" y="0%" size={14} color={lemon} delay={0.2} />
+          <BouncyRing x="78%" y="-4%" size={24} color={lilac} delay={0.15} />
+          <Ball x="0%" y="80%" size={10} color={coral} delay={0.25} />
+          <Ball x="92%" y="42%" size={8} color={mint} delay={0.3} />
         </div>
         <CenterEmoji emoji="👋" size="text-[5.5rem]" delay={0.1} />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
@@ -250,11 +250,11 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     1: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Ball x="3%" y="3%" size={32} color={lilac} delay={0} />
-          <Ball x="82%" y="60%" size={22} color={sky} delay={0.1} />
-          <BouncyRing x="80%" y="3%" size={28} color={coral} delay={0.12} />
-          <Ball x="5%" y="62%" size={16} color={peach} delay={0.2} />
-          <Ball x="88%" y="35%" size={12} color={mint} delay={0.25} />
+          <Ball x="-1%" y="-1%" size={26} color={lilac} delay={0} />
+          <Ball x="88%" y="76%" size={18} color={sky} delay={0.1} />
+          <BouncyRing x="84%" y="-2%" size={22} color={coral} delay={0.12} />
+          <Ball x="0%" y="78%" size={12} color={peach} delay={0.2} />
+          <Ball x="92%" y="40%" size={8} color={mint} delay={0.25} />
         </div>
         <motion.div
           className="relative flex items-center justify-center overflow-hidden rounded-[28px] border-[4px]"
@@ -279,11 +279,11 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     2: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Ball x="80%" y="2%" size={30} color={coral} delay={0} />
-          <Ball x="2%" y="60%" size={24} color={sky} delay={0.08} />
-          <BouncyRing x="84%" y="55%" size={26} color={mint} delay={0.15} />
-          <Ball x="5%" y="5%" size={16} color={lemon} delay={0.12} />
-          <Ball x="90%" y="35%" size={12} color={lilac} delay={0.2} />
+          <Ball x="86%" y="-2%" size={24} color={coral} delay={0} />
+          <Ball x="-2%" y="76%" size={20} color={sky} delay={0.08} />
+          <BouncyRing x="88%" y="72%" size={20} color={mint} delay={0.15} />
+          <Ball x="0%" y="-2%" size={14} color={lemon} delay={0.12} />
+          <Ball x="92%" y="38%" size={8} color={lilac} delay={0.2} />
         </div>
         <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.05} size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
@@ -307,11 +307,11 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     3: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Ball x="3%" y="3%" size={34} color={peach} delay={0} />
-          <Ball x="82%" y="62%" size={20} color={sky} delay={0.1} />
-          <BouncyRing x="80%" y="4%" size={30} color={pink} delay={0.08} />
-          <Ball x="6%" y="64%" size={14} color={mint} delay={0.18} />
-          <Ball x="88%" y="30%" size={10} color={lemon} delay={0.22} />
+          <Ball x="-1%" y="-1%" size={28} color={peach} delay={0} />
+          <Ball x="88%" y="78%" size={16} color={sky} delay={0.1} />
+          <BouncyRing x="84%" y="-2%" size={24} color={pink} delay={0.08} />
+          <Ball x="0%" y="80%" size={10} color={mint} delay={0.18} />
+          <Ball x="92%" y="34%" size={8} color={lemon} delay={0.22} />
         </div>
         <motion.div
           className="text-[5.5rem]"
@@ -330,11 +330,11 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     4: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Ball x="3%" y="3%" size={30} color={sky} delay={0} />
-          <Ball x="84%" y="60%" size={22} color={coral} delay={0.1} />
-          <BouncyRing x="82%" y="3%" size={28} color={lilac} delay={0.08} />
-          <Ball x="5%" y="62%" size={14} color={lemon} delay={0.18} />
-          <Ball x="90%" y="32%" size={10} color={pink} delay={0.22} />
+          <Ball x="-1%" y="-1%" size={24} color={sky} delay={0} />
+          <Ball x="88%" y="76%" size={18} color={coral} delay={0.1} />
+          <BouncyRing x="86%" y="-2%" size={22} color={lilac} delay={0.08} />
+          <Ball x="0%" y="78%" size={10} color={lemon} delay={0.18} />
+          <Ball x="92%" y="36%" size={8} color={pink} delay={0.22} />
         </div>
         <CenterEmoji emoji="📸" size="text-[5rem]" delay={0.05} />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
@@ -349,11 +349,11 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     5: (
       <div className={sceneClass}>
         <div className={shapesClass}>
-          <Ball x="78%" y="2%" size={32} color={mint} delay={0} />
-          <Ball x="2%" y="58%" size={22} color={pink} delay={0.08} />
-          <BouncyRing x="3%" y="3%" size={28} color={sky} delay={0.1} />
-          <Ball x="88%" y="55%" size={14} color={peach} delay={0.18} />
-          <Ball x="5%" y="30%" size={10} color={lilac} delay={0.22} />
+          <Ball x="84%" y="-2%" size={26} color={mint} delay={0} />
+          <Ball x="-2%" y="74%" size={18} color={pink} delay={0.08} />
+          <BouncyRing x="-1%" y="-2%" size={22} color={sky} delay={0.1} />
+          <Ball x="92%" y="70%" size={12} color={peach} delay={0.18} />
+          <Ball x="0%" y="36%" size={8} color={lilac} delay={0.22} />
         </div>
         <CenterEmoji emoji="✍️" size="text-[5rem]" delay={0.05} />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
@@ -374,13 +374,13 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
       <div className={sceneClass}>
         <div className={shapesClass}>
           <ParticleBurst active={burst} />
-          <Ball x="3%" y="3%" size={36} color={coral} delay={0} />
-          <Ball x="80%" y="58%" size={26} color={sky} delay={0.08} />
-          <Ball x="84%" y="3%" size={20} color={lemon} delay={0.12} />
-          <BouncyRing x="78%" y="30%" size={30} color={pink} delay={0.1} />
-          <BouncyRing x="2%" y="55%" size={24} color={mint} delay={0.18} />
-          <Ball x="8%" y="32%" size={12} color={lilac} delay={0.22} />
-          <Ball x="90%" y="60%" size={10} color={peach} delay={0.26} />
+          <Ball x="-1%" y="-1%" size={30} color={coral} delay={0} />
+          <Ball x="86%" y="74%" size={22} color={sky} delay={0.08} />
+          <Ball x="88%" y="-2%" size={16} color={lemon} delay={0.12} />
+          <BouncyRing x="84%" y="36%" size={22} color={pink} delay={0.1} />
+          <BouncyRing x="-2%" y="70%" size={18} color={mint} delay={0.18} />
+          <Ball x="0%" y="36%" size={10} color={lilac} delay={0.22} />
+          <Ball x="92%" y="72%" size={8} color={peach} delay={0.26} />
         </div>
         <CenterEmoji emoji="🚀" size="text-[5.5rem]" delay={0.1} />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
