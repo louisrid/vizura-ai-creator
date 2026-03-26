@@ -183,22 +183,21 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         </motion.h2>
         <motion.div variants={fadeUp} className="w-full flex flex-col gap-2.5 mt-1">
           {[
-            { label: "ethnicity", desc: "pick where she's from", color: "#d4a843" },
-            { label: "age", desc: "18 to 40", color: "#7c9cf5" },
-            { label: "hair", desc: "blonde, brunette, red…", color: "#e87c7c" },
-            { label: "eyes", desc: "brown, blue, green…", color: "#6bcf9a" },
-            { label: "body", desc: "slim, regular, curvy", color: "#c49cf5" },
+            { label: "ethnicity", desc: "pick where she's from" },
+            { label: "age", desc: "18 to 40" },
+            { label: "hair", desc: "blonde, brunette, red…" },
+            { label: "eyes", desc: "brown, blue, green…" },
+            { label: "body", desc: "slim, regular, curvy" },
           ].map((item, i) => (
             <motion.div
               key={item.label}
-              className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-2.5"
+              className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-2.5"
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 0.7 + i * 0.12, ease: "easeOut" as const }}
             >
-              <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
-              <span className="text-xs font-[900] lowercase text-white w-14">{item.label}</span>
-              <span className="text-xs font-bold lowercase text-white/35">{item.desc}</span>
+              <span className="text-xs font-[900] lowercase text-white/70 w-14">{item.label}</span>
+              <span className="text-xs font-bold lowercase text-white/30">{item.desc}</span>
             </motion.div>
           ))}
         </motion.div>
