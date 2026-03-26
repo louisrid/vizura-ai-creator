@@ -439,7 +439,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end pb-[8vh]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
