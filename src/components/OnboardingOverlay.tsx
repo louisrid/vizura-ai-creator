@@ -176,29 +176,18 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
   const scenes: Record<number, React.ReactNode> = {
     0: (
       <div className={sceneClass}>
-        <Splodge x="4%" y="8%" w={80} color={blue1} />
-        <Splodge x="72%" y="52%" w={60} delay={0.15} color={pink} />
-        <Ring x="76%" y="12%" size={44} delay={0.1} color={orange} />
-        <Dot x="20%" y="58%" size={12} delay={0.2} color={yellow} />
         <CenterEmoji emoji="👋" size="text-[5rem]" delay={0.1} y="18%" />
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
     1: (
       <div className={sceneClass}>
-        <Splodge x="8%" y="10%" w={70} color={orange} />
-        <Ring x="74%" y="8%" size={40} delay={0.1} color={blue1} />
-        <Dot x="80%" y="52%" size={10} delay={0.2} color={green} />
-        <Dot x="16%" y="54%" size={14} delay={0.25} color={pink} />
         <CenterEmoji emoji="🫶" size="text-[5.5rem]" delay={0.1} y="16%" />
         <TitleBlock title="make any character" subtitle="start with a vibe, a face, a mood, or a whole fantasy and build from there" />
       </div>
     ),
     2: (
       <div className={sceneClass}>
-        <Splodge x="68%" y="6%" w={65} color={green} />
-        <Ring x="10%" y="14%" size={36} delay={0.1} color={pink} />
-        <Dot x="82%" y="50%" size={10} delay={0.15} color={yellow} />
         <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} y="14%" size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
         <div className="flex flex-col gap-2 text-center">
@@ -219,14 +208,10 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     ),
     3: (
       <div className={sceneClass}>
-        <Splodge x="6%" y="10%" w={70} color={yellow} />
-        <Ring x="78%" y="14%" size={42} delay={0.1} color={blue2} />
-        <Dot x="14%" y="52%" size={12} delay={0.2} color={red} />
         <motion.div
           className="text-[5.5rem]"
-          style={{ opacity: 0.7 }}
           initial={{ opacity: 0, scale: 0.3, y: 16, rotate: -30 }}
-          animate={{ opacity: 0.7, scale: 1, y: 0, rotate: 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
           transition={{ duration: 0.5, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "linear" }}>
@@ -238,9 +223,6 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     ),
     4: (
       <div className={sceneClass}>
-        <Splodge x="76%" y="8%" w={55} color={blue1} />
-        <Ring x="8%" y="12%" size={38} delay={0.1} color={orange} />
-        <Dot x="84%" y="50%" size={10} delay={0.2} color={green} />
         <CenterEmoji emoji="📸" size="text-[4.5rem]" delay={0.1} y="14%" />
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-3">
@@ -266,9 +248,6 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     ),
     5: (
       <div className={sceneClass}>
-        <Splodge x="70%" y="8%" w={60} color={green} />
-        <Dot x="12%" y="14%" size={14} delay={0.1} color={pink} />
-        <Ring x="82%" y="48%" size={34} delay={0.15} color={yellow} />
         <CenterEmoji emoji="✍️" size="text-[4.5rem]" delay={0.1} y="14%" />
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
         <motion.div
@@ -286,10 +265,6 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     6: (
       <div className={sceneClass}>
         <ParticleBurst active={burst} />
-        <Splodge x="6%" y="10%" w={75} color={blue1} />
-        <Splodge x="72%" y="48%" w={55} delay={0.15} color={pink} />
-        <Ring x="80%" y="12%" size={40} delay={0.1} color={yellow} />
-        <Dot x="18%" y="52%" size={14} delay={0.2} color={green} />
         <CenterEmoji emoji="🚀" size="text-[5rem]" delay={0.1} y="16%" />
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
