@@ -39,6 +39,7 @@ const CharacterCreator = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(!user);
 
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
@@ -87,6 +88,7 @@ const CharacterCreator = () => {
   return (
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
+      <OnboardingOverlay open={showOnboarding && !user} onDismiss={() => setShowOnboarding(false)} />
 
       {/* Hero nature image — square with crown/shield bottom */}
       <div className="mx-auto w-full max-w-lg px-4 mt-6">
