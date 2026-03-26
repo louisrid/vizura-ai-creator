@@ -284,7 +284,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <motion.h2 variants={fadeUp} className="text-2xl font-[900] lowercase tracking-tighter text-white text-center">
           describe what you want in the prompt
         </motion.h2>
-        <motion.div variants={fadeUp} className="w-full rounded-2xl border-[4px] border-foreground/20 bg-white/10 px-4 py-3 min-h-[80px]">
+        <motion.div variants={fadeUp} className="w-full rounded-2xl border-[4px] border-white/20 bg-white/10 px-4 py-3 min-h-[80px]">
           <TypingText
             text="sitting in a cafe, golden hour lighting, wearing a white summer dress"
             className="text-sm font-extrabold lowercase text-white/70"
