@@ -9,12 +9,12 @@ const TOTAL_STEPS = 8;
 /* ── palette ── */
 const dotColors = [
   "hsl(270 90% 62%)", // purple
-  "hsl(200 100% 55%)", // blue
+  "hsl(210 100% 65%)", // light blue
   "hsl(330 95% 58%)", // pink
-  "hsl(165 90% 45%)", // green
+  "hsl(145 80% 45%)", // green
   "hsl(240 85% 65%)", // indigo
   "hsl(285 80% 60%)", // violet
-  "hsl(195 95% 50%)", // cyan
+  "hsl(350 90% 58%)", // rose
 ];
 
 const amber = "#d4a843";
@@ -471,7 +471,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
         >
           {/* content */}
           <motion.div
-            className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center"
+            className="relative z-10 mx-4 flex w-full max-w-sm flex-col items-center pt-8"
             initial={{ y: 10, opacity: 0.95 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
