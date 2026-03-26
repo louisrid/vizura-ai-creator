@@ -225,6 +225,42 @@ const Scene0 = () => (
   </div>
 );
 
+/* ── slot machine reel for traits ── */
+const traitSlots = [
+  ["👩‍🦰", "👩‍🦱", "👩‍🦳", "👩"],       // hair
+  ["🏻", "🏼", "🏽", "🏾", "🏿"],          // skin tone (modifiers shown as blocks)
+  ["👗", "👔", "🧥", "👙"],              // style
+];
+const slotLabels = ["hair", "skin", "style"];
+
+const SlotReel = ({ items, delay, speed = 2.8 }: { items: string[]; delay: number; speed?: number }) => {
+  const looped = [...items, ...items, ...items]; // triple for seamless loop
+  const itemH = 48;
+  const totalH = items.length * itemH;
+
+  return (
+    <motion.div
+      className="relative overflow-hidden"
+      style={{ width: 52, height: itemH }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3, delay }}
+    >
+      <motion.div
+        className="flex flex-col items-center"
+        animate={{ y: [0, -totalH] }}
+        transition={{ duration: speed, delay: delay + 0.4, repeat: Infinity, ease: "linear" }}
+      >
+        {looped.map((item, i) => (
+          <div key={i} className="flex items-center justify-center" style={{ height: itemH, width: 52 }}>
+            <span className="text-3xl">{item}</span>
+          </div>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Scene1 = () => (
   <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={96}>
@@ -233,27 +269,19 @@ const Scene1 = () => (
     <BigTitle delay={0.2}>you create a character</BigTitle>
     <Subtitle delay={0.35}>pick a look, a name, a nationality — make anyone you can imagine</Subtitle>
     <motion.div
-      className="flex gap-3 pt-1"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5 }}
+      className="mt-2 flex items-center gap-1 rounded-2xl border-[4px] px-3 py-2"
+      style={{ borderColor: "hsl(0 0% 100% / 0.12)", background: "hsl(0 0% 100% / 0.04)" }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.45 }}
     >
-      {["🫶", "✨", "🎨"].map((e, i) => (
-        <motion.span
-          key={i}
-          className="text-4xl"
-          initial={{ opacity: 0, y: 16, scale: 0 }}
-          animate={{ opacity: 1, y: 0, scale: [0, 1.3, 0.9, 1] }}
-          transition={{ duration: 0.35, delay: 0.55 + i * 0.1, ease: [0.2, 0.9, 0.2, 1] }}
-        >
-          <motion.span
-            className="inline-block"
-            animate={{ y: [0, -5, 0], rotate: [0, 6, -4, 0] }}
-            transition={{ duration: 2.2, delay: 1.2 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {e}
-          </motion.span>
-        </motion.span>
+      {traitSlots.map((items, i) => (
+        <div key={i} className="flex flex-col items-center gap-1">
+          <SlotReel items={items} delay={0.5 + i * 0.15} speed={2.2 + i * 0.6} />
+          <span className="text-[9px] font-extrabold uppercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.3)" }}>
+            {slotLabels[i]}
+          </span>
+        </div>
       ))}
     </motion.div>
   </div>
