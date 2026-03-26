@@ -398,6 +398,20 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     if (step < TOTAL_STEPS - 1) setStep((s) => s + 1);
   }, [step]);
 
+  // lock scroll when overlay is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+      const root = document.getElementById("root");
+      if (root) root.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      const root = document.getElementById("root");
+      if (root) root.style.overflow = "";
+    };
+  }, [open]);
+
   // reset on open
   useEffect(() => {
     if (open) { setStep(0); setBurst(false); }
@@ -419,7 +433,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center touch-manipulation select-none"
+          className="fixed inset-0 z-[100] flex items-center justify-center touch-manipulation select-none overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -433,11 +447,11 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
               src={heroImage}
               alt=""
               className="w-full h-full object-cover"
-              style={{ opacity: 0.06, filter: "blur(4px) saturate(0.3)" }}
+              style={{ opacity: 0.9, filter: "blur(6px) saturate(0.4) brightness(0.3)" }}
             />
           </div>
           {/* dark overlay on top */}
-          <div className="absolute inset-0 bg-black/92" />
+          <div className="absolute inset-0 bg-black/80" />
 
           {/* content */}
           <motion.div
