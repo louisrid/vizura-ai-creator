@@ -45,7 +45,7 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="bg-card border-[5px] border-border rounded-2xl shadow-medium p-6 max-w-sm w-full text-center"
+            className="bg-card border-[3px] border-border rounded-2xl shadow-medium p-6 max-w-sm w-full text-center"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-xs font-extrabold lowercase mb-1">$7/mo</p>
