@@ -54,13 +54,12 @@ const Dot = ({ x, y, size, delay = 0, color = whi1 }: { x: string; y: string; si
   />
 );
 
-/* ── single centered emoji (no glow, no gradient) ── */
-const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
+/* ── single centered emoji (flow-based, not absolute) ── */
+const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0 }: { emoji: string; size?: string; delay?: number }) => (
   <motion.div
-    className="pointer-events-none absolute left-1/2 select-none"
-    style={{ top: y, transform: "translateX(-50%)" }}
-    initial={{ opacity: 0, scale: 0.3, y: 30, filter: "blur(8px)" }}
-    animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
+    className="pointer-events-none select-none"
+    initial={{ opacity: 0, scale: 0.3, filter: "blur(8px)" }}
+    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
     transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
@@ -73,13 +72,13 @@ const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { 
   </motion.div>
 );
 
-/* ── row of emojis centered together ── */
-const EmojiRow = ({ emojis, delay = 0, y = "32%", size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; y?: string; size?: string; gap?: number }) => (
+/* ── row of emojis (flow-based) ── */
+const EmojiRow = ({ emojis, delay = 0, size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; size?: string; gap?: number }) => (
   <motion.div
-    className="pointer-events-none absolute left-1/2 flex select-none"
-    style={{ top: y, transform: "translateX(-50%)", gap }}
+    className="pointer-events-none flex select-none"
+    style={{ gap }}
     initial={{ opacity: 0 }}
-    animate={{ opacity: 1, x: "-50%" }}
+    animate={{ opacity: 1 }}
     transition={{ duration: 0.6, delay: delay + 1 }}
   >
     {emojis.map((emoji, i) => (
