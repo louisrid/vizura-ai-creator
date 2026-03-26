@@ -325,44 +325,6 @@ const Scene3 = () => (
   </div>
 );
 
-/* ── mock character card for "saved to account" scene ── */
-const MockCharCard = ({ delay }: { delay: number }) => (
-  <motion.div
-    className="flex flex-col items-center"
-    initial={{ opacity: 0, y: 24, scale: 0.9 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ duration: 0.4, delay, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="relative w-[120px] rounded-2xl border-[4px] overflow-hidden"
-      style={{ borderColor: "hsl(0 0% 100% / 0.15)", background: "hsl(0 0% 100% / 0.06)", aspectRatio: "3/4" }}
-      animate={{ y: [0, -3, 0] }}
-      transition={{ duration: 3, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
-    >
-      {/* flag */}
-      <span className="absolute bottom-2 left-2 text-2xl">🇺🇸</span>
-      {/* silhouette placeholder */}
-      <div className="flex h-full w-full items-center justify-center">
-        <svg width="60" height="72" viewBox="0 0 80 96" fill="none">
-          <ellipse cx="40" cy="32" rx="34" ry="36" fill="hsl(0 0% 100% / 0.12)" />
-          <ellipse cx="40" cy="36" rx="26" ry="30" fill="hsl(0 0% 100% / 0.18)" />
-          <path d="M12 28 Q18 4 40 2 Q62 4 68 28 Q60 12 40 10 Q20 12 12 28Z" fill="hsl(0 0% 100% / 0.12)" />
-          <path d="M30 72 Q26 74 24 86 L56 86 Q54 74 50 72 Q46 70 40 70 Q34 70 30 72Z" fill="hsl(0 0% 100% / 0.15)" />
-          <rect x="36" y="66" width="8" height="6" rx="2" fill="hsl(0 0% 100% / 0.18)" />
-        </svg>
-      </div>
-    </motion.div>
-    <motion.span
-      className="mt-2 text-xs font-[900] lowercase tracking-tight"
-      style={{ color: "hsl(0 0% 100% / 0.9)" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: delay + 0.2 }}
-    >
-      sarah, 24
-    </motion.span>
-  </motion.div>
-);
 
 const Scene4 = () => (
   <div className="flex flex-col items-center gap-3">
