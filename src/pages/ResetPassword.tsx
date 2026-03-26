@@ -48,22 +48,22 @@ const ResetPassword = () => {
         <PageTitle>reset password</PageTitle>
 
         {success ? (
-          <div className="border-[3px] border-border rounded-2xl p-6 text-center">
+          <div className="border-[1.5px] border-border rounded-2xl p-6 text-center">
             <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
             <p className="text-[10px] font-bold lowercase text-foreground">redirecting…</p>
           </div>
         ) : !isRecovery ? (
-          <div className="border-[3px] border-border rounded-2xl p-6 text-center">
+          <div className="border-[1.5px] border-border rounded-2xl p-6 text-center">
             <p className="text-xs font-extrabold lowercase mb-3">invalid link</p>
             <button onClick={() => navigate("/auth")} className="font-extrabold lowercase text-foreground underline text-[10px]">
               back to log in
             </button>
           </div>
         ) : (
-          <div className="border-[3px] border-border rounded-2xl p-4">
+          <div className="border-[1.5px] border-border rounded-2xl p-4">
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="border-[3px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-2xl text-xs">
+                <div className="border-[1.5px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-2xl text-xs">
                   {error}
                 </div>
               )}
@@ -78,7 +78,7 @@ const ResetPassword = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-[3px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
+                    className="w-full border-[1.5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                     placeholder="••••••••"
                   />
                 </div>
@@ -94,7 +94,7 @@ const ResetPassword = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-[3px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
+                    className="w-full border-[1.5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                     placeholder="••••••••"
                   />
                 </div>

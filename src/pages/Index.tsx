@@ -91,7 +91,7 @@ const Index = () => {
           </div>
           <PageTitle>create photo</PageTitle>
 
-          <div className="relative mb-10 overflow-hidden rounded-2xl border-[3px] border-border bg-card aspect-[4/5]">
+          <div className="relative mb-10 overflow-hidden rounded-2xl border-[1.5px] border-border bg-card aspect-[4/5]">
             {primaryImage ? (
               <>
                 <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />
@@ -125,7 +125,7 @@ const Index = () => {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="woman in golden hour light, rooftop…"
-                className="w-full border-[3px] border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
+                className="w-full border-[1.5px] border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
               />
             </div>
 
@@ -138,7 +138,7 @@ const Index = () => {
                     <button
                       key={style.label}
                       onClick={() => setActiveStyle(i)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl font-extrabold lowercase text-sm border-[3px] transition-all ${
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl font-extrabold lowercase text-sm border-[1.5px] transition-all ${
                         activeStyle === i
                           ? "border-foreground bg-foreground text-background"
                           : "border-border text-foreground hover:border-foreground/60"
@@ -154,7 +154,7 @@ const Index = () => {
           </div>
 
           {error && (
-            <div className="border-[3px] border-destructive/30 bg-destructive/5 p-4 text-destructive font-extrabold lowercase text-sm rounded-2xl mt-10">
+            <div className="border-[1.5px] border-destructive/30 bg-destructive/5 p-4 text-destructive font-extrabold lowercase text-sm rounded-2xl mt-10">
               {error}
             </div>
           )}
