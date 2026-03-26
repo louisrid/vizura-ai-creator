@@ -138,7 +138,7 @@ const TypingLine = ({ text }: { text: string }) => {
 };
 
 const ParticleBurst = ({ active }: { active: boolean }) => {
-  const colors = [blue1, blue2, pink, orange, yellow, green, red];
+  const colors = [blue1, blue2, pink, orange, green, "hsl(45 85% 68%)", "hsl(0 70% 68%)"];
   const particles = useMemo(
     () => Array.from({ length: 24 }).map((_, index) => ({
       angle: (index / 24) * Math.PI * 2,
