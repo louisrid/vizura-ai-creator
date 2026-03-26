@@ -40,7 +40,7 @@
     --accent-purple-dark: 230 85% 50%;
     --accent-purple-light: 210 100% 65%;
 
-    --sidebar-background: 0 0% 5%;
+    --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
     --sidebar-primary-foreground: 0 0% 5%;
@@ -50,9 +50,9 @@
     --sidebar-ring: 0 0% 98%;
 
     /* custom tokens */
-    --nav: 0 0% 5%;
+    --nav: 0 0% 4%;
     --nav-foreground: 0 0% 98%;
-    --surface-dark: 0 0% 6%;
+    --surface-dark: 0 0% 4%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
     --glow: 220 90% 55%;
