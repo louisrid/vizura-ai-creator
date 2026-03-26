@@ -108,7 +108,7 @@ const Storage = () => {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`flex-1 py-3.5 rounded-2xl font-extrabold lowercase text-xs border-[3.5px] transition-all ${
+                className={`flex-1 py-3.5 rounded-2xl font-extrabold lowercase text-xs border-[4px] transition-all ${
                   filter === f
                     ? "border-foreground bg-foreground text-background"
                     : "border-border text-foreground hover:border-foreground/60"
@@ -129,7 +129,7 @@ const Storage = () => {
                 transition={{ duration: 0.15 }}
                 className="overflow-hidden mb-6"
               >
-                <div className="flex items-center gap-2 border-[3.5px] border-border rounded-2xl p-3">
+                <div className="flex items-center gap-2 border-[4px] border-border rounded-2xl p-3">
                   <span className="text-[10px] font-extrabold lowercase text-foreground flex-1">
                     {selected.size} selected
                   </span>
@@ -160,7 +160,7 @@ const Storage = () => {
               <Loader2 className="animate-spin text-foreground" size={24} />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="border-[3.5px] border-border rounded-2xl p-6 text-center">
+            <div className="border-[4px] border-border rounded-2xl p-6 text-center">
               <p className="text-xs font-extrabold lowercase mb-3">nothing here yet</p>
               <Button variant="outline" className="h-10" onClick={() => navigate("/")}>
                 start creating
@@ -179,7 +179,7 @@ const Storage = () => {
                     e.preventDefault();
                     toggleSelect(img.id);
                   }}
-                  className={`relative rounded-2xl border-[3.5px] overflow-hidden bg-background transition-all active:scale-[0.98] ${
+                  className={`relative rounded-2xl border-[4px] overflow-hidden bg-background transition-all active:scale-[0.98] ${
                     selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/60"
                   }`}
                 >
@@ -216,7 +216,7 @@ const Storage = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="bg-card border-[3.5px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              className="bg-card border-[4px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
