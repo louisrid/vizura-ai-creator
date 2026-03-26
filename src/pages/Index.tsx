@@ -85,14 +85,21 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      {/* Hero nature image — top 60% of viewport */}
+      {/* Hero nature image with top-down fade to white */}
       <div className="relative w-full" style={{ height: '60vh' }}>
         <img
           src={heroImage}
-          alt="lush green nature collage with butterfly, bird and flowers"
+          alt="lush green nature scene with bunny and ladybugs"
           className="w-full h-full object-cover"
           width={1024}
           height={768}
+        />
+        {/* Gradient overlay: 5% white at top 2/3, ramps to 75% at ~85%, then 100% white at bottom */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, hsla(0,0%,100%,0.05) 0%, hsla(0,0%,100%,0.05) 66%, hsla(0,0%,100%,0.75) 85%, hsla(0,0%,100%,1) 100%)',
+          }}
         />
       </div>
 
