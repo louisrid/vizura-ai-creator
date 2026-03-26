@@ -144,7 +144,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
         <Glow color="#7c9cf5" x="30%" y="20%" />
         <Glow color="#d4a843" x="70%" y="70%" size={100} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#d4a843" delay={0.5}>
+          <IconBlock delay={0.5}>
             <Wand2 size={28} strokeWidth={2.5} className="text-white" />
           </IconBlock>
         </motion.div>
@@ -162,7 +162,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
         <Glow color="#d4a843" x="25%" y="30%" size={90} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#7c9cf5" delay={0.5}>
+          <IconBlock delay={0.5}>
             <Sparkles size={28} strokeWidth={2.5} className="text-white" />
           </IconBlock>
         </motion.div>
@@ -210,7 +210,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
         <Glow color="#7c9cf5" x="60%" y="25%" size={100} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#e87c7c" delay={0.5}>
+          <IconBlock delay={0.5}>
             <RefreshCw size={28} strokeWidth={2.5} className="text-white" />
           </IconBlock>
         </motion.div>
@@ -228,7 +228,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-6 relative">
         <Glow color="#d4a843" x="40%" y="60%" size={90} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#6bcf9a" delay={0.5}>
+          <IconBlock delay={0.5}>
             <Camera size={28} strokeWidth={2.5} className="text-white" />
           </IconBlock>
         </motion.div>
@@ -248,7 +248,7 @@ const StepContent = ({ step, burst }: { step: number; burst: boolean }) => {
       <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col items-center gap-5 relative">
         <Glow color="#c49cf5" x="70%" y="30%" size={80} />
         <motion.div variants={fadeUp}>
-          <IconBlock color="#c49cf5" delay={0.5}>
+          <IconBlock delay={0.5}>
             <Type size={28} strokeWidth={2.5} className="text-white" />
           </IconBlock>
         </motion.div>
