@@ -14,94 +14,52 @@ const panelBorder = "hsl(0 0% 100% / 0.12)";
 const overlay = "hsl(0 0% 0% / 0.985)";
 const amber = "hsl(39 63% 55%)";
 
-/* shape palette: 70% light-blue, 30% white */
-const shapeBlue1 = "hsl(210 60% 65% / 0.1)";
-const shapeBlue2 = "hsl(200 55% 60% / 0.08)";
-const shapeBlue3 = "hsl(215 50% 70% / 0.12)";
-const shapeWhite1 = "hsl(0 0% 100% / 0.08)";
-const shapeWhite2 = "hsl(0 0% 100% / 0.06)";
-const ringBlue = "hsl(210 55% 65% / 0.14)";
-const ringWhite = "hsl(0 0% 100% / 0.1)";
-const dotBlue = "hsl(205 60% 68% / 0.18)";
-const dotWhite = "hsl(0 0% 100% / 0.14)";
+/* shape palette: bright, solid */
+const blue1 = "hsl(210 80% 72%)";
+const blue2 = "hsl(200 75% 68%)";
+const blue3 = "hsl(220 70% 76%)";
+const whi1 = "hsl(0 0% 100%)";
+const whi2 = "hsl(0 0% 92%)";
 
-/* ── abstract shape components ── */
-
-const Splodge = ({ x, y, w, h, delay = 0, rotate = 0, color = "hsl(0 0% 100% / 0.06)" }: { x: string; y: string; w: number; h: number; delay?: number; rotate?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: w, height: h, borderRadius: "42% 58% 62% 38% / 46% 54% 46% 54%", background: color, rotate }}
-    initial={{ opacity: 0, scale: 0.3 }}
-    animate={{ opacity: 1, scale: [0.3, 1.06, 1] }}
-    transition={{ duration: 1.1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full"
-      style={{ borderRadius: "inherit", background: "inherit" }}
-      animate={{ borderRadius: ["42% 58% 62% 38% / 46% 54% 46% 54%", "56% 44% 38% 62% / 52% 48% 52% 48%", "42% 58% 62% 38% / 46% 54% 46% 54%"] }}
-      transition={{ duration: 8, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
-);
-
-const Ring = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.1)", strokeWidth = 4 }: { x: string; y: string; size: number; delay?: number; color?: string; strokeWidth?: number }) => (
+/* ── clean circle ── */
+const Circle = ({ x, y, size, delay = 0, color = blue1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
     className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, border: `${strokeWidth}px solid ${color}` }}
-    initial={{ opacity: 0, scale: 0.2 }}
-    animate={{ opacity: 1, scale: [0.2, 1.08, 1] }}
-    transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full"
-      animate={{ rotate: [0, 360] }}
-      transition={{ duration: 24, delay: delay + 2, repeat: Infinity, ease: "linear" }}
-    />
-  </motion.div>
-);
-
-const Dot = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.14)" }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
-  <motion.div
-    className="pointer-events-none absolute rounded-full"
-    style={{ left: x, top: y, width: size, height: size, background: color }}
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.18 }}
     initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 1, scale: [0, 1.2, 1] }}
+    animate={{ opacity: 0.18, scale: 1 }}
     transition={{ duration: 0.7, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="h-full w-full rounded-full"
-      animate={{ scale: [1, 1.15, 0.92, 1] }}
-      transition={{ duration: 5, delay: delay + 2, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.div>
+  />
 );
 
-const CrossMark = ({ x, y, size, delay = 0, color = "hsl(0 0% 100% / 0.1)" }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
+/* ── ring (no rotation) ── */
+const Ring = ({ x, y, size, delay = 0, color = blue2 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute"
-    style={{ left: x, top: y, width: size, height: size }}
-    initial={{ opacity: 0, scale: 0.3, rotate: -45 }}
-    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-    transition={{ duration: 0.9, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
-  >
-    <motion.div
-      className="relative h-full w-full"
-      animate={{ rotate: [0, 90] }}
-      transition={{ duration: 12, delay: delay + 2, repeat: Infinity, ease: "linear" }}
-    >
-      <div className="absolute left-1/2 top-0 h-full w-[4px] -translate-x-1/2 rounded-full" style={{ background: color }} />
-      <div className="absolute left-0 top-1/2 h-[4px] w-full -translate-y-1/2 rounded-full" style={{ background: color }} />
-    </motion.div>
-  </motion.div>
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, border: `4px solid ${color}`, opacity: 0.22 }}
+    initial={{ opacity: 0, scale: 0.3 }}
+    animate={{ opacity: 0.22, scale: 1 }}
+    transition={{ duration: 0.8, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  />
 );
 
-/* ── single centered emoji (no glow, no gradient) ── */
-const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { emoji: string; size?: string; delay?: number; y?: string }) => (
+/* ── small dot ── */
+const Dot = ({ x, y, size, delay = 0, color = whi1 }: { x: string; y: string; size: number; delay?: number; color?: string }) => (
   <motion.div
-    className="pointer-events-none absolute left-1/2 select-none"
-    style={{ top: y, transform: "translateX(-50%)" }}
-    initial={{ opacity: 0, scale: 0.3, y: 30, filter: "blur(8px)" }}
-    animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", x: "-50%" }}
+    className="pointer-events-none absolute rounded-full"
+    style={{ left: x, top: y, width: size, height: size, background: color, opacity: 0.24 }}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 0.24, scale: 1 }}
+    transition={{ duration: 0.5, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
+  />
+);
+
+/* ── single centered emoji (flow-based, not absolute) ── */
+const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0 }: { emoji: string; size?: string; delay?: number }) => (
+  <motion.div
+    className="pointer-events-none select-none"
+    initial={{ opacity: 0, scale: 0.3, filter: "blur(8px)" }}
+    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
     transition={{ duration: 1, delay: delay + 1, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
@@ -114,13 +72,13 @@ const CenterEmoji = ({ emoji, size = "text-[4.5rem]", delay = 0, y = "36%" }: { 
   </motion.div>
 );
 
-/* ── row of emojis centered together ── */
-const EmojiRow = ({ emojis, delay = 0, y = "32%", size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; y?: string; size?: string; gap?: number }) => (
+/* ── row of emojis (flow-based) ── */
+const EmojiRow = ({ emojis, delay = 0, size = "text-[3.5rem]", gap = 12 }: { emojis: string[]; delay?: number; size?: string; gap?: number }) => (
   <motion.div
-    className="pointer-events-none absolute left-1/2 flex select-none"
-    style={{ top: y, transform: "translateX(-50%)", gap }}
+    className="pointer-events-none flex select-none"
+    style={{ gap }}
     initial={{ opacity: 0 }}
-    animate={{ opacity: 1, x: "-50%" }}
+    animate={{ opacity: 1 }}
     transition={{ duration: 0.6, delay: delay + 1 }}
   >
     {emojis.map((emoji, i) => (
@@ -262,31 +220,37 @@ const ParticleBurst = ({ active }: { active: boolean }) => {
 };
 
 const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
-  const sceneClass = "relative flex min-h-[440px] flex-col items-center justify-center gap-5 overflow-hidden";
+  /* layout: visual area on top, text below — no absolute overlap */
+  const sceneClass = "relative flex flex-col items-center gap-6 overflow-hidden";
+  /* background shapes layer behind everything */
+  const shapesClass = "pointer-events-none absolute inset-0";
 
   const scenes: Record<number, React.ReactNode> = {
     /* ── 0: welcome ── */
     0: (
       <div className={sceneClass}>
-        <Splodge x="6%" y="12%" w={120} h={100} delay={0} rotate={-12} color={shapeBlue1} />
-        <Splodge x="68%" y="56%" w={90} h={80} delay={0.2} rotate={20} color={shapeWhite1} />
-        <Ring x="72%" y="16%" size={56} delay={0.1} color={ringBlue} />
-        <Dot x="18%" y="58%" size={14} delay={0.25} color={dotBlue} />
-        <Dot x="82%" y="52%" size={10} delay={0.35} color={dotWhite} />
-        <CrossMark x="62%" y="60%" size={22} delay={0.4} color={ringBlue} />
-        <CenterEmoji emoji="👋" size="text-[5rem]" delay={0.15} y="34%" />
+        <div className={shapesClass}>
+          <Circle x="8%" y="10%" size={80} color={blue1} delay={0} />
+          <Circle x="75%" y="55%" size={50} color={whi2} delay={0.15} />
+          <Ring x="70%" y="8%" size={60} color={blue2} delay={0.1} />
+          <Dot x="20%" y="60%" size={10} color={whi1} delay={0.25} />
+          <Dot x="85%" y="45%" size={8} color={blue3} delay={0.3} />
+        </div>
+        <div className="flex h-[160px] items-center justify-center">
+          <CenterEmoji emoji="👋" size="text-[5.5rem]" delay={0.15} />
+        </div>
         <TitleBlock title="welcome to vizura" subtitle="quick walkthrough so you instantly get how character creation works" />
       </div>
     ),
     /* ── 1: make any character ── */
     1: (
       <div className={sceneClass}>
-        <Splodge x="10%" y="18%" w={100} h={90} delay={0} rotate={10} color={shapeBlue2} />
-        <Ring x="74%" y="14%" size={48} delay={0.1} color={ringBlue} />
-        <Ring x="14%" y="54%" size={34} delay={0.3} color={ringWhite} />
-        <Dot x="80%" y="52%" size={12} delay={0.2} color={dotBlue} />
-        <CrossMark x="24%" y="18%" size={20} delay={0.35} color={ringBlue} />
-        <Dot x="66%" y="58%" size={8} delay={0.4} color={dotWhite} />
+        <div className={shapesClass}>
+          <Circle x="12%" y="15%" size={70} color={blue2} delay={0} />
+          <Ring x="72%" y="10%" size={50} color={blue1} delay={0.1} />
+          <Dot x="80%" y="55%" size={12} color={whi1} delay={0.2} />
+          <Dot x="15%" y="50%" size={8} color={blue3} delay={0.3} />
+        </div>
         <motion.div
           className="relative flex items-center justify-center overflow-hidden rounded-[28px] border-[4px]"
           style={{ borderColor: panelBorder, background: panel, width: 125, height: 187 }}
@@ -305,13 +269,13 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 2: shape their look ── */
     2: (
       <div className={sceneClass}>
-        <Splodge x="64%" y="10%" w={110} h={90} delay={0} rotate={-8} color={shapeBlue1} />
-        <Splodge x="4%" y="48%" w={80} h={70} delay={0.15} rotate={15} color={shapeBlue2} />
-        <Ring x="78%" y="50%" size={42} delay={0.2} color={ringWhite} />
-        <Dot x="16%" y="22%" size={12} delay={0.1} color={dotBlue} />
-        <CrossMark x="80%" y="20%" size={18} delay={0.3} color={ringBlue} />
-        <Dot x="8%" y="38%" size={8} delay={0.35} color={dotBlue} />
-        <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} y="32%" size="text-[3.8rem]" gap={16} />
+        <div className={shapesClass}>
+          <Circle x="70%" y="8%" size={65} color={blue1} delay={0} />
+          <Circle x="5%" y="50%" size={50} color={blue3} delay={0.1} />
+          <Ring x="80%" y="48%" size={40} color={whi2} delay={0.2} />
+          <Dot x="18%" y="18%" size={10} color={blue2} delay={0.15} />
+        </div>
+        <EmojiRow emojis={["💇", "👁️", "🧍"]} delay={0.1} size="text-[3.8rem]" gap={16} />
         <TitleBlock title="shape their look" subtitle="choose traits like hair, eyes, and body type and watch the setup come alive" />
         <div className="flex flex-col gap-2 text-center">
           {["hair colour", "eye colour", "body type"].map((item, index) => (
@@ -332,16 +296,16 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 3: not perfect? ── */
     3: (
       <div className={sceneClass}>
-        <Splodge x="8%" y="14%" w={100} h={88} delay={0} rotate={-6} color={shapeBlue3} />
-        <Ring x="76%" y="18%" size={52} delay={0.1} color={ringBlue} />
-        <Ring x="18%" y="52%" size={38} delay={0.25} color={ringWhite} />
-        <Dot x="78%" y="54%" size={14} delay={0.3} color={dotWhite} />
-        <CrossMark x="10%" y="20%" size={20} delay={0.2} color={ringBlue} />
-        <Dot x="68%" y="44%" size={8} delay={0.4} color={dotBlue} />
+        <div className={shapesClass}>
+          <Circle x="10%" y="12%" size={75} color={blue3} delay={0} />
+          <Ring x="74%" y="14%" size={55} color={blue1} delay={0.1} />
+          <Dot x="78%" y="55%" size={12} color={whi1} delay={0.2} />
+          <Dot x="20%" y="52%" size={8} color={blue2} delay={0.3} />
+        </div>
         <motion.div
-          className="text-[5.5rem]"
-          initial={{ opacity: 0, scale: 0.3, y: 20, rotate: -30 }}
-          animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+          className="flex h-[160px] items-center justify-center text-[5.5rem]"
+          initial={{ opacity: 0, scale: 0.3, rotate: -30 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 1, delay: 1.2, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <motion.span className="inline-block" animate={{ rotate: [0, 360] }} transition={{ duration: 5.5, delay: 2.5, repeat: Infinity, ease: "linear" }}>
@@ -354,12 +318,15 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 4: create photos ── */
     4: (
       <div className={sceneClass}>
-        <Splodge x="12%" y="12%" w={104} h={86} delay={0} rotate={12} color={shapeBlue1} />
-        <Ring x="80%" y="14%" size={44} delay={0.15} color={ringBlue} />
-        <Dot x="10%" y="50%" size={12} delay={0.2} color={dotBlue} />
-        <Dot x="84%" y="48%" size={10} delay={0.3} color={dotWhite} />
-        <CrossMark x="6%" y="22%" size={18} delay={0.25} color={ringWhite} />
-        <CenterEmoji emoji="📸" size="text-[4.5rem]" delay={0.1} y="30%" />
+        <div className={shapesClass}>
+          <Circle x="14%" y="10%" size={70} color={blue1} delay={0} />
+          <Ring x="78%" y="12%" size={45} color={blue2} delay={0.1} />
+          <Dot x="10%" y="50%" size={10} color={whi1} delay={0.2} />
+          <Dot x="85%" y="48%" size={8} color={blue3} delay={0.25} />
+        </div>
+        <div className="flex h-[160px] items-center justify-center">
+          <CenterEmoji emoji="📸" size="text-[5rem]" delay={0.1} />
+        </div>
         <TitleBlock title="create photos" subtitle="your character can turn into polished image sets with depth, variation, and style" />
         <div className="flex items-center justify-center gap-4">
           <PhotoCard delay={1.15} rotation={-10} scale={0.96} />
@@ -371,12 +338,15 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 5: describe what you want ── */
     5: (
       <div className={sceneClass}>
-        <Splodge x="66%" y="12%" w={100} h={84} delay={0} rotate={-14} color={shapeBlue2} />
-        <Splodge x="6%" y="48%" w={80} h={68} delay={0.15} rotate={10} color={shapeWhite2} />
-        <Ring x="16%" y="16%" size={40} delay={0.1} color={ringBlue} />
-        <Dot x="80%" y="48%" size={12} delay={0.25} color={dotBlue} />
-        <CrossMark x="78%" y="22%" size={20} delay={0.3} color={ringBlue} />
-        <CenterEmoji emoji="✍️" size="text-[4.5rem]" delay={0.1} y="32%" />
+        <div className={shapesClass}>
+          <Circle x="68%" y="10%" size={65} color={blue2} delay={0} />
+          <Circle x="8%" y="48%" size={50} color={whi2} delay={0.1} />
+          <Ring x="18%" y="12%" size={42} color={blue1} delay={0.15} />
+          <Dot x="82%" y="50%" size={10} color={blue3} delay={0.2} />
+        </div>
+        <div className="flex h-[160px] items-center justify-center">
+          <CenterEmoji emoji="✍️" size="text-[5rem]" delay={0.1} />
+        </div>
         <TitleBlock title="describe what you want" subtitle="add prompt details like lighting, pose, setting, outfit, mood, or camera feel" />
         <motion.div
           className="w-full rounded-[24px] border-[4px] px-5 py-4"
@@ -393,15 +363,18 @@ const StepScene = ({ step, burst }: { step: number; burst: boolean }) => {
     /* ── 6: ready to create? ── */
     6: (
       <div className={sceneClass}>
-        <ParticleBurst active={burst} />
-        <Splodge x="8%" y="14%" w={110} h={96} delay={0} rotate={-10} color={shapeBlue3} />
-        <Splodge x="66%" y="50%" w={90} h={78} delay={0.2} rotate={16} color={shapeWhite1} />
-        <Ring x="78%" y="16%" size={50} delay={0.1} color={ringBlue} />
-        <Ring x="12%" y="52%" size={36} delay={0.3} color={ringWhite} />
-        <Dot x="24%" y="20%" size={14} delay={0.15} color={dotBlue} />
-        <Dot x="80%" y="48%" size={10} delay={0.35} color={dotWhite} />
-        <CrossMark x="68%" y="56%" size={22} delay={0.4} color={ringBlue} />
-        <CenterEmoji emoji="🚀" size="text-[5rem]" delay={0.15} y="32%" />
+        <div className={shapesClass}>
+          <ParticleBurst active={burst} />
+          <Circle x="10%" y="12%" size={80} color={blue3} delay={0} />
+          <Circle x="68%" y="50%" size={55} color={whi2} delay={0.15} />
+          <Ring x="76%" y="10%" size={52} color={blue1} delay={0.1} />
+          <Ring x="14%" y="50%" size={38} color={blue2} delay={0.25} />
+          <Dot x="26%" y="18%" size={12} color={whi1} delay={0.2} />
+          <Dot x="82%" y="46%" size={8} color={blue3} delay={0.3} />
+        </div>
+        <div className="flex h-[160px] items-center justify-center">
+          <CenterEmoji emoji="🚀" size="text-[5.5rem]" delay={0.15} />
+        </div>
         <TitleBlock title="ready to create?" subtitle="sign up free and jump straight into your first character build" />
       </div>
     ),
@@ -466,7 +439,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-end pb-[8vh]"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -485,7 +458,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.34, ease: "easeOut" }}
           >
-            <div className="flex min-h-[420px] w-full items-center justify-center px-2">
+            <div className="flex w-full items-center justify-center px-2">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
