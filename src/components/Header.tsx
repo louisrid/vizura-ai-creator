@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, Settings, UserRound, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
+import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn } from "lucide-react";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -30,7 +30,7 @@ const pageNames: Record<string, string> = {
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const { user, loading } = useAuth();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -73,21 +73,25 @@ const Header = () => {
               </linearGradient>
             </defs>
           </svg>
-          {user && (
-            <button onClick={() => navigate("/account")} className="shrink-0">
+
+          {!loading && !!user && (
+            <button onClick={() => navigate("/account")} className="shrink-0" aria-label="my account">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-nav-foreground">
                 <circle cx="12" cy="8" r="5" />
                 <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
               </svg>
             </button>
           )}
+
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
             {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} style={{ stroke: "url(#icon-gradient-purple)" }} />}
             <span className="gradient-purple-text">{currentPage}</span>
           </span>
+
           <button
             onClick={() => setOpen(!open)}
             className="w-10 h-10 rounded-2xl gradient-purple flex items-center justify-center text-white transition-opacity hover:opacity-90"
+            aria-label="open menu"
           >
             <Menu size={20} strokeWidth={2.5} />
           </button>
