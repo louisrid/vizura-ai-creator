@@ -132,10 +132,10 @@ export const GoldButton = ({
       onClick(e);
     }}
     disabled={disabled}
-    className="relative mt-5 h-16 w-full border-[6px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
+    className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
     style={{
-      background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
-      borderColor: "hsl(50 100% 54%)",
+      background: "linear-gradient(135deg, hsl(48 100% 62%) 0%, hsl(45 100% 56%) 50%, hsl(40 100% 50%) 100%)",
+      borderColor: "hsl(48 100% 60%)",
       color: "#000",
       borderRadius: 16,
     }}
