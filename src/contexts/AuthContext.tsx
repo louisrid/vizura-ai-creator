@@ -9,6 +9,7 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  autoSignIn: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -60,8 +61,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (error) throw error;
   };
 
+  const autoSignIn = async () => {
+    const id = crypto.randomUUID().slice(0, 8);
+    const email = `user-${id}@vizura.app`;
+    const password = crypto.randomUUID();
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin },
+    });
+
+    if (error) throw error;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword, autoSignIn }}>
       {children}
     </AuthContext.Provider>
   );
