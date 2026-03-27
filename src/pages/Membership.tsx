@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
+import SubscribeOverlay from "@/components/SubscribeOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -16,6 +15,7 @@ const Membership = () => {
   const { subscribe } = useSubscription();
   const navigate = useNavigate();
   const [buying, setBuying] = useState(false);
+  const [overlayOpen, setOverlayOpen] = useState(true);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth");
@@ -55,13 +55,12 @@ const Membership = () => {
             then $20/month
           </span>
 
-          <Button
-            className="w-full h-12 text-sm bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600 border-0"
-            onClick={handleSubscribe}
-            disabled={buying}
+          <button
+            onClick={() => setOverlayOpen(true)}
+            className="w-full h-12 rounded-2xl text-sm font-extrabold lowercase bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600 transition-all"
           >
-            {buying ? <Loader2 className="animate-spin" size={18} /> : "subscribe"}
-          </Button>
+            subscribe
+          </button>
         </div>
 
         <div className="mt-8 text-center">
@@ -73,6 +72,13 @@ const Membership = () => {
           </button>
         </div>
       </main>
+
+      <SubscribeOverlay
+        open={overlayOpen}
+        onDismiss={() => setOverlayOpen(false)}
+        onSubscribe={handleSubscribe}
+        buying={buying}
+      />
     </div>
   );
 };
