@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,7 +8,7 @@ import PageTitle from "@/components/PageTitle";
 import { toast } from "sonner";
 
 const Auth = () => {
-  const { signIn, signUp, resetPassword, autoSignIn, user, loading: authLoading } = useAuth();
+  const { signIn, signUp, resetPassword, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
@@ -32,8 +32,6 @@ const Auth = () => {
       } else if (mode === "signup") {
         await signUp(email, password);
         toast.success("check your email to confirm your account");
-      } else if (!email.trim() && !password.trim()) {
-        await autoSignIn();
       } else {
         await signIn(email, password);
       }
@@ -61,7 +59,7 @@ const Auth = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required={mode === "forgot" || mode === "signup"}
-            className="h-14 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
+            className="h-14 w-full rounded-2xl border-[4px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
           />
 
           {mode !== "forgot" && (
@@ -72,7 +70,7 @@ const Auth = () => {
               onChange={(e) => setPassword(e.target.value)}
               required={mode === "signup"}
               minLength={mode === "signup" ? 6 : undefined}
-              className="h-14 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
+              className="h-14 w-full rounded-2xl border-[4px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
             />
           )}
 

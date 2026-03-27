@@ -106,7 +106,7 @@ const photoGradients = [
 
 const PhotoCard = ({ delay, rotate, index }: { delay: number; rotate: number; index: number }) => (
   <motion.div
-    className="rounded-2xl border-[5px] overflow-hidden flex items-center justify-center"
+    className="flex items-center justify-center overflow-hidden rounded-2xl border-[4px]"
     style={{
       borderColor: "hsl(0 0% 100% / 0.12)",
       background: photoGradients[index % photoGradients.length],
@@ -167,7 +167,7 @@ const Scene1 = () => (
     <BigTitle delay={0.2}>1. choose a look</BigTitle>
     <Subtitle delay={0.35}>set age, ethnicity, and style</Subtitle>
     <motion.div
-      className="mt-2 flex items-center gap-1 rounded-2xl border-[5px] px-3 py-2"
+      className="mt-2 flex items-center gap-1 rounded-2xl border-[4px] px-3 py-2"
       style={{ borderColor: "hsl(0 0% 100% / 0.12)", background: "hsl(0 0% 100% / 0.04)" }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
@@ -216,7 +216,7 @@ const Scene4 = () => (
     <BigTitle delay={0.2}>4. add a prompt</BigTitle>
     <Subtitle delay={0.35}>describe the pose, place, and mood</Subtitle>
     <motion.div
-      className="mt-1 w-full max-w-[17rem] rounded-2xl border-[5px] px-4 py-3"
+      className="mt-1 w-full max-w-[17rem] rounded-2xl border-[4px] px-4 py-3"
       style={{ borderColor: "hsl(0 0% 100% / 0.1)", background: "hsl(0 0% 100% / 0.04)" }}
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}

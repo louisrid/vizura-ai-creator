@@ -22,11 +22,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     let cancelled = false;
 
+    const clearStoredAuth = () => {
+      const storages = [window.localStorage, window.sessionStorage];
+
+      storages.forEach((storage) => {
+        const keysToRemove: string[] = [];
+
+        for (let index = 0; index < storage.length; index += 1) {
+          const key = storage.key(index);
+          if (!key) continue;
+          if (key.startsWith("sb-") || key.includes("supabase") || key.includes("auth-token")) {
+            keysToRemove.push(key);
+          }
+        }
+
+        keysToRemove.forEach((key) => storage.removeItem(key));
+      });
+    };
+
     const initializeAuth = async () => {
       try {
+        clearStoredAuth();
         await supabase.auth.signOut({ scope: "local" });
       } finally {
         if (cancelled) return;
+
+        clearStoredAuth();
 
         const { data } = supabase.auth.onAuthStateChange((event, session) => {
           if (event === "SIGNED_OUT") {

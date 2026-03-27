@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -38,7 +38,8 @@ const AppOnboarding = ({
   onOpenChange: (open: boolean) => void;
 }) => {
   const location = useLocation();
-  const { user, loading, autoSignIn } = useAuth();
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
@@ -55,7 +56,11 @@ const AppOnboarding = ({
         setShowOnboarding(false);
         onOpenChange(false);
       }}
-      onLetsGo={autoSignIn}
+      onLetsGo={() => {
+        setShowOnboarding(false);
+        onOpenChange(false);
+        navigate("/auth");
+      }}
     />
   );
 };

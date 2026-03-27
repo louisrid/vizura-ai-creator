@@ -131,7 +131,7 @@ export const GoldButton = ({
       onClick(e);
     }}
     disabled={disabled}
-    className="relative mt-5 h-16 w-full rounded-2xl border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
+    className="relative mt-5 h-16 w-full rounded-2xl border-[4px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
     style={{
       background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
       borderColor: "hsl(50 100% 54%)",
@@ -194,7 +194,7 @@ export const ArrowButton = ({ direction, onClick }: { direction: "left" | "right
       e.stopPropagation();
       onClick();
     }}
-    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[5px]"
+    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
     whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
   >

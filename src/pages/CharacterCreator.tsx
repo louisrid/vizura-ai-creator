@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -22,9 +22,10 @@ const bodyOptions = ["slim", "regular", "curvy"] as const;
 const styleOptions = ["natural", "model", "egirl"] as const;
 
 const CharacterCreator = () => {
-  const { user, autoSignIn } = useAuth();
+  const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
   const { subscribed } = useSubscription();
+  const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
@@ -57,7 +58,7 @@ const CharacterCreator = () => {
 
   const generate = async () => {
     if (!user) {
-      await autoSignIn();
+      navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
     if (credits <= 0 && !subscribed) {
@@ -139,7 +140,7 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="face shape, hairstyle, outfit, pose, mood, setting..."
             rows={4}
-            className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-32 w-full resize-none rounded-2xl border-[4px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -156,8 +157,8 @@ const CharacterCreator = () => {
                   onClick={() => setStyle(s)}
                   className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
                     style === s
-                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[5px] border-transparent"
-                      : "border-[5px] border-border text-foreground hover:border-foreground/60"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[4px] border-transparent"
+                      : "border-[4px] border-border text-foreground hover:border-foreground/60"
                   }`}
                 >
                   {s}
@@ -172,7 +173,7 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-2xl border-[4px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -210,7 +211,7 @@ const SelectField = <T extends string>({ label, options, value, onChange }: Sele
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+      className="h-12 w-full appearance-none rounded-2xl border-[4px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
     >
       {options.map((option) => (
         <option key={option} value={option}>
