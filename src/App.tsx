@@ -15,6 +15,7 @@ import MyCharacters from "./pages/MyCharacters";
 import Storage from "./pages/Storage";
 import Account from "./pages/Account";
 import TopUps from "./pages/TopUps";
+import Membership from "./pages/Membership";
 import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
@@ -45,6 +46,7 @@ const AnimatedRoutes = () => {
             <Route path="/storage" element={<Storage />} />
             <Route path="/top-ups" element={<TopUps />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/account/membership" element={<Membership />} />
             <Route path="/help" element={<Help />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
@@ -63,10 +65,12 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <CreditsProvider>
-          <BrowserRouter>
-            <ScrollToTop />
-            <AnimatedRoutes />
-          </BrowserRouter>
+          <SubscriptionProvider>
+            <BrowserRouter>
+              <ScrollToTop />
+              <AnimatedRoutes />
+            </BrowserRouter>
+          </SubscriptionProvider>
         </CreditsProvider>
       </AuthProvider>
     </TooltipProvider>
