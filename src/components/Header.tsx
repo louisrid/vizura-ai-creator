@@ -74,7 +74,7 @@ const Header = () => {
             </defs>
           </svg>
 
-          {!loading && !!user && (
+          {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
             <button onClick={() => navigate("/account")} className="shrink-0" aria-label="my account">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-nav-foreground">
                 <circle cx="12" cy="8" r="5" />
@@ -137,9 +137,12 @@ const Header = () => {
 const CreditsBadge = () => {
   const { credits } = useCredits();
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl border-gradient-yellow px-3 py-1.5">
+    <div
+      className="flex items-center gap-1.5 rounded-2xl border-[3px] px-3 py-1.5"
+      style={{ borderColor: "hsl(45 100% 60% / 0.7)" }}
+    >
       <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
-      <span className="text-[11px] font-extrabold text-nav-foreground">{credits}</span>
+      <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{credits} energy</span>
     </div>
   );
 };
