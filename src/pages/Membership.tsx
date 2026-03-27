@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import SubscribeOverlay from "@/components/SubscribeOverlay";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCredits } from "@/contexts/CreditsContext";
-import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const Membership = () => {
   const { user, loading: authLoading } = useAuth();
-  const { refetch } = useCredits();
-  const { subscribe } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
   const [buying, setBuying] = useState(false);
@@ -27,17 +24,16 @@ const Membership = () => {
   const handleSubscribe = async () => {
     setBuying(true);
     try {
-      const { error } = await supabase.functions.invoke("add-credits", {
-        body: { amount: 150 },
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { type: "membership" },
       });
       if (error) throw error;
-      subscribe("member", 150);
-      await refetch();
-      toast.success("subscribed!");
-      navigate("/account");
+      if (data?.error) throw new Error(data.error);
+      if (data?.url) {
+        window.location.href = data.url;
+      }
     } catch (e: any) {
-      toast.error(e.message || "failed to subscribe");
-    } finally {
+      toast.error(e.message || "failed to start checkout");
       setBuying(false);
     }
   };

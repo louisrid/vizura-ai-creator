@@ -15,7 +15,7 @@ serve(async (req) => {
       return new Response("No signature", { status: 400 });
     }
 
-    // Simple signature verification - parse the timestamp and verify it's recent
+    // Verify signature
     const sigParts = signature.split(",");
     const timestampPart = sigParts.find(p => p.startsWith("t="));
     if (!timestampPart) {
@@ -28,7 +28,6 @@ serve(async (req) => {
       return new Response("Timestamp too old", { status: 400 });
     }
 
-    // Verify HMAC
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
       "raw",
@@ -54,15 +53,82 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const CREDITS_PER_MONTH = 50;
-
     switch (event.type) {
-      case "customer.subscription.created":
+      case "checkout.session.completed": {
+        const session = event.data.object;
+        const metadata = session.metadata || {};
+        const customerId = session.customer;
+
+        if (metadata.type === "topup") {
+          // One-time top-up: add credits
+          const credits = parseInt(metadata.credits || "0");
+          const userId = metadata.user_id;
+          if (credits > 0 && userId) {
+            const { data: creditRow } = await adminClient
+              .from("credits")
+              .select("balance")
+              .eq("user_id", userId)
+              .single();
+
+            if (creditRow) {
+              await adminClient
+                .from("credits")
+                .update({ balance: creditRow.balance + credits, updated_at: new Date().toISOString() })
+                .eq("user_id", userId);
+            } else {
+              await adminClient
+                .from("credits")
+                .insert({ user_id: userId, balance: credits });
+            }
+          }
+        } else if (metadata.type === "membership") {
+          // Subscription: update subscriptions table
+          const userId = metadata.user_id;
+          const subscriptionId = session.subscription;
+
+          if (userId && subscriptionId) {
+            // Fetch subscription details from Stripe
+            const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${subscriptionId}`, {
+              headers: { Authorization: `Basic ${btoa(STRIPE_SECRET_KEY + ":")}` },
+            });
+            const sub = await subRes.json();
+
+            await adminClient.from("subscriptions").upsert({
+              user_id: userId,
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              status: sub.status || "active",
+              current_period_start: new Date(sub.current_period_start * 1000).toISOString(),
+              current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            }, { onConflict: "user_id" });
+
+            // Give initial membership credits
+            const MEMBERSHIP_CREDITS = 50;
+            const { data: creditRow } = await adminClient
+              .from("credits")
+              .select("balance")
+              .eq("user_id", userId)
+              .single();
+
+            if (creditRow) {
+              await adminClient
+                .from("credits")
+                .update({ balance: creditRow.balance + MEMBERSHIP_CREDITS, updated_at: new Date().toISOString() })
+                .eq("user_id", userId);
+            } else {
+              await adminClient
+                .from("credits")
+                .insert({ user_id: userId, balance: MEMBERSHIP_CREDITS });
+            }
+          }
+        }
+        break;
+      }
+
       case "customer.subscription.updated": {
         const subscription = event.data.object;
         const customerId = subscription.customer;
 
-        // Find user by stripe_customer_id
         const { data: subRecord } = await adminClient
           .from("subscriptions")
           .select("user_id")
@@ -84,25 +150,28 @@ serve(async (req) => {
         const invoice = event.data.object;
         const customerId = invoice.customer;
 
-        const { data: subRecord } = await adminClient
-          .from("subscriptions")
-          .select("user_id")
-          .eq("stripe_customer_id", customerId)
-          .single();
-
-        if (subRecord) {
-          // Add monthly credits
-          const { data: creditData } = await adminClient
-            .from("credits")
-            .select("balance")
-            .eq("user_id", subRecord.user_id)
+        // Only add credits for recurring invoices (not the first one, handled by checkout.session.completed)
+        if (invoice.billing_reason === "subscription_cycle") {
+          const { data: subRecord } = await adminClient
+            .from("subscriptions")
+            .select("user_id")
+            .eq("stripe_customer_id", customerId)
             .single();
 
-          const newBalance = (creditData?.balance ?? 0) + CREDITS_PER_MONTH;
-          await adminClient
-            .from("credits")
-            .update({ balance: newBalance })
-            .eq("user_id", subRecord.user_id);
+          if (subRecord) {
+            const MEMBERSHIP_CREDITS = 50;
+            const { data: creditRow } = await adminClient
+              .from("credits")
+              .select("balance")
+              .eq("user_id", subRecord.user_id)
+              .single();
+
+            const newBalance = (creditRow?.balance ?? 0) + MEMBERSHIP_CREDITS;
+            await adminClient
+              .from("credits")
+              .update({ balance: newBalance })
+              .eq("user_id", subRecord.user_id);
+          }
         }
         break;
       }

@@ -6,6 +6,13 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Top-up credit amounts mapped by price ID env var name
+const TOPUP_CREDITS: Record<string, number> = {
+  TOPUP_150_PRICE_ID: 150,
+  TOPUP_600_PRICE_ID: 600,
+  TOPUP_1500_PRICE_ID: 1500,
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -32,6 +39,7 @@ serve(async (req) => {
     }
 
     const userId = claimsData.claims.sub;
+    const userEmail = claimsData.claims.email;
 
     const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
     if (!STRIPE_SECRET_KEY) throw new Error("STRIPE_SECRET_KEY not configured");
@@ -41,7 +49,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Check if user already has a Stripe customer
+    // Get or create Stripe customer
     const { data: sub } = await adminClient
       .from("subscriptions")
       .select("stripe_customer_id")
@@ -50,11 +58,7 @@ serve(async (req) => {
 
     let customerId = sub?.stripe_customer_id;
 
-    // Get user email
-    const userEmail = claimsData.claims.email;
-
     if (!customerId) {
-      // Create Stripe customer
       const customerRes = await fetch("https://api.stripe.com/v1/customers", {
         method: "POST",
         headers: {
@@ -69,7 +73,6 @@ serve(async (req) => {
       const customer = await customerRes.json();
       customerId = customer.id;
 
-      // Upsert subscription record
       await adminClient.from("subscriptions").upsert({
         user_id: userId,
         stripe_customer_id: customerId,
@@ -77,18 +80,53 @@ serve(async (req) => {
       }, { onConflict: "user_id" });
     }
 
-    const { priceId } = await req.json();
-
-    // Create checkout session
+    const { type, priceId } = await req.json();
     const origin = req.headers.get("origin") || "https://vizura.lovable.app";
-    const params = new URLSearchParams({
-      "customer": customerId!,
-      "mode": "subscription",
-      "line_items[0][price]": priceId,
-      "line_items[0][quantity]": "1",
-      "success_url": `${origin}/generate?checkout=success`,
-      "cancel_url": `${origin}/generate?checkout=cancel`,
-    });
+
+    let params: URLSearchParams;
+
+    if (type === "membership") {
+      // Membership: recurring subscription
+      const membershipPriceId = priceId || Deno.env.get("MEMBERSHIP_PRICE_ID");
+      if (!membershipPriceId) throw new Error("MEMBERSHIP_PRICE_ID not configured");
+
+      params = new URLSearchParams({
+        "customer": customerId!,
+        "mode": "subscription",
+        "line_items[0][price]": membershipPriceId,
+        "line_items[0][quantity]": "1",
+        "success_url": `${origin}/account?checkout=success`,
+        "cancel_url": `${origin}/account/membership?checkout=cancel`,
+        "metadata[type]": "membership",
+        "metadata[user_id]": userId,
+        "subscription_data[metadata][user_id]": userId,
+        "subscription_data[metadata][type]": "membership",
+      });
+    } else if (type === "topup") {
+      // Top-up: one-time payment
+      // priceId here is the env var name like "TOPUP_150_PRICE_ID"
+      if (!priceId) throw new Error("priceId required for topup");
+
+      const creditAmount = TOPUP_CREDITS[priceId];
+      if (!creditAmount) throw new Error("Invalid topup tier");
+
+      const resolvedPriceId = Deno.env.get(priceId);
+      if (!resolvedPriceId) throw new Error(`${priceId} not configured`);
+
+      params = new URLSearchParams({
+        "customer": customerId!,
+        "mode": "payment",
+        "line_items[0][price]": resolvedPriceId,
+        "line_items[0][quantity]": "1",
+        "success_url": `${origin}/top-ups?checkout=success`,
+        "cancel_url": `${origin}/top-ups?checkout=cancel`,
+        "metadata[type]": "topup",
+        "metadata[user_id]": userId,
+        "metadata[credits]": creditAmount.toString(),
+      });
+    } else {
+      throw new Error("Invalid checkout type. Use 'membership' or 'topup'");
+    }
 
     const checkoutRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",

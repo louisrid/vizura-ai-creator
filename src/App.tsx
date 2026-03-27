@@ -19,6 +19,7 @@ import TopUps from "./pages/TopUps";
 import Membership from "./pages/Membership";
 import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
+import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 
@@ -84,6 +85,7 @@ const AnimatedRoutes = () => {
           <Route path="/account" element={<Account />} />
           <Route path="/account/membership" element={<Membership />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/history" element={<History />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
