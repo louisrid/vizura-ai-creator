@@ -32,7 +32,7 @@ const Storage = () => {
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location.pathname]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -61,6 +61,8 @@ const Storage = () => {
     };
     if (user) fetchAll();
   }, [user]);
+
+  if (!authLoading && !user) return null;
 
   const filtered = images.filter((img) => {
     if (filter === "characters") return img.source === "character";

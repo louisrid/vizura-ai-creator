@@ -24,7 +24,9 @@ const TopUps = () => {
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, location.pathname]);
+
+  if (!loading && !user) return null;
 
   const handleBuy = async (plan: typeof plans[number]) => {
     setBuying(plan.label);

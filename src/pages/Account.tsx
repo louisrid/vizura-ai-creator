@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut, Mail, Zap, Calendar, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -12,11 +12,14 @@ const Account = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const { credits } = useCredits();
   const { subscribed, plan, cancel } = useSubscription();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authLoading && !user) navigate("/");
-  }, [user, authLoading, navigate]);
+    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+  }, [user, authLoading, navigate, location.pathname]);
+
+  if (!authLoading && !user) return null;
 
   const handleSignOut = async () => {
     await signOut();
