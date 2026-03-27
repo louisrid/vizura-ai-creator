@@ -19,6 +19,7 @@ import TopUps from "./pages/TopUps";
 import Membership from "./pages/Membership";
 import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
+import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 

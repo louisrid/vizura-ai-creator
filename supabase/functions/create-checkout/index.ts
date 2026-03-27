@@ -104,22 +104,19 @@ serve(async (req) => {
       });
     } else if (type === "topup") {
       // Top-up: one-time payment
+      // priceId here is the env var name like "TOPUP_150_PRICE_ID"
       if (!priceId) throw new Error("priceId required for topup");
 
-      // Determine credits from the price ID
-      let creditAmount = 0;
-      for (const [envVar, amount] of Object.entries(TOPUP_CREDITS)) {
-        if (Deno.env.get(envVar) === priceId) {
-          creditAmount = amount;
-          break;
-        }
-      }
-      if (!creditAmount) throw new Error("Invalid topup priceId");
+      const creditAmount = TOPUP_CREDITS[priceId];
+      if (!creditAmount) throw new Error("Invalid topup tier");
+
+      const resolvedPriceId = Deno.env.get(priceId);
+      if (!resolvedPriceId) throw new Error(`${priceId} not configured`);
 
       params = new URLSearchParams({
         "customer": customerId!,
         "mode": "payment",
-        "line_items[0][price]": priceId,
+        "line_items[0][price]": resolvedPriceId,
         "line_items[0][quantity]": "1",
         "success_url": `${origin}/top-ups?checkout=success`,
         "cancel_url": `${origin}/top-ups?checkout=cancel`,
