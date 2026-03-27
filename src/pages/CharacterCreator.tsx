@@ -129,18 +129,7 @@ const CharacterCreator = () => {
       </div>
 
       {/* Page title */}
-      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-20 pb-0">
-        <button
-          onClick={() => {
-            setOnboardingDismissed(false);
-            setShowOnboarding(true);
-            localStorage.removeItem("onboarding_seen");
-          }}
-          className="mx-auto mb-3 flex h-8 w-8 items-center justify-center rounded-2xl border-[4px] border-border text-foreground/40 hover:text-foreground transition-colors"
-          aria-label="Replay onboarding"
-        >
-          <RefreshCw size={13} strokeWidth={2.5} />
-        </button>
+      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0">
         <h1
           className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center"
         >
