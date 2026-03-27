@@ -32,24 +32,29 @@ const ScrollToTop = () => {
   return null;
 };
 
-const AppOnboarding = () => {
+const AppOnboarding = ({
+  onOpenChange,
+}: {
+  onOpenChange: (open: boolean) => void;
+}) => {
   const location = useLocation();
   const { user, loading, autoSignIn } = useAuth();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     const hiddenRoutes = ["/auth", "/reset-password"];
-    if (loading || user || hiddenRoutes.includes(location.pathname)) {
-      setShowOnboarding(false);
-      return;
-    }
-    setShowOnboarding(true);
-  }, [loading, user, location.pathname]);
+    const shouldShow = !loading && !user && !hiddenRoutes.includes(location.pathname);
+    setShowOnboarding(shouldShow);
+    onOpenChange(shouldShow);
+  }, [loading, user, location.pathname, onOpenChange]);
 
   return (
     <OnboardingOverlay
       open={showOnboarding}
-      onDismiss={() => setShowOnboarding(false)}
+      onDismiss={() => {
+        setShowOnboarding(false);
+        onOpenChange(false);
+      }}
       onLetsGo={autoSignIn}
     />
   );
@@ -57,11 +62,12 @@ const AppOnboarding = () => {
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
 
   return (
     <>
-      <AppOnboarding />
-      <Header />
+      <AppOnboarding onOpenChange={setOnboardingOpen} />
+      {!onboardingOpen && <Header />}
       <PageTransition key={location.pathname}>
         <Routes location={location}>
           <Route path="/" element={<CharacterCreator />} />
