@@ -154,7 +154,7 @@ const CharacterCreator = () => {
             id="character-description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="face shape, hairstyle, outfit, pose, mood, setting…"
+            placeholder="face shape, hairstyle, outfit, pose, mood, setting..."
             rows={4}
             className="min-h-32 w-full resize-none rounded-2xl border-[4px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
@@ -175,7 +175,7 @@ const CharacterCreator = () => {
                   onClick={() => setStyle(s)}
                   className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
                     style === s
-                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[4px] border-transparent"
                       : "border-[4px] border-border text-foreground hover:border-foreground/60"
                   }`}
                 >
@@ -202,7 +202,7 @@ const CharacterCreator = () => {
             {isGenerating ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
-                creating…
+                creating...
               </>
             ) : (
               <>

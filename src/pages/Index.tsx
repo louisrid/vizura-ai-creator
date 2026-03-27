@@ -125,7 +125,7 @@ const Index = () => {
               <input
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="woman in golden hour light, rooftop…"
+                placeholder="woman in golden hour light, rooftop..."
                 className="w-full border-[4px] border-border bg-background text-foreground px-4 py-4 text-sm font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
               />
             </div>
@@ -141,7 +141,7 @@ const Index = () => {
                       onClick={() => setActiveStyle(i)}
                       className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl font-extrabold lowercase text-sm border-[4px] transition-all ${
                         activeStyle === i
-                          ? "border-foreground bg-foreground text-background"
+                          ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-transparent"
                           : "border-border text-foreground hover:border-foreground/60"
                       }`}
                     >
@@ -167,7 +167,7 @@ const Index = () => {
               disabled={isGenerating || (!!user && !prompt.trim())}
             >
               {isGenerating ? (
-                <><Loader2 className="animate-spin" size={18} />creating…</>
+                <><Loader2 className="animate-spin" size={18} />creating...</>
               ) : (
                 <><Zap size={18} strokeWidth={2.5} />create</>
               )}

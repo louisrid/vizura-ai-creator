@@ -111,7 +111,7 @@ const Storage = () => {
                 onClick={() => setFilter(f)}
                 className={`flex-1 py-3.5 rounded-2xl font-extrabold lowercase text-xs border-[4px] transition-all ${
                   filter === f
-                    ? "border-foreground bg-foreground text-background"
+                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-transparent"
                     : "border-border text-foreground hover:border-foreground/60"
                 }`}
               >

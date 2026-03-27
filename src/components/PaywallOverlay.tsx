@@ -51,7 +51,7 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
             <p className="text-xs font-extrabold lowercase mb-1">$7/mo</p>
             <p className="text-[10px] font-bold lowercase text-foreground mb-6">unlimited creations</p>
             <Button className="w-full h-14 text-xs mb-3" onClick={handleSubscribe} disabled={loading}>
-              {loading ? <><Loader2 className="animate-spin" size={16} /> loading…</> : "subscribe & create"}
+              {loading ? <><Loader2 className="animate-spin" size={16} /> loading...</> : "subscribe & create"}
             </Button>
             <button onClick={onClose} className="w-full text-center text-foreground font-bold lowercase text-[10px] hover:underline py-1">
               maybe later
