@@ -35,20 +35,25 @@ const AnimatedRoutes = () => {
   return (
     <>
       <Header />
-        <PageTransition key={location.pathname}>
+        {location.pathname === "/" ? (
           <Routes location={location}>
             <Route path="/" element={<CharacterCreator />} />
-            <Route path="/create" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/characters" element={<MyCharacters />} />
-            <Route path="/storage" element={<Storage />} />
-            <Route path="/top-ups" element={<TopUps />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="*" element={<NotFound />} />
           </Routes>
-        </PageTransition>
+        ) : (
+          <PageTransition key={location.pathname}>
+            <Routes location={location}>
+              <Route path="/create" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/characters" element={<MyCharacters />} />
+              <Route path="/storage" element={<Storage />} />
+              <Route path="/top-ups" element={<TopUps />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </PageTransition>
+        )}
     </>
   );
 };
