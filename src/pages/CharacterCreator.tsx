@@ -40,23 +40,13 @@ const CharacterCreator = () => {
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
-    return localStorage.getItem("onboarding_seen") === "true";
-  });
 
-  // Auto-trigger onboarding with a small delay for non-logged-in or first-time users
   useEffect(() => {
-    if (onboardingDismissed) return;
-    const timer = window.setTimeout(() => {
-      setShowOnboarding(true);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [onboardingDismissed]);
+    setShowOnboarding(!user);
+  }, [user]);
 
   const handleDismissOnboarding = useCallback(() => {
     setShowOnboarding(false);
-    setOnboardingDismissed(true);
-    localStorage.setItem("onboarding_seen", "true");
   }, []);
 
   const imageCards = useMemo(() => {
