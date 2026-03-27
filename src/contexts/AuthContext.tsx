@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Restore session first
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    // Sign out on every fresh page load so user starts logged-out
+    supabase.auth.signOut().then(() => {
+      setUser(null);
       setLoading(false);
     });
 
