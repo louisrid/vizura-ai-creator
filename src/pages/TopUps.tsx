@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Zap } from "lucide-react";
+import { Zap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const plans = [
   { label: "starter", credits: 1000, price: 9 },
@@ -15,17 +16,31 @@ const plans = [
 ];
 
 const TopUps = () => {
-  const { credits } = useCredits();
+  const { credits, refetch } = useCredits();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [buying, setBuying] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, loading, navigate]);
 
-  const handleBuy = () => {
-    toast({ title: "coming soon", description: "top-ups will be available soon" });
+  const handleBuy = async (plan: typeof plans[number]) => {
+    setBuying(plan.label);
+    try {
+      const { data, error } = await supabase.functions.invoke("add-credits", {
+        body: { amount: plan.credits },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      await refetch();
+      toast.success(`${plan.credits.toLocaleString()} credits added`);
+    } catch (e: any) {
+      toast.error(e.message || "failed to add credits");
+    } finally {
+      setBuying(null);
+    }
   };
 
   return (
@@ -102,9 +117,14 @@ const TopUps = () => {
                       : ""
                   }`}
                   variant={plan.highlighted ? "default" : "outline"}
-                  onClick={handleBuy}
+                  onClick={() => handleBuy(plan)}
+                  disabled={buying !== null}
                 >
-                  buy credits
+                  {buying === plan.label ? (
+                    <Loader2 className="animate-spin" size={18} />
+                  ) : (
+                    "buy credits"
+                  )}
                 </Button>
               </div>
             );
