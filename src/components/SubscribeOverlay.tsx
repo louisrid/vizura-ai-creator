@@ -286,7 +286,7 @@ const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOve
                 >
                   {step === 0 && <Scene0 />}
                   {step === 1 && <Scene1 />}
-                  {step === 2 && <Scene2 burst={burst} buying={buying} onSubscribe={handleSubscribe} />}
+                  {step === 2 && <Scene2 burst={burst} buying={buying} onSubscribe={handleSubscribe} onDismiss={onDismiss} />}
                 </motion.div>
               </AnimatePresence>
             </div>
