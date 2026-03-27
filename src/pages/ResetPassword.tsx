@@ -50,7 +50,7 @@ const ResetPassword = () => {
         {success ? (
           <div className="border-[4px] border-border rounded-2xl p-6 text-center">
             <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
-            <p className="text-[10px] font-bold lowercase text-foreground">redirecting…</p>
+            <p className="text-[10px] font-bold lowercase text-foreground">redirecting...</p>
           </div>
         ) : !isRecovery ? (
           <div className="border-[4px] border-border rounded-2xl p-6 text-center">
@@ -101,7 +101,7 @@ const ResetPassword = () => {
               </div>
 
               <Button className="w-full h-16 text-sm" disabled={loading}>
-                {loading ? "loading…" : "update password"}
+                {loading ? "loading..." : "update password"}
               </Button>
             </form>
           </div>
