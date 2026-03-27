@@ -462,6 +462,7 @@ const OnboardingOverlay = ({ open, onDismiss, onLetsGo: externalLetsGo }: { open
 
   const handleLetsGo = () => {
     setBurst(true);
+    externalLetsGo?.();
     window.setTimeout(onDismiss, 700);
   };
 

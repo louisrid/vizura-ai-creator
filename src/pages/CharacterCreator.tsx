@@ -115,7 +115,7 @@ const CharacterCreator = () => {
   return (
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
-      <OnboardingOverlay open={showOnboarding && !user} onDismiss={handleDismissOnboarding} />
+      <OnboardingOverlay open={showOnboarding && !user} onDismiss={handleDismissOnboarding} onLetsGo={autoSignIn} />
 
       {/* Faint background image behind everything at top */}
       <div className="absolute top-0 left-1/2 z-0 w-full max-w-lg -translate-x-1/2">
