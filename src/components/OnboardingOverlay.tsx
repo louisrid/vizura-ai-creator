@@ -229,8 +229,8 @@ const ControlItem = ({ label, desc, n, delay }: { label: string; desc: string; n
 const Scene0 = () => (
   <div className="flex flex-col items-center gap-3">
     <motion.div
-      animate={{ rotate: [0, -8, 8, -6, 6, -3, 3, 0] }}
-      transition={{ duration: 0.6, delay: 0.3, ease: "easeInOut" }}
+      animate={{ rotate: [0, -14, 14, -12, 10, -6, 4, 0] }}
+      transition={{ duration: 1.4, delay: 0.4, ease: "easeInOut" }}
     >
       <IconPop delay={0.15} size={96}>
         <span className="text-[5rem]">👋</span>
