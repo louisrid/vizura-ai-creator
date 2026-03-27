@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap } from "lucide-react";
+import { ChevronDown, Loader2, Zap, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
@@ -37,7 +38,9 @@ const CharacterCreator = () => {
   const [body, setBody] = useState<(typeof bodyOptions)[number]>("regular");
   const [style, setStyle] = useState<(typeof styleOptions)[number]>("natural");
   const [description, setDescription] = useState(editPrompt || "");
+  const [characterName, setCharacterName] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [generated, setGenerated] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
@@ -54,6 +57,33 @@ const CharacterCreator = () => {
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
+  };
+
+  const saveCharacter = async () => {
+    if (!user) {
+      navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const { error: insertError } = await supabase.from("characters").insert({
+        user_id: user.id,
+        name: characterName.trim() || `${hair} ${eye} ${age}`,
+        country,
+        age,
+        hair,
+        eye,
+        body,
+        style,
+        description: description.trim(),
+      });
+      if (insertError) throw insertError;
+      toast({ title: "saved", description: "character saved to your collection" });
+    } catch (err: any) {
+      toast({ title: "error", description: err.message || "failed to save character", variant: "destructive" });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const generate = async () => {
@@ -130,6 +160,20 @@ const CharacterCreator = () => {
           onNext={cycleNext}
         />
 
+        {/* Character name */}
+        <section className="mt-6 flex flex-col gap-2">
+          <label htmlFor="character-name" className="text-xs font-extrabold lowercase text-foreground">
+            character name
+          </label>
+          <input
+            id="character-name"
+            value={characterName}
+            onChange={(e) => setCharacterName(e.target.value)}
+            placeholder="give your character a name..."
+            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+          />
+        </section>
+
         <section className="mt-6 flex flex-col gap-2">
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
@@ -140,7 +184,7 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="face shape, hairstyle, outfit, pose, mood, setting..."
             rows={4}
-            className="min-h-32 w-full resize-none rounded-2xl border-[4px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -157,8 +201,8 @@ const CharacterCreator = () => {
                   onClick={() => setStyle(s)}
                   className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
                     style === s
-                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[4px] border-transparent"
-                      : "border-[4px] border-border text-foreground hover:border-foreground/60"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[5px] border-transparent"
+                      : "border-[5px] border-border text-foreground hover:border-foreground/60"
                   }`}
                 >
                   {s}
@@ -173,13 +217,13 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-4 rounded-2xl border-[4px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
 
-        <div className="mt-6">
-          <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
+        <div className="mt-6 flex gap-2">
+          <Button className="flex-1 h-14 text-sm" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
@@ -191,6 +235,14 @@ const CharacterCreator = () => {
                 create
               </>
             )}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-14 px-5"
+            onClick={saveCharacter}
+            disabled={isSaving}
+          >
+            {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} strokeWidth={2.5} />}
           </Button>
         </div>
       </main>
@@ -211,7 +263,7 @@ const SelectField = <T extends string>({ label, options, value, onChange }: Sele
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-2xl border-[4px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
     >
       {options.map((option) => (
         <option key={option} value={option}>

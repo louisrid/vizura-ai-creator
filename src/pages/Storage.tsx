@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Download, Trash2, X, Check } from "lucide-react";
+import { Loader2, Download, Trash2, X, Calendar, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
@@ -10,14 +10,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface StorageImage {
   id: string;
+  genId: string;
   url: string;
   prompt: string;
-  source: "character" | "photo";
   created_at: string;
 }
-
-const filters = ["all", "characters", "photos"] as const;
-type Filter = (typeof filters)[number];
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
@@ -25,10 +22,7 @@ const Storage = () => {
   const location = useLocation();
   const [images, setImages] = useState<StorageImage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<Filter>("all");
-  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
-  const isSelecting = selected.size > 0;
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
@@ -45,13 +39,12 @@ const Storage = () => {
 
       const allImages: StorageImage[] = [];
       (data || []).forEach((gen: any) => {
-        const isCharacter = gen.prompt?.includes("body type,") && gen.prompt?.includes("hair,") && gen.prompt?.includes("eyes");
         (gen.image_urls || []).forEach((url: string, i: number) => {
           allImages.push({
             id: `${gen.id}-${i}`,
+            genId: gen.id,
             url,
-            prompt: gen.prompt,
-            source: isCharacter ? "character" : "photo",
+            prompt: gen.prompt || "",
             created_at: gen.created_at,
           });
         });
@@ -64,144 +57,63 @@ const Storage = () => {
 
   if (!authLoading && !user) return null;
 
-  const filtered = images.filter((img) => {
-    if (filter === "characters") return img.source === "character";
-    if (filter === "photos") return img.source === "photo";
-    return true;
-  });
-
-  const toggleSelect = (id: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  const formatDate = (dateStr: string) => {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }).toLowerCase();
   };
 
-  const handleDownload = async () => {
-    const toDownload = filtered.filter((img) => selected.has(img.id));
-    for (const img of toDownload) {
-      const a = document.createElement("a");
-      a.href = img.url;
-      a.download = `vizura-${img.id}.png`;
-      a.target = "_blank";
-      a.click();
-    }
-    setSelected(new Set());
-  };
-
-  const handleDelete = () => {
-    setImages((prev) => prev.filter((img) => !selected.has(img.id)));
-    setSelected(new Set());
+  const handleDelete = (img: StorageImage) => {
+    setImages((prev) => prev.filter((i) => i.id !== img.id));
+    if (expanded?.id === img.id) setExpanded(null);
   };
 
   return (
     <div className="min-h-screen bg-background">
-      
-        <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-          <div className="flex items-center gap-3 mb-10">
-            <BackButton />
-          </div>
-          <PageTitle>storage</PageTitle>
+      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
+        <div className="flex items-center gap-3 mb-10">
+          <BackButton />
+        </div>
+        <PageTitle>storage</PageTitle>
 
-          {/* Filter pills */}
-          <div className="flex gap-2 mb-6">
-            {filters.map((f) => (
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 className="animate-spin text-foreground" size={24} />
+          </div>
+        ) : images.length === 0 ? (
+          <div className="border-[5px] border-border rounded-2xl p-8 text-center">
+            <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
+            <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
+            <Button
+              variant="outline"
+              className="h-12"
+              onClick={() => navigate("/create-photo")}
+            >
+              create photo
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {images.map((img) => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`flex-1 py-3.5 rounded-2xl font-extrabold lowercase text-xs border-[5px] transition-all ${
-                  filter === f
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-transparent"
-                    : "border-border text-foreground hover:border-foreground/60"
-                }`}
+                key={img.id}
+                onClick={() => setExpanded(img)}
+                className="group relative rounded-2xl border-[5px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
               >
-                {f}
+                <img src={img.url} alt="" className="w-full aspect-[3/4] object-cover" />
+                <div className="p-3">
+                  <p className="text-[10px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed mb-2">
+                    {img.prompt || "no prompt"}
+                  </p>
+                  <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
+                    <Calendar size={10} strokeWidth={2.5} />
+                    {formatDate(img.created_at)}
+                  </div>
+                </div>
               </button>
             ))}
           </div>
-
-          {/* Selection action bar */}
-          <AnimatePresence>
-            {isSelecting && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.15 }}
-                className="overflow-hidden mb-6"
-              >
-                <div className="flex items-center gap-2 border-[5px] border-border rounded-2xl p-3">
-                  <span className="text-[10px] font-extrabold lowercase text-foreground flex-1">
-                    {selected.size} selected
-                  </span>
-                  <Button variant="outline" size="sm" className="h-10 px-4" onClick={handleDownload}>
-                    <Download size={14} strokeWidth={2.5} /> download
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-10 px-4 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
-                    onClick={handleDelete}
-                  >
-                    <Trash2 size={14} strokeWidth={2.5} /> delete
-                  </Button>
-                  <button
-                    onClick={() => setSelected(new Set())}
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-foreground hover:text-foreground transition-colors"
-                  >
-                    <X size={14} strokeWidth={2.5} />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="animate-spin text-foreground" size={24} />
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="border-[5px] border-border rounded-2xl p-6 text-center">
-              <p className="text-xs font-extrabold lowercase mb-3">nothing here yet</p>
-              <Button variant="outline" className="h-10" onClick={() => navigate("/")}>
-                start creating
-              </Button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2">
-              {filtered.map((img) => (
-                <button
-                  key={img.id}
-                  onClick={() => {
-                    if (isSelecting) toggleSelect(img.id);
-                    else setExpanded(img);
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    toggleSelect(img.id);
-                  }}
-                  className={`relative rounded-2xl border-[5px] overflow-hidden bg-background transition-all active:scale-[0.98] ${
-                    selected.has(img.id) ? "border-foreground" : "border-border hover:border-foreground/60"
-                  }`}
-                >
-                  <img src={img.url} alt="" className="w-full aspect-[3/4] object-cover" />
-                  {isSelecting && (
-                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                      selected.has(img.id)
-                        ? "bg-foreground border-foreground"
-                        : "bg-black/20 backdrop-blur border-white/50"
-                    }`}>
-                      {selected.has(img.id) && <Check size={12} strokeWidth={3} className="text-background" />}
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-        </main>
-      
+        )}
+      </main>
 
       {/* Expanded view */}
       <AnimatePresence>
@@ -215,9 +127,9 @@ const Storage = () => {
             onClick={() => setExpanded(null)}
           >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
               className="bg-card border-[5px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
@@ -226,17 +138,33 @@ const Storage = () => {
                 <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 <button
                   onClick={() => setExpanded(null)}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                  className="absolute top-3 right-3 w-9 h-9 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
                 >
                   <X size={14} strokeWidth={2.5} />
                 </button>
               </div>
-              <div className="p-4">
-                <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="block">
-                  <Button variant="outline" className="w-full h-10">
-                    <Download size={14} strokeWidth={2.5} /> download
+              <div className="p-4 space-y-3">
+                <p className="text-[10px] font-extrabold lowercase text-foreground/60 leading-relaxed">
+                  {expanded.prompt || "no prompt"}
+                </p>
+                <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
+                  <Calendar size={10} strokeWidth={2.5} />
+                  {formatDate(expanded.created_at)}
+                </div>
+                <div className="flex gap-2">
+                  <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
+                    <Button variant="outline" className="w-full h-12">
+                      <Download size={14} strokeWidth={2.5} /> download
+                    </Button>
+                  </a>
+                  <Button
+                    variant="outline"
+                    className="h-12 px-4 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                    onClick={() => handleDelete(expanded)}
+                  >
+                    <Trash2 size={14} strokeWidth={2.5} />
                   </Button>
-                </a>
+                </div>
               </div>
             </motion.div>
           </motion.div>
