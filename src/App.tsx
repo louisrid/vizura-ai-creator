@@ -44,8 +44,7 @@ const AppOnboarding = ({
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    const hiddenRoutes = ["/auth", "/reset-password"];
-    const shouldShow = !loading && !user && !hiddenRoutes.includes(location.pathname);
+    const shouldShow = !loading && !user && location.pathname === "/";
     setShowOnboarding(shouldShow);
     onOpenChange(shouldShow);
   }, [loading, user, location.pathname, onOpenChange]);
