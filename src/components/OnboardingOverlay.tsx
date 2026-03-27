@@ -452,8 +452,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onTouchEnd={handleTouchEnd}
         >
           {/* Scene content — true vertical centre between header and controls */}
-          <div className="flex-1 flex items-center justify-center overflow-hidden px-5 pt-2 pb-1">
-            <div className="flex w-full max-w-sm items-center justify-center" style={{ transform: "translateY(4vh)" }}>
+          <div className="flex-1 flex items-center justify-center overflow-hidden px-5">
+            <div className="flex w-full max-w-sm items-center justify-center" style={{ marginTop: "8vh" }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
@@ -508,25 +508,18 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                 {step > 0 && (
                   <motion.button
                     onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
-                    className="flex items-center justify-center rounded-2xl"
-                    style={{ cursor: "pointer" }}
-                    whileTap={{ scale: 1.15, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
-                    animate={{ width: 56, height: 56, background: "#000", borderWidth: 2, borderColor: "hsl(0 0% 100% / 0.12)", borderStyle: "solid" }}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.2 }}
+                    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[2px]"
+                    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
+                    whileTap={{ scale: 1.12, backgroundColor: "hsl(220, 90%, 55%)" }}
                   >
                     <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                   </motion.button>
                 )}
                 <motion.button
                   onClick={(e) => { e.stopPropagation(); advance(); }}
-                  className="flex items-center justify-center rounded-2xl"
-                  style={{ cursor: "pointer" }}
-                  whileTap={{ scale: 1.15, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
-                  animate={{ width: 56, height: 56, background: "#000", borderWidth: 2, borderColor: "hsl(0 0% 100% / 0.12)", borderStyle: "solid" }}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.25, delay: 0.1 }}
-                  layout
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border-[2px]"
+                  style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
+                  whileTap={{ scale: 1.12, backgroundColor: "hsl(220, 90%, 55%)" }}
                 >
                   <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                 </motion.button>
