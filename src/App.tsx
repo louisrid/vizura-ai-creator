@@ -44,21 +44,24 @@ const AppOnboarding = ({
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    const shouldShow = !loading && !user && location.pathname === "/";
+    const seen = sessionStorage.getItem("onboarding_seen");
+    const shouldShow = !loading && !user && location.pathname === "/" && !seen;
     setShowOnboarding(shouldShow);
     onOpenChange(shouldShow);
   }, [loading, user, location.pathname, onOpenChange]);
 
+  const dismiss = () => {
+    sessionStorage.setItem("onboarding_seen", "1");
+    setShowOnboarding(false);
+    onOpenChange(false);
+  };
+
   return (
     <OnboardingOverlay
       open={showOnboarding}
-      onDismiss={() => {
-        setShowOnboarding(false);
-        onOpenChange(false);
-      }}
+      onDismiss={dismiss}
       onLetsGo={() => {
-        setShowOnboarding(false);
-        onOpenChange(false);
+        dismiss();
         navigate("/");
       }}
     />

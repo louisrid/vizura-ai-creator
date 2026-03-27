@@ -250,7 +250,7 @@ const OnboardingOverlay = ({ open, onDismiss, onLetsGo: externalLetsGo }: { open
   };
 
   return (
-    <OverlayShell open={open} totalSteps={TOTAL_STEPS}>
+    <OverlayShell open={open} totalSteps={TOTAL_STEPS} onSkip={onDismiss}>
       {(step) => (
         <>
           {step === 0 && <Scene0 />}
