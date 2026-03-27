@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
+import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -11,11 +11,6 @@ import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
 
-const stylePresets = [
-  { label: "ig photo", icon: Camera, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
-  { label: "ig selfie", icon: SmartphoneNfc, suffix: ", instagram selfie style, front-facing camera, natural skin texture, soft ring light, photorealistic" },
-  { label: "freestyle", icon: Brush, suffix: ", photorealistic, hyperdetailed, cinematic lighting" },
-];
 
 const randomPrompts = [
   "confident woman in golden hour light, rooftop terrace",
@@ -36,7 +31,7 @@ const Index = () => {
   const [images, setImages] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
-  const [activeStyle, setActiveStyle] = useState<number>(0);
+  
 
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") setShowPaywall(true);
@@ -53,7 +48,7 @@ const Index = () => {
     setImages([]);
     setError("");
 
-    const fullPrompt = prompt.trim() + stylePresets[activeStyle].suffix;
+    const fullPrompt = prompt.trim();
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
