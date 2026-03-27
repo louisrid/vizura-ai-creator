@@ -6,6 +6,7 @@ import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-nature-collage.jpg";
 import OnboardingOverlay from "@/components/OnboardingOverlay";
@@ -23,6 +24,7 @@ const bodyOptions = ["slim", "regular", "curvy"] as const;
 const CharacterCreator = () => {
   const { user, autoSignIn } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
+  const { subscribed } = useSubscription();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -71,7 +73,7 @@ const CharacterCreator = () => {
 
   const generate = async () => {
     if (!user) { await autoSignIn(); return; }
-    if (credits <= 0) { setShowPaywall(true); return; }
+    if (credits <= 0 && !subscribed) { navigate("/account/membership"); return; }
 
     setIsGenerating(true);
     setError("");
