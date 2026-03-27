@@ -22,6 +22,12 @@ export const CreditsProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     try {
+      // Reset balance to 0 on sign-in so user starts fresh
+      await supabase
+        .from("credits")
+        .update({ balance: 0 })
+        .eq("user_id", user.id);
+
       const { data, error } = await supabase
         .from("credits")
         .select("balance")
