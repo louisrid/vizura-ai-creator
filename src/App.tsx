@@ -44,8 +44,7 @@ const AppOnboarding = ({
 
   useEffect(() => {
     const hiddenRoutes = ["/auth", "/reset-password"];
-    const alreadySeen = sessionStorage.getItem("onboarding_seen") === "1";
-    const shouldShow = !loading && !user && !alreadySeen && !hiddenRoutes.includes(location.pathname);
+    const shouldShow = !loading && !user && !hiddenRoutes.includes(location.pathname);
     setShowOnboarding(shouldShow);
     onOpenChange(shouldShow);
   }, [loading, user, location.pathname, onOpenChange]);
@@ -56,12 +55,10 @@ const AppOnboarding = ({
       onDismiss={() => {
         setShowOnboarding(false);
         onOpenChange(false);
-        sessionStorage.setItem("onboarding_seen", "1");
       }}
       onLetsGo={() => {
         setShowOnboarding(false);
         onOpenChange(false);
-        sessionStorage.setItem("onboarding_seen", "1");
         navigate("/");
       }}
     />
