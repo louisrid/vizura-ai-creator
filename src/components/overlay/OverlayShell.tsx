@@ -11,7 +11,7 @@ interface OverlayShellProps {
   onExited?: () => void;
 }
 
-const LONG_PRESS_MS = 400;
+const LONG_PRESS_MS = 1000;
 
 const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
@@ -30,20 +30,24 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
     setTimeout(() => setSkipAnim(false), 50);
   }, [totalSteps]);
 
-  const handleBackPointerDown = useCallback(() => {
+  const handleArrowPointerDown = useCallback((dir: "left" | "right") => {
     longPressTimer.current = window.setTimeout(() => {
       skipToEnd();
       longPressTimer.current = null;
     }, LONG_PRESS_MS);
+    // store which direction for short-tap fallback
+    (longPressTimer as any)._dir = dir;
   }, [skipToEnd]);
 
-  const handleBackPointerUp = useCallback(() => {
+  const handleArrowPointerUp = useCallback(() => {
     if (longPressTimer.current !== null) {
       clearTimeout(longPressTimer.current);
       longPressTimer.current = null;
-      setStep((s) => (s > 0 ? s - 1 : s));
+      const dir = (longPressTimer as any)._dir;
+      if (dir === "left") setStep((s) => (s > 0 ? s - 1 : s));
+      else advance();
     }
-  }, []);
+  }, [advance]);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -116,12 +120,17 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
                 {step > 0 && (
                   <ArrowButton
                     direction="left"
-                    onPointerDown={handleBackPointerDown}
-                    onPointerUp={handleBackPointerUp}
-                    onPointerLeave={handleBackPointerUp}
+                    onPointerDown={() => handleArrowPointerDown("left")}
+                    onPointerUp={handleArrowPointerUp}
+                    onPointerLeave={handleArrowPointerUp}
                   />
                 )}
-                <ArrowButton direction="right" onClick={advance} />
+                <ArrowButton
+                  direction="right"
+                  onPointerDown={() => handleArrowPointerDown("right")}
+                  onPointerUp={handleArrowPointerUp}
+                  onPointerLeave={handleArrowPointerUp}
+                />
               </div>
             ) : null}
 
