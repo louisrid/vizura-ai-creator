@@ -113,7 +113,14 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
           <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1">
             {showNav && step !== totalSteps - 1 ? (
               <div className="flex items-center justify-center gap-3">
-                {step > 0 && <ArrowButton direction="left" onClick={() => setStep((s) => s - 1)} />}
+                {step > 0 && (
+                  <ArrowButton
+                    direction="left"
+                    onPointerDown={handleBackPointerDown}
+                    onPointerUp={handleBackPointerUp}
+                    onPointerLeave={handleBackPointerUp}
+                  />
+                )}
                 <ArrowButton direction="right" onClick={advance} />
               </div>
             ) : null}
