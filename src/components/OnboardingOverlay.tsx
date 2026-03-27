@@ -479,7 +479,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
             {step === TOTAL_STEPS - 1 ? (
               <motion.button
                 onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
+                className="relative h-16 w-full rounded-2xl text-lg font-[900] lowercase tracking-tight border-[4px]"
                 style={{
                   background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
                   borderColor: "hsl(50 100% 54%)",
