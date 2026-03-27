@@ -55,6 +55,19 @@ const CharacterCreator = () => {
     localStorage.setItem("onboarding_seen", "true");
   }, []);
 
+  const autoSignIn = useCallback(async () => {
+    if (user) return;
+    const id = crypto.randomUUID().slice(0, 8);
+    const email = `user-${id}@vizura.app`;
+    const password = crypto.randomUUID();
+    try {
+      const { error: signUpErr } = await supabase.auth.signUp({ email, password });
+      if (signUpErr) throw signUpErr;
+    } catch (e: any) {
+      console.error("auto sign-in failed", e);
+    }
+  }, [user]);
+
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
     return generated.map((img) => img ?? null);
@@ -69,7 +82,7 @@ const CharacterCreator = () => {
   };
 
   const generate = async () => {
-    if (!user) { navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`); return; }
+    if (!user) { await autoSignIn(); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
 
     setIsGenerating(true);
@@ -102,7 +115,7 @@ const CharacterCreator = () => {
   return (
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
-      <OnboardingOverlay open={showOnboarding && !user} onDismiss={handleDismissOnboarding} />
+      <OnboardingOverlay open={showOnboarding && !user} onDismiss={handleDismissOnboarding} onLetsGo={autoSignIn} />
 
       {/* Faint background image behind everything at top */}
       <div className="absolute top-0 left-1/2 z-0 w-full max-w-lg -translate-x-1/2">

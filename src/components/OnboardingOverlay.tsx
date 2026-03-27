@@ -413,7 +413,7 @@ const Scene5 = ({ burst, onLetsGo }: { burst: boolean; onLetsGo: () => void }) =
    MAIN OVERLAY
    ═══════════════════════════════════════════════════════ */
 
-const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () => void }) => {
+const OnboardingOverlay = ({ open, onDismiss, onLetsGo: externalLetsGo }: { open: boolean; onDismiss: () => void; onLetsGo?: () => void }) => {
   const [step, setStep] = useState(0);
   const [burst, setBurst] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -462,6 +462,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
 
   const handleLetsGo = () => {
     setBurst(true);
+    externalLetsGo?.();
     window.setTimeout(onDismiss, 700);
   };
 
