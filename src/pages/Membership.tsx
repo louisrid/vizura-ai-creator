@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader2, Zap, Check } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
@@ -10,49 +10,32 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const plans = [
-  {
-    name: "starter",
-    price: 7,
-    credits: 150,
-    features: ["150 credits", "3 character creates", "~20 photos", "cancel anytime"],
-  },
-  {
-    name: "pro",
-    price: 20,
-    credits: 600,
-    features: ["600 credits", "3-4 character creates", "80+ photos", "best value"],
-    highlighted: true,
-  },
-];
-
 const Membership = () => {
   const { user, loading: authLoading } = useAuth();
   const { refetch } = useCredits();
   const { subscribe } = useSubscription();
   const navigate = useNavigate();
-  const [buying, setBuying] = useState<string | null>(null);
+  const [buying, setBuying] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth");
   }, [user, authLoading, navigate]);
 
-  const handleSubscribe = async (plan: typeof plans[number]) => {
-    setBuying(plan.name);
+  const handleSubscribe = async () => {
+    setBuying(true);
     try {
-      // Mock: add credits via edge function
       const { error } = await supabase.functions.invoke("add-credits", {
-        body: { amount: plan.credits },
+        body: { amount: 150 },
       });
       if (error) throw error;
-      subscribe(plan.name, plan.credits);
+      subscribe("member", 150);
       await refetch();
-      toast.success(`subscribed to ${plan.name}!`);
+      toast.success("subscribed!");
       navigate("/account");
     } catch (e: any) {
       toast.error(e.message || "failed to subscribe");
     } finally {
-      setBuying(null);
+      setBuying(false);
     }
   };
 
@@ -64,43 +47,21 @@ const Membership = () => {
         </div>
         <PageTitle>membership</PageTitle>
 
-        <div className="space-y-4">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className="border-[4px] border-border rounded-2xl p-5"
-            >
-              <div className="flex items-baseline justify-between mb-3">
-                <span className="text-2xl font-extrabold lowercase text-foreground">
-                  ${plan.price}/month
-                </span>
-                <span className="text-xs font-extrabold lowercase text-foreground">
-                  {plan.name}
-                </span>
-              </div>
+        <div className="border-[4px] border-border rounded-2xl p-6">
+          <span className="block text-2xl font-extrabold lowercase text-foreground mb-1">
+            $7/first month
+          </span>
+          <span className="block text-sm font-extrabold lowercase text-foreground/60 mb-6">
+            then $20/month
+          </span>
 
-              <div className="space-y-1.5 mb-5">
-                {plan.features.map((f) => (
-                  <div key={f} className="flex items-center gap-2">
-                    <Check size={14} strokeWidth={3} className="text-foreground shrink-0" />
-                    <span className="text-xs font-extrabold lowercase text-foreground">{f}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Button
-                className="w-full h-12 text-sm bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600 border-0"
-                onClick={() => handleSubscribe(plan)}
-                disabled={buying !== null}
-              >
-                {buying === plan.name ? (
-                  <Loader2 className="animate-spin" size={18} />
-                ) : (
-                  "subscribe"
-                )}
-              </Button>
-            </div>
-          ))}
+          <Button
+            className="w-full h-12 text-sm bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600 border-0"
+            onClick={handleSubscribe}
+            disabled={buying}
+          >
+            {buying ? <Loader2 className="animate-spin" size={18} /> : "subscribe"}
+          </Button>
         </div>
 
         <div className="mt-8 text-center">
