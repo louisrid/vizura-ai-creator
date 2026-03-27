@@ -475,11 +475,14 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           </div>
 
           {/* Controls — slightly raised from bottom */}
-          <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1">
+          <div
+            className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1"
+            style={step === TOTAL_STEPS - 1 ? { marginTop: "-8vh" } : undefined}
+          >
             {step === TOTAL_STEPS - 1 ? (
               <motion.button
                 onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                className="relative h-14 w-full rounded-2xl text-sm font-[900] lowercase tracking-tight border-[4px]"
+                className="relative h-16 w-full rounded-2xl text-lg font-[900] lowercase tracking-tight border-[4px]"
                 style={{
                   background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
                   borderColor: "hsl(50 100% 54%)",
