@@ -141,7 +141,7 @@ const Scene1 = () => (
   </div>
 );
 
-const Scene2 = ({ burst, buying, onSubscribe }: { burst: boolean; buying: boolean; onSubscribe: () => void }) => (
+const Scene2 = ({ burst, buying, onSubscribe, onDismiss }: { burst: boolean; buying: boolean; onSubscribe: () => void; onDismiss: () => void }) => (
   <div className="relative flex flex-col items-center gap-3">
     <ParticleBurst active={burst} />
     <IconPop delay={0.1} size={96}>
@@ -180,6 +180,19 @@ const Scene2 = ({ burst, buying, onSubscribe }: { burst: boolean; buying: boolea
       <span className="relative z-10 flex items-center justify-center gap-2">
         {buying ? <Loader2 className="animate-spin" size={20} /> : "subscribe"}
       </span>
+    </motion.button>
+    <motion.button
+      onClick={(e) => {
+        e.stopPropagation();
+        onDismiss();
+      }}
+      className="mt-2 text-xs font-extrabold lowercase underline underline-offset-4"
+      style={{ color: "hsl(0 0% 100% / 0.4)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, delay: 0.5 }}
+    >
+      i'll think about it
     </motion.button>
   </div>
 );
