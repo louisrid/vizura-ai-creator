@@ -136,14 +136,13 @@ const CharacterCreator = () => {
             setShowOnboarding(true);
             localStorage.removeItem("onboarding_seen");
           }}
-          className="mx-auto mb-3 flex h-8 w-8 items-center justify-center rounded-full border-[4px] border-border text-foreground/40 hover:text-foreground transition-colors"
+          className="mx-auto mb-3 flex h-8 w-8 items-center justify-center rounded-2xl border-[4px] border-border text-foreground/40 hover:text-foreground transition-colors"
           aria-label="Replay onboarding"
         >
           <RefreshCw size={13} strokeWidth={2.5} />
         </button>
         <h1
-          className="text-4xl lowercase tracking-tighter text-foreground text-center"
-          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800 }}
+          className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center"
         >
           create character
         </h1>
