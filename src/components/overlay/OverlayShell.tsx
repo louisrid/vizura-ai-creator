@@ -9,11 +9,12 @@ interface OverlayShellProps {
   children: (step: number) => React.ReactNode;
   showNav?: boolean;
   onExited?: () => void;
+  onSkip?: () => void;
 }
 
 const LONG_PRESS_MS = 1000;
 
-const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: OverlayShellProps) => {
+const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onSkip }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [skipAnim, setSkipAnim] = useState(false);
@@ -24,20 +25,17 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
     setStep((s) => (s < totalSteps - 1 ? s + 1 : s));
   }, [totalSteps]);
 
-  const skipToEnd = useCallback(() => {
-    setSkipAnim(true);
-    setStep(totalSteps - 1);
-    setTimeout(() => setSkipAnim(false), 50);
-  }, [totalSteps]);
+  const handleLongPress = useCallback(() => {
+    onSkip?.();
+  }, [onSkip]);
 
   const handleArrowPointerDown = useCallback((dir: "left" | "right") => {
     longPressTimer.current = window.setTimeout(() => {
-      skipToEnd();
+      handleLongPress();
       longPressTimer.current = null;
     }, LONG_PRESS_MS);
-    // store which direction for short-tap fallback
     (longPressTimer as any)._dir = dir;
-  }, [skipToEnd]);
+  }, [handleLongPress]);
 
   const handleArrowPointerUp = useCallback(() => {
     if (longPressTimer.current !== null) {
