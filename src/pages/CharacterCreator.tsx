@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,16 +29,19 @@ const CharacterCreator = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const editPrompt = searchParams.get("edit");
 
-  const [country, setCountry] = useState<string>("any");
-  const [age, setAge] = useState<string>("25");
-  const [hair, setHair] = useState<(typeof hairOptions)[number]>("brunette");
-  const [eye, setEye] = useState<(typeof eyeOptions)[number]>("brown");
-  const [body, setBody] = useState<(typeof bodyOptions)[number]>("regular");
-  const [style, setStyle] = useState<(typeof styleOptions)[number]>("natural");
-  const [description, setDescription] = useState(editPrompt || "");
-  const [characterName, setCharacterName] = useState("");
+  // Edit mode
+  const editId = searchParams.get("editId");
+  const isEditing = !!editId;
+
+  const [country, setCountry] = useState<string>(searchParams.get("country") || "any");
+  const [age, setAge] = useState<string>(searchParams.get("age") || "25");
+  const [hair, setHair] = useState<string>(searchParams.get("hair") || "brunette");
+  const [eye, setEye] = useState<string>(searchParams.get("eye") || "brown");
+  const [body, setBody] = useState<string>(searchParams.get("body") || "regular");
+  const [style, setStyle] = useState<string>(searchParams.get("style") || "natural");
+  const [description, setDescription] = useState(searchParams.get("description") || searchParams.get("edit") || "");
+  const [characterName, setCharacterName] = useState(searchParams.get("name") || "");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [generated, setGenerated] = useState<string[]>([]);
@@ -66,8 +69,7 @@ const CharacterCreator = () => {
     }
     setIsSaving(true);
     try {
-      const { error: insertError } = await supabase.from("characters").insert({
-        user_id: user.id,
+      const charData = {
         name: characterName.trim() || `${hair} ${eye} ${age}`,
         country,
         age,
@@ -76,9 +78,23 @@ const CharacterCreator = () => {
         body,
         style,
         description: description.trim(),
-      });
-      if (insertError) throw insertError;
-      toast({ title: "saved", description: "character saved to your collection" });
+      };
+
+      if (isEditing) {
+        const { error: updateError } = await supabase
+          .from("characters")
+          .update(charData)
+          .eq("id", editId);
+        if (updateError) throw updateError;
+        toast({ title: "updated", description: "character updated successfully" });
+      } else {
+        const { error: insertError } = await supabase.from("characters").insert({
+          user_id: user.id,
+          ...charData,
+        });
+        if (insertError) throw insertError;
+        toast({ title: "saved", description: "character saved to your collection" });
+      }
     } catch (err: any) {
       toast({ title: "error", description: err.message || "failed to save character", variant: "destructive" });
     } finally {
@@ -148,7 +164,7 @@ const CharacterCreator = () => {
 
       <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0">
         <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
-          create character
+          {isEditing ? "edit character" : "create character"}
         </h1>
       </div>
 
@@ -217,7 +233,7 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
