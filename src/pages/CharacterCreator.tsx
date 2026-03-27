@@ -55,6 +55,19 @@ const CharacterCreator = () => {
     localStorage.setItem("onboarding_seen", "true");
   }, []);
 
+  const autoSignIn = useCallback(async () => {
+    if (user) return;
+    const id = crypto.randomUUID().slice(0, 8);
+    const email = `user-${id}@vizura.app`;
+    const password = crypto.randomUUID();
+    try {
+      const { error: signUpErr } = await supabase.auth.signUp({ email, password });
+      if (signUpErr) throw signUpErr;
+    } catch (e: any) {
+      console.error("auto sign-in failed", e);
+    }
+  }, [user]);
+
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
     return generated.map((img) => img ?? null);
