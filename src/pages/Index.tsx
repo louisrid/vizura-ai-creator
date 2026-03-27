@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Camera, SmartphoneNfc, Brush, Sparkles, Download, Zap, Shuffle, Wand2 } from "lucide-react";
+import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -11,11 +11,6 @@ import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
 
-const stylePresets = [
-  { label: "ig photo", icon: Camera, suffix: ", professional instagram photography, natural lighting, shallow depth of field, photorealistic" },
-  { label: "ig selfie", icon: SmartphoneNfc, suffix: ", instagram selfie style, front-facing camera, natural skin texture, soft ring light, photorealistic" },
-  { label: "freestyle", icon: Brush, suffix: ", photorealistic, hyperdetailed, cinematic lighting" },
-];
 
 const randomPrompts = [
   "confident woman in golden hour light, rooftop terrace",
@@ -36,7 +31,7 @@ const Index = () => {
   const [images, setImages] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
-  const [activeStyle, setActiveStyle] = useState<number>(0);
+  
 
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") setShowPaywall(true);
@@ -53,7 +48,7 @@ const Index = () => {
     setImages([]);
     setError("");
 
-    const fullPrompt = prompt.trim() + stylePresets[activeStyle].suffix;
+    const fullPrompt = prompt.trim();
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
@@ -130,28 +125,6 @@ const Index = () => {
               />
             </div>
 
-            <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">style</span>
-              <div className="flex gap-2">
-                {stylePresets.map((style, i) => {
-                  const Icon = style.icon;
-                  return (
-                    <button
-                      key={style.label}
-                      onClick={() => setActiveStyle(i)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 rounded-2xl border-[4px] py-4 text-sm font-extrabold lowercase transition-all ${
-                        activeStyle === i
-                          ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-transparent"
-                          : "border-border text-foreground hover:border-foreground/60"
-                      }`}
-                    >
-                      <Icon size={16} strokeWidth={2.5} />
-                      {style.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
           </div>
 
           {error && (
