@@ -34,7 +34,9 @@ const MyCharacters = () => {
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location.pathname]);
+
+  if (!authLoading && !user) return null;
 
   const cells = Array.from({ length: GRID_COLS * GRID_ROWS });
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,37 +13,61 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
   const [submitting, setSubmitting] = useState(false);
-  const attemptedAutoSignInRef = useRef(false);
 
   useEffect(() => {
     if (user) navigate(redirectTo, { replace: true });
   }, [user, navigate, redirectTo]);
 
-  useEffect(() => {
-    if (authLoading || user || submitting || attemptedAutoSignInRef.current) return;
+  const handleAutoSignIn = async () => {
+    setSubmitting(true);
 
-    const doAutoSign = async () => {
-      attemptedAutoSignInRef.current = true;
-      setSubmitting(true);
+    try {
+      await autoSignIn();
+    } catch (err: any) {
+      toast.error(err.message || "something went wrong");
+      setSubmitting(false);
+    }
+  };
 
-      try {
-        await autoSignIn();
-      } catch (err: any) {
-        toast.error(err.message || "something went wrong");
-      } finally {
-        setSubmitting(false);
-      }
-    };
-    doAutoSign();
-  }, [authLoading, user, submitting, autoSignIn]);
+  if (authLoading || user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="animate-spin text-foreground" size={28} />
+      </div>
+    );
+  }
 
-  if (authLoading || user || submitting) return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <Loader2 className="animate-spin text-foreground" size={28} />
+  return (
+    <div className="min-h-screen bg-background">
+      <main className="mx-auto w-full max-w-lg px-4 pt-12 pb-12">
+        <div className="mb-10 flex items-center gap-3">
+          <BackButton />
+        </div>
+
+        <PageTitle>sign in</PageTitle>
+
+        <div className="rounded-2xl border-[4px] border-border bg-card p-5">
+          <p className="mb-4 text-sm font-extrabold lowercase text-foreground/70">
+            tap continue to sign in
+          </p>
+
+          <Button className="mt-0 h-14 w-full text-sm" onClick={handleAutoSignIn} disabled={submitting}>
+            {submitting ? (
+              <>
+                <Loader2 className="animate-spin" size={18} />
+                signing in...
+              </>
+            ) : (
+              <>
+                continue
+                <ArrowRight size={14} />
+              </>
+            )}
+          </Button>
+        </div>
+      </main>
     </div>
   );
-
-  return null;
 };
 
 export default Auth;

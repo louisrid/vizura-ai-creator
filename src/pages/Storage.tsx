@@ -32,7 +32,9 @@ const Storage = () => {
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location.pathname]);
+
+  if (!authLoading && !user) return null;
 
   useEffect(() => {
     const fetchAll = async () => {

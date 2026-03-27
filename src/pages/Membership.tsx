@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import SubscribeOverlay from "@/components/SubscribeOverlay";
@@ -13,13 +13,16 @@ const Membership = () => {
   const { user, loading: authLoading } = useAuth();
   const { refetch } = useCredits();
   const { subscribe } = useSubscription();
+  const location = useLocation();
   const navigate = useNavigate();
   const [buying, setBuying] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate("/auth");
-  }, [user, authLoading, navigate]);
+    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+  }, [user, authLoading, navigate, location.pathname]);
+
+  if (!authLoading && !user) return null;
 
   const handleSubscribe = async () => {
     setBuying(true);
