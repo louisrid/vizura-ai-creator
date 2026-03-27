@@ -59,7 +59,7 @@ const Auth = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="h-14 w-full rounded-2xl border-[4px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
+            className="h-14 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
           />
 
           {mode !== "forgot" && (
@@ -70,7 +70,7 @@ const Auth = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="h-14 w-full rounded-2xl border-[4px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
+              className="h-14 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
             />
           )}
 
