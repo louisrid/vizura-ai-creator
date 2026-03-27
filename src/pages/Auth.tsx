@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,15 +13,19 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
   const [submitting, setSubmitting] = useState(false);
+  const attemptedAutoSignInRef = useRef(false);
 
   useEffect(() => {
     if (user) navigate(redirectTo, { replace: true });
   }, [user, navigate, redirectTo]);
 
   useEffect(() => {
-    if (authLoading || user || submitting) return;
+    if (authLoading || user || submitting || attemptedAutoSignInRef.current) return;
+
     const doAutoSign = async () => {
+      attemptedAutoSignInRef.current = true;
       setSubmitting(true);
+
       try {
         await autoSignIn();
       } catch (err: any) {
