@@ -17,40 +17,32 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const signedOutRef = useRef(false);
+  const bootSigningOutRef = useRef(true);
 
   useEffect(() => {
     let cancelled = false;
 
-    // Force sign-out on every fresh page load
-    signedOutRef.current = true;
-    supabase.auth.signOut().then(() => {
-      if (!cancelled) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
         setUser(null);
-        setLoading(false);
+        return;
+      }
+
+      if (bootSigningOutRef.current) {
+        return;
+      }
+
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+        setUser(session?.user ?? null);
       }
     });
 
-    // Listen for auth changes, but ignore events that arrive
-    // before/during the initial forced sign-out
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_OUT") {
-          setUser(null);
-          return;
-        }
-        // Only accept a session after the forced sign-out completes
-        // and only for real sign-in events (not the initial restore)
-        if (event === "INITIAL_SESSION" && signedOutRef.current) {
-          // Ignore the restored session — we already signed out
-          return;
-        }
-        if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-          signedOutRef.current = false;
-          setUser(session?.user ?? null);
-        }
-      }
-    );
+    supabase.auth.signOut().then(() => {
+      if (cancelled) return;
+      bootSigningOutRef.current = false;
+      setUser(null);
+      setLoading(false);
+    });
 
     return () => {
       cancelled = true;
