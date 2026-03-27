@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const plans = [
-  { label: "starter", credits: 1000, price: 9 },
-  { label: "popular", credits: 3500, price: 20, highlighted: true },
-  { label: "pro", credits: 15000, price: 60 },
+  { label: "starter", credits: 150, price: 5 },
+  { label: "popular", credits: 600, price: 15, highlighted: true },
+  { label: "pro", credits: 1500, price: 30 },
 ];
 
 const TopUps = () => {
