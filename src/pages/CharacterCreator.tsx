@@ -40,13 +40,19 @@ const CharacterCreator = () => {
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
+    return localStorage.getItem("onboarding_seen") === "true";
+  });
 
   useEffect(() => {
-    setShowOnboarding(!user);
-  }, [user]);
+    if (onboardingDismissed || user) return;
+    setShowOnboarding(true);
+  }, [onboardingDismissed, user]);
 
   const handleDismissOnboarding = useCallback(() => {
     setShowOnboarding(false);
+    setOnboardingDismissed(true);
+    localStorage.setItem("onboarding_seen", "true");
   }, []);
 
   const imageCards = useMemo(() => {
