@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      characters: {
+        Row: {
+          age: string
+          body: string
+          country: string
+          created_at: string
+          description: string
+          eye: string
+          hair: string
+          id: string
+          name: string
+          style: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: string
+          body?: string
+          country?: string
+          created_at?: string
+          description?: string
+          eye?: string
+          hair?: string
+          id?: string
+          name?: string
+          style?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: string
+          body?: string
+          country?: string
+          created_at?: string
+          description?: string
+          eye?: string
+          hair?: string
+          id?: string
+          name?: string
+          style?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       credits: {
         Row: {
           balance: number
