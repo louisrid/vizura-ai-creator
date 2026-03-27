@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, RefreshCw, Zap } from "lucide-react";
+import { ChevronDown, Loader2, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
@@ -129,25 +130,39 @@ const CharacterCreator = () => {
       </div>
 
       {/* Page title */}
-      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0">
-        <h1
-          className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center"
-        >
+      <motion.div
+        className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
+        <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
           create character
         </h1>
-      </div>
+      </motion.div>
 
       <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
 
-        <CardCarousel
-          images={imageCards}
-          activeIndex={activeIndex}
-          onPrevious={cyclePrevious}
-          onNext={cycleNext}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+        >
+          <CardCarousel
+            images={imageCards}
+            activeIndex={activeIndex}
+            onPrevious={cyclePrevious}
+            onNext={cycleNext}
+          />
+        </motion.div>
 
         {/* Description textarea */}
-        <section className="mt-6 flex flex-col gap-2">
+        <motion.section
+          className="mt-6 flex flex-col gap-2"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
+        >
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
           </label>
@@ -159,16 +174,21 @@ const CharacterCreator = () => {
             rows={4}
             className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
-        </section>
+        </motion.section>
 
         {/* Dropdowns */}
-        <section className="mt-6 flex flex-col gap-4">
+        <motion.section
+          className="mt-6 flex flex-col gap-4"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
+        >
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
           <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
-        </section>
+        </motion.section>
 
         {error && (
           <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
@@ -177,7 +197,12 @@ const CharacterCreator = () => {
         )}
 
         {/* Create button */}
-        <div className="mt-6">
+        <motion.div
+          className="mt-6"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
+        >
           <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
               <>
@@ -191,7 +216,7 @@ const CharacterCreator = () => {
               </>
             )}
           </Button>
-        </div>
+        </motion.div>
       </main>
     </div>
   );
