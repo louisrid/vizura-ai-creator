@@ -477,7 +477,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           {/* Controls — slightly raised from bottom */}
           <div
             className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1"
-            style={step === TOTAL_STEPS - 1 ? { marginTop: "-18vh" } : undefined}
+            style={step === TOTAL_STEPS - 1 ? { marginTop: "-28vh" } : undefined}
           >
             {step === TOTAL_STEPS - 1 ? (
               <motion.button
