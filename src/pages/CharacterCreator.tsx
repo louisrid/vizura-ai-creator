@@ -23,7 +23,7 @@ const bodyOptions = ["slim", "regular", "curvy"] as const;
 const styleOptions = ["natural", "model", "egirl"] as const;
 
 const CharacterCreator = () => {
-  const { user, autoSignIn } = useAuth();
+  const { user, loading: authLoading, autoSignIn } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
   const { subscribed } = useSubscription();
   const navigate = useNavigate();
@@ -49,9 +49,9 @@ const CharacterCreator = () => {
   });
 
   useEffect(() => {
-    if (onboardingDismissed || user) return;
+    if (authLoading || onboardingDismissed || user) return;
     setShowOnboarding(true);
-  }, [onboardingDismissed, user]);
+  }, [authLoading, onboardingDismissed, user]);
 
   const handleDismissOnboarding = useCallback(() => {
     setShowOnboarding(false);
