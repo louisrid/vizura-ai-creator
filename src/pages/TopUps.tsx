@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const plans = [
-  { label: "starter", credits: 150, price: 5 },
-  { label: "popular", credits: 600, price: 15, highlighted: true },
-  { label: "pro", credits: 1500, price: 30 },
+  { label: "starter", credits: 150, price: 5, envVar: "TOPUP_150_PRICE_ID" },
+  { label: "popular", credits: 600, price: 15, highlighted: true, envVar: "TOPUP_600_PRICE_ID" },
+  { label: "pro", credits: 1500, price: 30, envVar: "TOPUP_1500_PRICE_ID" },
 ];
 
 const TopUps = () => {
@@ -31,16 +31,16 @@ const TopUps = () => {
   const handleBuy = async (plan: typeof plans[number]) => {
     setBuying(plan.label);
     try {
-      const { data, error } = await supabase.functions.invoke("add-credits", {
-        body: { amount: plan.credits },
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { type: "topup", priceId: plan.envVar },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      await refetch();
-      toast.success(`${plan.credits.toLocaleString()} credits added`);
+      if (data?.url) {
+        window.location.href = data.url;
+      }
     } catch (e: any) {
-      toast.error(e.message || "failed to add credits");
-    } finally {
+      toast.error(e.message || "failed to start checkout");
       setBuying(null);
     }
   };
