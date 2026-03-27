@@ -136,19 +136,19 @@ const Scene1 = () => (
     </IconPop>
     <BigTitle delay={0.2}>your imagination, no limits</BigTitle>
     <Subtitle delay={0.35}>
-      full access to every style, setting, and detail — generate as many photos as you want
+      full access to every style, setting, and detail. generate as many photos as you want
     </Subtitle>
   </div>
 );
 
-const Scene2 = ({ burst, buying, onSubscribe }: { burst: boolean; buying: boolean; onSubscribe: () => void }) => (
+const Scene2 = ({ burst, buying, onSubscribe, onDismiss }: { burst: boolean; buying: boolean; onSubscribe: () => void; onDismiss: () => void }) => (
   <div className="relative flex flex-col items-center gap-3">
     <ParticleBurst active={burst} />
     <IconPop delay={0.1} size={96}>
       <span className="text-[5rem]">✨</span>
     </IconPop>
     <BigTitle delay={0.2}>$7 first month</BigTitle>
-    <Subtitle delay={0.35}>then $20/month — cancel anytime</Subtitle>
+    <Subtitle delay={0.35}>then $20/month. cancel anytime</Subtitle>
     <motion.button
       onClick={(e) => {
         e.stopPropagation();
@@ -180,6 +180,19 @@ const Scene2 = ({ burst, buying, onSubscribe }: { burst: boolean; buying: boolea
       <span className="relative z-10 flex items-center justify-center gap-2">
         {buying ? <Loader2 className="animate-spin" size={20} /> : "subscribe"}
       </span>
+    </motion.button>
+    <motion.button
+      onClick={(e) => {
+        e.stopPropagation();
+        onDismiss();
+      }}
+      className="mt-2 text-xs font-extrabold lowercase underline underline-offset-4"
+      style={{ color: "hsl(0 0% 100% / 0.4)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, delay: 0.5 }}
+    >
+      i'll think about it
     </motion.button>
   </div>
 );
@@ -273,7 +286,7 @@ const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOve
                 >
                   {step === 0 && <Scene0 />}
                   {step === 1 && <Scene1 />}
-                  {step === 2 && <Scene2 burst={burst} buying={buying} onSubscribe={handleSubscribe} />}
+                  {step === 2 && <Scene2 burst={burst} buying={buying} onSubscribe={handleSubscribe} onDismiss={onDismiss} />}
                 </motion.div>
               </AnimatePresence>
             </div>
