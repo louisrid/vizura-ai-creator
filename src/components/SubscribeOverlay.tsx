@@ -299,7 +299,7 @@ const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOve
                 {step > 0 && (
                   <motion.button
                     onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
-                    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[2px]"
+                    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
                     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
                     whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
                   >
@@ -308,7 +308,7 @@ const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOve
                 )}
                 <motion.button
                   onClick={(e) => { e.stopPropagation(); advance(); }}
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl border-[2px]"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
                   style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
                   whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
                 >

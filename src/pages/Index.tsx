@@ -141,7 +141,7 @@ const Index = () => {
                       onClick={() => setActiveStyle(i)}
                       className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl font-extrabold lowercase text-sm border-[4px] transition-all ${
                         activeStyle === i
-                          ? "border-foreground bg-foreground text-background"
+                          ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-transparent"
                           : "border-border text-foreground hover:border-foreground/60"
                       }`}
                     >

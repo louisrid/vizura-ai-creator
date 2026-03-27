@@ -175,7 +175,7 @@ const CharacterCreator = () => {
                   onClick={() => setStyle(s)}
                   className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
                     style === s
-                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[4px] border-transparent"
                       : "border-[4px] border-border text-foreground hover:border-foreground/60"
                   }`}
                 >
