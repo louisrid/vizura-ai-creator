@@ -45,13 +45,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-16 pb-12">
+      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
         <div className="flex items-center gap-3 mb-10">
           <BackButton />
         </div>
-        <h1 className="text-4xl font-extrabold lowercase tracking-tight text-foreground mb-10">
-          {mode === "forgot" ? "reset password" : mode === "signup" ? "sign up" : "sign in"}
-        </h1>
+        <PageTitle>{mode === "forgot" ? "reset password" : mode === "signup" ? "sign up" : "sign in"}</PageTitle>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
