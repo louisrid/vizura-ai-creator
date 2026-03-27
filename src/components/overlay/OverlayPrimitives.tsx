@@ -188,12 +188,24 @@ export const SwipeHint = () => (
 );
 
 /* ── arrow nav buttons ── */
-export const ArrowButton = ({ direction, onClick }: { direction: "left" | "right"; onClick: () => void }) => (
+export const ArrowButton = ({
+  direction,
+  onClick,
+  onPointerDown,
+  onPointerUp,
+  onPointerLeave,
+}: {
+  direction: "left" | "right";
+  onClick?: () => void;
+  onPointerDown?: () => void;
+  onPointerUp?: () => void;
+  onPointerLeave?: () => void;
+}) => (
   <motion.button
-    onClick={(e) => {
-      e.stopPropagation();
-      onClick();
-    }}
+    onClick={(e) => { e.stopPropagation(); onClick?.(); }}
+    onPointerDown={onPointerDown}
+    onPointerUp={onPointerUp}
+    onPointerLeave={onPointerLeave}
     className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
     whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
