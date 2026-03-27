@@ -164,7 +164,7 @@ const Index = () => {
             <Button
               className="flex-1 h-16 text-sm"
               onClick={handleCreate}
-              disabled={isGenerating || !prompt.trim()}
+              disabled={isGenerating || (!!user && !prompt.trim())}
             >
               {isGenerating ? (
                 <><Loader2 className="animate-spin" size={18} />creating…</>
