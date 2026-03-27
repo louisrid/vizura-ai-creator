@@ -54,7 +54,7 @@ const MyCharacters = () => {
                 <button
                   key={i}
                   onClick={() => navigate("/")}
-                  className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
+                  className="aspect-[3/4] rounded-2xl border-[4px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
                 >
                   <Plus size={32} strokeWidth={3} className="text-foreground" />
                 </button>
@@ -65,7 +65,7 @@ const MyCharacters = () => {
             if (i === 1 && user) {
               return (
                 <div key={i} className="flex flex-col items-center">
-                  <div className="aspect-[3/4] w-full rounded-2xl border-[5px] border-border bg-card flex items-center justify-center relative overflow-hidden">
+                  <div className="aspect-[3/4] w-full rounded-2xl border-[4px] border-border bg-card flex items-center justify-center relative overflow-hidden">
                     <span className="absolute text-5xl leading-none" style={{ bottom: '16px', left: '14px' }}>🇺🇸</span>
                     <div className="relative z-10">
                       <CartoonGirl size={100} />
