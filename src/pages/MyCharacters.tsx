@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import BackButton from "@/components/BackButton";
+import PageTitle from "@/components/PageTitle";
 
 const CartoonGirl = ({ size = 80 }: { size?: number }) => (
   <svg width={size} height={size * 1.2} viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,10 +40,11 @@ const MyCharacters = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-28 pb-12">
-        <h1 className="text-5xl font-[900] lowercase tracking-tighter text-foreground text-center mb-12">
-          my characters
-        </h1>
+      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
+        <div className="flex items-center gap-3 mb-10">
+          <BackButton />
+        </div>
+        <PageTitle>my characters</PageTitle>
 
         <div className="grid grid-cols-3 gap-2">
           {cells.map((_, i) => {
