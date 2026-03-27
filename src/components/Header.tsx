@@ -142,7 +142,7 @@ const CreditsBadge = () => {
       style={{ borderColor: "hsl(45 100% 60% / 0.7)" }}
     >
       <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
-      <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{credits} energy</span>
+      <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{credits}</span>
     </div>
   );
 };
