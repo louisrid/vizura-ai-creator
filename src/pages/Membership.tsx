@@ -47,7 +47,7 @@ const Membership = () => {
         </div>
         <PageTitle>membership</PageTitle>
 
-        <div className="border-[4px] border-border rounded-2xl p-6">
+        <div className="border-[5px] border-border rounded-2xl p-6">
           <span className="block text-2xl font-extrabold lowercase text-foreground mb-1">
             $7/first month
           </span>

@@ -34,7 +34,7 @@ const Account = () => {
         <div className="space-y-4">
           {/* Subscribe button OR plan info */}
           {subscribed ? (
-            <div className="border-[4px] border-border rounded-2xl p-4">
+            <div className="border-[5px] border-border rounded-2xl p-4">
               <div className="flex items-center gap-3 mb-3">
                 <Crown size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1">
@@ -59,7 +59,7 @@ const Account = () => {
             </Button>
           )}
 
-          <div className="border-[4px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
@@ -69,7 +69,7 @@ const Account = () => {
             </div>
           </div>
 
-          <div className="border-[4px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
               <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
@@ -79,7 +79,7 @@ const Account = () => {
             </div>
           </div>
 
-          <div className="border-[4px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
             <Zap size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
               <span className="block text-xs font-extrabold lowercase text-foreground">credits</span>
