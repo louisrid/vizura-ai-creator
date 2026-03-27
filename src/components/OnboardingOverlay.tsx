@@ -472,14 +472,10 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
       {open ? (
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col"
-          style={{ background: "hsl(0 0% 0% / 0.97)" }}
+          style={{ background: "hsl(0 0% 0% / 0.97)", transformOrigin: "center center" }}
           initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            default: { duration: 0.12, ease: "easeOut" },
-            exit: { duration: 0.5, ease: "easeIn" },
-          }}
+          animate={{ opacity: 1, scale: 1, transition: { duration: 0.12, ease: "easeOut" } }}
+          exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeIn" } }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
