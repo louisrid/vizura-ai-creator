@@ -64,7 +64,7 @@ const Account = () => {
             <div className="flex-1 min-w-0">
               <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
               <span className="block text-sm font-extrabold lowercase text-foreground truncate">
-                {user?.email || "—"}
+                {user?.email || "..."}
               </span>
             </div>
           </div>

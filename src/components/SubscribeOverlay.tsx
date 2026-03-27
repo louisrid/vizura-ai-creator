@@ -136,7 +136,7 @@ const Scene1 = () => (
     </IconPop>
     <BigTitle delay={0.2}>your imagination, no limits</BigTitle>
     <Subtitle delay={0.35}>
-      full access to every style, setting, and detail — generate as many photos as you want
+      full access to every style, setting, and detail. generate as many photos as you want
     </Subtitle>
   </div>
 );
@@ -148,7 +148,7 @@ const Scene2 = ({ burst, buying, onSubscribe }: { burst: boolean; buying: boolea
       <span className="text-[5rem]">✨</span>
     </IconPop>
     <BigTitle delay={0.2}>$7 first month</BigTitle>
-    <Subtitle delay={0.35}>then $20/month — cancel anytime</Subtitle>
+    <Subtitle delay={0.35}>then $20/month. cancel anytime</Subtitle>
     <motion.button
       onClick={(e) => {
         e.stopPropagation();
