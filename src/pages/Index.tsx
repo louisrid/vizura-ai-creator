@@ -125,7 +125,7 @@ const Index = () => {
           </div>
           <PageTitle>create photo</PageTitle>
 
-          <div className="relative mb-10 overflow-hidden rounded-2xl border-[5px] border-border bg-card aspect-[4/5]">
+          <div className="relative mb-10 overflow-hidden rounded-2xl border-[6px] border-border bg-card aspect-[4/5]">
             {primaryImage ? (
               <>
                 <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />

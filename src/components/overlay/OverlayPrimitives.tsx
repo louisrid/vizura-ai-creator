@@ -21,6 +21,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
         key={i}
         className="rounded-full"
         style={{
+          borderRadius: 9999,
           background:
             i === current
               ? "linear-gradient(135deg, hsl(210 100% 70%), hsl(225 100% 58%))"
@@ -131,11 +132,12 @@ export const GoldButton = ({
       onClick(e);
     }}
     disabled={disabled}
-    className="relative mt-5 h-16 w-full rounded-2xl border-[4px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
+    className="relative mt-5 h-16 w-full border-[4px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
     style={{
       background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
       borderColor: "hsl(50 100% 54%)",
       color: "#000",
+      borderRadius: 16,
     }}
     whileTap={{ scale: 0.97 }}
     initial={{ opacity: 0, y: 10 }}
@@ -143,7 +145,8 @@ export const GoldButton = ({
     transition={{ duration: 0.3, delay }}
   >
     <motion.div
-      className="absolute inset-0 rounded-xl"
+      className="absolute inset-0"
+      style={{ borderRadius: 12 }}
       animate={{
         boxShadow: [
           "0 0 0 0 hsl(52 100% 58% / 0.4)",
@@ -207,8 +210,8 @@ export const ArrowButton = ({
     onPointerUp={onPointerUp}
     onPointerLeave={onPointerLeave}
     className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
-    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
-    whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
+    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16 }}
+    whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))", borderRadius: 16 }}
   >
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
