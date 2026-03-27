@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
@@ -130,39 +129,23 @@ const CharacterCreator = () => {
       </div>
 
       {/* Page title */}
-      <motion.div
-        className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0"
-        initial={{ opacity: 0, scale: 0.92 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.12, ease: "easeOut" }}
-      >
+      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0">
         <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
           create character
         </h1>
-      </motion.div>
+      </div>
 
       <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.12, delay: 0.03, ease: "easeOut" }}
-        >
-          <CardCarousel
-            images={imageCards}
-            activeIndex={activeIndex}
-            onPrevious={cyclePrevious}
-            onNext={cycleNext}
-          />
-        </motion.div>
+        <CardCarousel
+          images={imageCards}
+          activeIndex={activeIndex}
+          onPrevious={cyclePrevious}
+          onNext={cycleNext}
+        />
 
         {/* Description textarea */}
-        <motion.section
-          className="mt-6 flex flex-col gap-2"
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.12, delay: 0.06, ease: "easeOut" }}
-        >
+        <section className="mt-6 flex flex-col gap-2">
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
           </label>
@@ -174,21 +157,16 @@ const CharacterCreator = () => {
             rows={4}
             className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
-        </motion.section>
+        </section>
 
         {/* Dropdowns */}
-        <motion.section
-          className="mt-6 flex flex-col gap-4"
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.12, delay: 0.09, ease: "easeOut" }}
-        >
+        <section className="mt-6 flex flex-col gap-4">
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
           <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
-        </motion.section>
+        </section>
 
         {error && (
           <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
@@ -197,12 +175,7 @@ const CharacterCreator = () => {
         )}
 
         {/* Create button */}
-        <motion.div
-          className="mt-6"
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.12, delay: 0.12, ease: "easeOut" }}
-        >
+        <div className="mt-6">
           <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
               <>
@@ -216,7 +189,7 @@ const CharacterCreator = () => {
               </>
             )}
           </Button>
-        </motion.div>
+        </div>
       </main>
     </div>
   );
