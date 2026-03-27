@@ -7,20 +7,43 @@ interface OverlayShellProps {
   open: boolean;
   totalSteps: number;
   children: (step: number) => React.ReactNode;
-  /** Whether to show nav arrows + swipe hint on non-final steps */
   showNav?: boolean;
-  /** Called when overlay finishes exit */
   onExited?: () => void;
 }
+
+const LONG_PRESS_MS = 400;
 
 const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [skipAnim, setSkipAnim] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const longPressTimer = useRef<number | null>(null);
 
   const advance = useCallback(() => {
     setStep((s) => (s < totalSteps - 1 ? s + 1 : s));
   }, [totalSteps]);
+
+  const skipToEnd = useCallback(() => {
+    setSkipAnim(true);
+    setStep(totalSteps - 1);
+    setTimeout(() => setSkipAnim(false), 50);
+  }, [totalSteps]);
+
+  const handleBackPointerDown = useCallback(() => {
+    longPressTimer.current = window.setTimeout(() => {
+      skipToEnd();
+      longPressTimer.current = null;
+    }, LONG_PRESS_MS);
+  }, [skipToEnd]);
+
+  const handleBackPointerUp = useCallback(() => {
+    if (longPressTimer.current !== null) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+      setStep((s) => (s > 0 ? s - 1 : s));
+    }
+  }, []);
 
   useEffect(() => { setMounted(true); }, []);
 
