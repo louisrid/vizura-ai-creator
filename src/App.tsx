@@ -85,6 +85,7 @@ const AnimatedRoutes = () => {
           <Route path="/account" element={<Account />} />
           <Route path="/account/membership" element={<Membership />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/history" element={<History />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
