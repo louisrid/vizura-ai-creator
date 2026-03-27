@@ -1,8 +1,15 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import OverlayShell from "./overlay/OverlayShell";
+import {
+  BigTitle,
+  Subtitle,
+  IconPop,
+  ParticleBurst,
+  GoldButton,
+  DismissLink,
+} from "./overlay/OverlayPrimitives";
 
 interface PaywallOverlayProps {
   open: boolean;
@@ -11,9 +18,11 @@ interface PaywallOverlayProps {
 
 const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
   const [loading, setLoading] = useState(false);
+  const [burst, setBurst] = useState(false);
 
   const handleSubscribe = async () => {
     setLoading(true);
+    setBurst(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId: "price_vizura_monthly" },
@@ -30,36 +39,22 @@ const PaywallOverlay = ({ open, onClose }: PaywallOverlayProps) => {
   };
 
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
-          onClick={onClose}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="bg-card border-[4px] border-border rounded-2xl shadow-medium p-6 max-w-sm w-full text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="text-xs font-extrabold lowercase mb-1">$7/mo</p>
-            <p className="text-[10px] font-bold lowercase text-foreground mb-6">unlimited creations</p>
-            <Button className="w-full h-14 text-xs mb-3" onClick={handleSubscribe} disabled={loading}>
-              {loading ? <><Loader2 className="animate-spin" size={16} /> loading...</> : "subscribe & create"}
-            </Button>
-            <button onClick={onClose} className="w-full text-center text-foreground font-bold lowercase text-[10px] hover:underline py-1">
-              maybe later
-            </button>
-          </motion.div>
-        </motion.div>
+    <OverlayShell open={open} totalSteps={1} showNav={false}>
+      {() => (
+        <div className="relative flex flex-col items-center gap-3">
+          <ParticleBurst active={burst} />
+          <IconPop delay={0.15} size={96}>
+            <span className="text-[5rem]">✨</span>
+          </IconPop>
+          <BigTitle delay={0.25}>$7/mo</BigTitle>
+          <Subtitle delay={0.4}>unlimited creations</Subtitle>
+          <GoldButton onClick={handleSubscribe} disabled={loading} delay={0.2}>
+            {loading ? <><Loader2 className="animate-spin" size={20} /> loading...</> : "subscribe & create"}
+          </GoldButton>
+          <DismissLink onClick={onClose} />
+        </div>
       )}
-    </AnimatePresence>
+    </OverlayShell>
   );
 };
 
