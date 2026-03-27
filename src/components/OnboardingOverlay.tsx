@@ -369,7 +369,7 @@ const Scene4 = () => (
   </div>
 );
 
-const Scene5 = ({ burst }: { burst: boolean }) => (
+const Scene5 = ({ burst, onLetsGo }: { burst: boolean; onLetsGo: () => void }) => (
   <div className="relative flex flex-col items-center gap-3">
     <ParticleBurst active={burst} />
     <IconPop delay={0.1} size={96}>
@@ -377,6 +377,35 @@ const Scene5 = ({ burst }: { burst: boolean }) => (
     </IconPop>
     <BigTitle delay={0.2}>ready</BigTitle>
     <Subtitle delay={0.35}>sign up free and start creating</Subtitle>
+    <motion.button
+      onClick={(e) => {
+        e.stopPropagation();
+        onLetsGo();
+      }}
+      className="relative mt-5 h-16 w-full rounded-2xl border-[4px] text-xl font-[900] lowercase tracking-tight"
+      style={{
+        background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
+        borderColor: "hsl(50 100% 54%)",
+        color: "#000",
+      }}
+      whileTap={{ scale: 0.97 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
+    >
+      <motion.div
+        className="absolute inset-0 rounded-xl"
+        animate={{
+          boxShadow: [
+            "0 0 0 0 hsl(52 100% 58% / 0.4)",
+            "0 0 0 14px hsl(52 100% 58% / 0)",
+            "0 0 0 0 hsl(52 100% 58% / 0)",
+          ],
+        }}
+        transition={{ duration: 1.8, repeat: Infinity }}
+      />
+      <span className="relative z-10">let's go</span>
+    </motion.button>
   </div>
 );
 
@@ -468,45 +497,15 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   {step === 2 && <Scene2 />}
                   {step === 3 && <Scene3 />}
                   {step === 4 && <Scene4 />}
-                  {step === 5 && <Scene5 burst={burst} />}
+                  {step === 5 && <Scene5 burst={burst} onLetsGo={handleLetsGo} />}
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
 
-          {/* Controls — slightly raised from bottom */}
-          <div
-            className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1"
-            style={step === TOTAL_STEPS - 1 ? { marginTop: "-28vh" } : undefined}
-          >
-            {step === TOTAL_STEPS - 1 ? (
-              <motion.button
-                onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                className="relative h-16 w-full rounded-2xl text-xl font-[900] lowercase tracking-tight border-[4px]"
-                style={{
-                  background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
-                  borderColor: "hsl(50 100% 54%)",
-                  color: "#000",
-                }}
-                whileTap={{ scale: 0.97 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.15 }}
-              >
-                <motion.div
-                  className="absolute inset-0 rounded-xl"
-                  animate={{
-                    boxShadow: [
-                      "0 0 0 0 hsl(52 100% 58% / 0.4)",
-                      "0 0 0 14px hsl(52 100% 58% / 0)",
-                      "0 0 0 0 hsl(52 100% 58% / 0)",
-                    ],
-                  }}
-                  transition={{ duration: 1.8, repeat: Infinity }}
-                />
-                <span className="relative z-10">let's go</span>
-              </motion.button>
-            ) : (
+          {/* Controls */}
+          <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1">
+            {step !== TOTAL_STEPS - 1 ? (
               <div className="flex items-center justify-center gap-3">
                 {step > 0 && (
                   <motion.button
@@ -527,7 +526,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                 </motion.button>
               </div>
-            )}
+            ) : null}
 
             {step < TOTAL_STEPS - 1 && (
               <motion.p
