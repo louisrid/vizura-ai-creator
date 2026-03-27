@@ -477,12 +477,12 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           {/* Controls — slightly raised from bottom */}
           <div
             className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1"
-            style={step === TOTAL_STEPS - 1 ? { marginTop: "-8vh" } : undefined}
+            style={step === TOTAL_STEPS - 1 ? { marginTop: "-18vh" } : undefined}
           >
             {step === TOTAL_STEPS - 1 ? (
               <motion.button
                 onClick={(e) => { e.stopPropagation(); handleLetsGo(); }}
-                className="relative h-16 w-full rounded-2xl text-lg font-[900] lowercase tracking-tight border-[4px]"
+                className="relative h-16 w-full rounded-2xl text-xl font-[900] lowercase tracking-tight border-[4px]"
                 style={{
                   background: "linear-gradient(135deg, hsl(52 100% 58%) 0%, hsl(50 100% 55%) 70%, hsl(44 95% 52%) 100%)",
                   borderColor: "hsl(50 100% 54%)",
@@ -513,7 +513,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                     onClick={(e) => { e.stopPropagation(); setStep((s) => s - 1); }}
                     className="flex h-14 w-14 items-center justify-center rounded-2xl border-[2px]"
                     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
-                    whileTap={{ scale: 1.12, backgroundColor: "hsl(220, 90%, 55%)" }}
+                    whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
                   >
                     <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                   </motion.button>
@@ -522,7 +522,7 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
                   onClick={(e) => { e.stopPropagation(); advance(); }}
                   className="flex h-14 w-14 items-center justify-center rounded-2xl border-[2px]"
                   style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)" }}
-                  whileTap={{ scale: 1.12, backgroundColor: "hsl(220, 90%, 55%)" }}
+                  whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))" }}
                 >
                   <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
                 </motion.button>
