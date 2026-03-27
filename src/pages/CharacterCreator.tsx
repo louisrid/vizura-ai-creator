@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -9,7 +9,6 @@ import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-nature-collage.jpg";
-import OnboardingOverlay from "@/components/OnboardingOverlay";
 
 const countryOptions = [
   "any", "american", "british", "australian", "brazilian", "colombian", "french",
@@ -23,11 +22,10 @@ const bodyOptions = ["slim", "regular", "curvy"] as const;
 const styleOptions = ["natural", "model", "egirl"] as const;
 
 const CharacterCreator = () => {
-  const { user, loading: authLoading, autoSignIn } = useAuth();
+  const { user, autoSignIn } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
   const { subscribed } = useSubscription();
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   const editPrompt = searchParams.get("edit");
 
@@ -43,20 +41,6 @@ const CharacterCreator = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
-
-  useEffect(() => {
-    if (authLoading || onboardingDismissed || user) return;
-    setShowOnboarding(true);
-  }, [authLoading, onboardingDismissed, user]);
-
-  const handleDismissOnboarding = useCallback(() => {
-    setShowOnboarding(false);
-    setOnboardingDismissed(true);
-    localStorage.setItem("onboarding_seen", "true");
-  }, []);
-
 
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
@@ -72,8 +56,14 @@ const CharacterCreator = () => {
   };
 
   const generate = async () => {
-    if (!user) { await autoSignIn(); return; }
-    if (credits <= 0 && !subscribed) { navigate("/account/membership"); return; }
+    if (!user) {
+      await autoSignIn();
+      return;
+    }
+    if (credits <= 0 && !subscribed) {
+      navigate("/account/membership");
+      return;
+    }
 
     setIsGenerating(true);
     setError("");
@@ -105,29 +95,26 @@ const CharacterCreator = () => {
   return (
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
-      <OnboardingOverlay open={showOnboarding && !user} onDismiss={handleDismissOnboarding} onLetsGo={autoSignIn} />
 
-      {/* Faint background image behind everything at top */}
       <div className="absolute top-0 left-1/2 z-0 w-full max-w-lg -translate-x-1/2">
-        <div className="relative w-full" style={{ aspectRatio: '4 / 2.2' }}>
+        <div className="relative w-full" style={{ aspectRatio: "4 / 2.2" }}>
           <img
             src={heroImage}
             alt=""
             className="w-full h-full object-cover"
-            style={{ opacity: 0.04, filter: 'saturate(0.08) blur(0.5px)' }}
+            style={{ opacity: 0.04, filter: "saturate(0.08) blur(0.5px)" }}
             width={1024}
             height={768}
           />
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: 'linear-gradient(to bottom, hsl(var(--background) / 0.4) 0%, hsl(var(--background) / 0.7) 50%, hsl(var(--background)) 85%)',
+              background: "linear-gradient(to bottom, hsl(var(--background) / 0.4) 0%, hsl(var(--background) / 0.7) 50%, hsl(var(--background)) 85%)",
             }}
           />
         </div>
       </div>
 
-      {/* Page title */}
       <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0">
         <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
           create character
@@ -135,7 +122,6 @@ const CharacterCreator = () => {
       </div>
 
       <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
-
         <CardCarousel
           images={imageCards}
           activeIndex={activeIndex}
@@ -143,7 +129,6 @@ const CharacterCreator = () => {
           onNext={cycleNext}
         />
 
-        {/* Description textarea */}
         <section className="mt-6 flex flex-col gap-2">
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
@@ -158,12 +143,10 @@ const CharacterCreator = () => {
           />
         </section>
 
-        {/* Dropdowns */}
         <section className="mt-6 flex flex-col gap-4">
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
           <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
 
-          {/* Style toggle */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-extrabold lowercase text-foreground">style</span>
             <div className="flex gap-2">
@@ -173,7 +156,7 @@ const CharacterCreator = () => {
                   onClick={() => setStyle(s)}
                   className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
                     style === s
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[5px] border-transparent"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[5px] border-transparent"
                       : "border-[5px] border-border text-foreground hover:border-foreground/60"
                   }`}
                 >
@@ -194,7 +177,6 @@ const CharacterCreator = () => {
           </div>
         )}
 
-        {/* Create button */}
         <div className="mt-6">
           <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
