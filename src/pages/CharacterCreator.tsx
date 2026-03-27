@@ -132,9 +132,9 @@ const CharacterCreator = () => {
       {/* Page title */}
       <motion.div
         className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.12, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
           create character
@@ -144,9 +144,9 @@ const CharacterCreator = () => {
       <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.12, delay: 0.03, ease: "easeOut" }}
         >
           <CardCarousel
             images={imageCards}
@@ -159,9 +159,9 @@ const CharacterCreator = () => {
         {/* Description textarea */}
         <motion.section
           className="mt-6 flex flex-col gap-2"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.12, delay: 0.06, ease: "easeOut" }}
         >
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
@@ -179,9 +179,9 @@ const CharacterCreator = () => {
         {/* Dropdowns */}
         <motion.section
           className="mt-6 flex flex-col gap-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.12, delay: 0.09, ease: "easeOut" }}
         >
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
           <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
@@ -199,9 +199,9 @@ const CharacterCreator = () => {
         {/* Create button */}
         <motion.div
           className="mt-6"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.12, delay: 0.12, ease: "easeOut" }}
         >
           <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
             {isGenerating ? (
