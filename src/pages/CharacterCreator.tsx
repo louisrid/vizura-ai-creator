@@ -20,6 +20,7 @@ const ageOptions = Array.from({ length: 23 }, (_, i) => `${i + 18}`) as unknown 
 const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
 const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
+const styleOptions = ["natural", "model", "egirl"] as const;
 
 const CharacterCreator = () => {
   const { user, autoSignIn } = useAuth();
@@ -35,6 +36,7 @@ const CharacterCreator = () => {
   const [hair, setHair] = useState<(typeof hairOptions)[number]>("brunette");
   const [eye, setEye] = useState<(typeof eyeOptions)[number]>("brown");
   const [body, setBody] = useState<(typeof bodyOptions)[number]>("regular");
+  const [style, setStyle] = useState<(typeof styleOptions)[number]>("natural");
   const [description, setDescription] = useState(editPrompt || "");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState<string[]>([]);
@@ -162,6 +164,27 @@ const CharacterCreator = () => {
         <section className="mt-6 flex flex-col gap-4">
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
           <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
+
+          {/* Style toggle */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-extrabold lowercase text-foreground">style</span>
+            <div className="flex gap-2">
+              {styleOptions.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setStyle(s)}
+                  className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
+                    style === s
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground"
+                      : "border-[4px] border-border text-foreground hover:border-foreground/60"
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
