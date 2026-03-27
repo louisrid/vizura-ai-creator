@@ -130,28 +130,6 @@ const Index = () => {
               />
             </div>
 
-            <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">style</span>
-              <div className="flex gap-2">
-                {stylePresets.map((style, i) => {
-                  const Icon = style.icon;
-                  return (
-                    <button
-                      key={style.label}
-                      onClick={() => setActiveStyle(i)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 rounded-2xl border-[4px] py-4 text-sm font-extrabold lowercase transition-all ${
-                        activeStyle === i
-                          ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-transparent"
-                          : "border-border text-foreground hover:border-foreground/60"
-                      }`}
-                    >
-                      <Icon size={16} strokeWidth={2.5} />
-                      {style.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
           </div>
 
           {error && (
