@@ -294,7 +294,7 @@ const Scene1 = () => (
       {traitSlots.map((items, i) => (
         <div key={i} className="flex flex-col items-center gap-1">
           <SlotReel items={items} delay={0.5 + i * 0.15} speed={2.2 + i * 0.6} />
-          <span className="text-[9px] font-extrabold uppercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.3)" }}>
+          <span className="text-[9px] font-extrabold lowercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.3)" }}>
             {slotLabels[i]}
           </span>
         </div>
@@ -361,7 +361,7 @@ const Scene4 = () => (
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.3, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
     >
-      <div className="mb-2 text-[10px] font-extrabold uppercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.45)" }}>
+      <div className="mb-2 text-[10px] font-extrabold lowercase tracking-wider" style={{ color: "hsl(0 0% 100% / 0.45)" }}>
         prompt
       </div>
       <TypingLine text="sitting in a cafe, golden hour lighting" delay={0.8} />
