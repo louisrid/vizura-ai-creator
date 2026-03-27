@@ -17,36 +17,39 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const bootSigningOutRef = useRef(true);
+  const subscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>["data"]["subscription"] | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") {
+    const initializeAuth = async () => {
+      try {
+        await supabase.auth.signOut({ scope: "local" });
+      } finally {
+        if (cancelled) return;
+
+        const { data } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === "SIGNED_OUT") {
+            setUser(null);
+            return;
+          }
+
+          if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+            setUser(session?.user ?? null);
+          }
+        });
+
+        subscriptionRef.current = data.subscription;
         setUser(null);
-        return;
+        setLoading(false);
       }
+    };
 
-      if (bootSigningOutRef.current) {
-        return;
-      }
-
-      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-        setUser(session?.user ?? null);
-      }
-    });
-
-    supabase.auth.signOut().then(() => {
-      if (cancelled) return;
-      bootSigningOutRef.current = false;
-      setUser(null);
-      setLoading(false);
-    });
+    void initializeAuth();
 
     return () => {
       cancelled = true;
-      subscription.unsubscribe();
+      subscriptionRef.current?.unsubscribe();
     };
   }, []);
 
