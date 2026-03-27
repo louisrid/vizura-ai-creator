@@ -44,9 +44,7 @@ const CharacterCreator = () => {
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
-    return localStorage.getItem("onboarding_seen") === "true";
-  });
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
 
   useEffect(() => {
     if (authLoading || onboardingDismissed || user) return;
