@@ -61,7 +61,7 @@ const Auth = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required={mode === "forgot" || mode === "signup"}
-            className="h-14 w-full rounded-2xl border-[4px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
+            className="h-14 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
           />
 
           {mode !== "forgot" && (
@@ -72,7 +72,7 @@ const Auth = () => {
               onChange={(e) => setPassword(e.target.value)}
               required={mode === "signup"}
               minLength={mode === "signup" ? 6 : undefined}
-              className="h-14 w-full rounded-2xl border-[4px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
+              className="h-14 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-foreground"
             />
           )}
 
