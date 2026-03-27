@@ -1,13 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
+import OnboardingOverlay from "@/components/OnboardingOverlay";
 import CharacterCreator from "./pages/CharacterCreator";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -31,27 +32,51 @@ const ScrollToTop = () => {
   return null;
 };
 
+const AppOnboarding = () => {
+  const location = useLocation();
+  const { user, loading, autoSignIn } = useAuth();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const hiddenRoutes = ["/auth", "/reset-password"];
+    if (loading || user || hiddenRoutes.includes(location.pathname)) {
+      setShowOnboarding(false);
+      return;
+    }
+    setShowOnboarding(true);
+  }, [loading, user, location.pathname]);
+
+  return (
+    <OnboardingOverlay
+      open={showOnboarding}
+      onDismiss={() => setShowOnboarding(false)}
+      onLetsGo={autoSignIn}
+    />
+  );
+};
+
 const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
     <>
+      <AppOnboarding />
       <Header />
-        <PageTransition key={location.pathname}>
-          <Routes location={location}>
-            <Route path="/" element={<CharacterCreator />} />
-            <Route path="/create" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/characters" element={<MyCharacters />} />
-            <Route path="/storage" element={<Storage />} />
-            <Route path="/top-ups" element={<TopUps />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/account/membership" element={<Membership />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </PageTransition>
+      <PageTransition key={location.pathname}>
+        <Routes location={location}>
+          <Route path="/" element={<CharacterCreator />} />
+          <Route path="/create" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/characters" element={<MyCharacters />} />
+          <Route path="/storage" element={<Storage />} />
+          <Route path="/top-ups" element={<TopUps />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/account/membership" element={<Membership />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </PageTransition>
     </>
   );
 };
