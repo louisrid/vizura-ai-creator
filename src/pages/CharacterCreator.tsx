@@ -142,8 +142,7 @@ const CharacterCreator = () => {
           <RefreshCw size={13} strokeWidth={2.5} />
         </button>
         <h1
-          className="text-4xl lowercase tracking-tighter text-foreground text-center"
-          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800 }}
+          className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center"
         >
           create character
         </h1>
