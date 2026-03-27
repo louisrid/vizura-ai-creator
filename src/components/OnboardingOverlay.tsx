@@ -452,8 +452,8 @@ const OnboardingOverlay = ({ open, onDismiss }: { open: boolean; onDismiss: () =
           onTouchEnd={handleTouchEnd}
         >
           {/* Scene content — true vertical centre between header and controls */}
-          <div className="flex-1 flex items-center justify-center overflow-hidden px-5 pt-2 pb-1">
-            <div className="flex w-full max-w-sm items-center justify-center" style={{ transform: "translateY(4vh)" }}>
+          <div className="flex-1 flex items-center justify-center overflow-hidden px-5">
+            <div className="flex w-full max-w-sm items-center justify-center" style={{ marginTop: "8vh" }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
