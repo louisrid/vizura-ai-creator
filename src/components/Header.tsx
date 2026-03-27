@@ -59,7 +59,7 @@ const Header = () => {
   const CurrentIcon = currentMenuItem?.icon || (isAuthPage ? LogIn : undefined);
 
   return (
-    <header className="bg-nav sticky top-0 z-40 border-b-[4px] border-nav-foreground/15">
+    <header className="bg-nav sticky top-0 z-40 border-b-[5px] border-nav-foreground/15">
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
@@ -105,7 +105,7 @@ const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
-                className="absolute right-0 top-full mt-2 mr-0 w-48 overflow-hidden rounded-2xl border-[4px] border-nav-foreground/20 bg-nav shadow-medium"
+                className="absolute right-0 top-full mt-2 mr-0 w-48 overflow-hidden rounded-2xl border-[5px] border-nav-foreground/20 bg-nav shadow-medium"
               >
                 <div className="py-1.5">
                   {menuItems.map((item) => (

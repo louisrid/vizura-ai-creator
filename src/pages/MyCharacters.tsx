@@ -1,44 +1,86 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const CartoonGirl = ({ size = 80 }: { size?: number }) => (
-  <svg width={size} height={size * 1.2} viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Hair behind — bigger, fuller */}
-    <ellipse cx="40" cy="32" rx="34" ry="36" fill="#C85A2A" />
-    {/* Head — bigger ratio */}
-    <ellipse cx="40" cy="36" rx="26" ry="30" fill="#FFD93D" />
-    {/* Hair bangs — fuller */}
-    <path d="M12 28 Q18 4 40 2 Q62 4 68 28 Q60 12 40 10 Q20 12 12 28Z" fill="#C85A2A" />
-    {/* Side hair strands */}
-    <path d="M10 32 Q8 50 14 62" stroke="#C85A2A" strokeWidth="8" strokeLinecap="round" fill="none" />
-    <path d="M70 32 Q72 50 66 62" stroke="#C85A2A" strokeWidth="8" strokeLinecap="round" fill="none" />
-    {/* No face — blank */}
-    {/* Body / top — smaller relative to head */}
-    <path d="M30 72 Q26 74 24 86 L56 86 Q54 74 50 72 Q46 70 40 70 Q34 70 30 72Z" fill="#FF69B4" />
-    {/* Neck */}
-    <rect x="36" y="66" width="8" height="6" rx="2" fill="#FFD93D" />
-  </svg>
-);
-
-const GRID_COLS = 3;
-const GRID_ROWS = 3;
+interface Character {
+  id: string;
+  name: string;
+  country: string;
+  age: string;
+  hair: string;
+  eye: string;
+  body: string;
+  style: string;
+  description: string;
+}
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<Character | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
 
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      if (!user) return;
+      const { data } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      if (data) setCharacters(data as Character[]);
+      setLoading(false);
+    };
+    if (user) fetchCharacters();
+  }, [user]);
+
   if (!authLoading && !user) return null;
 
-  const cells = Array.from({ length: GRID_COLS * GRID_ROWS });
+  const handleEdit = (char: Character) => {
+    const params = new URLSearchParams({
+      editId: char.id,
+      name: char.name,
+      country: char.country,
+      age: char.age,
+      hair: char.hair,
+      eye: char.eye,
+      body: char.body,
+      style: char.style,
+      description: char.description,
+    });
+    navigate(`/?${params.toString()}`);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    const { error } = await supabase
+      .from("characters")
+      .delete()
+      .eq("id", deleteTarget.id);
+    if (error) {
+      toast.error("failed to delete character");
+    } else {
+      setCharacters((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+      toast.success("character deleted");
+    }
+    setDeleting(false);
+    setDeleteTarget(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,48 +90,124 @@ const MyCharacters = () => {
         </div>
         <PageTitle>my characters</PageTitle>
 
-        <div className="grid grid-cols-3 gap-2">
-          {cells.map((_, i) => {
-            // Top-left: add new character button
-            if (i === 0) {
-              return (
-                <button
-                  key={i}
-                  onClick={() => navigate("/")}
-                  className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
-                >
-                  <Plus size={32} strokeWidth={3} className="text-foreground" />
-                </button>
-              );
-            }
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 className="animate-spin text-foreground" size={24} />
+          </div>
+        ) : characters.length === 0 ? (
+          <div className="border-[5px] border-border rounded-2xl p-8 text-center">
+            <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no characters yet</p>
+            <Button
+              variant="outline"
+              className="h-12"
+              onClick={() => navigate("/")}
+            >
+              create character
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-3">
+            {/* Add new */}
+            <button
+              onClick={() => navigate("/")}
+              className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
+            >
+              <Plus size={32} strokeWidth={3} className="text-foreground" />
+            </button>
 
-            // Top-middle: test character (only when logged in)
-            if (i === 1 && user) {
-              return (
-                <div key={i} className="flex flex-col items-center">
-                  <div className="aspect-[3/4] w-full rounded-2xl border-[5px] border-border bg-card flex items-center justify-center relative overflow-hidden">
-                    <span className="absolute text-5xl leading-none" style={{ bottom: '16px', left: '14px' }}>🇺🇸</span>
-                    <div className="relative z-10">
-                      <CartoonGirl size={100} />
-                    </div>
+            {characters.map((char) => (
+              <div key={char.id} className="flex flex-col">
+                <div className="aspect-[3/4] w-full rounded-2xl border-[5px] border-border bg-card flex flex-col items-center justify-center relative overflow-hidden group">
+                  {/* Trait summary */}
+                  <div className="flex flex-col items-center gap-1 px-2 text-center">
+                    <span className="text-lg">{char.country !== "any" ? "🌍" : "👤"}</span>
+                    <span className="text-[10px] font-extrabold lowercase text-foreground leading-tight line-clamp-2">
+                      {char.hair} hair
+                    </span>
+                    <span className="text-[10px] font-extrabold lowercase text-foreground/60">
+                      {char.eye} eyes
+                    </span>
                   </div>
-                  <span className="mt-1.5 text-xs font-[900] tracking-tight text-foreground">
-                    Sarah, 24
-                  </span>
-                </div>
-              );
-            }
 
-            // Empty cells
-            return (
-              <div
-                key={i}
-                className="aspect-[3/4] rounded-2xl bg-background"
-              />
-            );
-          })}
-        </div>
+                  {/* Hover actions */}
+                  <div className="absolute inset-0 bg-foreground/80 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => handleEdit(char)}
+                      className="w-9 h-9 rounded-2xl bg-amber-400 flex items-center justify-center text-foreground hover:bg-amber-500 transition-colors"
+                      aria-label="edit"
+                    >
+                      <Pencil size={14} strokeWidth={2.5} />
+                    </button>
+                    <button
+                      onClick={() => setDeleteTarget(char)}
+                      className="w-9 h-9 rounded-2xl bg-destructive flex items-center justify-center text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                      aria-label="delete"
+                    >
+                      <Trash2 size={14} strokeWidth={2.5} />
+                    </button>
+                  </div>
+                </div>
+                <span className="mt-1.5 text-[10px] font-extrabold lowercase tracking-tight text-foreground text-center truncate">
+                  {char.name || `${char.hair} ${char.eye} ${char.age}`}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
+
+      {/* Delete confirmation modal */}
+      <AnimatePresence>
+        {deleteTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
+            onClick={() => !deleting && setDeleteTarget(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="bg-card border-[5px] border-border rounded-2xl shadow-medium w-full max-w-xs overflow-hidden p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-extrabold lowercase text-foreground">delete character</h2>
+                <button
+                  onClick={() => !deleting && setDeleteTarget(null)}
+                  className="w-8 h-8 rounded-2xl bg-foreground/10 flex items-center justify-center hover:bg-foreground/20 transition-colors"
+                >
+                  <X size={14} strokeWidth={2.5} className="text-foreground" />
+                </button>
+              </div>
+              <p className="text-xs font-extrabold lowercase text-foreground/60 mb-6">
+                delete "{deleteTarget.name || `${deleteTarget.hair} ${deleteTarget.eye}`}" permanently?
+              </p>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="flex-1 h-12 text-sm"
+                  onClick={() => setDeleteTarget(null)}
+                  disabled={deleting}
+                >
+                  cancel
+                </Button>
+                <Button
+                  className="flex-1 h-12 text-sm bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                >
+                  {deleting ? <Loader2 className="animate-spin" size={16} /> : "delete"}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

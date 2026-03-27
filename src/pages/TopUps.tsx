@@ -112,22 +112,21 @@ const TopUps = () => {
                   </span>
                 </div>
 
-                <Button
-                  className={`w-full h-12 text-sm ${
+                <button
+                  className={`w-full h-12 rounded-2xl text-sm font-extrabold lowercase transition-all ${
                     plan.highlighted
                       ? "bg-background text-foreground hover:bg-background/90"
-                      : ""
+                      : "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600"
                   }`}
-                  variant={plan.highlighted ? "default" : "outline"}
                   onClick={() => handleBuy(plan)}
                   disabled={buying !== null}
                 >
                   {buying === plan.label ? (
-                    <Loader2 className="animate-spin" size={18} />
+                    <Loader2 className="animate-spin inline" size={18} />
                   ) : (
                     "buy credits"
                   )}
-                </Button>
+                </button>
               </div>
             );
           })}
