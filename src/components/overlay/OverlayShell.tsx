@@ -7,20 +7,43 @@ interface OverlayShellProps {
   open: boolean;
   totalSteps: number;
   children: (step: number) => React.ReactNode;
-  /** Whether to show nav arrows + swipe hint on non-final steps */
   showNav?: boolean;
-  /** Called when overlay finishes exit */
   onExited?: () => void;
 }
+
+const LONG_PRESS_MS = 400;
 
 const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [skipAnim, setSkipAnim] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const longPressTimer = useRef<number | null>(null);
 
   const advance = useCallback(() => {
     setStep((s) => (s < totalSteps - 1 ? s + 1 : s));
   }, [totalSteps]);
+
+  const skipToEnd = useCallback(() => {
+    setSkipAnim(true);
+    setStep(totalSteps - 1);
+    setTimeout(() => setSkipAnim(false), 50);
+  }, [totalSteps]);
+
+  const handleBackPointerDown = useCallback(() => {
+    longPressTimer.current = window.setTimeout(() => {
+      skipToEnd();
+      longPressTimer.current = null;
+    }, LONG_PRESS_MS);
+  }, [skipToEnd]);
+
+  const handleBackPointerUp = useCallback(() => {
+    if (longPressTimer.current !== null) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+      setStep((s) => (s > 0 ? s - 1 : s));
+    }
+  }, []);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -76,10 +99,10 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
                 <motion.div
                   key={step}
                   className="w-full"
-                  initial={{ opacity: 0, x: 30 }}
+                  initial={skipAnim ? false : { opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.22, ease: [0.2, 0.9, 0.2, 1] }}
+                  exit={skipAnim ? { opacity: 0 } : { opacity: 0, x: -30 }}
+                  transition={skipAnim ? { duration: 0.08 } : { duration: 0.22, ease: [0.2, 0.9, 0.2, 1] }}
                 >
                   {children(step)}
                 </motion.div>
@@ -90,7 +113,14 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
           <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-2 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-1">
             {showNav && step !== totalSteps - 1 ? (
               <div className="flex items-center justify-center gap-3">
-                {step > 0 && <ArrowButton direction="left" onClick={() => setStep((s) => s - 1)} />}
+                {step > 0 && (
+                  <ArrowButton
+                    direction="left"
+                    onPointerDown={handleBackPointerDown}
+                    onPointerUp={handleBackPointerUp}
+                    onPointerLeave={handleBackPointerUp}
+                  />
+                )}
                 <ArrowButton direction="right" onClick={advance} />
               </div>
             ) : null}
