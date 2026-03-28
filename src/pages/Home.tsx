@@ -9,9 +9,12 @@ const quickOptions = [
   { key: "style", label: "style", choices: ["natural", "model", "egirl"] },
   { key: "hair", label: "hair", choices: ["blonde", "brunette", "black", "red", "pink", "white"] },
   { key: "eyes", label: "eyes", choices: ["brown", "blue", "green", "hazel", "grey"] },
+  { key: "body", label: "body", choices: ["slim", "regular", "curvy"] },
+  { key: "age", label: "age", choices: ["18","20","22","25","28","30","35","40"] },
+  { key: "ethnicity", label: "ethnicity", choices: ["any","american","british","brazilian","french","indian","italian","japanese","korean","spanish"] },
 ] as const;
 
-type OptKey = (typeof quickOptions)[number]["key"];
+type OptKey = "style" | "hair" | "eyes" | "body" | "age" | "ethnicity";
 
 /* ── Pill select ── */
 const PillSelect = ({
@@ -79,6 +82,9 @@ const Home = () => {
     style: null,
     hair: null,
     eyes: null,
+    body: null,
+    age: null,
+    ethnicity: null,
   });
   const [expandedKey, setExpandedKey] = useState<OptKey | null>(null);
 
