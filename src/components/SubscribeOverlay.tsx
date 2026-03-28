@@ -18,7 +18,7 @@ const TOTAL_STEPS = 3;
 const Scene0 = () => (
   <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.15} size={96}>
-      <Crown size={64} strokeWidth={2} style={{ color: "hsl(45 100% 60%)" }} />
+      <Crown size={64} strokeWidth={2} style={{ color: "hsl(55 100% 50%)" }} />
     </IconPop>
     <BigTitle delay={0.25}>unlock vizura</BigTitle>
     <Subtitle delay={0.4}>create unlimited characters and bring any idea to life</Subtitle>

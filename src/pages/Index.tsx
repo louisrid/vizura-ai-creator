@@ -178,7 +178,7 @@ const Index = () => {
               {characters.length === 0 && user && (
                 <button
                   onClick={() => navigate("/")}
-                  className="mt-2 text-[10px] font-extrabold lowercase text-amber-400 hover:text-amber-300 transition-colors"
+                  className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
                 >
                   create your first character →
                 </button>
