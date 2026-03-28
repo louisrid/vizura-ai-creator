@@ -134,7 +134,7 @@ const CharacterCreator = () => {
       setActiveIndex(0);
       await refetchCredits();
     } catch (err: any) {
-      if (err.message?.includes("No credits") || err.message?.includes("402")) {
+      if (err.message?.includes("No gems") || err.message?.includes("No credits") || err.message?.includes("402")) {
         setShowPaywall(true);
       } else {
         setError(err.message || "creation failed");

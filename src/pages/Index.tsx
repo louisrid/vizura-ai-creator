@@ -112,7 +112,7 @@ const Index = () => {
       setImages(data.images || []);
       await refetchCredits();
     } catch (e: any) {
-      if (e.message?.includes("No credits") || e.message?.includes("402")) {
+      if (e.message?.includes("No gems") || e.message?.includes("No credits") || e.message?.includes("402")) {
         setShowPaywall(true);
       } else {
         setError(e.message || "creation failed");
