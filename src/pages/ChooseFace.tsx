@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, RefreshCw } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import SubscribeOverlay from "@/components/SubscribeOverlay";
+
+const MAX_REROLLS = 3;
 
 const ChooseFace = () => {
   const { user } = useAuth();
@@ -21,8 +24,11 @@ const ChooseFace = () => {
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [showSubscribe, setShowSubscribe] = useState(false);
+  const [rerollCount, setRerollCount] = useState(0);
+  const [rerolling, setRerolling] = useState(false);
 
   useEffect(() => {
     if (!prompt || !user) {
@@ -45,10 +51,7 @@ const ChooseFace = () => {
       if (fnError) throw fnError;
 
       if (data?.error) {
-        if (
-          data.code === "FREE_GEN_USED" ||
-          data.code === "IP_USED"
-        ) {
+        if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
           setShowSubscribe(true);
           setLoading(false);
           return;
@@ -57,15 +60,60 @@ const ChooseFace = () => {
       }
 
       setFaces(data.images || []);
+      setSelectedIndex(null);
     } catch (err: any) {
       const msg = err?.message || "generation failed";
-      if (msg.includes("Free generation already used") || msg.includes("IP_USED") || msg.includes("FREE_GEN_USED")) {
+      if (
+        msg.includes("Free generation already used") ||
+        msg.includes("IP_USED") ||
+        msg.includes("FREE_GEN_USED")
+      ) {
         setShowSubscribe(true);
       } else {
         setError(msg);
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRegenerate = async () => {
+    if (rerollCount >= MAX_REROLLS) return;
+    setRerolling(true);
+    setError("");
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "generate",
+        { body: { prompt, free_gen: true } }
+      );
+
+      if (fnError) throw fnError;
+      if (data?.error) {
+        // After first use, free_gen will fail — that's fine, still count the reroll
+        if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
+          // Use standard gen instead for rerolls (costs credit)
+          const { data: stdData, error: stdError } = await supabase.functions.invoke(
+            "generate",
+            { body: { prompt } }
+          );
+          if (stdError) throw stdError;
+          if (stdData?.error) throw new Error(stdData.error);
+          setFaces(stdData.images?.length >= 6
+            ? stdData.images.slice(0, 6)
+            : [...(stdData.images || []), ...(stdData.images || [])].slice(0, 6)
+          );
+        } else {
+          throw new Error(data.error);
+        }
+      } else {
+        setFaces(data.images || []);
+      }
+      setSelectedIndex(null);
+      setRerollCount((c) => c + 1);
+    } catch (err: any) {
+      setError(err?.message || "regeneration failed");
+    } finally {
+      setRerolling(false);
     }
   };
 
@@ -84,18 +132,20 @@ const ChooseFace = () => {
 
       if (updateError) throw updateError;
 
-      toast({
-        title: "face selected",
-        description: "your character's face has been saved",
-      });
-      navigate("/characters");
+      setSaved(true);
+
+      // Brief "saving your character" then redirect to create photo with character pre-selected
+      setTimeout(() => {
+        navigate("/create", {
+          state: { preselectedCharacterId: characterId },
+        });
+      }, 1500);
     } catch (err: any) {
       toast({
         title: "error",
         description: err.message || "failed to save face",
         variant: "destructive",
       });
-    } finally {
       setSaving(false);
     }
   };
@@ -113,6 +163,27 @@ const ChooseFace = () => {
           onSubscribe={handleSubscribe}
           buying={false}
         />
+      </div>
+    );
+  }
+
+  /* ── saving state ── */
+  if (saved) {
+    return (
+      <div className="relative min-h-screen bg-background">
+        <main className="mx-auto flex w-full max-w-lg flex-col items-center justify-center px-4 pt-44 pb-12">
+          <motion.div
+            className="flex flex-col items-center gap-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Loader2 className="animate-spin text-neon-yellow" size={40} />
+            <p className="text-lg font-extrabold lowercase text-foreground">
+              saving your character
+            </p>
+          </motion.div>
+        </main>
       </div>
     );
   }
@@ -144,34 +215,69 @@ const ChooseFace = () => {
 
         {!loading && faces.length > 0 && (
           <>
-            <div className="mt-8 grid grid-cols-2 gap-3">
-              {faces.map((url, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedIndex(i)}
-                  className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-all ${
-                    selectedIndex === i
-                      ? "border-neon-yellow ring-2 ring-neon-yellow/40 scale-[1.02]"
-                      : "border-border hover:border-foreground/40"
-                  }`}
-                >
-                  <img
-                    src={url}
-                    alt={`face option ${i + 1}`}
-                    className="h-full w-full object-cover"
-                  />
-                  {selectedIndex === i && (
-                    <div className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-neon-yellow">
-                      <Check size={18} strokeWidth={3} className="text-neon-yellow-foreground" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-surface-dark/20 pointer-events-none" />
-                </button>
-              ))}
-            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={rerollCount}
+                className="mt-8 grid grid-cols-2 gap-3"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.25 }}
+              >
+                {faces.map((url, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedIndex(i)}
+                    className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-all ${
+                      selectedIndex === i
+                        ? "border-neon-yellow ring-2 ring-neon-yellow/40 scale-[1.02]"
+                        : "border-border hover:border-foreground/40"
+                    }`}
+                  >
+                    <img
+                      src={url}
+                      alt={`face option ${i + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                    {selectedIndex === i && (
+                      <div className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-neon-yellow">
+                        <Check
+                          size={18}
+                          strokeWidth={3}
+                          className="text-neon-yellow-foreground"
+                        />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </motion.div>
+            </AnimatePresence>
 
+            {/* Regenerate button */}
             <Button
-              className="mt-8 h-14 w-full text-sm"
+              variant="outline"
+              className="mt-4 h-12 w-full text-sm"
+              onClick={handleRegenerate}
+              disabled={rerolling || rerollCount >= MAX_REROLLS}
+            >
+              {rerolling ? (
+                <>
+                  <Loader2 className="animate-spin" size={16} />
+                  regenerating...
+                </>
+              ) : rerollCount >= MAX_REROLLS ? (
+                "out of rerolls"
+              ) : (
+                <>
+                  <RefreshCw size={16} strokeWidth={2.5} />
+                  regenerate ({MAX_REROLLS - rerollCount} left)
+                </>
+              )}
+            </Button>
+
+            {/* Select button */}
+            <Button
+              className="mt-3 h-14 w-full text-sm"
               onClick={handleSelect}
               disabled={selectedIndex === null || saving}
             >
