@@ -79,7 +79,7 @@ const TopUps = () => {
                     {plan.label}
                   </span>
                   {plan.highlighted && (
-                    <span className="text-[10px] font-extrabold lowercase text-background bg-background/20 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-extrabold lowercase text-neon-yellow-foreground bg-neon-yellow px-2 py-0.5 rounded-full">
                       best value
                     </span>
                   )}
