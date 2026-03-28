@@ -15,31 +15,43 @@ const screenEmojis: string[][] = [
   ["🚀", "🎉"],
 ];
 
-/* ── single emoji, full opacity, bouncy pop-in ── */
-const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
-  <motion.span
-    className="select-none pointer-events-none text-6xl"
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
-    transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
-  >
+/* ── per-screen micro-animation configs ── */
+const emojiMotions = [
+  { y: [0, -10, 0], rotate: [0, 6, -4, 0], scale: [1, 1.08, 1], duration: 2.8 },
+  { y: [0, -7, 2, 0], rotate: [0, -8, 5, 0], scale: [1, 1.05, 0.97, 1], duration: 3.2 },
+  { y: [0, -12, 0], rotate: [0, 10, -6, 0], scale: [1, 1.1, 0.95, 1], duration: 2.5 },
+  { y: [0, -6, 4, 0], rotate: [0, -5, 8, -3, 0], scale: [1, 1.06, 1], duration: 3.5 },
+  { y: [0, -14, 0], rotate: [0, 12, -8, 0], scale: [1, 1.12, 0.96, 1], duration: 2.6 },
+];
+
+/* ── single emoji, full opacity, bouncy pop-in + idle loop ── */
+const BigEmoji = ({ emoji, delay = 0, screenIndex = 0 }: { emoji: string; delay?: number; screenIndex?: number }) => {
+  const motion_cfg = emojiMotions[screenIndex % emojiMotions.length];
+  return (
     <motion.span
-      className="inline-block"
-      animate={{ y: [0, -6, 0], rotate: [0, 8, -5, 0] }}
-      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
+      className="select-none pointer-events-none text-[4.5rem]"
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
+      transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
     >
-      {emoji}
+      <motion.span
+        className="inline-block"
+        animate={{ y: motion_cfg.y, rotate: motion_cfg.rotate, scale: motion_cfg.scale }}
+        transition={{ duration: motion_cfg.duration, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
+      >
+        {emoji}
+      </motion.span>
     </motion.span>
-  </motion.span>
-);
+  );
+};
 
 /* ── emoji row ── */
 const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
   const emojis = screenEmojis[screenIndex] || ["✨"];
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center gap-4">
       {emojis.map((e, i) => (
-        <BigEmoji key={e} emoji={e} delay={0.05 + i * 0.15} />
+        <BigEmoji key={e} emoji={e} delay={0.05 + i * 0.15} screenIndex={screenIndex} />
       ))}
     </div>
   );
