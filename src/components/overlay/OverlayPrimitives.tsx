@@ -196,7 +196,7 @@ export const ArrowButton = ({
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
     ) : (
-      <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#000" }} />
+      <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
     )}
   </button>
 );
