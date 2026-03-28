@@ -234,7 +234,34 @@ const Scene5 = ({ burst, onLetsGo }: { burst: boolean; onLetsGo: () => void }) =
     <IconPop delay={0.1} size={96}><span className="text-[5rem]">🚀</span></IconPop>
     <BigTitle delay={0.2}>ready</BigTitle>
     <Subtitle delay={0.35}>sign up free and start creating</Subtitle>
-    <GoldButton onClick={onLetsGo} delay={0.2}>let's go</GoldButton>
+    <motion.button
+      onClick={(e) => { e.stopPropagation(); onLetsGo(); }}
+      className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight"
+      style={{
+        background: "hsl(270 60% 35%)",
+        borderColor: "hsl(270 60% 42%)",
+        color: "#fff",
+        borderRadius: 16,
+      }}
+      whileTap={{ scale: 0.97 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
+    >
+      <motion.div
+        className="absolute inset-0"
+        style={{ borderRadius: 12 }}
+        animate={{
+          boxShadow: [
+            "0 0 0 0 hsl(270 60% 35% / 0.4)",
+            "0 0 0 14px hsl(270 60% 35% / 0)",
+            "0 0 0 0 hsl(270 60% 35% / 0)",
+          ],
+        }}
+        transition={{ duration: 1.8, repeat: Infinity }}
+      />
+      <span className="relative z-10 flex items-center justify-center gap-2">let's go</span>
+    </motion.button>
   </div>
 );
 
