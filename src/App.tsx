@@ -34,11 +34,12 @@ const ScrollToTop = () => {
   return null;
 };
 
-/* On every fresh page load (refresh), clear intro flag and redirect to home */
+/* Clear intro flag synchronously before any component renders */
+sessionStorage.removeItem("intro_seen");
+
 const RedirectHomeOnLoad = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    sessionStorage.removeItem("intro_seen");
     if (window.location.pathname !== "/") {
       navigate("/", { replace: true });
     }
