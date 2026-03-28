@@ -55,9 +55,9 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg px-4 pt-12 pb-12">
-        <div className="mb-10 flex items-center gap-3">
+    <div className="min-h-screen bg-background px-4 py-6">
+      <main className="mx-auto w-full max-w-lg rounded-3xl bg-card shadow-[0_4px_32px_rgba(0,0,0,0.08)] p-6 pb-10">
+        <div className="mb-8 flex items-center gap-3">
           <BackButton />
         </div>
 

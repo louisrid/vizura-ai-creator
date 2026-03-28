@@ -141,12 +141,10 @@ const CharacterCreator = () => {
   const cycleNext = () => setActiveIndex((c) => (c + 1) % total);
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background px-4 py-6">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <div className="mx-auto w-full max-w-lg px-4 pt-16 pb-0" />
-
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
+      <main className="mx-auto flex w-full max-w-lg flex-col rounded-3xl bg-card shadow-[0_4px_32px_rgba(0,0,0,0.08)] p-6 pb-10">
         <CardCarousel
           images={imageCards}
           activeIndex={activeIndex}
@@ -211,7 +209,7 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-6 rounded-2xl border-[4px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
