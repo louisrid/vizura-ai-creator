@@ -341,7 +341,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
 
           {/* dots + arrows — generous bottom spacing */}
           <div className="flex flex-col items-center gap-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-2">
-            <p className="text-xs font-bold lowercase text-white/30">swipe or hold arrow</p>
+            <p className="text-xs font-bold lowercase text-white/30">press arrow to continue</p>
             <ProgressDots current={step} total={TOTAL} />
             <div className="flex items-center gap-6">
               <ArrowButton
