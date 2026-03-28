@@ -355,7 +355,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Content — fills available space, centered vertically */}
-          <div className="flex-1 flex items-center justify-center px-8 overflow-hidden">
+          <div className="flex-1 flex items-center justify-center px-8 pt-10 overflow-hidden">
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
