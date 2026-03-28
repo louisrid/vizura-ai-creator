@@ -138,12 +138,12 @@ const Scene2 = () => (
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.25, duration: 0.3 }}
     >
-      {/* fake prompt input — warm orange tint */}
+      {/* fake prompt input — neon blue */}
       <div
         className="flex h-14 items-center rounded-2xl border-[5px] px-4"
         style={{
-          background: "hsl(15 100% 15%)",
-          borderColor: "hsl(15 100% 50%)",
+          background: "hsl(210 100% 15%)",
+          borderColor: "hsl(210 100% 50%)",
         }}
       >
         <Pen size={16} strokeWidth={2.5} color="#fff" />
