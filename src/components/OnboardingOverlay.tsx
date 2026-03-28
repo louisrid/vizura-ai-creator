@@ -70,7 +70,7 @@ const Scene1 = () => {
   const borderColors = [
     "hsl(210 90% 55%)",
     "hsl(330 80% 55%)",
-    "hsl(55 90% 58%)", // selected one
+    "hsl(55 100% 50%)", // selected one
     "hsl(150 70% 45%)",
     "hsl(280 70% 55%)",
     "hsl(20 90% 55%)",
@@ -106,9 +106,9 @@ const Scene1 = () => {
               height={80}
             />
             {i === 2 && (
-              <motion.div
-                className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full"
-                style={{ background: "hsl(55 90% 58%)" }}
+               <motion.div
+                 className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full"
+                 style={{ background: "hsl(55 100% 50%)" }}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.55, type: "spring", stiffness: 400 }}
@@ -194,8 +194,8 @@ const Scene3 = ({ onLetsGo }: { onLetsGo: () => void }) => (
       }}
       className="relative h-16 w-full max-w-[16rem] border-[5px] text-xl font-[900] lowercase tracking-tight active:scale-[0.93]"
       style={{
-        background: "hsl(55 90% 58%)",
-        borderColor: "hsl(55 80% 48%)",
+      background: "hsl(55 100% 50%)",
+        borderColor: "hsl(55 100% 50%)",
         color: "#000",
         borderRadius: 16,
         transition: "transform 0.05s",
