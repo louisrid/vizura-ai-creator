@@ -356,8 +356,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                 >
-                  {step < 4 && (() => { const S = screens[step]; return <S />; })()}
-                  {step === 4 && <Screen5 onGo={onComplete} />}
+                  {step < 5 && (() => { const S = screens[step]; return <S />; })()}
+                  {step === 5 && <Screen6 onGo={onComplete} />}
                 </motion.div>
               </AnimatePresence>
             </div>
