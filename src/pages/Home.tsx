@@ -23,10 +23,10 @@ const Home = () => {
       style={{ height: "calc(100dvh - 73px)" }}
     >
       {/* Photo preview box */}
-      <div className="px-4 pt-4 pb-3">
+      <div className="flex-1 px-4 pt-4 pb-3">
         <div
           className="flex items-center justify-center rounded-2xl border-[6px] border-foreground bg-card"
-          style={{ width: "48%", height: "calc((100dvh - 73px) * 0.37)" }}
+          style={{ width: "55%", height: "100%" }}
         >
           <Wand2 size={28} className="text-foreground/20" />
         </div>
