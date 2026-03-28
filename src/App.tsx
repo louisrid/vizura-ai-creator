@@ -117,12 +117,11 @@ const AppOnboarding = ({
 const AnimatedRoutes = () => {
   const location = useLocation();
   const [onboardingOpen, setOnboardingOpen] = useState(false);
-  const isHome = location.pathname === "/" || location.pathname === "/index";
 
   return (
     <>
       <AppOnboarding onOpenChange={setOnboardingOpen} />
-      {!onboardingOpen && !isHome && <Header />}
+      {!onboardingOpen && <Header />}
       <PageTransition key={location.pathname}>
         <Routes location={location}>
           <Route path="/" element={<Home />} />
