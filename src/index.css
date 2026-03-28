@@ -44,8 +44,8 @@
     --neon-green: 140 70% 52%;
     --neon-green-foreground: 0 0% 100%;
 
-    /* gem neon — for gems badge & gem-related elements */
-    --gem-green: 50 100% 55%;
+    /* gem neon pink — for gems badge & gem-related elements */
+    --gem-green: 330 100% 72%;
     --gem-green-foreground: 0 0% 4%;
 
     --sidebar-background: 0 0% 4%;
