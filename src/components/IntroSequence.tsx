@@ -60,13 +60,13 @@ const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
 /* ── mock pill ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
   <motion.div
-    className="flex h-9 items-center justify-center rounded-full px-3.5"
+    className="flex h-6 items-center justify-center rounded-full px-2.5"
     style={{ background: "hsl(0 0% 100% / 0.08)" }}
-    initial={{ opacity: 0, y: 10, scale: 0.92 }}
+    initial={{ opacity: 0, y: 6, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-xs font-[800] lowercase tracking-tight text-white/70">{label}</span>
+    <span className="text-[0.55rem] font-[800] lowercase tracking-tight text-white/50">{label}</span>
   </motion.div>
 );
 
@@ -78,10 +78,10 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.65rem] font-bold lowercase text-white/35">{label}</span>
+    <span className="text-[0.5rem] font-bold lowercase text-white/30">{label}</span>
     <div
-      className="w-full rounded-xl"
-      style={{ background: "hsl(0 0% 100% / 0.08)", height: tall ? 56 : 36 }}
+      className="w-full rounded-lg"
+      style={{ background: "hsl(0 0% 100% / 0.08)", height: tall ? 36 : 24 }}
     />
   </motion.div>
 );
@@ -89,7 +89,7 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
 /* ── section label ── */
 const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
-    className="text-[0.6rem] font-bold uppercase tracking-widest text-white/25"
+    className="text-[0.45rem] font-bold uppercase tracking-widest text-white/20"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay, duration: 0.3 }}
@@ -151,14 +151,14 @@ const Screen1 = () => (
       pick a style
     </motion.h2>
     <motion.p
-      className="text-xs font-bold lowercase text-white/45 text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 8 }}
+      className="text-[0.6rem] font-bold lowercase text-white/35 text-center max-w-[12rem]"
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       choose how your character looks — natural, model, or egirl
     </motion.p>
-    <div className="flex flex-wrap justify-center gap-2 pt-1">
+    <div className="flex flex-wrap justify-center gap-1.5 pt-1">
       <Pill label="natural" delay={0.15} />
       <Pill label="model" delay={0.22} />
       <Pill label="egirl" delay={0.29} />
@@ -178,28 +178,28 @@ const Screen2 = () => (
       hair, eyes & body
     </motion.h2>
     <motion.p
-      className="text-xs font-bold lowercase text-white/45 text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 8 }}
+      className="text-[0.6rem] font-bold lowercase text-white/35 text-center max-w-[12rem]"
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       fine-tune the details that make your character unique
     </motion.p>
-    <div className="flex flex-col gap-2 w-full pt-1">
+    <div className="flex flex-col gap-1 w-full pt-1">
       <SectionLabel delay={0.15}>hair colour</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1">
         {["blonde", "brunette", "black", "red"].map((h, i) => (
           <Pill key={h} label={h} delay={0.18 + i * 0.05} />
         ))}
       </div>
       <SectionLabel delay={0.35}>eye colour</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1">
         {["brown", "blue", "green"].map((e, i) => (
           <Pill key={e} label={e} delay={0.38 + i * 0.05} />
         ))}
       </div>
       <SectionLabel delay={0.5}>body type</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1">
         {["slim", "regular", "curvy"].map((b, i) => (
           <Pill key={b} label={b} delay={0.53 + i * 0.05} />
         ))}
@@ -220,22 +220,22 @@ const Screen3 = () => (
       ethnicity & age
     </motion.h2>
     <motion.p
-      className="text-xs font-bold lowercase text-white/45 text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 8 }}
+      className="text-[0.6rem] font-bold lowercase text-white/35 text-center max-w-[12rem]"
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       set their background and how old they are
     </motion.p>
-    <div className="flex flex-col gap-2 w-full pt-1">
+    <div className="flex flex-col gap-1 w-full pt-1">
       <SectionLabel delay={0.15}>ethnicity</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1">
         {["american", "brazilian", "japanese", "korean"].map((e, i) => (
           <Pill key={e} label={e} delay={0.18 + i * 0.05} />
         ))}
       </div>
       <SectionLabel delay={0.4}>age</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1">
         {["18", "22", "25", "30"].map((a, i) => (
           <Pill key={a} label={a} delay={0.43 + i * 0.05} />
         ))}
@@ -256,14 +256,14 @@ const Screen4 = () => (
       name & describe
     </motion.h2>
     <motion.p
-      className="text-xs font-bold lowercase text-white/45 text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 8 }}
+      className="text-[0.6rem] font-bold lowercase text-white/35 text-center max-w-[12rem]"
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       give them a name and add any extra details you like
     </motion.p>
-    <div className="flex flex-col gap-3 w-full pt-1">
+    <div className="flex flex-col gap-2 w-full pt-1">
       <MockInput label="character name" delay={0.2} />
       <MockInput label="describe your character" tall delay={0.3} />
     </div>
@@ -282,8 +282,8 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
       ready?
     </motion.h2>
     <motion.p
-      className="text-xs font-bold lowercase text-white/45 text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 8 }}
+      className="text-[0.6rem] font-bold lowercase text-white/35 text-center max-w-[12rem]"
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12, duration: 0.3 }}
     >
@@ -291,7 +291,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
     </motion.p>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="h-12 w-full max-w-[13rem] rounded-full text-base font-[900] lowercase tracking-tight active:scale-[0.95]"
+      className="h-10 w-full max-w-[10rem] rounded-full text-xs font-[900] lowercase tracking-tight active:scale-[0.95]"
       style={{ background: LIGHT_BLUE, color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -370,7 +370,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Screen content — vertically centred in available space above nav */}
-          <div className="flex-1 flex items-center justify-center px-10 overflow-hidden pt-16">
+          <div className="flex-1 flex items-center justify-center px-14 overflow-hidden pt-20">
             <div className="w-full max-w-xs mx-auto">
               <AnimatePresence mode="wait">
                 <motion.div
