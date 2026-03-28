@@ -11,7 +11,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 const Account = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const { credits } = useCredits();
-  const { subscribed, plan, cancel } = useSubscription();
+  const { subscribed, status } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,16 +41,9 @@ const Account = () => {
                 <Crown size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1">
                   <span className="block text-xs font-extrabold lowercase text-foreground">current plan</span>
-                  <span className="block text-sm font-extrabold lowercase text-foreground">{plan}</span>
+                  <span className="block text-sm font-extrabold lowercase text-foreground">vizura membership ({status})</span>
                 </div>
               </div>
-              <Button
-                variant="outline"
-                className="w-full h-12 text-sm"
-                onClick={cancel}
-              >
-                cancel subscription
-              </Button>
             </div>
           ) : (
             <button
