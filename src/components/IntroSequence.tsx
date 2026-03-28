@@ -305,8 +305,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* content — vertically centered, pushed slightly above middle */}
-          <div className="flex-1 flex items-center justify-center px-6 pb-16">
+          {/* content — pushed well above center */}
+          <div className="flex-1 flex items-start justify-center px-6 pt-[18vh]">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={step}
