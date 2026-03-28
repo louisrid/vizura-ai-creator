@@ -9,7 +9,7 @@ import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
 import CharacterCreator from "./pages/CharacterCreator";
-import Home from "./pages/Home";
+
 import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -54,8 +54,7 @@ const AnimatedRoutes = () => {
       <Header />
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/create-character" element={<CharacterCreator />} />
+          <Route path="/" element={<CharacterCreator />} />
           <Route path="/choose-face" element={<ChooseFace />} />
           <Route path="/create" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
