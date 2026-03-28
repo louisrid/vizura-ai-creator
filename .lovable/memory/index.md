@@ -10,6 +10,7 @@ Nav token: --nav (black bg), --nav-foreground (white text).
 Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations, characters.
 Auth: Supabase email/password. New users get 0 credits via trigger.
 Edge functions: generate (AI image gen), create-checkout (Stripe), stripe-webhook (payment handling).
+Security: All tables have RLS (auth.uid()=user_id). Edge functions gated by IS_DEMO_MODE env var (defaults true). Generate has 10/min rate limit + input sanitisation. Client-side sanitiseText() in src/lib/sanitise.ts.
 Stripe: needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET secrets + real price IDs.
 Characters table: stores user characters with traits (name, country, age, hair, eye, body, style, description).
 Create photo page: has character dropdown that auto-fills prompt from saved character traits.

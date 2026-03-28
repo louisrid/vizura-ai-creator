@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitiseText } from "@/lib/sanitise";
 
 
 const countryOptions = [
@@ -70,14 +71,14 @@ const CharacterCreator = () => {
     setIsSaving(true);
     try {
       const charData = {
-        name: characterName.trim() || `${hair} ${eye} ${age}`,
-        country,
+        name: sanitiseText(characterName, 100) || `${hair} ${eye} ${age}`,
+        country: sanitiseText(country, 50),
         age,
-        hair,
-        eye,
-        body,
-        style,
-        description: description.trim(),
+        hair: sanitiseText(hair, 50),
+        eye: sanitiseText(eye, 50),
+        body: sanitiseText(body, 50),
+        style: sanitiseText(style, 50),
+        description: sanitiseText(description, 500),
       };
 
       if (isEditing) {
