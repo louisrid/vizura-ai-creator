@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap, Upload } from "lucide-react";
+import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
 import IntroSequence from "@/components/IntroSequence";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -176,6 +176,13 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-28">
+        {/* Hero image box */}
+        <section className="mb-6 flex w-full items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "4/3" }}>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
+            <Sparkles size={28} strokeWidth={2.5} className="text-black" />
+          </div>
+        </section>
+
         {/* Character name */}
         <section className="flex flex-col gap-2">
           <label htmlFor="character-name" className="text-xs font-extrabold lowercase text-foreground">
