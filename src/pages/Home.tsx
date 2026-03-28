@@ -131,7 +131,7 @@ const Home = () => {
         </div>
 
         {/* Right: 3 pill selectors stacked */}
-        <div className="grid grid-cols-2 gap-2 pt-1" style={{ width: "42%" }}>
+        <div className="grid grid-cols-2 gap-2 self-start rounded-2xl bg-foreground p-3" style={{ width: "42%" }}>
           {quickOptions.map((opt) => (
             <PillSelect
               key={opt.key}
