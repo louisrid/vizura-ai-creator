@@ -251,26 +251,38 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const advance = useCallback(() => goTo(step + 1), [goTo, step]);
   const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
 
+  const holdDir = useRef<"left" | "right" | null>(null);
+  const holdStart = useRef<number>(0);
+
   const clearHold = useCallback(() => {
-    if (holdTimer.current) { clearInterval(holdTimer.current); holdTimer.current = null; }
     if (skipTimer.current) { clearTimeout(skipTimer.current); skipTimer.current = null; }
+    holdDir.current = null;
   }, []);
 
-  const startHold = useCallback((dir: "left" | "right") => {
+  const handlePointerDown = useCallback((dir: "left" | "right") => {
     clearHold();
-    // Auto-advance every 400ms
-    holdTimer.current = setInterval(() => {
-      if (dir === "right") goTo(step + 1);
-      else goTo(step - 1);
-    }, 400);
-    // After 1s hold on right arrow, skip entire flow
+    holdDir.current = dir;
+    holdStart.current = Date.now();
+    // If held >1s on right, skip entire flow
     if (dir === "right") {
       skipTimer.current = setTimeout(() => {
-        clearHold();
+        holdDir.current = null;
         onComplete();
       }, 1000);
     }
-  }, [goTo, step, clearHold, onComplete]);
+  }, [clearHold, onComplete]);
+
+  const handlePointerUp = useCallback(() => {
+    if (!holdDir.current) return;
+    const elapsed = Date.now() - holdStart.current;
+    const dir = holdDir.current;
+    clearHold();
+    // If held <1s, just advance/go back one step on release
+    if (elapsed < 1000) {
+      if (dir === "right") goTo(step + 1);
+      else goTo(step - 1);
+    }
+  }, [clearHold, goTo, step]);
 
   // Swipe
   const handleTouchStart = (e: React.TouchEvent) => {
