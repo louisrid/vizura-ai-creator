@@ -68,34 +68,32 @@ const Header = () => {
           <GemsBadge />
         </div>
 
-        <div className="relative flex items-center" ref={menuRef}>
-          <div className="flex items-center gap-2.5 rounded-2xl bg-neon-yellow px-3 py-2">
-            {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
-              <button onClick={() => navigate("/account")} className="shrink-0" aria-label="my account">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-neon-yellow-foreground">
-                  <circle cx="12" cy="8" r="5" />
-                  <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-                </svg>
-              </button>
-            )}
-
-            <span className="flex items-center gap-1.5 text-xs font-extrabold lowercase text-neon-yellow-foreground">
-              {CurrentIcon && <CurrentIcon size={13} strokeWidth={2.5} />}
-              <span>{currentPage}</span>
-            </span>
-
-            <button
-              onClick={() => setOpen(!open)}
-              className="flex items-center justify-center transition-opacity hover:opacity-70"
-              aria-label="open menu"
-            >
-              <svg width="16" height="12" viewBox="0 0 18 14" fill="none">
-                <rect y="0" width="18" height="3" rx="1.5" fill="currentColor" className="text-neon-yellow-foreground" />
-                <rect y="5.5" width="18" height="3" rx="1.5" fill="currentColor" className="text-neon-yellow-foreground" />
-                <rect y="11" width="18" height="3" rx="1.5" fill="currentColor" className="text-neon-yellow-foreground" />
+        <div className="relative flex items-center gap-3" ref={menuRef}>
+          {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
+            <button onClick={() => navigate("/account")} className="shrink-0" aria-label="my account">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-nav-foreground">
+                <circle cx="12" cy="8" r="5" />
+                <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
               </svg>
             </button>
-          </div>
+          )}
+
+          <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
+            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow" />}
+            <span className="text-neon-yellow">{currentPage}</span>
+          </span>
+
+          <button
+            onClick={() => setOpen(!open)}
+            className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground transition-opacity hover:opacity-90"
+            aria-label="open menu"
+          >
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+              <rect y="0" width="18" height="3" rx="1.5" fill="currentColor" />
+              <rect y="5.5" width="18" height="3" rx="1.5" fill="currentColor" />
+              <rect y="11" width="18" height="3" rx="1.5" fill="currentColor" />
+            </svg>
+          </button>
 
           <AnimatePresence>
             {open && (

@@ -36,8 +36,8 @@
 
     --radius: 12px;
 
-    /* neon yellow accent — paler */
-    --neon-yellow: 55 90% 58%;
+    /* neon yellow accent */
+    --neon-yellow: 50 100% 55%;
     --neon-yellow-foreground: 0 0% 4%;
 
     /* neon green for buy/CTA — paler */
