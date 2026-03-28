@@ -87,12 +87,13 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Stacked setting cards */}
-        <div className="flex flex-col gap-2">
+        {/* Stacked setting cards — same 70% width, centered */}
+        <div className="flex flex-col gap-2 items-center w-full">
           {quickOptions.map((opt) => (
             <label
               key={opt.key}
               className="flex items-center justify-between rounded-xl border-[2px] border-black bg-white px-4 h-[42px]"
+              style={{ width: "70%" }}
             >
               <span className="text-[11px] font-bold lowercase text-black">{opt.label}</span>
               <select
