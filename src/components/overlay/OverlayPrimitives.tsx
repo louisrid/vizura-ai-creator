@@ -136,10 +136,8 @@ export const GoldButton = ({
       color: "#fff",
       borderRadius: 16,
     }}
-    whileTap={{ scale: 0.97 }}
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay }}
+    whileTap={{ scale: 0.93 }}
+    transition={{ duration: 0.05 }}
   >
     <motion.div
       className="absolute inset-0"
@@ -208,7 +206,7 @@ export const ArrowButton = ({
     onPointerLeave={onPointerLeave}
     className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16 }}
-    whileTap={{ scale: 1.12, background: "hsl(55 90% 58%)", borderRadius: 16 }}
+    whileTap={{ scale: 1.12, background: "hsl(55 90% 58%)", borderRadius: 16, transition: { duration: 0.05 } }}
   >
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
