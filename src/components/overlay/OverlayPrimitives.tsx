@@ -131,7 +131,7 @@ export const GoldButton = ({
     style={{
       background: "hsl(140 70% 52%)",
       borderColor: "hsl(140 70% 58%)",
-      color: "#fff",
+      color: "#000",
       borderRadius: 16,
       transition: "transform 0.05s",
     }}
