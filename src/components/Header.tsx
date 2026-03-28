@@ -80,7 +80,7 @@ const Header = () => {
 
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
             {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow" />}
-            <span className="text-neon-yellow">{currentPage}</span>
+            <span className="text-nav-foreground">{currentPage}</span>
           </span>
 
           <button
