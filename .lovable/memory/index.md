@@ -1,18 +1,15 @@
 # Memory: index.md
 Updated: now
 
-Design system: black nav + off-white bg (96%) + white card containers. Plus Jakarta Sans ExtraBold. 0px border-radius. Thick spacing. Lowercase everything. No gradients — flat cartoony colors only.
-Accent: neon yellow (55 100% 50%) for highlights/active states. Neon green (130 100% 42%) for buy/CTA buttons. No purple gradients.
-All borders use 5px consistently (border-[5px]).
-Pages: Landing (/), Create Photo (/create), Character Creator (/), Choose Face (/choose-face), My Characters, Auth (/auth), Account, Membership, Top-ups, Storage.
+Design system: pure black (#000) + white (#fff), no colors/gradients. Plus Jakarta Sans ExtraBold. 0px border-radius. Thick spacing. Lowercase everything.
+Pages: Landing (/), Generate (/generate), Auth (/auth), Paywall overlay component.
 Button variants: hero, hero-outline for on-dark surfaces.
 Nav token: --nav (black bg), --nav-foreground (white text).
-Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations, characters, free_gen_ips.
-Auth: Supabase email/password. New users get 0 credits via trigger.
-Edge functions: generate (AI image gen with free_gen mode), create-checkout (Stripe), stripe-webhook (payment handling).
-Security: All tables have RLS (auth.uid()=user_id). free_gen_ips has RLS enabled, no public policies (service role only). Edge functions gated by IS_DEMO_MODE env var (defaults true). Generate has 10/min rate limit + input sanitisation. Client-side sanitiseText() in src/lib/sanitise.ts.
+Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations.
+Auth: Supabase email/password. New users get 1 free credit via trigger.
+Edge functions: generate (AI image gen), create-checkout (Stripe), stripe-webhook (payment handling).
 Stripe: needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET secrets + real price IDs.
-Characters table: stores user characters with traits (name, country, age, hair, eye, body, style, description, face_image_url, generation_prompt).
-Free trial: 1 free generation per user ever (profiles.has_used_free_gen). IP limiting via free_gen_ips table. Generate edge function handles free_gen=true flag.
-Create photo page: has character dropdown that auto-fills prompt from saved character traits.
-Storage page: grid of generated photos from generations table with expand/download/delete.
+Credits rebranded to "gems" across entire app. DB table stays `credits` but all UI/variables say gems. Green gem icon (--gem-green: 145 72% 44%) in header badge. Gem icon from lucide-react.
+
+## Memories
+- [Border thickness](mem://design/border-thickness) — All borders use 4px consistently. Gradient border padding also 4px.
