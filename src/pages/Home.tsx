@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import IntroSequence from "@/components/IntroSequence";
+import CharacterCreatorOverlay from "@/components/CharacterCreatorOverlay";
 
 const quickOptions = [
   { key: "style", label: "style ✨", choices: ["natural", "model", "egirl"] },
@@ -17,13 +19,31 @@ const Home = () => {
   const [selections, setSelections] = useState<Record<OptKey, string | null>>({
     style: null, hair: null, body: null,
   });
+  const [showIntro, setShowIntro] = useState(false);
+  const [showCreator, setShowCreator] = useState(false);
 
   const handleCreate = () => {
+    if (!user) {
+      // Logged out: always show intro
+      setShowIntro(true);
+      return;
+    }
+    // Logged in: show intro once per session
+    if (!sessionStorage.getItem("intro_seen")) {
+      setShowIntro(true);
+    } else {
+      setShowCreator(true);
+    }
+  };
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    sessionStorage.setItem("intro_seen", "1");
     if (!user) {
       navigate("/auth?redirect=/");
       return;
     }
-    navigate("/create-character");
+    setShowCreator(true);
   };
 
   return (
@@ -31,6 +51,9 @@ const Home = () => {
       className="flex flex-col bg-background overflow-y-auto"
       style={{ height: "calc(100dvh - 73px)" }}
     >
+      <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
+      <CharacterCreatorOverlay open={showCreator} onClose={() => setShowCreator(false)} />
+
       <div className="flex flex-col gap-4 px-5 pt-8 pb-6">
         {/* Create character box + button — centered */}
         <div className="flex flex-col items-center w-full gap-3">
