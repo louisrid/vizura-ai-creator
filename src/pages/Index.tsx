@@ -9,6 +9,7 @@ import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitiseText } from "@/lib/sanitise";
 
 interface Character {
   id: string;
@@ -87,10 +88,11 @@ const Index = () => {
     setError("");
 
     const fullPrompt = prompt.trim();
+    const cleanPrompt = sanitiseText(fullPrompt);
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt: fullPrompt },
+        body: { prompt: cleanPrompt },
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
