@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap, Save } from "lucide-react";
+import { ChevronDown, Loader2, Zap, Upload } from "lucide-react";
 import IntroSequence from "@/components/IntroSequence";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -50,6 +50,18 @@ const CharacterCreator = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [referenceImage, setReferenceImage] = useState<File | null>(null);
+  const [referencePreview, setReferencePreview] = useState<string | null>(null);
+  const [extraDetails, setExtraDetails] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setReferenceImage(file);
+    const url = URL.createObjectURL(file);
+    setReferencePreview(url);
+  };
 
   // Intro sequence — show on every fresh page load (session-based)
   const [showIntro, setShowIntro] = useState(() => {
