@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const TOTAL = 5;
 const YELLOW = "hsl(50 100% 50%)";
+const AUTO_DELAY = 3200; // ms per slide before auto-advance
 
 /* ── progress dots ── */
 const Dots = ({ current }: { current: number }) => (
