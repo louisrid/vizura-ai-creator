@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Crown, Zap, Loader2 } from "lucide-react";
+import { Crown, Gem, Loader2 } from "lucide-react";
 import OverlayShell from "./overlay/OverlayShell";
 import {
   dotColors,
