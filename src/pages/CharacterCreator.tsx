@@ -1,6 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Save } from "lucide-react";
+import IntroSequence from "@/components/IntroSequence";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -49,6 +50,15 @@ const CharacterCreator = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Intro sequence — show on every fresh page load (session-based)
+  const [showIntro, setShowIntro] = useState(() => {
+    return !sessionStorage.getItem("intro_seen");
+  });
+  const handleIntroComplete = useCallback(() => {
+    sessionStorage.setItem("intro_seen", "1");
+    setShowIntro(false);
+  }, []);
 
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
@@ -150,6 +160,7 @@ const CharacterCreator = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
+      <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-12">
