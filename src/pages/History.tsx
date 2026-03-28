@@ -87,9 +87,9 @@ const History = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6">
-      <main className="w-full max-w-lg mx-auto rounded-lg border-[5px] border-border bg-card shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-6 pb-10">
-        <div className="flex items-center gap-3 mb-8">
+    <div className="min-h-screen bg-background">
+      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
+        <div className="flex items-center gap-3 mb-10">
           <BackButton />
         </div>
         <PageTitle>history</PageTitle>
