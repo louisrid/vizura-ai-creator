@@ -50,14 +50,14 @@ const Scene0 = () => (
       animate={{ opacity: 1 }}
       transition={{ delay: 0.2 }}
     >
-      <IconBadge delay={0.25} bg="hsl(210 80% 22%)" border="hsl(210 90% 55%)">
-        <Scissors size={28} strokeWidth={2.5} color="hsl(210 90% 65%)" />
+      <IconBadge delay={0.25} bg="hsl(210 100% 25%)" border="hsl(210 100% 50%)">
+        <Scissors size={28} strokeWidth={2.5} color="hsl(210 100% 60%)" />
       </IconBadge>
-      <IconBadge delay={0.35} bg="hsl(330 60% 22%)" border="hsl(330 80% 60%)">
-        <Eye size={28} strokeWidth={2.5} color="hsl(330 80% 70%)" />
+      <IconBadge delay={0.35} bg="hsl(330 100% 25%)" border="hsl(330 100% 50%)">
+        <Eye size={28} strokeWidth={2.5} color="hsl(330 100% 60%)" />
       </IconBadge>
-      <IconBadge delay={0.45} bg="hsl(150 60% 18%)" border="hsl(150 70% 45%)">
-        <User size={28} strokeWidth={2.5} color="hsl(150 70% 55%)" />
+      <IconBadge delay={0.45} bg="hsl(140 100% 20%)" border="hsl(140 100% 45%)">
+        <User size={28} strokeWidth={2.5} color="hsl(140 100% 50%)" />
       </IconBadge>
     </motion.div>
 
@@ -68,12 +68,12 @@ const Scene0 = () => (
 /* Screen 2: choose your face — cartoon woman faces in 2x3 grid */
 const Scene1 = () => {
   const borderColors = [
-    "hsl(210 90% 55%)",
-    "hsl(330 80% 55%)",
-    "hsl(55 100% 50%)", // selected one
-    "hsl(150 70% 45%)",
-    "hsl(280 70% 55%)",
-    "hsl(20 90% 55%)",
+    "hsl(210 100% 50%)",
+    "hsl(330 100% 50%)",
+    "hsl(55 100% 50%)",
+    "hsl(140 100% 45%)",
+    "hsl(280 100% 55%)",
+    "hsl(15 100% 50%)",
   ];
 
   return (
@@ -142,8 +142,8 @@ const Scene2 = () => (
       <div
         className="flex h-14 items-center rounded-2xl border-[5px] px-4"
         style={{
-          background: "hsl(20 40% 12%)",
-          borderColor: "hsl(20 70% 40%)",
+          background: "hsl(15 100% 15%)",
+          borderColor: "hsl(15 100% 50%)",
         }}
       >
         <Pen size={16} strokeWidth={2.5} color="#fff" />
@@ -159,8 +159,8 @@ const Scene2 = () => (
       <motion.div
         className="flex h-14 items-center justify-center gap-2 rounded-2xl border-[5px]"
         style={{
-          background: "hsl(140 50% 14%)",
-          borderColor: "hsl(140 70% 45%)",
+          background: "hsl(140 100% 15%)",
+          borderColor: "hsl(140 100% 45%)",
         }}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

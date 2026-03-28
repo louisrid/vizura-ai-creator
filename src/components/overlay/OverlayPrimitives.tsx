@@ -5,12 +5,12 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 /* ── shared palette ── */
 export const dotColors = [
   "hsl(55 100% 50%)",
-  "hsl(130 100% 42%)",
-  "hsl(330 95% 58%)",
-  "hsl(200 100% 50%)",
-  "hsl(280 85% 60%)",
-  "hsl(20 100% 55%)",
-  "hsl(0 90% 55%)",
+  "hsl(140 100% 45%)",
+  "hsl(330 100% 50%)",
+  "hsl(210 100% 50%)",
+  "hsl(280 100% 55%)",
+  "hsl(15 100% 50%)",
+  "hsl(0 100% 50%)",
 ];
 
 /* ── progress dots ── */
