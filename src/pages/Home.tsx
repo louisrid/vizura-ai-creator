@@ -1,77 +1,46 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Wand2, ChevronDown } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Wand2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import CharacterCreatorOverlay from "@/components/CharacterCreatorOverlay";
 
 const quickOptions = [
-  { key: "style", label: "style", choices: ["natural", "model", "egirl"] },
-  { key: "hair", label: "hair", choices: ["blonde", "brunette", "black", "red", "pink", "white"] },
-  { key: "eyes", label: "eyes", choices: ["brown", "blue", "green", "hazel", "grey"] },
-  { key: "body", label: "body", choices: ["slim", "regular", "curvy"] },
-  { key: "age", label: "age", choices: ["18","20","22","25","28","30","35","40"] },
-  { key: "ethnicity", label: "ethnicity", choices: ["any","american","british","brazilian","french","indian","italian","japanese","korean","spanish"] },
+  { key: "style", label: "✨ style", choices: ["natural", "model", "egirl"] },
+  { key: "hair", label: "💇 hair", choices: ["blonde", "brunette", "black", "red", "pink", "white"] },
+  { key: "eyes", label: "👁 eyes", choices: ["brown", "blue", "green", "hazel", "grey"] },
+  { key: "body", label: "🧍 body", choices: ["slim", "regular", "curvy"] },
+  { key: "age", label: "🎂 age", choices: ["18","20","22","25","28","30","35","40"] },
+  { key: "ethnicity", label: "🌍 ethnicity", choices: ["any","american","british","brazilian","french","indian","italian","japanese","korean","spanish"] },
 ] as const;
 
 type OptKey = "style" | "hair" | "eyes" | "body" | "age" | "ethnicity";
 
-/* ── Pill select — wide sausage shape ── */
-const PillSelect = ({
+/* ── Native select pill ── */
+const NativePill = ({
+  label,
   value,
   choices,
-  expanded,
-  onToggle,
-  onSelect,
+  onChange,
 }: {
+  label: string;
   value: string | null;
   choices: readonly string[];
-  expanded: boolean;
-  onToggle: () => void;
-  onSelect: (v: string) => void;
+  onChange: (v: string) => void;
 }) => (
-  <div className="flex flex-col gap-1">
-    <button
-      onClick={onToggle}
-      className={`flex h-7 w-full items-center justify-between rounded-full border-[2px] px-3 text-[9px] font-[900] lowercase transition-colors ${
-        expanded
-          ? "border-white bg-[hsl(0,0%,25%)] text-white"
-          : "border-white/40 bg-[hsl(0,0%,20%)] text-white/80"
-      }`}
+  <label className="relative flex flex-col gap-1">
+    <span className="text-[9px] font-[900] lowercase text-white/70">{label}</span>
+    <select
+      value={value || ""}
+      onChange={(e) => onChange(e.target.value)}
+      className="h-8 w-full appearance-none rounded-lg border-[2px] border-white/40 bg-[hsl(0,0%,20%)] px-2.5 text-[10px] font-[900] lowercase text-white outline-none transition-colors focus:border-white"
+      style={{ WebkitAppearance: "none" }}
     >
-      <span>{value || "–"}</span>
-      <ChevronDown
-        size={9}
-        strokeWidth={3}
-        className={`shrink-0 transition-transform ${expanded ? "rotate-180" : ""}`}
-      />
-    </button>
-    <AnimatePresence>
-      {expanded && (
-        <motion.div
-          className="flex flex-wrap gap-1"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.12 }}
-        >
-          {choices.map((c) => (
-            <button
-              key={c}
-              onClick={() => onSelect(c)}
-              className={`rounded-full px-2.5 py-0.5 text-[8px] font-[900] lowercase transition-all ${
-                value === c
-                  ? "bg-neon-yellow text-neon-yellow-foreground"
-                  : "bg-white/10 text-white/50 hover:bg-white/20"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </div>
+      <option value="" disabled className="bg-black text-white">–</option>
+      {choices.map((c) => (
+        <option key={c} value={c} className="bg-black text-white">{c}</option>
+      ))}
+    </select>
+  </label>
 );
 
 const Home = () => {
@@ -79,14 +48,8 @@ const Home = () => {
   const { user } = useAuth();
   const [creatorOpen, setCreatorOpen] = useState(false);
   const [selections, setSelections] = useState<Record<OptKey, string | null>>({
-    style: null,
-    hair: null,
-    eyes: null,
-    body: null,
-    age: null,
-    ethnicity: null,
+    style: null, hair: null, eyes: null, body: null, age: null, ethnicity: null,
   });
-  const [expandedKey, setExpandedKey] = useState<OptKey | null>(null);
 
   const handleCreate = () => {
     if (!user) {
@@ -94,11 +57,6 @@ const Home = () => {
       return;
     }
     setCreatorOpen(true);
-  };
-
-  const handleSelect = (key: OptKey, val: string) => {
-    setSelections((prev) => ({ ...prev, [key]: val }));
-    setExpandedKey(null);
   };
 
   return (
@@ -129,19 +87,18 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Right: 6 sausage pill selectors in black rounded box */}
+        {/* Right: 3x2 grid of native selects in black box */}
         <div
-          className="flex flex-col gap-1.5 self-start bg-black p-3"
+          className="grid grid-cols-2 gap-x-2 gap-y-2.5 self-start bg-black p-3"
           style={{ width: "48%", borderRadius: 14 }}
         >
           {quickOptions.map((opt) => (
-            <PillSelect
+            <NativePill
               key={opt.key}
+              label={opt.label}
               value={selections[opt.key]}
               choices={opt.choices}
-              expanded={expandedKey === opt.key}
-              onToggle={() => setExpandedKey((prev) => (prev === opt.key ? null : opt.key))}
-              onSelect={(v) => handleSelect(opt.key, v)}
+              onChange={(v) => setSelections((prev) => ({ ...prev, [opt.key]: v }))}
             />
           ))}
         </div>
