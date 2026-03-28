@@ -132,7 +132,7 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
+      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#000" }} />
     ) : (
       <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
