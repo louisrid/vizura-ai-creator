@@ -170,6 +170,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const touchStartX = useRef<number | null>(null);
   const animating = useRef(false);
   const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const skipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
