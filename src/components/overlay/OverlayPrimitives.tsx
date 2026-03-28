@@ -15,20 +15,17 @@ export const dotColors = [
 
 /* ── progress dots ── */
 export const ProgressDots = ({ current, total }: { current: number; total: number }) => (
-  <div className="flex items-center justify-center gap-2.5 pt-2 pb-1">
+  <div className="flex items-center justify-center gap-3 pt-2 pb-1">
     {Array.from({ length: total }).map((_, i) => (
-      <motion.div
+      <div
         key={i}
         className="rounded-full"
         style={{
-          borderRadius: 9999,
           background: i === current ? "hsl(55 90% 58%)" : "hsl(0 0% 100% / 0.15)",
+          width: i === current ? 16 : 12,
+          height: i === current ? 16 : 12,
+          transition: "width 0.1s, height 0.1s",
         }}
-        animate={{
-          width: i === current ? 14 : 10,
-          height: i === current ? 14 : 10,
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
     ))}
   </div>
@@ -160,15 +157,12 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5 }: { o
 
 /* ── swipe hint ── */
 export const SwipeHint = () => (
-  <motion.p
-    className="text-[11px] font-bold lowercase"
+  <p
+    className="text-sm font-bold lowercase"
     style={{ color: "hsl(0 0% 100%)" }}
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.2, delay: 0.3 }}
   >
     swipe or tap arrow
-  </motion.p>
+  </p>
 );
 
 /* ── arrow nav buttons ── */
@@ -190,13 +184,13 @@ export const ArrowButton = ({
     onPointerDown={onPointerDown}
     onPointerUp={onPointerUp}
     onPointerLeave={onPointerLeave}
-    className={`flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] ${direction === "right" ? "bg-[hsl(55,90%,58%)]" : "bg-black active:bg-[hsl(55,90%,58%)]"}`}
+    className={`flex h-16 w-16 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] ${direction === "right" ? "bg-[hsl(55,90%,58%)]" : "bg-black active:bg-[hsl(55,90%,58%)]"}`}
     style={{ borderColor: direction === "right" ? "hsl(55 80% 48%)" : "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s, background-color 0.05s" }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
+      <ArrowLeft size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
     ) : (
-      <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#000" }} />
+      <ArrowRight size={24} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
   </button>
 );
