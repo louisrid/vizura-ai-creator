@@ -274,7 +274,7 @@ const Screen4 = () => (
 
 const Screen5 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex flex-col items-center gap-8">
-    <EmojiLayer screenIndex={4} />
+    
     <motion.h2
       className="relative z-10 text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
