@@ -30,6 +30,8 @@ const ScrollToTop = () => {
     window.scrollTo({ top: 0, left: 0 });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    const root = document.getElementById("root");
+    if (root) root.scrollTop = 0;
   }, [location.pathname, location.key]);
   return null;
 };
