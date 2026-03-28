@@ -5,12 +5,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import CharacterCreatorOverlay from "@/components/CharacterCreatorOverlay";
 
 const quickOptions = [
-  { key: "style", label: "✨ style", choices: ["natural", "model", "egirl"] },
-  { key: "hair", label: "💇 hair", choices: ["blonde", "brunette", "black", "red", "pink", "white"] },
-  { key: "eyes", label: "👁 eyes", choices: ["brown", "blue", "green", "hazel", "grey"] },
-  { key: "body", label: "🧍 body", choices: ["slim", "regular", "curvy"] },
-  { key: "age", label: "🎂 age", choices: ["18","20","22","25","28","30","35","40"] },
-  { key: "ethnicity", label: "🌍 ethnicity", choices: ["any","american","british","brazilian","french","indian","italian","japanese","korean","spanish"] },
+  { key: "style", label: "style ✨", choices: ["natural", "model", "egirl"] },
+  { key: "hair", label: "hair 💇", choices: ["blonde", "brunette", "black", "red", "pink", "white"] },
+  { key: "eyes", label: "eyes 👁", choices: ["brown", "blue", "green", "hazel", "grey"] },
+  { key: "body", label: "body 🧍", choices: ["slim", "regular", "curvy"] },
+  { key: "age", label: "age 🎂", choices: ["18","20","22","25","28","30","35","40"] },
+  { key: "ethnicity", label: "ethnicity 🌍", choices: ["any","american","british","brazilian","french","indian","italian","japanese","korean","spanish"] },
 ] as const;
 
 type OptKey = "style" | "hair" | "eyes" | "body" | "age" | "ethnicity";
@@ -27,12 +27,12 @@ const NativePill = ({
   choices: readonly string[];
   onChange: (v: string) => void;
 }) => (
-  <label className="relative flex flex-col gap-1">
-    <span className="text-[9px] font-[900] lowercase text-white/70">{label}</span>
+  <label className="relative flex flex-col gap-0.5">
+    <span className="text-[8px] font-bold lowercase text-white">{label}</span>
     <select
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
-      className="h-8 w-full appearance-none rounded-lg border-[2px] border-white/40 bg-[hsl(0,0%,20%)] px-2.5 text-[10px] font-[900] lowercase text-white outline-none transition-colors focus:border-white"
+      className="h-7 w-full appearance-none rounded-md border-[2px] border-white/40 bg-[hsl(0,0%,20%)] px-2 text-[9px] font-semibold lowercase text-white outline-none transition-colors focus:border-white"
       style={{ WebkitAppearance: "none" }}
     >
       <option value="" disabled className="bg-black text-white">–</option>
