@@ -118,22 +118,24 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
   </div>
 );
 
-/* ── arrow button ── */
+/* ── arrow button (blue square theme) ── */
 const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean }) => (
   <button
     onClick={(e) => { e.stopPropagation(); onClick(); }}
     disabled={disabled}
-    className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] active:scale-95"
+    className={`flex h-14 w-14 items-center justify-center border-[5px] active:scale-[1.05] ${direction === "right" ? "" : "bg-black"}`}
     style={{
-      borderColor: disabled ? "hsl(0 0% 100% / 0.1)" : "hsl(0 0% 100% / 0.3)",
+      background: direction === "right" ? LIGHT_BLUE : undefined,
+      borderColor: direction === "right" ? LIGHT_BLUE : (disabled ? "hsl(0 0% 100% / 0.15)" : LIGHT_BLUE),
       opacity: disabled ? 0.3 : 1,
-      transition: "opacity 0.15s, border-color 0.15s, transform 0.05s",
+      borderRadius: 16,
+      transition: "transform 0.05s, border-color 0.15s, opacity 0.15s",
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={18} strokeWidth={2.5} color="white" />
+      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
     ) : (
-      <ArrowRight size={18} strokeWidth={2.5} color="white" />
+      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
   </button>
 );
