@@ -4,22 +4,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
-const LIGHT_BLUE = "hsl(195 100% 50%)";
+const LIGHT_BLUE = "hsl(195 100% 60%)";
+const LIGHT_BLUE_DIM = "hsl(195 100% 50% / 0.15)";
 
-/* ── per-screen emojis — 2-3 big ones, ON TOP of title ── */
-const screenEmojis: string[] = ["💅", "💇‍♀️", "🌍", "✏️", "🚀"];
+/* ── per-screen emojis — 2-3 distinct per slide ── */
+const screenEmojis: string[][] = [
+  ["💅", "✨"],
+  ["💇‍♀️", "👁️", "💪"],
+  ["🌍", "🎂"],
+  ["✏️", "📝", "💬"],
+  ["🚀", "🎉"],
+];
 
-/* ── single big emoji, full opacity, floating on top ── */
+/* ── single big emoji, full opacity, bouncy pop-in ── */
 const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="select-none pointer-events-none text-5xl"
-    initial={{ opacity: 0, scale: 0, rotate: -20 }}
-    animate={{ opacity: 1, scale: [0, 1.3, 1], rotate: [-20, 10, 0] }}
+    className="select-none pointer-events-none text-6xl"
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
       className="inline-block"
-      animate={{ y: [0, -6, 0], rotate: [0, 6, -4, 0] }}
+      animate={{ y: [0, -8, 0], rotate: [0, 8, -5, 0] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
     >
       {emoji}
@@ -29,25 +36,26 @@ const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
 
 /* ── emoji row rendered INSIDE each screen, on top of title ── */
 const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
-  const emoji = screenEmojis[screenIndex] || "✨";
+  const emojis = screenEmojis[screenIndex] || ["✨"];
   return (
-    <div className="flex items-center justify-center gap-3">
-      <BigEmoji emoji={emoji} delay={0.05} />
-      <BigEmoji emoji={emoji} delay={0.2} />
+    <div className="flex items-center justify-center gap-4 pb-2">
+      {emojis.map((e, i) => (
+        <BigEmoji key={e} emoji={e} delay={0.05 + i * 0.15} />
+      ))}
     </div>
   );
 };
 
-/* ── mock pill ── */
+/* ── mock pill — neon blue tinted ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
   <motion.div
     className="flex h-10 items-center justify-center rounded-full px-4"
-    style={{ background: "hsl(0 0% 14%)" }}
+    style={{ background: LIGHT_BLUE_DIM }}
     initial={{ opacity: 0, y: 14, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-sm font-[800] lowercase tracking-tight text-white/70">{label}</span>
+    <span className="text-sm font-[800] lowercase tracking-tight" style={{ color: LIGHT_BLUE }}>{label}</span>
   </motion.div>
 );
 
