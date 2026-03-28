@@ -69,15 +69,15 @@ const Home = () => {
         <div className="flex flex-col items-center w-full">
           <div
             className="flex items-center justify-center border-[4px] border-foreground bg-card"
-            style={{ width: "65%", aspectRatio: "1/1", borderRadius: 14 }}
+            style={{ width: "48%", aspectRatio: "1/1", borderRadius: 14 }}
           >
-            <Wand2 size={28} className="text-foreground/20" />
+            <Wand2 size={24} className="text-foreground/20" />
           </div>
 
           <button
             onClick={handleCreate}
-            className="mt-2.5 flex h-[44px] items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
-            style={{ width: "65%", borderRadius: 14, transition: "transform 0.05s" }}
+            className="mt-2.5 flex h-[40px] items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+            style={{ width: "48%", borderRadius: 14, transition: "transform 0.05s" }}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
               <circle cx="12" cy="9" r="4.5" />
