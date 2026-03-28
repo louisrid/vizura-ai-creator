@@ -29,20 +29,32 @@ const SpinEmoji = ({ emoji, delay, x, y }: { emoji: string; delay: number; x: nu
 
 /* ── option pill ── */
 const OptionPill = ({ label, index, variant }: { label: string; index: number; variant: string }) => {
-  const animations: Record<string, object> = {
-    bounce: { opacity: [0, 1], y: [30, 0], scale: [0.7, 1] },
-    slide: { opacity: [0, 1], x: [-40, 0] },
-    fade: { opacity: [0, 1], scale: [0.8, 1] },
-    pop: { opacity: [0, 1], scale: [0, 1.1, 1] },
-    float: { opacity: [0, 1], y: [20, -5, 0] },
-    drop: { opacity: [0, 1], y: [-30, 5, 0] },
+  const getAnimation = (v: string) => {
+    switch (v) {
+      case "slide": return { opacity: 1, x: 0 };
+      case "fade": return { opacity: 1, scale: 1 };
+      case "pop": return { opacity: 1, scale: 1 };
+      case "float": return { opacity: 1, y: 0 };
+      case "drop": return { opacity: 1, y: 0 };
+      default: return { opacity: 1, y: 0, scale: 1 };
+    }
+  };
+  const getInitial = (v: string) => {
+    switch (v) {
+      case "slide": return { opacity: 0, x: -40 };
+      case "fade": return { opacity: 0, scale: 0.8 };
+      case "pop": return { opacity: 0, scale: 0 };
+      case "float": return { opacity: 0, y: 20 };
+      case "drop": return { opacity: 0, y: -30 };
+      default: return { opacity: 0, y: 30, scale: 0.7 };
+    }
   };
 
   return (
     <motion.div
       className="flex h-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm px-5"
-      initial={{ opacity: 0 }}
-      animate={animations[variant] || animations.bounce}
+      initial={getInitial(variant)}
+      animate={getAnimation(variant)}
       transition={{
         delay: 0.3 + index * 0.08,
         duration: 0.5,
