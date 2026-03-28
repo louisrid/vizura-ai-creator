@@ -19,7 +19,7 @@ const screenEmojis: string[][] = [
 /* ── single big emoji, full opacity, bouncy pop-in ── */
 const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="select-none pointer-events-none text-6xl"
+    className="select-none pointer-events-none text-7xl"
     initial={{ opacity: 0, scale: 0 }}
     animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
@@ -359,7 +359,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Screen content */}
-          <div className="flex-1 flex items-center justify-center px-6 overflow-hidden">
+          <div className="flex-1 flex items-end justify-center px-6 pb-8 overflow-hidden" style={{ paddingTop: "30vh" }}>
             <div className="w-full max-w-sm">
               <AnimatePresence mode="wait">
                 <motion.div
