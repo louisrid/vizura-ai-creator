@@ -281,7 +281,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
       className="relative z-10 h-14 w-full max-w-[15rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
-      style={{ background: "hsl(42 100% 50%)", color: "#000", transition: "transform 0.05s" }}
+      style={{ background: LIGHT_BLUE, color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 16, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
