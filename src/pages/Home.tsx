@@ -22,24 +22,24 @@ const Home = () => {
       className="flex flex-col bg-background"
       style={{ height: "calc(100dvh - 73px)" }}
     >
-      {/* Photo preview box */}
-      <div className="flex-1 px-4 pt-4 pb-3">
+      {/* Photo preview box — 4:5 ratio, left-aligned */}
+      <div className="flex-1 flex items-start px-4 pt-4 pb-3">
         <div
           className="flex items-center justify-center rounded-2xl border-[6px] border-foreground bg-card"
-          style={{ width: "55%", height: "100%" }}
+          style={{ aspectRatio: "4/5", height: "100%", maxHeight: "100%" }}
         >
           <Wand2 size={28} className="text-foreground/20" />
         </div>
       </div>
 
-      {/* Create+ pill button */}
-      <div className="shrink-0 px-4 pb-5">
+      {/* Create+ pill button — hugs text width */}
+      <div className="shrink-0 flex justify-start px-4 pb-5">
         <button
           onClick={handleCreate}
-          className="flex h-[58px] w-full items-center justify-center gap-2 rounded-full bg-foreground text-[1.25rem] font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+          className="flex h-[56px] items-center justify-center gap-2 rounded-full bg-foreground px-10 text-[1.2rem] font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
           style={{ transition: "transform 0.05s" }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
             <circle cx="12" cy="9" r="4.5" />
             <path d="M4 22a8 8 0 0 1 16 0c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Z" />
           </svg>
