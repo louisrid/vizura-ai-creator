@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface GemsContextType {
   gems: number;
+  credits: number; // backward compat alias
   loading: boolean;
   refetch: () => Promise<void>;
 }
@@ -46,7 +47,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchGems]);
 
   return (
-    <GemsContext.Provider value={{ gems, loading, refetch: fetchGems }}>
+    <GemsContext.Provider value={{ gems, credits: gems, loading, refetch: fetchGems }}>
       {children}
     </GemsContext.Provider>
   );
