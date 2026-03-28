@@ -60,13 +60,13 @@ const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
 /* ── mock pill ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
   <motion.div
-    className="flex h-[18px] items-center justify-center rounded-full px-2"
+    className="flex h-7 items-center justify-center rounded-full px-3"
     style={{ background: "hsl(0 0% 100% / 0.08)" }}
     initial={{ opacity: 0, y: 6, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.4rem] font-[800] lowercase tracking-tight text-white/40">{label}</span>
+    <span className="text-[0.65rem] font-[800] lowercase tracking-tight text-white">{label}</span>
   </motion.div>
 );
 
@@ -78,10 +78,10 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.35rem] font-bold lowercase text-white/25">{label}</span>
+    <span className="text-[0.55rem] font-bold lowercase text-white">{label}</span>
     <div
-      className="w-full rounded-md"
-      style={{ background: "hsl(0 0% 100% / 0.06)", height: tall ? 22 : 16 }}
+      className="w-full rounded-lg"
+      style={{ background: "hsl(0 0% 100% / 0.08)", height: tall ? 30 : 20 }}
     />
   </motion.div>
 );
@@ -89,7 +89,7 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
 /* ── section label ── */
 const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
-    className="text-[0.3rem] font-bold uppercase tracking-widest text-white/15"
+    className="text-[0.5rem] font-bold uppercase tracking-widest text-white"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay, duration: 0.3 }}
@@ -151,7 +151,7 @@ const Screen1 = () => (
       pick a style
     </motion.h2>
     <motion.p
-      className="text-[0.42rem] font-bold lowercase text-white/30 text-center max-w-[10rem]"
+      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -178,7 +178,7 @@ const Screen2 = () => (
       hair, eyes & body
     </motion.h2>
     <motion.p
-      className="text-[0.42rem] font-bold lowercase text-white/30 text-center max-w-[10rem]"
+      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -220,7 +220,7 @@ const Screen3 = () => (
       ethnicity & age
     </motion.h2>
     <motion.p
-      className="text-[0.42rem] font-bold lowercase text-white/30 text-center max-w-[10rem]"
+      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -256,7 +256,7 @@ const Screen4 = () => (
       name & describe
     </motion.h2>
     <motion.p
-      className="text-[0.42rem] font-bold lowercase text-white/30 text-center max-w-[10rem]"
+      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -282,7 +282,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
       ready?
     </motion.h2>
     <motion.p
-      className="text-[0.42rem] font-bold lowercase text-white/30 text-center max-w-[10rem]"
+      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12, duration: 0.3 }}
@@ -291,7 +291,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
     </motion.p>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="h-8 w-full max-w-[8rem] rounded-full text-[0.55rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+      className="h-9 w-full max-w-[9rem] rounded-full text-[0.7rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
       style={{ background: LIGHT_BLUE, color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
