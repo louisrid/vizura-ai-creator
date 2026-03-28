@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Scissors, Eye, User, Grid2x2, Pen, Zap } from "lucide-react";
+import { Scissors, Eye, User, Pen, Zap, Check } from "lucide-react";
 import OverlayShell from "./overlay/OverlayShell";
-import {
-  BigTitle,
-  Subtitle,
-  ProgressDots,
-} from "./overlay/OverlayPrimitives";
+import { BigTitle, Subtitle } from "./overlay/OverlayPrimitives";
+
+import face1 from "@/assets/onboarding-face1.png";
+import face2 from "@/assets/onboarding-face2.png";
+import face3 from "@/assets/onboarding-face3.png";
+import face4 from "@/assets/onboarding-face4.png";
+import face5 from "@/assets/onboarding-face5.png";
+import face6 from "@/assets/onboarding-face6.png";
 
 const TOTAL_STEPS = 4;
+const faces = [face1, face2, face3, face4, face5, face6];
 
-/* ── icon badge used in scene previews ── */
+/* ── colored icon badge ── */
 const IconBadge = ({
   children,
   delay = 0,
+  bg,
+  border,
 }: {
   children: React.ReactNode;
   delay?: number;
+  bg: string;
+  border: string;
 }) => (
   <motion.div
     className="flex h-16 w-16 items-center justify-center rounded-2xl border-[5px]"
-    style={{
-      background: "hsl(0 0% 12%)",
-      borderColor: "hsl(0 0% 20%)",
-    }}
-    initial={{ opacity: 0, scale: 0.6 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.3, delay, ease: [0.2, 0.9, 0.2, 1] }}
+    style={{ background: bg, borderColor: border }}
+    initial={{ opacity: 0, scale: 0.6, rotate: -8 }}
+    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+    transition={{ duration: 0.35, delay, ease: [0.2, 0.9, 0.2, 1] }}
   >
     {children}
   </motion.div>
@@ -34,7 +39,7 @@ const IconBadge = ({
 
 /* ═══════════════════ SCENES ═══════════════════ */
 
-/* Screen 1: create your character */
+/* Screen 1: create your character — blue + pink + green icons */
 const Scene0 = () => (
   <div className="flex flex-col items-center gap-5">
     <BigTitle delay={0.1}>create your character</BigTitle>
@@ -43,16 +48,16 @@ const Scene0 = () => (
       className="flex items-center gap-3"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ delay: 0.25 }}
+      transition={{ delay: 0.2 }}
     >
-      <IconBadge delay={0.3}>
-        <Scissors size={28} strokeWidth={2.5} color="#fff" />
+      <IconBadge delay={0.25} bg="hsl(210 80% 22%)" border="hsl(210 90% 55%)">
+        <Scissors size={28} strokeWidth={2.5} color="hsl(210 90% 65%)" />
       </IconBadge>
-      <IconBadge delay={0.4}>
-        <Eye size={28} strokeWidth={2.5} color="#fff" />
+      <IconBadge delay={0.35} bg="hsl(330 60% 22%)" border="hsl(330 80% 60%)">
+        <Eye size={28} strokeWidth={2.5} color="hsl(330 80% 70%)" />
       </IconBadge>
-      <IconBadge delay={0.5}>
-        <User size={28} strokeWidth={2.5} color="#fff" />
+      <IconBadge delay={0.45} bg="hsl(150 60% 18%)" border="hsl(150 70% 45%)">
+        <User size={28} strokeWidth={2.5} color="hsl(150 70% 55%)" />
       </IconBadge>
     </motion.div>
 
@@ -60,45 +65,69 @@ const Scene0 = () => (
   </div>
 );
 
-/* Screen 2: choose your face */
-const Scene1 = () => (
-  <div className="flex flex-col items-center gap-5">
-    <BigTitle delay={0.1}>choose your face</BigTitle>
+/* Screen 2: choose your face — cartoon woman faces in 2x3 grid */
+const Scene1 = () => {
+  const borderColors = [
+    "hsl(210 90% 55%)",
+    "hsl(330 80% 55%)",
+    "hsl(55 90% 58%)", // selected one
+    "hsl(150 70% 45%)",
+    "hsl(280 70% 55%)",
+    "hsl(20 90% 55%)",
+  ];
 
-    <motion.div
-      className="grid grid-cols-2 gap-2"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.25, duration: 0.3 }}
-    >
-      {Array.from({ length: 6 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="flex h-16 w-20 items-center justify-center rounded-2xl border-[5px]"
-          style={{
-            background: "hsl(0 0% 12%)",
-            borderColor: i === 2 ? "hsl(55 90% 58%)" : "hsl(0 0% 20%)",
-          }}
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 + i * 0.06, duration: 0.25 }}
-        >
-          <Grid2x2
-            size={20}
-            strokeWidth={2}
-            color={i === 2 ? "hsl(55 90% 58%)" : "hsl(0 0% 40%)"}
-          />
-        </motion.div>
-      ))}
-    </motion.div>
+  return (
+    <div className="flex flex-col items-center gap-5">
+      <BigTitle delay={0.1}>choose your face</BigTitle>
 
-    <Subtitle delay={0.6}>
-      we'll generate 6 faces. pick your favourite
-    </Subtitle>
-  </div>
-);
+      <motion.div
+        className="grid grid-cols-3 gap-2"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.3 }}
+      >
+        {faces.map((src, i) => (
+          <motion.div
+            key={i}
+            className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border-[5px]"
+            style={{
+              background: "hsl(0 0% 10%)",
+              borderColor: i === 2 ? borderColors[i] : "hsl(0 0% 20%)",
+            }}
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.25 + i * 0.06, duration: 0.25 }}
+          >
+            <img
+              src={src}
+              alt=""
+              className="h-full w-full object-cover"
+              width={80}
+              height={80}
+            />
+            {i === 2 && (
+              <motion.div
+                className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full"
+                style={{ background: "hsl(55 90% 58%)" }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.55, type: "spring", stiffness: 400 }}
+              >
+                <Check size={12} strokeWidth={3} color="#000" />
+              </motion.div>
+            )}
+          </motion.div>
+        ))}
+      </motion.div>
 
-/* Screen 3: create photos */
+      <Subtitle delay={0.6}>
+        we'll generate 6 faces. pick your favourite
+      </Subtitle>
+    </div>
+  );
+};
+
+/* Screen 3: create photos — orange prompt + green generate */
 const Scene2 = () => (
   <div className="flex flex-col items-center gap-5">
     <BigTitle delay={0.1}>create photos</BigTitle>
@@ -109,38 +138,38 @@ const Scene2 = () => (
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.25, duration: 0.3 }}
     >
-      {/* fake prompt input */}
+      {/* fake prompt input — warm orange tint */}
       <div
         className="flex h-14 items-center rounded-2xl border-[5px] px-4"
         style={{
-          background: "hsl(0 0% 12%)",
-          borderColor: "hsl(0 0% 20%)",
+          background: "hsl(20 40% 12%)",
+          borderColor: "hsl(20 70% 40%)",
         }}
       >
-        <Pen size={16} strokeWidth={2.5} color="hsl(0 0% 40%)" />
+        <Pen size={16} strokeWidth={2.5} color="hsl(20 90% 60%)" />
         <span
           className="ml-3 text-xs font-extrabold lowercase"
-          style={{ color: "hsl(0 0% 40%)" }}
+          style={{ color: "hsl(20 60% 60%)" }}
         >
           describe your scene...
         </span>
       </div>
 
-      {/* fake generate button */}
+      {/* fake generate button — neon green */}
       <motion.div
         className="flex h-14 items-center justify-center gap-2 rounded-2xl border-[5px]"
         style={{
-          background: "hsl(0 0% 12%)",
-          borderColor: "hsl(55 90% 58%)",
+          background: "hsl(140 50% 14%)",
+          borderColor: "hsl(140 70% 45%)",
         }}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4, duration: 0.25 }}
       >
-        <Zap size={18} strokeWidth={2.5} color="hsl(55 90% 58%)" />
+        <Zap size={18} strokeWidth={2.5} color="hsl(140 70% 55%)" />
         <span
           className="text-sm font-extrabold lowercase"
-          style={{ color: "hsl(55 90% 58%)" }}
+          style={{ color: "hsl(140 70% 55%)" }}
         >
           create
         </span>
@@ -153,7 +182,7 @@ const Scene2 = () => (
   </div>
 );
 
-/* Screen 4: ready? */
+/* Screen 4: ready? — amber let's go button */
 const Scene3 = ({ onLetsGo }: { onLetsGo: () => void }) => (
   <div className="flex flex-col items-center gap-6">
     <BigTitle delay={0.1}>ready?</BigTitle>
