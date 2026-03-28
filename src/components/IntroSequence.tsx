@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 6;
-const LIGHT_BLUE = "hsl(210 100% 65%)";
+const LIGHT_BLUE = "hsl(195 100% 70%)";
 
 /* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
@@ -364,7 +364,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           </div>
 
           {/* Bottom: arrows + dots */}
-          <div className="flex flex-col items-center gap-4 pb-4 pt-4">
+          <div className="flex flex-col items-center gap-4 pb-0 pt-0">
             <div className="flex items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
               <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
