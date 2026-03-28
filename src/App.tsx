@@ -124,7 +124,7 @@ const AnimatedRoutes = () => {
       {!onboardingOpen && <Header />}
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<CharacterCreator />} />
           <Route path="/create-character" element={<CharacterCreator />} />
           <Route path="/choose-face" element={<ChooseFace />} />
           <Route path="/create" element={<Index />} />
