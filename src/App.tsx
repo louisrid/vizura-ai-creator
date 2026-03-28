@@ -46,11 +46,10 @@ const AppOnboarding = ({
 
   useEffect(() => {
     if (loading) return;
-    const seen = sessionStorage.getItem("onboarding_seen");
-    const shouldShow = location.pathname === "/" && !seen;
+    const shouldShow = location.pathname === "/";
     setShowOnboarding(shouldShow);
     onOpenChange(shouldShow);
-  }, [loading, user, location.pathname, onOpenChange]);
+  }, [loading, location.pathname, onOpenChange]);
 
   const dismiss = () => {
     sessionStorage.setItem("onboarding_seen", "1");
