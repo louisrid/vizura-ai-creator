@@ -125,7 +125,7 @@ const Home = () => {
         </div>
 
         {/* Right: 3 pill selectors stacked */}
-        <div className="flex flex-col gap-3 pt-1" style={{ width: "42%" }}>
+        <div className="flex flex-col gap-3 pt-1" style={{ width: "32%" }}>
           {quickOptions.map((opt) => (
             <PillSelect
               key={opt.key}
