@@ -56,14 +56,20 @@ const Screen1 = () => (
     <Title>create your character</Title>
     <motion.div
       className="grid grid-cols-2 gap-2.5"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15, duration: 0.25 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
     >
-      {["style", "hair", "eyes", "body"].map((l) => (
-        <div key={l} className="flex h-12 w-[7.5rem] items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]">
+      {["style", "hair", "eyes", "body"].map((l, i) => (
+        <motion.div
+          key={l}
+          className="flex h-12 w-[7.5rem] items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.22 + i * 0.06, duration: 0.3, type: "spring", stiffness: 250, damping: 22 }}
+        >
           <span className="text-xs font-extrabold lowercase text-white/40">{l}</span>
-        </div>
+        </motion.div>
       ))}
     </motion.div>
     <Sub>pick a style, hair, eyes, body type</Sub>
@@ -77,12 +83,18 @@ const Screen2 = () => (
     <Title>choose your face</Title>
     <motion.div
       className="grid grid-cols-3 gap-3"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15, duration: 0.25 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
     >
       {Array.from({ length: 6 }).map((_, i) => (
-        <MiniBox key={i} className="h-16 w-16" />
+        <motion.div
+          key={i}
+          className="h-16 w-16 rounded-xl bg-[hsl(0,0%,15%)]"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.22 + i * 0.05, duration: 0.3, type: "spring", stiffness: 260, damping: 20 }}
+        />
       ))}
     </motion.div>
     <Sub>we generate 6 faces from your choices. pick your favourite</Sub>
@@ -96,14 +108,24 @@ const Screen3 = () => (
     <Title>create photos</Title>
     <motion.div
       className="flex flex-col gap-2.5 w-full max-w-[16rem]"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15, duration: 0.25 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
     >
-      <div className="flex h-12 items-center rounded-xl px-3 bg-[hsl(0,0%,15%)]">
+      <motion.div
+        className="flex h-12 items-center rounded-xl px-3 bg-[hsl(0,0%,15%)]"
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.25, duration: 0.3, type: "spring", stiffness: 250, damping: 22 }}
+      >
         <span className="text-xs font-extrabold lowercase text-white/30">describe your scene...</span>
-      </div>
-      <MiniBox className="w-full h-28" />
+      </motion.div>
+      <motion.div
+        className="w-full h-28 rounded-xl bg-[hsl(0,0%,15%)]"
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.32, duration: 0.3, type: "spring", stiffness: 250, damping: 22 }}
+      />
     </motion.div>
     <Sub>write a scene. your character gets placed in it. costs 1 gem per photo</Sub>
   </div>
@@ -116,14 +138,20 @@ const Screen4 = () => (
     <Title>save & collect</Title>
     <motion.div
       className="flex gap-4"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15, duration: 0.25 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
     >
       {["💾", "🛒", "✨"].map((e, i) => (
-        <div key={i} className="flex h-16 w-16 items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]">
+        <motion.div
+          key={i}
+          className="flex h-16 w-16 items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]"
+          initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ delay: 0.25 + i * 0.08, duration: 0.4, type: "spring", stiffness: 280, damping: 18 }}
+        >
           <span className="text-2xl">{e}</span>
-        </div>
+        </motion.div>
       ))}
     </motion.div>
     <Sub>photos save to your storage. get more gems with top-ups or subscribe for $7/month</Sub>
