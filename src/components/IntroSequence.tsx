@@ -18,7 +18,7 @@ const screenEmojis: string[][] = [
 /* ── single emoji, full opacity, bouncy pop-in ── */
 const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="select-none pointer-events-none text-5xl"
+    className="select-none pointer-events-none text-6xl"
     initial={{ opacity: 0, scale: 0 }}
     animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
@@ -131,7 +131,7 @@ const Screen1 = () => (
   <div className="relative flex flex-col items-center gap-3">
     <EmojiRow screenIndex={0} />
     <motion.h2
-      className="text-[1.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -158,7 +158,7 @@ const Screen2 = () => (
   <div className="relative flex flex-col items-center gap-3">
     <EmojiRow screenIndex={1} />
     <motion.h2
-      className="text-[1.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -200,7 +200,7 @@ const Screen3 = () => (
   <div className="relative flex flex-col items-center gap-3">
     <EmojiRow screenIndex={2} />
     <motion.h2
-      className="text-[1.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -236,7 +236,7 @@ const Screen4 = () => (
   <div className="relative flex flex-col items-center gap-3">
     <EmojiRow screenIndex={3} />
     <motion.h2
-      className="text-[1.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -262,7 +262,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex flex-col items-center gap-4">
     <EmojiRow screenIndex={4} />
     <motion.h2
-      className="text-[2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
@@ -357,9 +357,9 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Screen content — pushed down with flex-end + large top padding */}
-          <div className="flex-1 flex flex-col justify-end px-10 pb-6 overflow-hidden">
-            <div className="w-full max-w-xs mx-auto" style={{ marginTop: "auto", paddingTop: "40vh" }}>
+          {/* Screen content — vertically centred in available space above nav */}
+          <div className="flex-1 flex items-center justify-center px-10 overflow-hidden">
+            <div className="w-full max-w-xs mx-auto">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
