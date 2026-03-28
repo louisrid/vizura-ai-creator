@@ -92,12 +92,12 @@ const Home = () => {
           {quickOptions.map((opt) => (
             <label
               key={opt.key}
-              className="flex items-center justify-between rounded-xl border-[2px] border-black bg-white px-4 h-[42px]"
+              className="flex items-center justify-between rounded-xl border-[4px] border-black bg-white px-4 h-[46px]"
               style={{ width: "70%" }}
             >
-              <span className="text-[11px] font-bold lowercase text-black">{opt.label}</span>
+              <span className="text-[13px] font-bold lowercase text-black">{opt.label}</span>
               <span
-                className="text-[11px] font-semibold lowercase text-black/50 cursor-pointer select-none"
+                className="text-[13px] font-semibold lowercase text-black/50 cursor-pointer select-none"
                 onClick={() => {
                   const choices = opt.choices as readonly string[];
                   const currentIdx = selections[opt.key] ? choices.indexOf(selections[opt.key]!) : -1;
