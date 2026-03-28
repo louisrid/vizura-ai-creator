@@ -345,9 +345,9 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Screen content — vertically centred in available space above nav */}
-          <div className="flex-1 flex items-center justify-center px-16 overflow-hidden pt-24">
-            <div className="w-full max-w-xs mx-auto">
+          {/* Screen content + nav together, vertically centred */}
+          <div className="flex-1 flex items-center justify-center px-16 overflow-hidden">
+            <div className="w-full max-w-xs mx-auto flex flex-col items-center gap-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
@@ -360,16 +360,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                   {step === 5 && <Screen6 onGo={onComplete} />}
                 </motion.div>
               </AnimatePresence>
-            </div>
-          </div>
 
-          {/* Bottom: arrows + dots */}
-          <div className="flex flex-col items-center gap-4 pb-0 pt-0">
-            <div className="flex items-center gap-4">
-              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-              <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
+              {/* Arrows + dots — directly under content */}
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                  <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
+                </div>
+                <Dots current={step} total={TOTAL} />
+              </div>
             </div>
-            <Dots current={step} total={TOTAL} />
           </div>
         </motion.div>
       )}
