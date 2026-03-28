@@ -92,18 +92,18 @@ const Home = () => {
           {quickOptions.map((opt) => (
             <label
               key={opt.key}
-              className="flex items-center justify-between rounded-xl border-[2px] border-white/30 bg-[hsl(0,0%,12%)] px-4 h-[42px]"
+              className="flex items-center justify-between rounded-xl border-[2px] border-black bg-white px-4 h-[42px]"
             >
-              <span className="text-[11px] font-bold lowercase text-white">{opt.label}</span>
+              <span className="text-[11px] font-bold lowercase text-black">{opt.label}</span>
               <select
                 value={selections[opt.key] || ""}
                 onChange={(e) => setSelections((prev) => ({ ...prev, [opt.key]: e.target.value }))}
-                className="appearance-none bg-transparent text-[11px] font-semibold lowercase text-white/60 outline-none text-right cursor-pointer"
+                className="appearance-none bg-transparent text-[11px] font-semibold lowercase text-black/50 outline-none text-right cursor-pointer"
                 style={{ WebkitAppearance: "none" }}
               >
-                <option value="" disabled className="bg-black text-white">select</option>
+                <option value="" disabled>select</option>
                 {opt.choices.map((c) => (
-                  <option key={c} value={c} className="bg-black text-white">{c}</option>
+                  <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </label>
