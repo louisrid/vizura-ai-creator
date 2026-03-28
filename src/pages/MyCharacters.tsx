@@ -100,7 +100,7 @@ const MyCharacters = () => {
             <Button
               variant="outline"
               className="h-12"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/create-character")}
             >
               create character
             </Button>
@@ -109,7 +109,7 @@ const MyCharacters = () => {
           <div className="grid grid-cols-3 gap-3">
             {/* Add new */}
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/create-character")}
               className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
             >
               <Plus size={32} strokeWidth={3} className="text-foreground" />

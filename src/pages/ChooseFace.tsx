@@ -32,7 +32,7 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (!prompt || !user) {
-      navigate("/");
+      navigate("/create-character");
       return;
     }
     generateFaces();
