@@ -167,11 +167,11 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
 const ScreenShell = ({ children, screenIndex }: { children: React.ReactNode; screenIndex: number }) => (
   <div className="relative flex flex-col items-center w-full">
     {/* Emoji — fixed height zone */}
-    <div className="h-24 flex items-center justify-center">
+    <div className="h-20 flex items-center justify-center">
       <EmojiRow screenIndex={screenIndex} />
     </div>
-    {/* Content below emoji */}
-    <div className="flex flex-col items-center w-full mt-2">
+    {/* Title + content — fixed height zone so title never shifts */}
+    <div className="flex flex-col items-center w-full mt-3 min-h-[14rem]">
       {children}
     </div>
   </div>
@@ -246,7 +246,8 @@ const Screen4 = () => (
 
 const Screen5 = () => (
   <ScreenShell screenIndex={4}>
-    <div className="flex flex-col items-start w-full">
+    <ScreenTitle>set her details…</ScreenTitle>
+    <div className="flex flex-col items-start w-full mt-2">
       <motion.p
         className="text-[0.75rem] font-[800] uppercase tracking-widest text-white"
         initial={{ opacity: 0 }}
@@ -264,13 +265,12 @@ const Screen5 = () => (
         27
       </motion.span>
     </div>
-    <ScreenTitle>set her details…</ScreenTitle>
   </ScreenShell>
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex flex-col items-center w-full">
-    <div className="h-24" />
+    <div className="h-20" />
     <ScreenTitle>ready?</ScreenTitle>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
@@ -352,8 +352,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Content centred, nav pinned to fixed bottom position */}
-          <div className="flex-1 flex items-center justify-center px-10 pt-16 overflow-hidden">
+          {/* Content anchored from bottom so title stays in same position */}
+          <div className="flex-1 flex items-end justify-center px-10 pb-6 overflow-hidden">
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
