@@ -103,7 +103,7 @@ const Home = () => {
       {/* Main content area */}
       <div className="flex-1 flex gap-3 px-4 pt-6">
         {/* Left: photo box + button */}
-        <div className="flex flex-col" style={{ width: "55%" }}>
+        <div className="flex flex-col" style={{ width: "65%" }}>
           <div
             className="flex items-center justify-center rounded-2xl border-[6px] border-foreground bg-card"
             style={{ aspectRatio: "4/5" }}
@@ -125,7 +125,7 @@ const Home = () => {
         </div>
 
         {/* Right: 3 pill selectors stacked */}
-        <div className="flex flex-col gap-3 pt-1" style={{ width: "42%" }}>
+        <div className="flex flex-col gap-3 pt-1" style={{ width: "32%" }}>
           {quickOptions.map((opt) => (
             <PillSelect
               key={opt.key}
