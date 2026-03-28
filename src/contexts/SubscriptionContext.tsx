@@ -1,47 +1,54 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { useAuth } from "./AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SubscriptionContextType {
-  plan: string | null; // "starter" | "pro" | null
+  status: string | null;
   subscribed: boolean;
   loading: boolean;
-  subscribe: (planName: string, credits: number) => void;
-  cancel: () => void;
+  refetch: () => Promise<void>;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [plan, setPlan] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchSubscription = useCallback(async () => {
     if (!user) {
-      setPlan(null);
+      setStatus(null);
       setLoading(false);
       return;
     }
-    // Mock: check localStorage for fake subscription
-    const stored = localStorage.getItem(`sub_${user.id}`);
-    setPlan(stored || null);
-    setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from("subscriptions")
+        .select("status")
+        .eq("user_id", user.id)
+        .single();
+
+      if (error) {
+        setStatus(null);
+      } else {
+        setStatus(data?.status ?? null);
+      }
+    } catch {
+      setStatus(null);
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
 
-  const subscribe = useCallback((planName: string, _credits: number) => {
-    if (!user) return;
-    localStorage.setItem(`sub_${user.id}`, planName);
-    setPlan(planName);
-  }, [user]);
+  useEffect(() => {
+    fetchSubscription();
+  }, [fetchSubscription]);
 
-  const cancel = useCallback(() => {
-    if (!user) return;
-    localStorage.removeItem(`sub_${user.id}`);
-    setPlan(null);
-  }, [user]);
+  const subscribed = status === "active" || status === "trialing";
 
   return (
-    <SubscriptionContext.Provider value={{ plan, subscribed: !!plan, loading, subscribe, cancel }}>
+    <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription }}>
       {children}
     </SubscriptionContext.Provider>
   );
