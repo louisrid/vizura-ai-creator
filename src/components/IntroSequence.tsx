@@ -59,32 +59,21 @@ const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
   );
 };
 
-/* ── mock pill ── */
-const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
+/* ── mock pill (fixed width for consistency) ── */
+const Pill = ({ label, delay = 0, wide = false }: { label: string; delay?: number; wide?: boolean }) => (
   <motion.div
-    className="flex h-10 items-center justify-center rounded-xl px-5"
-    style={{ background: "hsl(0 0% 100% / 0.08)" }}
+    className="flex h-10 items-center justify-center rounded-xl"
+    style={{
+      background: "hsl(0 0% 100% / 0.08)",
+      minWidth: wide ? 120 : undefined,
+      paddingLeft: 20,
+      paddingRight: 20,
+    }}
     initial={{ opacity: 0, y: 6, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
     <span className="text-[0.85rem] font-[800] lowercase tracking-tight text-white">{label}</span>
-  </motion.div>
-);
-
-/* ── mock input ── */
-const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; delay?: number }) => (
-  <motion.div
-    className="flex w-full flex-col gap-1"
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-  >
-    <span className="text-[0.55rem] font-bold lowercase text-white">{label}</span>
-    <div
-      className="w-full rounded-lg"
-      style={{ background: "hsl(0 0% 100% / 0.08)", height: tall ? 30 : 20 }}
-    />
   </motion.div>
 );
 
@@ -168,7 +157,7 @@ const ScreenShell = ({
   children,
   screenIndex,
   title,
-  contentClassName = "flex-wrap justify-center gap-1.5",
+  contentClassName = "flex-wrap justify-center gap-3",
 }: {
   children: React.ReactNode;
   screenIndex: number;
@@ -179,11 +168,11 @@ const ScreenShell = ({
     <div className="flex h-14 items-end justify-center">
       <EmojiRow screenIndex={screenIndex} />
     </div>
-    <div className="mt-2 flex w-full flex-col items-center">
+    <div className="mt-3 flex w-full flex-col items-center">
       <div className="flex h-20 items-end justify-center">
         <ScreenTitle>{title}</ScreenTitle>
       </div>
-      <div className={`mt-1.5 flex w-full ${contentClassName}`}>
+      <div className={`mt-4 flex w-full ${contentClassName}`}>
         {children}
       </div>
     </div>
@@ -205,7 +194,7 @@ const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
 /* ═══════════ SCREENS ═══════════ */
 
 const Screen1 = () => (
-  <ScreenShell screenIndex={0} title="pick her style…">
+  <ScreenShell screenIndex={0} title="pick her style…" contentClassName="flex-wrap justify-center gap-3">
     <Pill label="natural" delay={0.15} />
     <Pill label="model" delay={0.22} />
     <Pill label="egirl" delay={0.29} />
@@ -213,24 +202,25 @@ const Screen1 = () => (
 );
 
 const Screen2 = () => (
-  <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-2.5">
+  <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-4">
     <SectionLabel delay={0.15}>hair colour</SectionLabel>
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap gap-2">
       {["blonde", "brunette", "black", "red", "pink", "white"].map((h, i) => (
-        <Pill key={h} label={h} delay={0.18 + i * 0.05} />
+        <Pill key={h} label={h} delay={0.18 + i * 0.05} wide />
       ))}
     </div>
+    <div className="h-1" />
     <SectionLabel delay={0.4}>eye colour</SectionLabel>
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap gap-2">
       {["brown", "blue", "green", "hazel", "grey"].map((e, i) => (
-        <Pill key={e} label={e} delay={0.43 + i * 0.05} />
+        <Pill key={e} label={e} delay={0.43 + i * 0.05} wide />
       ))}
     </div>
   </ScreenShell>
 );
 
 const Screen3 = () => (
-  <ScreenShell screenIndex={2} title="choose her build…">
+  <ScreenShell screenIndex={2} title="choose her build…" contentClassName="flex-wrap justify-center gap-3">
     <Pill label="slim" delay={0.15} />
     <Pill label="regular" delay={0.22} />
     <Pill label="curvy" delay={0.29} />
@@ -238,7 +228,7 @@ const Screen3 = () => (
 );
 
 const Screen4 = () => (
-  <ScreenShell screenIndex={3} title="pick her nationality…">
+  <ScreenShell screenIndex={3} title="pick her nationality…" contentClassName="grid grid-cols-2 gap-2">
     {["american", "british", "european", "latin american"].map((n, i) => (
       <Pill key={n} label={n} delay={0.15 + i * 0.05} />
     ))}
@@ -246,7 +236,7 @@ const Screen4 = () => (
 );
 
 const Screen5 = () => (
-  <ScreenShell screenIndex={4} title="set her details…" contentClassName="flex-col items-start justify-start">
+  <ScreenShell screenIndex={4} title="set her details…" contentClassName="flex-col items-center gap-4">
     <motion.p
       className="text-[0.75rem] font-[800] uppercase tracking-widest text-white"
       initial={{ opacity: 0 }}
@@ -256,26 +246,42 @@ const Screen5 = () => (
       example age
     </motion.p>
     <motion.span
-      className="-mt-1 text-[5rem] font-[900] leading-none text-white"
+      className="text-[2.4rem] font-[900] leading-none text-white"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.2, duration: 0.4 }}
     >
       27
     </motion.span>
+    <div className="h-1" />
+    <motion.p
+      className="text-[0.75rem] font-[800] uppercase tracking-widest text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.3, duration: 0.3 }}
+    >
+      makeup style
+    </motion.p>
+    <div className="flex flex-wrap justify-center gap-2">
+      {["natural", "glam", "none"].map((s, i) => (
+        <Pill key={s} label={s} delay={0.35 + i * 0.06} />
+      ))}
+    </div>
   </ScreenShell>
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex w-full flex-col items-center">
-    <div className="h-14" />
-    <div className="mt-2 flex w-full flex-col items-center">
+    <div className="flex h-14 items-end justify-center">
+      <EmojiRow screenIndex={5} />
+    </div>
+    <div className="mt-3 flex w-full flex-col items-center">
       <div className="flex h-20 items-end justify-center">
         <ScreenTitle>ready?</ScreenTitle>
       </div>
       <motion.button
         onClick={(e) => { e.stopPropagation(); onGo(); }}
-        className="mt-2 h-20 w-[90vw] max-w-[24rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+        className="mt-8 h-14 w-[75vw] max-w-[20rem] rounded-full text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
         style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
         initial={{ opacity: 0, y: 12, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -354,9 +360,9 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Content — pushed down with 38vh top padding */}
-          <div className="flex-1 px-8 overflow-hidden" style={{ paddingTop: "38vh" }}>
-            <div className="w-full max-w-xs mx-auto flex flex-col items-center">
+          {/* Content — vertically centred between top and nav */}
+          <div className="flex-1 flex items-center justify-center px-8 overflow-hidden">
+            <div className="w-full max-w-xs mx-auto flex flex-col items-center" style={{ marginTop: "8vh" }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
