@@ -389,7 +389,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
               <div className="flex flex-col items-center gap-4">
                 <div className="flex items-center gap-4">
                   <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                  <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
+                  <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
                 </div>
                 <Dots current={step} total={TOTAL} />
               </div>
