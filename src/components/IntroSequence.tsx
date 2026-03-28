@@ -219,15 +219,24 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
 
   const clearHold = useCallback(() => {
     if (holdTimer.current) { clearInterval(holdTimer.current); holdTimer.current = null; }
+    if (skipTimer.current) { clearTimeout(skipTimer.current); skipTimer.current = null; }
   }, []);
 
   const startHold = useCallback((dir: "left" | "right") => {
     clearHold();
+    // Auto-advance every 400ms
     holdTimer.current = setInterval(() => {
       if (dir === "right") goTo(step + 1);
       else goTo(step - 1);
     }, 400);
-  }, [goTo, step, clearHold]);
+    // After 1s hold on right arrow, skip entire flow
+    if (dir === "right") {
+      skipTimer.current = setTimeout(() => {
+        clearHold();
+        onComplete();
+      }, 1000);
+    }
+  }, [goTo, step, clearHold, onComplete]);
 
   // Swipe
   const handleTouchStart = (e: React.TouchEvent) => {
