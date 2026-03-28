@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const TOTAL = 5;
 const YELLOW = "hsl(50 100% 50%)";
+const AUTO_DELAY = 3200; // ms per slide before auto-advance
 
 /* ── progress dots ── */
 const Dots = ({ current }: { current: number }) => (
@@ -204,9 +205,26 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const animating = useRef(false);
 
   useEffect(() => setMounted(true), []);
+  // Reset fully when opened
   useEffect(() => {
-    if (open) { setStep(0); setDirection(1); }
+    if (open) { setStep(0); setDirection(1); animating.current = false; }
   }, [open]);
+
+  const goTo = useCallback((next: number) => {
+    if (animating.current) return;
+    if (next < 0 || next >= TOTAL || next === step) return;
+    animating.current = true;
+    setDirection(next > step ? 1 : -1);
+    setStep(next);
+    setTimeout(() => { animating.current = false; }, 350);
+  }, [step]);
+
+  // Auto-advance timer (screens 0–3, not last screen)
+  useEffect(() => {
+    if (!open || step >= TOTAL - 1) return;
+    const timer = setTimeout(() => goTo(step + 1), AUTO_DELAY);
+    return () => clearTimeout(timer);
+  }, [open, step, goTo]);
 
   // Lock scroll fully
   useEffect(() => {
@@ -220,21 +238,14 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
+      document.body.style.touchAction = "";
     };
   }, [open]);
-
-  const goTo = useCallback((next: number) => {
-    if (animating.current) return;
-    if (next < 0 || next >= TOTAL || next === step) return;
-    animating.current = true;
-    setDirection(next > step ? 1 : -1);
-    setStep(next);
-    setTimeout(() => { animating.current = false; }, 350);
-  }, [step]);
 
   const advance = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
