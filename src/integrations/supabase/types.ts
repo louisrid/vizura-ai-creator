@@ -22,6 +22,8 @@ export type Database = {
           created_at: string
           description: string
           eye: string
+          face_image_url: string | null
+          generation_prompt: string | null
           hair: string
           id: string
           name: string
@@ -36,6 +38,8 @@ export type Database = {
           created_at?: string
           description?: string
           eye?: string
+          face_image_url?: string | null
+          generation_prompt?: string | null
           hair?: string
           id?: string
           name?: string
@@ -50,6 +54,8 @@ export type Database = {
           created_at?: string
           description?: string
           eye?: string
+          face_image_url?: string | null
+          generation_prompt?: string | null
           hair?: string
           id?: string
           name?: string
@@ -83,6 +89,27 @@ export type Database = {
         }
         Relationships: []
       }
+      free_gen_ips: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       generations: {
         Row: {
           created_at: string
@@ -111,6 +138,7 @@ export type Database = {
         Row: {
           created_at: string
           email: string | null
+          has_used_free_gen: boolean
           id: string
           updated_at: string
           user_id: string
@@ -118,6 +146,7 @@ export type Database = {
         Insert: {
           created_at?: string
           email?: string | null
+          has_used_free_gen?: boolean
           id?: string
           updated_at?: string
           user_id: string
@@ -125,6 +154,7 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string | null
+          has_used_free_gen?: boolean
           id?: string
           updated_at?: string
           user_id?: string

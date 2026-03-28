@@ -63,7 +63,7 @@ const CharacterCreator = () => {
     return prompt;
   };
 
-  const saveCharacter = async () => {
+  const saveCharacter = async (andChooseFace = false) => {
     if (!user) {
       navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
       return;
@@ -89,11 +89,19 @@ const CharacterCreator = () => {
         if (updateError) throw updateError;
         toast({ title: "updated", description: "character updated successfully" });
       } else {
-        const { error: insertError } = await supabase.from("characters").insert({
-          user_id: user.id,
-          ...charData,
-        });
+        const { data: inserted, error: insertError } = await supabase
+          .from("characters")
+          .insert({ user_id: user.id, ...charData })
+          .select("id")
+          .single();
         if (insertError) throw insertError;
+
+        if (andChooseFace && inserted) {
+          navigate("/choose-face", {
+            state: { prompt: buildPrompt(), characterId: inserted.id },
+          });
+          return;
+        }
         toast({ title: "saved", description: "character saved to your collection" });
       }
     } catch (err: any) {
@@ -214,28 +222,43 @@ const CharacterCreator = () => {
           </div>
         )}
 
-        <div className="mt-6 flex gap-2">
-          <Button className="flex-1 h-14 text-sm" onClick={generate} disabled={isGenerating}>
-            {isGenerating ? (
+        <div className="mt-6 flex flex-col gap-2">
+          <Button className="h-14 w-full text-sm" onClick={() => saveCharacter(true)} disabled={isSaving || isGenerating}>
+            {isSaving ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
-                creating...
+                saving...
               </>
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                create
+                create & choose face
               </>
             )}
           </Button>
-          <Button
-            variant="outline"
-            className="h-14 px-5"
-            onClick={saveCharacter}
-            disabled={isSaving}
-          >
-            {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} strokeWidth={2.5} />}
-          </Button>
+          <div className="flex gap-2">
+            <Button className="flex-1 h-14 text-sm" onClick={generate} disabled={isGenerating}>
+              {isGenerating ? (
+                <>
+                  <Loader2 className="animate-spin" size={18} />
+                  creating...
+                </>
+              ) : (
+                <>
+                  <Zap size={18} strokeWidth={2.5} />
+                  create
+                </>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              className="h-14 px-5"
+              onClick={() => saveCharacter(false)}
+              disabled={isSaving}
+            >
+              {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} strokeWidth={2.5} />}
+            </Button>
+          </div>
         </div>
       </main>
     </div>
