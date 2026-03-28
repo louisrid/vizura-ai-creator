@@ -71,7 +71,7 @@ const Home = () => {
             className="flex items-center justify-center border-[6px] border-foreground bg-card"
             style={{ width: "70%", aspectRatio: "5/6", borderRadius: 14 }}
           >
-            <Wand2 size={36} strokeWidth={2.5} className="text-foreground/30" />
+            <Wand2 size={32} strokeWidth={2} className="text-foreground/25" />
           </div>
 
           <button
