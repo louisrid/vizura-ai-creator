@@ -273,18 +273,12 @@ const Screen5 = () => (
           27
         </motion.span>
       </div>
-      <SectionLabel delay={0.4}>style</SectionLabel>
-      <div className="flex flex-wrap gap-1">
-        {["natural", "model", "egirl"].map((s, i) => (
-          <Pill key={s} label={s} delay={0.43 + i * 0.05} />
-        ))}
-      </div>
     </div>
   </div>
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
-  <div className="relative flex flex-col items-center gap-6">
+  <div className="relative flex flex-col items-center gap-8">
     <EmojiRow screenIndex={5} />
     <motion.h2
       className="text-[3rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
@@ -296,7 +290,7 @@ const Screen6 = ({ onGo }: { onGo: () => void }) => (
     </motion.h2>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="mt-2 h-16 w-full max-w-[14rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+      className="mt-4 h-20 w-full max-w-[18rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
       style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -390,14 +384,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Arrows + dots — directly under content */}
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex items-center gap-4">
-                  <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                  <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+              {/* Arrows + dots — hidden on last slide */}
+              {step < TOTAL - 1 && (
+                <div className="flex flex-col items-center gap-4">
+                  <div className="flex items-center gap-4">
+                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                    <NavArrow direction="right" onClick={advance} onLongPress={onComplete} />
+                  </div>
+                  <Dots current={step} total={TOTAL} />
                 </div>
-                <Dots current={step} total={TOTAL} />
-              </div>
+              )}
             </div>
           </div>
         </motion.div>
