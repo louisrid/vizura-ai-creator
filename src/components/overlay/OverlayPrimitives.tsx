@@ -194,9 +194,9 @@ export const ArrowButton = ({
     style={{ borderColor: direction === "right" ? "hsl(55 80% 48%)" : "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s, background-color 0.05s" }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
+      <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#000" }} />
     ) : (
-      <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
+      <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
   </button>
 );
