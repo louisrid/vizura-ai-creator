@@ -183,12 +183,12 @@ interface IntroSequenceProps {
 const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
+  const [direction, setDirection] = useState(1);
   const touchStartX = useRef<number | null>(null);
   const animating = useRef(false);
+  const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => setMounted(true), []);
-  // Reset fully when opened
   useEffect(() => {
     if (open) { setStep(0); setDirection(1); animating.current = false; }
   }, [open]);
@@ -202,14 +202,14 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     setTimeout(() => { animating.current = false; }, 350);
   }, [step]);
 
-  // Auto-advance timer (screens 0–3, not last screen)
+  // Auto-advance
   useEffect(() => {
     if (!open || step >= TOTAL - 1) return;
     const timer = setTimeout(() => goTo(step + 1), AUTO_DELAY);
     return () => clearTimeout(timer);
   }, [open, step, goTo]);
 
-  // Lock scroll fully
+  // Lock scroll
   useEffect(() => {
     if (!open) return;
     const root = document.getElementById("root");
@@ -230,25 +230,31 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     };
   }, [open]);
 
-  const advance = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    goTo(step + 1);
-  }, [goTo, step]);
+  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
+  const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
 
-  const goBack = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    goTo(step - 1);
-  }, [goTo, step]);
+  const clearHold = useCallback(() => {
+    if (holdTimer.current) { clearInterval(holdTimer.current); holdTimer.current = null; }
+  }, []);
 
-  // Swipe support
+  const startHold = useCallback((dir: "left" | "right") => {
+    clearHold();
+    holdTimer.current = setInterval(() => {
+      if (dir === "right") goTo(step + 1);
+      else goTo(step - 1);
+    }, 400);
+  }, [goTo, step, clearHold]);
+
+  // Swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (diff > 50) goTo(step + 1);
-    else if (diff < -50) goTo(step - 1);
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) advance(); else goBack();
+    }
     touchStartX.current = null;
   };
 
@@ -272,25 +278,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* skip */}
-          <div className="flex items-center justify-between px-5 pt-5">
-            {step > 0 ? (
-              <button
-                onClick={goBack}
-                className="text-xs font-extrabold lowercase text-white/40 active:text-white/70"
-              >
-                ← back
-              </button>
-            ) : <div />}
-            <button
-              onClick={(e) => { e.stopPropagation(); onComplete(); }}
-              className="text-xs font-extrabold lowercase text-white/40 active:text-white/70"
-            >
-              skip
-            </button>
-          </div>
-
-          {/* content */}
+          {/* content — centered in full screen */}
           <div className="flex-1 flex items-center justify-center px-6">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
@@ -312,14 +300,25 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             </AnimatePresence>
           </div>
 
-          {/* dots + arrows */}
-          <div className="flex flex-col items-center gap-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-4">
+          {/* dots + arrows — generous bottom spacing */}
+          <div className="flex flex-col items-center gap-6 pb-[max(env(safe-area-inset-bottom),2.5rem)] pt-2">
+            <p className="text-xs font-bold lowercase text-white/30">swipe or hold arrow</p>
             <ProgressDots current={step} total={TOTAL} />
-            <div className="flex items-center gap-5">
-              <ArrowButton direction="left" onClick={() => goBack()} disabled={step === 0} />
+            <div className="flex items-center gap-6">
+              <ArrowButton
+                direction="left"
+                onClick={goBack}
+                disabled={step === 0}
+                onPointerDown={() => startHold("left")}
+                onPointerUp={clearHold}
+                onPointerLeave={clearHold}
+              />
               <ArrowButton
                 direction="right"
                 onClick={() => { if (step < TOTAL - 1) advance(); else onComplete(); }}
+                onPointerDown={() => startHold("right")}
+                onPointerUp={clearHold}
+                onPointerLeave={clearHold}
               />
             </div>
           </div>
@@ -329,5 +328,3 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     document.body,
   );
 };
-
-export default IntroSequence;
