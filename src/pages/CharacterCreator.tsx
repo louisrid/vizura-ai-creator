@@ -1,6 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Save } from "lucide-react";
+import IntroSequence from "@/components/IntroSequence";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import PaywallOverlay from "@/components/PaywallOverlay";
