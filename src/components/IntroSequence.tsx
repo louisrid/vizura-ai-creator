@@ -353,7 +353,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Content centred, nav pinned to fixed bottom position */}
-          <div className="flex-1 flex items-end justify-center px-16 pb-8 overflow-hidden">
+          <div className="flex-1 flex items-center justify-center px-10 pt-16 overflow-hidden">
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
