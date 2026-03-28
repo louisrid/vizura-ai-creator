@@ -64,17 +64,20 @@ const Home = () => {
       className="flex flex-col bg-background"
       style={{ height: "calc(100dvh - 73px)" }}
     >
-      <div className="flex-1 flex gap-4 px-5 pt-5">
-        {/* Left: create character box */}
-        <div
-          className="flex flex-col items-center justify-center border-[4px] border-foreground bg-card"
-          style={{ width: "48%", borderRadius: 14 }}
-        >
-          <Wand2 size={28} className="text-foreground/20 mb-3" />
+      <div className="flex gap-4 px-5 pt-5">
+        {/* Left: photo box + button */}
+        <div className="flex flex-col" style={{ width: "48%" }}>
+          <div
+            className="flex items-center justify-center border-[4px] border-foreground bg-card"
+            style={{ aspectRatio: "1/1", borderRadius: 14 }}
+          >
+            <Wand2 size={24} className="text-foreground/20" />
+          </div>
+
           <button
             onClick={handleCreate}
-            className="flex h-[40px] w-[80%] items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
-            style={{ borderRadius: 10, transition: "transform 0.05s" }}
+            className="mt-2.5 flex h-[40px] w-full items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+            style={{ borderRadius: 14, transition: "transform 0.05s" }}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
               <circle cx="12" cy="9" r="4.5" />
@@ -84,10 +87,10 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Right: 3x2 grid of native selects — same height */}
+        {/* Right: 3x2 grid of native selects — matched height */}
         <div
-          className="grid grid-cols-2 gap-x-2 gap-y-2.5 content-center bg-black p-3"
-          style={{ width: "48%", borderRadius: 14 }}
+          className="grid grid-cols-2 gap-x-2.5 gap-y-2 content-center bg-black p-3.5"
+          style={{ width: "48%", borderRadius: 14, alignSelf: "stretch" }}
         >
           {quickOptions.map((opt) => (
             <NativePill
