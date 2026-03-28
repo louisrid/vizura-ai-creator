@@ -175,16 +175,9 @@ const CharacterCreator = () => {
       <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-12">
-        <CardCarousel
-          images={imageCards}
-          activeIndex={activeIndex}
-          onPrevious={cyclePrevious}
-          onNext={cycleNext}
-        />
-
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-28">
         {/* Character name */}
-        <section className="mt-6 flex flex-col gap-2">
+        <section className="flex flex-col gap-2">
           <label htmlFor="character-name" className="text-xs font-extrabold lowercase text-foreground">
             character name
           </label>
@@ -197,6 +190,7 @@ const CharacterCreator = () => {
           />
         </section>
 
+        {/* Description */}
         <section className="mt-6 flex flex-col gap-2">
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
@@ -211,10 +205,8 @@ const CharacterCreator = () => {
           />
         </section>
 
+        {/* Toggles */}
         <section className="mt-6 flex flex-col gap-4">
-          <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
-          <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
-
           <div className="flex flex-col gap-2">
             <span className="text-xs font-extrabold lowercase text-foreground">style</span>
             <div className="flex gap-2">
@@ -237,6 +229,49 @@ const CharacterCreator = () => {
           <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
+          <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
+          <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
+        </section>
+
+        {/* Reference image upload */}
+        <section className="mt-6 flex flex-col gap-2">
+          <span className="text-xs font-extrabold lowercase text-foreground">reference image</span>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileSelect}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex w-full items-center justify-center rounded-2xl border-[3px] border-dashed border-foreground/20 bg-card transition-colors hover:border-foreground/40"
+            style={{ aspectRatio: "4/3" }}
+          >
+            {referencePreview ? (
+              <img
+                src={referencePreview}
+                alt="Reference"
+                className="h-full w-full rounded-2xl object-cover"
+              />
+            ) : (
+              <Upload size={28} strokeWidth={2.5} className="text-foreground/30" />
+            )}
+          </button>
+        </section>
+
+        {/* Extra details */}
+        <section className="mt-6 flex flex-col gap-2">
+          <label htmlFor="extra-details" className="text-xs font-extrabold lowercase text-foreground">
+            extra details
+          </label>
+          <input
+            id="extra-details"
+            value={extraDetails}
+            onChange={(e) => setExtraDetails(e.target.value)}
+            placeholder="any extra details…"
+            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+          />
         </section>
 
         {error && (
@@ -244,46 +279,26 @@ const CharacterCreator = () => {
             {error}
           </div>
         )}
+      </main>
 
-        <div className="mt-6 flex flex-col gap-2">
-          <Button className="h-14 w-full text-sm" onClick={() => saveCharacter(true)} disabled={isSaving || isGenerating}>
-            {isSaving ? (
+      {/* Fixed bottom create button */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 bg-background">
+        <div className="mx-auto max-w-lg">
+          <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
+            {isGenerating ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
-                saving...
+                creating...
               </>
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                create & choose face
+                create
               </>
             )}
           </Button>
-          <div className="flex gap-2">
-            <Button className="flex-1 h-14 text-sm" onClick={generate} disabled={isGenerating}>
-              {isGenerating ? (
-                <>
-                  <Loader2 className="animate-spin" size={18} />
-                  creating...
-                </>
-              ) : (
-                <>
-                  <Zap size={18} strokeWidth={2.5} />
-                  create
-                </>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-14 px-5"
-              onClick={() => saveCharacter(false)}
-              disabled={isSaving}
-            >
-              {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} strokeWidth={2.5} />}
-            </Button>
-          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
