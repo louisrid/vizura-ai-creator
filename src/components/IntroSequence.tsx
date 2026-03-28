@@ -126,7 +126,7 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     style={{
       backgroundColor: direction === "right" ? LIGHT_BLUE : "rgba(0,0,0,0)",
       borderColor: direction === "right" ? LIGHT_BLUE : "hsl(0 0% 100%)",
-      opacity: disabled ? 0.3 : 1,
+      opacity: direction === "left" ? 1 : disabled ? 0.3 : 1,
       borderRadius: 16,
       borderStyle: "solid",
       transition: "transform 0.05s, border-color 0.15s, opacity 0.15s",
