@@ -62,13 +62,13 @@ const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
 /* ── mock pill ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
   <motion.div
-    className="flex h-7 items-center justify-center rounded-full px-3"
+    className="flex h-10 items-center justify-center rounded-xl px-5"
     style={{ background: "hsl(0 0% 100% / 0.08)" }}
     initial={{ opacity: 0, y: 6, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.65rem] font-[800] lowercase tracking-tight text-white">{label}</span>
+    <span className="text-[0.85rem] font-[800] lowercase tracking-tight text-white">{label}</span>
   </motion.div>
 );
 
