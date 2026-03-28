@@ -8,8 +8,8 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const menuItems = [
   { label: "home", icon: Home, path: "/" },
-  { label: "create character", icon: Sparkles, path: "/create-character" },
   { label: "create photo", icon: Camera, path: "/create" },
+  { label: "create character", icon: Sparkles, path: "/create-character" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
   { label: "history", icon: Clock, path: "/history" },
