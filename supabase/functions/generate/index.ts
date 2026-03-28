@@ -60,7 +60,6 @@ async function generateImages(
   const imageUrls: string[] = [];
 
   if (count <= 3) {
-    // Original 3-angle mode
     const angles = [
       "front view",
       "left side view, 3/4 angle",
@@ -72,7 +71,6 @@ async function generateImages(
       if (url) imageUrls.push(url);
     }
   } else {
-    // Free trial: 6 varied face portraits
     const variations = [
       "front view, soft smile",
       "front view, serious expression",
@@ -194,7 +192,6 @@ serve(async (req) => {
 
     /* ── FREE GENERATION FLOW ── */
     if (isFreeGen) {
-      // Check if user already used free gen
       const { data: profile } = await adminClient
         .from("profiles")
         .select("has_used_free_gen")
@@ -208,7 +205,6 @@ serve(async (req) => {
         );
       }
 
-      // Check IP limit
       const clientIp = getClientIp(req);
       if (clientIp !== "unknown") {
         const { data: existingIp } = await adminClient
@@ -225,7 +221,6 @@ serve(async (req) => {
         }
       }
 
-      // Generate 6 face images
       const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
       if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -250,20 +245,17 @@ serve(async (req) => {
 
       if (imageUrls.length === 0) throw new Error("No images generated");
 
-      // Mark free gen as used
       await adminClient
         .from("profiles")
         .update({ has_used_free_gen: true })
         .eq("user_id", userId);
 
-      // Record IP
       if (clientIp !== "unknown") {
         await adminClient
           .from("free_gen_ips")
           .upsert({ ip_address: clientIp, user_id: userId }, { onConflict: "ip_address" });
       }
 
-      // Persist generation
       await adminClient.from("generations").insert({
         user_id: userId,
         prompt: sanitiseText(prompt),
@@ -277,6 +269,8 @@ serve(async (req) => {
     }
 
     /* ── STANDARD CREDIT-BASED FLOW ── */
+
+    // Demo mode: unlimited credits
     if (IS_DEMO_MODE) {
       const { data: demoCred } = await adminClient
         .from("credits")
@@ -293,6 +287,7 @@ serve(async (req) => {
       }
     }
 
+    // Check credits
     const { data: creditData } = await adminClient
       .from("credits")
       .select("balance")
@@ -300,11 +295,36 @@ serve(async (req) => {
       .single();
 
     if (!creditData || creditData.balance <= 0) {
-      return new Response(JSON.stringify({ error: "No credits remaining" }), {
-        status: 402,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      // Check if user has active subscription to differentiate error
+      const { data: subData } = await adminClient
+        .from("subscriptions")
+        .select("status")
+        .eq("user_id", userId)
+        .single();
+
+      const hasActiveSub = subData?.status === "active";
+
+      return new Response(
+        JSON.stringify({
+          error: "No credits remaining",
+          code: "NO_CREDITS",
+          has_subscription: hasActiveSub,
+        }),
+        {
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
     }
+
+    // Deduct 1 credit BEFORE generation
+    await adminClient
+      .from("credits")
+      .update({
+        balance: creditData.balance - 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId);
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
@@ -313,6 +333,15 @@ serve(async (req) => {
     try {
       imageUrls = await generateImages(prompt, 3, LOVABLE_API_KEY);
     } catch (e: any) {
+      // Refund credit on failure
+      await adminClient
+        .from("credits")
+        .update({
+          balance: creditData.balance,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId);
+
       if (e?.status === 429) {
         return new Response(
           JSON.stringify({ error: "Rate limited, please try again shortly" }),
@@ -328,23 +357,23 @@ serve(async (req) => {
       throw e;
     }
 
-    if (imageUrls.length === 0) throw new Error("No images generated");
-
-    const sanitisedPrompt = sanitiseText(prompt);
+    if (imageUrls.length === 0) {
+      // Refund credit if no images generated
+      await adminClient
+        .from("credits")
+        .update({
+          balance: creditData.balance,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId);
+      throw new Error("No images generated");
+    }
 
     await adminClient.from("generations").insert({
       user_id: userId,
-      prompt: sanitisedPrompt,
+      prompt: sanitiseText(prompt),
       image_urls: imageUrls,
     });
-
-    await adminClient
-      .from("credits")
-      .update({
-        balance: creditData.balance - 1,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", userId);
 
     return new Response(
       JSON.stringify({
