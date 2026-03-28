@@ -67,7 +67,7 @@ const Auth = () => {
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
-            className="w-full h-14 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 text-sm font-extrabold lowercase text-foreground hover:from-amber-500 hover:to-amber-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {googleLoading ? (
               <>

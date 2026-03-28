@@ -56,7 +56,7 @@ const Membership = () => {
 
           <button
             onClick={() => setOverlayOpen(true)}
-            className="w-full h-14 rounded-2xl text-sm font-extrabold lowercase bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600 transition-all"
+            className="w-full h-14 rounded-2xl text-sm font-extrabold lowercase bg-neon-green text-neon-green-foreground hover:opacity-90 transition-all"
           >
             subscribe
           </button>

@@ -9,8 +9,8 @@ const ComingSoon = ({ title }: { title: string }) => (
         <BackButton />
       </div>
       <PageTitle>{title}</PageTitle>
-      <div className="border-gradient-purple rounded-2xl p-8 text-center bg-card">
-        <Sparkles size={20} className="mx-auto mb-3" style={{ stroke: "url(#icon-gradient-purple)" }} />
+      <div className="border-[5px] border-neon-yellow rounded-2xl p-8 text-center bg-card">
+        <Sparkles size={20} className="mx-auto mb-3 text-neon-yellow" />
         <p className="text-sm font-extrabold lowercase text-foreground">coming soon</p>
         <p className="text-xs font-bold lowercase text-foreground mt-2">this feature is on the way</p>
       </div>

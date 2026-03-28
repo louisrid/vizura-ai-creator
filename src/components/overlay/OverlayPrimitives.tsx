@@ -22,7 +22,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
         className="rounded-full"
         style={{
           borderRadius: 9999,
-          background: i === current ? "hsl(55 100% 50%)" : "hsl(0 0% 100% / 0.15)",
+          background: i === current ? "hsl(55 90% 58%)" : "hsl(0 0% 100% / 0.15)",
         }}
         animate={{
           width: i === current ? 14 : 10,
@@ -131,8 +131,8 @@ export const GoldButton = ({
     disabled={disabled}
     className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
     style={{
-      background: "hsl(130 100% 42%)",
-      borderColor: "hsl(130 100% 48%)",
+      background: "hsl(140 70% 52%)",
+      borderColor: "hsl(140 70% 58%)",
       color: "#fff",
       borderRadius: 16,
     }}
@@ -146,9 +146,9 @@ export const GoldButton = ({
       style={{ borderRadius: 12 }}
       animate={{
         boxShadow: [
-          "0 0 0 0 hsl(130 100% 42% / 0.4)",
-          "0 0 0 14px hsl(130 100% 42% / 0)",
-          "0 0 0 0 hsl(130 100% 42% / 0)",
+          "0 0 0 0 hsl(140 70% 52% / 0.4)",
+          "0 0 0 14px hsl(140 70% 52% / 0)",
+          "0 0 0 0 hsl(140 70% 52% / 0)",
         ],
       }}
       transition={{ duration: 1.8, repeat: Infinity }}
@@ -208,7 +208,7 @@ export const ArrowButton = ({
     onPointerLeave={onPointerLeave}
     className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16 }}
-    whileTap={{ scale: 1.12, background: "hsl(55 100% 50%)", borderRadius: 16 }}
+    whileTap={{ scale: 1.12, background: "hsl(55 90% 58%)", borderRadius: 16 }}
   >
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />

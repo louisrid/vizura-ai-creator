@@ -66,7 +66,7 @@ const TopUps = () => {
                 key={plan.label}
                 className={`rounded-2xl p-5 ${
                   plan.highlighted
-                    ? "border-gradient-blue bg-foreground"
+                    ? "border-[5px] border-neon-yellow bg-foreground"
                     : "border-[5px] border-border bg-card"
                 }`}
               >
@@ -116,7 +116,7 @@ const TopUps = () => {
                   className={`w-full h-12 rounded-2xl text-sm font-extrabold lowercase transition-all ${
                     plan.highlighted
                       ? "bg-background text-foreground hover:bg-background/90"
-                      : "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground hover:from-amber-500 hover:to-amber-600"
+                      : "bg-neon-green text-neon-green-foreground hover:opacity-90"
                   }`}
                   onClick={() => handleBuy(plan)}
                   disabled={buying !== null}

@@ -133,7 +133,7 @@ const MyCharacters = () => {
                   <div className="absolute inset-0 bg-foreground/80 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleEdit(char)}
-                      className="w-9 h-9 rounded-2xl bg-amber-400 flex items-center justify-center text-foreground hover:bg-amber-500 transition-colors"
+                      className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors"
                       aria-label="edit"
                     >
                       <Pencil size={14} strokeWidth={2.5} />

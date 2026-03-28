@@ -27,7 +27,7 @@
     --accent: 55 100% 50%;
     --accent-foreground: 0 0% 4%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 4%;
@@ -36,12 +36,12 @@
 
     --radius: 12px;
 
-    /* neon yellow accent */
-    --neon-yellow: 55 100% 50%;
+    /* neon yellow accent — paler */
+    --neon-yellow: 55 90% 58%;
     --neon-yellow-foreground: 0 0% 4%;
 
-    /* neon green for buy/CTA */
-    --neon-green: 130 100% 42%;
+    /* neon green for buy/CTA — paler */
+    --neon-green: 140 70% 52%;
     --neon-green-foreground: 0 0% 100%;
 
     --sidebar-background: 0 0% 4%;

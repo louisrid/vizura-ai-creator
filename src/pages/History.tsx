@@ -125,7 +125,7 @@ const History = () => {
                   </p>
                   <div className="flex items-center justify-between">
                     {item.characterName && (
-                      <div className="flex items-center gap-1.5 text-[10px] font-extrabold lowercase text-amber-400">
+                      <div className="flex items-center gap-1.5 text-[10px] font-extrabold lowercase text-neon-yellow">
                         <User size={10} strokeWidth={2.5} />
                         {item.characterName}
                       </div>
@@ -176,7 +176,7 @@ const History = () => {
                 </p>
                 <div className="flex items-center gap-3">
                   {expanded.characterName && (
-                    <div className="flex items-center gap-1.5 text-[10px] font-extrabold lowercase text-amber-400">
+                    <div className="flex items-center gap-1.5 text-[10px] font-extrabold lowercase text-neon-yellow">
                       <User size={10} strokeWidth={2.5} />
                       {expanded.characterName}
                     </div>
