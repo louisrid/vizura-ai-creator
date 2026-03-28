@@ -16,7 +16,7 @@ const MiniBox = ({ className = "" }: { className?: string }) => (
 /* ── emoji pop ── */
 const EmojiPop = ({ emoji }: { emoji: string }) => (
   <motion.span
-    className="text-6xl block"
+    className="text-7xl block"
     initial={{ opacity: 0, scale: 0.5 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay: 0.05, duration: 0.3, type: "spring", stiffness: 300, damping: 20 }}
@@ -28,7 +28,7 @@ const EmojiPop = ({ emoji }: { emoji: string }) => (
 /* ── screen title ── */
 const Title = ({ children }: { children: React.ReactNode }) => (
   <motion.h2
-    className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+    className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.1, duration: 0.25 }}
@@ -40,7 +40,7 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 /* ── screen subtitle ── */
 const Sub = ({ children }: { children: React.ReactNode }) => (
   <motion.p
-    className="text-sm font-bold lowercase text-white/60 text-center max-w-[17rem] leading-relaxed"
+    className="text-[0.94rem] font-bold lowercase text-white/60 text-center max-w-[18rem] leading-relaxed"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay: 0.25, duration: 0.25 }}
@@ -261,8 +261,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* content — centered in full screen */}
-          <div className="flex-1 flex items-center justify-center px-6">
+          {/* content — vertically centered, pushed slightly above middle */}
+          <div className="flex-1 flex items-center justify-center px-6 pb-16">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={step}
@@ -284,7 +284,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           </div>
 
           {/* dots + arrows — generous bottom spacing */}
-          <div className="flex flex-col items-center gap-6 pb-[max(env(safe-area-inset-bottom),2.5rem)] pt-2">
+          <div className="flex flex-col items-center gap-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-2">
             <p className="text-xs font-bold lowercase text-white/30">swipe or hold arrow</p>
             <ProgressDots current={step} total={TOTAL} />
             <div className="flex items-center gap-6">
