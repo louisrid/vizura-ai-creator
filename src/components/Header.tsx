@@ -2,11 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn, Clock } from "lucide-react";
+import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn, Clock, Home } from "lucide-react";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 const menuItems = [
+  { label: "home", icon: Home, path: "/" },
   { label: "create character", icon: Sparkles, path: "/create-character" },
   { label: "create photo", icon: Camera, path: "/create" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
