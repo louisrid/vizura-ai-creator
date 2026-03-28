@@ -259,16 +259,19 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     holdDir.current = null;
   }, []);
 
+  const skipped = useRef(false);
+
   const handlePointerDown = useCallback((dir: "left" | "right") => {
     clearHold();
+    skipped.current = false;
     holdDir.current = dir;
     holdStart.current = Date.now();
-    // If held >1s on right, skip entire flow
     if (dir === "right") {
       skipTimer.current = setTimeout(() => {
+        skipped.current = true;
         holdDir.current = null;
         onComplete();
-      }, 1000);
+      }, 990);
     }
   }, [clearHold, onComplete]);
 
@@ -277,8 +280,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     const elapsed = Date.now() - holdStart.current;
     const dir = holdDir.current;
     clearHold();
-    // If held <1s, just advance/go back one step on release
-    if (elapsed < 1000) {
+    if (skipped.current) return;
+    if (elapsed < 990) {
       if (dir === "right") goTo(step + 1);
       else goTo(step - 1);
     }
@@ -346,7 +349,6 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             <div className="flex items-center gap-6">
               <ArrowButton
                 direction="left"
-                onClick={goBack}
                 disabled={step === 0}
                 onPointerDown={() => handlePointerDown("left")}
                 onPointerUp={handlePointerUp}
@@ -354,7 +356,6 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
               />
               <ArrowButton
                 direction="right"
-                onClick={() => { if (step < TOTAL - 1) advance(); else onComplete(); }}
                 onPointerDown={() => handlePointerDown("right")}
                 onPointerUp={handlePointerUp}
                 onPointerLeave={handlePointerUp}
