@@ -9,6 +9,7 @@ import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
 import OnboardingOverlay from "@/components/OnboardingOverlay";
+import { supabase } from "@/integrations/supabase/client";
 import CharacterCreator from "./pages/CharacterCreator";
 import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
