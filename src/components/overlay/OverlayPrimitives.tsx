@@ -21,7 +21,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
         key={i}
         className="rounded-full"
         style={{
-          background: i === current ? "hsl(55 90% 58%)" : "hsl(0 0% 100% / 0.15)",
+          background: i === current ? "hsl(55 100% 50%)" : "hsl(0 0% 100% / 0.15)",
           width: i === current ? 16 : 12,
           height: i === current ? 16 : 12,
           transition: "width 0.1s, height 0.1s",
@@ -184,8 +184,8 @@ export const ArrowButton = ({
     onPointerDown={onPointerDown}
     onPointerUp={onPointerUp}
     onPointerLeave={onPointerLeave}
-    className={`flex h-16 w-16 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] ${direction === "right" ? "bg-[hsl(55,90%,58%)]" : "bg-black active:bg-[hsl(55,90%,58%)]"}`}
-    style={{ borderColor: direction === "right" ? "hsl(55 80% 48%)" : "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s, background-color 0.05s" }}
+    className={`flex h-16 w-16 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] ${direction === "right" ? "bg-[hsl(55,100%,50%)]" : "bg-black active:bg-[hsl(55,100%,50%)]"}`}
+    style={{ borderColor: direction === "right" ? "hsl(55 100% 50%)" : "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s, background-color 0.05s" }}
   >
     {direction === "left" ? (
       <ArrowLeft size={24} strokeWidth={2.5} style={{ color: "#fff" }} />
