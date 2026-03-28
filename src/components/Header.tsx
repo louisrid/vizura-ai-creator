@@ -67,15 +67,6 @@ const Header = () => {
         </div>
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
-          <svg width="0" height="0" className="absolute">
-            <defs>
-              <linearGradient id="icon-gradient-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(210 100% 65%)" />
-                <stop offset="100%" stopColor="hsl(230 85% 55%)" />
-              </linearGradient>
-            </defs>
-          </svg>
-
           {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
             <button onClick={() => navigate("/account")} className="shrink-0" aria-label="my account">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-nav-foreground">
@@ -86,13 +77,13 @@ const Header = () => {
           )}
 
           <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
-            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} style={{ stroke: "url(#icon-gradient-purple)" }} />}
-            <span className="gradient-purple-text">{currentPage}</span>
+            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow" />}
+            <span className="text-neon-yellow">{currentPage}</span>
           </span>
 
           <button
             onClick={() => setOpen(!open)}
-            className="w-10 h-10 rounded-2xl gradient-purple flex items-center justify-center text-white transition-opacity hover:opacity-90"
+            className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground transition-opacity hover:opacity-90"
             aria-label="open menu"
           >
             <Menu size={20} strokeWidth={2.5} />
@@ -114,14 +105,14 @@ const Header = () => {
                       onClick={() => handleNav(item.path)}
                       className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
                         location.pathname === item.path
-                          ? "gradient-purple-text"
+                          ? "text-neon-yellow"
                           : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
                     >
                       <item.icon
                         size={14}
                         strokeWidth={2.5}
-                        style={location.pathname === item.path ? { stroke: "url(#icon-gradient-purple)" } : undefined}
+                        className={location.pathname === item.path ? "text-neon-yellow" : undefined}
                       />
                       {item.label}
                     </button>
@@ -139,11 +130,8 @@ const Header = () => {
 const CreditsBadge = () => {
   const { credits } = useCredits();
   return (
-    <div
-      className="flex items-center gap-1.5 rounded-2xl border-[3px] px-3 py-1.5"
-      style={{ borderColor: "hsl(45 100% 60% / 0.7)" }}
-    >
-      <Zap size={12} strokeWidth={2.5} className="text-nav-foreground" />
+    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-neon-yellow px-3 py-1.5">
+      <Zap size={12} strokeWidth={2.5} className="text-neon-yellow" />
       <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{credits}</span>
     </div>
   );
