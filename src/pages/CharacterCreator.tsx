@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
-import heroImage from "@/assets/hero-nature-collage.jpg";
+
 
 const countryOptions = [
   "any", "american", "british", "australian", "brazilian", "colombian", "french",
@@ -143,32 +143,13 @@ const CharacterCreator = () => {
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <div className="absolute top-0 left-1/2 z-0 w-full max-w-lg -translate-x-1/2">
-        <div className="relative w-full" style={{ aspectRatio: "4 / 2.2" }}>
-          <img
-            src={heroImage}
-            alt=""
-            className="w-full h-full object-cover"
-            style={{ opacity: 0.04, filter: "saturate(0.08) blur(0.5px)" }}
-            width={1024}
-            height={768}
-          />
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: "linear-gradient(to bottom, hsl(var(--background) / 0.4) 0%, hsl(var(--background) / 0.7) 50%, hsl(var(--background)) 85%)",
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="relative z-10 mx-auto w-full max-w-lg px-4 pt-16 pb-0">
+      <div className="mx-auto w-full max-w-lg px-4 pt-8 pb-0">
         <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
           {isEditing ? "edit character" : "create character"}
         </h1>
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
         <CardCarousel
           images={imageCards}
           activeIndex={activeIndex}
@@ -217,7 +198,7 @@ const CharacterCreator = () => {
                   onClick={() => setStyle(s)}
                   className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
                     style === s
-                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-foreground border-[5px] border-transparent"
+                      ? "bg-neon-yellow text-neon-yellow-foreground border-[5px] border-neon-yellow"
                       : "border-[5px] border-border text-foreground hover:border-foreground/60"
                   }`}
                 >

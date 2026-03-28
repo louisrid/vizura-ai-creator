@@ -70,10 +70,13 @@ export default {
           DEFAULT: "hsl(var(--surface-dark))",
           foreground: "hsl(var(--surface-dark-foreground))",
         },
-        'accent-purple': {
-          DEFAULT: "hsl(var(--accent-purple))",
-          dark: "hsl(var(--accent-purple-dark))",
-          light: "hsl(var(--accent-purple-light))",
+        'neon-yellow': {
+          DEFAULT: "hsl(var(--neon-yellow))",
+          foreground: "hsl(var(--neon-yellow-foreground))",
+        },
+        'neon-green': {
+          DEFAULT: "hsl(var(--neon-green))",
+          foreground: "hsl(var(--neon-green-foreground))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

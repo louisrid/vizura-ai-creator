@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 96%;
     --foreground: 0 0% 4%;
 
     --card: 0 0% 100%;
@@ -18,13 +18,13 @@
     --primary: 0 0% 4%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 94%;
+    --secondary: 0 0% 90%;
     --secondary-foreground: 0 0% 4%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 4%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 0 0% 94%;
+    --accent: 55 100% 50%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 84% 60%;
@@ -36,9 +36,13 @@
 
     --radius: 12px;
 
-    --accent-purple: 220 92% 60%;
-    --accent-purple-dark: 230 85% 50%;
-    --accent-purple-light: 210 100% 65%;
+    /* neon yellow accent */
+    --neon-yellow: 55 100% 50%;
+    --neon-yellow-foreground: 0 0% 4%;
+
+    /* neon green for buy/CTA */
+    --neon-green: 130 100% 42%;
+    --neon-green-foreground: 0 0% 100%;
 
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 98%;
@@ -55,68 +59,7 @@
     --surface-dark: 0 0% 4%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
-    --glow: 220 90% 55%;
   }
-}
-
-/* Purple gradient utilities — use sparingly for borders & accents only */
-.gradient-purple {
-  background: linear-gradient(135deg, hsl(210 100% 65%) 0%, hsl(230 85% 55%) 100%);
-}
-
-.gradient-purple-text {
-  background: linear-gradient(135deg, hsl(210 100% 65%) 0%, hsl(230 85% 55%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.border-gradient-purple {
-  position: relative;
-}
-.border-gradient-purple::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 4px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.border-gradient-blue {
-  position: relative;
-}
-.border-gradient-blue::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 4px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.border-gradient-yellow {
-  position: relative;
-}
-.border-gradient-yellow::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 4px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, hsl(45 100% 60%), hsl(35 100% 50%));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
 }
 
 @layer base {
@@ -147,31 +90,11 @@
   }
 }
 
-/* Subtle gradient backgrounds */
-.gradient-subtle {
-  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(260 60% 98%) 50%, hsl(var(--background)) 100%);
-}
-
-.gradient-card {
-  background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(0 0% 97%) 100%);
-}
-
-/* Glass effect */
-.glass {
-  backdrop-filter: blur(12px);
-  background: hsl(var(--background) / 0.8);
-}
-
-/* Shimmer animation */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.shimmer {
-  background: linear-gradient(90deg, transparent 25%, hsl(var(--accent-purple) / 0.08) 50%, transparent 75%);
-  background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
+/* Content pill — white rounded container on off-white bg */
+.content-pill {
+  background: hsl(var(--card));
+  border-radius: 24px;
+  box-shadow: 0 2px 12px -2px hsl(0 0% 0% / 0.06), 0 1px 4px -1px hsl(0 0% 0% / 0.04);
 }
 
 .scrollbar-hide {

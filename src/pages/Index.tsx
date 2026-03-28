@@ -147,7 +147,7 @@ const Index = () => {
 
           {user && (
             <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-foreground lowercase mb-10">
-              <Sparkles size={14} style={{ stroke: "url(#icon-gradient-purple)" }} />
+              <Sparkles size={14} className="text-neon-yellow" />
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
@@ -178,7 +178,7 @@ const Index = () => {
               {characters.length === 0 && user && (
                 <button
                   onClick={() => navigate("/")}
-                  className="mt-2 text-[10px] font-extrabold lowercase text-amber-400 hover:text-amber-300 transition-colors"
+                  className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
                 >
                   create your first character →
                 </button>

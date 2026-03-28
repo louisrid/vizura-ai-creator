@@ -4,13 +4,13 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 /* ── shared palette ── */
 export const dotColors = [
-  "hsl(270 90% 62%)",
-  "hsl(210 100% 65%)",
+  "hsl(55 100% 50%)",
+  "hsl(130 100% 42%)",
   "hsl(330 95% 58%)",
-  "hsl(150 100% 40%)",
-  "hsl(240 85% 65%)",
-  "hsl(285 80% 60%)",
-  "hsl(350 90% 58%)",
+  "hsl(200 100% 50%)",
+  "hsl(280 85% 60%)",
+  "hsl(20 100% 55%)",
+  "hsl(0 90% 55%)",
 ];
 
 /* ── progress dots ── */
@@ -22,10 +22,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
         className="rounded-full"
         style={{
           borderRadius: 9999,
-          background:
-            i === current
-              ? "linear-gradient(135deg, hsl(210 100% 70%), hsl(225 100% 58%))"
-              : "hsl(0 0% 100% / 0.15)",
+          background: i === current ? "hsl(55 100% 50%)" : "hsl(0 0% 100% / 0.15)",
         }}
         animate={{
           width: i === current ? 14 : 10,
@@ -114,7 +111,7 @@ export const ParticleBurst = ({ active }: { active: boolean }) => {
   );
 };
 
-/* ── gold CTA button ── */
+/* ── neon green CTA button ── */
 export const GoldButton = ({
   children,
   onClick,
@@ -134,9 +131,9 @@ export const GoldButton = ({
     disabled={disabled}
     className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
     style={{
-      background: "linear-gradient(135deg, hsl(48 100% 62%) 0%, hsl(45 100% 56%) 50%, hsl(40 100% 50%) 100%)",
-      borderColor: "hsl(48 100% 60%)",
-      color: "#000",
+      background: "hsl(130 100% 42%)",
+      borderColor: "hsl(130 100% 48%)",
+      color: "#fff",
       borderRadius: 16,
     }}
     whileTap={{ scale: 0.97 }}
@@ -149,9 +146,9 @@ export const GoldButton = ({
       style={{ borderRadius: 12 }}
       animate={{
         boxShadow: [
-          "0 0 0 0 hsl(52 100% 58% / 0.4)",
-          "0 0 0 14px hsl(52 100% 58% / 0)",
-          "0 0 0 0 hsl(52 100% 58% / 0)",
+          "0 0 0 0 hsl(130 100% 42% / 0.4)",
+          "0 0 0 14px hsl(130 100% 42% / 0)",
+          "0 0 0 0 hsl(130 100% 42% / 0)",
         ],
       }}
       transition={{ duration: 1.8, repeat: Infinity }}
@@ -211,7 +208,7 @@ export const ArrowButton = ({
     onPointerLeave={onPointerLeave}
     className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
     style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16 }}
-    whileTap={{ scale: 1.12, background: "linear-gradient(135deg, hsl(210 100% 65%), hsl(230 85% 55%))", borderRadius: 16 }}
+    whileTap={{ scale: 1.12, background: "hsl(55 100% 50%)", borderRadius: 16 }}
   >
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
