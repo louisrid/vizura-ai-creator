@@ -146,10 +146,10 @@ const Scene2 = () => (
           borderColor: "hsl(20 70% 40%)",
         }}
       >
-        <Pen size={16} strokeWidth={2.5} color="hsl(20 90% 60%)" />
+        <Pen size={16} strokeWidth={2.5} color="#fff" />
         <span
           className="ml-3 text-xs font-extrabold lowercase"
-          style={{ color: "hsl(20 60% 60%)" }}
+          style={{ color: "hsl(0 0% 100% / 0.7)" }}
         >
           describe your scene...
         </span>
@@ -166,10 +166,10 @@ const Scene2 = () => (
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4, duration: 0.25 }}
       >
-        <Zap size={18} strokeWidth={2.5} color="hsl(140 70% 55%)" />
+        <Zap size={18} strokeWidth={2.5} color="#fff" />
         <span
           className="text-sm font-extrabold lowercase"
-          style={{ color: "hsl(140 70% 55%)" }}
+          style={{ color: "#fff" }}
         >
           create
         </span>
