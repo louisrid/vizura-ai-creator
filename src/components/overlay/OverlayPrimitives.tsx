@@ -116,43 +116,29 @@ export const GoldButton = ({
   children,
   onClick,
   disabled,
-  delay = 0.2,
 }: {
   children: React.ReactNode;
   onClick: (e: React.MouseEvent) => void;
   disabled?: boolean;
   delay?: number;
 }) => (
-  <motion.button
+  <button
     onClick={(e) => {
       e.stopPropagation();
       onClick(e);
     }}
     disabled={disabled}
-    className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60"
+    className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60 active:scale-[0.93]"
     style={{
       background: "hsl(140 70% 52%)",
       borderColor: "hsl(140 70% 58%)",
       color: "#fff",
       borderRadius: 16,
+      transition: "transform 0.05s",
     }}
-    whileTap={{ scale: 0.93 }}
-    transition={{ duration: 0.05 }}
   >
-    <motion.div
-      className="absolute inset-0"
-      style={{ borderRadius: 12 }}
-      animate={{
-        boxShadow: [
-          "0 0 0 0 hsl(140 70% 52% / 0.4)",
-          "0 0 0 14px hsl(140 70% 52% / 0)",
-          "0 0 0 0 hsl(140 70% 52% / 0)",
-        ],
-      }}
-      transition={{ duration: 1.8, repeat: Infinity }}
-    />
     <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
-  </motion.button>
+  </button>
 );
 
 /* ── dismiss link ── */
@@ -199,19 +185,18 @@ export const ArrowButton = ({
   onPointerUp?: () => void;
   onPointerLeave?: () => void;
 }) => (
-  <motion.button
+  <button
     onClick={(e) => { e.stopPropagation(); onClick?.(); }}
     onPointerDown={onPointerDown}
     onPointerUp={onPointerUp}
     onPointerLeave={onPointerLeave}
-    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px]"
-    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16 }}
-    whileTap={{ scale: 1.12, background: "hsl(55 90% 58%)", borderRadius: 16, transition: { duration: 0.05 } }}
+    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] active:bg-[hsl(55_90%_58%)]"
+    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s" }}
   >
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
     ) : (
       <ArrowRight size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
     )}
-  </motion.button>
+  </button>
 );

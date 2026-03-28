@@ -187,37 +187,24 @@ const Scene3 = ({ onLetsGo }: { onLetsGo: () => void }) => (
   <div className="flex flex-col items-center gap-6">
     <BigTitle delay={0.1}>ready?</BigTitle>
 
-    <motion.button
+    <button
       onClick={(e) => {
         e.stopPropagation();
         onLetsGo();
       }}
-      className="relative h-16 w-full max-w-[16rem] border-[5px] text-xl font-[900] lowercase tracking-tight"
+      className="relative h-16 w-full max-w-[16rem] border-[5px] text-xl font-[900] lowercase tracking-tight active:scale-[0.93]"
       style={{
         background: "hsl(55 90% 58%)",
         borderColor: "hsl(55 80% 48%)",
         color: "#000",
         borderRadius: 16,
+        transition: "transform 0.05s",
       }}
-      whileTap={{ scale: 0.93 }}
-      transition={{ duration: 0.05 }}
     >
-      <motion.div
-        className="absolute inset-0"
-        style={{ borderRadius: 12 }}
-        animate={{
-          boxShadow: [
-            "0 0 0 0 hsl(55 90% 58% / 0.4)",
-            "0 0 0 14px hsl(55 90% 58% / 0)",
-            "0 0 0 0 hsl(55 90% 58% / 0)",
-          ],
-        }}
-        transition={{ duration: 1.8, repeat: Infinity }}
-      />
       <span className="relative z-10 flex items-center justify-center gap-2">
         let's go
       </span>
-    </motion.button>
+    </button>
   </div>
 );
 
