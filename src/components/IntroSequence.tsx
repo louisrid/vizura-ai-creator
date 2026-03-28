@@ -349,22 +349,6 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Full-screen emoji layer */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`emoji-${step}`}
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <EmojiLayer screenIndex={step} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
           {/* Screen content */}
           <div className="flex-1 flex items-center justify-center px-6 overflow-hidden">
             <div className="w-full max-w-sm">
