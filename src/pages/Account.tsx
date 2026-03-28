@@ -10,14 +10,23 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const Account = () => {
   const { user, loading: authLoading, signOut } = useAuth();
-  const { credits } = useCredits();
-  const { subscribed, status } = useSubscription();
+  const { credits, refetch: refetchCredits } = useCredits();
+  const { subscribed, status, refetch: refetchSub } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
+
+  // Refetch on checkout success
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("checkout") === "success") {
+      refetchSub();
+      refetchCredits();
+    }
+  }, [location.search, refetchSub, refetchCredits]);
 
   if (!authLoading && !user) return null;
 
