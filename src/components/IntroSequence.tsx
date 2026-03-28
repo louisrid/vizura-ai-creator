@@ -150,16 +150,8 @@ const Screen1 = () => (
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      pick a style
+      pick her style…
     </motion.h2>
-    <motion.p
-      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.3 }}
-    >
-      choose how your character looks — natural, model, or egirl
-    </motion.p>
     <div className="flex flex-wrap justify-center gap-1.5 pt-1">
       <Pill label="natural" delay={0.15} />
       <Pill label="model" delay={0.22} />
@@ -177,33 +169,19 @@ const Screen2 = () => (
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      hair, eyes & body
+      set her look…
     </motion.h2>
-    <motion.p
-      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.3 }}
-    >
-      fine-tune the details that make your character unique
-    </motion.p>
-    <div className="flex flex-col gap-1 w-full pt-1">
+    <div className="flex flex-col gap-1.5 w-full pt-1">
       <SectionLabel delay={0.15}>hair colour</SectionLabel>
       <div className="flex flex-wrap gap-1">
-        {["blonde", "brunette", "black", "red"].map((h, i) => (
+        {["blonde", "brunette", "black", "red", "pink", "white"].map((h, i) => (
           <Pill key={h} label={h} delay={0.18 + i * 0.05} />
         ))}
       </div>
-      <SectionLabel delay={0.35}>eye colour</SectionLabel>
+      <SectionLabel delay={0.4}>eye colour</SectionLabel>
       <div className="flex flex-wrap gap-1">
-        {["brown", "blue", "green"].map((e, i) => (
-          <Pill key={e} label={e} delay={0.38 + i * 0.05} />
-        ))}
-      </div>
-      <SectionLabel delay={0.5}>body type</SectionLabel>
-      <div className="flex flex-wrap gap-1">
-        {["slim", "regular", "curvy"].map((b, i) => (
-          <Pill key={b} label={b} delay={0.53 + i * 0.05} />
+        {["brown", "blue", "green", "hazel", "grey"].map((e, i) => (
+          <Pill key={e} label={e} delay={0.43 + i * 0.05} />
         ))}
       </div>
     </div>
@@ -219,29 +197,12 @@ const Screen3 = () => (
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      ethnicity & age
+      choose her build…
     </motion.h2>
-    <motion.p
-      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.3 }}
-    >
-      set their background and how old they are
-    </motion.p>
-    <div className="flex flex-col gap-1 w-full pt-1">
-      <SectionLabel delay={0.15}>ethnicity</SectionLabel>
-      <div className="flex flex-wrap gap-1">
-        {["american", "brazilian", "japanese", "korean"].map((e, i) => (
-          <Pill key={e} label={e} delay={0.18 + i * 0.05} />
-        ))}
-      </div>
-      <SectionLabel delay={0.4}>age</SectionLabel>
-      <div className="flex flex-wrap gap-1">
-        {["18", "22", "25", "30"].map((a, i) => (
-          <Pill key={a} label={a} delay={0.43 + i * 0.05} />
-        ))}
-      </div>
+    <div className="flex flex-wrap justify-center gap-1.5 pt-1">
+      <Pill label="slim" delay={0.15} />
+      <Pill label="regular" delay={0.22} />
+      <Pill label="curvy" delay={0.29} />
     </div>
   </div>
 );
@@ -255,26 +216,47 @@ const Screen4 = () => (
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      name & describe
+      pick her nationality…
     </motion.h2>
-    <motion.p
-      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.3 }}
-    >
-      give them a name and add any extra details you like
-    </motion.p>
-    <div className="flex flex-col gap-2 w-full pt-1">
-      <MockInput label="character name" delay={0.2} />
-      <MockInput label="describe your character" tall delay={0.3} />
+    <div className="flex flex-wrap justify-center gap-1">
+      {["american", "brazilian", "french", "japanese", "korean", "italian", "nigerian", "spanish"].map((n, i) => (
+        <Pill key={n} label={n} delay={0.15 + i * 0.04} />
+      ))}
     </div>
   </div>
 );
 
-const Screen5 = ({ onGo }: { onGo: () => void }) => (
-  <div className="relative flex flex-col items-center gap-4">
+const Screen5 = () => (
+  <div className="relative flex flex-col items-center gap-3">
     <EmojiRow screenIndex={4} />
+    <motion.h2
+      className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, y: 12, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      set her details…
+    </motion.h2>
+    <div className="flex flex-col gap-1.5 w-full pt-1">
+      <SectionLabel delay={0.15}>age</SectionLabel>
+      <div className="flex flex-wrap gap-1">
+        {["18", "21", "25", "30", "35", "40"].map((a, i) => (
+          <Pill key={a} label={a} delay={0.18 + i * 0.05} />
+        ))}
+      </div>
+      <SectionLabel delay={0.4}>style</SectionLabel>
+      <div className="flex flex-wrap gap-1">
+        {["natural", "model", "egirl"].map((s, i) => (
+          <Pill key={s} label={s} delay={0.43 + i * 0.05} />
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const Screen6 = ({ onGo }: { onGo: () => void }) => (
+  <div className="relative flex flex-col items-center gap-4">
+    <EmojiRow screenIndex={5} />
     <motion.h2
       className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
@@ -283,18 +265,10 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
     >
       ready?
     </motion.h2>
-    <motion.p
-      className="text-[0.7rem] font-bold lowercase text-white text-center max-w-[14rem]"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.12, duration: 0.3 }}
-    >
-      let's create your first character
-    </motion.p>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="h-9 w-full max-w-[9rem] rounded-full text-[0.7rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
-      style={{ background: LIGHT_BLUE, color: "#000", transition: "transform 0.05s" }}
+      className="h-10 w-full max-w-[10rem] rounded-full text-[0.75rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+      style={{ background: "hsl(40 95% 55%)", color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -305,7 +279,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
   </div>
 );
 
-const screens = [Screen1, Screen2, Screen3, Screen4];
+const screens = [Screen1, Screen2, Screen3, Screen4, Screen5];
 
 /* ═══════════ MAIN ═══════════ */
 
