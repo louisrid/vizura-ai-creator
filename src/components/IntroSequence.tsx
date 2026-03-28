@@ -125,7 +125,6 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     className="flex h-14 w-14 items-center justify-center border-[5px] active:scale-[1.05]"
     style={{
       background: direction === "right" ? LIGHT_BLUE : "transparent",
-      background: direction === "right" ? LIGHT_BLUE : undefined,
       borderColor: direction === "right" ? LIGHT_BLUE : (disabled ? "hsl(0 0% 100% / 0.15)" : LIGHT_BLUE),
       opacity: disabled ? 0.3 : 1,
       borderRadius: 16,
