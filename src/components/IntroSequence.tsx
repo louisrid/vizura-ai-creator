@@ -89,7 +89,7 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
         style={{
           width: i === current ? 22 : 8,
           height: 8,
-          background: i === current ? "white" : "hsl(0 0% 100% / 0.2)",
+          background: i === current ? LIGHT_BLUE : "hsl(0 0% 100% / 0.2)",
         }}
       />
     ))}
