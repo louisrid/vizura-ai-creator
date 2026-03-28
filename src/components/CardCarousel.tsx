@@ -103,29 +103,15 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
   );
 };
 
-const angleLabels = ["front", "left 3/4", "right 3/4"];
-
 const CardContent = ({ image, index }: { image: string | null; index: number }) => (
-  <div className="relative h-full w-full overflow-hidden rounded-lg border-[5px] border-border shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex flex-col bg-card">
-    {/* Polaroid header strip */}
-    <div className="bg-neon-yellow px-4 py-2.5 flex items-center justify-between border-b-[5px] border-border">
-      <span className="text-[11px] font-extrabold uppercase tracking-wide text-neon-yellow-foreground">
-        photo {index}
-      </span>
-      <span className="text-[10px] font-extrabold lowercase tracking-tight text-neon-yellow-foreground/70">
-        {angleLabels[index - 1] || `view ${index}`}
-      </span>
-    </div>
-    {/* Image area */}
-    <div className="flex-1 min-h-0 bg-card">
-      {image ? (
-        <img src={image} alt={`generated character ${index}`} className="h-full w-full object-cover" draggable={false} />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <span className="text-4xl font-extrabold text-foreground/20">{index}</span>
-        </div>
-      )}
-    </div>
+  <div className="relative h-full w-full overflow-hidden rounded-2xl border-[6px] border-border">
+    {image ? (
+      <img src={image} alt={`generated character ${index}`} className="h-full w-full object-cover" draggable={false} />
+    ) : (
+      <div className="flex h-full w-full items-center justify-center bg-card">
+        <span className="text-4xl font-extrabold text-foreground">{index}</span>
+      </div>
+    )}
   </div>
 );
 
