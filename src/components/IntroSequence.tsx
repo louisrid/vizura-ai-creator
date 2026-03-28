@@ -210,6 +210,15 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     if (open) { setStep(0); setDirection(1); animating.current = false; }
   }, [open]);
 
+  const goTo = useCallback((next: number) => {
+    if (animating.current) return;
+    if (next < 0 || next >= TOTAL || next === step) return;
+    animating.current = true;
+    setDirection(next > step ? 1 : -1);
+    setStep(next);
+    setTimeout(() => { animating.current = false; }, 350);
+  }, [step]);
+
   // Auto-advance timer (screens 0–3, not last screen)
   useEffect(() => {
     if (!open || step >= TOTAL - 1) return;
@@ -237,15 +246,6 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
       document.body.style.touchAction = "";
     };
   }, [open]);
-
-  const goTo = useCallback((next: number) => {
-    if (animating.current) return;
-    if (next < 0 || next >= TOTAL || next === step) return;
-    animating.current = true;
-    setDirection(next > step ? 1 : -1);
-    setStep(next);
-    setTimeout(() => { animating.current = false; }, 350);
-  }, [step]);
 
   const advance = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
