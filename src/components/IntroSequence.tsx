@@ -359,7 +359,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Screen content */}
-          <div className="flex-1 flex items-end justify-center px-6 pb-8 overflow-hidden" style={{ paddingTop: "30vh" }}>
+          <div className="flex-1 flex items-center justify-center px-6 overflow-hidden mt-12">
             <div className="w-full max-w-sm">
               <AnimatePresence mode="wait">
                 <motion.div
