@@ -160,10 +160,10 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5 }: { o
 /* ── swipe hint ── */
 export const SwipeHint = () => (
   <p
-    className="text-sm font-bold lowercase"
-    style={{ color: "hsl(0 0% 100%)" }}
+    className="text-xs font-bold lowercase"
+    style={{ color: "hsl(0 0% 100% / 0.3)" }}
   >
-    swipe or tap arrow
+    press arrow to continue
   </p>
 );
 
