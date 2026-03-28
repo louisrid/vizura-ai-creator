@@ -176,14 +176,14 @@ const ScreenShell = ({
   contentClassName?: string;
 }) => (
   <div className="relative flex w-full flex-col items-center">
-    <div className="flex h-16 items-end justify-center">
+    <div className="flex h-14 items-end justify-center">
       <EmojiRow screenIndex={screenIndex} />
     </div>
-    <div className="mt-5 flex h-[15rem] w-full flex-col items-center">
-      <div className="flex h-24 items-end justify-center">
+    <div className="mt-2 flex w-full flex-col items-center">
+      <div className="flex h-20 items-end justify-center">
         <ScreenTitle>{title}</ScreenTitle>
       </div>
-      <div className={`mt-3 flex w-full flex-1 ${contentClassName}`}>
+      <div className={`mt-1.5 flex w-full ${contentClassName}`}>
         {children}
       </div>
     </div>
@@ -268,14 +268,14 @@ const Screen5 = () => (
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex w-full flex-col items-center">
-    <div className="h-16" />
-    <div className="mt-5 flex h-[15rem] w-full flex-col items-center">
-      <div className="flex h-24 items-end justify-center">
+    <div className="h-14" />
+    <div className="mt-2 flex w-full flex-col items-center">
+      <div className="flex h-20 items-end justify-center">
         <ScreenTitle>ready?</ScreenTitle>
       </div>
       <motion.button
         onClick={(e) => { e.stopPropagation(); onGo(); }}
-        className="mt-4 h-20 w-[90vw] max-w-[24rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+        className="mt-2 h-20 w-[90vw] max-w-[24rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
         style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
         initial={{ opacity: 0, y: 12, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -354,8 +354,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Content anchored lower so every slide shares the same title position */}
-          <div className="flex-1 flex items-end justify-center px-8 pb-3 overflow-hidden">
+          {/* Everything in one block, pushed to the bottom of the screen */}
+          <div className="flex-1 flex flex-col items-center justify-end px-8 pb-[max(env(safe-area-inset-bottom),3.5rem)] overflow-hidden">
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -370,15 +370,15 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 </motion.div>
               </AnimatePresence>
             </div>
-          </div>
 
-          {/* Arrows + dots — always at fixed bottom position */}
-          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),8rem)] pt-4">
-            <div className="flex items-center gap-4">
-              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-              <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+            {/* Arrows + dots — tight below content */}
+            <div className="flex flex-col items-center gap-3 mt-5">
+              <div className="flex items-center gap-4">
+                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+              </div>
+              <Dots current={step} total={TOTAL} />
             </div>
-            <Dots current={step} total={TOTAL} />
           </div>
         </motion.div>
       )}
