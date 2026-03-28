@@ -14,7 +14,7 @@ const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
     className="select-none pointer-events-none text-5xl"
     initial={{ opacity: 0, scale: 0, rotate: -20 }}
-    animate={{ opacity: 1, scale: [0, 1.3, 1], rotate: [−20, 10, 0] }}
+    animate={{ opacity: 1, scale: [0, 1.3, 1], rotate: [-20, 10, 0] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
