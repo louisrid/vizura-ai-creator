@@ -26,6 +26,14 @@ const TopUps = () => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, loading, navigate, location.pathname]);
 
+  // Refetch credits when returning from checkout
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("checkout") === "success") {
+      refetch();
+    }
+  }, [location.search, refetch]);
+
   if (!loading && !user) return null;
 
   const handleBuy = async (plan: typeof plans[number]) => {
