@@ -35,8 +35,8 @@ const PillSelect = ({
       onClick={onToggle}
       className={`flex h-7 w-full items-center justify-between rounded-full px-3 text-[9px] font-[900] lowercase transition-colors ${
         expanded
-          ? "bg-white/20 text-white"
-          : "bg-white/8 text-white/60"
+          ? "bg-[hsl(0,0%,28%)] text-white"
+          : "bg-[hsl(0,0%,18%)] text-white/60"
       }`}
     >
       <span>{value || "–"}</span>
