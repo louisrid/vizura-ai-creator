@@ -147,7 +147,7 @@ const Index = () => {
 
           {user && (
             <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-foreground lowercase mb-10">
-              <Sparkles size={14} style={{ stroke: "url(#icon-gradient-purple)" }} />
+              <Sparkles size={14} className="text-neon-yellow" />
               {credits} credit{credits !== 1 ? "s" : ""}
             </div>
           )}
