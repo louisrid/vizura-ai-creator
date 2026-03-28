@@ -122,12 +122,13 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
   <button
     onClick={(e) => { e.stopPropagation(); onClick(); }}
     disabled={disabled}
-    className="flex h-14 w-14 items-center justify-center border-[5px] active:scale-[1.05]"
+    className="flex h-14 w-14 items-center justify-center border-[5px] active:scale-[1.05] bg-transparent"
     style={{
-      background: direction === "right" ? LIGHT_BLUE : "transparent",
+      backgroundColor: direction === "right" ? LIGHT_BLUE : "rgba(0,0,0,0)",
       borderColor: direction === "right" ? LIGHT_BLUE : "hsl(0 0% 100%)",
       opacity: disabled ? 0.3 : 1,
       borderRadius: 16,
+      borderStyle: "solid",
       transition: "transform 0.05s, border-color 0.15s, opacity 0.15s",
     }}
   >
