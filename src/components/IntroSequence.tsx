@@ -357,9 +357,9 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Screen content — pushed down with flex-end + large top padding */}
-          <div className="flex-1 flex flex-col justify-end px-10 pb-6 overflow-hidden">
-            <div className="w-full max-w-xs mx-auto" style={{ marginTop: "auto", paddingTop: "40vh" }}>
+          {/* Screen content — vertically centred in available space above nav */}
+          <div className="flex-1 flex items-center justify-center px-10 overflow-hidden">
+            <div className="w-full max-w-xs mx-auto">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
