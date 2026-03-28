@@ -118,31 +118,50 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
 );
 
 /* ── arrow button ── */
-const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean }) => (
-  <button
-    onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
-    className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
-    style={{
-      backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
-      border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-      boxShadow: direction === "left" ? "inset 0 0 0 5px hsl(0 0% 100%)" : "none",
-      opacity: direction === "right" && disabled ? 0.3 : 1,
-      borderRadius: 16,
-      outline: "none",
-      WebkitAppearance: "none",
-      appearance: "none",
-      padding: 0,
-      cursor: disabled && direction === "left" ? "default" : "pointer",
-      transition: "transform 0.05s",
-    }}
-  >
-    {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.75} color="hsl(0 0% 100%)" />
-    ) : (
-      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
-    )}
-  </button>
-);
+const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "left" | "right"; onClick: () => void; onLongPress?: () => void; disabled?: boolean }) => {
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const firedRef = useRef(false);
+
+  const startPress = () => {
+    firedRef.current = false;
+    if (onLongPress) {
+      timerRef.current = setTimeout(() => { firedRef.current = true; onLongPress(); }, 600);
+    }
+  };
+  const endPress = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = null;
+  };
+
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); if (!firedRef.current && !disabled) onClick(); }}
+      onPointerDown={startPress}
+      onPointerUp={endPress}
+      onPointerCancel={endPress}
+      className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
+      style={{
+        backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
+        border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
+        boxShadow: direction === "left" ? "inset 0 0 0 5px hsl(0 0% 100%)" : "none",
+        opacity: direction === "right" && disabled ? 0.3 : 1,
+        borderRadius: 16,
+        outline: "none",
+        WebkitAppearance: "none",
+        appearance: "none",
+        padding: 0,
+        cursor: disabled && direction === "left" ? "default" : "pointer",
+        transition: "transform 0.05s",
+      }}
+    >
+      {direction === "left" ? (
+        <ArrowLeft size={22} strokeWidth={2.75} color="hsl(0 0% 100%)" />
+      ) : (
+        <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
+      )}
+    </button>
+  );
+};
 
 /* ═══════════ SCREENS ═══════════ */
 
@@ -370,7 +389,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
               <div className="flex flex-col items-center gap-4">
                 <div className="flex items-center gap-4">
                   <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                  <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
+                  <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
                 </div>
                 <Dots current={step} total={TOTAL} />
               </div>
