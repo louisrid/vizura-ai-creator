@@ -271,11 +271,11 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
           </div>
 
           {/* Fixed bottom CTA */}
-          <div className="fixed bottom-0 left-0 right-0 z-10 px-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] pt-3 bg-gradient-to-t from-black via-black/95 to-transparent">
+          <div className="fixed bottom-0 left-0 right-0 z-10 px-10 pb-[max(env(safe-area-inset-bottom),2rem)] pt-3 bg-gradient-to-t from-black via-black/95 to-transparent">
             <button
               onClick={handleCreate}
               disabled={isSaving}
-              className="flex h-[58px] w-full items-center justify-center gap-2 rounded-full bg-neon-yellow text-base font-[900] lowercase tracking-tight text-neon-yellow-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
+              className="flex h-[56px] w-full items-center justify-center gap-2 rounded-full bg-neon-yellow text-base font-[900] lowercase tracking-tight text-neon-yellow-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
               style={{ transition: "transform 0.05s" }}
             >
               {isSaving ? (
