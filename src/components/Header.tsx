@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Gem, LogIn, Clock, Home } from "lucide-react";
+import { Menu, Settings, Sparkles, Camera, LayoutGrid, Save, Gem, LogIn, Clock, Home } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -11,7 +11,7 @@ const menuItems = [
   { label: "create photo", icon: Camera, path: "/create" },
   { label: "create character", icon: Sparkles, path: "/create-character" },
   { label: "characters", icon: LayoutGrid, path: "/characters" },
-  { label: "storage", icon: FolderOpen, path: "/storage" },
+  { label: "saved", icon: Save, path: "/storage" },
   { label: "history", icon: Clock, path: "/history" },
   { label: "top-ups", icon: Gem, path: "/top-ups" },
   { label: "my account", icon: Settings, path: "/account" },
@@ -21,7 +21,7 @@ const pageNames: Record<string, string> = {
   "/": "home",
   "/create-character": "create character",
   "/characters": "characters",
-  "/storage": "storage",
+  "/storage": "saved",
   "/history": "history",
   "/top-ups": "top-ups",
   "/account": "my account",
