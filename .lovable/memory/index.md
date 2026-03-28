@@ -1,9 +1,10 @@
 # Memory: index.md
 Updated: now
 
-Design system: pure black (#000) + white (#fff), no colors/gradients. Plus Jakarta Sans ExtraBold. 0px border-radius. Thick spacing. Lowercase everything.
-All borders use 5px consistently (border-[5px]). Gradient border padding also 5px.
-Pages: Landing (/), Create Photo (/create-photo), Character Creator (/), My Characters, Auth (/auth), Account, Membership, Top-ups, Storage.
+Design system: black nav + off-white bg (96%) + white card containers. Plus Jakarta Sans ExtraBold. 0px border-radius. Thick spacing. Lowercase everything. No gradients — flat cartoony colors only.
+Accent: neon yellow (55 100% 50%) for highlights/active states. Neon green (130 100% 42%) for buy/CTA buttons. No purple gradients.
+All borders use 5px consistently (border-[5px]).
+Pages: Landing (/), Create Photo (/create), Character Creator (/), My Characters, Auth (/auth), Account, Membership, Top-ups, Storage.
 Button variants: hero, hero-outline for on-dark surfaces.
 Nav token: --nav (black bg), --nav-foreground (white text).
 Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations, characters.
