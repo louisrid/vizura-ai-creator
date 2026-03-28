@@ -61,45 +61,50 @@ const Home = () => {
 
   return (
     <div
-      className="flex flex-col bg-background"
+      className="flex flex-col bg-background overflow-y-auto"
       style={{ height: "calc(100dvh - 73px)" }}
     >
-      <div className="flex gap-4 px-5 pt-5">
-        {/* Left: photo box + button */}
-        <div className="flex flex-col" style={{ width: "48%" }}>
-          <div
-            className="flex items-center justify-center border-[4px] border-foreground bg-card"
-            style={{ aspectRatio: "1/1", borderRadius: 14 }}
-          >
-            <Wand2 size={24} className="text-foreground/20" />
-          </div>
-
-          <button
-            onClick={handleCreate}
-            className="mt-2.5 flex h-[40px] w-full items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
-            style={{ borderRadius: 14, transition: "transform 0.05s" }}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
-              <circle cx="12" cy="9" r="4.5" />
-              <path d="M4 22a8 8 0 0 1 16 0c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Z" />
-            </svg>
-            create+
-          </button>
+      <div className="flex flex-col gap-3 px-5 pt-5 pb-6">
+        {/* Image box + create button */}
+        <div
+          className="flex items-center justify-center border-[4px] border-foreground bg-card w-full"
+          style={{ aspectRatio: "4/5", borderRadius: 14 }}
+        >
+          <Wand2 size={28} className="text-foreground/20" />
         </div>
 
-        {/* Right: 3x2 grid of native selects — matched height */}
-        <div
-          className="grid grid-cols-2 gap-x-2.5 gap-y-2 content-center bg-black p-3.5"
-          style={{ width: "48%", borderRadius: 14, alignSelf: "stretch" }}
+        <button
+          onClick={handleCreate}
+          className="flex h-[44px] w-full items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+          style={{ borderRadius: 14, transition: "transform 0.05s" }}
         >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+            <circle cx="12" cy="9" r="4.5" />
+            <path d="M4 22a8 8 0 0 1 16 0c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Z" />
+          </svg>
+          create+
+        </button>
+
+        {/* Stacked setting cards */}
+        <div className="flex flex-col gap-2">
           {quickOptions.map((opt) => (
-            <NativePill
+            <label
               key={opt.key}
-              label={opt.label}
-              value={selections[opt.key]}
-              choices={opt.choices}
-              onChange={(v) => setSelections((prev) => ({ ...prev, [opt.key]: v }))}
-            />
+              className="flex items-center justify-between rounded-xl border-[2px] border-white/30 bg-[hsl(0,0%,12%)] px-4 h-[42px]"
+            >
+              <span className="text-[11px] font-bold lowercase text-white">{opt.label}</span>
+              <select
+                value={selections[opt.key] || ""}
+                onChange={(e) => setSelections((prev) => ({ ...prev, [opt.key]: e.target.value }))}
+                className="appearance-none bg-transparent text-[11px] font-semibold lowercase text-white/60 outline-none text-right cursor-pointer"
+                style={{ WebkitAppearance: "none" }}
+              >
+                <option value="" disabled className="bg-black text-white">select</option>
+                {opt.choices.map((c) => (
+                  <option key={c} value={c} className="bg-black text-white">{c}</option>
+                ))}
+              </select>
+            </label>
           ))}
         </div>
       </div>
