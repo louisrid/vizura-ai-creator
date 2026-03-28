@@ -284,36 +284,14 @@ const Screen5 = () => (
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex flex-col items-center gap-3">
-    {/* Rocket behind text */}
-    <div className="relative">
-      <motion.span
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[60%] select-none pointer-events-none text-[7rem] opacity-30"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 0.3, scale: [0, 1.4, 0.9, 1] }}
-        transition={{ duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
-      >
-        <motion.span
-          className="inline-block"
-          animate={{
-            y: [0, -18, -14, -22, -16, 0],
-            x: [0, 1, -1.5, 1, -0.5, 0],
-            rotate: [0, -2, 1.5, -1, 0.5, 0],
-            scale: [1, 1.08, 1.04, 1.1, 1.06, 1],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-        >
-          🚀
-        </motion.span>
-      </motion.span>
-      <motion.h2
-        className="relative z-10 text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
-        initial={{ opacity: 0, y: 12, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-      >
-        ready?
-      </motion.h2>
-    </div>
+    <motion.h2
+      className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, y: 12, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      ready?
+    </motion.h2>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
       className="mt-5 h-20 rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
@@ -394,9 +372,9 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Screen content + nav together, vertically centred */}
+          {/* Content centred, nav pinned to fixed bottom position */}
           <div className="flex-1 flex items-center justify-center px-16 overflow-hidden">
-            <div className="w-full max-w-xs mx-auto flex flex-col items-center gap-8">
+            <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
@@ -409,18 +387,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                   {step === 5 && <Screen6 onGo={onComplete} />}
                 </motion.div>
               </AnimatePresence>
-
-              {/* Arrows + dots — hidden on last slide */}
-              {step < TOTAL - 1 && (
-                <div className="flex flex-col items-center gap-4">
-                  <div className="flex items-center gap-4">
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                    <NavArrow direction="right" onClick={advance} onLongPress={onComplete} />
-                  </div>
-                  <Dots current={step} total={TOTAL} />
-                </div>
-              )}
             </div>
+          </div>
+
+          {/* Arrows + dots — always at fixed bottom position */}
+          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),2rem)] pt-4">
+            <div className="flex items-center gap-4">
+              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+              <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+            </div>
+            <Dots current={step} total={TOTAL} />
           </div>
         </motion.div>
       )}
