@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 6;
-const LIGHT_BLUE = "hsl(195 100% 75%)";
+const LIGHT_BLUE = "hsl(210 100% 65%)";
 
 /* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
@@ -108,8 +108,8 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
         key={i}
         className="rounded-full transition-all duration-200"
         style={{
-          width: i === current ? 22 : 8,
-          height: 8,
+          width: i === current ? 10 : 8,
+          height: i === current ? 10 : 8,
           background: i === current ? LIGHT_BLUE : "hsl(0 0% 100% / 0.2)",
         }}
       />
@@ -364,7 +364,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           </div>
 
           {/* Bottom: arrows + dots */}
-          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),2rem)] pt-4">
+          <div className="flex flex-col items-center gap-4 pb-4 pt-4">
             <div className="flex items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
               <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
