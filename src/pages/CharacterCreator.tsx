@@ -144,11 +144,7 @@ const CharacterCreator = () => {
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <div className="mx-auto w-full max-w-lg px-4 pt-24 pb-0">
-        <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
-          {isEditing ? "edit character" : "create character"}
-        </h1>
-      </div>
+      <div className="mx-auto w-full max-w-lg px-4 pt-24 pb-0" />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-4 pb-12">
         <CardCarousel
