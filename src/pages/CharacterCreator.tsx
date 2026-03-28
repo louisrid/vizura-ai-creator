@@ -160,6 +160,7 @@ const CharacterCreator = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
+      <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-12">
