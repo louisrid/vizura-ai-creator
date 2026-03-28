@@ -46,8 +46,12 @@ const AppOnboarding = ({
 
   useEffect(() => {
     if (loading) return;
+    const navigationEntry = window.performance
+      .getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    const isReload = navigationEntry?.type === "reload";
     const seen = sessionStorage.getItem("onboarding_seen");
-    const shouldShow = location.pathname === "/" && !seen;
+    const isOnIntroRoute = location.pathname === "/" || location.pathname === "/index";
+    const shouldShow = isOnIntroRoute && (isReload || !seen);
     setShowOnboarding(shouldShow);
     onOpenChange(shouldShow);
   }, [loading, location.pathname, onOpenChange]);
