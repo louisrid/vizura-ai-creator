@@ -328,3 +328,5 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     document.body,
   );
 };
+
+export default IntroSequence;
