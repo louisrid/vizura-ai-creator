@@ -108,7 +108,7 @@ const AppOnboarding = ({
       onDismiss={dismiss}
       onLetsGo={() => {
         dismiss();
-        navigate("/");
+        navigate("/create-character");
       }}
     />
   );
