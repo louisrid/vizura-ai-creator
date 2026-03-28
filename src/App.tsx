@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -31,6 +31,18 @@ const ScrollToTop = () => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, [location.pathname, location.key]);
+  return null;
+};
+
+/* On every fresh page load (refresh), clear intro flag and redirect to home */
+const RedirectHomeOnLoad = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    sessionStorage.removeItem("intro_seen");
+    if (window.location.pathname !== "/") {
+      navigate("/", { replace: true });
+    }
+  }, []);
   return null;
 };
 
@@ -73,6 +85,7 @@ const App = () => (
         <CreditsProvider>
           <SubscriptionProvider>
             <BrowserRouter>
+              <RedirectHomeOnLoad />
               <ScrollToTop />
               <AnimatedRoutes />
             </BrowserRouter>
