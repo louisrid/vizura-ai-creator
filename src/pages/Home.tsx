@@ -33,10 +33,10 @@ const PillSelect = ({
   <div className="flex flex-col gap-1.5">
     <button
       onClick={onToggle}
-      className={`flex h-10 items-center justify-between rounded-full border-[4px] px-4 text-xs font-[900] lowercase transition-colors ${
+      className={`flex h-9 items-center justify-between rounded-full border-[3px] px-3 text-[10px] font-[900] lowercase transition-colors ${
         expanded
-          ? "border-neon-yellow bg-foreground text-background"
-          : "border-border bg-card text-foreground"
+          ? "border-neon-yellow bg-white/10 text-white"
+          : "border-white/20 bg-white/5 text-white/70"
       }`}
     >
       <span>{value || "–"}</span>
@@ -62,7 +62,7 @@ const PillSelect = ({
               className={`rounded-full border-[3px] px-3 py-1 text-[10px] font-[900] lowercase transition-all ${
                 value === c
                   ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
-                  : "border-border text-foreground/60 hover:border-foreground/40"
+                  : "border-white/20 text-white/50 hover:border-white/40"
               }`}
             >
               {c}
@@ -131,7 +131,7 @@ const Home = () => {
         </div>
 
         {/* Right: 3 pill selectors stacked */}
-        <div className="grid grid-cols-2 gap-2 pt-1" style={{ width: "42%" }}>
+        <div className="grid grid-cols-2 gap-2 self-start rounded-2xl bg-foreground p-3" style={{ width: "42%" }}>
           {quickOptions.map((opt) => (
             <PillSelect
               key={opt.key}
