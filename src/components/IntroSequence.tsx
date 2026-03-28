@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
+const LIGHT_BLUE = "hsl(195 100% 50%)";
 
 /* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
@@ -117,22 +118,24 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
   </div>
 );
 
-/* ── arrow button ── */
+/* ── arrow button (blue square theme) ── */
 const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean }) => (
   <button
     onClick={(e) => { e.stopPropagation(); onClick(); }}
     disabled={disabled}
-    className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] active:scale-95"
+    className={`flex h-14 w-14 items-center justify-center border-[5px] active:scale-[1.05] ${direction === "right" ? "" : "bg-black"}`}
     style={{
-      borderColor: disabled ? "hsl(0 0% 100% / 0.1)" : "hsl(0 0% 100% / 0.3)",
+      background: direction === "right" ? LIGHT_BLUE : undefined,
+      borderColor: direction === "right" ? LIGHT_BLUE : (disabled ? "hsl(0 0% 100% / 0.15)" : LIGHT_BLUE),
       opacity: disabled ? 0.3 : 1,
-      transition: "opacity 0.15s, border-color 0.15s, transform 0.05s",
+      borderRadius: 16,
+      transition: "transform 0.05s, border-color 0.15s, opacity 0.15s",
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={18} strokeWidth={2.5} color="white" />
+      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
     ) : (
-      <ArrowRight size={18} strokeWidth={2.5} color="white" />
+      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
   </button>
 );
@@ -141,7 +144,6 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
 
 const Screen1 = () => (
   <div className="relative flex flex-col items-center gap-6">
-    <EmojiLayer screenIndex={0} />
     <motion.h2
       className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
@@ -168,7 +170,7 @@ const Screen1 = () => (
 
 const Screen2 = () => (
   <div className="relative flex flex-col items-center gap-6">
-    <EmojiLayer screenIndex={1} />
+    
     <motion.h2
       className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
@@ -210,7 +212,7 @@ const Screen2 = () => (
 
 const Screen3 = () => (
   <div className="relative flex flex-col items-center gap-6">
-    <EmojiLayer screenIndex={2} />
+    
     <motion.h2
       className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
@@ -246,7 +248,7 @@ const Screen3 = () => (
 
 const Screen4 = () => (
   <div className="relative flex flex-col items-center gap-6">
-    <EmojiLayer screenIndex={3} />
+    
     <motion.h2
       className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
@@ -272,7 +274,7 @@ const Screen4 = () => (
 
 const Screen5 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex flex-col items-center gap-8">
-    <EmojiLayer screenIndex={4} />
+    
     <motion.h2
       className="relative z-10 text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
@@ -369,6 +371,22 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
+          {/* Full-screen emoji layer */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`emoji-${step}`}
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <EmojiLayer screenIndex={step} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
           {/* Screen content */}
           <div className="flex-1 flex items-center justify-center px-6 overflow-hidden">
             <div className="w-full max-w-sm">
@@ -388,13 +406,11 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           </div>
 
           {/* Bottom: arrows + dots */}
-          <div className="flex flex-col items-center gap-3 pb-[max(env(safe-area-inset-bottom),2rem)] pt-2">
-            {step < TOTAL - 1 && (
-              <div className="flex items-center gap-4">
-                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                <NavArrow direction="right" onClick={advance} />
-              </div>
-            )}
+          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),2rem)] pt-4">
+            <div className="flex items-center gap-4">
+              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+              <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} />
+            </div>
             <Dots current={step} total={TOTAL} />
           </div>
         </motion.div>
