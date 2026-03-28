@@ -30,7 +30,7 @@ const ChooseFace = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
-  const [showSubscribe, setShowSubscribe] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
   const [rerollCount, setRerollCount] = useState(0);
   const [rerolling, setRerolling] = useState(false);
 
@@ -56,7 +56,7 @@ const ChooseFace = () => {
 
       if (data?.error) {
         if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
-          setShowSubscribe(true);
+          setShowPaywall(true);
           setLoading(false);
           return;
         }
@@ -72,7 +72,7 @@ const ChooseFace = () => {
         msg.includes("IP_USED") ||
         msg.includes("FREE_GEN_USED")
       ) {
-        setShowSubscribe(true);
+        setShowPaywall(true);
       } else {
         setError(msg);
       }
@@ -114,6 +114,7 @@ const ChooseFace = () => {
       }
       setSelectedIndex(null);
       setRerollCount((c) => c + 1);
+      await refetchCredits();
     } catch (err: any) {
       setError(err?.message || "regeneration failed");
     } finally {
@@ -154,18 +155,13 @@ const ChooseFace = () => {
     }
   };
 
-  const handleSubscribe = async () => {
-    navigate("/account/membership");
-  };
-
-  if (showSubscribe) {
+  if (showPaywall) {
     return (
       <div className="relative min-h-screen bg-background">
-        <SubscribeOverlay
+        <PaywallOverlay
           open={true}
-          onDismiss={() => navigate("/")}
-          onSubscribe={handleSubscribe}
-          buying={false}
+          onClose={() => navigate("/")}
+          hasSubscription={subscribed}
         />
       </div>
     );
