@@ -139,7 +139,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       onPointerDown={startPress}
       onPointerUp={endPress}
       onPointerCancel={endPress}
-      className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
+      className="flex h-16 w-12 items-center justify-center active:scale-[1.05]"
       style={{
         backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
         border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
