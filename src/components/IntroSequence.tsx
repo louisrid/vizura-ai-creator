@@ -164,15 +164,26 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
 };
 
 /* ── consistent screen wrapper ── */
-const ScreenShell = ({ children, screenIndex }: { children: React.ReactNode; screenIndex: number }) => (
-  <div className="relative flex flex-col items-center w-full">
-    {/* Emoji — fixed height zone */}
-    <div className="h-20 flex items-center justify-center">
+const ScreenShell = ({
+  children,
+  screenIndex,
+  title,
+  contentClassName = "flex-wrap justify-center gap-1.5",
+}: {
+  children: React.ReactNode;
+  screenIndex: number;
+  title: React.ReactNode;
+  contentClassName?: string;
+}) => (
+  <div className="relative flex w-full flex-col items-center pt-6">
+    <div className="flex h-20 items-end justify-center">
       <EmojiRow screenIndex={screenIndex} />
     </div>
-    {/* Title + content — fixed height zone so title never shifts */}
-    <div className="flex flex-col items-center w-full mt-3 min-h-[14rem]">
-      {children}
+    <div className="flex h-[17.5rem] w-full flex-col items-center pt-8">
+      <ScreenTitle>{title}</ScreenTitle>
+      <div className={`mt-1 flex w-full ${contentClassName}`}>
+        {children}
+      </div>
     </div>
   </div>
 );
@@ -180,7 +191,7 @@ const ScreenShell = ({ children, screenIndex }: { children: React.ReactNode; scr
 /* ── consistent title ── */
 const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
   <motion.h2
-    className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center mb-5"
+    className="mb-5 text-center text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white"
     initial={{ opacity: 0, y: 12, scale: 0.95 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -192,97 +203,84 @@ const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
 /* ═══════════ SCREENS ═══════════ */
 
 const Screen1 = () => (
-  <ScreenShell screenIndex={0}>
-    <ScreenTitle>pick her style…</ScreenTitle>
-    <div className="flex flex-wrap justify-center gap-1.5">
-      <Pill label="natural" delay={0.15} />
-      <Pill label="model" delay={0.22} />
-      <Pill label="egirl" delay={0.29} />
-    </div>
+  <ScreenShell screenIndex={0} title="pick her style…">
+    <Pill label="natural" delay={0.15} />
+    <Pill label="model" delay={0.22} />
+    <Pill label="egirl" delay={0.29} />
   </ScreenShell>
 );
 
 const Screen2 = () => (
-  <ScreenShell screenIndex={1}>
-    <ScreenTitle>set her look…</ScreenTitle>
-    <div className="flex flex-col gap-2.5 w-full">
-      <SectionLabel delay={0.15}>hair colour</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
-        {["blonde", "brunette", "black", "red", "pink", "white"].map((h, i) => (
-          <Pill key={h} label={h} delay={0.18 + i * 0.05} />
-        ))}
-      </div>
-      <SectionLabel delay={0.4}>eye colour</SectionLabel>
-      <div className="flex flex-wrap gap-1.5">
-        {["brown", "blue", "green", "hazel", "grey"].map((e, i) => (
-          <Pill key={e} label={e} delay={0.43 + i * 0.05} />
-        ))}
-      </div>
+  <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-2.5">
+    <SectionLabel delay={0.15}>hair colour</SectionLabel>
+    <div className="flex flex-wrap gap-1.5">
+      {["blonde", "brunette", "black", "red", "pink", "white"].map((h, i) => (
+        <Pill key={h} label={h} delay={0.18 + i * 0.05} />
+      ))}
     </div>
-  </ScreenShell>
-);
-
-const Screen3 = () => (
-  <ScreenShell screenIndex={2}>
-    <ScreenTitle>choose her build…</ScreenTitle>
-    <div className="flex flex-wrap justify-center gap-1.5">
-      <Pill label="slim" delay={0.15} />
-      <Pill label="regular" delay={0.22} />
-      <Pill label="curvy" delay={0.29} />
-    </div>
-  </ScreenShell>
-);
-
-const Screen4 = () => (
-  <ScreenShell screenIndex={3}>
-    <ScreenTitle>pick her nationality…</ScreenTitle>
-    <div className="flex flex-wrap justify-center gap-1.5">
-      {["american", "british", "european", "latin american"].map((n, i) => (
-        <Pill key={n} label={n} delay={0.15 + i * 0.05} />
+    <SectionLabel delay={0.4}>eye colour</SectionLabel>
+    <div className="flex flex-wrap gap-1.5">
+      {["brown", "blue", "green", "hazel", "grey"].map((e, i) => (
+        <Pill key={e} label={e} delay={0.43 + i * 0.05} />
       ))}
     </div>
   </ScreenShell>
 );
 
+const Screen3 = () => (
+  <ScreenShell screenIndex={2} title="choose her build…">
+    <Pill label="slim" delay={0.15} />
+    <Pill label="regular" delay={0.22} />
+    <Pill label="curvy" delay={0.29} />
+  </ScreenShell>
+);
+
+const Screen4 = () => (
+  <ScreenShell screenIndex={3} title="pick her nationality…">
+    {["american", "british", "european", "latin american"].map((n, i) => (
+      <Pill key={n} label={n} delay={0.15 + i * 0.05} />
+    ))}
+  </ScreenShell>
+);
+
 const Screen5 = () => (
-  <ScreenShell screenIndex={4}>
-    <ScreenTitle>set her details…</ScreenTitle>
-    <div className="flex flex-col items-start w-full mt-2">
-      <motion.p
-        className="text-[0.75rem] font-[800] uppercase tracking-widest text-white"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.15, duration: 0.3 }}
-      >
-        example age
-      </motion.p>
-      <motion.span
-        className="text-[5rem] font-[900] text-white leading-none -mt-1"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2, duration: 0.4 }}
-      >
-        27
-      </motion.span>
-    </div>
+  <ScreenShell screenIndex={4} title="set her details…" contentClassName="flex-col items-start">
+    <motion.p
+      className="text-[0.75rem] font-[800] uppercase tracking-widest text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.15, duration: 0.3 }}
+    >
+      example age
+    </motion.p>
+    <motion.span
+      className="-mt-1 text-[5rem] font-[900] leading-none text-white"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.2, duration: 0.4 }}
+    >
+      27
+    </motion.span>
   </ScreenShell>
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
-  <div className="relative flex flex-col items-center w-full">
+  <div className="relative flex w-full flex-col items-center pt-6">
     <div className="h-20" />
-    <ScreenTitle>ready?</ScreenTitle>
-    <motion.button
-      onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="mt-4 h-20 rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
-      style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s", width: "90vw", maxWidth: "24rem" }}
-      initial={{ opacity: 0, y: 12, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-      whileTap={{ scale: 0.93 }}
-    >
-      let's go
-    </motion.button>
+    <div className="flex h-[17.5rem] w-full flex-col items-center pt-8">
+      <ScreenTitle>ready?</ScreenTitle>
+      <motion.button
+        onClick={(e) => { e.stopPropagation(); onGo(); }}
+        className="mt-5 h-20 w-[90vw] max-w-[24rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+        style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
+        initial={{ opacity: 0, y: 12, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        whileTap={{ scale: 0.93 }}
+      >
+        let's go
+      </motion.button>
+    </div>
   </div>
 );
 
@@ -352,8 +350,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Content anchored from bottom so title stays in same position */}
-          <div className="flex-1 flex items-end justify-center px-10 pb-6 overflow-hidden">
+          {/* Content anchored lower so every slide shares the same title position */}
+          <div className="flex-1 flex items-end justify-center px-8 pb-16 overflow-hidden">
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
