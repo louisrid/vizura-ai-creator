@@ -1,23 +1,26 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
 const YELLOW = "hsl(50 100% 50%)";
 const AUTO_DELAY = 3200; // ms per slide before auto-advance
 
+const LIGHT_BLUE = "hsl(195 100% 50%)";
+
 /* ── progress dots ── */
 const Dots = ({ current }: { current: number }) => (
-  <div className="flex items-center justify-center gap-2.5">
+  <div className="flex items-center justify-center gap-3 pt-2 pb-1">
     {Array.from({ length: TOTAL }).map((_, i) => (
       <div
         key={i}
         className="rounded-full"
         style={{
-          width: i === current ? 10 : 7,
-          height: i === current ? 10 : 7,
-          background: i === current ? YELLOW : "hsl(0 0% 100% / 0.25)",
-          transition: "all 0.2s",
+          width: i === current ? 16 : 12,
+          height: i === current ? 16 : 12,
+          background: i === current ? LIGHT_BLUE : "hsl(0 0% 100% / 0.15)",
+          transition: "width 0.15s, height 0.15s, background 0.15s",
         }}
       />
     ))}
@@ -329,9 +332,37 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             </AnimatePresence>
           </div>
 
-          {/* dots */}
-          <div className="pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-4">
+          {/* dots + arrows */}
+          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-4">
             <Dots current={step} />
+            <div className="flex items-center gap-4">
+              <button
+                onClick={(e) => { e.stopPropagation(); goBack(); }}
+                className={`flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] bg-black`}
+                style={{
+                  borderColor: step > 0 ? LIGHT_BLUE : "hsl(0 0% 100% / 0.15)",
+                  opacity: step > 0 ? 1 : 0.3,
+                  transition: "transform 0.05s, border-color 0.15s, opacity 0.15s",
+                }}
+              >
+                <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (step < TOTAL - 1) advance();
+                  else onComplete();
+                }}
+                className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12]"
+                style={{
+                  background: LIGHT_BLUE,
+                  borderColor: LIGHT_BLUE,
+                  transition: "transform 0.05s",
+                }}
+              >
+                <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
+              </button>
+            </div>
           </div>
         </motion.div>
       )}
