@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Wand2 } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-
 
 const quickOptions = [
   { key: "style", label: "style ✨", choices: ["natural", "model", "egirl"] },
@@ -15,38 +14,9 @@ const quickOptions = [
 
 type OptKey = "style" | "hair" | "eyes" | "body" | "age" | "ethnicity";
 
-/* ── Native select pill ── */
-const NativePill = ({
-  label,
-  value,
-  choices,
-  onChange,
-}: {
-  label: string;
-  value: string | null;
-  choices: readonly string[];
-  onChange: (v: string) => void;
-}) => (
-  <label className="relative flex flex-col gap-0.5">
-    <span className="text-[8px] font-bold lowercase text-white">{label}</span>
-    <select
-      value={value || ""}
-      onChange={(e) => onChange(e.target.value)}
-      className="h-7 w-full appearance-none rounded-md border-[2px] border-white/40 bg-[hsl(0,0%,20%)] px-2 text-[9px] font-semibold lowercase text-white outline-none transition-colors focus:border-white"
-      style={{ WebkitAppearance: "none" }}
-    >
-      <option value="" disabled className="bg-black text-white">–</option>
-      {choices.map((c) => (
-        <option key={c} value={c} className="bg-black text-white">{c}</option>
-      ))}
-    </select>
-  </label>
-);
-
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  
   const [selections, setSelections] = useState<Record<OptKey, string | null>>({
     style: null, hair: null, eyes: null, body: null, age: null, ethnicity: null,
   });
@@ -64,19 +34,19 @@ const Home = () => {
       className="flex flex-col bg-background overflow-y-auto"
       style={{ height: "calc(100dvh - 73px)" }}
     >
-      <div className="flex flex-col gap-3 px-5 pt-10 pb-6">
+      <div className="flex flex-col gap-4 px-5 pt-8 pb-6">
         {/* Create character box + button — centered */}
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full gap-3">
           <div
             className="flex items-center justify-center border-[6px] border-foreground bg-card"
-            style={{ width: "70%", aspectRatio: "5/6", borderRadius: 14 }}
+            style={{ width: "70%", aspectRatio: "4/4", borderRadius: 14 }}
           >
-            <Wand2 size={32} strokeWidth={2} className="text-foreground/25" />
+            <Sparkles size={28} strokeWidth={2.5} className="text-foreground/20" />
           </div>
 
           <button
             onClick={handleCreate}
-            className="mt-3 flex h-[44px] items-center justify-center gap-1.5 bg-foreground text-sm font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+            className="flex h-[48px] items-center justify-center gap-1.5 bg-foreground text-sm font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
             style={{ width: "70%", borderRadius: 14, transition: "transform 0.05s" }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
@@ -88,31 +58,27 @@ const Home = () => {
         </div>
 
         {/* Stacked setting cards — same 70% width, centered */}
-        <div className="flex flex-col gap-2 items-center w-full">
+        <div className="flex flex-col gap-2.5 items-center w-full">
           {quickOptions.map((opt) => (
-            <label
+            <button
               key={opt.key}
-              className="flex items-center justify-between rounded-xl border-[4px] border-black bg-white px-4 h-[46px]"
+              onClick={() => {
+                const choices = opt.choices as readonly string[];
+                const currentIdx = selections[opt.key] ? choices.indexOf(selections[opt.key]!) : -1;
+                const nextIdx = (currentIdx + 1) % choices.length;
+                setSelections((prev) => ({ ...prev, [opt.key]: choices[nextIdx] }));
+              }}
+              className="flex items-center justify-between rounded-2xl border-[6px] border-foreground bg-card px-4 h-[48px]"
               style={{ width: "70%" }}
             >
-              <span className="text-[13px] font-bold lowercase text-black">{opt.label}</span>
-              <span
-                className="text-[13px] font-semibold lowercase text-black/50 cursor-pointer select-none"
-                onClick={() => {
-                  const choices = opt.choices as readonly string[];
-                  const currentIdx = selections[opt.key] ? choices.indexOf(selections[opt.key]!) : -1;
-                  const nextIdx = (currentIdx + 1) % choices.length;
-                  setSelections((prev) => ({ ...prev, [opt.key]: choices[nextIdx] }));
-                }}
-              >
+              <span className="text-[13px] font-extrabold lowercase text-foreground">{opt.label}</span>
+              <span className="text-[13px] font-bold lowercase text-foreground/40">
                 {selections[opt.key] || "–"}
               </span>
-            </label>
+            </button>
           ))}
         </div>
       </div>
-
-      
     </div>
   );
 };
