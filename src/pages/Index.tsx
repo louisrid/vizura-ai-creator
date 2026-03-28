@@ -52,6 +52,9 @@ const Index = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharId, setSelectedCharId] = useState("");
 
+  // Accept preselected character from ChooseFace flow
+  const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
+
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") setShowPaywall(true);
   }, [searchParams]);
@@ -64,10 +67,20 @@ const Index = () => {
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      if (data) setCharacters(data as Character[]);
+      if (data) {
+        setCharacters(data as Character[]);
+        // Auto-select character if coming from ChooseFace
+        if (preselectedCharacterId) {
+          const char = data.find((c: any) => c.id === preselectedCharacterId);
+          if (char) {
+            setSelectedCharId(preselectedCharacterId);
+            setPrompt(buildPromptFromCharacter(char as Character));
+          }
+        }
+      }
     };
     fetchCharacters();
-  }, [user]);
+  }, [user, preselectedCharacterId]);
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
