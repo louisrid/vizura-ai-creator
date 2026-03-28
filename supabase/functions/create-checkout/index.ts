@@ -16,7 +16,6 @@ const TOPUP_CREDITS: Record<string, number> = {
   TOPUP_1500_PRICE_ID: 1500,
 };
 
-/* ── input sanitiser ── */
 function sanitiseText(raw: string): string {
   return raw
     .replace(/[<>]/g, "")
@@ -30,39 +29,41 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
 
   try {
-    let userId: string;
-    let userEmail = "";
-
+    /* ── Demo mode: return fake checkout URL ── */
     if (IS_DEMO_MODE) {
-      userId = DEMO_USER_ID;
-      userEmail = "demo@vizura.app";
-    } else {
-      const authHeader = req.headers.get("Authorization");
-      if (!authHeader?.startsWith("Bearer ")) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const supabase = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_ANON_KEY")!,
-        { global: { headers: { Authorization: authHeader } } }
+      const origin = req.headers.get("origin") || "https://vizura.lovable.app";
+      return new Response(
+        JSON.stringify({ url: `${origin}/account?checkout=success` }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
-
-      const token = authHeader.replace("Bearer ", "");
-      const { data: claimsData, error: claimsError } =
-        await supabase.auth.getClaims(token);
-      if (claimsError || !claimsData?.claims) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      userId = claimsData.claims.sub;
-      userEmail = claimsData.claims.email ?? "";
     }
+
+    /* ── Auth ── */
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } =
+      await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const userId = claimsData.claims.sub;
+    const userEmail = claimsData.claims.email ?? "";
 
     const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
     if (!STRIPE_SECRET_KEY) throw new Error("STRIPE_SECRET_KEY not configured");
@@ -108,7 +109,6 @@ serve(async (req) => {
 
     const { type, priceId } = await req.json();
 
-    // Validate type
     if (type !== "membership" && type !== "topup") {
       return new Response(
         JSON.stringify({ error: "Invalid checkout type" }),
@@ -120,9 +120,11 @@ serve(async (req) => {
     let params: URLSearchParams;
 
     if (type === "membership") {
-      const membershipPriceId = priceId || Deno.env.get("MEMBERSHIP_PRICE_ID");
+      const membershipPriceId = Deno.env.get("MEMBERSHIP_PRICE_ID");
       if (!membershipPriceId)
         throw new Error("MEMBERSHIP_PRICE_ID not configured");
+
+      const membershipCouponId = Deno.env.get("MEMBERSHIP_COUPON_ID");
 
       params = new URLSearchParams({
         customer: customerId!,
@@ -136,6 +138,11 @@ serve(async (req) => {
         "subscription_data[metadata][user_id]": userId,
         "subscription_data[metadata][type]": "membership",
       });
+
+      // Apply introductory coupon for $7 first month
+      if (membershipCouponId) {
+        params.append("discounts[0][coupon]", membershipCouponId);
+      }
     } else {
       if (!priceId || typeof priceId !== "string")
         throw new Error("priceId required for topup");

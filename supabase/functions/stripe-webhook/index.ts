@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const IS_DEMO_MODE = (Deno.env.get("IS_DEMO_MODE") ?? "true") === "true";
+const MEMBERSHIP_CREDITS = 50;
 
 serve(async (req) => {
   try {
@@ -63,6 +64,29 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    /* ── Helper: add credits to a user ── */
+    async function addCredits(userId: string, amount: number) {
+      const { data: creditRow } = await adminClient
+        .from("credits")
+        .select("balance")
+        .eq("user_id", userId)
+        .single();
+
+      if (creditRow) {
+        await adminClient
+          .from("credits")
+          .update({
+            balance: creditRow.balance + amount,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("user_id", userId);
+      } else {
+        await adminClient
+          .from("credits")
+          .insert({ user_id: userId, balance: amount });
+      }
+    }
+
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
@@ -73,25 +97,7 @@ serve(async (req) => {
           const credits = parseInt(metadata.credits || "0");
           const userId = metadata.user_id;
           if (credits > 0 && userId) {
-            const { data: creditRow } = await adminClient
-              .from("credits")
-              .select("balance")
-              .eq("user_id", userId)
-              .single();
-
-            if (creditRow) {
-              await adminClient
-                .from("credits")
-                .update({
-                  balance: creditRow.balance + credits,
-                  updated_at: new Date().toISOString(),
-                })
-                .eq("user_id", userId);
-            } else {
-              await adminClient
-                .from("credits")
-                .insert({ user_id: userId, balance: credits });
-            }
+            await addCredits(userId, credits);
           }
         } else if (metadata.type === "membership") {
           const userId = metadata.user_id;
@@ -124,26 +130,8 @@ serve(async (req) => {
               { onConflict: "user_id" }
             );
 
-            const MEMBERSHIP_CREDITS = 50;
-            const { data: creditRow } = await adminClient
-              .from("credits")
-              .select("balance")
-              .eq("user_id", userId)
-              .single();
-
-            if (creditRow) {
-              await adminClient
-                .from("credits")
-                .update({
-                  balance: creditRow.balance + MEMBERSHIP_CREDITS,
-                  updated_at: new Date().toISOString(),
-                })
-                .eq("user_id", userId);
-            } else {
-              await adminClient
-                .from("credits")
-                .insert({ user_id: userId, balance: MEMBERSHIP_CREDITS });
-            }
+            // Grant 50 credits on initial subscription
+            await addCredits(userId, MEMBERSHIP_CREDITS);
           }
         }
         break;
@@ -181,6 +169,7 @@ serve(async (req) => {
         const invoice = event.data.object;
         const customerId = invoice.customer;
 
+        // Only grant credits on renewal cycles, not the initial subscription
         if (invoice.billing_reason === "subscription_cycle") {
           const { data: subRecord } = await adminClient
             .from("subscriptions")
@@ -189,19 +178,7 @@ serve(async (req) => {
             .single();
 
           if (subRecord) {
-            const MEMBERSHIP_CREDITS = 50;
-            const { data: creditRow } = await adminClient
-              .from("credits")
-              .select("balance")
-              .eq("user_id", subRecord.user_id)
-              .single();
-
-            const newBalance =
-              (creditRow?.balance ?? 0) + MEMBERSHIP_CREDITS;
-            await adminClient
-              .from("credits")
-              .update({ balance: newBalance })
-              .eq("user_id", subRecord.user_id);
+            await addCredits(subRecord.user_id, MEMBERSHIP_CREDITS);
           }
         }
         break;

@@ -5,11 +5,15 @@ import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import SubscribeOverlay from "@/components/SubscribeOverlay";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const Membership = () => {
   const { user, loading: authLoading } = useAuth();
+  const { refetch: refetchSub } = useSubscription();
+  const { refetch: refetchCredits } = useCredits();
   const location = useLocation();
   const navigate = useNavigate();
   const [buying, setBuying] = useState(false);
@@ -18,6 +22,15 @@ const Membership = () => {
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
+
+  // Refetch on checkout success
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("checkout") === "success") {
+      refetchSub();
+      refetchCredits();
+    }
+  }, [location.search, refetchSub, refetchCredits]);
 
   if (!authLoading && !user) return null;
 
