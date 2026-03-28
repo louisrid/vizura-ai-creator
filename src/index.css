@@ -24,7 +24,7 @@
     --muted: 0 0% 90%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 55 100% 50%;
+    --accent: 60 100% 72%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 72% 55%;
@@ -36,16 +36,16 @@
 
     --radius: 12px;
 
-    /* neon yellow accent */
-    --neon-yellow: 50 100% 55%;
+    /* neon pale yellow accent — sitewide */
+    --neon-yellow: 60 100% 72%;
     --neon-yellow-foreground: 0 0% 4%;
 
-    /* neon green for buy/CTA — paler */
+    /* neon green for buy/CTA */
     --neon-green: 140 70% 52%;
     --neon-green-foreground: 0 0% 100%;
 
-    /* gem neon pink — for gems badge & gem-related elements */
-    --gem-green: 330 100% 72%;
+    /* gem — pale neon lime green */
+    --gem-green: 100 80% 65%;
     --gem-green-foreground: 0 0% 4%;
 
     --sidebar-background: 0 0% 4%;
