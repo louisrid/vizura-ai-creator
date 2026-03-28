@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import CharacterCreator from "./pages/CharacterCreator";
 import Home from "./pages/Home";
 import ChooseFace from "./pages/ChooseFace";
+import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import MyCharacters from "./pages/MyCharacters";
 import Storage from "./pages/Storage";
