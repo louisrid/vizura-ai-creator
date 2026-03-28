@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const IS_DEMO_MODE = (Deno.env.get("IS_DEMO_MODE") ?? "true") === "true";
-const MEMBERSHIP_CREDITS = 50;
+const MEMBERSHIP_GEMS = 50;
 
 serve(async (req) => {
   try {
@@ -64,8 +64,8 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    /* ── Helper: add credits to a user ── */
-    async function addCredits(userId: string, amount: number) {
+    /* ── Helper: add gems to a user ── */
+    async function addGems(userId: string, amount: number) {
       const { data: creditRow } = await adminClient
         .from("credits")
         .select("balance")
@@ -94,10 +94,10 @@ serve(async (req) => {
         const customerId = session.customer;
 
         if (metadata.type === "topup") {
-          const credits = parseInt(metadata.credits || "0");
+          const gems = parseInt(metadata.credits || "0");
           const userId = metadata.user_id;
-          if (credits > 0 && userId) {
-            await addCredits(userId, credits);
+          if (gems > 0 && userId) {
+            await addGems(userId, gems);
           }
         } else if (metadata.type === "membership") {
           const userId = metadata.user_id;
@@ -130,8 +130,8 @@ serve(async (req) => {
               { onConflict: "user_id" }
             );
 
-            // Grant 50 credits on initial subscription
-            await addCredits(userId, MEMBERSHIP_CREDITS);
+            // Grant 50 gems on initial subscription
+            await addGems(userId, MEMBERSHIP_GEMS);
           }
         }
         break;
@@ -178,7 +178,7 @@ serve(async (req) => {
             .single();
 
           if (subRecord) {
-            await addCredits(subRecord.user_id, MEMBERSHIP_CREDITS);
+            await addGems(subRecord.user_id, MEMBERSHIP_GEMS);
           }
         }
         break;
