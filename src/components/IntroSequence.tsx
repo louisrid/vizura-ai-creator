@@ -124,7 +124,7 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     disabled={disabled}
     className="flex h-14 w-14 items-center justify-center border-[5px] active:scale-[1.05]"
     style={{
-      background: direction === "right" ? LIGHT_BLUE : "hsl(0 0% 100%)",
+      background: direction === "right" ? LIGHT_BLUE : "transparent",
       borderColor: direction === "right" ? LIGHT_BLUE : "hsl(0 0% 100%)",
       opacity: disabled ? 0.3 : 1,
       borderRadius: 16,
@@ -132,7 +132,7 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#000" }} />
+      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
     ) : (
       <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
