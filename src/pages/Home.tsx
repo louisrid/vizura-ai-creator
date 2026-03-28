@@ -33,10 +33,10 @@ const PillSelect = ({
   <div className="flex flex-col gap-1">
     <button
       onClick={onToggle}
-      className={`flex h-7 w-full items-center justify-between rounded-full px-3 text-[9px] font-[900] lowercase transition-colors ${
+      className={`flex h-7 w-full items-center justify-between rounded-full border-[2px] px-3 text-[9px] font-[900] lowercase transition-colors ${
         expanded
-          ? "bg-[hsl(0,0%,28%)] text-white"
-          : "bg-[hsl(0,0%,18%)] text-white/60"
+          ? "border-white bg-[hsl(0,0%,25%)] text-white"
+          : "border-white/40 bg-[hsl(0,0%,20%)] text-white/80"
       }`}
     >
       <span>{value || "–"}</span>
