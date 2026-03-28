@@ -2,22 +2,22 @@ import { createContext, useContext, useState, ReactNode, useEffect, useCallback 
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
-interface CreditsContextType {
-  credits: number;
+interface GemsContextType {
+  gems: number;
   loading: boolean;
   refetch: () => Promise<void>;
 }
 
-const CreditsContext = createContext<CreditsContextType | undefined>(undefined);
+const GemsContext = createContext<GemsContextType | undefined>(undefined);
 
-export const CreditsProvider = ({ children }: { children: ReactNode }) => {
+export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [credits, setCredits] = useState(0);
+  const [gems, setGems] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const fetchCredits = useCallback(async () => {
+  const fetchGems = useCallback(async () => {
     if (!user) {
-      setCredits(0);
+      setGems(0);
       setLoading(false);
       return;
     }
@@ -28,32 +28,36 @@ export const CreditsProvider = ({ children }: { children: ReactNode }) => {
         .eq("user_id", user.id)
         .single();
       if (error) {
-        console.error("Failed to fetch credits:", error);
-        setCredits(0);
+        console.error("Failed to fetch gems:", error);
+        setGems(0);
       } else {
-        setCredits(data?.balance ?? 0);
+        setGems(data?.balance ?? 0);
       }
     } catch (e) {
-      console.error("Credits fetch error:", e);
-      setCredits(0);
+      console.error("Gems fetch error:", e);
+      setGems(0);
     } finally {
       setLoading(false);
     }
   }, [user]);
 
   useEffect(() => {
-    fetchCredits();
-  }, [fetchCredits]);
+    fetchGems();
+  }, [fetchGems]);
 
   return (
-    <CreditsContext.Provider value={{ credits, loading, refetch: fetchCredits }}>
+    <GemsContext.Provider value={{ gems, loading, refetch: fetchGems }}>
       {children}
-    </CreditsContext.Provider>
+    </GemsContext.Provider>
   );
 };
 
-export const useCredits = () => {
-  const context = useContext(CreditsContext);
-  if (!context) throw new Error("useCredits must be used within CreditsProvider");
+export const useGems = () => {
+  const context = useContext(GemsContext);
+  if (!context) throw new Error("useGems must be used within GemsProvider");
   return context;
 };
+
+// Backward compatibility
+export const CreditsProvider = GemsProvider;
+export const useCredits = useGems;
