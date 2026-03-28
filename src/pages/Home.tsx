@@ -6,19 +6,16 @@ import { useAuth } from "@/contexts/AuthContext";
 const quickOptions = [
   { key: "style", label: "style ✨", choices: ["natural", "model", "egirl"] },
   { key: "hair", label: "hair 💇", choices: ["blonde", "brunette", "black", "red", "pink", "white"] },
-  { key: "eyes", label: "eyes 👁", choices: ["brown", "blue", "green", "hazel", "grey"] },
   { key: "body", label: "body 🧍", choices: ["slim", "regular", "curvy"] },
-  { key: "age", label: "age 🎂", choices: ["18","20","22","25","28","30","35","40"] },
-  { key: "ethnicity", label: "ethnicity 🌍", choices: ["any","american","british","brazilian","french","indian","italian","japanese","korean","spanish"] },
 ] as const;
 
-type OptKey = "style" | "hair" | "eyes" | "body" | "age" | "ethnicity";
+type OptKey = "style" | "hair" | "body";
 
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [selections, setSelections] = useState<Record<OptKey, string | null>>({
-    style: null, hair: null, eyes: null, body: null, age: null, ethnicity: null,
+    style: null, hair: null, body: null,
   });
 
   const handleCreate = () => {
