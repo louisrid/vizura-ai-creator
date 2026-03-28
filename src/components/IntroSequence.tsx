@@ -67,10 +67,10 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.7rem] font-bold lowercase text-white/40">{label}</span>
+    <span className="text-[0.7rem] font-bold lowercase" style={{ color: "hsl(195 100% 60% / 0.5)" }}>{label}</span>
     <div
       className="w-full rounded-xl"
-      style={{ background: "hsl(0 0% 14%)", height: tall ? 72 : 40 }}
+      style={{ background: LIGHT_BLUE_DIM, height: tall ? 72 : 40 }}
     />
   </motion.div>
 );
@@ -78,7 +78,7 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
 /* ── section label ── */
 const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
-    className="text-[0.7rem] font-bold uppercase tracking-widest text-white/30"
+    className="text-[0.7rem] font-bold uppercase tracking-widest" style={{ color: "hsl(195 100% 60% / 0.4)" }}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay, duration: 0.3 }}
