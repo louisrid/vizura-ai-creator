@@ -91,7 +91,12 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
           style={{ background: "hsl(0 0% 0% / 0.97)", transformOrigin: "center center" }}
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1, transition: { duration: 0.12, ease: "easeOut" } }}
-          exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeIn" } }}
+          exit={{
+            opacity: 0,
+            scale: 1.15,
+            filter: "blur(12px)",
+            transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+          }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
