@@ -243,7 +243,7 @@ const Screen4 = () => (
       pick her nationality…
     </motion.h2>
     <div className="flex flex-wrap justify-center gap-1">
-      {["american", "british", "european", "latina"].map((n, i) => (
+      {["american", "british", "european", "latin american"].map((n, i) => (
         <Pill key={n} label={n} delay={0.15 + i * 0.05} />
       ))}
     </div>
