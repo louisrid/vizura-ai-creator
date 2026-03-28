@@ -98,7 +98,7 @@ const Home = () => {
               <select
                 value={selections[opt.key] || ""}
                 onChange={(e) => setSelections((prev) => ({ ...prev, [opt.key]: e.target.value }))}
-                className="appearance-none bg-transparent text-[11px] font-semibold lowercase text-black/50 outline-none text-right cursor-pointer"
+                className="appearance-none bg-transparent text-[11px] font-semibold lowercase text-black outline-none text-right cursor-pointer"
                 style={{ WebkitAppearance: "none" }}
               >
                 <option value="" disabled>select</option>
