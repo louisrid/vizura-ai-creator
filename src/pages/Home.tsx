@@ -64,22 +64,22 @@ const Home = () => {
       className="flex flex-col bg-background overflow-y-auto"
       style={{ height: "calc(100dvh - 73px)" }}
     >
-      <div className="flex flex-col gap-3 px-5 pt-5 pb-6">
-        {/* Image box + create button — centered, original 1:1 shape */}
+      <div className="flex flex-col gap-3 px-5 pt-10 pb-6">
+        {/* Create character box + button — centered */}
         <div className="flex flex-col items-center w-full">
           <div
-            className="flex items-center justify-center border-[4px] border-foreground bg-card"
-            style={{ width: "48%", aspectRatio: "1/1", borderRadius: 14 }}
+            className="flex items-center justify-center border-[6px] border-foreground bg-card"
+            style={{ width: "70%", aspectRatio: "5/6", borderRadius: 14 }}
           >
-            <Wand2 size={24} className="text-foreground/20" />
+            <Wand2 size={36} strokeWidth={2.5} className="text-foreground/30" />
           </div>
 
           <button
             onClick={handleCreate}
-            className="mt-2.5 flex h-[40px] items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
-            style={{ width: "48%", borderRadius: 14, transition: "transform 0.05s" }}
+            className="mt-3 flex h-[44px] items-center justify-center gap-1.5 bg-foreground text-sm font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+            style={{ width: "70%", borderRadius: 14, transition: "transform 0.05s" }}
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
               <circle cx="12" cy="9" r="4.5" />
               <path d="M4 22a8 8 0 0 1 16 0c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Z" />
             </svg>
