@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap, Upload } from "lucide-react";
+import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
 import IntroSequence from "@/components/IntroSequence";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
