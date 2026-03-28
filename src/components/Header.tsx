@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Zap, LogIn, Clock, Home } from "lucide-react";
-import { useCredits } from "@/contexts/CreditsContext";
+import { Menu, Settings, Sparkles, Camera, LayoutGrid, FolderOpen, Gem, LogIn, Clock, Home } from "lucide-react";
+import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 const menuItems = [
@@ -13,7 +13,7 @@ const menuItems = [
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
   { label: "history", icon: Clock, path: "/history" },
-  { label: "top-ups", icon: Zap, path: "/top-ups" },
+  { label: "top-ups", icon: Gem, path: "/top-ups" },
   { label: "my account", icon: Settings, path: "/account" },
 ];
 
@@ -64,7 +64,7 @@ const Header = () => {
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
-          <CreditsBadge />
+          <GemsBadge />
         </div>
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
@@ -132,12 +132,12 @@ const Header = () => {
   );
 };
 
-const CreditsBadge = () => {
-  const { credits } = useCredits();
+const GemsBadge = () => {
+  const { gems } = useGems();
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-neon-yellow px-3 py-1.5">
-      <Zap size={12} strokeWidth={2.5} className="text-neon-yellow" />
-      <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{credits}</span>
+    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-gem-green bg-gem-green/10 px-3 py-1.5">
+      <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
+      <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{gems}</span>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCredits } from "@/contexts/CreditsContext";
+import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -14,7 +14,7 @@ const MAX_REROLLS = 3;
 
 const ChooseFace = () => {
   const { user } = useAuth();
-  const { refetch: refetchCredits } = useCredits();
+  const { refetch: refetchGems } = useGems();
   const { subscribed } = useSubscription();
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,9 +93,8 @@ const ChooseFace = () => {
 
       if (fnError) throw fnError;
       if (data?.error) {
-        // After first use, free_gen will fail — that's fine, still count the reroll
         if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
-          // Use standard gen instead for rerolls (costs credit)
+          // Use standard gen instead for rerolls (costs a gem)
           const { data: stdData, error: stdError } = await supabase.functions.invoke(
             "generate",
             { body: { prompt } }
@@ -114,7 +113,7 @@ const ChooseFace = () => {
       }
       setSelectedIndex(null);
       setRerollCount((c) => c + 1);
-      await refetchCredits();
+      await refetchGems();
     } catch (err: any) {
       setError(err?.message || "regeneration failed");
     } finally {
@@ -139,7 +138,6 @@ const ChooseFace = () => {
 
       setSaved(true);
 
-      // Brief "saving your character" then redirect to create photo with character pre-selected
       setTimeout(() => {
         navigate("/create", {
           state: { preselectedCharacterId: characterId },
@@ -167,7 +165,6 @@ const ChooseFace = () => {
     );
   }
 
-  /* ── saving state ── */
   if (saved) {
     return (
       <div className="relative min-h-screen bg-background">
@@ -253,7 +250,6 @@ const ChooseFace = () => {
               </motion.div>
             </AnimatePresence>
 
-            {/* Regenerate button */}
             <Button
               variant="outline"
               className="mt-4 h-12 w-full text-sm"
@@ -275,7 +271,6 @@ const ChooseFace = () => {
               )}
             </Button>
 
-            {/* Select button */}
             <Button
               className="mt-3 h-14 w-full text-sm"
               onClick={handleSelect}
