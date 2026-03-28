@@ -218,45 +218,45 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 pb-28">
-            <div className="mx-auto flex w-full max-w-sm flex-col pt-4">
-              {/* 2-column grid: label | selection box */}
-              <div className="grid grid-cols-[1fr_1fr] items-center gap-x-4 gap-y-4">
+            <div className="mx-auto flex w-full max-w-sm flex-col pt-2">
+              {/* 2-column grid: each cell = label + box stacked */}
+              <div className="grid grid-cols-2 gap-x-3 gap-y-5">
                 {categories.map((cat) => (
-                  <>
-                    {/* Label */}
-                    <span
-                      key={`label-${cat.key}`}
-                      className="text-lg font-[900] lowercase tracking-tight text-white"
-                    >
+                  <div key={cat.key} className="flex flex-col gap-2">
+                    <span className="text-sm font-[900] lowercase tracking-tight text-white">
                       {cat.label}
                     </span>
-
-                    {/* Selection box */}
-                    <div key={`box-${cat.key}`}>
-                      <SelectionBox
-                        value={values[cat.key]}
-                        active={expandedKey === cat.key}
-                        onClick={() => toggleExpand(cat.key)}
-                      />
-                    </div>
-
-                    {/* Expanded toggles below the row */}
-                    <AnimatePresence key={`toggle-${cat.key}`}>
-                      {expandedKey === cat.key && (
-                        <ToggleOptions
-                          options={cat.options}
-                          value={values[cat.key]}
-                          onSelect={(v) => handleSelect(cat.key, v)}
-                        />
-                      )}
-                    </AnimatePresence>
-                  </>
+                    <SelectionBox
+                      value={values[cat.key]}
+                      active={expandedKey === cat.key}
+                      onClick={() => toggleExpand(cat.key)}
+                    />
+                  </div>
                 ))}
               </div>
 
+              {/* Expanded toggles — shown below grid */}
+              <AnimatePresence>
+                {expandedKey && (
+                  <motion.div
+                    className="mt-4"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ToggleOptions
+                      options={categories.find((c) => c.key === expandedKey)!.options}
+                      value={values[expandedKey]}
+                      onSelect={(v) => handleSelect(expandedKey, v)}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {/* Details textarea */}
-              <div className="mt-8">
-                <span className="mb-3 block text-lg font-[900] lowercase tracking-tight text-white">
+              <div className="mt-10">
+                <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">
                   details
                 </span>
                 <textarea
