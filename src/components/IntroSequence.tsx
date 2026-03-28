@@ -283,7 +283,7 @@ const Screen5 = () => (
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
-  <div className="relative flex flex-col items-center gap-3">
+  <div className="relative flex flex-col items-center gap-3 mt-32">
     <motion.h2
       className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
