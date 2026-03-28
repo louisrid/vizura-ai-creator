@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TOTAL = 5;
-const YELLOW = "hsl(var(--neon-yellow))";
+const YELLOW = "hsl(50 100% 50%)";
 
 /* ── progress dots ── */
 const Dots = ({ current }: { current: number }) => (
