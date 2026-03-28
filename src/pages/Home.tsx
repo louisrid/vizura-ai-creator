@@ -39,11 +39,7 @@ const Home = () => {
   const handleIntroComplete = () => {
     setShowIntro(false);
     sessionStorage.setItem("intro_seen", "1");
-    if (!user) {
-      navigate("/auth?redirect=/");
-      return;
-    }
-    setShowCreator(true);
+    navigate("/create-character");
   };
 
   return (
