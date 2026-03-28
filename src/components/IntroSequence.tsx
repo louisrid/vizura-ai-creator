@@ -205,9 +205,17 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const animating = useRef(false);
 
   useEffect(() => setMounted(true), []);
+  // Reset fully when opened
   useEffect(() => {
-    if (open) { setStep(0); setDirection(1); }
+    if (open) { setStep(0); setDirection(1); animating.current = false; }
   }, [open]);
+
+  // Auto-advance timer (screens 0–3, not last screen)
+  useEffect(() => {
+    if (!open || step >= TOTAL - 1) return;
+    const timer = setTimeout(() => goTo(step + 1), AUTO_DELAY);
+    return () => clearTimeout(timer);
+  }, [open, step, goTo]);
 
   // Lock scroll fully
   useEffect(() => {
@@ -221,10 +229,12 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
+      document.body.style.touchAction = "";
     };
   }, [open]);
 
