@@ -76,27 +76,27 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
       </motion.div>
 
       {/* Nav + counter */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5 mt-6">
         <button
           type="button"
           onClick={goPrev}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
           aria-label="previous"
         >
-          <ChevronLeft size={16} strokeWidth={2.5} />
+          <ChevronLeft size={20} strokeWidth={2.5} />
         </button>
 
-        <span className="text-sm font-extrabold text-foreground lowercase">
+        <span className="text-base font-extrabold text-foreground lowercase">
           {activeIndex + 1} / {total}
         </span>
 
         <button
           type="button"
           onClick={goNext}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
           aria-label="next"
         >
-          <ChevronRight size={16} strokeWidth={2.5} />
+          <ChevronRight size={20} strokeWidth={2.5} />
         </button>
       </div>
     </section>
