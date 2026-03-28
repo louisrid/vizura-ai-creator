@@ -13,25 +13,31 @@ const MiniBox = ({ className = "" }: { className?: string }) => (
   <div className={`rounded-xl bg-[hsl(0,0%,15%)] ${className}`} />
 );
 
-/* ── emoji pop ── */
+/* ── emoji pop with bounce ── */
 const EmojiPop = ({ emoji }: { emoji: string }) => (
   <motion.span
     className="text-7xl block"
-    initial={{ opacity: 0, scale: 0.5 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay: 0.05, duration: 0.3, type: "spring", stiffness: 300, damping: 20 }}
+    initial={{ opacity: 0, scale: 0, y: 20 }}
+    animate={{ opacity: 1, scale: 1, y: 0 }}
+    transition={{ delay: 0.05, duration: 0.5, type: "spring", stiffness: 260, damping: 15 }}
   >
-    {emoji}
+    <motion.span
+      className="block"
+      animate={{ y: [0, -6, 0] }}
+      transition={{ duration: 2.5, delay: 0.6, repeat: Infinity, ease: "easeInOut" }}
+    >
+      {emoji}
+    </motion.span>
   </motion.span>
 );
 
-/* ── screen title ── */
+/* ── screen title with spring ── */
 const Title = ({ children }: { children: React.ReactNode }) => (
   <motion.h2
     className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
-    initial={{ opacity: 0, y: 10 }}
+    initial={{ opacity: 0, y: 16 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.1, duration: 0.25 }}
+    transition={{ delay: 0.12, duration: 0.4, type: "spring", stiffness: 200, damping: 20 }}
   >
     {children}
   </motion.h2>
@@ -40,10 +46,10 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 /* ── screen subtitle ── */
 const Sub = ({ children }: { children: React.ReactNode }) => (
   <motion.p
-    className="text-[0.94rem] font-bold lowercase text-white/60 text-center max-w-[18rem] leading-relaxed"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: 0.25, duration: 0.25 }}
+    className="text-[0.94rem] font-bold lowercase text-white/55 text-center max-w-[18rem] leading-relaxed"
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.3, duration: 0.3, ease: "easeOut" }}
   >
     {children}
   </motion.p>
