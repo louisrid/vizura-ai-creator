@@ -86,7 +86,11 @@ const Header = () => {
             className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground transition-opacity hover:opacity-90"
             aria-label="open menu"
           >
-            <Menu size={20} strokeWidth={2.5} />
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+              <rect y="0" width="18" height="3" rx="1.5" fill="currentColor" />
+              <rect y="5.5" width="18" height="3" rx="1.5" fill="currentColor" />
+              <rect y="11" width="18" height="3" rx="1.5" fill="currentColor" />
+            </svg>
           </button>
 
           <AnimatePresence>
