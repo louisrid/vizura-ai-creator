@@ -10,6 +10,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
 import OnboardingOverlay from "@/components/OnboardingOverlay";
 import CharacterCreator from "./pages/CharacterCreator";
+import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import MyCharacters from "./pages/MyCharacters";
@@ -79,6 +80,7 @@ const AnimatedRoutes = () => {
       <PageTransition key={location.pathname}>
         <Routes location={location}>
           <Route path="/" element={<CharacterCreator />} />
+          <Route path="/choose-face" element={<ChooseFace />} />
           <Route path="/create" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/characters" element={<MyCharacters />} />
