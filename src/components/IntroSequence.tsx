@@ -260,10 +260,10 @@ const Screen5 = () => (
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
-  <div className="relative flex flex-col items-center gap-4">
+  <div className="relative flex flex-col items-center gap-6">
     <EmojiRow screenIndex={5} />
     <motion.h2
-      className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[3rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
@@ -272,8 +272,8 @@ const Screen6 = ({ onGo }: { onGo: () => void }) => (
     </motion.h2>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="h-10 w-full max-w-[10rem] rounded-full text-[0.75rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
-      style={{ background: "hsl(50 100% 50%)", color: "#000", transition: "transform 0.05s" }}
+      className="mt-2 h-16 w-full max-w-[14rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+      style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
