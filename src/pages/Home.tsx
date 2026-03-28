@@ -16,7 +16,7 @@ const quickOptions = [
 
 type OptKey = "style" | "hair" | "eyes" | "body" | "age" | "ethnicity";
 
-/* ── Pill select ── */
+/* ── Pill select — wide sausage shape ── */
 const PillSelect = ({
   value,
   choices,
@@ -30,39 +30,39 @@ const PillSelect = ({
   onToggle: () => void;
   onSelect: (v: string) => void;
 }) => (
-  <div className="flex flex-col gap-1.5">
+  <div className="flex flex-col gap-1">
     <button
       onClick={onToggle}
-      className={`flex h-9 items-center justify-between rounded-full border-[3px] px-3 text-[10px] font-[900] lowercase transition-colors ${
+      className={`flex h-7 w-full items-center justify-between rounded-full px-3 text-[9px] font-[900] lowercase transition-colors ${
         expanded
-          ? "border-neon-yellow bg-white/10 text-white"
-          : "border-white/20 bg-white/5 text-white/70"
+          ? "bg-white/20 text-white"
+          : "bg-white/8 text-white/60"
       }`}
     >
       <span>{value || "–"}</span>
       <ChevronDown
-        size={12}
+        size={9}
         strokeWidth={3}
-        className={`transition-transform ${expanded ? "rotate-180" : ""}`}
+        className={`shrink-0 transition-transform ${expanded ? "rotate-180" : ""}`}
       />
     </button>
     <AnimatePresence>
       {expanded && (
         <motion.div
-          className="flex flex-wrap gap-1.5"
+          className="flex flex-wrap gap-1"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: 0.12 }}
         >
           {choices.map((c) => (
             <button
               key={c}
               onClick={() => onSelect(c)}
-              className={`rounded-full border-[3px] px-3 py-1 text-[10px] font-[900] lowercase transition-all ${
+              className={`rounded-full px-2.5 py-0.5 text-[8px] font-[900] lowercase transition-all ${
                 value === c
-                  ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
-                  : "border-white/20 text-white/50 hover:border-white/40"
+                  ? "bg-neon-yellow text-neon-yellow-foreground"
+                  : "bg-white/10 text-white/50 hover:bg-white/20"
               }`}
             >
               {c}
@@ -106,23 +106,22 @@ const Home = () => {
       className="flex flex-col bg-background"
       style={{ height: "calc(100dvh - 73px)" }}
     >
-      {/* Main content area */}
-      <div className="flex-1 flex gap-3 px-6 pt-6">
+      <div className="flex-1 flex gap-4 px-5 pt-5">
         {/* Left: photo box + button */}
-        <div className="flex flex-col" style={{ width: "55%" }}>
+        <div className="flex flex-col" style={{ width: "48%" }}>
           <div
-            className="flex items-center justify-center rounded-2xl border-[6px] border-foreground bg-card"
-            style={{ aspectRatio: "4/5" }}
+            className="flex items-center justify-center border-[6px] border-foreground bg-card"
+            style={{ aspectRatio: "1/1", borderRadius: 14 }}
           >
-            <Wand2 size={28} className="text-foreground/20" />
+            <Wand2 size={24} className="text-foreground/20" />
           </div>
 
           <button
             onClick={handleCreate}
-            className="mt-3 flex h-[46px] w-full items-center justify-center gap-2 rounded-full bg-foreground text-sm font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
-            style={{ transition: "transform 0.05s" }}
+            className="mt-2.5 flex h-[40px] w-full items-center justify-center gap-1.5 bg-foreground text-xs font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+            style={{ borderRadius: 14, transition: "transform 0.05s" }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
               <circle cx="12" cy="9" r="4.5" />
               <path d="M4 22a8 8 0 0 1 16 0c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Z" />
             </svg>
@@ -130,8 +129,11 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Right: 3 pill selectors stacked */}
-        <div className="grid grid-cols-2 gap-2 self-start rounded-2xl bg-foreground p-3" style={{ width: "42%" }}>
+        {/* Right: 6 sausage pill selectors in black rounded box */}
+        <div
+          className="flex flex-col gap-1.5 self-start bg-black p-3"
+          style={{ width: "48%", borderRadius: 14 }}
+        >
           {quickOptions.map((opt) => (
             <PillSelect
               key={opt.key}
