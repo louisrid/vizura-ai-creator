@@ -12,8 +12,8 @@ const screenEmojis: string[][] = [
   ["✨"],
   ["🫧"],
   ["🇺🇸"],
-  ["🎀"],
-  ["🚀", "🎉"],
+  ["⚙️"],
+  ["🚀"],
 ];
 
 /* ── per-screen micro-animation configs ── */
@@ -262,11 +262,16 @@ const Screen5 = () => (
       set her details…
     </motion.h2>
     <div className="flex flex-col gap-1.5 w-full pt-1">
-      <SectionLabel delay={0.15}>age</SectionLabel>
-      <div className="flex flex-wrap gap-1">
-        {["18", "21", "25", "30", "35", "40"].map((a, i) => (
-          <Pill key={a} label={a} delay={0.18 + i * 0.05} />
-        ))}
+      <SectionLabel delay={0.15}>suggested age</SectionLabel>
+      <div className="flex justify-center pt-1">
+        <motion.span
+          className="text-[3rem] font-[900] text-white"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+        >
+          27
+        </motion.span>
       </div>
       <SectionLabel delay={0.4}>style</SectionLabel>
       <div className="flex flex-wrap gap-1">
