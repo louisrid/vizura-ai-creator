@@ -24,7 +24,7 @@
     --muted: 0 0% 90%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 60 100% 72%;
+    --accent: 54 100% 75%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 72% 55%;
@@ -37,7 +37,7 @@
     --radius: 12px;
 
     /* neon pale yellow accent — sitewide */
-    --neon-yellow: 60 100% 72%;
+    --neon-yellow: 54 100% 75%;
     --neon-yellow-foreground: 0 0% 4%;
 
     /* neon green for buy/CTA */
