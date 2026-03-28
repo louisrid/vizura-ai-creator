@@ -106,10 +106,10 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                 <motion.div
                   key={step}
                   className="w-full"
-                  initial={skipAnim ? false : { opacity: 0, x: 30 }}
+                  initial={skipAnim ? false : { opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={skipAnim ? { opacity: 0 } : { opacity: 0, x: -30 }}
-                  transition={skipAnim ? { duration: 0.08 } : { duration: 0.22, ease: [0.2, 0.9, 0.2, 1] }}
+                  exit={skipAnim ? { opacity: 0 } : { opacity: 0, x: -20 }}
+                  transition={{ duration: 0.12, ease: "easeOut" }}
                 >
                   {children(step)}
                 </motion.div>
