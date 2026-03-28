@@ -23,6 +23,7 @@ const emojiMotions = [
   { y: [0, -12, 0], rotate: [0, 10, -6, 0], scale: [1, 1.1, 0.95, 1], duration: 2.5 },
   { y: [0, -6, 4, 0], rotate: [0, -5, 8, -3, 0], scale: [1, 1.06, 1], duration: 3.5 },
   { y: [0, -14, 0], rotate: [0, 12, -8, 0], scale: [1, 1.12, 0.96, 1], duration: 2.6 },
+  { y: [0, -9, 0], rotate: [0, 7, -5, 0], scale: [1, 1.07, 1], duration: 3.0 },
 ];
 
 /* ── single emoji, full opacity, bouncy pop-in + idle loop ── */
