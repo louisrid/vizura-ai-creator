@@ -348,16 +348,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 direction="left"
                 onClick={goBack}
                 disabled={step === 0}
-                onPointerDown={() => startHold("left")}
-                onPointerUp={clearHold}
-                onPointerLeave={clearHold}
+                onPointerDown={() => handlePointerDown("left")}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
               />
               <ArrowButton
                 direction="right"
                 onClick={() => { if (step < TOTAL - 1) advance(); else onComplete(); }}
-                onPointerDown={() => startHold("right")}
-                onPointerUp={clearHold}
-                onPointerLeave={clearHold}
+                onPointerDown={() => handlePointerDown("right")}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
               />
             </div>
           </div>
