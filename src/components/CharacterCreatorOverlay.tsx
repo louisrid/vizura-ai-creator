@@ -1,34 +1,66 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronDown, Loader2, Zap } from "lucide-react";
+import { X, Loader2, Zap } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
-const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
-const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
-const bodyOptions = ["slim", "regular", "curvy"] as const;
-const styleOptions = ["natural", "model", "egirl"] as const;
+const categories = [
+  { key: "style", label: "style", options: ["natural", "model", "egirl"] },
+  { key: "hair", label: "hair", options: ["blonde", "brunette", "black", "red", "pink", "white"] },
+  { key: "eyes", label: "eyes", options: ["brown", "blue", "green", "hazel", "grey"] },
+  { key: "body", label: "body", options: ["slim", "regular", "curvy"] },
+] as const;
 
-/* ── Toggle row ── */
-const ToggleRow = ({
+type CatKey = (typeof categories)[number]["key"];
+
+/* ── Selection box ── */
+const SelectionBox = ({
+  value,
+  active,
+  onClick,
+}: {
+  value: string | null;
+  active: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`flex h-14 w-full items-center justify-center rounded-2xl border-[4px] text-sm font-[900] lowercase tracking-tight transition-colors ${
+      active
+        ? "border-neon-yellow bg-[hsl(0,0%,12%)] text-white"
+        : "border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white/80"
+    }`}
+  >
+    {value || "–"}
+  </button>
+);
+
+/* ── Toggle options that appear below a row ── */
+const ToggleOptions = ({
   options,
   value,
-  onChange,
+  onSelect,
 }: {
   options: readonly string[];
-  value: string;
-  onChange: (v: string) => void;
+  value: string | null;
+  onSelect: (v: string) => void;
 }) => (
-  <div className="flex flex-wrap gap-2">
+  <motion.div
+    className="col-span-2 flex flex-wrap gap-2 pb-2"
+    initial={{ opacity: 0, height: 0 }}
+    animate={{ opacity: 1, height: "auto" }}
+    exit={{ opacity: 0, height: 0 }}
+    transition={{ duration: 0.2 }}
+  >
     {options.map((opt) => (
       <button
         key={opt}
-        onClick={() => onChange(opt)}
-        className={`rounded-2xl border-[4px] px-5 py-2.5 text-sm font-extrabold lowercase transition-all ${
+        onClick={() => onSelect(opt)}
+        className={`rounded-2xl border-[4px] px-4 py-2 text-xs font-[900] lowercase transition-all ${
           value === opt
             ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
             : "border-[hsl(0,0%,25%)] text-white/60 hover:border-white/40"
@@ -37,44 +69,7 @@ const ToggleRow = ({
         {opt}
       </button>
     ))}
-  </div>
-);
-
-/* ── Select dropdown on dark bg ── */
-const DarkSelect = ({
-  value,
-  options,
-  onChange,
-}: {
-  value: string;
-  options: readonly string[];
-  onChange: (v: string) => void;
-}) => (
-  <label className="relative block">
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="h-14 w-full appearance-none rounded-2xl border-[4px] border-[hsl(0,0%,25%)] bg-transparent px-4 pr-10 text-sm font-extrabold lowercase text-white outline-none transition-colors focus:border-white/50"
-    >
-      {options.map((opt) => (
-        <option key={opt} value={opt} className="bg-black text-white">
-          {opt}
-        </option>
-      ))}
-    </select>
-    <ChevronDown
-      size={16}
-      strokeWidth={2.5}
-      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-white/50"
-    />
-  </label>
-);
-
-/* ── Section label ── */
-const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="text-lg font-[900] lowercase tracking-tight text-white">
-    {children}
-  </h3>
+  </motion.div>
 );
 
 /* ═══════════════ MAIN OVERLAY ═══════════════ */
@@ -89,16 +84,28 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
   const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
 
-  const [style, setStyle] = useState("natural");
-  const [hair, setHair] = useState("brunette");
-  const [eye, setEye] = useState("brown");
-  const [body, setBody] = useState("regular");
+  const [values, setValues] = useState<Record<CatKey, string | null>>({
+    style: null,
+    hair: null,
+    eyes: null,
+    body: null,
+  });
+  const [expandedKey, setExpandedKey] = useState<CatKey | null>(null);
   const [description, setDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
-  // Lock scroll when open
+  // Reset when opening
+  useEffect(() => {
+    if (open) {
+      setValues({ style: null, hair: null, eyes: null, body: null });
+      setExpandedKey(null);
+      setDescription("");
+    }
+  }, [open]);
+
+  // Lock scroll
   useEffect(() => {
     if (!open) return;
     const root = document.getElementById("root");
@@ -118,7 +125,11 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
   }, [open]);
 
   const buildPrompt = () => {
-    let prompt = `photorealistic portrait, woman, ${body} body type, ${hair} hair, ${eye} eyes, ${style} style`;
+    const s = values.style || "natural";
+    const h = values.hair || "brunette";
+    const e = values.eyes || "brown";
+    const b = values.body || "regular";
+    let prompt = `photorealistic portrait, woman, ${b} body type, ${h} hair, ${e} eyes, ${s} style`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -133,15 +144,20 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
     setIsSaving(true);
     try {
+      const h = values.hair || "brunette";
+      const e = values.eyes || "brown";
+      const s = values.style || "natural";
+      const b = values.body || "regular";
+
       const charData = {
         user_id: user.id,
-        name: `${hair} ${eye} ${style}`,
+        name: `${h} ${e} ${s}`,
         country: "any",
         age: "25",
-        hair: sanitiseText(hair, 50),
-        eye: sanitiseText(eye, 50),
-        body: sanitiseText(body, 50),
-        style: sanitiseText(style, 50),
+        hair: sanitiseText(h, 50),
+        eye: sanitiseText(e, 50),
+        body: sanitiseText(b, 50),
+        style: sanitiseText(s, 50),
         description: sanitiseText(description, 500),
       };
 
@@ -168,6 +184,15 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
     }
   };
 
+  const handleSelect = (key: CatKey, val: string) => {
+    setValues((prev) => ({ ...prev, [key]: val }));
+    setExpandedKey(null);
+  };
+
+  const toggleExpand = (key: CatKey) => {
+    setExpandedKey((prev) => (prev === key ? null : key));
+  };
+
   if (!mounted) return null;
 
   return createPortal(
@@ -181,7 +206,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
           transition={{ duration: 0.2 }}
         >
           {/* Close button */}
-          <div className="sticky top-0 z-10 flex items-center justify-between px-5 pt-5 pb-2">
+          <div className="flex items-center px-5 pt-5 pb-2">
             <button
               onClick={onClose}
               className="flex h-10 w-10 items-center justify-center rounded-full border-[4px] border-white/20 transition-colors hover:border-white/40"
@@ -189,49 +214,59 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
             >
               <X size={18} strokeWidth={2.5} className="text-white" />
             </button>
-            <span className="text-xs font-extrabold lowercase text-white/40">
-              create character
-            </span>
           </div>
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 pb-28">
-            <div className="mx-auto flex w-full max-w-lg flex-col gap-10 pt-6">
-              {/* Style */}
-              <section className="flex flex-col gap-4">
-                <SectionLabel>style</SectionLabel>
-                <ToggleRow options={styleOptions} value={style} onChange={setStyle} />
-              </section>
+            <div className="mx-auto flex w-full max-w-sm flex-col pt-4">
+              {/* 2-column grid: label | selection box */}
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-x-4 gap-y-4">
+                {categories.map((cat) => (
+                  <>
+                    {/* Label */}
+                    <span
+                      key={`label-${cat.key}`}
+                      className="text-lg font-[900] lowercase tracking-tight text-white"
+                    >
+                      {cat.label}
+                    </span>
 
-              {/* Hair */}
-              <section className="flex flex-col gap-4">
-                <SectionLabel>hair colour</SectionLabel>
-                <ToggleRow options={hairOptions} value={hair} onChange={setHair} />
-              </section>
+                    {/* Selection box */}
+                    <div key={`box-${cat.key}`}>
+                      <SelectionBox
+                        value={values[cat.key]}
+                        active={expandedKey === cat.key}
+                        onClick={() => toggleExpand(cat.key)}
+                      />
+                    </div>
 
-              {/* Eyes */}
-              <section className="flex flex-col gap-4">
-                <SectionLabel>eye colour</SectionLabel>
-                <ToggleRow options={eyeOptions} value={eye} onChange={setEye} />
-              </section>
+                    {/* Expanded toggles below the row */}
+                    <AnimatePresence key={`toggle-${cat.key}`}>
+                      {expandedKey === cat.key && (
+                        <ToggleOptions
+                          options={cat.options}
+                          value={values[cat.key]}
+                          onSelect={(v) => handleSelect(cat.key, v)}
+                        />
+                      )}
+                    </AnimatePresence>
+                  </>
+                ))}
+              </div>
 
-              {/* Body */}
-              <section className="flex flex-col gap-4">
-                <SectionLabel>body type</SectionLabel>
-                <ToggleRow options={bodyOptions} value={body} onChange={setBody} />
-              </section>
-
-              {/* Description */}
-              <section className="flex flex-col gap-4">
-                <SectionLabel>details</SectionLabel>
+              {/* Details textarea */}
+              <div className="mt-8">
+                <span className="mb-3 block text-lg font-[900] lowercase tracking-tight text-white">
+                  details
+                </span>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="face shape, hairstyle, outfit, pose, mood..."
-                  rows={4}
-                  className="min-h-[120px] w-full resize-none rounded-2xl border-[4px] border-[hsl(0,0%,25%)] bg-transparent px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50"
+                  rows={3}
+                  className="min-h-[100px] w-full resize-none rounded-2xl border-[4px] border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50"
                 />
-              </section>
+              </div>
             </div>
           </div>
 
