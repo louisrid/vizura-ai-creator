@@ -18,8 +18,9 @@ const menuItems = [
 ];
 
 const pageNames: Record<string, string> = {
-  "/": "home",
+  "/": "create character",
   "/create-character": "create character",
+  "/create": "create photo",
   "/characters": "characters",
   "/storage": "saved",
   "/history": "history",
