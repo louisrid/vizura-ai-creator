@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
-const LIGHT_BLUE = "hsl(195 100% 60%)";
-const LIGHT_BLUE_DIM = "hsl(195 100% 50% / 0.15)";
+const LIGHT_BLUE = "hsl(195 100% 75%)";
+const LIGHT_BLUE_DIM = "hsl(195 100% 70% / 0.15)";
 
 /* ── per-screen emojis — 2-3 distinct per slide ── */
 const screenEmojis: string[][] = [
