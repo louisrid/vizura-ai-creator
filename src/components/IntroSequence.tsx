@@ -347,17 +347,15 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[9999] grid grid-rows-[minmax(0,1fr)_auto_minmax(0,1fr)_auto] bg-black cursor-pointer"
+          className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          <div aria-hidden="true" />
-
-          {/* Content — centered exactly within the space above navigation */}
-          <div className="row-start-2 px-8 overflow-hidden">
+          {/* Content — pushed down with 38vh top padding */}
+          <div className="flex-1 px-8 overflow-hidden" style={{ paddingTop: "38vh" }}>
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -374,10 +372,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             </div>
           </div>
 
-          <div aria-hidden="true" />
-
           {/* Arrows + dots — pinned to bottom */}
-          <div className="row-start-4 flex flex-col items-center gap-3 pb-[max(env(safe-area-inset-bottom),3.5rem)] pt-2">
+          <div className="flex flex-col items-center gap-3 pb-[max(env(safe-area-inset-bottom),3.5rem)] pt-2">
             <div className="flex items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
               <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
