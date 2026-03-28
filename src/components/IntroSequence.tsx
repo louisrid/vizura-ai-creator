@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
-const LIGHT_BLUE = "hsl(195 100% 60%)";
-const LIGHT_BLUE_DIM = "hsl(195 100% 50% / 0.15)";
+const LIGHT_BLUE = "hsl(195 100% 75%)";
+const LIGHT_BLUE_DIM = "hsl(195 100% 70% / 0.15)";
 
 /* ── per-screen emojis — 2-3 distinct per slide ── */
 const screenEmojis: string[][] = [
@@ -19,7 +19,7 @@ const screenEmojis: string[][] = [
 /* ── single big emoji, full opacity, bouncy pop-in ── */
 const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="select-none pointer-events-none text-6xl"
+    className="select-none pointer-events-none text-7xl"
     initial={{ opacity: 0, scale: 0 }}
     animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
@@ -132,7 +132,7 @@ const Screen1 = () => (
   <div className="relative flex flex-col items-center gap-6">
     <EmojiRow screenIndex={0} />
     <motion.h2
-      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[2.4rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -159,7 +159,7 @@ const Screen2 = () => (
   <div className="relative flex flex-col items-center gap-6">
     <EmojiRow screenIndex={1} />
     <motion.h2
-      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[2.4rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -201,7 +201,7 @@ const Screen3 = () => (
   <div className="relative flex flex-col items-center gap-6">
     <EmojiRow screenIndex={2} />
     <motion.h2
-      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[2.4rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -237,7 +237,7 @@ const Screen4 = () => (
   <div className="relative flex flex-col items-center gap-6">
     <EmojiRow screenIndex={3} />
     <motion.h2
-      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[2.4rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -263,7 +263,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex flex-col items-center gap-8">
     <EmojiRow screenIndex={4} />
     <motion.h2
-      className="relative z-10 text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[2.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
@@ -359,7 +359,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Screen content */}
-          <div className="flex-1 flex items-center justify-center px-6 overflow-hidden">
+          <div className="flex-1 flex items-center justify-center px-6 overflow-hidden mt-12">
             <div className="w-full max-w-sm">
               <AnimatePresence mode="wait">
                 <motion.div
