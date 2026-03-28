@@ -7,7 +7,7 @@ import { useCredits } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 const menuItems = [
-  { label: "create character", icon: Sparkles, path: "/" },
+  { label: "create character", icon: Sparkles, path: "/create-character" },
   { label: "create photo", icon: Camera, path: "/create" },
   { label: "my characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
@@ -17,8 +17,8 @@ const menuItems = [
 ];
 
 const pageNames: Record<string, string> = {
-  "/": "create character",
-  "/create": "create photo",
+  "/": "home",
+  "/create-character": "create character",
   "/characters": "my characters",
   "/storage": "storage",
   "/history": "history",
