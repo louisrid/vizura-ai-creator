@@ -59,7 +59,7 @@ const AnimatedRoutes = () => {
         <Routes location={location}>
           <Route path="/" element={<CharacterCreator />} />
           <Route path="/choose-face" element={<ChooseFace />} />
-          <Route path="/create" element={<Index />} />
+          <Route path="/index" element={<CharacterCreator />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/characters" element={<MyCharacters />} />
           <Route path="/storage" element={<Storage />} />
