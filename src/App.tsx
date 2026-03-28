@@ -11,6 +11,7 @@ import Header from "@/components/Header";
 import OnboardingOverlay from "@/components/OnboardingOverlay";
 import { supabase } from "@/integrations/supabase/client";
 import CharacterCreator from "./pages/CharacterCreator";
+import Home from "./pages/Home";
 import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -107,7 +108,7 @@ const AppOnboarding = ({
       onDismiss={dismiss}
       onLetsGo={() => {
         dismiss();
-        navigate("/");
+        navigate("/create-character");
       }}
     />
   );
@@ -116,14 +117,16 @@ const AppOnboarding = ({
 const AnimatedRoutes = () => {
   const location = useLocation();
   const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const isHome = location.pathname === "/" || location.pathname === "/index";
 
   return (
     <>
       <AppOnboarding onOpenChange={setOnboardingOpen} />
-      {!onboardingOpen && <Header />}
+      {!onboardingOpen && !isHome && <Header />}
       <PageTransition key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<CharacterCreator />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/create-character" element={<CharacterCreator />} />
           <Route path="/choose-face" element={<ChooseFace />} />
           <Route path="/create" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
