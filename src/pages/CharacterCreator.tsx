@@ -51,6 +51,15 @@ const CharacterCreator = () => {
   const [error, setError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Intro sequence — show on every fresh page load (session-based)
+  const [showIntro, setShowIntro] = useState(() => {
+    return !sessionStorage.getItem("intro_seen");
+  });
+  const handleIntroComplete = useCallback(() => {
+    sessionStorage.setItem("intro_seen", "1");
+    setShowIntro(false);
+  }, []);
+
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
     return generated.map((img) => img ?? null);
