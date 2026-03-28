@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Wand2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import CharacterCreatorOverlay from "@/components/CharacterCreatorOverlay";
+
 
 const quickOptions = [
   { key: "style", label: "style ✨", choices: ["natural", "model", "egirl"] },
@@ -46,7 +46,7 @@ const NativePill = ({
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [creatorOpen, setCreatorOpen] = useState(false);
+  
   const [selections, setSelections] = useState<Record<OptKey, string | null>>({
     style: null, hair: null, eyes: null, body: null, age: null, ethnicity: null,
   });
@@ -56,7 +56,7 @@ const Home = () => {
       navigate("/auth?redirect=/");
       return;
     }
-    setCreatorOpen(true);
+    navigate("/create-character");
   };
 
   return (
@@ -96,23 +96,23 @@ const Home = () => {
               style={{ width: "70%" }}
             >
               <span className="text-[11px] font-bold lowercase text-black">{opt.label}</span>
-              <select
-                value={selections[opt.key] || ""}
-                onChange={(e) => setSelections((prev) => ({ ...prev, [opt.key]: e.target.value }))}
-                className="appearance-none bg-transparent text-[11px] font-semibold lowercase text-black outline-none text-right cursor-pointer"
-                style={{ WebkitAppearance: "none" }}
+              <span
+                className="text-[11px] font-semibold lowercase text-black/50 cursor-pointer select-none"
+                onClick={() => {
+                  const choices = opt.choices as readonly string[];
+                  const currentIdx = selections[opt.key] ? choices.indexOf(selections[opt.key]!) : -1;
+                  const nextIdx = (currentIdx + 1) % choices.length;
+                  setSelections((prev) => ({ ...prev, [opt.key]: choices[nextIdx] }));
+                }}
               >
-                <option value="" disabled>select</option>
-                {opt.choices.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+                {selections[opt.key] || "–"}
+              </span>
             </label>
           ))}
         </div>
       </div>
 
-      <CharacterCreatorOverlay open={creatorOpen} onClose={() => setCreatorOpen(false)} />
+      
     </div>
   );
 };
