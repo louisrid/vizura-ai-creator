@@ -10,7 +10,7 @@ const menuItems = [
   { label: "home", icon: Home, path: "/" },
   { label: "create photo", icon: Camera, path: "/create" },
   { label: "create character", icon: Sparkles, path: "/create-character" },
-  { label: "my characters", icon: LayoutGrid, path: "/characters" },
+  { label: "characters", icon: LayoutGrid, path: "/characters" },
   { label: "storage", icon: FolderOpen, path: "/storage" },
   { label: "history", icon: Clock, path: "/history" },
   { label: "top-ups", icon: Gem, path: "/top-ups" },
@@ -20,7 +20,7 @@ const menuItems = [
 const pageNames: Record<string, string> = {
   "/": "home",
   "/create-character": "create character",
-  "/characters": "my characters",
+  "/characters": "characters",
   "/storage": "storage",
   "/history": "history",
   "/top-ups": "top-ups",
