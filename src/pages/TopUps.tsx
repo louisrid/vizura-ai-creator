@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Zap, Loader2 } from "lucide-react";
+import { Gem, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import { useCredits } from "@/contexts/CreditsContext";
+import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const plans = [
-  { label: "starter", credits: 150, price: 5, envVar: "TOPUP_150_PRICE_ID" },
-  { label: "popular", credits: 600, price: 15, highlighted: true, envVar: "TOPUP_600_PRICE_ID" },
-  { label: "pro", credits: 1500, price: 30, envVar: "TOPUP_1500_PRICE_ID" },
+  { label: "starter", gems: 150, price: 5, envVar: "TOPUP_150_PRICE_ID" },
+  { label: "popular", gems: 600, price: 15, highlighted: true, envVar: "TOPUP_600_PRICE_ID" },
+  { label: "pro", gems: 1500, price: 30, envVar: "TOPUP_1500_PRICE_ID" },
 ];
 
 const TopUps = () => {
-  const { credits, refetch } = useCredits();
+  const { gems, refetch } = useGems();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +26,7 @@ const TopUps = () => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, loading, navigate, location.pathname]);
 
-  // Refetch credits when returning from checkout
+  // Refetch gems when returning from checkout
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get("checkout") === "success") {
@@ -62,13 +62,13 @@ const TopUps = () => {
         <PageTitle>top-ups</PageTitle>
 
         <div className="flex items-center gap-2 mb-10">
-          <Zap size={20} strokeWidth={2.5} className="text-foreground" />
-          <span className="text-2xl font-extrabold lowercase text-foreground">{credits} credits</span>
+          <Gem size={20} strokeWidth={2.5} className="text-gem-green" />
+          <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
         </div>
 
         <div className="space-y-4">
           {plans.map((plan) => {
-            const perCredit = (plan.price / plan.credits).toFixed(3);
+            const perGem = (plan.price / plan.gems).toFixed(3);
             return (
               <div
                 key={plan.label}
@@ -99,7 +99,7 @@ const TopUps = () => {
                       plan.highlighted ? "text-background" : "text-foreground"
                     }`}
                   >
-                    {plan.credits.toLocaleString()} credits
+                    {plan.gems.toLocaleString()} gems
                   </span>
                 </div>
 
@@ -116,7 +116,7 @@ const TopUps = () => {
                       plan.highlighted ? "text-background/60" : "text-foreground/50"
                     }`}
                   >
-                    ${perCredit}/credit
+                    ${perGem}/gem
                   </span>
                 </div>
 
@@ -132,7 +132,7 @@ const TopUps = () => {
                   {buying === plan.label ? (
                     <Loader2 className="animate-spin inline" size={18} />
                   ) : (
-                    "buy credits"
+                    "buy gems"
                   )}
                 </button>
               </div>

@@ -78,6 +78,10 @@ export default {
           DEFAULT: "hsl(var(--neon-green))",
           foreground: "hsl(var(--neon-green-foreground))",
         },
+        'gem-green': {
+          DEFAULT: "hsl(var(--gem-green))",
+          foreground: "hsl(var(--gem-green-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

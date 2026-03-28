@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Crown, Zap, Loader2 } from "lucide-react";
+import { Crown, Gem, Loader2 } from "lucide-react";
 import OverlayShell from "./overlay/OverlayShell";
 import {
   dotColors,
@@ -28,7 +28,7 @@ const Scene0 = () => (
 const Scene1 = () => (
   <div className="flex flex-col items-center gap-3">
     <IconPop delay={0.1} size={96}>
-      <Zap size={60} strokeWidth={2} style={{ color: dotColors[1] }} />
+      <Gem size={60} strokeWidth={2} style={{ color: dotColors[1] }} />
     </IconPop>
     <BigTitle delay={0.2}>your imagination, no limits</BigTitle>
     <Subtitle delay={0.35}>

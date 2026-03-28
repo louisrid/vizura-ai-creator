@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { LogOut, Mail, Zap, Calendar, Crown } from "lucide-react";
+import { LogOut, Mail, Gem, Calendar, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCredits } from "@/contexts/CreditsContext";
+import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const Account = () => {
   const { user, loading: authLoading, signOut } = useAuth();
-  const { credits, refetch: refetchCredits } = useCredits();
+  const { gems, refetch: refetchGems } = useGems();
   const { subscribed, status, refetch: refetchSub } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,9 +24,9 @@ const Account = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("checkout") === "success") {
       refetchSub();
-      refetchCredits();
+      refetchGems();
     }
-  }, [location.search, refetchSub, refetchCredits]);
+  }, [location.search, refetchSub, refetchGems]);
 
   if (!authLoading && !user) return null;
 
@@ -84,11 +84,11 @@ const Account = () => {
           </div>
 
           <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-            <Zap size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
+            <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
             <div className="flex-1">
-              <span className="block text-xs font-extrabold lowercase text-foreground">credits</span>
+              <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
               <span className="block text-sm font-extrabold lowercase text-foreground">
-                {credits}
+                {gems}
               </span>
             </div>
           </div>

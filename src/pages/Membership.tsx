@@ -6,14 +6,14 @@ import PageTitle from "@/components/PageTitle";
 import SubscribeOverlay from "@/components/SubscribeOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { useCredits } from "@/contexts/CreditsContext";
+import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const Membership = () => {
   const { user, loading: authLoading } = useAuth();
   const { refetch: refetchSub } = useSubscription();
-  const { refetch: refetchCredits } = useCredits();
+  const { refetch: refetchGems } = useGems();
   const location = useLocation();
   const navigate = useNavigate();
   const [buying, setBuying] = useState(false);
@@ -28,9 +28,9 @@ const Membership = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("checkout") === "success") {
       refetchSub();
-      refetchCredits();
+      refetchGems();
     }
-  }, [location.search, refetchSub, refetchCredits]);
+  }, [location.search, refetchSub, refetchGems]);
 
   if (!authLoading && !user) return null;
 
@@ -80,7 +80,7 @@ const Membership = () => {
             onClick={() => navigate("/top-ups")}
             className="text-xs font-extrabold lowercase text-foreground/60 underline underline-offset-4 hover:text-foreground transition-colors"
           >
-            or buy credits
+            or buy gems
           </button>
         </div>
       </main>

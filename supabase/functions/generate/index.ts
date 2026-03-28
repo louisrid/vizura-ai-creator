@@ -236,7 +236,7 @@ serve(async (req) => {
         }
         if (e?.status === 402) {
           return new Response(
-            JSON.stringify({ error: "AI credits exhausted" }),
+            JSON.stringify({ error: "AI gems exhausted" }),
             { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
@@ -268,7 +268,7 @@ serve(async (req) => {
       );
     }
 
-    /* ── STANDARD CREDIT-BASED FLOW ── */
+    /* ── STANDARD GEM-BASED FLOW ── */
 
     // Demo mode: unlimited credits
     if (IS_DEMO_MODE) {
@@ -306,8 +306,8 @@ serve(async (req) => {
 
       return new Response(
         JSON.stringify({
-          error: "No credits remaining",
-          code: "NO_CREDITS",
+          error: "No gems remaining",
+          code: "NO_GEMS",
           has_subscription: hasActiveSub,
         }),
         {
@@ -317,7 +317,7 @@ serve(async (req) => {
       );
     }
 
-    // Deduct 1 credit BEFORE generation
+    // Deduct 1 gem BEFORE generation
     await adminClient
       .from("credits")
       .update({
@@ -333,7 +333,7 @@ serve(async (req) => {
     try {
       imageUrls = await generateImages(prompt, 3, LOVABLE_API_KEY);
     } catch (e: any) {
-      // Refund credit on failure
+      // Refund gem on failure
       await adminClient
         .from("credits")
         .update({
@@ -350,7 +350,7 @@ serve(async (req) => {
       }
       if (e?.status === 402) {
         return new Response(
-          JSON.stringify({ error: "AI credits exhausted" }),
+          JSON.stringify({ error: "AI gems exhausted" }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -358,7 +358,7 @@ serve(async (req) => {
     }
 
     if (imageUrls.length === 0) {
-      // Refund credit if no images generated
+      // Refund gem if no images generated
       await adminClient
         .from("credits")
         .update({
@@ -378,7 +378,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         images: imageUrls,
-        credits_remaining: creditData.balance - 1,
+        gems_remaining: creditData.balance - 1,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
