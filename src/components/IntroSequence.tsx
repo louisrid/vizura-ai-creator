@@ -4,22 +4,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
-const LIGHT_BLUE = "hsl(195 100% 50%)";
+const LIGHT_BLUE = "hsl(195 100% 60%)";
+const LIGHT_BLUE_DIM = "hsl(195 100% 50% / 0.15)";
 
-/* ── per-screen emojis — 2-3 big ones, ON TOP of title ── */
-const screenEmojis: string[] = ["💅", "💇‍♀️", "🌍", "✏️", "🚀"];
+/* ── per-screen emojis — 2-3 distinct per slide ── */
+const screenEmojis: string[][] = [
+  ["💅", "✨"],
+  ["💇‍♀️", "👁️", "💪"],
+  ["🌍", "🎂"],
+  ["✏️", "📝", "💬"],
+  ["🚀", "🎉"],
+];
 
-/* ── single big emoji, full opacity, floating on top ── */
+/* ── single big emoji, full opacity, bouncy pop-in ── */
 const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="select-none pointer-events-none text-5xl"
-    initial={{ opacity: 0, scale: 0, rotate: -20 }}
-    animate={{ opacity: 1, scale: [0, 1.3, 1], rotate: [-20, 10, 0] }}
+    className="select-none pointer-events-none text-6xl"
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.span
       className="inline-block"
-      animate={{ y: [0, -6, 0], rotate: [0, 6, -4, 0] }}
+      animate={{ y: [0, -8, 0], rotate: [0, 8, -5, 0] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
     >
       {emoji}
@@ -29,25 +36,26 @@ const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
 
 /* ── emoji row rendered INSIDE each screen, on top of title ── */
 const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
-  const emoji = screenEmojis[screenIndex] || "✨";
+  const emojis = screenEmojis[screenIndex] || ["✨"];
   return (
-    <div className="flex items-center justify-center gap-3">
-      <BigEmoji emoji={emoji} delay={0.05} />
-      <BigEmoji emoji={emoji} delay={0.2} />
+    <div className="flex items-center justify-center gap-4 pb-2">
+      {emojis.map((e, i) => (
+        <BigEmoji key={e} emoji={e} delay={0.05 + i * 0.15} />
+      ))}
     </div>
   );
 };
 
-/* ── mock pill ── */
+/* ── mock pill — neon blue tinted ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
   <motion.div
     className="flex h-10 items-center justify-center rounded-full px-4"
-    style={{ background: "hsl(0 0% 14%)" }}
+    style={{ background: LIGHT_BLUE_DIM }}
     initial={{ opacity: 0, y: 14, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-sm font-[800] lowercase tracking-tight text-white/70">{label}</span>
+    <span className="text-sm font-[800] lowercase tracking-tight" style={{ color: LIGHT_BLUE }}>{label}</span>
   </motion.div>
 );
 
@@ -59,10 +67,10 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.7rem] font-bold lowercase text-white/40">{label}</span>
+    <span className="text-[0.7rem] font-bold lowercase" style={{ color: "hsl(195 100% 60% / 0.5)" }}>{label}</span>
     <div
       className="w-full rounded-xl"
-      style={{ background: "hsl(0 0% 14%)", height: tall ? 72 : 40 }}
+      style={{ background: LIGHT_BLUE_DIM, height: tall ? 72 : 40 }}
     />
   </motion.div>
 );
@@ -70,7 +78,7 @@ const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; 
 /* ── section label ── */
 const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
   <motion.p
-    className="text-[0.7rem] font-bold uppercase tracking-widest text-white/30"
+    className="text-[0.7rem] font-bold uppercase tracking-widest" style={{ color: "hsl(195 100% 60% / 0.4)" }}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay, duration: 0.3 }}
@@ -132,7 +140,7 @@ const Screen1 = () => (
       pick a style
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -159,7 +167,7 @@ const Screen2 = () => (
       hair, eyes & body
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -201,7 +209,7 @@ const Screen3 = () => (
       ethnicity & age
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -237,7 +245,7 @@ const Screen4 = () => (
       name & describe
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -263,7 +271,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
       ready?
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12, duration: 0.3 }}
@@ -273,7 +281,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
       className="relative z-10 h-14 w-full max-w-[15rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
-      style={{ background: "hsl(42 100% 50%)", color: "#000", transition: "transform 0.05s" }}
+      style={{ background: LIGHT_BLUE, color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 16, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
