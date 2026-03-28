@@ -55,14 +55,21 @@ const AppOnboarding = ({
       return;
     }
 
+    // Already dismissed this session
+    if (sessionStorage.getItem("onboarding_dismissed")) {
+      setShowOnboarding(false);
+      onOpenChange(false);
+      return;
+    }
+
     if (!user) {
-      // Logged-out: always show onboarding on every load
+      // Logged-out: show onboarding (refresh clears sessionStorage)
       setShowOnboarding(true);
       onOpenChange(true);
       return;
     }
 
-    // Logged-in: check DB for has_seen_onboarding
+    // Logged-in: check DB
     const checkOnboarding = async () => {
       const { data } = await supabase
         .from("profiles")
@@ -71,6 +78,10 @@ const AppOnboarding = ({
         .single();
 
       const seen = data?.has_seen_onboarding ?? false;
+      if (seen) {
+        // Already completed — mark session too so we never show again
+        sessionStorage.setItem("onboarding_dismissed", "1");
+      }
       setShowOnboarding(!seen);
       onOpenChange(!seen);
     };
