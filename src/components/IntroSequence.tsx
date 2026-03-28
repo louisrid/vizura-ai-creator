@@ -18,7 +18,7 @@ const screenEmojis: string[][] = [
 /* ── single emoji, full opacity, bouncy pop-in ── */
 const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="select-none pointer-events-none text-5xl"
+    className="select-none pointer-events-none text-6xl"
     initial={{ opacity: 0, scale: 0 }}
     animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
     transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
