@@ -295,7 +295,7 @@ const Screen6 = ({ onGo }: { onGo: () => void }) => (
     </motion.h2>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="mt-4 h-20 w-full max-w-[18rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+      className="mt-4 h-20 w-full rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
       style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
