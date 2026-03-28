@@ -140,7 +140,7 @@ const Screen1 = () => (
       pick a style
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -167,7 +167,7 @@ const Screen2 = () => (
       hair, eyes & body
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -209,7 +209,7 @@ const Screen3 = () => (
       ethnicity & age
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -245,7 +245,7 @@ const Screen4 = () => (
       name & describe
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
@@ -271,7 +271,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
       ready?
     </motion.h2>
     <motion.p
-      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-[hsl(195_100%_60%_/_0.6)] text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12, duration: 0.3 }}
