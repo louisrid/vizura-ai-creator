@@ -1,8 +1,63 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
+
+/* ── per-screen emojis ── */
+const screenEmojis: string[][] = [
+  ["💅", "✨", "🔥", "💖"],
+  ["💇‍♀️", "👁️", "💪", "🌟"],
+  ["🌍", "🎂", "🧡", "⚡"],
+  ["✏️", "📝", "💬", "🪄"],
+  ["🚀", "🎉", "💫", "⭐"],
+];
+
+/* ── floating emoji ── */
+const FloatingEmoji = ({ emoji, x, y, delay }: { emoji: string; x: number; y: number; delay: number }) => (
+  <motion.span
+    className="absolute text-2xl select-none pointer-events-none opacity-[0.15]"
+    style={{ left: `${x}%`, top: `${y}%` }}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{
+      opacity: [0, 0.15, 0.12, 0.15],
+      scale: [0, 1.1, 0.95, 1],
+      y: [0, -8, 4, 0],
+      rotate: [0, 12, -8, 0],
+    }}
+    transition={{ delay, duration: 3, repeat: Infinity, ease: "easeInOut" }}
+  >
+    {emoji}
+  </motion.span>
+);
+
+/* ── emoji positions scattered around ── */
+const emojiPositions = [
+  { x: 8, y: 10 }, { x: 78, y: 8 }, { x: 85, y: 45 },
+  { x: 6, y: 55 }, { x: 48, y: 5 }, { x: 68, y: 60 },
+  { x: 22, y: 70 }, { x: 90, y: 25 },
+];
+
+/* ── emoji layer for a screen ── */
+const EmojiLayer = ({ screenIndex }: { screenIndex: number }) => {
+  const emojis = screenEmojis[screenIndex] || [];
+  return (
+    <>
+      {emojis.map((emoji, i) =>
+        emojiPositions.slice(0, emojis.length + 2).map((pos, j) => (
+          <FloatingEmoji
+            key={`${i}-${j}`}
+            emoji={emoji}
+            x={(pos.x + i * 7) % 92}
+            y={(pos.y + i * 11) % 75}
+            delay={0.1 + (i + j) * 0.2}
+          />
+        ))
+      )}
+    </>
+  );
+};
 
 /* ── mock pill ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
@@ -62,12 +117,33 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
   </div>
 );
 
+/* ── arrow button ── */
+const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean }) => (
+  <button
+    onClick={(e) => { e.stopPropagation(); onClick(); }}
+    disabled={disabled}
+    className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] active:scale-95"
+    style={{
+      borderColor: disabled ? "hsl(0 0% 100% / 0.1)" : "hsl(0 0% 100% / 0.3)",
+      opacity: disabled ? 0.3 : 1,
+      transition: "opacity 0.15s, border-color 0.15s, transform 0.05s",
+    }}
+  >
+    {direction === "left" ? (
+      <ArrowLeft size={18} strokeWidth={2.5} color="white" />
+    ) : (
+      <ArrowRight size={18} strokeWidth={2.5} color="white" />
+    )}
+  </button>
+);
+
 /* ═══════════ SCREENS ═══════════ */
 
 const Screen1 = () => (
-  <div className="flex flex-col items-center gap-6">
+  <div className="relative flex flex-col items-center gap-6">
+    <EmojiLayer screenIndex={0} />
     <motion.h2
-      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -75,14 +151,14 @@ const Screen1 = () => (
       pick a style
     </motion.h2>
     <motion.p
-      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       choose how your character looks — natural, model, or egirl
     </motion.p>
-    <div className="flex flex-wrap justify-center gap-2.5 pt-2">
+    <div className="relative z-10 flex flex-wrap justify-center gap-2.5 pt-2">
       <Pill label="natural" delay={0.15} />
       <Pill label="model" delay={0.22} />
       <Pill label="egirl" delay={0.29} />
@@ -91,9 +167,10 @@ const Screen1 = () => (
 );
 
 const Screen2 = () => (
-  <div className="flex flex-col items-center gap-6">
+  <div className="relative flex flex-col items-center gap-6">
+    <EmojiLayer screenIndex={1} />
     <motion.h2
-      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -101,14 +178,14 @@ const Screen2 = () => (
       hair, eyes & body
     </motion.h2>
     <motion.p
-      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       fine-tune the details that make your character unique
     </motion.p>
-    <div className="flex flex-col gap-3 w-full pt-2">
+    <div className="relative z-10 flex flex-col gap-3 w-full pt-2">
       <SectionLabel delay={0.15}>hair colour</SectionLabel>
       <div className="flex flex-wrap gap-2">
         {["blonde", "brunette", "black", "red"].map((h, i) => (
@@ -132,9 +209,10 @@ const Screen2 = () => (
 );
 
 const Screen3 = () => (
-  <div className="flex flex-col items-center gap-6">
+  <div className="relative flex flex-col items-center gap-6">
+    <EmojiLayer screenIndex={2} />
     <motion.h2
-      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -142,14 +220,14 @@ const Screen3 = () => (
       ethnicity & age
     </motion.h2>
     <motion.p
-      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       set their background and how old they are
     </motion.p>
-    <div className="flex flex-col gap-3 w-full pt-2">
+    <div className="relative z-10 flex flex-col gap-3 w-full pt-2">
       <SectionLabel delay={0.15}>ethnicity</SectionLabel>
       <div className="flex flex-wrap gap-2">
         {["american", "brazilian", "japanese", "korean"].map((e, i) => (
@@ -167,9 +245,10 @@ const Screen3 = () => (
 );
 
 const Screen4 = () => (
-  <div className="flex flex-col items-center gap-6">
+  <div className="relative flex flex-col items-center gap-6">
+    <EmojiLayer screenIndex={3} />
     <motion.h2
-      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -177,14 +256,14 @@ const Screen4 = () => (
       name & describe
     </motion.h2>
     <motion.p
-      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.3 }}
     >
       give them a name and add any extra details you like
     </motion.p>
-    <div className="flex flex-col gap-4 w-full pt-2">
+    <div className="relative z-10 flex flex-col gap-4 w-full pt-2">
       <MockInput label="character name" delay={0.2} />
       <MockInput label="describe your character" tall delay={0.3} />
     </div>
@@ -192,9 +271,10 @@ const Screen4 = () => (
 );
 
 const Screen5 = ({ onGo }: { onGo: () => void }) => (
-  <div className="flex flex-col items-center gap-8">
+  <div className="relative flex flex-col items-center gap-8">
+    <EmojiLayer screenIndex={4} />
     <motion.h2
-      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="relative z-10 text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
@@ -202,7 +282,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
       ready?
     </motion.h2>
     <motion.p
-      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      className="relative z-10 text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12, duration: 0.3 }}
@@ -211,7 +291,7 @@ const Screen5 = ({ onGo }: { onGo: () => void }) => (
     </motion.p>
     <motion.button
       onClick={(e) => { e.stopPropagation(); onGo(); }}
-      className="h-14 w-full max-w-[15rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
+      className="relative z-10 h-14 w-full max-w-[15rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
       style={{ background: "hsl(42 100% 50%)", color: "#000", transition: "transform 0.05s" }}
       initial={{ opacity: 0, y: 16, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -242,13 +322,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     if (open) { setStep(0); animating.current = false; }
   }, [open]);
 
-  const advance = useCallback(() => {
+  const goTo = useCallback((next: number) => {
     if (animating.current) return;
-    if (step >= TOTAL - 1) return;
+    if (next < 0 || next >= TOTAL || next === step) return;
     animating.current = true;
-    setStep((s) => s + 1);
+    setStep(next);
     setTimeout(() => { animating.current = false; }, 400);
   }, [step]);
+
+  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
+  const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
 
   const handleTap = useCallback(() => {
     if (step < TOTAL - 1) advance();
@@ -304,10 +387,13 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             </div>
           </div>
 
-          {/* Bottom */}
+          {/* Bottom: arrows + dots */}
           <div className="flex flex-col items-center gap-3 pb-[max(env(safe-area-inset-bottom),2rem)] pt-2">
             {step < TOTAL - 1 && (
-              <p className="text-[0.65rem] font-bold lowercase text-white/25">tap to continue</p>
+              <div className="flex items-center gap-4">
+                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                <NavArrow direction="right" onClick={advance} />
+              </div>
             )}
             <Dots current={step} total={TOTAL} />
           </div>
