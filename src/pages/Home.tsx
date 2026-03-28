@@ -107,7 +107,7 @@ const Home = () => {
       style={{ height: "calc(100dvh - 73px)" }}
     >
       {/* Main content area */}
-      <div className="flex-1 flex gap-3 px-4 pt-6">
+      <div className="flex-1 flex gap-3 px-6 pt-6">
         {/* Left: photo box + button */}
         <div className="flex flex-col" style={{ width: "65%" }}>
           <div
@@ -119,7 +119,7 @@ const Home = () => {
 
           <button
             onClick={handleCreate}
-            className="mt-3 flex h-[56px] w-full items-center justify-center gap-2 rounded-full bg-foreground text-[1.15rem] font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
+            className="mt-3 flex h-[46px] w-full items-center justify-center gap-2 rounded-full bg-foreground text-sm font-[900] lowercase tracking-tight text-background transition-transform active:scale-[0.97]"
             style={{ transition: "transform 0.05s" }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
@@ -131,7 +131,7 @@ const Home = () => {
         </div>
 
         {/* Right: 3 pill selectors stacked */}
-        <div className="flex flex-col gap-3 pt-1" style={{ width: "32%" }}>
+        <div className="grid grid-cols-2 gap-2 pt-1" style={{ width: "42%" }}>
           {quickOptions.map((opt) => (
             <PillSelect
               key={opt.key}
