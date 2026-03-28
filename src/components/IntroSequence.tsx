@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const TOTAL = 5;
+const LIGHT_BLUE = "hsl(195 100% 50%)";
 
 /* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
