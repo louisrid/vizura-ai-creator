@@ -3,15 +3,16 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const TOTAL = 5;
+const TOTAL = 6;
 const LIGHT_BLUE = "hsl(195 100% 75%)";
 
-/* ── per-screen emojis — 2-3 distinct per slide ── */
+/* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
-  ["💅", "✨"],
-  ["💇‍♀️", "👁️", "💪"],
-  ["🌍", "🎂"],
-  ["✏️", "📝", "💬"],
+  ["🖌️"],
+  ["✨"],
+  ["🫧"],
+  ["🇺🇸"],
+  ["🎀"],
   ["🚀", "🎉"],
 ];
 
