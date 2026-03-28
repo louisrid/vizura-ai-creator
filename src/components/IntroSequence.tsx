@@ -175,13 +175,15 @@ const ScreenShell = ({
   title: React.ReactNode;
   contentClassName?: string;
 }) => (
-  <div className="relative flex w-full flex-col items-center pt-6">
-    <div className="flex h-20 items-end justify-center">
+  <div className="relative flex w-full flex-col items-center">
+    <div className="flex h-16 items-end justify-center">
       <EmojiRow screenIndex={screenIndex} />
     </div>
-    <div className="flex h-[17.5rem] w-full flex-col items-center pt-8">
-      <ScreenTitle>{title}</ScreenTitle>
-      <div className={`mt-1 flex w-full ${contentClassName}`}>
+    <div className="mt-5 flex h-[15rem] w-full flex-col items-center">
+      <div className="flex h-24 items-end justify-center">
+        <ScreenTitle>{title}</ScreenTitle>
+      </div>
+      <div className={`mt-3 flex w-full flex-1 ${contentClassName}`}>
         {children}
       </div>
     </div>
@@ -191,7 +193,7 @@ const ScreenShell = ({
 /* ── consistent title ── */
 const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
   <motion.h2
-    className="mb-5 text-center text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white"
+    className="mb-0 text-center text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white"
     initial={{ opacity: 0, y: 12, scale: 0.95 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -244,7 +246,7 @@ const Screen4 = () => (
 );
 
 const Screen5 = () => (
-  <ScreenShell screenIndex={4} title="set her details…" contentClassName="flex-col items-start">
+  <ScreenShell screenIndex={4} title="set her details…" contentClassName="flex-col items-start justify-start">
     <motion.p
       className="text-[0.75rem] font-[800] uppercase tracking-widest text-white"
       initial={{ opacity: 0 }}
@@ -265,13 +267,15 @@ const Screen5 = () => (
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
-  <div className="relative flex w-full flex-col items-center pt-6">
-    <div className="h-20" />
-    <div className="flex h-[17.5rem] w-full flex-col items-center pt-8">
-      <ScreenTitle>ready?</ScreenTitle>
+  <div className="relative flex w-full flex-col items-center">
+    <div className="h-16" />
+    <div className="mt-5 flex h-[15rem] w-full flex-col items-center">
+      <div className="flex h-24 items-end justify-center">
+        <ScreenTitle>ready?</ScreenTitle>
+      </div>
       <motion.button
         onClick={(e) => { e.stopPropagation(); onGo(); }}
-        className="mt-5 h-20 w-[90vw] max-w-[24rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+        className="mt-4 h-20 w-[90vw] max-w-[24rem] rounded-2xl text-[1.6rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
         style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
         initial={{ opacity: 0, y: 12, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -351,7 +355,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           onClick={handleTap}
         >
           {/* Content anchored lower so every slide shares the same title position */}
-          <div className="flex-1 flex items-end justify-center px-8 pb-16 overflow-hidden">
+          <div className="flex-1 flex items-end justify-center px-8 pb-3 overflow-hidden">
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
