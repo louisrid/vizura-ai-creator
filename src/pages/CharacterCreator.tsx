@@ -63,7 +63,7 @@ const CharacterCreator = () => {
     return prompt;
   };
 
-  const saveCharacter = async () => {
+  const saveCharacter = async (andChooseFace = false) => {
     if (!user) {
       navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
       return;
@@ -89,11 +89,19 @@ const CharacterCreator = () => {
         if (updateError) throw updateError;
         toast({ title: "updated", description: "character updated successfully" });
       } else {
-        const { error: insertError } = await supabase.from("characters").insert({
-          user_id: user.id,
-          ...charData,
-        });
+        const { data: inserted, error: insertError } = await supabase
+          .from("characters")
+          .insert({ user_id: user.id, ...charData })
+          .select("id")
+          .single();
         if (insertError) throw insertError;
+
+        if (andChooseFace && inserted) {
+          navigate("/choose-face", {
+            state: { prompt: buildPrompt(), characterId: inserted.id },
+          });
+          return;
+        }
         toast({ title: "saved", description: "character saved to your collection" });
       }
     } catch (err: any) {
