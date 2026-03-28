@@ -251,29 +251,34 @@ const Screen4 = () => (
 );
 
 const Screen5 = () => (
-  <div className="relative flex flex-col items-center gap-3">
-    <EmojiRow screenIndex={4} />
+  <div className="relative flex flex-col items-start gap-1">
+    <div className="flex w-full justify-center">
+      <EmojiRow screenIndex={4} />
+    </div>
+    <motion.p
+      className="text-[0.75rem] font-[800] uppercase tracking-widest text-white mt-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.15, duration: 0.3 }}
+    >
+      example age
+    </motion.p>
+    <motion.span
+      className="text-[5rem] font-[900] text-white leading-none -mt-1"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.2, duration: 0.4 }}
+    >
+      27
+    </motion.span>
     <motion.h2
-      className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      className="text-[2.6rem] font-[900] lowercase leading-tight tracking-tight text-white"
       initial={{ opacity: 0, y: 12, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
       set her details…
     </motion.h2>
-    <div className="flex flex-col gap-1.5 w-full pt-1">
-      <SectionLabel delay={0.15}>suggested age</SectionLabel>
-      <div className="flex justify-center pt-1">
-        <motion.span
-          className="text-[3rem] font-[900] text-white"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-        >
-          27
-        </motion.span>
-      </div>
-    </div>
   </div>
 );
 
