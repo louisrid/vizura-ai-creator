@@ -190,8 +190,8 @@ export const ArrowButton = ({
     onPointerDown={onPointerDown}
     onPointerUp={onPointerUp}
     onPointerLeave={onPointerLeave}
-    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] active:bg-[hsl(55_90%_58%)]"
-    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s" }}
+    className="flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] active:!bg-[hsl(55,90%,58%)]"
+    style={{ background: "#000", borderColor: "hsl(0 0% 100% / 0.15)", borderRadius: 16, transition: "transform 0.05s, background 0.05s" }}
   >
     {direction === "left" ? (
       <ArrowLeft size={20} strokeWidth={2.5} style={{ color: "#fff" }} />
