@@ -48,17 +48,47 @@ const AppOnboarding = ({
   useEffect(() => {
     if (loading) return;
     const isOnIntroRoute = location.pathname === "/" || location.pathname === "/index";
-    const dismissed = sessionStorage.getItem("onboarding_dismissed");
-    const shouldShow = isOnIntroRoute && !dismissed;
-    setShowOnboarding(shouldShow);
-    onOpenChange(shouldShow);
-  }, [loading, location.pathname, onOpenChange]);
 
-  const dismiss = () => {
-    sessionStorage.setItem("onboarding_dismissed", "1");
+    if (!isOnIntroRoute) {
+      setShowOnboarding(false);
+      onOpenChange(false);
+      return;
+    }
+
+    if (!user) {
+      // Logged-out: always show onboarding on every load
+      setShowOnboarding(true);
+      onOpenChange(true);
+      return;
+    }
+
+    // Logged-in: check DB for has_seen_onboarding
+    const checkOnboarding = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("has_seen_onboarding")
+        .eq("user_id", user.id)
+        .single();
+
+      const seen = data?.has_seen_onboarding ?? false;
+      setShowOnboarding(!seen);
+      onOpenChange(!seen);
+    };
+    checkOnboarding();
+  }, [loading, user, location.pathname, onOpenChange]);
+
+  const dismiss = useCallback(async () => {
     setShowOnboarding(false);
     onOpenChange(false);
-  };
+
+    // If logged in, persist dismissal in DB
+    if (user) {
+      await supabase
+        .from("profiles")
+        .update({ has_seen_onboarding: true })
+        .eq("user_id", user.id);
+    }
+  }, [user, onOpenChange]);
 
   return (
     <OnboardingOverlay
