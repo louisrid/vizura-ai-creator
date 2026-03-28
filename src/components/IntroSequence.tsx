@@ -2,222 +2,230 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TOTAL = 7;
+const TOTAL = 5;
 
-/* ── colour themes per screen ── */
-const themes = [
-  { bg: "hsl(330 100% 60%)", emojis: ["💅", "🔥", "✨"], label: "style", options: ["natural", "model", "egirl"] },
-  { bg: "hsl(270 100% 60%)", emojis: ["💇‍♀️", "💜"], label: "hair colour", options: ["blonde", "brunette", "black", "red", "pink", "white"] },
-  { bg: "hsl(210 100% 55%)", emojis: ["👁️", "💎"], label: "eye colour", options: ["brown", "blue", "green", "hazel", "grey"] },
-  { bg: "hsl(145 80% 45%)", emojis: ["💚", "🫧"], label: "body type", options: ["slim", "regular", "curvy"] },
-  { bg: "hsl(25 100% 55%)", emojis: ["🌍", "🧡"], label: "ethnicity", options: ["american", "british", "brazilian", "french", "japanese", "korean", "scandinavian"] },
-  { bg: "hsl(50 100% 50%)", emojis: ["⚡", "💛"], label: "age", options: ["18", "20", "22", "25", "28", "30", "35", "40"] },
-] as const;
-
-/* ── spinning emoji ── */
-const SpinEmoji = ({ emoji, delay, x, y }: { emoji: string; delay: number; x: number; y: number }) => (
-  <motion.span
-    className="absolute text-4xl select-none pointer-events-none"
-    style={{ left: `${x}%`, top: `${y}%` }}
-    initial={{ opacity: 0, scale: 0, rotate: 0 }}
-    animate={{ opacity: [0, 1, 1, 0.6], scale: [0, 1.2, 1, 1], rotate: [0, 360] }}
-    transition={{ delay, duration: 2, repeat: Infinity, ease: "easeInOut" }}
+/* ── mock pill ── */
+const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
+  <motion.div
+    className="flex h-10 items-center justify-center rounded-full px-4"
+    style={{ background: "hsl(0 0% 14%)" }}
+    initial={{ opacity: 0, y: 14, scale: 0.92 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    {emoji}
-  </motion.span>
+    <span className="text-sm font-[800] lowercase tracking-tight text-white/70">{label}</span>
+  </motion.div>
 );
 
-/* ── option pill ── */
-const OptionPill = ({ label, index, variant }: { label: string; index: number; variant: string }) => {
-  const getAnimation = (v: string) => {
-    switch (v) {
-      case "slide": return { opacity: 1, x: 0 };
-      case "fade": return { opacity: 1, scale: 1 };
-      case "pop": return { opacity: 1, scale: 1 };
-      case "float": return { opacity: 1, y: 0 };
-      case "drop": return { opacity: 1, y: 0 };
-      default: return { opacity: 1, y: 0, scale: 1 };
-    }
-  };
-  const getInitial = (v: string) => {
-    switch (v) {
-      case "slide": return { opacity: 0, x: -40 };
-      case "fade": return { opacity: 0, scale: 0.8 };
-      case "pop": return { opacity: 0, scale: 0 };
-      case "float": return { opacity: 0, y: 20 };
-      case "drop": return { opacity: 0, y: -30 };
-      default: return { opacity: 0, y: 30, scale: 0.7 };
-    }
-  };
+/* ── mock input ── */
+const MockInput = ({ label, tall, delay = 0 }: { label: string; tall?: boolean; delay?: number }) => (
+  <motion.div
+    className="flex w-full flex-col gap-1.5"
+    initial={{ opacity: 0, y: 14 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+  >
+    <span className="text-[0.7rem] font-bold lowercase text-white/40">{label}</span>
+    <div
+      className="w-full rounded-xl"
+      style={{ background: "hsl(0 0% 14%)", height: tall ? 72 : 40 }}
+    />
+  </motion.div>
+);
 
-  return (
-    <motion.div
-      className="flex h-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm px-5"
-      initial={getInitial(variant)}
-      animate={getAnimation(variant)}
-      transition={{
-        delay: 0.3 + index * 0.08,
-        duration: 0.5,
-        type: "spring",
-        stiffness: 300,
-        damping: 20,
-      }}
-    >
-      <span className="text-sm font-[900] lowercase tracking-tight text-white">{label}</span>
-    </motion.div>
-  );
-};
+/* ── section label ── */
+const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+  <motion.p
+    className="text-[0.7rem] font-bold uppercase tracking-widest text-white/30"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay, duration: 0.3 }}
+  >
+    {children}
+  </motion.p>
+);
 
 /* ── progress dots ── */
 const Dots = ({ current, total }: { current: number; total: number }) => (
   <div className="flex items-center gap-2">
     {Array.from({ length: total }).map((_, i) => (
-      <motion.div
+      <div
         key={i}
-        className="rounded-full"
+        className="rounded-full transition-all duration-200"
         style={{
-          width: i === current ? 24 : 8,
+          width: i === current ? 22 : 8,
           height: 8,
-          background: i === current ? "white" : "rgba(255,255,255,0.3)",
+          background: i === current ? "white" : "hsl(0 0% 100% / 0.2)",
         }}
-        layout
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
       />
     ))}
   </div>
 );
 
-/* ── option screen (screens 1-6) ── */
-const OptionScreen = ({ step }: { step: number }) => {
-  const theme = themes[step];
-  const variants = ["bounce", "slide", "fade", "pop", "float", "drop"];
-  const variant = variants[step] || "bounce";
+/* ═══════════ SCREENS ═══════════ */
 
-  // Emoji positions scattered around
-  const emojiPositions = [
-    { x: 10, y: 8 }, { x: 75, y: 5 }, { x: 85, y: 55 },
-    { x: 5, y: 60 }, { x: 50, y: 3 }, { x: 65, y: 65 },
-  ];
+const Screen1 = () => (
+  <div className="flex flex-col items-center gap-6">
+    <motion.h2
+      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, y: 16, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      pick a style
+    </motion.h2>
+    <motion.p
+      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.3 }}
+    >
+      choose how your character looks — natural, model, or egirl
+    </motion.p>
+    <div className="flex flex-wrap justify-center gap-2.5 pt-2">
+      <Pill label="natural" delay={0.15} />
+      <Pill label="model" delay={0.22} />
+      <Pill label="egirl" delay={0.29} />
+    </div>
+  </div>
+);
 
-  return (
-    <div className="relative flex flex-col items-center w-full h-full overflow-hidden">
-      {/* Neon background burst */}
-      <motion.div
-        className="absolute inset-0"
-        style={{ background: `radial-gradient(ellipse at center, ${theme.bg}, transparent 70%)`, opacity: 0.35 }}
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: [0.5, 1.4, 1.2], opacity: [0, 0.5, 0.35] }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      />
-
-      {/* Spinning emojis */}
-      {theme.emojis.map((emoji, i) =>
-        emojiPositions.slice(0, theme.emojis.length + 2).map((pos, j) => (
-          <SpinEmoji
-            key={`${i}-${j}`}
-            emoji={emoji}
-            delay={0.1 + (i + j) * 0.2}
-            x={pos.x + i * 8}
-            y={pos.y + i * 12}
-          />
-        ))
-      )}
-
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center gap-8 pt-[22vh]">
-        <motion.h2
-          className="text-[2.5rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
-          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 200, damping: 18 }}
-        >
-          {theme.label}
-        </motion.h2>
-
-        <div className="flex flex-wrap justify-center gap-2.5 max-w-[20rem]">
-          {theme.options.map((opt, i) => (
-            <OptionPill key={opt} label={opt} index={i} variant={variant} />
-          ))}
-        </div>
+const Screen2 = () => (
+  <div className="flex flex-col items-center gap-6">
+    <motion.h2
+      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, y: 16, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      hair, eyes & body
+    </motion.h2>
+    <motion.p
+      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.3 }}
+    >
+      fine-tune the details that make your character unique
+    </motion.p>
+    <div className="flex flex-col gap-3 w-full pt-2">
+      <SectionLabel delay={0.15}>hair colour</SectionLabel>
+      <div className="flex flex-wrap gap-2">
+        {["blonde", "brunette", "black", "red"].map((h, i) => (
+          <Pill key={h} label={h} delay={0.18 + i * 0.05} />
+        ))}
+      </div>
+      <SectionLabel delay={0.35}>eye colour</SectionLabel>
+      <div className="flex flex-wrap gap-2">
+        {["brown", "blue", "green"].map((e, i) => (
+          <Pill key={e} label={e} delay={0.38 + i * 0.05} />
+        ))}
+      </div>
+      <SectionLabel delay={0.5}>body type</SectionLabel>
+      <div className="flex flex-wrap gap-2">
+        {["slim", "regular", "curvy"].map((b, i) => (
+          <Pill key={b} label={b} delay={0.53 + i * 0.05} />
+        ))}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-/* ── screen 7: ready ── */
-const ReadyScreen = ({ onGo }: { onGo: () => void }) => {
-  // All theme colours for the swirl
-  const colors = themes.map((t) => t.bg);
-
-  return (
-    <div className="relative flex flex-col items-center w-full h-full overflow-hidden">
-      {/* Multi-colour swirl */}
-      {colors.map((color, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: 300,
-            height: 300,
-            background: `radial-gradient(circle, ${color}, transparent 70%)`,
-            left: `${20 + (i % 3) * 25}%`,
-            top: `${15 + Math.floor(i / 3) * 30}%`,
-            opacity: 0.3,
-          }}
-          animate={{
-            x: [0, 30 * Math.cos(i * 1.2), -20 * Math.sin(i), 0],
-            y: [0, -25 * Math.sin(i * 0.8), 30 * Math.cos(i), 0],
-            scale: [1, 1.2, 0.9, 1],
-          }}
-          transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ))}
-
-      {/* Scattered emojis from all themes */}
-      {themes.flatMap((t) => t.emojis).slice(0, 8).map((emoji, i) => (
-        <SpinEmoji
-          key={i}
-          emoji={emoji}
-          delay={i * 0.15}
-          x={10 + (i * 11) % 80}
-          y={10 + (i * 13) % 60}
-        />
-      ))}
-
-      <div className="relative z-10 flex flex-col items-center gap-10 pt-[25vh]">
-        <motion.h2
-          className="text-[3rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.6, type: "spring", stiffness: 180, damping: 16 }}
-        >
-          ready?
-        </motion.h2>
-
-        <motion.button
-          onClick={(e) => {
-            e.stopPropagation();
-            onGo();
-          }}
-          className="h-16 w-full max-w-[16rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
-          style={{
-            background: "hsl(42 100% 50%)",
-            color: "#000",
-            transition: "transform 0.05s",
-          }}
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.5, type: "spring", stiffness: 200, damping: 18 }}
-          whileTap={{ scale: 0.93 }}
-        >
-          let's go
-        </motion.button>
+const Screen3 = () => (
+  <div className="flex flex-col items-center gap-6">
+    <motion.h2
+      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, y: 16, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      ethnicity & age
+    </motion.h2>
+    <motion.p
+      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.3 }}
+    >
+      set their background and how old they are
+    </motion.p>
+    <div className="flex flex-col gap-3 w-full pt-2">
+      <SectionLabel delay={0.15}>ethnicity</SectionLabel>
+      <div className="flex flex-wrap gap-2">
+        {["american", "brazilian", "japanese", "korean"].map((e, i) => (
+          <Pill key={e} label={e} delay={0.18 + i * 0.05} />
+        ))}
+      </div>
+      <SectionLabel delay={0.4}>age</SectionLabel>
+      <div className="flex flex-wrap gap-2">
+        {["18", "22", "25", "30"].map((a, i) => (
+          <Pill key={a} label={a} delay={0.43 + i * 0.05} />
+        ))}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-/* ═══════════════════ MAIN ═══════════════════ */
+const Screen4 = () => (
+  <div className="flex flex-col items-center gap-6">
+    <motion.h2
+      className="text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, y: 16, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      name & describe
+    </motion.h2>
+    <motion.p
+      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1, duration: 0.3 }}
+    >
+      give them a name and add any extra details you like
+    </motion.p>
+    <div className="flex flex-col gap-4 w-full pt-2">
+      <MockInput label="character name" delay={0.2} />
+      <MockInput label="describe your character" tall delay={0.3} />
+    </div>
+  </div>
+);
+
+const Screen5 = ({ onGo }: { onGo: () => void }) => (
+  <div className="flex flex-col items-center gap-8">
+    <motion.h2
+      className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      ready?
+    </motion.h2>
+    <motion.p
+      className="text-sm font-bold lowercase text-white/50 text-center max-w-[16rem]"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.12, duration: 0.3 }}
+    >
+      let's create your first character
+    </motion.p>
+    <motion.button
+      onClick={(e) => { e.stopPropagation(); onGo(); }}
+      className="h-14 w-full max-w-[15rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
+      style={{ background: "hsl(42 100% 50%)", color: "#000", transition: "transform 0.05s" }}
+      initial={{ opacity: 0, y: 16, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      whileTap={{ scale: 0.93 }}
+    >
+      let's go
+    </motion.button>
+  </div>
+);
+
+const screens = [Screen1, Screen2, Screen3, Screen4];
+
+/* ═══════════ MAIN ═══════════ */
 
 interface IntroSequenceProps {
   open: boolean;
@@ -227,28 +235,24 @@ interface IntroSequenceProps {
 const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [direction, setDirection] = useState(1);
   const animating = useRef(false);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    if (open) {
-      setStep(0);
-      setDirection(1);
-      animating.current = false;
-    }
+    if (open) { setStep(0); animating.current = false; }
   }, [open]);
 
-  const goTo = useCallback((next: number) => {
+  const advance = useCallback(() => {
     if (animating.current) return;
-    if (next < 0 || next >= TOTAL || next === step) return;
+    if (step >= TOTAL - 1) return;
     animating.current = true;
-    setDirection(next > step ? 1 : -1);
-    setStep(next);
+    setStep((s) => s + 1);
     setTimeout(() => { animating.current = false; }, 400);
   }, [step]);
 
-  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
+  const handleTap = useCallback(() => {
+    if (step < TOTAL - 1) advance();
+  }, [step, advance]);
 
   // Lock scroll
   useEffect(() => {
@@ -262,27 +266,14 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
-      document.body.style.touchAction = "";
     };
   }, [open]);
 
-  // Tap anywhere to advance (except on the "let's go" button)
-  const handleTap = useCallback(() => {
-    if (step < TOTAL - 1) advance();
-  }, [step, advance]);
-
   if (!mounted) return null;
-
-  const variants = {
-    enter: (d: number) => ({ opacity: 0, x: d * 60, scale: 0.95 }),
-    center: { opacity: 1, x: 0, scale: 1 },
-    exit: (d: number) => ({ opacity: 0, x: d * -60, scale: 0.95 }),
-  };
 
   return createPortal(
     <AnimatePresence>
@@ -292,32 +283,31 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
           {/* Screen content */}
-          <div className="flex-1 relative">
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={step}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-                className="absolute inset-0"
-              >
-                {step < 6 && <OptionScreen step={step} />}
-                {step === 6 && <ReadyScreen onGo={onComplete} />}
-              </motion.div>
-            </AnimatePresence>
+          <div className="flex-1 flex items-center justify-center px-6 overflow-hidden">
+            <div className="w-full max-w-sm">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={step}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                  {step < 4 && (() => { const S = screens[step]; return <S />; })()}
+                  {step === 4 && <Screen5 onGo={onComplete} />}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
-          {/* Bottom area: tap hint + dots */}
-          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),2rem)] pt-2">
+          {/* Bottom */}
+          <div className="flex flex-col items-center gap-3 pb-[max(env(safe-area-inset-bottom),2rem)] pt-2">
             {step < TOTAL - 1 && (
-              <p className="text-xs font-bold lowercase text-white/30">tap to continue</p>
+              <p className="text-[0.65rem] font-bold lowercase text-white/25">tap to continue</p>
             )}
             <Dots current={step} total={TOTAL} />
           </div>
