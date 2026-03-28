@@ -6,57 +6,35 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 const TOTAL = 5;
 const LIGHT_BLUE = "hsl(195 100% 50%)";
 
-/* ── per-screen emojis ── */
-const screenEmojis: string[][] = [
-  ["💅", "✨", "🔥", "💖"],
-  ["💇‍♀️", "👁️", "💪", "🌟"],
-  ["🌍", "🎂", "🧡", "⚡"],
-  ["✏️", "📝", "💬", "🪄"],
-  ["🚀", "🎉", "💫", "⭐"],
-];
+/* ── per-screen emojis — 2-3 big ones, ON TOP of title ── */
+const screenEmojis: string[] = ["💅", "💇‍♀️", "🌍", "✏️", "🚀"];
 
-/* ── floating emoji ── */
-const FloatingEmoji = ({ emoji, x, y, delay }: { emoji: string; x: number; y: number; delay: number }) => (
+/* ── single big emoji, full opacity, floating on top ── */
+const BigEmoji = ({ emoji, delay = 0 }: { emoji: string; delay?: number }) => (
   <motion.span
-    className="absolute text-2xl select-none pointer-events-none opacity-[0.15]"
-    style={{ left: `${x}%`, top: `${y}%` }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{
-      opacity: [0, 0.15, 0.12, 0.15],
-      scale: [0, 1.1, 0.95, 1],
-      y: [0, -8, 4, 0],
-      rotate: [0, 12, -8, 0],
-    }}
-    transition={{ delay, duration: 3, repeat: Infinity, ease: "easeInOut" }}
+    className="select-none pointer-events-none text-5xl"
+    initial={{ opacity: 0, scale: 0, rotate: -20 }}
+    animate={{ opacity: 1, scale: [0, 1.3, 1], rotate: [−20, 10, 0] }}
+    transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
   >
-    {emoji}
+    <motion.span
+      className="inline-block"
+      animate={{ y: [0, -6, 0], rotate: [0, 6, -4, 0] }}
+      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
+    >
+      {emoji}
+    </motion.span>
   </motion.span>
 );
 
-/* ── emoji positions scattered around ── */
-const emojiPositions = [
-  { x: 8, y: 10 }, { x: 78, y: 8 }, { x: 85, y: 45 },
-  { x: 6, y: 55 }, { x: 48, y: 5 }, { x: 68, y: 60 },
-  { x: 22, y: 70 }, { x: 90, y: 25 },
-];
-
-/* ── emoji layer for a screen ── */
-const EmojiLayer = ({ screenIndex }: { screenIndex: number }) => {
-  const emojis = screenEmojis[screenIndex] || [];
+/* ── emoji row rendered INSIDE each screen, on top of title ── */
+const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
+  const emoji = screenEmojis[screenIndex] || "✨";
   return (
-    <>
-      {emojis.map((emoji, i) =>
-        emojiPositions.slice(0, emojis.length + 2).map((pos, j) => (
-          <FloatingEmoji
-            key={`${i}-${j}`}
-            emoji={emoji}
-            x={(pos.x + i * 7) % 92}
-            y={(pos.y + i * 11) % 75}
-            delay={0.1 + (i + j) * 0.2}
-          />
-        ))
-      )}
-    </>
+    <div className="flex items-center justify-center gap-3">
+      <BigEmoji emoji={emoji} delay={0.05} />
+      <BigEmoji emoji={emoji} delay={0.2} />
+    </div>
   );
 };
 
