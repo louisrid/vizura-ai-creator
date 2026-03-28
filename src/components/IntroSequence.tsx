@@ -1,194 +1,221 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ProgressDots, ArrowButton, LIGHT_BLUE } from "@/components/overlay/OverlayPrimitives";
 
-const TOTAL = 5;
-const YELLOW = "hsl(50 100% 50%)";
-const AUTO_DELAY = 3200;
+const TOTAL = 7;
 
+/* ── colour themes per screen ── */
+const themes = [
+  { bg: "hsl(330 100% 60%)", emojis: ["💅", "🔥", "✨"], label: "style", options: ["natural", "model", "egirl"] },
+  { bg: "hsl(270 100% 60%)", emojis: ["💇‍♀️", "💜"], label: "hair colour", options: ["blonde", "brunette", "black", "red", "pink", "white"] },
+  { bg: "hsl(210 100% 55%)", emojis: ["👁️", "💎"], label: "eye colour", options: ["brown", "blue", "green", "hazel", "grey"] },
+  { bg: "hsl(145 80% 45%)", emojis: ["💚", "🫧"], label: "body type", options: ["slim", "regular", "curvy"] },
+  { bg: "hsl(25 100% 55%)", emojis: ["🌍", "🧡"], label: "ethnicity", options: ["american", "british", "brazilian", "french", "japanese", "korean", "scandinavian"] },
+  { bg: "hsl(50 100% 50%)", emojis: ["⚡", "💛"], label: "age", options: ["18", "20", "22", "25", "28", "30", "35", "40"] },
+] as const;
 
-/* ── mini dark grey box ── */
-const MiniBox = ({ className = "" }: { className?: string }) => (
-  <div className={`rounded-xl bg-[hsl(0,0%,15%)] ${className}`} />
-);
-
-/* ── emoji pop with bounce ── */
-const EmojiPop = ({ emoji }: { emoji: string }) => (
+/* ── spinning emoji ── */
+const SpinEmoji = ({ emoji, delay, x, y }: { emoji: string; delay: number; x: number; y: number }) => (
   <motion.span
-    className="text-7xl block"
-    initial={{ opacity: 0, scale: 0, y: 20 }}
-    animate={{ opacity: 1, scale: 1, y: 0 }}
-    transition={{ delay: 0.05, duration: 0.5, type: "spring", stiffness: 260, damping: 15 }}
+    className="absolute text-4xl select-none pointer-events-none"
+    style={{ left: `${x}%`, top: `${y}%` }}
+    initial={{ opacity: 0, scale: 0, rotate: 0 }}
+    animate={{ opacity: [0, 1, 1, 0.6], scale: [0, 1.2, 1, 1], rotate: [0, 360] }}
+    transition={{ delay, duration: 2, repeat: Infinity, ease: "easeInOut" }}
   >
-    <motion.span
-      className="block"
-      animate={{ y: [0, -6, 0] }}
-      transition={{ duration: 2.5, delay: 0.6, repeat: Infinity, ease: "easeInOut" }}
-    >
-      {emoji}
-    </motion.span>
+    {emoji}
   </motion.span>
 );
 
-/* ── screen title with spring ── */
-const Title = ({ children }: { children: React.ReactNode }) => (
-  <motion.h2
-    className="text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
-    initial={{ opacity: 0, y: 16 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.12, duration: 0.4, type: "spring", stiffness: 200, damping: 20 }}
-  >
-    {children}
-  </motion.h2>
-);
+/* ── option pill ── */
+const OptionPill = ({ label, index, variant }: { label: string; index: number; variant: string }) => {
+  const getAnimation = (v: string) => {
+    switch (v) {
+      case "slide": return { opacity: 1, x: 0 };
+      case "fade": return { opacity: 1, scale: 1 };
+      case "pop": return { opacity: 1, scale: 1 };
+      case "float": return { opacity: 1, y: 0 };
+      case "drop": return { opacity: 1, y: 0 };
+      default: return { opacity: 1, y: 0, scale: 1 };
+    }
+  };
+  const getInitial = (v: string) => {
+    switch (v) {
+      case "slide": return { opacity: 0, x: -40 };
+      case "fade": return { opacity: 0, scale: 0.8 };
+      case "pop": return { opacity: 0, scale: 0 };
+      case "float": return { opacity: 0, y: 20 };
+      case "drop": return { opacity: 0, y: -30 };
+      default: return { opacity: 0, y: 30, scale: 0.7 };
+    }
+  };
 
-/* ── screen subtitle ── */
-const Sub = ({ children }: { children: React.ReactNode }) => (
-  <motion.p
-    className="text-[0.94rem] font-bold lowercase text-white/55 text-center max-w-[18rem] leading-relaxed"
-    initial={{ opacity: 0, y: 8 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.3, duration: 0.3, ease: "easeOut" }}
-  >
-    {children}
-  </motion.p>
-);
-
-/* ── screen 1 ── */
-const Screen1 = () => (
-  <div className="flex flex-col items-center gap-6">
-    <EmojiPop emoji="🎨" />
-    <Title>create your character</Title>
+  return (
     <motion.div
-      className="grid grid-cols-2 gap-2.5"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
+      className="flex h-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm px-5"
+      initial={getInitial(variant)}
+      animate={getAnimation(variant)}
+      transition={{
+        delay: 0.3 + index * 0.08,
+        duration: 0.5,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      }}
     >
-      {["style", "hair", "eyes", "body"].map((l, i) => (
-        <motion.div
-          key={l}
-          className="flex h-12 w-[7.5rem] items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22 + i * 0.06, duration: 0.3, type: "spring", stiffness: 250, damping: 22 }}
-        >
-          <span className="text-xs font-extrabold lowercase text-white/40">{l}</span>
-        </motion.div>
-      ))}
+      <span className="text-sm font-[900] lowercase tracking-tight text-white">{label}</span>
     </motion.div>
-    <Sub>pick a style, hair, eyes, body type</Sub>
+  );
+};
+
+/* ── progress dots ── */
+const Dots = ({ current, total }: { current: number; total: number }) => (
+  <div className="flex items-center gap-2">
+    {Array.from({ length: total }).map((_, i) => (
+      <motion.div
+        key={i}
+        className="rounded-full"
+        style={{
+          width: i === current ? 24 : 8,
+          height: 8,
+          background: i === current ? "white" : "rgba(255,255,255,0.3)",
+        }}
+        layout
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      />
+    ))}
   </div>
 );
 
-/* ── screen 2 ── */
-const Screen2 = () => (
-  <div className="flex flex-col items-center gap-6">
-    <EmojiPop emoji="🤳" />
-    <Title>choose your face</Title>
-    <motion.div
-      className="grid grid-cols-3 gap-3"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
-    >
-      {Array.from({ length: 6 }).map((_, i) => (
+/* ── option screen (screens 1-6) ── */
+const OptionScreen = ({ step }: { step: number }) => {
+  const theme = themes[step];
+  const variants = ["bounce", "slide", "fade", "pop", "float", "drop"];
+  const variant = variants[step] || "bounce";
+
+  // Emoji positions scattered around
+  const emojiPositions = [
+    { x: 10, y: 8 }, { x: 75, y: 5 }, { x: 85, y: 55 },
+    { x: 5, y: 60 }, { x: 50, y: 3 }, { x: 65, y: 65 },
+  ];
+
+  return (
+    <div className="relative flex flex-col items-center w-full h-full overflow-hidden">
+      {/* Neon background burst */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ background: `radial-gradient(ellipse at center, ${theme.bg}, transparent 70%)`, opacity: 0.35 }}
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: [0.5, 1.4, 1.2], opacity: [0, 0.5, 0.35] }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      />
+
+      {/* Spinning emojis */}
+      {theme.emojis.map((emoji, i) =>
+        emojiPositions.slice(0, theme.emojis.length + 2).map((pos, j) => (
+          <SpinEmoji
+            key={`${i}-${j}`}
+            emoji={emoji}
+            delay={0.1 + (i + j) * 0.2}
+            x={pos.x + i * 8}
+            y={pos.y + i * 12}
+          />
+        ))
+      )}
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center gap-8 pt-[22vh]">
+        <motion.h2
+          className="text-[2.5rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 200, damping: 18 }}
+        >
+          {theme.label}
+        </motion.h2>
+
+        <div className="flex flex-wrap justify-center gap-2.5 max-w-[20rem]">
+          {theme.options.map((opt, i) => (
+            <OptionPill key={opt} label={opt} index={i} variant={variant} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── screen 7: ready ── */
+const ReadyScreen = ({ onGo }: { onGo: () => void }) => {
+  // All theme colours for the swirl
+  const colors = themes.map((t) => t.bg);
+
+  return (
+    <div className="relative flex flex-col items-center w-full h-full overflow-hidden">
+      {/* Multi-colour swirl */}
+      {colors.map((color, i) => (
         <motion.div
           key={i}
-          className="h-16 w-16 rounded-xl bg-[hsl(0,0%,15%)]"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.22 + i * 0.05, duration: 0.3, type: "spring", stiffness: 260, damping: 20 }}
+          className="absolute rounded-full"
+          style={{
+            width: 300,
+            height: 300,
+            background: `radial-gradient(circle, ${color}, transparent 70%)`,
+            left: `${20 + (i % 3) * 25}%`,
+            top: `${15 + Math.floor(i / 3) * 30}%`,
+            opacity: 0.3,
+          }}
+          animate={{
+            x: [0, 30 * Math.cos(i * 1.2), -20 * Math.sin(i), 0],
+            y: [0, -25 * Math.sin(i * 0.8), 30 * Math.cos(i), 0],
+            scale: [1, 1.2, 0.9, 1],
+          }}
+          transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
         />
       ))}
-    </motion.div>
-    <Sub>we generate 6 faces from your choices. pick your favourite</Sub>
-  </div>
-);
 
-/* ── screen 3 ── */
-const Screen3 = () => (
-  <div className="flex flex-col items-center gap-6">
-    <EmojiPop emoji="📸" />
-    <Title>create photos</Title>
-    <motion.div
-      className="flex flex-col gap-2.5 w-full max-w-[16rem]"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
-    >
-      <motion.div
-        className="flex h-12 items-center rounded-xl px-3 bg-[hsl(0,0%,15%)]"
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.25, duration: 0.3, type: "spring", stiffness: 250, damping: 22 }}
-      >
-        <span className="text-xs font-extrabold lowercase text-white/30">describe your scene...</span>
-      </motion.div>
-      <motion.div
-        className="w-full h-28 rounded-xl bg-[hsl(0,0%,15%)]"
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.32, duration: 0.3, type: "spring", stiffness: 250, damping: 22 }}
-      />
-    </motion.div>
-    <Sub>write a scene. your character gets placed in it. costs 1 gem per photo</Sub>
-  </div>
-);
-
-/* ── screen 4 ── */
-const Screen4 = () => (
-  <div className="flex flex-col items-center gap-6">
-    <EmojiPop emoji="💎" />
-    <Title>save & collect</Title>
-    <motion.div
-      className="flex gap-4"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.18, duration: 0.4, type: "spring", stiffness: 220, damping: 20 }}
-    >
-      {["💾", "🛒", "✨"].map((e, i) => (
-        <motion.div
+      {/* Scattered emojis from all themes */}
+      {themes.flatMap((t) => t.emojis).slice(0, 8).map((emoji, i) => (
+        <SpinEmoji
           key={i}
-          className="flex h-16 w-16 items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]"
-          initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ delay: 0.25 + i * 0.08, duration: 0.4, type: "spring", stiffness: 280, damping: 18 }}
-        >
-          <span className="text-2xl">{e}</span>
-        </motion.div>
+          emoji={emoji}
+          delay={i * 0.15}
+          x={10 + (i * 11) % 80}
+          y={10 + (i * 13) % 60}
+        />
       ))}
-    </motion.div>
-    <Sub>photos save to your storage. get more gems with top-ups or subscribe for $7/month</Sub>
-  </div>
-);
 
-/* ── screen 5 ── */
-const Screen5 = ({ onGo }: { onGo: () => void }) => (
-  <div className="flex flex-col items-center gap-6">
-    <EmojiPop emoji="🚀" />
-    <Title>ready?</Title>
-    <motion.button
-      onClick={(e) => {
-        e.stopPropagation();
-        onGo();
-      }}
-      className="h-16 w-full max-w-[16rem] rounded-2xl border-[4px] text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
-      style={{
-        background: YELLOW,
-        borderColor: YELLOW,
-        color: "#000",
-        transition: "transform 0.05s",
-      }}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.3, duration: 0.3, type: "spring", stiffness: 200, damping: 20 }}
-    >
-      let's go
-    </motion.button>
-  </div>
-);
+      <div className="relative z-10 flex flex-col items-center gap-10 pt-[25vh]">
+        <motion.h2
+          className="text-[3rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.6, type: "spring", stiffness: 180, damping: 16 }}
+        >
+          ready?
+        </motion.h2>
+
+        <motion.button
+          onClick={(e) => {
+            e.stopPropagation();
+            onGo();
+          }}
+          className="h-16 w-full max-w-[16rem] rounded-full text-lg font-[900] lowercase tracking-tight active:scale-[0.95]"
+          style={{
+            background: "hsl(42 100% 50%)",
+            color: "#000",
+            transition: "transform 0.05s",
+          }}
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5, type: "spring", stiffness: 200, damping: 18 }}
+          whileTap={{ scale: 0.93 }}
+        >
+          let's go
+        </motion.button>
+      </div>
+    </div>
+  );
+};
 
 /* ═══════════════════ MAIN ═══════════════════ */
 
@@ -201,14 +228,15 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [direction, setDirection] = useState(1);
-  const touchStartX = useRef<number | null>(null);
   const animating = useRef(false);
-  const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
-  const skipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    if (open) { setStep(0); setDirection(1); animating.current = false; }
+    if (open) {
+      setStep(0);
+      setDirection(1);
+      animating.current = false;
+    }
   }, [open]);
 
   const goTo = useCallback((next: number) => {
@@ -217,15 +245,10 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     animating.current = true;
     setDirection(next > step ? 1 : -1);
     setStep(next);
-    setTimeout(() => { animating.current = false; }, 350);
+    setTimeout(() => { animating.current = false; }, 400);
   }, [step]);
 
-  // Auto-advance
-  useEffect(() => {
-    if (!open || step >= TOTAL - 1) return;
-    const timer = setTimeout(() => goTo(step + 1), AUTO_DELAY);
-    return () => clearTimeout(timer);
-  }, [open, step, goTo]);
+  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
 
   // Lock scroll
   useEffect(() => {
@@ -248,80 +271,32 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     };
   }, [open]);
 
-  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
-  const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
-
-  const holdDir = useRef<"left" | "right" | null>(null);
-  const holdStart = useRef<number>(0);
-
-  const clearHold = useCallback(() => {
-    if (skipTimer.current) { clearTimeout(skipTimer.current); skipTimer.current = null; }
-    holdDir.current = null;
-  }, []);
-
-  const skipped = useRef(false);
-
-  const handlePointerDown = useCallback((dir: "left" | "right") => {
-    clearHold();
-    skipped.current = false;
-    holdDir.current = dir;
-    holdStart.current = Date.now();
-    if (dir === "right") {
-      skipTimer.current = setTimeout(() => {
-        skipped.current = true;
-        holdDir.current = null;
-        onComplete();
-      }, 990);
-    }
-  }, [clearHold, onComplete]);
-
-  const handlePointerUp = useCallback(() => {
-    if (!holdDir.current) return;
-    const elapsed = Date.now() - holdStart.current;
-    const dir = holdDir.current;
-    clearHold();
-    if (skipped.current) return;
-    if (elapsed < 990) {
-      if (dir === "right") goTo(step + 1);
-      else goTo(step - 1);
-    }
-  }, [clearHold, goTo, step]);
-
-  // Swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) advance(); else goBack();
-    }
-    touchStartX.current = null;
-  };
+  // Tap anywhere to advance (except on the "let's go" button)
+  const handleTap = useCallback(() => {
+    if (step < TOTAL - 1) advance();
+  }, [step, advance]);
 
   if (!mounted) return null;
 
   const variants = {
-    enter: (d: number) => ({ opacity: 0, x: d * 40 }),
-    center: { opacity: 1, x: 0 },
-    exit: (d: number) => ({ opacity: 0, x: d * -40 }),
+    enter: (d: number) => ({ opacity: 0, x: d * 60, scale: 0.95 }),
+    center: { opacity: 1, x: 0, scale: 1 },
+    exit: (d: number) => ({ opacity: 0, x: d * -60, scale: 0.95 }),
   };
 
   return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col bg-black"
+          className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onClick={handleTap}
         >
-          {/* content — pushed well above center */}
-          <div className="flex-1 flex items-start justify-center px-6 pt-[18vh]">
+          {/* Screen content */}
+          <div className="flex-1 relative">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={step}
@@ -330,37 +305,21 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
-                className="w-full max-w-sm flex flex-col items-center"
+                transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                className="absolute inset-0"
               >
-                {step === 0 && <Screen1 />}
-                {step === 1 && <Screen2 />}
-                {step === 2 && <Screen3 />}
-                {step === 3 && <Screen4 />}
-                {step === 4 && <Screen5 onGo={onComplete} />}
+                {step < 6 && <OptionScreen step={step} />}
+                {step === 6 && <ReadyScreen onGo={onComplete} />}
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* dots + arrows — generous bottom spacing */}
-          <div className="flex flex-col items-center gap-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-2">
-            <p className="text-xs font-bold lowercase text-white/30">press arrow to continue</p>
-            <ProgressDots current={step} total={TOTAL} />
-            <div className="flex items-center gap-6">
-              <ArrowButton
-                direction="left"
-                disabled={step === 0}
-                onPointerDown={() => handlePointerDown("left")}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={handlePointerUp}
-              />
-              <ArrowButton
-                direction="right"
-                onPointerDown={() => handlePointerDown("right")}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={handlePointerUp}
-              />
-            </div>
+          {/* Bottom area: tap hint + dots */}
+          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),2rem)] pt-2">
+            {step < TOTAL - 1 && (
+              <p className="text-xs font-bold lowercase text-white/30">tap to continue</p>
+            )}
+            <Dots current={step} total={TOTAL} />
           </div>
         </motion.div>
       )}
