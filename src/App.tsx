@@ -45,8 +45,9 @@ const AppOnboarding = ({
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
+    if (loading) return;
     const seen = sessionStorage.getItem("onboarding_seen");
-    const shouldShow = !loading && !user && location.pathname === "/" && !seen;
+    const shouldShow = location.pathname === "/" && !seen;
     setShowOnboarding(shouldShow);
     onOpenChange(shouldShow);
   }, [loading, user, location.pathname, onOpenChange]);
