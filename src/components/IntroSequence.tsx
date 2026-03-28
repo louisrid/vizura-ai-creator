@@ -139,7 +139,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       onPointerDown={startPress}
       onPointerUp={endPress}
       onPointerCancel={endPress}
-      className="flex h-16 w-12 items-center justify-center active:scale-[1.05]"
+      className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
       style={{
         backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
         border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
@@ -386,7 +386,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
               </AnimatePresence>
 
               {/* Arrows + dots — directly under content */}
-              <div className="flex flex-col items-center gap-4 mt-6">
+              <div className="flex flex-col items-center gap-4">
                 <div className="flex items-center gap-4">
                   <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
                   <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
