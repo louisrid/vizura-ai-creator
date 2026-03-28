@@ -391,7 +391,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           </div>
 
           {/* Arrows + dots — always at fixed bottom position */}
-          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),3rem)] pt-4">
+          <div className="flex flex-col items-center gap-4 pb-[max(env(safe-area-inset-bottom),8rem)] pt-4">
             <div className="flex items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
               <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
