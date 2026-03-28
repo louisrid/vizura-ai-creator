@@ -248,7 +248,7 @@ const Screen3 = () => (
 
 const Screen4 = () => (
   <div className="relative flex flex-col items-center gap-6">
-    <EmojiLayer screenIndex={3} />
+    
     <motion.h2
       className="relative z-10 text-[1.8rem] font-[900] lowercase leading-tight tracking-tight text-white text-center"
       initial={{ opacity: 0, y: 16, scale: 0.95 }}
