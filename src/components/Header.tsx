@@ -33,7 +33,7 @@ const pageNames: Record<string, string> = {
   "/": "create character",
   "/create-character": "create character",
   "/create": "create photo",
-  "/characters": "characters",
+  "/characters": "your characters",
   "/storage": "saved",
   "/history": "history",
   "/top-ups": "top-ups",
