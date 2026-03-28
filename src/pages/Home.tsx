@@ -19,16 +19,17 @@ const Home = () => {
   const [selections, setSelections] = useState<Record<OptKey, string | null>>({
     style: null, hair: null, body: null,
   });
-  const [showIntro, setShowIntro] = useState(false);
   const [showCreator, setShowCreator] = useState(false);
+
+  // Auto-play intro on first page load (once per session)
+  const shouldAutoPlay = !sessionStorage.getItem("intro_seen");
+  const [showIntro, setShowIntro] = useState(shouldAutoPlay);
 
   const handleCreate = () => {
     if (!user) {
-      // Logged out: always show intro
       setShowIntro(true);
       return;
     }
-    // Logged in: show intro once per session
     if (!sessionStorage.getItem("intro_seen")) {
       setShowIntro(true);
     } else {
