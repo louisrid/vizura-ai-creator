@@ -143,7 +143,7 @@ const CharacterCreator = () => {
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <div className="mx-auto w-full max-w-lg px-4 pt-8 pb-0">
+      <div className="mx-auto w-full max-w-lg px-4 pt-14 pb-0">
         <h1 className="text-3xl font-extrabold lowercase tracking-tight text-foreground text-center">
           {isEditing ? "edit character" : "create character"}
         </h1>
