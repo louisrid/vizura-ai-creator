@@ -5,13 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCredits } from "@/contexts/CreditsContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
-import SubscribeOverlay from "@/components/SubscribeOverlay";
+import PaywallOverlay from "@/components/PaywallOverlay";
 
 const MAX_REROLLS = 3;
 
 const ChooseFace = () => {
   const { user } = useAuth();
+  const { refetch: refetchCredits } = useCredits();
+  const { subscribed } = useSubscription();
   const navigate = useNavigate();
   const location = useLocation();
 
