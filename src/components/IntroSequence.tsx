@@ -7,19 +7,6 @@ const TOTAL = 5;
 const YELLOW = "hsl(50 100% 50%)";
 const AUTO_DELAY = 3200;
 
-/* ── big white confirm button ── */
-const ConfirmButton = ({ onClick, label = "next" }: { onClick: (e: React.MouseEvent) => void; label?: string }) => (
-  <motion.button
-    onClick={onClick}
-    className="mt-4 h-16 w-full max-w-[16rem] rounded-2xl border-[4px] border-white bg-white text-lg font-[900] lowercase tracking-tight text-black active:scale-[0.95]"
-    style={{ transition: "transform 0.05s" }}
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.35, duration: 0.25 }}
-  >
-    {label}
-  </motion.button>
-);
 
 /* ── mini dark grey box ── */
 const MiniBox = ({ className = "" }: { className?: string }) => (
@@ -63,87 +50,83 @@ const Sub = ({ children }: { children: React.ReactNode }) => (
 );
 
 /* ── screen 1 ── */
-const Screen1 = ({ onNext }: { onNext: (e: React.MouseEvent) => void }) => (
-  <div className="flex flex-col items-center gap-5">
+const Screen1 = () => (
+  <div className="flex flex-col items-center gap-6">
     <EmojiPop emoji="🎨" />
     <Title>create your character</Title>
     <motion.div
-      className="grid grid-cols-2 gap-2"
+      className="grid grid-cols-2 gap-2.5"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15, duration: 0.25 }}
     >
       {["style", "hair", "eyes", "body"].map((l) => (
-        <div key={l} className="flex h-11 w-[7rem] items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]">
-          <span className="text-[11px] font-extrabold lowercase text-white/40">{l}</span>
+        <div key={l} className="flex h-12 w-[7.5rem] items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]">
+          <span className="text-xs font-extrabold lowercase text-white/40">{l}</span>
         </div>
       ))}
     </motion.div>
     <Sub>pick a style, hair, eyes, body type</Sub>
-    <ConfirmButton onClick={onNext} />
   </div>
 );
 
 /* ── screen 2 ── */
-const Screen2 = ({ onNext }: { onNext: (e: React.MouseEvent) => void }) => (
-  <div className="flex flex-col items-center gap-5">
+const Screen2 = () => (
+  <div className="flex flex-col items-center gap-6">
     <EmojiPop emoji="🤳" />
     <Title>choose your face</Title>
     <motion.div
-      className="grid grid-cols-3 gap-2.5"
+      className="grid grid-cols-3 gap-3"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15, duration: 0.25 }}
     >
       {Array.from({ length: 6 }).map((_, i) => (
-        <MiniBox key={i} className="h-14 w-14" />
+        <MiniBox key={i} className="h-16 w-16" />
       ))}
     </motion.div>
     <Sub>we generate 6 faces from your choices. pick your favourite</Sub>
-    <ConfirmButton onClick={onNext} />
   </div>
 );
 
 /* ── screen 3 ── */
-const Screen3 = ({ onNext }: { onNext: (e: React.MouseEvent) => void }) => (
-  <div className="flex flex-col items-center gap-5">
+const Screen3 = () => (
+  <div className="flex flex-col items-center gap-6">
     <EmojiPop emoji="📸" />
     <Title>create photos</Title>
     <motion.div
-      className="flex flex-col gap-2 w-full max-w-[15rem]"
+      className="flex flex-col gap-2.5 w-full max-w-[16rem]"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15, duration: 0.25 }}
     >
-      <div className="flex h-11 items-center rounded-xl px-3 bg-[hsl(0,0%,15%)]">
-        <span className="text-[11px] font-extrabold lowercase text-white/30">describe your scene...</span>
+      <div className="flex h-12 items-center rounded-xl px-3 bg-[hsl(0,0%,15%)]">
+        <span className="text-xs font-extrabold lowercase text-white/30">describe your scene...</span>
       </div>
-      <MiniBox className="w-full h-24" />
+      <MiniBox className="w-full h-28" />
     </motion.div>
     <Sub>write a scene. your character gets placed in it. costs 1 gem per photo</Sub>
-    <ConfirmButton onClick={onNext} />
   </div>
 );
 
 /* ── screen 4 ── */
-const Screen4 = ({ onNext }: { onNext: (e: React.MouseEvent) => void }) => (
-  <div className="flex flex-col items-center gap-5">
+const Screen4 = () => (
+  <div className="flex flex-col items-center gap-6">
     <EmojiPop emoji="💎" />
     <Title>save & collect</Title>
     <motion.div
-      className="flex gap-3"
+      className="flex gap-4"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15, duration: 0.25 }}
     >
       {["💾", "🛒", "✨"].map((e, i) => (
-        <div key={i} className="flex h-14 w-14 items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]">
+        <div key={i} className="flex h-16 w-16 items-center justify-center rounded-xl bg-[hsl(0,0%,15%)]">
           <span className="text-2xl">{e}</span>
         </div>
       ))}
     </motion.div>
     <Sub>photos save to your storage. get more gems with top-ups or subscribe for $7/month</Sub>
-    <ConfirmButton onClick={onNext} />
   </div>
 );
 
@@ -291,10 +274,10 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
                 className="w-full max-w-sm flex flex-col items-center"
               >
-                {step === 0 && <Screen1 onNext={advance} />}
-                {step === 1 && <Screen2 onNext={advance} />}
-                {step === 2 && <Screen3 onNext={advance} />}
-                {step === 3 && <Screen4 onNext={advance} />}
+                {step === 0 && <Screen1 />}
+                {step === 1 && <Screen2 />}
+                {step === 2 && <Screen3 />}
+                {step === 3 && <Screen4 />}
                 {step === 4 && <Screen5 onGo={onComplete} />}
               </motion.div>
             </AnimatePresence>
