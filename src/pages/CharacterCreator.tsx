@@ -152,7 +152,7 @@ const CharacterCreator = () => {
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-44 pb-12">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-12">
         <CardCarousel
           images={imageCards}
           activeIndex={activeIndex}
