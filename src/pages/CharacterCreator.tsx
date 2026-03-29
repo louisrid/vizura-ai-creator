@@ -3,9 +3,8 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
 
-
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
 import { useAuth } from "@/contexts/AuthContext";
@@ -103,7 +102,7 @@ const CharacterCreator = () => {
           .update(charData)
           .eq("id", editId);
         if (updateError) throw updateError;
-        toast({ title: "updated", description: "character updated successfully" });
+        toast.success("character updated");
       } else {
         const { data: inserted, error: insertError } = await supabase
           .from("characters")
@@ -118,10 +117,10 @@ const CharacterCreator = () => {
           });
           return;
         }
-        toast({ title: "saved", description: "character saved to your collection" });
+        toast.success("character saved");
       }
     } catch (err: any) {
-      toast({ title: "error", description: err.message || "failed to save character", variant: "destructive" });
+      toast.error(err.message || "failed to save character");
     } finally {
       setIsSaving(false);
     }
@@ -157,6 +156,26 @@ const CharacterCreator = () => {
       }
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleCreate = async () => {
+    if (!characterName.trim()) {
+      toast.error("name is required");
+      return;
+    }
+    if (!age || Number(age) < 18 || Number(age) > 40) {
+      toast.error("age is required (18-40)");
+      return;
+    }
+    if (!user) {
+      navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+    await saveCharacter(false);
+    if (!isEditing) {
+      toast.success("character added!");
+      navigate("/characters");
     }
   };
 
@@ -293,16 +312,16 @@ const CharacterCreator = () => {
       {/* Fixed bottom create button */}
       <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 bg-background">
         <div className="mx-auto max-w-lg">
-          <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
-            {isGenerating ? (
+          <Button className="h-14 w-full text-sm" onClick={handleCreate} disabled={isSaving}>
+            {isSaving ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
-                creating...
+                saving...
               </>
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                create
+                {isEditing ? "update" : "create"}
               </>
             )}
           </Button>
