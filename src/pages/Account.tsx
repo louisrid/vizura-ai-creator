@@ -19,6 +19,7 @@ const Account = () => {
   const { subscribed, status, refetch: refetchSub, optimisticSubscribe } = useSubscription();
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [buying, setBuying] = useState(false);
+  const [justSubscribed, setJustSubscribed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
