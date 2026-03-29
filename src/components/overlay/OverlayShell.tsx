@@ -97,7 +97,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
 
   const isLastStep = step === totalSteps - 1;
 
-  const contentTransition = { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] as const };
 
   if (!mounted) return null;
 
@@ -125,10 +125,10 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                   <motion.div
                     key={step}
                     className="w-full"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={contentTransition}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
                   >
                     {children(step)}
                   </motion.div>
