@@ -287,12 +287,7 @@ const CharacterCreator = () => {
                 const v = e.target.value;
                 if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
               }}
-              onBlur={() => {
-                if (age === "") return;
-                const n = Number(age);
-                if (n < 18) setAge("18");
-                else if (n > 40) setAge("40");
-              }}
+              onBlur={() => {}}
               className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
             />
           </div>
