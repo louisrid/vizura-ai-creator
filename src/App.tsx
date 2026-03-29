@@ -12,7 +12,7 @@ import CharacterCreator from "./pages/CharacterCreator";
 
 import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+
 import MyCharacters from "./pages/MyCharacters";
 import Storage from "./pages/Storage";
 import Account from "./pages/Account";
@@ -62,7 +62,7 @@ const AnimatedRoutes = () => {
           <Route path="/choose-face" element={<ChooseFace />} />
           <Route path="/create" element={<Index />} />
           <Route path="/index" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/auth" element={<Account />} />
           <Route path="/characters" element={<MyCharacters />} />
           <Route path="/storage" element={<Storage />} />
           <Route path="/top-ups" element={<TopUps />} />

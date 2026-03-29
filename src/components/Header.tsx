@@ -28,7 +28,7 @@ const pageNames: Record<string, string> = {
   "/account": "my account",
   "/account/membership": "membership",
   "/help": "help",
-  "/auth": "sign in",
+  "/auth": "my account",
   "/reset-password": "reset password",
 };
 
@@ -49,11 +49,7 @@ const Header = () => {
 
   const handleNav = (path: string) => {
     setOpen(false);
-    if (path === "/account" && !user) {
-      navigate(`/auth?redirect=${encodeURIComponent(path)}`);
-    } else {
-      navigate(path);
-    }
+    navigate(path);
   };
 
   const currentPage = pageNames[location.pathname] || "";
