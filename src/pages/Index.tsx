@@ -146,14 +146,16 @@ const Index = () => {
           </div>
           <PageTitle>create photo</PageTitle>
 
-          <h2 className="text-lg font-[900] lowercase text-foreground mb-4">image generated</h2>
-
-          <CardCarousel
-            images={paddedImages}
-            activeIndex={activeIndex}
-            onPrevious={goPrev}
-            onNext={goNext}
-          />
+          {/* Hero image box — matches CharacterCreator */}
+          <section className="mx-auto mb-5 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+            {images[0] ? (
+              <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
+                <Sparkles size={28} strokeWidth={2.5} className="text-black" />
+              </div>
+            )}
+          </section>
 
           {user && (
             <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-foreground lowercase mb-10">
