@@ -3,6 +3,44 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { IntroDots, IntroNavArrow } from "./IntroSequencePrimitives";
 
+/* ── ambient glow background ── */
+const AmbientGlow = () => (
+  <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <motion.div
+      className="absolute rounded-full blur-[120px]"
+      style={{
+        width: "70%",
+        height: "70%",
+        top: "20%",
+        left: "15%",
+        background: "radial-gradient(circle, hsl(260 80% 30% / 0.15), hsl(220 90% 20% / 0.08), transparent 70%)",
+      }}
+      animate={{
+        x: [0, 40, -30, 0],
+        y: [0, -30, 20, 0],
+        scale: [1, 1.15, 0.9, 1],
+      }}
+      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div
+      className="absolute rounded-full blur-[100px]"
+      style={{
+        width: "50%",
+        height: "50%",
+        bottom: "10%",
+        right: "5%",
+        background: "radial-gradient(circle, hsl(200 80% 25% / 0.12), hsl(240 70% 20% / 0.06), transparent 70%)",
+      }}
+      animate={{
+        x: [0, -35, 25, 0],
+        y: [0, 20, -25, 0],
+        scale: [1, 0.85, 1.1, 1],
+      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </div>
+);
+
 const Dots = IntroDots;
 const NavArrow = IntroNavArrow;
 
@@ -116,6 +154,8 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
+          {/* Ambient background glow */}
+          <AmbientGlow />
           {/* Absolute layout: content pinned at center, nav pinned below */}
           <div className="relative flex-1 overflow-hidden">
             {/* Content zone — pinned at vertical center of screen */}

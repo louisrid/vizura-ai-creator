@@ -15,26 +15,64 @@ const screenEmojis: string[][] = [
   ["🚀"],  // 6: ready
 ];
 
-/* ── per-screen micro-animation configs — gentle floats ── */
+/* ── per-screen micro-animation configs — noticeable bounces ── */
 const emojiMotions = [
-  { y: [0, -6, 0], rotate: [0, 3, -2, 0], scale: [1, 1.05, 1], duration: 3.0 },
-  { y: [0, -8, 0], rotate: [0, 5, -3, 0], scale: [1, 1.06, 1], duration: 2.8 },
-  { y: [0, -5, 2, 0], rotate: [0, -4, 3, 0], scale: [1, 1.04, 0.98, 1], duration: 3.2 },
-  { y: [0, -7, 0], rotate: [0, 6, -4, 0], scale: [1, 1.06, 0.97, 1], duration: 2.6 },
-  { y: [0, -5, 3, 0], rotate: [0, -3, 5, -2, 0], scale: [1, 1.04, 1], duration: 3.4 },
-  { y: [0, -9, 0], rotate: [0, 7, -5, 0], scale: [1, 1.07, 0.97, 1], duration: 2.7 },
-  { y: [0, -6, 0], rotate: [0, 4, -3, 0], scale: [1, 1.05, 1], duration: 3.0 },
+  { y: [0, -18, 0], rotate: [0, 6, -4, 0], scale: [1, 1.12, 1], duration: 2.0 },
+  { y: [0, -14, 4, 0], rotate: [0, -10, 8, 0], scale: [1, 1.08, 0.96, 1], duration: 2.2 },
+  { y: [0, -16, 0], x: [0, 6, -6, 0], scale: [1, 1.1, 1], duration: 2.4 },
+  { y: [0, -20, 2, 0], rotate: [0, 12, -8, 0], scale: [1, 1.1, 0.95, 1], duration: 1.8 },
+  { y: [0, -12, 0], rotate: [0, -6, 10, -4, 0], scale: [1, 1.08, 1], duration: 2.6 },
+  { y: [0, -22, 0], rotate: [0, 8, -6, 0], scale: [1, 1.14, 0.97, 1], duration: 2.0 },
+  { y: [0, -16, 4, 0], rotate: [0, -8, 6, 0], scale: [1, 1.1, 1], duration: 2.2 },
 ];
+
+/* ── ambient glow background ── */
+const AmbientGlow = () => (
+  <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <motion.div
+      className="absolute rounded-full blur-[120px]"
+      style={{
+        width: "70%",
+        height: "70%",
+        top: "20%",
+        left: "15%",
+        background: "radial-gradient(circle, hsl(260 80% 30% / 0.15), hsl(220 90% 20% / 0.08), transparent 70%)",
+      }}
+      animate={{
+        x: [0, 40, -30, 0],
+        y: [0, -30, 20, 0],
+        scale: [1, 1.15, 0.9, 1],
+      }}
+      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div
+      className="absolute rounded-full blur-[100px]"
+      style={{
+        width: "50%",
+        height: "50%",
+        bottom: "10%",
+        right: "5%",
+        background: "radial-gradient(circle, hsl(200 80% 25% / 0.12), hsl(240 70% 20% / 0.06), transparent 70%)",
+      }}
+      animate={{
+        x: [0, -35, 25, 0],
+        y: [0, 20, -25, 0],
+        scale: [1, 0.85, 1.1, 1],
+      }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </div>
+);
 
 /* ── single emoji ── */
 const BigEmoji = ({ emoji, screenIndex = 0 }: { emoji: string; screenIndex?: number }) => {
-  const motion_cfg = emojiMotions[screenIndex % emojiMotions.length];
+  const m = emojiMotions[screenIndex % emojiMotions.length];
   return (
     <span className="select-none pointer-events-none text-[3.5rem]">
       <motion.span
         className="inline-block"
-        animate={{ y: motion_cfg.y, rotate: motion_cfg.rotate, scale: motion_cfg.scale }}
-        transition={{ duration: motion_cfg.duration, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y: m.y, x: (m as any).x, rotate: m.rotate, scale: m.scale }}
+        transition={{ duration: m.duration, repeat: Infinity, ease: "easeInOut" }}
       >
         {emoji}
       </motion.span>
@@ -279,6 +317,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
+          {/* Ambient background glow */}
+          <AmbientGlow />
           {/* Absolute layout: content pinned at center, nav pinned below */}
           <div className="relative flex-1 overflow-hidden">
             {/* Content zone — pinned at vertical center of screen */}
