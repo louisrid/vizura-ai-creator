@@ -66,6 +66,22 @@ const Account = () => {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       if (data?.url) {
+        // If the returned URL is same-origin with checkout=success, the subscription
+        // was already created server-side (demo mode). Just refetch — don't redirect.
+        try {
+          const parsed = new URL(data.url, window.location.origin);
+          if (
+            parsed.origin === window.location.origin &&
+            parsed.searchParams.get("checkout") === "success"
+          ) {
+            await refetchSub();
+            await refetchGems();
+            setBuying(false);
+            return;
+          }
+        } catch {
+          // URL parsing failed — fall through to redirect
+        }
         window.location.href = data.url;
       }
     } catch (e: any) {
