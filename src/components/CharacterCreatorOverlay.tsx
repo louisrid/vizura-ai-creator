@@ -10,8 +10,8 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const categories = [
   { key: "style", label: "style", options: ["natural", "model", "egirl"] },
-  { key: "skin", label: "skin", options: ["pale", "tanned", "asian", "black"] },
-  { key: "hair", label: "hair", options: ["blonde", "brunette", "black", "red", "pink", "white"] },
+  { key: "skin", label: "skin", options: ["pale", "tan", "asian", "black"] },
+  { key: "hair", label: "hair", options: ["blonde", "brunette", "black", "pink", "white"] },
   { key: "eyes", label: "eyes", options: ["brown", "blue", "green", "hazel", "grey"] },
   { key: "body", label: "body", options: ["slim", "regular", "curvy"] },
 ] as const;
