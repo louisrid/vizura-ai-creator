@@ -160,11 +160,17 @@ const CharacterCreator = () => {
   };
 
   const handleCreate = async () => {
-    if (!characterName.trim()) {
+    const missingName = !characterName.trim();
+    const missingAge = !age || Number(age) < 18 || Number(age) > 40;
+    if (missingName && missingAge) {
+      toast.error("name and age are required");
+      return;
+    }
+    if (missingName) {
       toast.error("name is required");
       return;
     }
-    if (!age || Number(age) < 18 || Number(age) > 40) {
+    if (missingAge) {
       toast.error("age is required (18-40)");
       return;
     }
