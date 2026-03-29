@@ -109,3 +109,8 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Snappier toast exit */
+[data-sonner-toast][data-removed] {
+  transition-duration: 150ms !important;
+}
