@@ -208,20 +208,13 @@ const Screen5 = () => (
   </ScreenShell>
 );
 
-const Screen6 = ({ onGo }: { onGo: () => void }) => (
+const Screen6 = () => (
   <div className="relative flex w-full flex-col items-center">
     <div className="flex h-12 items-end justify-center">
       <BigEmoji emoji="🚀" screenIndex={6} />
     </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <ScreenTitle>ready?</ScreenTitle>
-      <button
-        onClick={(e) => { e.stopPropagation(); onGo(); }}
-        className="mt-3 h-14 w-[80vw] max-w-[20rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
-        style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
-      >
-        let's go
-      </button>
     </div>
   </div>
 );
@@ -333,7 +326,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                   >
                     {step < 6 && (() => { const S = screens[step]; return <S />; })()}
-                    {step === 6 && <Screen6 onGo={onComplete} />}
+                    {step === 6 && <Screen6 />}
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -341,13 +334,26 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
 
             {/* Nav zone — pinned at fixed position */}
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
-              <div className={`mb-4 flex h-14 items-center gap-4 ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
-                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={false} />
-              </div>
-              <div className={`flex h-3 items-center ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
-                <Dots current={step} total={TOTAL} />
-              </div>
+              {!isLastStep && (
+                <>
+                  <div className="mb-4 flex h-14 items-center gap-4">
+                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                    <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={false} />
+                  </div>
+                  <div className="flex h-3 items-center">
+                    <Dots current={step} total={TOTAL} />
+                  </div>
+                </>
+              )}
+              {isLastStep && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onComplete(); }}
+                  className="h-14 w-[80vw] max-w-[20rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+                  style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
+                >
+                  let's go
+                </button>
+              )}
             </div>
           </div>
         </motion.div>
