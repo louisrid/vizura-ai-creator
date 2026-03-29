@@ -102,7 +102,7 @@ const CharacterCreator = () => {
           .update(charData)
           .eq("id", editId);
         if (updateError) throw updateError;
-        toast({ title: "updated", description: "character updated successfully" });
+        toast.success("character updated");
       } else {
         const { data: inserted, error: insertError } = await supabase
           .from("characters")
@@ -117,10 +117,10 @@ const CharacterCreator = () => {
           });
           return;
         }
-        toast({ title: "saved", description: "character saved to your collection" });
+        toast.success("character saved");
       }
     } catch (err: any) {
-      toast({ title: "error", description: err.message || "failed to save character", variant: "destructive" });
+      toast.error(err.message || "failed to save character");
     } finally {
       setIsSaving(false);
     }
