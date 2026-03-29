@@ -25,7 +25,7 @@ const Storage = () => {
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/account`);
+    if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
 
   useEffect(() => {

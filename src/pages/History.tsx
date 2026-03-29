@@ -25,7 +25,7 @@ const History = () => {
   const [expanded, setExpanded] = useState<HistoryItem | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/account`);
+    if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
 
   useEffect(() => {

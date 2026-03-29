@@ -17,6 +17,15 @@ const Account = () => {
   const { subscribed, status, refetch: refetchSub } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get("redirect");
+
+  // Redirect back after successful login
+  useEffect(() => {
+    if (user && redirectTo) {
+      navigate(redirectTo, { replace: true });
+    }
+  }, [user, redirectTo, navigate]);
 
   // Refetch on checkout success
   useEffect(() => {
@@ -36,7 +45,7 @@ const Account = () => {
   }
 
   if (!user) {
-    return <SignInView autoSignIn={autoSignIn} />;
+    return <SignInView autoSignIn={autoSignIn} redirectTo={redirectTo} />;
   }
 
   const handleSignOut = async () => {
@@ -116,7 +125,7 @@ const Account = () => {
   );
 };
 
-const SignInView = ({ autoSignIn }: { autoSignIn: () => Promise<void> }) => {
+const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void>; redirectTo?: string | null }) => {
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -133,8 +142,11 @@ const SignInView = ({ autoSignIn }: { autoSignIn: () => Promise<void> }) => {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
+      const redirectUri = redirectTo
+        ? `${window.location.origin}/account?redirect=${encodeURIComponent(redirectTo)}`
+        : window.location.origin;
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: redirectUri,
       });
       if (result?.error) {
         toast.error("google sign in failed");

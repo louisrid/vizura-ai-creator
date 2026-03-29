@@ -31,7 +31,7 @@ const MyCharacters = () => {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+    if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
 
   useEffect(() => {

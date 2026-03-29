@@ -78,7 +78,7 @@ const CharacterCreator = () => {
 
   const saveCharacter = async (andChooseFace = false) => {
     if (!user) {
-      navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+      navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
     setIsSaving(true);
@@ -126,7 +126,7 @@ const CharacterCreator = () => {
 
   const generate = async () => {
     if (!user) {
-      navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+      navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
     if (credits <= 0 && !subscribed) {
