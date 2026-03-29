@@ -204,25 +204,25 @@ const CharacterCreator = () => {
         </div>
 
         {/* Top section: Photo left, Name + Traits right */}
-        <section className="flex gap-3 mb-6">
-          {/* Photo preview box */}
+        <section className="flex gap-3 mb-5">
+          {/* Photo preview box — 4:5 portrait */}
           <div
             className="shrink-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
-            style={{ width: "42%", aspectRatio: "3/4" }}
+            style={{ width: "40%", aspectRatio: "4/5" }}
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-neon-yellow">
-              <Sparkles size={24} strokeWidth={2.5} className="text-black" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neon-yellow">
+              <Sparkles size={20} strokeWidth={2.5} className="text-black" />
             </div>
           </div>
 
           {/* Name + Trait selectors */}
-          <div className="flex-1 flex flex-col gap-2 min-w-0">
+          <div className="flex-1 flex flex-col gap-1.5 min-w-0">
             {/* Character name */}
             <input
               value={characterName}
               onChange={(e) => setCharacterName(e.target.value)}
               placeholder="name..."
-              className="h-11 w-full rounded-2xl border-[5px] border-border bg-card px-3 text-xs font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+              className="h-[34px] w-full rounded-xl border-[4px] border-border bg-card px-3 text-[10px] font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
             />
 
             {/* Compact trait selectors */}
@@ -233,47 +233,43 @@ const CharacterCreator = () => {
             <CompactSelect label="nationality" value={country} options={countryOptions} onChange={setCountry} />
 
             {/* Age */}
-            <div className="relative">
-              <input
-                type="number"
-                min={18}
-                max={40}
-                value={age}
-                placeholder="age (18-40)"
-                onChange={(e) => {
-                  const v = e.target.value;
-                  if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
-                }}
-                className="h-9 w-full rounded-xl border-[4px] border-border bg-card px-3 text-[10px] font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-              />
-            </div>
+            <input
+              type="number"
+              min={18}
+              max={40}
+              value={age}
+              placeholder="age (18-40)"
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
+              }}
+              className="h-[34px] w-full rounded-xl border-[4px] border-border bg-card px-3 text-[10px] font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            />
           </div>
         </section>
 
         {/* Extra details / description — full width */}
-        <section className="mb-6">
-          <label className="text-xs font-extrabold lowercase text-foreground mb-2 block">
+        <section className="mb-5">
+          <label className="text-xs font-extrabold lowercase text-foreground mb-1.5 block">
             extra details
           </label>
           <textarea
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="describe her look, outfit, setting…"
-            rows={4}
-            className="min-h-28 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            rows={3}
+            className="min-h-24 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
-        {/* + icon for future options */}
-        <div className="flex justify-center mb-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-card border-[5px] border-border">
-            <Plus size={20} strokeWidth={3} className="text-foreground" />
-          </div>
+        {/* Plain + icon */}
+        <div className="flex justify-center mb-5">
+          <Plus size={24} strokeWidth={3} className="text-foreground" />
         </div>
 
         {/* Reference image upload */}
-        <section className="mb-6 flex flex-col">
-          <label className="text-xs font-extrabold lowercase text-foreground mb-2 block">
+        <section className="mb-5 flex flex-col">
+          <label className="text-xs font-extrabold lowercase text-foreground mb-1.5 block">
             reference image
           </label>
           <input
@@ -295,14 +291,14 @@ const CharacterCreator = () => {
                 className="h-full w-full rounded-2xl object-cover"
               />
             ) : (
-              <Upload size={28} strokeWidth={2.5} className="text-foreground/30" />
+              <Upload size={24} strokeWidth={2.5} className="text-foreground/30" />
             )}
           </button>
         </section>
 
         {/* Reference strength slider */}
-        <section className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+        <section className="mb-5">
+          <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs font-extrabold lowercase text-foreground">
               reference strength
             </span>
