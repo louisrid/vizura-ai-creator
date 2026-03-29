@@ -295,6 +295,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     };
   }, [open, stopSkip]);
 
+  const isLastStep = step === TOTAL - 1;
   const contentTransition = { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as const };
 
   if (!mounted) return null;
