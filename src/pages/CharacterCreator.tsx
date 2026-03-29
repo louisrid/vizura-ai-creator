@@ -38,7 +38,7 @@ const CharacterCreator = () => {
   const isEditing = !!editId;
 
   const [country, setCountry] = useState<string>(searchParams.get("country") || "any");
-  const [age, setAge] = useState<string>(searchParams.get("age") || "25");
+  const [age, setAge] = useState<string>(searchParams.get("age") || "");
   const [hair, setHair] = useState<string>(searchParams.get("hair") || "brunette");
   const [eye, setEye] = useState<string>(searchParams.get("eye") || "brown");
   const [body, setBody] = useState<string>(searchParams.get("body") || "regular");
@@ -162,17 +162,9 @@ const CharacterCreator = () => {
   const handleCreate = async () => {
     const missingName = !characterName.trim();
     const missingAge = !age || Number(age) < 18 || Number(age) > 40;
-    if (missingName && missingAge) {
-      toast.error("name is required");
-      toast.error("age is required");
-      return;
-    }
-    if (missingName) {
-      toast.error("name is required");
-      return;
-    }
-    if (missingAge) {
-      toast.error("age is required (18-40)");
+    if (missingName || missingAge) {
+      if (missingName) toast.error("name is required");
+      if (missingAge) toast.error("age is required");
       return;
     }
     if (!user) {
@@ -268,11 +260,13 @@ const CharacterCreator = () => {
               min={18}
               max={40}
               value={age}
+              placeholder="age"
               onChange={(e) => {
                 const v = e.target.value;
                 if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
               }}
               onBlur={() => {
+                if (age === "") return;
                 const n = Number(age);
                 if (n < 18) setAge("18");
                 else if (n > 40) setAge("40");
