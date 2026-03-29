@@ -136,6 +136,13 @@ const Account = () => {
           </Button>
         </div>
       </main>
+
+      <SubscribeOverlay
+        open={overlayOpen}
+        onDismiss={() => setOverlayOpen(false)}
+        onSubscribe={handleSubscribe}
+        buying={buying}
+      />
     </div>
   );
 };
