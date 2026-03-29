@@ -64,7 +64,10 @@ const Account = () => {
     setBuying(false);
     setOverlayOpen(false);
     setJustSubscribed(true);
-    navigate("/account", { replace: true });
+    // Clear the search params but stay on /account without adding a history entry
+    if (location.search) {
+      navigate("/account", { replace: true });
+    }
   };
 
   return (
