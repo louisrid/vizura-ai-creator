@@ -7,6 +7,7 @@ interface SubscriptionContextType {
   subscribed: boolean;
   loading: boolean;
   refetch: () => Promise<void>;
+  optimisticSubscribe: () => void;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -88,8 +89,12 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 
+  const optimisticSubscribe = useCallback(() => {
+    setStatus("active");
+  }, []);
+
   return (
-    <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription }}>
+    <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription, optimisticSubscribe }}>
       {children}
     </SubscriptionContext.Provider>
   );

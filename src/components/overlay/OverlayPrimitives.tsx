@@ -147,8 +147,8 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
       e.stopPropagation();
       onClick(e);
     }}
-    className={`text-xs font-extrabold lowercase underline underline-offset-4 ${className}`}
-    style={{ color: "hsl(0 0% 100% / 0.28)" }}
+    className={`mt-2 text-[0.6rem] font-bold lowercase underline underline-offset-4 ${className}`}
+    style={{ color: "hsl(0 0% 100% / 0.25)" }}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3, delay }}
