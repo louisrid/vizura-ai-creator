@@ -1,7 +1,50 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ProgressDots, SwipeHint, ArrowButton } from "./OverlayPrimitives";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+const LIGHT_BLUE = "hsl(195 100% 70%)";
+
+/* ── dots matching IntroSequence exactly ── */
+const Dots = ({ current, total }: { current: number; total: number }) => (
+  <div className="flex items-center gap-2">
+    {Array.from({ length: total }).map((_, i) => (
+      <div
+        key={i}
+        className="rounded-full transition-all duration-200"
+        style={{
+          width: i === current ? 10 : 8,
+          height: i === current ? 10 : 8,
+          background: i === current ? LIGHT_BLUE : "hsl(0 0% 100% / 0.2)",
+        }}
+      />
+    ))}
+  </div>
+);
+
+/* ── arrow matching IntroSequence exactly ── */
+const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean }) => (
+  <button
+    onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
+    className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
+    style={{
+      backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
+      border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
+      boxShadow: direction === "left" ? "inset 0 0 0 5px hsl(0 0% 100%)" : "none",
+      opacity: disabled ? 0.3 : 1,
+      borderRadius: 16,
+      outline: "none",
+      cursor: disabled ? "default" : "pointer",
+      transition: "transform 0.05s",
+    }}
+  >
+    {direction === "left" ? (
+      <ArrowLeft size={22} strokeWidth={2.75} color="hsl(0 0% 100%)" />
+    ) : (
+      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
+    )}
+  </button>
+);
 
 interface OverlayShellProps {
   open: boolean;
@@ -12,74 +55,45 @@ interface OverlayShellProps {
   onSkip?: () => void;
 }
 
-const LONG_PRESS_MS = 1000;
-
-const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onSkip }: OverlayShellProps) => {
+const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [skipAnim, setSkipAnim] = useState(false);
   const touchStartX = useRef<number | null>(null);
-  const longPressTimer = useRef<number | null>(null);
 
-  const advance = useCallback(() => {
-    setStep((s) => (s < totalSteps - 1 ? s + 1 : s));
-  }, [totalSteps]);
-
-  const handleLongPress = useCallback(() => {
-    onSkip?.();
-  }, [onSkip]);
-
-  const handleArrowPointerDown = useCallback((dir: "left" | "right") => {
-    longPressTimer.current = window.setTimeout(() => {
-      handleLongPress();
-      longPressTimer.current = null;
-    }, LONG_PRESS_MS);
-    (longPressTimer as any)._dir = dir;
-  }, [handleLongPress]);
-
-  const handleArrowPointerUp = useCallback(() => {
-    if (longPressTimer.current !== null) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-      const dir = (longPressTimer as any)._dir;
-      if (dir === "left") setStep((s) => (s > 0 ? s - 1 : s));
-      else advance();
-    }
-  }, [advance]);
+  const advance = useCallback(() => setStep((s) => Math.min(s + 1, totalSteps - 1)), [totalSteps]);
+  const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
 
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (!open) return;
     setStep(0);
-
     const root = document.getElementById("root");
     const prev = {
       body: document.body.style.overflow,
       html: document.documentElement.style.overflow,
       root: root?.style.overflow ?? "",
-      touch: root?.style.touchAction ?? "",
     };
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
-    if (root) { root.style.overflow = "hidden"; root.style.touchAction = "none"; }
+    if (root) root.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
-      if (root) { root.style.overflow = prev.root; root.style.touchAction = prev.touch; }
+      if (root) root.style.overflow = prev.root;
     };
   }, [open]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (diff > 50 && step < totalSteps - 1) advance();
-    if (diff < -50 && step > 0) setStep((s) => s - 1);
+    if (diff < -50 && step > 0) goBack();
     touchStartX.current = null;
   };
+
+  const isLastStep = step === totalSteps - 1;
 
   if (!mounted) return null;
 
@@ -87,59 +101,51 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
     <AnimatePresence onExitComplete={onExited}>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col"
-          style={{ background: "hsl(0 0% 0% / 0.97)", transformOrigin: "center center" }}
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1, transition: { duration: 0.12, ease: "easeOut" } }}
-          exit={{
-            opacity: 0,
-            scale: 1.15,
-            filter: "blur(12px)",
-            transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
-          }}
+          className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          onClick={() => { if (!isLastStep) advance(); }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <div className="flex-1 flex items-center justify-center overflow-hidden px-5">
-            <div className="flex w-full max-w-sm items-center justify-center" style={{ marginTop: "8vh" }}>
+          {/* Content — same paddingTop as IntroSequence */}
+          <div className="flex-1 px-8 overflow-hidden flex flex-col" style={{ paddingTop: "34vh" }}>
+            <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
                   className="w-full"
-                  initial={skipAnim ? false : { opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={skipAnim ? { opacity: 0 } : { opacity: 0, x: -30 }}
-                  transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   {children(step)}
                 </motion.div>
               </AnimatePresence>
             </div>
-          </div>
 
-          <div className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center gap-3 px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)]" style={{ marginTop: "-6vh" }}>
-            {showNav && step !== totalSteps - 1 ? (
-              <div className="flex items-center justify-center gap-4">
-                {step > 0 && (
-                  <ArrowButton
-                    direction="left"
-                    onPointerDown={() => handleArrowPointerDown("left")}
-                    onPointerUp={handleArrowPointerUp}
-                    onPointerLeave={handleArrowPointerUp}
-                  />
+            {/* Arrows + dots — tight below content, matching IntroSequence */}
+            {showNav && (
+              <div className="flex flex-col items-center mt-8">
+                {!isLastStep && (
+                  <div className="flex items-center gap-4 mb-4">
+                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                    <NavArrow direction="right" onClick={advance} />
+                  </div>
                 )}
-                <ArrowButton
-                  direction="right"
-                  onPointerDown={() => handleArrowPointerDown("right")}
-                  onPointerUp={handleArrowPointerUp}
-                  onPointerLeave={handleArrowPointerUp}
-                />
+                <Dots current={step} total={totalSteps} />
               </div>
-            ) : null}
+            )}
 
-            {showNav && step < totalSteps - 1 && <SwipeHint />}
-
-            <ProgressDots current={step} total={totalSteps} />
+            {/* Single-step overlays (no nav): just dots */}
+            {!showNav && totalSteps > 1 && (
+              <div className="flex flex-col items-center mt-8">
+                <Dots current={step} total={totalSteps} />
+              </div>
+            )}
           </div>
         </motion.div>
       ) : null}
