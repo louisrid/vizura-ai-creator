@@ -13,10 +13,12 @@ interface OverlayShellProps {
   showNav?: boolean;
   onExited?: () => void;
   onSkip?: () => void;
+  onLongPressSkip?: () => void;
   reserveLastStepNavSpace?: boolean;
+  bottomContent?: React.ReactNode;
 }
 
-const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, reserveLastStepNavSpace = true }: OverlayShellProps) => {
+const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onLongPressSkip, reserveLastStepNavSpace = true, bottomContent }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const touchStartX = useRef<number | null>(null);
@@ -36,10 +38,13 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
     if (skipTimerRef.current) return;
     skipTimerRef.current = setTimeout(() => {
       skipTimerRef.current = null;
-      // Jump to last step to dismiss
-      setStep(totalSteps - 1);
-    }, 500) as unknown as ReturnType<typeof setInterval>;
-  }, [totalSteps]);
+      if (onLongPressSkip) {
+        onLongPressSkip();
+      } else {
+        setStep(totalSteps - 1);
+      }
+    }, 500) as unknown as ReturnType<typeof setTimeout>;
+  }, [totalSteps, onLongPressSkip]);
 
   useEffect(() => {
     return () => stopSkip();
@@ -138,6 +143,11 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
                   <div className="flex h-3 items-center">
                     <Dots current={step} total={totalSteps} />
                   </div>
+                  {bottomContent && (
+                    <div className="mt-5 flex items-center justify-center">
+                      {bottomContent}
+                    </div>
+                  )}
                 </>
               )}
 
