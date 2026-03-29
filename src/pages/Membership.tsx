@@ -20,7 +20,7 @@ const Membership = () => {
   const [overlayOpen, setOverlayOpen] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+    if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, authLoading, navigate, location.pathname]);
 
   // Refetch on checkout success

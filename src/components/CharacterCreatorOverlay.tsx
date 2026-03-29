@@ -138,7 +138,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
   const handleCreate = async () => {
     if (!user) {
       onClose();
-      navigate("/account");
+      navigate("/account?redirect=%2F");
       return;
     }
 
