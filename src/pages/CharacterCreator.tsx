@@ -282,7 +282,8 @@ const CharacterCreator = () => {
         </section>
 
         {/* Description */}
-        <section className="mt-5 flex flex-col gap-1.5">
+        <section className="mt-10 flex flex-col gap-1.5">
+          <span className="text-xs font-extrabold lowercase text-foreground">text box</span>
           <textarea
             id="character-description"
             value={description}
