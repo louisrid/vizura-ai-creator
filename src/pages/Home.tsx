@@ -15,8 +15,8 @@ const Home = () => {
       <div className="flex flex-col gap-4 px-5 pt-6">
         {/* Preview box */}
         <motion.div
-          className="border-[6px] border-foreground bg-card"
-          style={{ width: "65%", aspectRatio: "1/1", borderRadius: 18 }}
+          className="border-[5px] border-foreground bg-card rounded-2xl"
+          style={{ width: "65%", aspectRatio: "1/1" }}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, type: "spring", stiffness: 200, damping: 25 }}
@@ -35,8 +35,7 @@ const Home = () => {
         {/* Create+ button */}
         <motion.button
           onClick={() => setShowCreator(true)}
-          className="flex h-[56px] w-full items-center justify-center gap-2.5 bg-foreground text-base font-[900] lowercase tracking-tight text-background"
-          style={{ borderRadius: 9999 }}
+          className="flex h-14 w-full items-center justify-center gap-2.5 rounded-2xl bg-foreground text-base font-extrabold lowercase tracking-tight text-background"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.3, type: "spring", stiffness: 250, damping: 25 }}
