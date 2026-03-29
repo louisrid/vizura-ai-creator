@@ -4,11 +4,11 @@ import PageTitle from "@/components/PageTitle";
 
 const ComingSoon = ({ title }: { title: string }) => (
   <div className="min-h-screen bg-background">
-    <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-      <div className="flex items-center gap-3 mb-10">
+    <main className="w-full max-w-lg mx-auto px-4 pt-8 pb-12">
+      <div className="flex items-center gap-3 mb-4">
         <BackButton />
+        <PageTitle className="mb-0">{title}</PageTitle>
       </div>
-      <PageTitle>{title}</PageTitle>
       <div className="border-[5px] border-neon-yellow rounded-2xl p-8 text-center bg-card">
         <Sparkles size={20} className="mx-auto mb-3 text-neon-yellow" />
         <p className="text-sm font-extrabold lowercase text-foreground">coming soon</p>
