@@ -35,16 +35,25 @@ const ScrollToTop = () => {
   return null;
 };
 
+const INTRO_KEY = "vizura_intro_seen";
+
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const [introSeen, setIntroSeen] = useState(location.pathname !== "/" && location.pathname !== "/create" && location.pathname !== "/index");
+  const isHomePage = location.pathname === "/" || location.pathname === "/create" || location.pathname === "/index";
+  const [introSeen, setIntroSeen] = useState(() => {
+    if (!isHomePage) return true;
+    return window.sessionStorage.getItem(INTRO_KEY) === "1";
+  });
 
   useEffect(() => {
-    const shouldShowIntro = location.pathname === "/" || location.pathname === "/create" || location.pathname === "/index";
-    setIntroSeen(!shouldShowIntro);
-  }, [location.key, location.pathname]);
+    if (!isHomePage) return;
+    if (window.sessionStorage.getItem(INTRO_KEY) === "1") {
+      setIntroSeen(true);
+    }
+  }, [isHomePage]);
 
   const handleIntroComplete = useCallback(() => {
+    window.sessionStorage.setItem(INTRO_KEY, "1");
     setIntroSeen(true);
   }, []);
 

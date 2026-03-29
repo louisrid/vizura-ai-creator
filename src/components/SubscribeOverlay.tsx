@@ -89,7 +89,6 @@ interface SubscribeOverlayProps {
 const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOverlayProps) => {
   const handleSubscribe = async () => {
     await onSubscribe();
-    window.setTimeout(onDismiss, 700);
   };
 
   return (
