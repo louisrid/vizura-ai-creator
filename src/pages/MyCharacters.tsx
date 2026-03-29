@@ -84,8 +84,8 @@ const MyCharacters = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-8 pb-12">
-        <div className="flex items-center gap-3 mb-4">
+      <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-12">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
           <PageTitle className="mb-0">your creations</PageTitle>
         </div>
