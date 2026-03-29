@@ -177,7 +177,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
     <>
       <ShatterExit active={shattering} color="hsl(0 0% 0%)" onComplete={handleShatterDone} />
       <AnimatePresence onExitComplete={onExited}>
-        {open && !shattering ? (
+        {visible && !shattering ? (
           <motion.div
             className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
             initial={{ opacity: 0 }}
