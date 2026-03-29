@@ -269,7 +269,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     if (next < 0 || next >= TOTAL || next === step) return;
     animating.current = true;
     setStep(next);
-    setTimeout(() => { animating.current = false; }, 280);
+    setTimeout(() => { animating.current = false; }, 80);
   }, [step]);
 
   const advance = useCallback(() => {

@@ -61,7 +61,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [shattering, setShattering] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(open);
   const touchStartX = useRef<number | null>(null);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingActionRef = useRef<(() => void) | null>(null);
