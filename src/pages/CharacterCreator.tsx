@@ -131,7 +131,7 @@ const CharacterCreator = () => {
           });
           return;
         }
-        toast.success("character saved");
+        toast.success("character added!");
       }
     } catch (err: any) {
       toast.error(err.message || "failed to save character");

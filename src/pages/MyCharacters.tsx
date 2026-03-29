@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, X, Trash2, Pencil } from "lucide-react";
+import { Plus, Loader2, X, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -51,21 +51,6 @@ const MyCharacters = () => {
 
   if (!authLoading && !user) return null;
 
-  const handleEdit = (char: Character) => {
-    const params = new URLSearchParams({
-      editId: char.id,
-      name: char.name,
-      country: char.country,
-      age: char.age,
-      hair: char.hair,
-      eye: char.eye,
-      body: char.body,
-      style: char.style,
-      description: char.description,
-    });
-    navigate(`/?${params.toString()}`);
-  };
-
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
@@ -107,9 +92,10 @@ const MyCharacters = () => {
 
             {/* Character cards */}
             {characters.map((char) => (
-              <div
+              <button
                 key={char.id}
-                className="group relative aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex flex-col items-center justify-center overflow-hidden"
+                onClick={() => navigate(`/characters/${char.id}`)}
+                className="group relative aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex flex-col items-center justify-center overflow-hidden text-left transition-colors hover:border-foreground/40 active:scale-[0.97]"
               >
                 <span className="text-sm font-extrabold lowercase text-foreground leading-tight text-center px-2 truncate w-full">
                   {char.name || "unnamed"}
@@ -117,25 +103,7 @@ const MyCharacters = () => {
                 <span className="text-[10px] font-extrabold lowercase text-foreground/50 mt-0.5">
                   age {char.age}
                 </span>
-
-                {/* Hover overlay with actions */}
-                <div className="absolute inset-0 bg-foreground/80 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
-                  <button
-                    onClick={() => handleEdit(char)}
-                    className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors"
-                    aria-label="edit"
-                  >
-                    <Pencil size={14} strokeWidth={2.5} />
-                  </button>
-                  <button
-                    onClick={() => setDeleteTarget(char)}
-                    className="w-9 h-9 rounded-2xl bg-destructive flex items-center justify-center text-destructive-foreground hover:bg-destructive/90 transition-colors"
-                    aria-label="delete"
-                  >
-                    <Trash2 size={14} strokeWidth={2.5} />
-                  </button>
-                </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
