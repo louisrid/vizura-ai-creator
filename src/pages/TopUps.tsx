@@ -23,7 +23,7 @@ const TopUps = () => {
   const [buying, setBuying] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+    if (!loading && !user) navigate(`/account`);
   }, [user, loading, navigate, location.pathname]);
 
   // Refetch gems when returning from checkout

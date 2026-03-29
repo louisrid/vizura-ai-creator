@@ -55,7 +55,7 @@ const ResetPassword = () => {
         ) : !isRecovery ? (
           <div className="border-[5px] border-border rounded-2xl p-6 text-center">
             <p className="text-xs font-extrabold lowercase mb-3">invalid link</p>
-            <button onClick={() => navigate("/auth")} className="font-extrabold lowercase text-foreground underline text-[10px]">
+            <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px]">
               back to log in
             </button>
           </div>
