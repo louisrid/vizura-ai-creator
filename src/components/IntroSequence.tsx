@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IntroDots, IntroNavArrow, LIGHT_BLUE } from "./overlay/IntroSequencePrimitives";
-import ShatterExit from "./ShatterExit";
 
 const TOTAL = 7;
 /* ── per-screen emojis (unique per slide) ── */
@@ -318,18 +317,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   if (!mounted) return null;
 
   return createPortal(
-    <>
-      <ShatterExit active={shattering} color="hsl(0 0% 0%)" onComplete={handleShatterDone} />
-      <AnimatePresence>
-        {open && !shattering && (
-          <motion.div
-            className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
-            onClick={handleTap}
-          >
+    <AnimatePresence onExitComplete={handleShatterDone}>
+      {open && !shattering && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
+          onClick={handleTap}
+        >
             <AmbientGlow />
             <div className="relative flex-1 overflow-hidden">
               <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
@@ -374,8 +371,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
-    </>,
+      </AnimatePresence>,
     document.body,
   );
 };

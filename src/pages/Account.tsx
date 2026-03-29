@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -145,26 +145,18 @@ const Account = () => {
 };
 
 const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () => void }) => {
-  const [phase, setPhase] = useState<"show" | "shatter" | "idle">("idle");
-  const ShatterExit = useRef<typeof import("@/components/ShatterExit").default | null>(null);
-
-  // Lazy-load ShatterExit
-  useEffect(() => {
-    import("@/components/ShatterExit").then((m) => {
-      ShatterExit.current = m.default;
-    });
-  }, []);
+  const [showing, setShowing] = useState(false);
 
   useEffect(() => {
-    if (!active) { setPhase("idle"); return; }
-    setPhase("show");
+    if (!active) { setShowing(false); return; }
+    setShowing(true);
     const root = document.getElementById("root");
     const prev = { body: document.body.style.overflow, html: document.documentElement.style.overflow, root: root?.style.overflow ?? "" };
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
 
-    const t = setTimeout(() => setPhase("shatter"), 1400);
+    const t = setTimeout(() => setShowing(false), 1400);
     return () => {
       clearTimeout(t);
       document.body.style.overflow = prev.body;
@@ -173,38 +165,28 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
     };
   }, [active]);
 
-  const handleShatterDone = useCallback(() => {
-    setPhase("idle");
-    onDone();
-  }, [onDone]);
-
-  const Shatter = ShatterExit.current;
-
   return (
-    <>
-      {Shatter && <Shatter active={phase === "shatter"} color="hsl(140 100% 50%)" onComplete={handleShatterDone} />}
-      <AnimatePresence>
-        {active && phase === "show" && (
-          <motion.div
-            className="fixed inset-0 z-[9999] flex items-center justify-center"
-            style={{ backgroundColor: "hsl(var(--member-green))" }}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.05 }}
+    <AnimatePresence onExitComplete={onDone}>
+      {showing && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          style={{ backgroundColor: "hsl(var(--member-green))" }}
+          initial={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
+        >
+          <motion.h1
+            className="text-[3rem] font-extrabold lowercase tracking-tight text-black"
+            initial={{ opacity: 0, scale: 1.2 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.35, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            <motion.h1
-              className="text-[3rem] font-extrabold lowercase tracking-tight text-black"
-              initial={{ opacity: 0, scale: 1.2 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.35, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              subscribed!
-            </motion.h1>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+            subscribed!
+          </motion.h1>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
