@@ -75,7 +75,7 @@ const Scene2 = ({ buying, onSubscribe, onDismiss }: { buying: boolean; onSubscri
     <GoldButton onClick={onSubscribe} disabled={buying}>
       {buying ? <Loader2 className="animate-spin" size={20} /> : "subscribe"}
     </GoldButton>
-    <DismissLink onClick={onDismiss} label="i'll think about it" />
+    <DismissLink onClick={onDismiss} label="i'll think about it" className="mt-7 text-[0.65rem]" />
   </IntroStyleShell>
 );
 
