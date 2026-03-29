@@ -51,6 +51,13 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!user) return;
 
+    const refreshOnReturn = () => {
+      void fetchSubscription();
+    };
+
+    window.addEventListener("focus", refreshOnReturn);
+    document.addEventListener("visibilitychange", refreshOnReturn);
+
     const channel = supabase
       .channel(`subscription-status-${user.id}`)
       .on(
@@ -73,9 +80,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       .subscribe();
 
     return () => {
+      window.removeEventListener("focus", refreshOnReturn);
+      document.removeEventListener("visibilitychange", refreshOnReturn);
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [fetchSubscription, user]);
 
   const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 

@@ -48,6 +48,29 @@ const AnimatedRoutes = () => {
   const [introSeen, setIntroSeen] = useState(readIntroSeen);
 
   useEffect(() => {
+    const syncIntroSeen = () => {
+      if (readIntroSeen()) {
+        setIntroSeen(true);
+      }
+    };
+
+    syncIntroSeen();
+    window.addEventListener("focus", syncIntroSeen);
+    document.addEventListener("visibilitychange", syncIntroSeen);
+
+    return () => {
+      window.removeEventListener("focus", syncIntroSeen);
+      document.removeEventListener("visibilitychange", syncIntroSeen);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (readIntroSeen()) {
+      setIntroSeen(true);
+    }
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
     if (introSeen) {
       window.sessionStorage.setItem(INTRO_KEY, "1");
     }
