@@ -97,14 +97,6 @@ const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
   </motion.h2>
 );
 
-/*
- * Every screen uses this fixed structure:
- * - Emoji row (fixed height)
- * - Title (fixed height)
- * - Sub-content area (compact, lives below title)
- *
- * The outer layout centres this whole block identically on every screen.
- */
 const ScreenShell = ({
   children,
   screenIndex,
@@ -225,12 +217,13 @@ interface IntroSequenceProps {
 const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [skipping, setSkipping] = useState(false);
   const animating = useRef(false);
   const skipIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    if (open) { setStep(0); animating.current = false; }
+    if (open) { setStep(0); animating.current = false; setSkipping(false); }
   }, [open]);
 
   const stopSkip = useCallback(() => {
@@ -238,6 +231,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
       clearInterval(skipIntervalRef.current);
       skipIntervalRef.current = null;
     }
+    setSkipping(false);
   }, []);
 
   useEffect(() => {
@@ -249,7 +243,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     if (next < 0 || next >= TOTAL || next === step) return;
     animating.current = true;
     setStep(next);
-    setTimeout(() => { animating.current = false; }, 400);
+    setTimeout(() => { animating.current = false; }, 350);
   }, [step]);
 
   const advance = useCallback(() => goTo(step + 1), [goTo, step]);
@@ -261,6 +255,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
 
   const handleLongPress = useCallback(() => {
     stopSkip();
+    setSkipping(true);
     skipIntervalRef.current = setInterval(() => {
       setStep((s) => {
         if (s >= TOTAL - 1) {
@@ -271,7 +266,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
         }
         return s + 1;
       });
-    }, 120);
+    }, 180);
   }, [onComplete, stopSkip]);
 
   // Lock scroll
@@ -294,6 +289,11 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     };
   }, [open, stopSkip]);
 
+  // During skip: instant transitions
+  const contentTransition = skipping
+    ? { duration: 0.08, ease: "linear" as const }
+    : { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const };
+
   if (!mounted) return null;
 
   return createPortal(
@@ -307,29 +307,33 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Content — pushed down with top padding */}
-          <div className="flex-1 px-8 overflow-hidden flex flex-col" style={{ paddingTop: "34vh" }}>
-            <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={step}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  {step < 5 && (() => { const S = screens[step]; return <S />; })()}
-                  {step === 5 && <Screen6 onGo={onComplete} />}
-                </motion.div>
-              </AnimatePresence>
+          {/* Two-zone layout: content zone (top 62%) + nav zone (bottom 38%) */}
+          <div className="flex flex-1 flex-col overflow-hidden">
+            {/* Content zone — vertically centred */}
+            <div className="flex flex-1 items-center justify-center px-8" style={{ maxHeight: "62%" }}>
+              <div className="w-full max-w-xs mx-auto flex flex-col items-center">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={step}
+                    initial={{ opacity: 0, y: skipping ? 0 : 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: skipping ? 0 : -12 }}
+                    transition={contentTransition}
+                  >
+                    {step < 5 && (() => { const S = screens[step]; return <S />; })()}
+                    {step === 5 && <Screen6 onGo={onComplete} />}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
 
-            <div className="pointer-events-none absolute inset-x-0 flex flex-col items-center" style={{ top: "62%" }}>
-              <div className={`pointer-events-auto mb-4 flex h-14 items-center gap-4 ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
+            {/* Nav zone — arrows + dots, fixed height */}
+            <div className="flex flex-col items-center justify-start pt-4 pb-8" style={{ height: "38%" }}>
+              <div className={`mb-4 flex h-14 items-center gap-4 ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
                 <NavArrow direction="left" onClick={goBack} disabled={step === 0 || step === TOTAL - 1} />
                 <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={step === TOTAL - 1} />
               </div>
-              <div className={`pointer-events-auto flex h-3 items-center ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
+              <div className={`flex h-3 items-center ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
                 <Dots current={step} total={TOTAL} />
               </div>
             </div>
