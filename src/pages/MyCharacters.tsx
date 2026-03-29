@@ -51,21 +51,6 @@ const MyCharacters = () => {
 
   if (!authLoading && !user) return null;
 
-  const handleEdit = (char: Character) => {
-    const params = new URLSearchParams({
-      editId: char.id,
-      name: char.name,
-      country: char.country,
-      age: char.age,
-      hair: char.hair,
-      eye: char.eye,
-      body: char.body,
-      style: char.style,
-      description: char.description,
-    });
-    navigate(`/?${params.toString()}`);
-  };
-
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
