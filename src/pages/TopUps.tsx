@@ -7,7 +7,7 @@ import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const plans = [
   { label: "starter", gems: 150, price: 5, envVar: "TOPUP_150_PRICE_ID" },
