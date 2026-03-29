@@ -86,9 +86,9 @@ const Storage = () => {
             <Button
               variant="outline"
               className="h-12"
-              onClick={() => navigate("/create-photo")}
+              onClick={() => navigate("/create")}
             >
-              create photo
+              create a photo
             </Button>
           </div>
         ) : (
