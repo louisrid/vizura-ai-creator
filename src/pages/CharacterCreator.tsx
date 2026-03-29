@@ -236,14 +236,11 @@ const CharacterCreator = () => {
 
         {/* Description */}
         <section className="mt-5 flex flex-col gap-1.5">
-          <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
-            describe your character
-          </label>
           <textarea
             id="character-description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="face shape, hairstyle, outfit, pose, mood, setting..."
+            placeholder="type extra stuff here"
             rows={3}
             className="min-h-24 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
