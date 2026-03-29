@@ -90,7 +90,7 @@ const Index = () => {
   };
 
   const handleCreate = async () => {
-    if (!user) { navigate(`/account`); return; }
+    if (!user) { navigate(`/account?redirect=${encodeURIComponent("/create")}`); return; }
     toast({ title: "coming soon", description: "photo creation will be available soon" });
     return;
     if (credits <= 0) { setShowPaywall(true); return; }

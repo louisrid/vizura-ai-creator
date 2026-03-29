@@ -31,9 +31,9 @@
     --neon-yellow: 50 100% 50%;
     --neon-yellow-foreground: 0 0% 4%;
 
-    /* neon green for buy/CTA */
-    --neon-green: 145 100% 40%;
-    --neon-green-foreground: 0 0% 100%;
+    /* neon green (now mapped to neon-yellow for CTA consistency) */
+    --neon-green: 50 100% 50%;
+    --neon-green-foreground: 0 0% 4%;
 
     /* gem — neon light blue */
     --gem-green: 195 100% 50%;

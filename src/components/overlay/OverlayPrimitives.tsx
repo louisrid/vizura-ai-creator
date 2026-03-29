@@ -129,8 +129,8 @@ export const GoldButton = ({
     disabled={disabled}
     className="relative mt-5 h-16 w-full border-[5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60 active:scale-[0.93]"
     style={{
-      background: "hsl(140 70% 52%)",
-      borderColor: "hsl(140 70% 58%)",
+      background: "hsl(var(--neon-yellow))",
+      borderColor: "hsl(var(--neon-yellow))",
       color: "#000",
       borderRadius: 16,
       transition: "transform 0.05s",
