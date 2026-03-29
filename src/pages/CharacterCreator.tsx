@@ -1,7 +1,8 @@
 import { useMemo, useState, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
+import { ChevronDown, Loader2, Zap, Upload, Sparkles, Plus } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
+import { Slider } from "@/components/ui/slider";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
@@ -66,7 +67,7 @@ const CharacterCreator = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referencePreview, setReferencePreview] = useState<string | null>(null);
-  const [extraDetails, setExtraDetails] = useState("");
+  const [referenceStrength, setReferenceStrength] = useState(50);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,12 +77,6 @@ const CharacterCreator = () => {
     const url = URL.createObjectURL(file);
     setReferencePreview(url);
   };
-
-
-  const imageCards = useMemo(() => {
-    if (generated.length === 0) return [null, null, null];
-    return generated.map((img) => img ?? null);
-  }, [generated]);
 
   const buildPrompt = () => {
     const ethnicityPart = country !== "any" ? `, ${country} ethnicity` : "";
@@ -130,7 +125,6 @@ const CharacterCreator = () => {
           });
           return;
         }
-        // toast handled by caller
       }
     } catch (err: any) {
       toast.error(err.message || "failed to save character");
@@ -199,10 +193,6 @@ const CharacterCreator = () => {
     }
   };
 
-  const total = imageCards.length || 3;
-  const cyclePrevious = () => setActiveIndex((c) => (c - 1 + total) % total);
-  const cycleNext = () => setActiveIndex((c) => (c + 1) % total);
-
   return (
     <div className="relative min-h-screen bg-background">
       
@@ -213,88 +203,79 @@ const CharacterCreator = () => {
           <PageTitle className="mb-0">create character</PageTitle>
         </div>
 
-        {/* Hero image box */}
-        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-            <Sparkles size={28} strokeWidth={2.5} className="text-black" />
-          </div>
-        </section>
-
-        {/* Character name */}
-        <section className="flex flex-col gap-2">
-          <label htmlFor="character-name" className="text-xs font-extrabold lowercase text-foreground">
-            character name
-          </label>
-          <input
-            id="character-name"
-            value={characterName}
-            onChange={(e) => setCharacterName(e.target.value)}
-            placeholder="give your character a name..."
-            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-          />
-        </section>
-
-        {/* Description */}
-        <section className="mt-6 flex flex-col gap-2">
-          <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
-            describe your character
-          </label>
-          <textarea
-            id="character-description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="face shape, hairstyle, outfit, pose, mood, setting..."
-            rows={4}
-            className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-          />
-        </section>
-
-        {/* Toggles */}
-        <section className="mt-6 flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-extrabold lowercase text-foreground">style</span>
-            <div className="flex gap-2">
-              {styleOptions.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setStyle(s)}
-                  className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
-                    style === s
-                      ? "bg-neon-yellow text-neon-yellow-foreground border-[5px] border-neon-yellow"
-                      : "border-[5px] border-border text-foreground hover:border-foreground/60"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+        {/* Top section: Photo left, Name + Traits right */}
+        <section className="flex gap-3 mb-6">
+          {/* Photo preview box */}
+          <div
+            className="shrink-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
+            style={{ width: "42%", aspectRatio: "3/4" }}
+          >
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-neon-yellow">
+              <Sparkles size={24} strokeWidth={2.5} className="text-black" />
             </div>
           </div>
 
-          <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
-          <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
-          <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
-          <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-extrabold lowercase text-foreground">age</span>
+          {/* Name + Trait selectors */}
+          <div className="flex-1 flex flex-col gap-2 min-w-0">
+            {/* Character name */}
             <input
-              type="number"
-              min={18}
-              max={40}
-              value={age}
-              placeholder="age (18-40)"
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
-              }}
-              onBlur={() => {}}
-              className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+              value={characterName}
+              onChange={(e) => setCharacterName(e.target.value)}
+              placeholder="name..."
+              className="h-11 w-full rounded-2xl border-[5px] border-border bg-card px-3 text-xs font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
             />
+
+            {/* Compact trait selectors */}
+            <CompactSelect label="style" value={style} options={styleOptions} onChange={setStyle} />
+            <CompactSelect label="hair" value={hair} options={hairOptions} onChange={setHair} />
+            <CompactSelect label="eyes" value={eye} options={eyeOptions} onChange={setEye} />
+            <CompactSelect label="body" value={body} options={bodyOptions} onChange={setBody} />
+            <CompactSelect label="nationality" value={country} options={countryOptions} onChange={setCountry} />
+
+            {/* Age */}
+            <div className="relative">
+              <input
+                type="number"
+                min={18}
+                max={40}
+                value={age}
+                placeholder="age (18-40)"
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
+                }}
+                className="h-9 w-full rounded-xl border-[4px] border-border bg-card px-3 text-[10px] font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+              />
+            </div>
           </div>
         </section>
 
+        {/* Extra details / description — full width */}
+        <section className="mb-6">
+          <label className="text-xs font-extrabold lowercase text-foreground mb-2 block">
+            extra details
+          </label>
+          <textarea
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            placeholder="describe her look, outfit, setting…"
+            rows={4}
+            className="min-h-28 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+          />
+        </section>
+
+        {/* + icon for future options */}
+        <div className="flex justify-center mb-6">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-card border-[5px] border-border">
+            <Plus size={20} strokeWidth={3} className="text-foreground" />
+          </div>
+        </div>
+
         {/* Reference image upload */}
-        <section className="mt-10 flex flex-col">
-          <h2 className="text-2xl font-[900] lowercase text-foreground mb-3">got an idea?</h2>
+        <section className="mb-6 flex flex-col">
+          <label className="text-xs font-extrabold lowercase text-foreground mb-2 block">
+            reference image
+          </label>
           <input
             ref={fileInputRef}
             type="file"
@@ -305,7 +286,7 @@ const CharacterCreator = () => {
           <button
             onClick={() => fileInputRef.current?.click()}
             className="flex w-full items-center justify-center rounded-2xl border-[3px] border-dashed border-foreground/20 bg-card transition-colors hover:border-foreground/40"
-            style={{ aspectRatio: "4/3" }}
+            style={{ aspectRatio: "16/9" }}
           >
             {referencePreview ? (
               <img
@@ -319,8 +300,28 @@ const CharacterCreator = () => {
           </button>
         </section>
 
+        {/* Reference strength slider */}
+        <section className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-extrabold lowercase text-foreground">
+              reference strength
+            </span>
+            <span className="text-xs font-extrabold lowercase text-foreground/50">
+              {referenceStrength}%
+            </span>
+          </div>
+          <Slider
+            value={[referenceStrength]}
+            onValueChange={(v) => setReferenceStrength(v[0])}
+            min={0}
+            max={100}
+            step={1}
+            className="w-full [&_[data-radix-slider-track]]:h-2.5 [&_[data-radix-slider-track]]:rounded-full [&_[data-radix-slider-track]]:bg-card [&_[data-radix-slider-track]]:border-[3px] [&_[data-radix-slider-track]]:border-border [&_[data-radix-slider-range]]:bg-neon-yellow [&_[data-radix-slider-thumb]]:h-5 [&_[data-radix-slider-thumb]]:w-5 [&_[data-radix-slider-thumb]]:bg-neon-yellow [&_[data-radix-slider-thumb]]:border-[3px] [&_[data-radix-slider-thumb]]:border-foreground"
+          />
+        </section>
+
         {error && (
-          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-2 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -348,31 +349,31 @@ const CharacterCreator = () => {
   );
 };
 
-type SelectFieldProps<T extends string> = {
+type CompactSelectProps<T extends string> = {
   label: string;
   options: readonly T[];
   value: T;
   onChange: (value: T) => void;
 };
 
-const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
-  <label className="relative flex flex-col gap-2">
-    <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
+const CompactSelect = <T extends string>({ label, options, value, onChange }: CompactSelectProps<T>) => (
+  <label className="relative flex items-center">
     <select
       value={value}
-      onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+      onChange={(e) => onChange(e.target.value as T)}
+      className="h-9 w-full appearance-none rounded-xl border-[4px] border-border bg-card pl-3 pr-8 text-[10px] font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
     >
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>{opt}</option>
       ))}
     </select>
+    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[7px] font-extrabold lowercase text-foreground/40 hidden">
+      {label}
+    </span>
     <ChevronDown
-      size={16}
-      strokeWidth={2.5}
-      className="pointer-events-none absolute right-4 bottom-3.5 text-foreground"
+      size={12}
+      strokeWidth={3}
+      className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-foreground/50"
     />
   </label>
 );
