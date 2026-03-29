@@ -242,12 +242,16 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     setTimeout(() => { animating.current = false; }, 350);
   }, [step]);
 
-  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
+  const advance = useCallback(() => {
+    if (step === TOTAL - 1) { onComplete(); return; }
+    goTo(step + 1);
+  }, [goTo, step, onComplete]);
   const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
 
   const handleTap = useCallback(() => {
     if (step < TOTAL - 1) advance();
-  }, [step, advance]);
+    else onComplete();
+  }, [step, advance, onComplete]);
 
   const handleLongPress = useCallback(() => {
     stopSkip();
@@ -315,8 +319,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             {/* Nav zone — pinned at fixed position */}
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
               <div className={`mb-4 flex h-14 items-center gap-4 ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
-                <NavArrow direction="left" onClick={goBack} disabled={step === 0 || step === TOTAL - 1} />
-                <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={step === TOTAL - 1} />
+                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={false} />
               </div>
               <div className={`flex h-3 items-center ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
                 <Dots current={step} total={TOTAL} />
