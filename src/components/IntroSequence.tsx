@@ -360,8 +360,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           </div>
 
           {/* Arrows + dots — pinned to bottom */}
-          <div className="flex flex-col items-center gap-3 pb-[max(env(safe-area-inset-bottom),3.5rem)] pt-2">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center pb-[max(env(safe-area-inset-bottom),3.5rem)] pt-2">
+            <div className="flex items-center gap-4 -mt-4 mb-5">
               <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
               <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
             </div>
