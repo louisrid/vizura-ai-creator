@@ -72,7 +72,7 @@ const CharacterCreator = () => {
 
   const buildPrompt = () => {
     const ethnicityPart = country !== "any" ? `, ${country} ethnicity` : "";
-    let prompt = `photorealistic portrait, ${age} year old woman${ethnicityPart}, ${body} body type, ${hair} hair, ${eye} eyes`;
+    let prompt = `photorealistic portrait, ${age || "25"} year old woman${ethnicityPart}, ${body} body type, ${hair} hair, ${eye} eyes, ${style} style`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
