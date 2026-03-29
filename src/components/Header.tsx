@@ -57,6 +57,8 @@ const Header = () => {
   };
 
   const currentPage = pageNames[location.pathname] || "";
+  const currentMenuItem = menuItems.find((item) => item.path === location.pathname);
+  const CurrentIcon = currentMenuItem?.icon;
 
   return (
     <header className="bg-nav sticky top-0 z-40 border-b-[5px] border-nav-foreground/15">
@@ -76,7 +78,8 @@ const Header = () => {
             </button>
           )}
 
-          <span className="text-xs font-extrabold lowercase text-nav-foreground">
+          <span className="text-xs font-extrabold lowercase text-nav-foreground flex items-center gap-1.5">
+            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow shrink-0" />}
             {currentPage}
           </span>
 
@@ -112,7 +115,7 @@ const Header = () => {
                           : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
                     >
-                      <item.icon size={14} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
+                      <item.icon size={14} strokeWidth={2.5} className="shrink-0" />
                       {item.label}
                     </button>
                   ))}
