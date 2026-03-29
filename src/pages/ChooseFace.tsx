@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2, Check, RefreshCw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/BackButton";
+import PageTitle from "@/components/PageTitle";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
