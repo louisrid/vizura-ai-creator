@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { IntroDots, IntroNavArrow } from "./IntroSequencePrimitives";
+import ShatterExit from "../ShatterExit";
 
 /* ── ambient glow background ── */
 const AmbientGlow = () => (
@@ -59,19 +60,32 @@ interface OverlayShellProps {
 const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onLongPressSkip, reserveLastStepNavSpace = true, bottomContent }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [shattering, setShattering] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingActionRef = useRef<(() => void) | null>(null);
+
+  const triggerExit = useCallback((afterAction?: () => void) => {
+    if (shattering) return;
+    pendingActionRef.current = afterAction || null;
+    setShattering(true);
+  }, [shattering]);
+
+  const handleShatterDone = useCallback(() => {
+    if (pendingActionRef.current) pendingActionRef.current();
+    pendingActionRef.current = null;
+    if (onExited) onExited();
+  }, [onExited]);
 
   const advance = useCallback(() => {
     setStep((s) => {
       if (s >= totalSteps - 1) {
-        // Already on last step — trigger long press skip (acts as final action)
-        if (onLongPressSkip) setTimeout(() => onLongPressSkip(), 0);
+        if (onLongPressSkip) setTimeout(() => triggerExit(() => onLongPressSkip()), 0);
         return s;
       }
       return s + 1;
     });
-  }, [totalSteps, onLongPressSkip]);
+  }, [totalSteps, onLongPressSkip, triggerExit]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
 
   const stopSkip = useCallback(() => {
