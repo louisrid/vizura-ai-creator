@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, User, type LucideIcon } from "lucide-react";
+import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, Settings, type LucideIcon } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -13,7 +13,7 @@ const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
   { label: "my characters", path: "/characters", icon: LayoutGrid },
   { label: "storage", path: "/storage", icon: FolderOpen },
   { label: "top-ups", path: "/top-ups", icon: Gem },
-  { label: "my account", path: "/account", icon: User },
+  { label: "my account", path: "/account", icon: Settings },
 ];
 
 const pageNames: Record<string, string> = {
@@ -69,9 +69,6 @@ const Header = () => {
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
           <GemsBadge />
-        </div>
-
-        <div className="relative flex items-center gap-3" ref={menuRef}>
           {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
             <button
               onClick={() => navigate("/account")}
@@ -92,6 +89,9 @@ const Header = () => {
               </svg>
             </button>
           )}
+        </div>
+
+        <div className="relative flex items-center gap-3" ref={menuRef}>
 
           <span className="text-xs font-extrabold lowercase text-nav-foreground flex items-center gap-1.5">
             {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow shrink-0" />}
