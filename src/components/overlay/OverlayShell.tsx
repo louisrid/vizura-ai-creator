@@ -115,10 +115,10 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Two-zone layout: content zone (top) + nav zone (bottom), no overlap */}
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {/* Content zone — vertically centred in its area */}
-            <div className="flex flex-1 items-center justify-center px-8" style={{ maxHeight: "62%" }}>
+          {/* Absolute layout: content pinned at center, nav pinned below */}
+          <div className="relative flex-1 overflow-hidden">
+            {/* Content zone — pinned at vertical center of screen */}
+            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
               <div className="mx-auto flex w-full max-w-xs flex-col items-center">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
@@ -135,8 +135,8 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
               </div>
             </div>
 
-            {/* Nav zone — fixed height area below content */}
-            <div className="flex flex-col items-center justify-start pt-4 pb-8" style={{ height: "38%" }}>
+            {/* Nav zone — pinned at fixed position */}
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
               {showNav && (
                 <>
                   <div className={`mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
