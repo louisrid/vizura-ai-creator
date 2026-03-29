@@ -197,7 +197,7 @@ const Index = () => {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="woman in golden hour light, rooftop..."
-                className="w-full rounded-2xl border-[5px] border-border bg-background px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground transition-colors"
+                className="w-full rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground transition-colors"
               />
             </div>
           </div>

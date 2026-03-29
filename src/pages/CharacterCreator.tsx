@@ -284,7 +284,7 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-6 rounded-2xl border-[4px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
