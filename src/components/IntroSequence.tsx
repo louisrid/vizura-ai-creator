@@ -96,7 +96,7 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
-          background: i === current ? NAV_GREY : NAV_GREY_DIM,
+          background: i === current ? LIGHT_BLUE : NAV_GREY_DIM,
         }}
       />
     ))}
@@ -127,9 +127,9 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       onPointerCancel={endPress}
       className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
       style={{
-        backgroundColor: direction === "right" ? NAV_GREY : "transparent",
-        border: direction === "right" ? `5px solid ${NAV_GREY}` : "none",
-        boxShadow: direction === "left" ? `inset 0 0 0 5px ${NAV_GREY}` : "none",
+        backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
+        border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
+        boxShadow: direction === "left" ? `inset 0 0 0 5px hsl(0 0% 100%)` : "none",
         opacity: direction === "right" && disabled ? 0.3 : 1,
         borderRadius: 16,
         outline: "none",
@@ -141,7 +141,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       }}
     >
       {direction === "left" ? (
-        <ArrowLeft size={22} strokeWidth={2.75} color={NAV_GREY} />
+        <ArrowLeft size={22} strokeWidth={2.75} color="#fff" />
       ) : (
         <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
       )}
