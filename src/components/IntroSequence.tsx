@@ -312,7 +312,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   }, [open, stopSkip]);
 
   const isLastStep = step === TOTAL - 1;
-  const contentTransition = { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as const };
+  const contentTransition = { duration: 0.05, ease: "linear" as const };
 
   if (!mounted) return null;
 
@@ -321,7 +321,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
       {open && !shattering && (
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
@@ -331,13 +331,13 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             <div className="relative flex-1 overflow-hidden">
               <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
                 <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence mode="wait" initial={false}>
                     <motion.div
                       key={step}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      transition={{ duration: 0.05, ease: "linear" }}
                     >
                       {step < 6 && (() => { const S = screens[step]; return <S />; })()}
                       {step === 6 && <Screen6 />}

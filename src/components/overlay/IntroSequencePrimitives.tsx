@@ -85,12 +85,7 @@ export const IntroNavArrow = ({
 };
 
 export const IntroScreenTitle = ({ children }: { children: React.ReactNode }) => (
-  <motion.h2
-    className="mb-0 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white"
-    initial={{ opacity: 0, y: 12, scale: 0.95 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-  >
+  <h2 className="mb-0 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
     {children}
-  </motion.h2>
+  </h2>
 );
