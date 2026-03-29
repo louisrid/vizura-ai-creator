@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
+import PageTitle from "@/components/PageTitle";
 
 
 import { Button } from "@/components/ui/button";
@@ -169,8 +170,9 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-28">
-        {/* Spacer to keep box at same vertical position as other pages */}
-        <div className="mb-8 h-9" />
+        <div className="flex items-center mb-8">
+          <PageTitle className="mb-0">create character</PageTitle>
+        </div>
 
         {/* Hero image box */}
         <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
