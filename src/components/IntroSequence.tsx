@@ -217,26 +217,22 @@ interface IntroSequenceProps {
 const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [skipping, setSkipping] = useState(false);
   const animating = useRef(false);
-  const skipIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    if (open) { setStep(0); animating.current = false; setSkipping(false); }
+    if (open) { setStep(0); animating.current = false; }
   }, [open]);
 
   const stopSkip = useCallback(() => {
-    if (skipIntervalRef.current) {
-      clearInterval(skipIntervalRef.current);
-      skipIntervalRef.current = null;
+    if (skipTimerRef.current) {
+      clearTimeout(skipTimerRef.current);
+      skipTimerRef.current = null;
     }
-    setSkipping(false);
   }, []);
 
-  useEffect(() => {
-    return () => stopSkip();
-  }, [stopSkip]);
+  useEffect(() => () => stopSkip(), [stopSkip]);
 
   const goTo = useCallback((next: number) => {
     if (animating.current) return;
@@ -255,18 +251,10 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
 
   const handleLongPress = useCallback(() => {
     stopSkip();
-    setSkipping(true);
-    skipIntervalRef.current = setInterval(() => {
-      setStep((s) => {
-        if (s >= TOTAL - 1) {
-          if (skipIntervalRef.current) clearInterval(skipIntervalRef.current);
-          skipIntervalRef.current = null;
-          onComplete();
-          return s;
-        }
-        return s + 1;
-      });
-    }, 180);
+    skipTimerRef.current = setTimeout(() => {
+      skipTimerRef.current = null;
+      onComplete();
+    }, 500);
   }, [onComplete, stopSkip]);
 
   // Lock scroll
@@ -289,10 +277,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     };
   }, [open, stopSkip]);
 
-  // During skip: instant transitions
-  const contentTransition = skipping
-    ? { duration: 0.08, ease: "linear" as const }
-    : { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
 
   if (!mounted) return null;
 
@@ -315,9 +300,9 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={step}
-                    initial={{ opacity: 0, y: skipping ? 0 : 20 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: skipping ? 0 : -12 }}
+                    exit={{ opacity: 0, y: -12 }}
                     transition={contentTransition}
                   >
                     {step < 5 && (() => { const S = screens[step]; return <S />; })()}

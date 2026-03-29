@@ -19,9 +19,8 @@ interface OverlayShellProps {
 const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, reserveLastStepNavSpace = true }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [skipping, setSkipping] = useState(false);
   const touchStartX = useRef<number | null>(null);
-  const skipTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const advance = useCallback(() => setStep((s) => Math.min(s + 1, totalSteps - 1)), [totalSteps]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
@@ -29,25 +28,17 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
   const stopSkip = useCallback(() => {
     if (skipTimerRef.current) {
       clearTimeout(skipTimerRef.current as unknown as ReturnType<typeof setTimeout>);
-      clearInterval(skipTimerRef.current);
       skipTimerRef.current = null;
     }
-    setSkipping(false);
   }, []);
 
   const startLongPress = useCallback(() => {
     if (skipTimerRef.current) return;
-    setSkipping(true);
-    skipTimerRef.current = setInterval(() => {
-      setStep((s) => {
-        if (s >= totalSteps - 1) {
-          if (skipTimerRef.current) clearInterval(skipTimerRef.current);
-          skipTimerRef.current = null;
-          return s;
-        }
-        return s + 1;
-      });
-    }, 180);
+    skipTimerRef.current = setTimeout(() => {
+      skipTimerRef.current = null;
+      // Jump to last step to dismiss
+      setStep(totalSteps - 1);
+    }, 500) as unknown as ReturnType<typeof setInterval>;
   }, [totalSteps]);
 
   useEffect(() => {
@@ -61,7 +52,6 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
   useEffect(() => {
     if (!open) return;
     setStep(0);
-    setSkipping(false);
     stopSkip();
     const root = document.getElementById("root");
     const prev = {
@@ -93,10 +83,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
 
   const isLastStep = step === totalSteps - 1;
 
-  // During skip: instant transitions. Normal: smooth.
-  const contentTransition = skipping
-    ? { duration: 0.08, ease: "linear" as const }
-    : { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
 
   if (!mounted) return null;
 
@@ -124,9 +111,9 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
                   <motion.div
                     key={step}
                     className="w-full"
-                    initial={{ opacity: 0, y: skipping ? 0 : 20 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: skipping ? 0 : -12 }}
+                    exit={{ opacity: 0, y: -12 }}
                     transition={contentTransition}
                   >
                     {children(step)}
