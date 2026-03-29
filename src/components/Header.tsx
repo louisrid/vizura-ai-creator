@@ -77,18 +77,19 @@ const Header = () => {
               onClick={() => navigate("/account")}
               className="shrink-0"
               aria-label="my account"
-              style={subscribed ? { filter: "drop-shadow(0 0 3px hsl(140 100% 50%))" } : undefined}
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="none"
                 className="text-nav-foreground"
-                style={subscribed ? { stroke: "hsl(140 100% 50%)", strokeWidth: 2 } : undefined}
+                style={{
+                  color: subscribed ? "hsl(var(--member-green))" : "hsl(var(--nav-foreground))",
+                }}
               >
-                <circle cx="12" cy="8" r="5" />
-                <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
+                <circle cx="12" cy="8" r="5" stroke="currentColor" strokeWidth="2" />
+                <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
               </svg>
             </button>
           )}

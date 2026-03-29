@@ -11,6 +11,8 @@ interface SubscriptionContextType {
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
+const ACTIVE_STATUSES = new Set(["active", "trialing"]);
+
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [status, setStatus] = useState<string | null>(null);
@@ -22,12 +24,13 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
       return;
     }
+
     try {
       const { data, error } = await supabase
         .from("subscriptions")
         .select("status")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (error) {
         setStatus(null);
@@ -42,10 +45,48 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   useEffect(() => {
-    fetchSubscription();
+    void fetchSubscription();
   }, [fetchSubscription]);
 
-  const subscribed = status === "active" || status === "trialing";
+  useEffect(() => {
+    if (!user) return;
+
+    const refreshOnReturn = () => {
+      void fetchSubscription();
+    };
+
+    window.addEventListener("focus", refreshOnReturn);
+    document.addEventListener("visibilitychange", refreshOnReturn);
+
+    const channel = supabase
+      .channel(`subscription-status-${user.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "subscriptions",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const nextStatus =
+            payload.eventType === "DELETE"
+              ? null
+              : (payload.new as { status?: string | null } | null)?.status ?? null;
+          setStatus(nextStatus);
+          setLoading(false);
+        },
+      )
+      .subscribe();
+
+    return () => {
+      window.removeEventListener("focus", refreshOnReturn);
+      document.removeEventListener("visibilitychange", refreshOnReturn);
+      supabase.removeChannel(channel);
+    };
+  }, [fetchSubscription, user]);
+
+  const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 
   return (
     <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription }}>

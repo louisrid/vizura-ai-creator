@@ -29,9 +29,53 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
 
   try {
-    /* ── Demo mode: return fake checkout URL ── */
+    /* ── Demo mode: simulate successful checkout and persist active membership ── */
     if (IS_DEMO_MODE) {
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader?.startsWith("Bearer ")) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader } } }
+      );
+
+      const token = authHeader.replace("Bearer ", "");
+      const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+      if (claimsError || !claimsData?.claims?.sub) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const userId = claimsData.claims.sub;
       const origin = req.headers.get("origin") || "https://vizura.lovable.app";
+      const { type } = await req.json();
+
+      if (type === "membership") {
+        const adminClient = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+        );
+
+        await adminClient.from("subscriptions").upsert(
+          {
+            user_id: userId,
+            status: "active",
+            current_period_start: new Date().toISOString(),
+            current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "user_id" }
+        );
+      }
+
       return new Response(
         JSON.stringify({ url: `${origin}/account?checkout=success` }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
