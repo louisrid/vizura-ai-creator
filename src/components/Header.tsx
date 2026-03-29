@@ -5,6 +5,7 @@ import VizuraLogo from "@/components/VizuraLogo";
 import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, User, type LucideIcon } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
   { label: "create character", path: "/", icon: Sparkles },
@@ -36,6 +37,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading } = useAuth();
+  const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -71,8 +73,20 @@ const Header = () => {
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
           {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
-            <button onClick={() => navigate("/account")} className="shrink-0" aria-label="my account">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-nav-foreground">
+            <button
+              onClick={() => navigate("/account")}
+              className="shrink-0"
+              aria-label="my account"
+              style={subscribed ? { filter: "drop-shadow(0 0 3px hsl(140 100% 50%))" } : undefined}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-nav-foreground"
+                style={subscribed ? { stroke: "hsl(140 100% 50%)", strokeWidth: 2 } : undefined}
+              >
                 <circle cx="12" cy="8" r="5" />
                 <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
               </svg>

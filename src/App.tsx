@@ -36,8 +36,10 @@ const ScrollToTop = () => {
   return null;
 };
 
-/* Session-level intro flag: true means intro already completed this session */
-let introSeenThisSession = false;
+/* Session-level intro flag: survives Stripe checkout redirects */
+const INTRO_KEY = "vizura_intro_seen";
+const introAlreadySeen = () => sessionStorage.getItem(INTRO_KEY) === "1";
+const markIntroSeen = () => sessionStorage.setItem(INTRO_KEY, "1");
 
 const RedirectHomeOnLoad = () => {
   const navigate = useNavigate();
@@ -52,9 +54,9 @@ const RedirectHomeOnLoad = () => {
 const AnimatedRoutes = () => {
   const location = useLocation();
 
-  const [showIntro, setShowIntro] = useState(() => !introSeenThisSession);
+  const [showIntro, setShowIntro] = useState(() => !introAlreadySeen());
   const handleIntroComplete = useCallback(() => {
-    introSeenThisSession = true;
+    markIntroSeen();
     setShowIntro(false);
   }, []);
 
