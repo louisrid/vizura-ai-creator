@@ -4,9 +4,11 @@ import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2 } from "lucide-
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
+import SubscribeOverlay from "@/components/SubscribeOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 import { useEffect } from "react";
@@ -15,6 +17,8 @@ const Account = () => {
   const { user, loading: authLoading, signOut, autoSignIn } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const { subscribed, status, refetch: refetchSub } = useSubscription();
+  const [overlayOpen, setOverlayOpen] = useState(false);
+  const [buying, setBuying] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -53,6 +57,23 @@ const Account = () => {
     navigate("/");
   };
 
+  const handleSubscribe = async () => {
+    setBuying(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { type: "membership" },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (e: any) {
+      toast.error(e.message || "failed to start checkout");
+      setBuying(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-12">
@@ -63,19 +84,13 @@ const Account = () => {
 
         <div className="space-y-4">
           {subscribed ? (
-            <div className="border-[5px] border-border rounded-2xl p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <Crown size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-                <div className="flex-1">
-                  <span className="block text-xs font-extrabold lowercase text-foreground">current plan</span>
-                  <span className="block text-sm font-extrabold lowercase text-foreground">vizura membership ({status})</span>
-                </div>
-              </div>
+            <div className="w-full h-14 rounded-2xl border-[5px] border-border flex items-center justify-center opacity-40">
+              <span className="text-base font-extrabold lowercase text-foreground">subscribed</span>
             </div>
           ) : (
             <button
               className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase hover:opacity-90 transition-all"
-              onClick={() => navigate("/account/membership")}
+              onClick={() => setOverlayOpen(true)}
             >
               subscribe
             </button>
