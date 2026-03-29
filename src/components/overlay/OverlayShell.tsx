@@ -29,7 +29,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
 
   const stopSkip = useCallback(() => {
     if (skipTimerRef.current) {
-      clearTimeout(skipTimerRef.current as unknown as ReturnType<typeof setTimeout>);
+      clearTimeout(skipTimerRef.current);
       skipTimerRef.current = null;
     }
   }, []);
@@ -43,7 +43,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
       } else {
         setStep(totalSteps - 1);
       }
-    }, 500) as unknown as ReturnType<typeof setTimeout>;
+    }, 500);
   }, [totalSteps, onLongPressSkip]);
 
   useEffect(() => {
