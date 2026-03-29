@@ -110,3 +110,30 @@
   display: none;
 }
 
+/* Range slider thumb */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 9999px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: hsl(var(--neon-yellow));
+  border: 3px solid hsl(var(--neon-yellow-foreground));
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: hsl(var(--neon-yellow));
+  border: 3px solid hsl(var(--neon-yellow-foreground));
+  cursor: pointer;
+}
+
