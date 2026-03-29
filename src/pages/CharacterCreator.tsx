@@ -1,8 +1,7 @@
 import { useMemo, useState, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
+import { Loader2, Zap, Upload, Sparkles } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
-
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -12,19 +11,46 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
-
-const countryOptions = [
-  "any", "american", "british", "australian", "brazilian", "colombian", "french",
-  "german", "indian", "italian", "japanese", "korean", "mexican", "nigerian",
-  "russian", "scandinavian", "spanish", "thai", "turkish", "ukrainian",
-] as const;
-
+const skinOptions = ["pale", "tanned", "asian", "black"] as const;
 const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
 const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
 const styleOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
+
+/* ── Pill toggle group ── */
+const PillGroup = ({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: readonly string[];
+  value: string;
+  onChange: (v: string) => void;
+}) => (
+  <div className="flex flex-col gap-1.5">
+    <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
+    <div className="flex flex-wrap gap-1.5">
+      {options.map((opt) => (
+        <button
+          key={opt}
+          type="button"
+          onClick={() => onChange(opt)}
+          className={`rounded-xl px-3.5 py-2 text-xs font-extrabold lowercase transition-all ${
+            value === opt
+              ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
+              : "border-[3px] border-border bg-card text-foreground/70 hover:border-foreground/40"
+          }`}
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+  </div>
+);
 
 const CharacterCreator = () => {
   const { user } = useAuth();
@@ -34,11 +60,9 @@ const CharacterCreator = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Edit mode
   const editId = searchParams.get("editId");
   const isEditing = !!editId;
 
-  // Restore from sessionStorage if available, then clear it
   const saved = useMemo(() => {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -50,7 +74,7 @@ const CharacterCreator = () => {
     return null;
   }, []);
 
-  const [country, setCountry] = useState<string>(searchParams.get("country") || saved?.country || "any");
+  const [skin, setSkin] = useState<string>(searchParams.get("skin") || saved?.skin || "tanned");
   const [age, setAge] = useState<string>(searchParams.get("age") || saved?.age || "");
   const [hair, setHair] = useState<string>(searchParams.get("hair") || saved?.hair || "brunette");
   const [eye, setEye] = useState<string>(searchParams.get("eye") || saved?.eye || "brown");
@@ -58,34 +82,23 @@ const CharacterCreator = () => {
   const [style, setStyle] = useState<string>(searchParams.get("style") || saved?.style || "natural");
   const [description, setDescription] = useState(searchParams.get("description") || searchParams.get("edit") || saved?.description || "");
   const [characterName, setCharacterName] = useState(searchParams.get("name") || saved?.characterName || "");
-  const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [generated, setGenerated] = useState<string[]>([]);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
-  const [activeIndex, setActiveIndex] = useState(0);
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referencePreview, setReferencePreview] = useState<string | null>(null);
-  const [extraDetails, setExtraDetails] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setReferenceImage(file);
-    const url = URL.createObjectURL(file);
-    setReferencePreview(url);
+    setReferencePreview(URL.createObjectURL(file));
   };
 
-
-  const imageCards = useMemo(() => {
-    if (generated.length === 0) return [null, null, null];
-    return generated.map((img) => img ?? null);
-  }, [generated]);
-
   const buildPrompt = () => {
-    const ethnicityPart = country !== "any" ? `, ${country} ethnicity` : "";
-    let prompt = `photorealistic portrait, ${age || "25"} year old woman${ethnicityPart}, ${body} body type, ${hair} hair, ${eye} eyes, ${style} style`;
+    const skinPart = skin ? `, ${skin} skin` : "";
+    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${body} body type, ${hair} hair, ${eye} eyes, ${style} style`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -100,7 +113,7 @@ const CharacterCreator = () => {
     try {
       const charData = {
         name: sanitiseText(characterName, 100) || `${hair} ${eye} ${age}`,
-        country: sanitiseText(country, 50),
+        country: sanitiseText(skin, 50),
         age,
         hair: sanitiseText(hair, 50),
         eye: sanitiseText(eye, 50),
@@ -130,7 +143,6 @@ const CharacterCreator = () => {
           });
           return;
         }
-        // toast handled by caller
       }
     } catch (err: any) {
       toast.error(err.message || "failed to save character");
@@ -139,42 +151,9 @@ const CharacterCreator = () => {
     }
   };
 
-  const generate = async () => {
-    if (!user) {
-      navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
-      return;
-    }
-    if (credits <= 0 && !subscribed) {
-      navigate("/account");
-      return;
-    }
-
-    setIsGenerating(true);
-    setError("");
-
-    try {
-      const { data, error: functionError } = await supabase.functions.invoke("generate", {
-        body: { prompt: buildPrompt() },
-      });
-      if (functionError) throw functionError;
-      if (data?.error) throw new Error(data.error);
-      setGenerated(data.images || []);
-      setActiveIndex(0);
-      await refetchCredits();
-    } catch (err: any) {
-      if (err.message?.includes("No gems") || err.message?.includes("No credits") || err.message?.includes("402")) {
-        setShowPaywall(true);
-      } else {
-        setError(err.message || "creation failed");
-      }
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
   const saveFormToSession = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-      characterName, country, age, hair, eye, body, style, description,
+      characterName, skin, age, hair, eye, body, style, description,
     }));
   };
 
@@ -199,13 +178,8 @@ const CharacterCreator = () => {
     }
   };
 
-  const total = imageCards.length || 3;
-  const cyclePrevious = () => setActiveIndex((c) => (c - 1 + total) % total);
-  const cycleNext = () => setActiveIndex((c) => (c + 1) % total);
-
   return (
     <div className="relative min-h-screen bg-background">
-      
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-28">
@@ -216,12 +190,12 @@ const CharacterCreator = () => {
         {/* Hero image box */}
         <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-            <Sparkles size={28} strokeWidth={2.5} className="text-black" />
+            <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
           </div>
         </section>
 
         {/* Character name */}
-        <section className="flex flex-col gap-2">
+        <section className="flex flex-col gap-1.5">
           <label htmlFor="character-name" className="text-xs font-extrabold lowercase text-foreground">
             character name
           </label>
@@ -234,8 +208,34 @@ const CharacterCreator = () => {
           />
         </section>
 
+        {/* Pill toggle sections */}
+        <section className="mt-5 flex flex-col gap-4">
+          <PillGroup label="style" options={styleOptions} value={style} onChange={setStyle} />
+          <PillGroup label="skin" options={skinOptions} value={skin} onChange={setSkin} />
+          <PillGroup label="hair colour" options={hairOptions} value={hair} onChange={setHair} />
+          <PillGroup label="eye colour" options={eyeOptions} value={eye} onChange={setEye} />
+          <PillGroup label="body type" options={bodyOptions} value={body} onChange={setBody} />
+
+          {/* Age — text input */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs font-extrabold lowercase text-foreground">age</span>
+            <input
+              type="number"
+              min={18}
+              max={40}
+              value={age}
+              placeholder="18-40"
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
+              }}
+              className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            />
+          </div>
+        </section>
+
         {/* Description */}
-        <section className="mt-6 flex flex-col gap-2">
+        <section className="mt-5 flex flex-col gap-1.5">
           <label htmlFor="character-description" className="text-xs font-extrabold lowercase text-foreground">
             describe your character
           </label>
@@ -244,57 +244,14 @@ const CharacterCreator = () => {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="face shape, hairstyle, outfit, pose, mood, setting..."
-            rows={4}
-            className="min-h-32 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            rows={3}
+            className="min-h-24 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
-        {/* Toggles */}
-        <section className="mt-6 flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-extrabold lowercase text-foreground">style</span>
-            <div className="flex gap-2">
-              {styleOptions.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setStyle(s)}
-                  className={`flex-1 py-3 rounded-2xl font-extrabold lowercase text-xs transition-all ${
-                    style === s
-                      ? "bg-neon-yellow text-neon-yellow-foreground border-[5px] border-neon-yellow"
-                      : "border-[5px] border-border text-foreground hover:border-foreground/60"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <SelectField label="hair colour" value={hair} options={hairOptions} onChange={(v) => setHair(v)} />
-          <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
-          <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
-          <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-extrabold lowercase text-foreground">age</span>
-            <input
-              type="number"
-              min={18}
-              max={40}
-              value={age}
-              placeholder="age (18-40)"
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
-              }}
-              onBlur={() => {}}
-              className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-            />
-          </div>
-        </section>
-
         {/* Reference image upload */}
-        <section className="mt-10 flex flex-col">
-          <h2 className="text-2xl font-[900] lowercase text-foreground mb-3">got an idea?</h2>
+        <section className="mt-5 flex flex-col gap-1.5">
+          <span className="text-xs font-extrabold lowercase text-foreground">reference image</span>
           <input
             ref={fileInputRef}
             type="file"
@@ -320,7 +277,7 @@ const CharacterCreator = () => {
         </section>
 
         {error && (
-          <div className="mt-6 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-5 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -347,34 +304,5 @@ const CharacterCreator = () => {
     </div>
   );
 };
-
-type SelectFieldProps<T extends string> = {
-  label: string;
-  options: readonly T[];
-  value: T;
-  onChange: (value: T) => void;
-};
-
-const SelectField = <T extends string>({ label, options, value, onChange }: SelectFieldProps<T>) => (
-  <label className="relative flex flex-col gap-2">
-    <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
-    <select
-      value={value}
-      onChange={(event) => onChange(event.target.value as T)}
-      className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
-    >
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-    <ChevronDown
-      size={16}
-      strokeWidth={2.5}
-      className="pointer-events-none absolute right-4 bottom-3.5 text-foreground"
-    />
-  </label>
-);
 
 export default CharacterCreator;
