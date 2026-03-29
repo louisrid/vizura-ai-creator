@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const LIGHT_BLUE = "hsl(195 100% 70%)";
+const NAV_GREY = "hsl(0 0% 45%)";
+const NAV_GREY_DIM = "hsl(0 0% 25%)";
 
 /* ── dots matching IntroSequence exactly ── */
 const Dots = ({ current, total }: { current: number; total: number }) => (
@@ -15,7 +16,7 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
-          background: i === current ? LIGHT_BLUE : "hsl(0 0% 100% / 0.2)",
+          background: i === current ? NAV_GREY : NAV_GREY_DIM,
         }}
       />
     ))}
@@ -28,9 +29,9 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
-      backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
-      border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-      boxShadow: direction === "left" ? "inset 0 0 0 5px hsl(0 0% 100%)" : "none",
+      backgroundColor: direction === "right" ? NAV_GREY : "transparent",
+      border: direction === "right" ? `5px solid ${NAV_GREY}` : "none",
+      boxShadow: direction === "left" ? `inset 0 0 0 5px ${NAV_GREY}` : "none",
       opacity: disabled ? 0.3 : 1,
       borderRadius: 16,
       outline: "none",
@@ -39,7 +40,7 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.75} color="hsl(0 0% 100%)" />
+      <ArrowLeft size={22} strokeWidth={2.75} color={NAV_GREY} />
     ) : (
       <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
     )}
