@@ -138,6 +138,65 @@ const Account = () => {
   );
 };
 
+const SPARKLE_COUNT = 12;
+
+const SubscribedButton = ({ justSubscribed, onCelebrationDone }: { justSubscribed: boolean; onCelebrationDone: () => void }) => {
+  useEffect(() => {
+    if (justSubscribed) {
+      const t = setTimeout(onCelebrationDone, 2500);
+      return () => clearTimeout(t);
+    }
+  }, [justSubscribed, onCelebrationDone]);
+
+  return (
+    <div className="relative">
+      <div className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
+        subscribed
+      </div>
+      <AnimatePresence>
+        {justSubscribed && (
+          <>
+            <motion.div
+              className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="absolute inset-y-0 w-[60%]"
+                style={{
+                  background: "linear-gradient(90deg, transparent, hsl(50 100% 70% / 0.5), hsl(45 100% 60% / 0.3), transparent)",
+                }}
+                initial={{ left: "-60%" }}
+                animate={{ left: "120%" }}
+                transition={{ duration: 0.8, ease: "easeInOut", delay: 0.15 }}
+              />
+            </motion.div>
+            {Array.from({ length: SPARKLE_COUNT }).map((_, i) => {
+              const angle = (i / SPARKLE_COUNT) * 360;
+              const radius = 40 + Math.random() * 30;
+              const dx = Math.cos((angle * Math.PI) / 180) * radius;
+              const dy = Math.sin((angle * Math.PI) / 180) * radius;
+              return (
+                <motion.div
+                  key={i}
+                  className="absolute pointer-events-none"
+                  style={{ left: "50%", top: "50%", fontSize: 10 + Math.random() * 6, color: "hsl(50 100% 65%)" }}
+                  initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
+                  animate={{ x: dx, y: dy, opacity: 0, scale: 1 }}
+                  transition={{ duration: 0.9 + Math.random() * 0.5, delay: 0.1 + Math.random() * 0.3, ease: "easeOut" }}
+                >
+                  ✦
+                </motion.div>
+              );
+            })}
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void>; redirectTo?: string | null }) => {
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
