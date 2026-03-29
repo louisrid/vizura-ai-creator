@@ -110,7 +110,23 @@
   display: none;
 }
 
-/* Snappier toast exit */
+/* Toast overrides — force top-right */
+[data-sonner-toaster] {
+  position: fixed !important;
+  top: 73px !important;
+  right: 16px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  transform: none !important;
+  align-items: flex-end !important;
+}
+[data-sonner-toaster] [data-sonner-toast] {
+  margin-left: auto !important;
+}
 [data-sonner-toast][data-removed] {
-  transition-duration: 150ms !important;
+  transition-duration: 120ms !important;
+}
+[data-sonner-toast] [data-icon] {
+  display: none !important;
 }
