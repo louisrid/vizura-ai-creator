@@ -324,7 +324,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
               </AnimatePresence>
             </div>
 
-            <div className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center">
+            <div className="pointer-events-none absolute inset-x-0 flex flex-col items-center" style={{ top: "62%" }}>
               <div className={`pointer-events-auto mb-4 flex h-14 items-center gap-4 ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
                 <NavArrow direction="left" onClick={goBack} disabled={step === 0 || step === TOTAL - 1} />
                 <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={step === TOTAL - 1} />

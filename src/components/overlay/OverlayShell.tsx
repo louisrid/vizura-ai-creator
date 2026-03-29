@@ -127,7 +127,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
             </div>
 
             {showNav && (
-              <div className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center">
+              <div className="pointer-events-none absolute inset-x-0 flex flex-col items-center" style={{ top: "62%" }}>
                 <div className={`pointer-events-auto mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
                   <NavArrow direction="left" onClick={goBack} disabled={step === 0 || isLastStep} />
                   <NavArrow
@@ -156,7 +156,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
             )}
 
             {!showNav && totalSteps > 1 && (
-              <div className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center">
+              <div className="pointer-events-none absolute inset-x-0 flex flex-col items-center" style={{ top: "62%" }}>
                 <div className="pointer-events-auto flex h-3 items-center">
                   <Dots current={step} total={totalSteps} />
                 </div>

@@ -151,7 +151,7 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
 
-    const t = setTimeout(onDone, 2400);
+    const t = setTimeout(onDone, 1200);
     return () => {
       clearTimeout(t);
       document.body.style.overflow = prev.body;
@@ -169,13 +169,13 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
         >
           <motion.h1
-            className="text-[3rem] font-extrabold lowercase tracking-tight text-white"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="text-[3rem] font-extrabold lowercase tracking-tight text-black"
+            initial={{ opacity: 0, scale: 1.2 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.35, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
           >
             subscribed!
           </motion.h1>
