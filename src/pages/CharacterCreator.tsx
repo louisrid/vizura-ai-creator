@@ -18,7 +18,7 @@ const countryOptions = [
   "german", "indian", "italian", "japanese", "korean", "mexican", "nigerian",
   "russian", "scandinavian", "spanish", "thai", "turkish", "ukrainian",
 ] as const;
-const ageOptions = Array.from({ length: 23 }, (_, i) => `${i + 18}`) as unknown as readonly string[];
+
 const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
 const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
@@ -237,12 +237,30 @@ const CharacterCreator = () => {
           <SelectField label="eye colour" value={eye} options={eyeOptions} onChange={(v) => setEye(v)} />
           <SelectField label="body type" value={body} options={bodyOptions} onChange={(v) => setBody(v)} />
           <SelectField label="ethnicity / country" value={country} options={countryOptions} onChange={(v) => setCountry(v)} />
-          <SelectField label="age" value={age} options={ageOptions} onChange={(v) => setAge(v)} />
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-extrabold lowercase text-foreground">age</span>
+            <input
+              type="number"
+              min={18}
+              max={40}
+              value={age}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
+              }}
+              onBlur={() => {
+                const n = Number(age);
+                if (n < 18) setAge("18");
+                else if (n > 40) setAge("40");
+              }}
+              className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            />
+          </div>
         </section>
 
         {/* Reference image upload */}
-        <section className="mt-6 flex flex-col gap-2">
-          <span className="text-xs font-extrabold lowercase text-foreground">reference image</span>
+        <section className="mt-10 flex flex-col">
+          <h2 className="text-2xl font-[900] lowercase text-foreground mb-3">got an idea?</h2>
           <input
             ref={fileInputRef}
             type="file"
@@ -265,20 +283,6 @@ const CharacterCreator = () => {
               <Upload size={28} strokeWidth={2.5} className="text-foreground/30" />
             )}
           </button>
-        </section>
-
-        {/* Extra details */}
-        <section className="mt-6 flex flex-col gap-2">
-          <label htmlFor="extra-details" className="text-xs font-extrabold lowercase text-foreground">
-            extra details
-          </label>
-          <input
-            id="extra-details"
-            value={extraDetails}
-            onChange={(e) => setExtraDetails(e.target.value)}
-            placeholder="any extra details…"
-            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-          />
         </section>
 
         {error && (
