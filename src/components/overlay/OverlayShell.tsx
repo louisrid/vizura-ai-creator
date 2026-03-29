@@ -111,7 +111,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={() => {
-            if (!isLastStep) advance();
+            advance();
           }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
