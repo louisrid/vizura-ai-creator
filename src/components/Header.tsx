@@ -52,8 +52,13 @@ const Header = () => {
     navigate(path);
   };
 
-  const currentPage = pageNames[location.pathname] || "";
-  const currentMenuItem = menuItems.find((item) => item.path === location.pathname);
+  // When on /account with a redirect param, treat the redirect target as the active page
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
+  const effectivePath = redirectTarget || location.pathname;
+
+  const currentPage = pageNames[effectivePath] || pageNames[location.pathname] || "";
+  const currentMenuItem = menuItems.find((item) => item.path === effectivePath) || menuItems.find((item) => item.path === location.pathname);
   const CurrentIcon = currentMenuItem?.icon;
 
   return (
@@ -106,7 +111,7 @@ const Header = () => {
                       key={item.label}
                       onClick={() => handleNav(item.path)}
                       className={`w-full text-left px-4 py-2.5 text-xs font-extrabold lowercase transition-colors flex items-center gap-2 ${
-                        location.pathname === item.path
+                        effectivePath === item.path
                           ? "text-neon-yellow"
                           : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
