@@ -217,7 +217,7 @@ const Index = () => {
               {isGenerating ? (
                 <><Loader2 className="animate-spin" size={18} />creating...</>
               ) : (
-                <><Zap size={18} strokeWidth={2.5} />create</>
+                <><Zap size={18} strokeWidth={2.5} className="text-gem-green" />create</>
               )}
             </Button>
             <Button
