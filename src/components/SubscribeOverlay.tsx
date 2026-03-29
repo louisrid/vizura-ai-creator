@@ -27,8 +27,8 @@ const IntroStyleShell = ({
       >
         <motion.div
           className="inline-flex items-center justify-center"
-          animate={{ y: [0, -7, 2, 0], rotate: [0, -8, 5, 0], scale: [1, 1.05, 0.97, 1] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.55 }}
+          animate={{ y: [0, -18, 4, 0], rotate: [0, -10, 6, 0], scale: [1, 1.12, 0.96, 1] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
           {emoji}
         </motion.div>
