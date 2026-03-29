@@ -292,16 +292,16 @@ const CharacterCreator = () => {
       {/* Fixed bottom create button */}
       <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 bg-background">
         <div className="mx-auto max-w-lg">
-          <Button className="h-14 w-full text-sm" onClick={generate} disabled={isGenerating}>
-            {isGenerating ? (
+          <Button className="h-14 w-full text-sm" onClick={handleCreate} disabled={isSaving}>
+            {isSaving ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
-                creating...
+                saving...
               </>
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                create
+                {isEditing ? "update" : "create"}
               </>
             )}
           </Button>
