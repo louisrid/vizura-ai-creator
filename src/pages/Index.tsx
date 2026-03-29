@@ -91,10 +91,11 @@ const Index = () => {
 
   const handleCreate = async () => {
     if (!user) { navigate(`/account?redirect=${encodeURIComponent("/create")}`); return; }
-    toast("coming soon");
-    return;
     if (credits <= 0) { setShowPaywall(true); return; }
-    if (!prompt.trim()) return;
+    if (!prompt.trim()) {
+      toast.error("describe your photo first");
+      return;
+    }
 
     setIsGenerating(true);
     setImages([]);
