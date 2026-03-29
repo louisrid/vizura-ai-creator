@@ -11,8 +11,8 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
-const skinOptions = ["pale", "tanned", "asian", "black"] as const;
-const hairOptions = ["blonde", "brunette", "black", "red", "pink", "white"] as const;
+const skinOptions = ["pale", "tan", "asian", "black"] as const;
+const hairOptions = ["blonde", "brunette", "black", "pink", "white"] as const;
 const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
 const styleOptions = ["natural", "model", "egirl"] as const;
