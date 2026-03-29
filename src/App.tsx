@@ -35,27 +35,27 @@ const ScrollToTop = () => {
   return null;
 };
 
-const INTRO_KEY = "vizura_intro_seen";
-
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const isHomePage = location.pathname === "/" || location.pathname === "/create" || location.pathname === "/index";
-  const [introSeen, setIntroSeen] = useState(() => {
-    if (!isHomePage) return true;
-    return window.sessionStorage.getItem(INTRO_KEY) === "1";
-  });
+  const [introSeen, setIntroSeen] = useState(false);
+  const [redirectedHome, setRedirectedHome] = useState(false);
 
+  const navigate = useNavigate();
+
+  // On first mount, if not already on "/", redirect home so intro plays over it
   useEffect(() => {
-    if (!isHomePage) return;
-    if (window.sessionStorage.getItem(INTRO_KEY) === "1") {
-      setIntroSeen(true);
+    if (location.pathname !== "/") {
+      navigate("/", { replace: true });
     }
-  }, [isHomePage]);
+    setRedirectedHome(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleIntroComplete = useCallback(() => {
-    window.sessionStorage.setItem(INTRO_KEY, "1");
     setIntroSeen(true);
   }, []);
+
+  if (!redirectedHome) return null;
 
   return (
     <>
