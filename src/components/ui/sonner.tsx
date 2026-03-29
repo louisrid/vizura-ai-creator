@@ -34,7 +34,9 @@ let externalShow: ((message: string, tone?: ToastTone) => void) | null = null;
 let externalDismiss: (() => void) | null = null;
 
 const emit = (input: ToastInput, tone: ToastTone = "default") => {
-  externalShow?.(resolveMessage(input), tone);
+  const msg = resolveMessage(input);
+  console.log("[toast] emit called:", msg, "externalShow:", !!externalShow);
+  externalShow?.(msg, tone);
 };
 
 const toast = Object.assign(
