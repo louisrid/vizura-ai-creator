@@ -82,6 +82,9 @@ export default {
           DEFAULT: "hsl(var(--gem-green))",
           foreground: "hsl(var(--gem-green-foreground))",
         },
+        'member-green': {
+          DEFAULT: "hsl(var(--member-green))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
