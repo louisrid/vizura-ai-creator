@@ -133,7 +133,7 @@ const Header = () => {
 const GemsBadge = () => {
   const { gems } = useGems();
   return (
-    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-neon-yellow bg-neon-yellow/10 px-3 py-1.5">
+    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-gem-green bg-gem-green/10 px-3 py-1.5">
       <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
       <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{gems}</span>
     </div>
