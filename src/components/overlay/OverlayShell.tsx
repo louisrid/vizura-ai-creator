@@ -61,7 +61,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [shattering, setShattering] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(open);
   const touchStartX = useRef<number | null>(null);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingActionRef = useRef<(() => void) | null>(null);
@@ -168,16 +168,16 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
 
   const isLastStep = step === totalSteps - 1;
 
-  const contentTransition = { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.05, ease: "linear" as const };
 
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence onExitComplete={() => { handleShatterDone(); if (onExited) onExited(); }}>
+    <AnimatePresence onExitComplete={handleShatterDone}>
       {visible && !shattering ? (
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
@@ -196,7 +196,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      transition={{ duration: 0.05, ease: "linear" }}
                     >
                       {children(step)}
                     </motion.div>

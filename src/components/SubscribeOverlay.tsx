@@ -21,30 +21,21 @@ const IntroStyleShell = ({
   <div className="relative flex w-full flex-col items-center">
     <div className="flex h-12 items-end justify-center">
       <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
-        transition={{ delay: 0.05, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+        className="inline-flex items-center justify-center"
+        animate={{ y: [0, -18, 4, 0], rotate: [0, -10, 6, 0], scale: [1, 1.12, 0.96, 1] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       >
-        <motion.div
-          className="inline-flex items-center justify-center"
-          animate={{ y: [0, -18, 4, 0], rotate: [0, -10, 6, 0], scale: [1, 1.12, 0.96, 1] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {emoji}
-        </motion.div>
+        {emoji}
       </motion.div>
     </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <IntroScreenTitle>{title}</IntroScreenTitle>
-      <motion.p
+      <p
         className="mt-3 max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
         style={{ color: "hsl(0 0% 100% / 0.92)" }}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, delay: 0.35, ease: "easeOut" }}
       >
         {subtitle}
-      </motion.p>
+      </p>
       {children ? <div className="mt-3 flex w-full flex-col items-center">{children}</div> : null}
     </div>
   </div>

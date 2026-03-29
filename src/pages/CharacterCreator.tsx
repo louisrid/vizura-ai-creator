@@ -74,7 +74,7 @@ const CharacterCreator = () => {
     return null;
   }, []);
 
-  const [skin, setSkin] = useState<string>(searchParams.get("skin") || saved?.skin || "tanned");
+  const [skin, setSkin] = useState<string>(searchParams.get("skin") || saved?.skin || "tan");
   const [age, setAge] = useState<string>(searchParams.get("age") || saved?.age || "");
   const [hair, setHair] = useState<string>(searchParams.get("hair") || saved?.hair || "brunette");
   const [eye, setEye] = useState<string>(searchParams.get("eye") || saved?.eye || "brown");

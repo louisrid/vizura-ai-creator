@@ -36,46 +36,37 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
 
 /* ── big title ── */
 export const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode; delay?: number }) => (
-  <motion.h2
+  <h2
     className="text-center text-[2rem] font-[900] lowercase leading-[1.1] tracking-tight"
     style={{ color: "hsl(0 0% 100%)" }}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay, ease: [0.2, 0.9, 0.2, 1] }}
   >
     {children}
-  </motion.h2>
+  </h2>
 );
 
 /* ── subtitle ── */
 export const Subtitle = ({ children, delay = 0.2 }: { children: React.ReactNode; delay?: number }) => (
-  <motion.p
+  <p
     className="max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
     style={{ color: "hsl(0 0% 100% / 0.92)" }}
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.25, delay, ease: "easeOut" }}
   >
     {children}
-  </motion.p>
+  </p>
 );
 
 /* ── icon pop ── */
 export const IconPop = ({ children, delay = 0.15, size = 56 }: { children: React.ReactNode; delay?: number; size?: number }) => (
-  <motion.div
+  <div
     className="flex items-center justify-center"
     style={{ width: size, height: size }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ opacity: 1, scale: [0, 1.3, 0.9, 1] }}
-    transition={{ duration: 0.4, delay, ease: [0.2, 0.9, 0.2, 1] }}
   >
     <motion.div
       animate={{ y: [0, -4, 0], scale: [1, 1.05, 1] }}
-      transition={{ duration: 2.5, delay: delay + 0.5, repeat: Infinity, ease: "easeInOut" }}
+      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
     >
       {children}
     </motion.div>
-  </motion.div>
+  </div>
 );
 
 /* ── particle burst ── */
@@ -143,19 +134,16 @@ export const GoldButton = ({
 
 /* ── dismiss link ── */
 export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, className = "" }: { onClick: (e: React.MouseEvent) => void; label?: string; delay?: number; className?: string }) => (
-  <motion.button
+  <button
     onClick={(e) => {
       e.stopPropagation();
       onClick(e);
     }}
     className={`mt-2 text-[0.6rem] font-bold lowercase underline underline-offset-4 ${className}`}
     style={{ color: "hsl(0 0% 100% / 0.25)" }}
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.3, delay }}
   >
     {label}
-  </motion.button>
+  </button>
 );
 
 /* ── swipe hint ── */
