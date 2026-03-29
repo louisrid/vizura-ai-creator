@@ -77,6 +77,7 @@ const Account = () => {
             await refetchSub();
             await refetchGems();
             setBuying(false);
+            setOverlayOpen(false);
             return;
           }
         } catch {
