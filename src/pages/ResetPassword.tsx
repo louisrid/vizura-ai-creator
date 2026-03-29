@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock } from "lucide-react";
+import { Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import BackButton from "@/components/BackButton";
@@ -41,20 +41,20 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-12">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+        <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">reset password</PageTitle>
         </div>
 
         {success ? (
           <div className="border-[5px] border-border rounded-2xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-1">password updated</p>
-            <p className="text-[10px] font-bold lowercase text-foreground">redirecting...</p>
+            <p className="text-xs font-extrabold lowercase mb-1 text-foreground">password updated</p>
+            <p className="text-[10px] font-bold lowercase text-foreground/50">redirecting...</p>
           </div>
         ) : !isRecovery ? (
           <div className="border-[5px] border-border rounded-2xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-3">invalid link</p>
+            <p className="text-xs font-extrabold lowercase mb-3 text-foreground">invalid link</p>
             <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px]">
               back to log in
             </button>
@@ -78,7 +78,7 @@ const ResetPassword = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
+                    className="w-full border-[5px] border-border bg-card text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                     placeholder="••••••••"
                   />
                 </div>
@@ -94,14 +94,21 @@ const ResetPassword = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-[5px] border-border bg-background text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
+                    className="w-full border-[5px] border-border bg-card text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
                     placeholder="••••••••"
                   />
                 </div>
               </div>
 
-              <Button className="w-full h-16 text-sm" disabled={loading}>
-                {loading ? "loading..." : "update password"}
+              <Button type="submit" className="w-full h-14 text-sm" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={18} />
+                    updating...
+                  </>
+                ) : (
+                  "update password"
+                )}
               </Button>
             </form>
           </div>

@@ -27,10 +27,22 @@ const pageNames: Record<string, string> = {
   "/history": "history",
   "/top-ups": "top-ups",
   "/account": "my account",
-  
   "/help": "help",
   "/auth": "my account",
   "/reset-password": "reset password",
+};
+
+const resolvePageName = (pathname: string): string => {
+  if (pageNames[pathname]) return pageNames[pathname];
+  // Handle dynamic routes like /characters/:id
+  if (pathname.startsWith("/characters/")) return "character";
+  return "";
+};
+
+const resolveActivePath = (pathname: string): string => {
+  // Map sub-routes to their parent menu item path
+  if (pathname.startsWith("/characters")) return "/characters";
+  return pathname;
 };
 
 const Header = () => {
@@ -41,6 +53,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Close menu on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOpen(false);
@@ -48,6 +61,11 @@ const Header = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   const handleNav = (path: string) => {
     setOpen(false);
@@ -59,8 +77,9 @@ const Header = () => {
   const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
   const effectivePath = redirectTarget || location.pathname;
 
-  const currentPage = pageNames[effectivePath] || pageNames[location.pathname] || "";
-  const currentMenuItem = menuItems.find((item) => item.path === effectivePath) || menuItems.find((item) => item.path === location.pathname);
+  const currentPage = resolvePageName(effectivePath) || resolvePageName(location.pathname);
+  const activePath = resolveActivePath(effectivePath);
+  const currentMenuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname));
   const CurrentIcon = currentMenuItem?.icon;
 
   return (
@@ -92,7 +111,6 @@ const Header = () => {
         </div>
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
-
           <span className="text-xs font-extrabold lowercase text-nav-foreground flex items-center gap-1.5">
             {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow shrink-0" />}
             {currentPage}
@@ -113,9 +131,9 @@ const Header = () => {
           <AnimatePresence>
             {open && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.15 }}
                 className="absolute right-0 top-full mt-2 mr-0 w-48 overflow-hidden rounded-2xl border-[5px] border-nav-foreground/20 bg-nav shadow-medium"
               >
@@ -125,7 +143,7 @@ const Header = () => {
                       key={item.label}
                       onClick={() => handleNav(item.path)}
                       className={`w-full text-left px-4 py-2.5 text-xs font-extrabold lowercase transition-colors flex items-center gap-2 ${
-                        effectivePath === item.path
+                        activePath === item.path
                           ? "text-neon-yellow"
                           : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
