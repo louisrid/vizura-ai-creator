@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles, ChevronDown } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -91,7 +91,7 @@ const Index = () => {
 
   const handleCreate = async () => {
     if (!user) { navigate(`/account?redirect=${encodeURIComponent("/create")}`); return; }
-    toast({ title: "coming soon", description: "photo creation will be available soon" });
+    toast("coming soon");
     return;
     if (credits <= 0) { setShowPaywall(true); return; }
     if (!prompt.trim()) return;

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Loader2, Zap } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
@@ -174,11 +174,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
         state: { prompt: buildPrompt(), characterId: inserted.id },
       });
     } catch (err: any) {
-      toast({
-        title: "error",
-        description: err.message || "failed to save character",
-        variant: "destructive",
-      });
+      toast.error(err.message || "failed to save character");
     } finally {
       setIsSaving(false);
     }

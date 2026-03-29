@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -146,11 +146,7 @@ const ChooseFace = () => {
         });
       }, 1500);
     } catch (err: any) {
-      toast({
-        title: "error",
-        description: err.message || "failed to save face",
-        variant: "destructive",
-      });
+      toast.error(err.message || "failed to save face");
       setSaving(false);
     }
   };
