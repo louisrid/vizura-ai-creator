@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,9 +24,22 @@ import ResetPassword from "./pages/ResetPassword";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
+import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
+
+const INTRO_SEEN_KEY = "vizura_intro_seen";
+
 const ScrollToTop = () => {
   const location = useLocation();
+  const isFirst = useRef(true);
+
   useEffect(() => {
+    if (isFirst.current) {
+      // First render after mount — reset depth (fresh session via redirect)
+      resetNavDepth();
+      isFirst.current = false;
+    }
+    incrementNavDepth();
+
     window.scrollTo({ top: 0, left: 0 });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -38,12 +51,15 @@ const ScrollToTop = () => {
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const [introSeen, setIntroSeen] = useState(false);
-  const [redirectedHome, setRedirectedHome] = useState(false);
-
   const navigate = useNavigate();
 
-  // On first mount, if not already on "/", redirect home so intro plays over it
+  // Intro is "seen" if sessionStorage flag is set (survives navigation, resets on tab close/refresh)
+  const [introSeen, setIntroSeen] = useState(() => {
+    return sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+  });
+  const [redirectedHome, setRedirectedHome] = useState(false);
+
+  // On first mount, redirect to "/" so the app always starts on the homepage
   useEffect(() => {
     if (location.pathname !== "/") {
       navigate("/", { replace: true });
@@ -54,8 +70,10 @@ const AnimatedRoutes = () => {
 
   const handleIntroComplete = useCallback(() => {
     setIntroSeen(true);
+    sessionStorage.setItem(INTRO_SEEN_KEY, "1");
   }, []);
 
+  // Show nothing only until the redirect effect has run (single tick)
   if (!redirectedHome) return null;
 
   return (

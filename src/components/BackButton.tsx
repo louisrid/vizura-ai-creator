@@ -1,14 +1,15 @@
 import { forwardRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { getNavDepth } from "@/lib/navigation";
 
 const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleBack = () => {
-    // If there's history within the app, go back; otherwise go home
-    if (window.history.length > 2) {
+    // Only navigate(-1) if we have real in-app history;
+    // otherwise go to homepage to avoid leaving the app.
+    if (getNavDepth() > 1) {
       navigate(-1);
     } else {
       navigate("/");
