@@ -25,6 +25,8 @@ const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
 const styleOptions = ["natural", "model", "egirl"] as const;
 
+const STORAGE_KEY = "vizura_character_draft";
+
 const CharacterCreator = () => {
   const { user } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
@@ -37,14 +39,26 @@ const CharacterCreator = () => {
   const editId = searchParams.get("editId");
   const isEditing = !!editId;
 
-  const [country, setCountry] = useState<string>(searchParams.get("country") || "any");
-  const [age, setAge] = useState<string>(searchParams.get("age") || "");
-  const [hair, setHair] = useState<string>(searchParams.get("hair") || "brunette");
-  const [eye, setEye] = useState<string>(searchParams.get("eye") || "brown");
-  const [body, setBody] = useState<string>(searchParams.get("body") || "regular");
-  const [style, setStyle] = useState<string>(searchParams.get("style") || "natural");
-  const [description, setDescription] = useState(searchParams.get("description") || searchParams.get("edit") || "");
-  const [characterName, setCharacterName] = useState(searchParams.get("name") || "");
+  // Restore from sessionStorage if available, then clear it
+  const saved = useMemo(() => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        return JSON.parse(raw) as Record<string, string>;
+      }
+    } catch {}
+    return null;
+  }, []);
+
+  const [country, setCountry] = useState<string>(searchParams.get("country") || saved?.country || "any");
+  const [age, setAge] = useState<string>(searchParams.get("age") || saved?.age || "");
+  const [hair, setHair] = useState<string>(searchParams.get("hair") || saved?.hair || "brunette");
+  const [eye, setEye] = useState<string>(searchParams.get("eye") || saved?.eye || "brown");
+  const [body, setBody] = useState<string>(searchParams.get("body") || saved?.body || "regular");
+  const [style, setStyle] = useState<string>(searchParams.get("style") || saved?.style || "natural");
+  const [description, setDescription] = useState(searchParams.get("description") || searchParams.get("edit") || saved?.description || "");
+  const [characterName, setCharacterName] = useState(searchParams.get("name") || saved?.characterName || "");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [generated, setGenerated] = useState<string[]>([]);
@@ -159,15 +173,23 @@ const CharacterCreator = () => {
     }
   };
 
+  const saveFormToSession = () => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+      characterName, country, age, hair, eye, body, style, description,
+    }));
+  };
+
   const handleCreate = async () => {
     const missingName = !characterName.trim();
-    const missingAge = !age || Number(age) < 18 || Number(age) > 40;
-    if (missingName || missingAge) {
+    const ageNum = Number(age);
+    const invalidAge = !age || ageNum < 18 || ageNum > 40;
+    if (missingName || invalidAge) {
       if (missingName) toast.error("name is required");
-      if (missingAge) toast.error("age is required");
+      if (invalidAge) toast.error(age && (ageNum < 18 || ageNum > 40) ? "age must be between 18-40" : "age is required");
       return;
     }
     if (!user) {
+      saveFormToSession();
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
@@ -260,17 +282,12 @@ const CharacterCreator = () => {
               min={18}
               max={40}
               value={age}
-              placeholder="age"
+              placeholder="age (18-40)"
               onChange={(e) => {
                 const v = e.target.value;
                 if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
               }}
-              onBlur={() => {
-                if (age === "") return;
-                const n = Number(age);
-                if (n < 18) setAge("18");
-                else if (n > 40) setAge("40");
-              }}
+              onBlur={() => {}}
               className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
             />
           </div>
