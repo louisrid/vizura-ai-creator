@@ -2,17 +2,17 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Gem } from "lucide-react";
+import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, User, type LucideIcon } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
-const menuItems = [
-  { label: "create character", path: "/" },
-  { label: "create photo", path: "/create" },
-  { label: "my characters", path: "/characters" },
-  { label: "storage", path: "/storage" },
-  { label: "top-ups", path: "/top-ups" },
-  { label: "my account", path: "/account" },
+const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
+  { label: "create character", path: "/", icon: Sparkles },
+  { label: "create photo", path: "/create", icon: Camera },
+  { label: "my characters", path: "/characters", icon: LayoutGrid },
+  { label: "storage", path: "/storage", icon: FolderOpen },
+  { label: "top-ups", path: "/top-ups", icon: Gem },
+  { label: "my account", path: "/account", icon: User },
 ];
 
 const pageNames: Record<string, string> = {
@@ -106,12 +106,13 @@ const Header = () => {
                     <button
                       key={item.label}
                       onClick={() => handleNav(item.path)}
-                      className={`w-full text-left px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
+                      className={`w-full text-left px-4 py-2.5 text-xs font-extrabold lowercase transition-colors flex items-center gap-2 ${
                         location.pathname === item.path
                           ? "text-neon-yellow"
                           : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
                     >
+                      <item.icon size={14} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
                       {item.label}
                     </button>
                   ))}
