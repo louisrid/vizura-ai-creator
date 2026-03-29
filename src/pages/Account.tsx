@@ -59,43 +59,11 @@ const Account = () => {
 
   const handleSubscribe = async () => {
     setBuying(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { type: "membership" },
-      });
-      if (error || data?.error) {
-        // If the edge function fails or isn't configured, treat as demo mode
-        // and optimistically subscribe the user client-side
-        optimisticSubscribe();
-        setBuying(false);
-        setOverlayOpen(false);
-        return;
-      }
-      if (data?.url) {
-        try {
-          const parsed = new URL(data.url, window.location.origin);
-          if (
-            parsed.origin === window.location.origin &&
-            parsed.searchParams.get("checkout") === "success"
-          ) {
-            optimisticSubscribe();
-            await refetchSub();
-            await refetchGems();
-            setBuying(false);
-            setOverlayOpen(false);
-            return;
-          }
-        } catch {
-          // URL parsing failed — fall through to redirect
-        }
-        window.location.href = data.url;
-      }
-    } catch (e: any) {
-      // Network error or unconfigured — demo mode fallback
-      optimisticSubscribe();
-      setBuying(false);
-      setOverlayOpen(false);
-    }
+    // Demo mode: instantly flip subscription state, close overlay, navigate to account
+    optimisticSubscribe();
+    setBuying(false);
+    setOverlayOpen(false);
+    navigate("/account", { replace: true });
   };
 
   return (
