@@ -62,13 +62,13 @@ const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
 /* ── mock pill (compact) ── */
 const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
   <motion.div
-    className="flex h-8 items-center justify-center rounded-lg px-4"
+    className="flex h-6 items-center justify-center rounded-md px-3"
     style={{ background: "hsl(0 0% 100% / 0.08)" }}
     initial={{ opacity: 0, y: 6, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
-    <span className="text-[0.75rem] font-[800] lowercase tracking-tight text-white">{label}</span>
+    <span className="text-[0.65rem] font-[800] lowercase tracking-tight text-white">{label}</span>
   </motion.div>
 );
 
@@ -204,15 +204,15 @@ const Screen1 = () => (
 const Screen2 = () => (
   <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-2">
     <SectionLabel delay={0.15}>hair colour</SectionLabel>
-    <div className="flex flex-wrap gap-1.5">
-      {["blonde", "brunette", "black", "red", "pink", "white"].map((h, i) => (
+    <div className="flex gap-1.5">
+      {["blonde", "brunette", "black"].map((h, i) => (
         <Pill key={h} label={h} delay={0.18 + i * 0.05} />
       ))}
     </div>
-    <SectionLabel delay={0.4}>eye colour</SectionLabel>
-    <div className="flex flex-wrap gap-1.5">
-      {["brown", "blue", "green", "hazel", "grey"].map((e, i) => (
-        <Pill key={e} label={e} delay={0.43 + i * 0.05} />
+    <SectionLabel delay={0.35}>eye colour</SectionLabel>
+    <div className="flex gap-1.5">
+      {["brown", "blue", "green"].map((e, i) => (
+        <Pill key={e} label={e} delay={0.38 + i * 0.05} />
       ))}
     </div>
   </ScreenShell>
@@ -228,7 +228,7 @@ const Screen3 = () => (
 
 const Screen4 = () => (
   <ScreenShell screenIndex={3} title="pick her nationality…">
-    {["american", "british", "european", "latin american"].map((n, i) => (
+    {["american", "british", "european"].map((n, i) => (
       <Pill key={n} label={n} delay={0.15 + i * 0.05} />
     ))}
   </ScreenShell>
