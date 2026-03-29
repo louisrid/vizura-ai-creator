@@ -18,6 +18,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [optimistic, setOptimistic] = useState(false);
 
   const fetchSubscription = useCallback(async () => {
     if (!user) {
@@ -34,16 +35,23 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         .maybeSingle();
 
       if (error) {
-        setStatus(null);
+        // Don't overwrite optimistic state
+        if (!optimistic) setStatus(null);
       } else {
-        setStatus(data?.status ?? null);
+        const serverStatus = data?.status ?? null;
+        // Only overwrite optimistic if server confirms active
+        if (optimistic && serverStatus && ACTIVE_STATUSES.has(serverStatus)) {
+          setStatus(serverStatus);
+        } else if (!optimistic) {
+          setStatus(serverStatus);
+        }
       }
     } catch {
-      setStatus(null);
+      if (!optimistic) setStatus(null);
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, optimistic]);
 
   useEffect(() => {
     void fetchSubscription();
@@ -74,7 +82,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
             payload.eventType === "DELETE"
               ? null
               : (payload.new as { status?: string | null } | null)?.status ?? null;
-          setStatus(nextStatus);
+          if (nextStatus && ACTIVE_STATUSES.has(nextStatus)) {
+            setStatus(nextStatus);
+          } else if (!optimistic) {
+            setStatus(nextStatus);
+          }
           setLoading(false);
         },
       )
@@ -85,12 +97,13 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       document.removeEventListener("visibilitychange", refreshOnReturn);
       supabase.removeChannel(channel);
     };
-  }, [fetchSubscription, user]);
+  }, [fetchSubscription, user, optimistic]);
 
   const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 
   const optimisticSubscribe = useCallback(() => {
     setStatus("active");
+    setOptimistic(true);
   }, []);
 
   return (
