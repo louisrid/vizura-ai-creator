@@ -141,14 +141,14 @@ export const GoldButton = ({
 );
 
 /* ── dismiss link ── */
-export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5 }: { onClick: (e: React.MouseEvent) => void; label?: string; delay?: number }) => (
+export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, className = "" }: { onClick: (e: React.MouseEvent) => void; label?: string; delay?: number; className?: string }) => (
   <motion.button
     onClick={(e) => {
       e.stopPropagation();
       onClick(e);
     }}
-    className="mt-2 text-xs font-extrabold lowercase underline underline-offset-4"
-    style={{ color: "hsl(0 0% 100% / 0.4)" }}
+    className={`text-xs font-extrabold lowercase underline underline-offset-4 ${className}`}
+    style={{ color: "hsl(0 0% 100% / 0.28)" }}
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3, delay }}

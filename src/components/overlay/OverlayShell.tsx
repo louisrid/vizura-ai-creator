@@ -13,9 +13,10 @@ interface OverlayShellProps {
   showNav?: boolean;
   onExited?: () => void;
   onSkip?: () => void;
+  reserveLastStepNavSpace?: boolean;
 }
 
-const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: OverlayShellProps) => {
+const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, reserveLastStepNavSpace = true }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const touchStartX = useRef<number | null>(null);
@@ -126,37 +127,39 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
             </div>
 
             {showNav && (
-              <div className="mt-8 flex flex-col items-center">
-                {!isLastStep && (
-                  <div className="mb-4 flex items-center gap-4">
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                    <NavArrow
-                      direction="right"
-                      onClick={advance}
-                      onLongPress={() => {
-                        // Long-press triggers rapid auto-advance
-                        if (skipTimerRef.current) return;
-                        skipTimerRef.current = setInterval(() => {
-                          setStep((s) => {
-                            if (s >= totalSteps - 1) {
-                              if (skipTimerRef.current) clearInterval(skipTimerRef.current);
-                              skipTimerRef.current = null;
-                              return s;
-                            }
-                            return s + 1;
-                          });
-                        }, 120);
-                      }}
-                    />
-                  </div>
-                )}
-                <Dots current={step} total={totalSteps} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center">
+                <div className={`pointer-events-auto mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
+                  <NavArrow direction="left" onClick={goBack} disabled={step === 0 || isLastStep} />
+                  <NavArrow
+                    direction="right"
+                    onClick={advance}
+                    disabled={isLastStep}
+                    onLongPress={() => {
+                      if (skipTimerRef.current) return;
+                      skipTimerRef.current = setInterval(() => {
+                        setStep((s) => {
+                          if (s >= totalSteps - 1) {
+                            if (skipTimerRef.current) clearInterval(skipTimerRef.current);
+                            skipTimerRef.current = null;
+                            return s;
+                          }
+                          return s + 1;
+                        });
+                      }, 120);
+                    }}
+                  />
+                </div>
+                <div className="pointer-events-auto flex h-3 items-center">
+                  <Dots current={step} total={totalSteps} />
+                </div>
               </div>
             )}
 
             {!showNav && totalSteps > 1 && (
-              <div className="mt-8 flex flex-col items-center">
-                <Dots current={step} total={totalSteps} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center">
+                <div className="pointer-events-auto flex h-3 items-center">
+                  <Dots current={step} total={totalSteps} />
+                </div>
               </div>
             )}
           </div>
