@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
+import IntroSequence from "@/components/IntroSequence";
 import CharacterCreator from "./pages/CharacterCreator";
 
 import ChooseFace from "./pages/ChooseFace";
@@ -23,7 +24,6 @@ import ResetPassword from "./pages/ResetPassword";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
-
 const ScrollToTop = () => {
   const location = useLocation();
   useEffect(() => {
@@ -36,8 +36,8 @@ const ScrollToTop = () => {
   return null;
 };
 
-/* Clear intro flag synchronously before any component renders */
-sessionStorage.removeItem("intro_seen");
+/* Session-level intro flag: true means intro already completed this session */
+let introSeenThisSession = false;
 
 const RedirectHomeOnLoad = () => {
   const navigate = useNavigate();
@@ -52,8 +52,15 @@ const RedirectHomeOnLoad = () => {
 const AnimatedRoutes = () => {
   const location = useLocation();
 
+  const [showIntro, setShowIntro] = useState(() => !introSeenThisSession);
+  const handleIntroComplete = useCallback(() => {
+    introSeenThisSession = true;
+    setShowIntro(false);
+  }, []);
+
   return (
     <>
+      <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
       <Header />
       <PageTransition key={location.pathname}>
         <Routes location={location}>
