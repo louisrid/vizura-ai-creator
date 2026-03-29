@@ -95,8 +95,9 @@ const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOve
       open={open}
       totalSteps={TOTAL_STEPS}
       onLongPressSkip={handleSubscribe}
+      onDismiss={onDismiss}
       bottomContent={
-        <DismissLink onClick={onDismiss} label="i'll think about it" className="text-[0.65rem]" />
+        <DismissLink onClick={(e) => { e.stopPropagation(); onDismiss(); }} label="i'll think about it" className="text-[0.65rem]" />
       }
     >
       {(step) => (

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { IntroDots, IntroNavArrow } from "./IntroSequencePrimitives";
+import ShatterExit from "../ShatterExit";
 
 /* ── ambient glow background ── */
 const AmbientGlow = () => (
@@ -52,26 +53,59 @@ interface OverlayShellProps {
   onExited?: () => void;
   onSkip?: () => void;
   onLongPressSkip?: () => void;
+  onDismiss?: () => void;
   reserveLastStepNavSpace?: boolean;
   bottomContent?: React.ReactNode;
 }
 
-const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onLongPressSkip, reserveLastStepNavSpace = true, bottomContent }: OverlayShellProps) => {
+const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onLongPressSkip, onDismiss, reserveLastStepNavSpace = true, bottomContent }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [shattering, setShattering] = useState(false);
+  const [visible, setVisible] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingActionRef = useRef<(() => void) | null>(null);
+  const prevOpenRef = useRef(open);
+
+  // Track open changes — if closing externally (dismiss), trigger shatter
+  useEffect(() => {
+    if (prevOpenRef.current && !open && visible && !shattering) {
+      // External close (e.g. dismiss) — trigger shatter
+      setShattering(true);
+    }
+    if (open && !prevOpenRef.current) {
+      setVisible(true);
+    }
+    prevOpenRef.current = open;
+  }, [open, visible, shattering]);
+
+  const triggerExit = useCallback((afterAction?: () => void) => {
+    if (shattering) return;
+    pendingActionRef.current = afterAction || null;
+    setShattering(true);
+  }, [shattering]);
+
+  const handleShatterDone = useCallback(() => {
+    if (pendingActionRef.current) pendingActionRef.current();
+    pendingActionRef.current = null;
+    setVisible(false);
+    setShattering(false);
+    if (onDismiss && !open) {
+      // Already dismissed externally, just clean up
+    }
+    if (onExited) onExited();
+  }, [onExited, onDismiss, open]);
 
   const advance = useCallback(() => {
     setStep((s) => {
       if (s >= totalSteps - 1) {
-        // Already on last step — trigger long press skip (acts as final action)
-        if (onLongPressSkip) setTimeout(() => onLongPressSkip(), 0);
+        if (onLongPressSkip) setTimeout(() => triggerExit(() => onLongPressSkip()), 0);
         return s;
       }
       return s + 1;
     });
-  }, [totalSteps, onLongPressSkip]);
+  }, [totalSteps, onLongPressSkip, triggerExit]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
 
   const stopSkip = useCallback(() => {
@@ -86,12 +120,12 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
     skipTimerRef.current = setTimeout(() => {
       skipTimerRef.current = null;
       if (onLongPressSkip) {
-        onLongPressSkip();
+        triggerExit(() => onLongPressSkip());
       } else {
         setStep(totalSteps - 1);
       }
     }, 500);
-  }, [totalSteps, onLongPressSkip]);
+  }, [totalSteps, onLongPressSkip, triggerExit]);
 
   useEffect(() => {
     return () => stopSkip();
@@ -102,7 +136,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || !visible) return;
     setStep(0);
     stopSkip();
     const root = document.getElementById("root");
@@ -140,76 +174,73 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence onExitComplete={onExited}>
-      {open ? (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={() => {
-            advance();
-          }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Ambient background glow */}
-          <AmbientGlow />
-          {/* Absolute layout: content pinned at center, nav pinned below */}
-          <div className="relative flex-1 overflow-hidden">
-            {/* Content zone — pinned at vertical center of screen */}
-            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
-              <div className="mx-auto flex w-full max-w-xs flex-col items-center">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={step}
-                    className="w-full"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                  >
-                    {children(step)}
-                  </motion.div>
-                </AnimatePresence>
+    <>
+      <ShatterExit active={shattering} color="hsl(0 0% 0%)" onComplete={handleShatterDone} />
+      <AnimatePresence onExitComplete={onExited}>
+        {visible && !shattering ? (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.05 }}
+            onClick={() => advance()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <AmbientGlow />
+            <div className="relative flex-1 overflow-hidden">
+              <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
+                <div className="mx-auto flex w-full max-w-xs flex-col items-center">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={step}
+                      className="w-full"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                    >
+                      {children(step)}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
-            </div>
 
-            {/* Nav zone — pinned at fixed position */}
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
-              {showNav && (
-                <>
-                  <div className={`mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                    <NavArrow
-                      direction="right"
-                      onClick={advance}
-                      disabled={false}
-                      onLongPress={startLongPress}
-                    />
-                  </div>
+              <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
+                {showNav && (
+                  <>
+                    <div className={`mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
+                      <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                      <NavArrow
+                        direction="right"
+                        onClick={advance}
+                        disabled={false}
+                        onLongPress={startLongPress}
+                      />
+                    </div>
+                    <div className="flex h-3 items-center">
+                      <Dots current={step} total={totalSteps} />
+                    </div>
+                    {bottomContent && (
+                      <div className="mt-5 flex items-center justify-center">
+                        {bottomContent}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {!showNav && totalSteps > 1 && (
                   <div className="flex h-3 items-center">
                     <Dots current={step} total={totalSteps} />
                   </div>
-                  {bottomContent && (
-                    <div className="mt-5 flex items-center justify-center">
-                      {bottomContent}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {!showNav && totalSteps > 1 && (
-                <div className="flex h-3 items-center">
-                  <Dots current={step} total={totalSteps} />
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>,
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </>,
     document.body,
   );
 };
