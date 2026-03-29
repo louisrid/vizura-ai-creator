@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles, ChevronDown } from "lucide-react";
+import CardCarousel from "@/components/CardCarousel";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
