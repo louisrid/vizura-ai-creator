@@ -136,9 +136,8 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || !visible) return;
     setStep(0);
-    setShattering(false);
     stopSkip();
     const root = document.getElementById("root");
     const prev = {
