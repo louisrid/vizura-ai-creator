@@ -52,8 +52,15 @@ const RedirectHomeOnLoad = () => {
 const AnimatedRoutes = () => {
   const location = useLocation();
 
+  const [showIntro, setShowIntro] = useState(() => !introSeenThisSession);
+  const handleIntroComplete = useCallback(() => {
+    introSeenThisSession = true;
+    setShowIntro(false);
+  }, []);
+
   return (
     <>
+      <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
       <Header />
       <PageTransition key={location.pathname}>
         <Routes location={location}>
