@@ -163,7 +163,8 @@ const CharacterCreator = () => {
     const missingName = !characterName.trim();
     const missingAge = !age || Number(age) < 18 || Number(age) > 40;
     if (missingName && missingAge) {
-      toast.error("name and age are required");
+      toast.error("name is required");
+      toast.error("age is required");
       return;
     }
     if (missingName) {
