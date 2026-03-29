@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IntroDots, IntroNavArrow, LIGHT_BLUE } from "./overlay/IntroSequencePrimitives";
+import ShatterExit from "./ShatterExit";
 
 const TOTAL = 7;
 /* ── per-screen emojis (unique per slide) ── */
@@ -237,13 +238,23 @@ interface IntroSequenceProps {
 const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [shattering, setShattering] = useState(false);
   const animating = useRef(false);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    if (open) { setStep(0); animating.current = false; }
+    if (open) { setStep(0); animating.current = false; setShattering(false); }
   }, [open]);
+
+  const triggerExit = useCallback(() => {
+    if (shattering) return;
+    setShattering(true);
+  }, [shattering]);
+
+  const handleShatterDone = useCallback(() => {
+    onComplete();
+  }, [onComplete]);
 
   const stopSkip = useCallback(() => {
     if (skipTimerRef.current) {
@@ -263,23 +274,23 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   }, [step]);
 
   const advance = useCallback(() => {
-    if (step === TOTAL - 1) { onComplete(); return; }
+    if (step === TOTAL - 1) { triggerExit(); return; }
     goTo(step + 1);
-  }, [goTo, step, onComplete]);
+  }, [goTo, step, triggerExit]);
   const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
 
   const handleTap = useCallback(() => {
     if (step < TOTAL - 1) advance();
-    else onComplete();
-  }, [step, advance, onComplete]);
+    else triggerExit();
+  }, [step, advance, triggerExit]);
 
   const handleLongPress = useCallback(() => {
     stopSkip();
     skipTimerRef.current = setTimeout(() => {
       skipTimerRef.current = null;
-      onComplete();
+      triggerExit();
     }, 500);
-  }, [onComplete, stopSkip]);
+  }, [triggerExit, stopSkip]);
 
   // Lock scroll
   useEffect(() => {
@@ -307,65 +318,64 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={handleTap}
-        >
-          {/* Ambient background glow */}
-          <AmbientGlow />
-          {/* Absolute layout: content pinned at center, nav pinned below */}
-          <div className="relative flex-1 overflow-hidden">
-            {/* Content zone — pinned at vertical center of screen */}
-            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
-              <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={step}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
+    <>
+      <ShatterExit active={shattering} color="hsl(0 0% 0%)" onComplete={handleShatterDone} />
+      <AnimatePresence>
+        {open && !shattering && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.05 }}
+            onClick={handleTap}
+          >
+            <AmbientGlow />
+            <div className="relative flex-1 overflow-hidden">
+              <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
+                <div className="w-full max-w-xs mx-auto flex flex-col items-center">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={step}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                    >
+                      {step < 6 && (() => { const S = screens[step]; return <S />; })()}
+                      {step === 6 && <Screen6 />}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
+                {!isLastStep && (
+                  <>
+                    <div className="mb-4 flex h-14 items-center gap-4">
+                      <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                      <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={false} />
+                    </div>
+                    <div className="flex h-3 items-center">
+                      <Dots current={step} total={TOTAL} />
+                    </div>
+                  </>
+                )}
+                {isLastStep && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); triggerExit(); }}
+                    className="h-14 w-[80vw] max-w-[20rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
+                    style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
                   >
-                    {step < 6 && (() => { const S = screens[step]; return <S />; })()}
-                    {step === 6 && <Screen6 />}
-                  </motion.div>
-                </AnimatePresence>
+                    let's go
+                  </button>
+                )}
               </div>
             </div>
-
-            {/* Nav zone — pinned at fixed position */}
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
-              {!isLastStep && (
-                <>
-                  <div className="mb-4 flex h-14 items-center gap-4">
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                    <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={false} />
-                  </div>
-                  <div className="flex h-3 items-center">
-                    <Dots current={step} total={TOTAL} />
-                  </div>
-                </>
-              )}
-              {isLastStep && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onComplete(); }}
-                  className="h-14 w-[80vw] max-w-[20rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
-                  style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
-                >
-                  let's go
-                </button>
-              )}
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>,
     document.body,
   );
 };
