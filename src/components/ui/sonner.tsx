@@ -5,11 +5,11 @@ type ToastTone = "default" | "success" | "error" | "info" | "warning" | "loading
 
 type ToastInput = string | { title?: string; description?: string };
 
-type ToastState = {
+type ToastItem = {
   id: number;
   message: string;
   tone: ToastTone;
-} | null;
+};
 
 type ToastContextValue = {
   toast: ((input: ToastInput) => void) & {
@@ -50,44 +50,45 @@ const toast = Object.assign(
 );
 
 export const Toaster = () => {
-  const [currentToast, setCurrentToast] = useState<ToastState>(null);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const dismissToast = useCallback(() => {
-    setCurrentToast(null);
+  const dismissAll = useCallback(() => {
+    setToasts([]);
   }, []);
 
   const showToast = useCallback((message: string, tone: ToastTone = "default") => {
     if (!message.trim()) return;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     toastId += 1;
-    setCurrentToast({ id: toastId, message, tone });
+    const newToast: ToastItem = { id: toastId, message, tone };
+    setToasts((prev) => [...prev, newToast]);
     timeoutRef.current = setTimeout(() => {
-      setCurrentToast(null);
+      setToasts([]);
       timeoutRef.current = null;
     }, 2500);
   }, []);
 
   useEffect(() => {
     externalShow = showToast;
-    externalDismiss = dismissToast;
+    externalDismiss = dismissAll;
     return () => {
       externalShow = null;
       externalDismiss = null;
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [showToast, dismissToast]);
+  }, [showToast, dismissAll]);
 
   const value = useMemo(() => ({ toast }), []);
 
   return (
     <ToastContext.Provider value={value}>
-      <div className="pointer-events-none fixed top-[73px] left-0 right-0 z-[9999] mx-auto w-full max-w-lg px-4">
-        <div className="flex justify-end">
+      <div className="pointer-events-none fixed top-[85px] left-0 right-0 z-[9999] mx-auto w-full max-w-lg px-4">
+        <div className="flex flex-col items-end gap-1.5">
           <AnimatePresence>
-            {currentToast ? (
+            {toasts.map((t) => (
               <motion.div
-                key={currentToast.id}
+                key={t.id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
@@ -97,10 +98,10 @@ export const Toaster = () => {
                 aria-live="polite"
               >
                 <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-left text-sm font-extrabold lowercase leading-none text-white">
-                  {currentToast.message}
+                  {t.message}
                 </span>
               </motion.div>
-            ) : null}
+            ))}
           </AnimatePresence>
         </div>
       </div>
