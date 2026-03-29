@@ -45,7 +45,7 @@ const Account = () => {
   }
 
   if (!user) {
-    return <SignInView autoSignIn={autoSignIn} />;
+    return <SignInView autoSignIn={autoSignIn} redirectTo={redirectTo} />;
   }
 
   const handleSignOut = async () => {
