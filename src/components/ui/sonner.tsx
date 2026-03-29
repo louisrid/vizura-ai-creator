@@ -83,17 +83,17 @@ export const Toaster = () => {
 
   return (
     <ToastContext.Provider value={value}>
-      <div className="pointer-events-none fixed top-[85px] left-0 right-0 z-[9999] mx-auto w-full max-w-lg px-4">
-        <div className="flex flex-col items-end gap-1.5">
+      <div className="pointer-events-none fixed top-24 left-0 right-0 z-[9999] mx-auto w-full max-w-lg px-4">
+        <div className="flex flex-col items-end gap-2">
           <AnimatePresence>
             {toasts.map((t) => (
               <motion.div
                 key={t.id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
+                exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeOut" } }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
-                className="pointer-events-auto inline-flex items-center rounded-[6px] bg-black px-4 py-2.5"
+                className="pointer-events-auto inline-flex items-center rounded-2xl bg-black px-4 py-2.5"
                 role="status"
                 aria-live="polite"
               >
