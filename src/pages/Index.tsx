@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles, ChevronDown } from "lucide-react";
-import CardCarousel from "@/components/CardCarousel";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -129,12 +128,6 @@ const Index = () => {
     setSelectedCharId("");
   };
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const totalSlots = 3;
-  const paddedImages: (string | null)[] = Array.from({ length: totalSlots }, (_, i) => images[i] ?? null);
-
-  const goPrev = () => setActiveIndex((prev) => (prev - 1 + totalSlots) % totalSlots);
-  const goNext = () => setActiveIndex((prev) => (prev + 1) % totalSlots);
 
   return (
     <div className="min-h-screen bg-background">
