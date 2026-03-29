@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Pencil, Trash2, Loader2, X } from "lucide-react";
+import { Plus, Loader2, X, Trash2, Pencil } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,8 +12,8 @@ import { toast } from "sonner";
 interface Character {
   id: string;
   name: string;
-  country: string;
   age: string;
+  country: string;
   hair: string;
   eye: string;
   body: string;
@@ -41,7 +41,8 @@ const MyCharacters = () => {
         .from("characters")
         .select("*")
         .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(12);
       if (data) setCharacters(data as Character[]);
       setLoading(false);
     };
@@ -94,62 +95,46 @@ const MyCharacters = () => {
           <div className="flex items-center justify-center py-16">
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
-        ) : characters.length === 0 ? (
-          <div className="border-[5px] border-border rounded-2xl p-8 text-center">
-            <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no characters yet</p>
-            <Button
-              variant="outline"
-              className="h-12"
-              onClick={() => navigate("/")}
-            >
-              build character
-            </Button>
-          </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
-            {/* Add new */}
+            {/* Always-visible + button */}
             <button
               onClick={() => navigate("/")}
-              className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
+              className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors active:scale-[0.97]"
             >
-              <Plus size={32} strokeWidth={3} className="text-foreground" />
+              <Plus size={36} strokeWidth={3} className="text-foreground" />
             </button>
 
+            {/* Character cards */}
             {characters.map((char) => (
-              <div key={char.id} className="flex flex-col">
-                <div className="aspect-[3/4] w-full rounded-2xl border-[5px] border-border bg-card flex flex-col items-center justify-center relative overflow-hidden group">
-                  {/* Trait summary */}
-                  <div className="flex flex-col items-center gap-1 px-2 text-center">
-                    <span className="text-lg">{char.country !== "any" ? "🌍" : "👤"}</span>
-                    <span className="text-[10px] font-extrabold lowercase text-foreground leading-tight line-clamp-2">
-                      {char.hair} hair
-                    </span>
-                    <span className="text-[10px] font-extrabold lowercase text-foreground/60">
-                      {char.eye} eyes
-                    </span>
-                  </div>
-
-                  {/* Hover actions */}
-                  <div className="absolute inset-0 bg-foreground/80 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => handleEdit(char)}
-                      className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors"
-                      aria-label="edit"
-                    >
-                      <Pencil size={14} strokeWidth={2.5} />
-                    </button>
-                    <button
-                      onClick={() => setDeleteTarget(char)}
-                      className="w-9 h-9 rounded-2xl bg-destructive flex items-center justify-center text-destructive-foreground hover:bg-destructive/90 transition-colors"
-                      aria-label="delete"
-                    >
-                      <Trash2 size={14} strokeWidth={2.5} />
-                    </button>
-                  </div>
-                </div>
-                <span className="mt-1.5 text-[10px] font-extrabold lowercase tracking-tight text-foreground text-center truncate">
-                  {char.name || `${char.hair} ${char.eye} ${char.age}`}
+              <div
+                key={char.id}
+                className="group relative aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex flex-col items-center justify-center overflow-hidden"
+              >
+                <span className="text-sm font-extrabold lowercase text-foreground leading-tight text-center px-2 truncate w-full">
+                  {char.name || "unnamed"}
                 </span>
+                <span className="text-[10px] font-extrabold lowercase text-foreground/50 mt-0.5">
+                  age {char.age}
+                </span>
+
+                {/* Hover overlay with actions */}
+                <div className="absolute inset-0 bg-foreground/80 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                  <button
+                    onClick={() => handleEdit(char)}
+                    className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors"
+                    aria-label="edit"
+                  >
+                    <Pencil size={14} strokeWidth={2.5} />
+                  </button>
+                  <button
+                    onClick={() => setDeleteTarget(char)}
+                    className="w-9 h-9 rounded-2xl bg-destructive flex items-center justify-center text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                    aria-label="delete"
+                  >
+                    <Trash2 size={14} strokeWidth={2.5} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -185,7 +170,7 @@ const MyCharacters = () => {
                 </button>
               </div>
               <p className="text-xs font-extrabold lowercase text-foreground/60 mb-6">
-                delete "{deleteTarget.name || `${deleteTarget.hair} ${deleteTarget.eye}`}" permanently?
+                delete "{deleteTarget.name || "unnamed"}" permanently?
               </p>
               <div className="flex gap-2">
                 <Button
