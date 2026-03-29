@@ -1,13 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { IntroDots, IntroNavArrow, LIGHT_BLUE, LIGHT_BLUE_SOFT, PURE_WHITE } from "./overlay/IntroSequencePrimitives";
 
 const TOTAL = 6;
-const LIGHT_BLUE = "hsl(195 100% 70%)";
-const NAV_GREY = "hsl(0 0% 45%)";
-const NAV_GREY_DIM = "hsl(0 0% 25%)";
-
 /* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
   ["🖌️"],
@@ -86,68 +82,8 @@ const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; dela
   </motion.p>
 );
 
-/* ── progress dots ── */
-const Dots = ({ current, total }: { current: number; total: number }) => (
-  <div className="flex items-center gap-2">
-    {Array.from({ length: total }).map((_, i) => (
-      <div
-        key={i}
-        className="rounded-full transition-all duration-200"
-        style={{
-          width: i === current ? 10 : 8,
-          height: i === current ? 10 : 8,
-          background: i === current ? LIGHT_BLUE : NAV_GREY_DIM,
-        }}
-      />
-    ))}
-  </div>
-);
-
-/* ── arrow button ── */
-const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "left" | "right"; onClick: () => void; onLongPress?: () => void; disabled?: boolean }) => {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const firedRef = useRef(false);
-
-  const startPress = () => {
-    firedRef.current = false;
-    if (onLongPress) {
-      timerRef.current = setTimeout(() => { firedRef.current = true; onLongPress(); }, 500);
-    }
-  };
-  const endPress = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = null;
-  };
-
-  return (
-    <button
-      onClick={(e) => { e.stopPropagation(); if (!firedRef.current && !disabled) onClick(); }}
-      onPointerDown={startPress}
-      onPointerUp={endPress}
-      onPointerCancel={endPress}
-      className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
-      style={{
-        backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
-        border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-        boxShadow: direction === "left" ? "inset 0 0 0 5px #FFFFFF" : "none",
-        opacity: direction === "right" && disabled ? 0.3 : 1,
-        borderRadius: 16,
-        outline: "none",
-        WebkitAppearance: "none",
-        appearance: "none",
-        padding: 0,
-        cursor: disabled && direction === "left" ? "default" : "pointer",
-        transition: "transform 0.05s",
-      }}
-    >
-      {direction === "left" ? (
-        <ArrowLeft size={22} strokeWidth={2.75} color="#FFFFFF" />
-      ) : (
-        <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
-      )}
-    </button>
-  );
-};
+const Dots = IntroDots;
+const NavArrow = IntroNavArrow;
 
 /* ── consistent title ── */
 const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
@@ -388,13 +324,14 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
               </AnimatePresence>
             </div>
 
-            {/* Arrows + dots — tight below content */}
-            <div className="flex flex-col items-center mt-8">
-              <div className="flex items-center gap-4 mb-4">
-                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={handleLongPress} />
+            <div className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center">
+              <div className={`pointer-events-auto mb-4 flex h-14 items-center gap-4 ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
+                <NavArrow direction="left" onClick={goBack} disabled={step === 0 || step === TOTAL - 1} />
+                <NavArrow direction="right" onClick={advance} onLongPress={handleLongPress} disabled={step === TOTAL - 1} />
               </div>
-              <Dots current={step} total={TOTAL} />
+              <div className={`pointer-events-auto flex h-3 items-center ${step === TOTAL - 1 ? "invisible" : "visible"}`}>
+                <Dots current={step} total={TOTAL} />
+              </div>
             </div>
           </div>
         </motion.div>

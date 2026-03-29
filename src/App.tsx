@@ -35,48 +35,16 @@ const ScrollToTop = () => {
   return null;
 };
 
-const INTRO_KEY = "vizura_intro_seen";
-
-const readIntroSeen = () => {
-  if (typeof window === "undefined") return false;
-  return window.sessionStorage.getItem(INTRO_KEY) === "1";
-};
-
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const [introSeen, setIntroSeen] = useState(readIntroSeen);
+  const [introSeen, setIntroSeen] = useState(location.pathname !== "/" && location.pathname !== "/create" && location.pathname !== "/index");
 
   useEffect(() => {
-    const syncIntroSeen = () => {
-      if (readIntroSeen()) {
-        setIntroSeen(true);
-      }
-    };
-
-    syncIntroSeen();
-    window.addEventListener("focus", syncIntroSeen);
-    document.addEventListener("visibilitychange", syncIntroSeen);
-
-    return () => {
-      window.removeEventListener("focus", syncIntroSeen);
-      document.removeEventListener("visibilitychange", syncIntroSeen);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (readIntroSeen()) {
-      setIntroSeen(true);
-    }
-  }, [location.pathname, location.search]);
-
-  useEffect(() => {
-    if (introSeen) {
-      window.sessionStorage.setItem(INTRO_KEY, "1");
-    }
-  }, [introSeen]);
+    const shouldShowIntro = location.pathname === "/" || location.pathname === "/create" || location.pathname === "/index";
+    setIntroSeen(!shouldShowIntro);
+  }, [location.key, location.pathname]);
 
   const handleIntroComplete = useCallback(() => {
-    window.sessionStorage.setItem(INTRO_KEY, "1");
     setIntroSeen(true);
   }, []);
 
