@@ -10,6 +10,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
 import IntroSequence from "@/components/IntroSequence";
 import CharacterCreator from "./pages/CharacterCreator";
+import CharacterDetail from "./pages/CharacterDetail";
 
 import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
             <Route path="/index" element={<Index />} />
             <Route path="/auth" element={<Account />} />
             <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/characters/:id" element={<CharacterDetail />} />
             <Route path="/storage" element={<Storage />} />
             <Route path="/top-ups" element={<TopUps />} />
             <Route path="/account" element={<Account />} />
