@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
-import BackButton from "@/components/BackButton";
+
 import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -169,9 +169,8 @@ const CharacterCreator = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-28">
-        {/* Back button + title row */}
-        <div className="flex items-center gap-3 mb-8">
-          <BackButton />
+        {/* Title row (no back button on this page) */}
+        <div className="flex items-center mb-8 pl-12">
           <PageTitle className="mb-0">create character</PageTitle>
         </div>
 
