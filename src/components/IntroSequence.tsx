@@ -132,7 +132,7 @@ const Screen1 = () => (
 );
 
 const Screen2 = () => (
-  <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-2">
+  <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-1">
     <SectionLabel delay={0.15}>hair colour</SectionLabel>
     <div className="flex gap-1.5">
       {["blonde", "brunette", "black"].map((h, i) => (
