@@ -1,53 +1,116 @@
-import { useTheme } from "next-themes";
-import { Toaster as Sonner, toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
-type ToasterProps = React.ComponentProps<typeof Sonner>;
+type ToastTone = "default" | "success" | "error" | "info" | "warning" | "loading";
 
-const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+type ToastInput = string | { title?: string; description?: string };
+
+type ToastState = {
+  id: number;
+  message: string;
+  tone: ToastTone;
+} | null;
+
+type ToastContextValue = {
+  toast: ((input: ToastInput) => void) & {
+    success: (input: ToastInput) => void;
+    error: (input: ToastInput) => void;
+    info: (input: ToastInput) => void;
+    warning: (input: ToastInput) => void;
+    loading: (input: ToastInput) => void;
+    dismiss: () => void;
+  };
+};
+
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+const resolveMessage = (input: ToastInput) => {
+  if (typeof input === "string") return input;
+  return input.description || input.title || "";
+};
+
+let toastId = 0;
+let externalShow: ((message: string, tone?: ToastTone) => void) | null = null;
+let externalDismiss: (() => void) | null = null;
+
+const emit = (input: ToastInput, tone: ToastTone = "default") => {
+  externalShow?.(resolveMessage(input), tone);
+};
+
+const toast = Object.assign(
+  (input: ToastInput) => emit(input),
+  {
+    success: (input: ToastInput) => emit(input, "success"),
+    error: (input: ToastInput) => emit(input, "error"),
+    info: (input: ToastInput) => emit(input, "info"),
+    warning: (input: ToastInput) => emit(input, "warning"),
+    loading: (input: ToastInput) => emit(input, "loading"),
+    dismiss: () => externalDismiss?.(),
+  },
+);
+
+export const Toaster = () => {
+  const [currentToast, setCurrentToast] = useState<ToastState>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const dismissToast = useCallback(() => {
+    setCurrentToast(null);
+  }, []);
+
+  const showToast = useCallback((message: string, tone: ToastTone = "default") => {
+    if (!message.trim()) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    toastId += 1;
+    setCurrentToast({ id: toastId, message, tone });
+    timeoutRef.current = setTimeout(() => {
+      setCurrentToast(null);
+      timeoutRef.current = null;
+    }, 2500);
+  }, []);
+
+  useEffect(() => {
+    externalShow = showToast;
+    externalDismiss = dismissToast;
+    return () => {
+      externalShow = null;
+      externalDismiss = null;
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [showToast, dismissToast]);
+
+  const value = useMemo(() => ({ toast }), []);
 
   return (
-    <Sonner
-      theme={theme as ToasterProps["theme"]}
-      position="top-right"
-      duration={2500}
-      visibleToasts={1}
-      expand={false}
-      closeButton={false}
-      offset={{ top: 73, right: 16 }}
-      icons={{
-        success: null,
-        error: null,
-        info: null,
-        warning: null,
-        loading: null,
-      }}
-      toastOptions={{
-        unstyled: true,
-        classNames: {
-          toast:
-            "bg-black text-white rounded-[6px] w-[250px] min-w-[250px] max-w-[250px] h-10 min-h-10 px-3 py-0 flex items-center justify-start shadow-none border-0 whitespace-nowrap overflow-hidden text-ellipsis text-sm font-extrabold lowercase leading-none",
-          title: "m-0 p-0 text-sm font-extrabold lowercase leading-none whitespace-nowrap overflow-hidden text-ellipsis text-white",
-          description: "m-0 p-0 text-sm font-extrabold lowercase leading-none whitespace-nowrap overflow-hidden text-ellipsis text-white",
-          content: "flex items-center justify-start w-full min-w-0 overflow-hidden",
-          actionButton: "hidden",
-          cancelButton: "hidden",
-          closeButton: "hidden",
-          icon: "hidden",
-        },
-      }}
-      style={{
-        position: "fixed",
-        top: "73px",
-        right: "16px",
-        left: "auto",
-        bottom: "auto",
-        width: "250px",
-        zIndex: 9999,
-      }}
-      {...props}
-    />
+    <ToastContext.Provider value={value}>
+      <div className="pointer-events-none fixed top-[73px] left-0 right-0 z-[9999] mx-auto w-full max-w-lg px-4">
+        <div className="flex justify-end">
+          <AnimatePresence>
+            {currentToast ? (
+              <motion.div
+                key={currentToast.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="pointer-events-auto flex h-10 w-[250px] items-center overflow-hidden rounded-[6px] bg-black px-3"
+                role="status"
+                aria-live="polite"
+              >
+                <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-left text-sm font-extrabold lowercase leading-none text-white">
+                  {currentToast.message}
+                </span>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </div>
+      </div>
+    </ToastContext.Provider>
   );
 };
 
-export { Toaster, toast };
+export const useToast = () => {
+  const context = useContext(ToastContext);
+  return context ?? { toast };
+};
+
+export { toast };

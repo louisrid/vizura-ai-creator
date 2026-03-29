@@ -90,12 +90,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Sonner />
       <AuthProvider>
         <CreditsProvider>
           <SubscriptionProvider>
             <BrowserRouter>
-              
+              <Sonner />
               <ScrollToTop />
               <AnimatedRoutes />
             </BrowserRouter>
