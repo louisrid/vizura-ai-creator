@@ -100,12 +100,12 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
     skipTimerRef.current = setTimeout(() => {
       skipTimerRef.current = null;
       if (onLongPressSkip) {
-        onLongPressSkip();
+        triggerExit(() => onLongPressSkip());
       } else {
         setStep(totalSteps - 1);
       }
     }, 500);
-  }, [totalSteps, onLongPressSkip]);
+  }, [totalSteps, onLongPressSkip, triggerExit]);
 
   useEffect(() => {
     return () => stopSkip();
