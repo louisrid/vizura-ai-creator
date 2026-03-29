@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
+import BackButton from "@/components/BackButton";
+import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -166,9 +168,15 @@ const CharacterCreator = () => {
       
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-8 pb-28">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-28">
+        {/* Back button + title row */}
+        <div className="flex items-center gap-3 mb-8">
+          <BackButton />
+          <PageTitle className="mb-0">create character</PageTitle>
+        </div>
+
         {/* Hero image box */}
-        <section className="mx-auto mb-5 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
             <Sparkles size={28} strokeWidth={2.5} className="text-black" />
           </div>
