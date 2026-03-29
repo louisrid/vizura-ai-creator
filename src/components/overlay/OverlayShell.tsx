@@ -52,7 +52,6 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
   useEffect(() => {
     if (!open) return;
     setStep(0);
-    setSkipping(false);
     stopSkip();
     const root = document.getElementById("root");
     const prev = {
@@ -84,10 +83,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
 
   const isLastStep = step === totalSteps - 1;
 
-  // During skip: instant transitions. Normal: smooth.
-  const contentTransition = skipping
-    ? { duration: 0.08, ease: "linear" as const }
-    : { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
 
   if (!mounted) return null;
 
@@ -115,9 +111,9 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
                   <motion.div
                     key={step}
                     className="w-full"
-                    initial={{ opacity: 0, y: skipping ? 0 : 20 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: skipping ? 0 : -12 }}
+                    exit={{ opacity: 0, y: -12 }}
                     transition={contentTransition}
                   >
                     {children(step)}
