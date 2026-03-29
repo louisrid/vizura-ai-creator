@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, X, Trash2 } from "lucide-react";
+import { Plus, Loader2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
@@ -29,6 +28,7 @@ const MyCharacters = () => {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<Character | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [deletedId, setDeletedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
@@ -49,6 +49,25 @@ const MyCharacters = () => {
     if (user) fetchCharacters();
   }, [user]);
 
+  // Lock scroll when overlay is open
+  useEffect(() => {
+    if (!deleteTarget) return;
+    const root = document.getElementById("root");
+    const prev = {
+      body: document.body.style.overflow,
+      html: document.documentElement.style.overflow,
+      root: root?.style.overflow ?? "",
+    };
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    if (root) root.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev.body;
+      document.documentElement.style.overflow = prev.html;
+      if (root) root.style.overflow = prev.root;
+    };
+  }, [deleteTarget]);
+
   if (!authLoading && !user) return null;
 
   const handleDelete = async () => {
@@ -60,12 +79,26 @@ const MyCharacters = () => {
       .eq("id", deleteTarget.id);
     if (error) {
       toast.error("failed to delete character");
-    } else {
-      setCharacters((prev) => prev.filter((c) => c.id !== deleteTarget.id));
-      toast.success("character deleted");
+      setDeleting(false);
+      setDeleteTarget(null);
+      return;
     }
-    setDeleting(false);
+    const id = deleteTarget.id;
     setDeleteTarget(null);
+    setDeleting(false);
+    setDeletedId(id);
+    toast.success("character deleted");
+    // Remove from list after fade-out animation
+    setTimeout(() => {
+      setCharacters((prev) => prev.filter((c) => c.id !== id));
+      setDeletedId(null);
+    }, 350);
+  };
+
+  const openDelete = (e: React.MouseEvent, char: Character) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setDeleteTarget(char);
   };
 
   return (
@@ -91,71 +124,86 @@ const MyCharacters = () => {
             </button>
 
             {/* Character cards */}
-            {characters.map((char) => (
-              <button
-                key={char.id}
-                onClick={() => navigate(`/characters/${char.id}`)}
-                className="group relative aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex flex-col items-center justify-center overflow-hidden text-left transition-colors hover:border-foreground/40 active:scale-[0.97]"
-              >
-                <span className="text-sm font-extrabold lowercase text-foreground leading-tight text-center px-2 truncate w-full">
-                  {char.name || "unnamed"}
-                </span>
-                <span className="text-[10px] font-extrabold lowercase text-foreground/50 mt-0.5">
-                  age {char.age}
-                </span>
-              </button>
-            ))}
+            <AnimatePresence>
+              {characters.map((char) => (
+                <motion.button
+                  key={char.id}
+                  layout
+                  initial={{ opacity: 1, scale: 1 }}
+                  animate={{
+                    opacity: deletedId === char.id ? 0 : 1,
+                    scale: deletedId === char.id ? 0.9 : 1,
+                  }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  onClick={() => navigate(`/characters/${char.id}`)}
+                  className="relative aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex flex-col items-center justify-center overflow-hidden text-left transition-colors hover:border-foreground/40 active:scale-[0.97]"
+                >
+                  <span className="text-sm font-extrabold lowercase text-foreground leading-tight text-center px-2 truncate w-full">
+                    {char.name || "unnamed"}
+                  </span>
+                  <span className="text-[10px] font-extrabold lowercase text-foreground/50 mt-0.5">
+                    age {char.age}
+                  </span>
+
+                  {/* Delete X button */}
+                  <div
+                    onClick={(e) => openDelete(e, char)}
+                    className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-foreground/60 text-background transition-colors hover:bg-foreground/80"
+                    role="button"
+                    aria-label={`delete ${char.name || "character"}`}
+                  >
+                    <X size={12} strokeWidth={3} />
+                  </div>
+                </motion.button>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </main>
 
-      {/* Delete confirmation modal */}
+      {/* Fullscreen delete confirmation overlay */}
       <AnimatePresence>
         {deleteTarget && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
-            onClick={() => !deleting && setDeleteTarget(null)}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-black px-6"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.15 }}
-              className="bg-card border-[5px] border-border rounded-2xl shadow-medium w-full max-w-xs overflow-hidden p-6"
-              onClick={(e) => e.stopPropagation()}
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, delay: 0.05 }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-extrabold lowercase text-foreground">delete character</h2>
+              <h2 className="text-xl font-extrabold lowercase text-white leading-snug mb-2">
+                are you sure you want to<br />delete this character?
+              </h2>
+              <p className="text-base font-extrabold lowercase text-white/50 mb-10">
+                {deleteTarget.name || "unnamed"}
+              </p>
+
+              <div className="flex gap-3 w-full max-w-xs">
                 <button
                   onClick={() => !deleting && setDeleteTarget(null)}
-                  className="w-8 h-8 rounded-2xl bg-foreground/10 flex items-center justify-center hover:bg-foreground/20 transition-colors"
-                >
-                  <X size={14} strokeWidth={2.5} className="text-foreground" />
-                </button>
-              </div>
-              <p className="text-xs font-extrabold lowercase text-foreground/60 mb-6">
-                delete "{deleteTarget.name || "unnamed"}" permanently?
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1 h-12 text-sm"
-                  onClick={() => setDeleteTarget(null)}
                   disabled={deleting}
+                  className="flex-1 h-14 rounded-2xl bg-foreground/20 text-sm font-extrabold lowercase text-white transition-colors hover:bg-foreground/30 disabled:opacity-50"
                 >
-                  cancel
-                </Button>
-                <Button
-                  className="flex-1 h-12 text-sm bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  go back
+                </button>
+                <button
                   onClick={handleDelete}
                   disabled={deleting}
+                  className="flex-1 h-14 rounded-2xl bg-destructive text-sm font-extrabold lowercase text-white transition-colors hover:bg-destructive/90 disabled:opacity-50"
                 >
-                  {deleting ? <Loader2 className="animate-spin" size={16} /> : "delete"}
-                </Button>
+                  {deleting ? (
+                    <Loader2 className="animate-spin mx-auto" size={18} />
+                  ) : (
+                    "delete"
+                  )}
+                </button>
               </div>
             </motion.div>
           </motion.div>
