@@ -159,6 +159,26 @@ const CharacterCreator = () => {
     }
   };
 
+  const handleCreate = async () => {
+    if (!characterName.trim()) {
+      toast.error("name is required");
+      return;
+    }
+    if (!age || Number(age) < 18 || Number(age) > 40) {
+      toast.error("age is required (18-40)");
+      return;
+    }
+    if (!user) {
+      navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+    await saveCharacter(false);
+    if (!isEditing) {
+      toast.success("character added!");
+      navigate("/characters");
+    }
+  };
+
   const total = imageCards.length || 3;
   const cyclePrevious = () => setActiveIndex((c) => (c - 1 + total) % total);
   const cycleNext = () => setActiveIndex((c) => (c + 1) % total);
