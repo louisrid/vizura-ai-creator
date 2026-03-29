@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { IntroDots, IntroNavArrow, LIGHT_BLUE, LIGHT_BLUE_SOFT, PURE_WHITE } from "./overlay/IntroSequencePrimitives";
+import { IntroDots, IntroNavArrow, LIGHT_BLUE } from "./overlay/IntroSequencePrimitives";
 
 const TOTAL = 6;
 /* ── per-screen emojis ── */
