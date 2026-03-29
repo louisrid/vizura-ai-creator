@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles, ChevronDown } from "lucide-react";
+import CardCarousel from "@/components/CardCarousel";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -128,7 +129,12 @@ const Index = () => {
     setSelectedCharId("");
   };
 
-  const primaryImage = images[0];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const totalSlots = 3;
+  const paddedImages: (string | null)[] = Array.from({ length: totalSlots }, (_, i) => images[i] ?? null);
+
+  const goPrev = () => setActiveIndex((prev) => (prev - 1 + totalSlots) % totalSlots);
+  const goNext = () => setActiveIndex((prev) => (prev + 1) % totalSlots);
 
   return (
     <div className="min-h-screen bg-background">
@@ -140,25 +146,14 @@ const Index = () => {
           </div>
           <PageTitle>create photo</PageTitle>
 
-          <div className="relative mb-10 overflow-hidden rounded-2xl border-[6px] border-border bg-card aspect-[4/5]">
-            {primaryImage ? (
-              <>
-                <img src={primaryImage} alt="generated photo" className="h-full w-full object-cover" />
-                <a
-                  href={primaryImage}
-                  download="vizura-photo.png"
-                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
-                  aria-label="download photo"
-                >
-                  <Download size={14} />
-                </a>
-              </>
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <Wand2 size={28} className="text-foreground" />
-              </div>
-            )}
-          </div>
+          <h2 className="text-lg font-[900] lowercase text-foreground mb-4">image generated</h2>
+
+          <CardCarousel
+            images={paddedImages}
+            activeIndex={activeIndex}
+            onPrevious={goPrev}
+            onNext={goNext}
+          />
 
           {user && (
             <div className="flex items-center justify-end gap-1 text-xs font-extrabold text-foreground lowercase mb-10">
