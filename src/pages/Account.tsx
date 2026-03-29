@@ -17,6 +17,15 @@ const Account = () => {
   const { subscribed, status, refetch: refetchSub } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get("redirect");
+
+  // Redirect back after successful login
+  useEffect(() => {
+    if (user && redirectTo) {
+      navigate(redirectTo, { replace: true });
+    }
+  }, [user, redirectTo, navigate]);
 
   // Refetch on checkout success
   useEffect(() => {
