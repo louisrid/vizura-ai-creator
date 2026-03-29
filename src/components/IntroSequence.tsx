@@ -4,24 +4,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IntroDots, IntroNavArrow, LIGHT_BLUE } from "./overlay/IntroSequencePrimitives";
 
 const TOTAL = 7;
-/* ── per-screen emojis ── */
+/* ── per-screen emojis (unique per slide, index 0 = welcome ✨) ── */
 const screenEmojis: string[][] = [
-  ["🖌️"],
-  ["✨"],
-  ["🫧"],
-  ["🇺🇸"],
-  ["⚙️"],
-  ["🚀"],
+  ["✨"],  // 0: welcome
+  ["🖌️"],  // 1: pick style
+  ["👁️"],  // 2: set look
+  ["🫧"],  // 3: build
+  ["🇺🇸"],  // 4: nationality
+  ["⚙️"],  // 5: details
+  ["🚀"],  // 6: ready (used inline)
 ];
 
-/* ── per-screen micro-animation configs ── */
+/* ── per-screen micro-animation configs — gentle floats ── */
 const emojiMotions = [
-  { y: [0, -10, 0], rotate: [0, 6, -4, 0], scale: [1, 1.08, 1], duration: 2.8 },
-  { y: [0, -7, 2, 0], rotate: [0, -8, 5, 0], scale: [1, 1.05, 0.97, 1], duration: 3.2 },
-  { y: [0, -12, 0], rotate: [0, 10, -6, 0], scale: [1, 1.1, 0.95, 1], duration: 2.5 },
-  { y: [0, -6, 4, 0], rotate: [0, -5, 8, -3, 0], scale: [1, 1.06, 1], duration: 3.5 },
-  { y: [0, -14, 0], rotate: [0, 12, -8, 0], scale: [1, 1.12, 0.96, 1], duration: 2.6 },
-  { y: [0, -9, 0], rotate: [0, 7, -5, 0], scale: [1, 1.07, 1], duration: 3.0 },
+  { y: [0, -6, 0], rotate: [0, 3, -2, 0], scale: [1, 1.05, 1], duration: 3.0 },
+  { y: [0, -8, 0], rotate: [0, 5, -3, 0], scale: [1, 1.06, 1], duration: 2.8 },
+  { y: [0, -5, 2, 0], rotate: [0, -4, 3, 0], scale: [1, 1.04, 0.98, 1], duration: 3.2 },
+  { y: [0, -7, 0], rotate: [0, 6, -4, 0], scale: [1, 1.06, 0.97, 1], duration: 2.6 },
+  { y: [0, -5, 3, 0], rotate: [0, -3, 5, -2, 0], scale: [1, 1.04, 1], duration: 3.4 },
+  { y: [0, -9, 0], rotate: [0, 7, -5, 0], scale: [1, 1.07, 0.97, 1], duration: 2.7 },
+  { y: [0, -6, 0], rotate: [0, 4, -3, 0], scale: [1, 1.05, 1], duration: 3.0 },
 ];
 
 /* ── single emoji ── */
@@ -30,9 +32,9 @@ const BigEmoji = ({ emoji, delay = 0, screenIndex = 0 }: { emoji: string; delay?
   return (
     <motion.span
       className="select-none pointer-events-none text-[3.5rem]"
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: [0, 1.4, 0.9, 1] }}
-      transition={{ delay, duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.35, ease: [0.34, 1.56, 0.64, 1] }}
     >
       <motion.span
         className="inline-block"
@@ -130,15 +132,6 @@ const ScreenWelcome = () => (
     </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <ScreenTitle>welcome to vizura</ScreenTitle>
-      <motion.p
-        className="mt-3 max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
-        style={{ color: "hsl(0 0% 100% / 0.92)" }}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, delay: 0.35, ease: "easeOut" }}
-      >
-        create your dream character in seconds
-      </motion.p>
     </div>
   </div>
 );
@@ -152,7 +145,7 @@ const Screen1 = () => (
 );
 
 const Screen2 = () => (
-  <ScreenShell screenIndex={1} title="set her look…" contentClassName="flex-col gap-1">
+  <ScreenShell screenIndex={2} title="set her look…" contentClassName="flex-col gap-1">
     <SectionLabel delay={0.15}>hair colour</SectionLabel>
     <div className="flex gap-1.5">
       {["blonde", "brunette", "black"].map((h, i) => (
@@ -169,7 +162,7 @@ const Screen2 = () => (
 );
 
 const Screen3 = () => (
-  <ScreenShell screenIndex={2} title="choose her build…">
+  <ScreenShell screenIndex={3} title="choose her build…">
     <Pill label="slim" delay={0.15} />
     <Pill label="regular" delay={0.22} />
     <Pill label="curvy" delay={0.29} />
@@ -177,7 +170,7 @@ const Screen3 = () => (
 );
 
 const Screen4 = () => (
-  <ScreenShell screenIndex={3} title="pick her nationality…">
+  <ScreenShell screenIndex={4} title="pick her nationality…">
     {["american", "british", "european"].map((n, i) => (
       <Pill key={n} label={n} delay={0.15 + i * 0.05} />
     ))}
@@ -185,7 +178,7 @@ const Screen4 = () => (
 );
 
 const Screen5 = () => (
-  <ScreenShell screenIndex={4} title="set her details…" contentClassName="flex-col items-start justify-start">
+  <ScreenShell screenIndex={5} title="set her details…" contentClassName="flex-col items-start justify-start">
     <motion.p
       className="text-[0.65rem] font-[800] uppercase tracking-widest text-white"
       initial={{ opacity: 0 }}
@@ -207,7 +200,9 @@ const Screen5 = () => (
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex w-full flex-col items-center">
-    <div className="flex h-12 items-end justify-center" />
+    <div className="flex h-12 items-end justify-center">
+      <BigEmoji emoji="🚀" delay={0.05} screenIndex={6} />
+    </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <ScreenTitle>ready?</ScreenTitle>
       <motion.button
@@ -259,7 +254,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     if (next < 0 || next >= TOTAL || next === step) return;
     animating.current = true;
     setStep(next);
-    setTimeout(() => { animating.current = false; }, 350);
+    setTimeout(() => { animating.current = false; }, 280);
   }, [step]);
 
   const advance = useCallback(() => {
@@ -301,7 +296,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     };
   }, [open, stopSkip]);
 
-  const contentTransition = { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as const };
 
   if (!mounted) return null;
 
