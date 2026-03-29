@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
 
-import PageTitle from "@/components/PageTitle";
+
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import PaywallOverlay from "@/components/PaywallOverlay";
