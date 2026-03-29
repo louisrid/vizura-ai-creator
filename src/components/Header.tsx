@@ -20,23 +20,26 @@ const YourCharsIcon = ({ size = 14, className }: { size?: number; className?: st
 );
 
 const menuItems = [
-  { label: "generate face", icon: Image, path: "/generate-face" },
-  { label: "build character", icon: Sparkles, path: "/" },
-  { label: "create a photo", icon: Camera, path: "/create" },
-  { label: "your creations", icon: YourCharsIcon, path: "/characters" },
-  { label: "top-ups", icon: Gem, path: "/top-ups" },
-  { label: "my account", icon: Settings, path: "/account" },
+  { label: "create character", path: "/" },
+  { label: "create photo", path: "/create" },
+  { label: "my characters", path: "/characters" },
+  { label: "storage", path: "/storage" },
+  { label: "top-ups", path: "/top-ups" },
+  { label: "my account", path: "/account" },
 ];
 
 const pageNames: Record<string, string> = {
-  "/": "build character",
+  "/": "create character",
   "/generate-face": "generate face",
-  "/create": "create a photo",
-  "/characters": "your creations",
-  "/storage": "saved",
+  "/choose-face": "generate face",
+  "/create": "create photo",
+  "/index": "create photo",
+  "/characters": "my characters",
+  "/storage": "storage",
   "/history": "history",
   "/top-ups": "top-ups",
   "/account": "my account",
+  "/account/membership": "membership",
   "/help": "help",
   "/auth": "sign in",
   "/reset-password": "reset password",
@@ -67,9 +70,6 @@ const Header = () => {
   };
 
   const currentPage = pageNames[location.pathname] || "";
-  const currentMenuItem = menuItems.find((item) => item.path === location.pathname);
-  const isAuthPage = location.pathname === "/auth";
-  const CurrentIcon = currentMenuItem?.icon || (isAuthPage ? LogIn : undefined);
 
   return (
     <header className="bg-nav sticky top-0 z-40 border-b-[5px] border-nav-foreground/15">
@@ -89,9 +89,8 @@ const Header = () => {
             </button>
           )}
 
-          <span className="flex items-center gap-2.5 text-xs font-extrabold lowercase">
-            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow" />}
-            <span className="text-nav-foreground">{currentPage}</span>
+          <span className="text-xs font-extrabold lowercase text-nav-foreground">
+            {currentPage}
           </span>
 
           <button
@@ -120,17 +119,12 @@ const Header = () => {
                     <button
                       key={item.label}
                       onClick={() => handleNav(item.path)}
-                      className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
+                      className={`w-full text-left px-4 py-2.5 text-xs font-extrabold lowercase transition-colors ${
                         location.pathname === item.path
                           ? "text-neon-yellow"
                           : "text-nav-foreground hover:text-nav-foreground/80"
                       }`}
                     >
-                      <item.icon
-                        size={14}
-                        strokeWidth={2.5}
-                        className={location.pathname === item.path ? "text-neon-yellow" : undefined}
-                      />
                       {item.label}
                     </button>
                   ))}
