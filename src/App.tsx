@@ -28,6 +28,10 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 
 const INTRO_SEEN_KEY = "vizura_intro_seen";
 
+// Clear intro flag on every full page load (refresh) so the animation replays.
+// This runs once at module-evaluation time, before React mounts.
+sessionStorage.removeItem(INTRO_SEEN_KEY);
+
 const ScrollToTop = () => {
   const location = useLocation();
   const isFirst = useRef(true);
