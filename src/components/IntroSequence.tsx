@@ -287,10 +287,10 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={step}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={contentTransition}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
                   >
                     {step < 6 && (() => { const S = screens[step]; return <S />; })()}
                     {step === 6 && <Screen6 onGo={onComplete} />}
