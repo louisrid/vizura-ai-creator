@@ -85,6 +85,7 @@ const CharacterCreator = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
+  const [referenceStrength, setReferenceStrength] = useState(50);
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referencePreview, setReferencePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -182,7 +183,7 @@ const CharacterCreator = () => {
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-28">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
         <div className="flex items-center mb-8">
           <PageTitle className="mb-0">create character</PageTitle>
         </div>
@@ -234,18 +235,6 @@ const CharacterCreator = () => {
           </div>
         </section>
 
-        {/* Description */}
-        <section className="mt-5 flex flex-col gap-1.5">
-          <textarea
-            id="character-description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="type extra stuff here"
-            rows={3}
-            className="min-h-24 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-          />
-        </section>
-
         {/* Reference image upload */}
         <section className="mt-5 flex flex-col gap-1.5">
           <span className="text-xs font-extrabold lowercase text-foreground">reference image</span>
@@ -273,16 +262,45 @@ const CharacterCreator = () => {
           </button>
         </section>
 
+        {/* Reference strength slider */}
+        <section className="mt-4 flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-extrabold lowercase text-foreground">reference strength</span>
+            <span className="text-xs font-extrabold lowercase text-foreground">{referenceStrength}%</span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={referenceStrength}
+            onChange={(e) => setReferenceStrength(Number(e.target.value))}
+            className="w-full accent-neon-yellow h-2 rounded-full appearance-none cursor-pointer"
+            style={{
+              background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(0 0% 20%) ${referenceStrength}%)`,
+            }}
+          />
+        </section>
+
+        {/* Description */}
+        <section className="mt-5 flex flex-col gap-1.5">
+          <textarea
+            id="character-description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            placeholder="add any details you want to see"
+            rows={6}
+            className="min-h-40 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+          />
+        </section>
+
         {error && (
           <div className="mt-5 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
-      </main>
 
-      {/* Fixed bottom create button */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 bg-background">
-        <div className="mx-auto max-w-lg">
+        {/* Create button — in-flow, not fixed */}
+        <div className="mt-8 mb-6">
           <Button className="h-14 w-full text-sm" onClick={handleCreate} disabled={isSaving}>
             {isSaving ? (
               <>
@@ -297,7 +315,7 @@ const CharacterCreator = () => {
             )}
           </Button>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
