@@ -60,10 +60,10 @@ const Account = () => {
 
   const handleSubscribe = async () => {
     setBuying(true);
-    // Demo mode: instantly flip subscription state, close overlay, navigate to account
     optimisticSubscribe();
     setBuying(false);
     setOverlayOpen(false);
+    setJustSubscribed(true);
     navigate("/account", { replace: true });
   };
 
@@ -77,9 +77,7 @@ const Account = () => {
 
         <div className="space-y-4">
           {subscribed ? (
-            <div className="w-full h-14 rounded-2xl border-[5px] border-border flex items-center justify-center opacity-40">
-              <span className="text-base font-extrabold lowercase text-foreground">subscribed</span>
-            </div>
+            <SubscribedButton justSubscribed={justSubscribed} onCelebrationDone={() => setJustSubscribed(false)} />
           ) : (
             <button
               className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase hover:opacity-90 transition-all"
