@@ -357,7 +357,7 @@ const CompactSelect = <T extends string>({ label, options, value, onChange }: Co
     <select
       value={value}
       onChange={(e) => onChange(e.target.value as T)}
-      className="h-9 w-full appearance-none rounded-xl border-[4px] border-border bg-card pl-3 pr-8 text-[10px] font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+      className="h-[34px] w-full appearance-none rounded-xl border-[4px] border-border bg-card pl-3 pr-8 text-[10px] font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
     >
       {options.map((opt) => (
         <option key={opt} value={opt}>{opt}</option>
