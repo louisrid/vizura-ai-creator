@@ -38,8 +38,8 @@
     --neon-yellow: 50 100% 50%;
     --neon-yellow-foreground: 0 0% 4%;
 
-    /* neon green (now mapped to neon-yellow for CTA consistency) */
-    --neon-green: 50 100% 50%;
+    /* neon green — actual green for subscription status */
+    --neon-green: 140 100% 50%;
     --neon-green-foreground: 0 0% 4%;
 
     /* gem — neon light blue */
