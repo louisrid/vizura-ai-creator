@@ -341,8 +341,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
           transition={{ duration: 0.2 }}
           onClick={handleTap}
         >
-          {/* Content — pushed down with 38vh top padding */}
-          <div className="flex-1 px-8 overflow-hidden" style={{ paddingTop: "34vh" }}>
+          {/* Content — pushed down with top padding */}
+          <div className="flex-1 px-8 overflow-hidden flex flex-col" style={{ paddingTop: "34vh" }}>
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -357,15 +357,15 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                 </motion.div>
               </AnimatePresence>
             </div>
-          </div>
 
-          {/* Arrows + dots — pinned to bottom */}
-          <div className="flex flex-col items-center pb-[max(env(safe-area-inset-bottom),3.5rem)] pt-2">
-            <div className="flex items-center gap-4 -mt-4 mb-5">
-              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-              <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+            {/* Arrows + dots — tight below content */}
+            <div className="flex flex-col items-center mt-8">
+              <div className="flex items-center gap-4 mb-4">
+                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+              </div>
+              <Dots current={step} total={TOTAL} />
             </div>
-            <Dots current={step} total={TOTAL} />
           </div>
         </motion.div>
       )}
