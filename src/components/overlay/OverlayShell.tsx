@@ -236,8 +236,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
             </div>
           </motion.div>
         ) : null}
-      </AnimatePresence>
-    </>,
+      </AnimatePresence>,
     document.body,
   );
 };
