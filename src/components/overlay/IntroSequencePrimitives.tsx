@@ -2,8 +2,9 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-export const LIGHT_BLUE = "hsl(195 100% 70%)";
-export const NAV_GREY_DIM = "hsl(0 0% 25%)";
+export const LIGHT_BLUE = "hsl(var(--gem-green))";
+export const LIGHT_BLUE_SOFT = "hsl(195 100% 78%)";
+export const PURE_WHITE = "hsl(0 0% 100%)";
 
 export const IntroDots = ({ current, total }: { current: number; total: number }) => (
   <div className="flex items-center gap-2">
@@ -14,7 +15,7 @@ export const IntroDots = ({ current, total }: { current: number; total: number }
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
-          background: i === current ? LIGHT_BLUE : NAV_GREY_DIM,
+          background: i === current ? LIGHT_BLUE : LIGHT_BLUE_SOFT,
         }}
       />
     ))}
@@ -41,7 +42,7 @@ export const IntroNavArrow = ({
       timerRef.current = setTimeout(() => {
         firedRef.current = true;
         onLongPress();
-      }, 600);
+      }, 500);
     }
   };
 
@@ -59,23 +60,23 @@ export const IntroNavArrow = ({
       onPointerDown={startPress}
       onPointerUp={endPress}
       onPointerCancel={endPress}
+      onPointerLeave={endPress}
       className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
       style={{
         backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
         border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-        boxShadow: direction === "left" ? "inset 0 0 0 5px #FFFFFF" : "none",
-        opacity: direction === "right" && disabled ? 0.3 : 1,
+        boxShadow: direction === "left" ? `inset 0 0 0 5px ${PURE_WHITE}` : "none",
         borderRadius: 16,
         outline: "none",
         WebkitAppearance: "none",
         appearance: "none",
         padding: 0,
-        cursor: disabled && direction === "left" ? "default" : "pointer",
+        cursor: disabled ? "default" : "pointer",
         transition: "transform 0.05s",
       }}
     >
       {direction === "left" ? (
-        <ArrowLeft size={22} strokeWidth={2.75} color="#FFFFFF" />
+        <ArrowLeft size={22} strokeWidth={2.75} style={{ color: PURE_WHITE }} />
       ) : (
         <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
       )}
