@@ -81,11 +81,11 @@ const Storage = () => {
           </div>
         ) : images.length === 0 ? (
           <div className="border-[5px] border-border rounded-2xl p-8 text-center">
-            <Wand2 size={28} className="text-foreground/30 mx-auto mb-3" />
+            <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <Button
               variant="outline"
-              className="h-14"
+              className="h-12"
               onClick={() => navigate("/create")}
             >
               create a photo

@@ -93,31 +93,31 @@ const Account = () => {
             </button>
           )}
 
-          <div className="border-[5px] border-border rounded-2xl p-3.5 flex items-center gap-3">
-            <Mail size={14} strokeWidth={2.5} className="text-foreground shrink-0" />
+          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+            <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1 min-w-0">
-              <span className="block text-[10px] font-extrabold lowercase text-foreground/50 leading-none mb-0.5">email</span>
-              <span className="block text-xs font-extrabold lowercase text-foreground truncate">
+              <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
+              <span className="block text-sm font-extrabold lowercase text-foreground truncate">
                 {user?.email || "..."}
               </span>
             </div>
           </div>
 
-          <div className="border-[5px] border-border rounded-2xl p-3.5 flex items-center gap-3">
-            <Calendar size={14} strokeWidth={2.5} className="text-foreground shrink-0" />
+          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+            <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
             <div className="flex-1">
-              <span className="block text-[10px] font-extrabold lowercase text-foreground/50 leading-none mb-0.5">member since</span>
-              <span className="block text-xs font-extrabold lowercase text-foreground">
+              <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
+              <span className="block text-sm font-extrabold lowercase text-foreground">
                 {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }).toLowerCase() : "..."}
               </span>
             </div>
           </div>
 
-          <div className="border-[5px] border-border rounded-2xl p-3.5 flex items-center gap-3">
-            <Gem size={14} strokeWidth={2.5} className="text-gem-green shrink-0" />
+          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+            <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
             <div className="flex-1">
-              <span className="block text-[10px] font-extrabold lowercase text-foreground/50 leading-none mb-0.5">gems</span>
-              <span className="block text-xs font-extrabold lowercase text-foreground">
+              <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
+              <span className="block text-sm font-extrabold lowercase text-foreground">
                 {gems}
               </span>
             </div>

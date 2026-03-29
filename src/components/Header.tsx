@@ -35,7 +35,7 @@ const pageNames: Record<string, string> = {
 const resolvePageName = (pathname: string): string => {
   if (pageNames[pathname]) return pageNames[pathname];
   // Handle dynamic routes like /characters/:id
-  if (pathname.startsWith("/characters/")) return "profile";
+  if (pathname.startsWith("/characters/")) return "character";
   return "";
 };
 
