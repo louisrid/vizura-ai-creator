@@ -138,29 +138,29 @@ const Index = () => {
         </div>
 
         {/* Top section: Photo preview left, Character select + prompt right */}
-        <section className="flex gap-3 mb-6">
-          {/* Photo preview box */}
+        <section className="flex gap-3 mb-5">
+          {/* Photo preview box — 4:5 portrait, matches CharacterCreator */}
           <div
             className="shrink-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
-            style={{ width: "42%", aspectRatio: "3/4" }}
+            style={{ width: "40%", aspectRatio: "4/5" }}
           >
             {images[0] ? (
               <img src={images[0]} alt="generated photo" className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-neon-yellow">
-                <Sparkles size={24} strokeWidth={2.5} className="text-black" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neon-yellow">
+                <Sparkles size={20} strokeWidth={2.5} className="text-black" />
               </div>
             )}
           </div>
 
-          {/* Character select + credits */}
-          <div className="flex-1 flex flex-col gap-2 min-w-0">
+          {/* Character select + prompt */}
+          <div className="flex-1 flex flex-col gap-1.5 min-w-0">
             {/* Character selector */}
-            <label className="relative">
+            <label className="relative flex items-center">
               <select
                 value={selectedCharId}
                 onChange={(e) => handleCharacterSelect(e.target.value)}
-                className="h-11 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-3 pr-8 text-xs font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+                className="h-[34px] w-full appearance-none rounded-xl border-[4px] border-border bg-card pl-3 pr-8 text-[10px] font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
               >
                 <option value="">select character...</option>
                 {characters.map((c) => (
@@ -172,7 +172,7 @@ const Index = () => {
               <ChevronDown
                 size={12}
                 strokeWidth={3}
-                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-foreground/50"
+                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-foreground/50"
               />
             </label>
 
@@ -190,12 +190,12 @@ const Index = () => {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="quick prompt..."
-              className="h-11 w-full rounded-2xl border-[5px] border-border bg-card px-3 text-xs font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+              className="h-[34px] w-full rounded-xl border-[4px] border-border bg-card px-3 text-[10px] font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
             />
 
             {/* Credits display */}
             {user && (
-              <div className="flex items-center gap-1 text-[10px] font-extrabold text-foreground/50 lowercase mt-1">
+              <div className="flex items-center gap-1 text-[10px] font-extrabold text-foreground/50 lowercase mt-0.5">
                 <Sparkles size={11} className="text-neon-yellow" />
                 {credits} credit{credits !== 1 ? "s" : ""}
               </div>
@@ -204,8 +204,8 @@ const Index = () => {
         </section>
 
         {/* Full-width scene description */}
-        <section className="mb-6">
-          <label className="text-xs font-extrabold lowercase text-foreground mb-2 block">
+        <section className="mb-5">
+          <label className="text-xs font-extrabold lowercase text-foreground mb-1.5 block">
             scene description
           </label>
           <textarea
