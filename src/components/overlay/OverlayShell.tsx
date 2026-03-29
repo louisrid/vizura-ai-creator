@@ -29,25 +29,17 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
   const stopSkip = useCallback(() => {
     if (skipTimerRef.current) {
       clearTimeout(skipTimerRef.current as unknown as ReturnType<typeof setTimeout>);
-      clearInterval(skipTimerRef.current);
       skipTimerRef.current = null;
     }
-    setSkipping(false);
   }, []);
 
   const startLongPress = useCallback(() => {
     if (skipTimerRef.current) return;
-    setSkipping(true);
-    skipTimerRef.current = setInterval(() => {
-      setStep((s) => {
-        if (s >= totalSteps - 1) {
-          if (skipTimerRef.current) clearInterval(skipTimerRef.current);
-          skipTimerRef.current = null;
-          return s;
-        }
-        return s + 1;
-      });
-    }, 180);
+    skipTimerRef.current = setTimeout(() => {
+      skipTimerRef.current = null;
+      // Jump to last step to dismiss
+      setStep(totalSteps - 1);
+    }, 500) as unknown as ReturnType<typeof setInterval>;
   }, [totalSteps]);
 
   useEffect(() => {

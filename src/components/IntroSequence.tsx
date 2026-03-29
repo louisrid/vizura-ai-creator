@@ -228,45 +228,21 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
 
   const stopSkip = useCallback(() => {
     if (skipIntervalRef.current) {
-      clearInterval(skipIntervalRef.current);
+      clearTimeout(skipIntervalRef.current as unknown as ReturnType<typeof setTimeout>);
       skipIntervalRef.current = null;
     }
-    setSkipping(false);
   }, []);
 
   useEffect(() => {
     return () => stopSkip();
   }, [stopSkip]);
 
-  const goTo = useCallback((next: number) => {
-    if (animating.current) return;
-    if (next < 0 || next >= TOTAL || next === step) return;
-    animating.current = true;
-    setStep(next);
-    setTimeout(() => { animating.current = false; }, 350);
-  }, [step]);
-
-  const advance = useCallback(() => goTo(step + 1), [goTo, step]);
-  const goBack = useCallback(() => goTo(step - 1), [goTo, step]);
-
-  const handleTap = useCallback(() => {
-    if (step < TOTAL - 1) advance();
-  }, [step, advance]);
-
   const handleLongPress = useCallback(() => {
     stopSkip();
-    setSkipping(true);
-    skipIntervalRef.current = setInterval(() => {
-      setStep((s) => {
-        if (s >= TOTAL - 1) {
-          if (skipIntervalRef.current) clearInterval(skipIntervalRef.current);
-          skipIntervalRef.current = null;
-          onComplete();
-          return s;
-        }
-        return s + 1;
-      });
-    }, 180);
+    skipIntervalRef.current = setTimeout(() => {
+      skipIntervalRef.current = null;
+      onComplete();
+    }, 500) as unknown as ReturnType<typeof setInterval>;
   }, [onComplete, stopSkip]);
 
   // Lock scroll
