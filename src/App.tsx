@@ -62,24 +62,26 @@ const AnimatedRoutes = () => {
     <>
       <IntroSequence open={!introSeen} onComplete={handleIntroComplete} />
       <Header />
-      <PageTransition key={location.pathname}>
-        <Routes location={location}>
-          <Route path="/" element={<CharacterCreator />} />
-          <Route path="/generate-face" element={<ChooseFace />} />
-          <Route path="/choose-face" element={<ChooseFace />} />
-          <Route path="/create" element={<Index />} />
-          <Route path="/index" element={<Index />} />
-          <Route path="/auth" element={<Account />} />
-          <Route path="/characters" element={<MyCharacters />} />
-          <Route path="/storage" element={<Storage />} />
-          <Route path="/top-ups" element={<TopUps />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </PageTransition>
+      <AnimatePresence mode="wait">
+        <PageTransition key={location.pathname}>
+          <Routes location={location}>
+            <Route path="/" element={<CharacterCreator />} />
+            <Route path="/generate-face" element={<ChooseFace />} />
+            <Route path="/choose-face" element={<ChooseFace />} />
+            <Route path="/create" element={<Index />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/auth" element={<Account />} />
+            <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/storage" element={<Storage />} />
+            <Route path="/top-ups" element={<TopUps />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </PageTransition>
+      </AnimatePresence>
     </>
   );
 };
