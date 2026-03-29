@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -36,33 +36,31 @@ const ScrollToTop = () => {
   return null;
 };
 
-/* Session-level intro flag: survives Stripe checkout redirects */
 const INTRO_KEY = "vizura_intro_seen";
-const introAlreadySeen = () => sessionStorage.getItem(INTRO_KEY) === "1";
-const markIntroSeen = () => sessionStorage.setItem(INTRO_KEY, "1");
 
-const RedirectHomeOnLoad = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (window.location.pathname !== "/") {
-      navigate("/", { replace: true });
-    }
-  }, []);
-  return null;
+const readIntroSeen = () => {
+  if (typeof window === "undefined") return false;
+  return window.sessionStorage.getItem(INTRO_KEY) === "1";
 };
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const [introSeen, setIntroSeen] = useState(readIntroSeen);
 
-  const [showIntro, setShowIntro] = useState(() => !introAlreadySeen());
+  useEffect(() => {
+    if (introSeen) {
+      window.sessionStorage.setItem(INTRO_KEY, "1");
+    }
+  }, [introSeen]);
+
   const handleIntroComplete = useCallback(() => {
-    markIntroSeen();
-    setShowIntro(false);
+    window.sessionStorage.setItem(INTRO_KEY, "1");
+    setIntroSeen(true);
   }, []);
 
   return (
     <>
-      <IntroSequence open={showIntro} onComplete={handleIntroComplete} />
+      <IntroSequence open={!introSeen} onComplete={handleIntroComplete} />
       <Header />
       <PageTransition key={location.pathname}>
         <Routes location={location}>
@@ -98,7 +96,7 @@ const App = () => (
         <CreditsProvider>
           <SubscriptionProvider>
             <BrowserRouter>
-              <RedirectHomeOnLoad />
+              
               <ScrollToTop />
               <AnimatedRoutes />
             </BrowserRouter>
