@@ -110,19 +110,24 @@
   display: none;
 }
 
-/* Toast overrides — force top-right */
+/* Toast overrides */
 [data-sonner-toaster] {
   position: fixed !important;
   top: 73px !important;
   right: 16px !important;
   left: auto !important;
   bottom: auto !important;
-  width: auto !important;
+  width: 250px !important;
   transform: none !important;
-  align-items: flex-end !important;
 }
-[data-sonner-toaster] [data-sonner-toast] {
+[data-sonner-toast] {
+  width: 250px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   margin-left: auto !important;
+  white-space: nowrap !important;
 }
 [data-sonner-toast][data-removed] {
   transition-duration: 120ms !important;
