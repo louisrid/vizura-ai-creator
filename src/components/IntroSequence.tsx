@@ -27,23 +27,18 @@ const emojiMotions = [
 ];
 
 /* ── single emoji ── */
-const BigEmoji = ({ emoji, delay = 0, screenIndex = 0 }: { emoji: string; delay?: number; screenIndex?: number }) => {
+const BigEmoji = ({ emoji, screenIndex = 0 }: { emoji: string; screenIndex?: number }) => {
   const motion_cfg = emojiMotions[screenIndex % emojiMotions.length];
   return (
-    <motion.span
-      className="select-none pointer-events-none text-[3.5rem]"
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay, duration: 0.35, ease: [0.34, 1.56, 0.64, 1] }}
-    >
+    <span className="select-none pointer-events-none text-[3.5rem]">
       <motion.span
         className="inline-block"
         animate={{ y: motion_cfg.y, rotate: motion_cfg.rotate, scale: motion_cfg.scale }}
-        transition={{ duration: motion_cfg.duration, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
+        transition={{ duration: motion_cfg.duration, repeat: Infinity, ease: "easeInOut" }}
       >
         {emoji}
       </motion.span>
-    </motion.span>
+    </span>
   );
 };
 
@@ -52,36 +47,28 @@ const EmojiRow = ({ screenIndex }: { screenIndex: number }) => {
   const emojis = screenEmojis[screenIndex] || ["✨"];
   return (
     <div className="flex items-center justify-center gap-4">
-      {emojis.map((e, i) => (
-        <BigEmoji key={e} emoji={e} delay={0.05 + i * 0.15} screenIndex={screenIndex} />
+      {emojis.map((e) => (
+        <BigEmoji key={e} emoji={e} screenIndex={screenIndex} />
       ))}
     </div>
   );
 };
 
 /* ── mock pill (compact) ── */
-const Pill = ({ label, delay = 0 }: { label: string; delay?: number }) => (
-  <motion.div
+const Pill = ({ label }: { label: string }) => (
+  <div
     className="flex h-6 items-center justify-center rounded-md px-3"
     style={{ background: "hsl(0 0% 100% / 0.08)" }}
-    initial={{ opacity: 0, y: 6, scale: 0.92 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ delay, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   >
     <span className="text-[0.65rem] font-[800] lowercase tracking-tight text-white">{label}</span>
-  </motion.div>
+  </div>
 );
 
 /* ── section label ── */
-const SectionLabel = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
-  <motion.p
-    className="text-[0.5rem] font-bold uppercase tracking-widest text-white"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay, duration: 0.3 }}
-  >
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <p className="text-[0.5rem] font-bold uppercase tracking-widest text-white">
     {children}
-  </motion.p>
+  </p>
 );
 
 const Dots = IntroDots;
@@ -89,14 +76,9 @@ const NavArrow = IntroNavArrow;
 
 /* ── consistent title ── */
 const ScreenTitle = ({ children }: { children: React.ReactNode }) => (
-  <motion.h2
-    className="mb-0 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white"
-    initial={{ opacity: 0, y: 12, scale: 0.95 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-  >
+  <h2 className="mb-0 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
     {children}
-  </motion.h2>
+  </h2>
 );
 
 const ScreenShell = ({
