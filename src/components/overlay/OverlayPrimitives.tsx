@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { LIGHT_BLUE, LIGHT_BLUE_SOFT, PURE_WHITE } from "./IntroSequencePrimitives";
 
 /* ── shared palette ── */
-export const LIGHT_BLUE = "hsl(195 100% 50%)";
+export { LIGHT_BLUE };
 
 export const dotColors = [
   "hsl(50 100% 50%)",
@@ -15,7 +16,7 @@ export const dotColors = [
   "hsl(0 100% 50%)",
 ];
 
-/* ── progress dots ── */
+/* ── progress dots — matches IntroDots ── */
 export const ProgressDots = ({ current, total }: { current: number; total: number }) => (
   <div className="flex items-center justify-center gap-3 pt-2 pb-1">
     {Array.from({ length: total }).map((_, i) => (
@@ -23,7 +24,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
         key={i}
         className="rounded-full"
         style={{
-          background: i === current ? LIGHT_BLUE : "hsl(0 0% 100% / 0.15)",
+          background: i === current ? LIGHT_BLUE : LIGHT_BLUE_SOFT,
           width: i === current ? 14 : 10,
           height: i === current ? 14 : 10,
           transition: "width 0.15s, height 0.15s, background 0.15s",
@@ -167,7 +168,7 @@ export const SwipeHint = () => (
   </p>
 );
 
-/* ── arrow nav buttons ── */
+/* ── arrow nav buttons — matches IntroNavArrow ── */
 export const ArrowButton = ({
   direction,
   onClick,
@@ -189,19 +190,22 @@ export const ArrowButton = ({
     onPointerUp={onPointerUp}
     onPointerLeave={onPointerLeave}
     disabled={disabled}
-    className={`flex h-14 w-14 items-center justify-center rounded-2xl border-[4px] active:scale-[1.12] ${direction === "right" ? "" : "bg-black"}`}
+    className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
-      background: direction === "right" ? LIGHT_BLUE : undefined,
-      borderColor: direction === "right" ? LIGHT_BLUE : (disabled ? "hsl(0 0% 100% / 0.15)" : LIGHT_BLUE),
-      opacity: disabled ? 0.3 : 1,
+      backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
+      border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
+      boxShadow: direction === "left" ? `inset 0 0 0 5px ${PURE_WHITE}` : "none",
       borderRadius: 16,
-      transition: "transform 0.05s, border-color 0.15s, opacity 0.15s",
+      outline: "none",
+      cursor: disabled ? "default" : "pointer",
+      opacity: disabled ? 0.3 : 1,
+      transition: "transform 0.05s, opacity 0.15s",
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.5} style={{ color: "#fff" }} />
+      <ArrowLeft size={22} strokeWidth={2.75} style={{ color: PURE_WHITE }} />
     ) : (
-      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
+      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "hsl(0 0% 0%)" }} />
     )}
   </button>
 );

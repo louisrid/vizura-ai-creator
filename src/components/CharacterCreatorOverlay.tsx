@@ -29,10 +29,10 @@ const SelectionBox = ({
 }) => (
   <button
     onClick={onClick}
-    className={`flex h-14 w-full items-center justify-center rounded-2xl border-[4px] text-sm font-[900] lowercase tracking-tight transition-colors ${
+    className={`flex h-14 w-full items-center justify-center rounded-2xl border-[5px] text-sm font-[900] lowercase tracking-tight transition-colors ${
       active
-        ? "border-neon-yellow bg-[hsl(0,0%,12%)] text-white"
-        : "border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] text-white/80"
+        ? "border-neon-yellow bg-white/10 text-white"
+        : "border-white/15 bg-white/5 text-white/80"
     }`}
   >
     {value || "–"}
@@ -60,10 +60,10 @@ const ToggleOptions = ({
       <button
         key={opt}
         onClick={() => onSelect(opt)}
-        className={`rounded-2xl border-[4px] px-4 py-2 text-xs font-[900] lowercase transition-all ${
+        className={`rounded-2xl border-[5px] px-4 py-2 text-xs font-[900] lowercase transition-all ${
           value === opt
             ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
-            : "border-[hsl(0,0%,25%)] text-white/60 hover:border-white/40"
+            : "border-white/15 text-white/60 hover:border-white/40"
         }`}
       >
         {opt}
@@ -209,10 +209,10 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
           <div className="flex items-center px-5 pt-5 pb-2">
             <button
               onClick={onClose}
-              className="flex h-10 w-10 items-center justify-center rounded-full border-[4px] border-white/20 transition-colors hover:border-white/40"
+              className="flex h-10 w-10 items-center justify-center rounded-2xl border-[5px] border-white/15 transition-colors hover:border-white/40"
               aria-label="close"
             >
-              <X size={18} strokeWidth={2.5} className="text-white" />
+              <X size={16} strokeWidth={2.5} className="text-white" />
             </button>
           </div>
 
@@ -264,7 +264,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="face shape, hairstyle, outfit, pose, mood..."
                   rows={3}
-                  className="min-h-[100px] w-full resize-none rounded-2xl border-[4px] border-[hsl(0,0%,22%)] bg-[hsl(0,0%,10%)] px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50"
+                  className="min-h-[100px] w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50"
                 />
               </div>
             </div>
@@ -275,7 +275,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
             <button
               onClick={handleCreate}
               disabled={isSaving}
-              className="flex h-[56px] w-full items-center justify-center gap-2 rounded-full bg-neon-yellow text-base font-[900] lowercase tracking-tight text-neon-yellow-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
+              className="flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-neon-yellow text-base font-[900] lowercase tracking-tight text-neon-yellow-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
               style={{ transition: "transform 0.05s" }}
             >
               {isSaving ? (
