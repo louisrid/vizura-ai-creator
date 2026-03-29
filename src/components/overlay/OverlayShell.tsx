@@ -97,7 +97,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
 
   const isLastStep = step === totalSteps - 1;
 
-  const contentTransition = { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
+  const contentTransition = { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] as const };
 
   if (!mounted) return null;
 

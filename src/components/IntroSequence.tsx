@@ -110,7 +110,7 @@ const ScreenShell = ({
 const ScreenWelcome = () => (
   <div className="relative flex w-full flex-col items-center">
     <div className="flex h-12 items-end justify-center">
-      <BigEmoji emoji="✨" delay={0.05} screenIndex={0} />
+      <BigEmoji emoji="✨" screenIndex={0} />
     </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <ScreenTitle>welcome to vizura</ScreenTitle>
@@ -120,24 +120,24 @@ const ScreenWelcome = () => (
 
 const Screen1 = () => (
   <ScreenShell screenIndex={1} title="pick her style…">
-    <Pill label="natural" delay={0.15} />
-    <Pill label="model" delay={0.22} />
-    <Pill label="egirl" delay={0.29} />
+    <Pill label="natural" />
+    <Pill label="model" />
+    <Pill label="egirl" />
   </ScreenShell>
 );
 
 const Screen2 = () => (
   <ScreenShell screenIndex={2} title="set her look…" contentClassName="flex-col gap-1">
-    <SectionLabel delay={0.15}>hair colour</SectionLabel>
+    <SectionLabel>hair colour</SectionLabel>
     <div className="flex gap-1.5">
-      {["blonde", "brunette", "black"].map((h, i) => (
-        <Pill key={h} label={h} delay={0.18 + i * 0.05} />
+      {["blonde", "brunette", "black"].map((h) => (
+        <Pill key={h} label={h} />
       ))}
     </div>
-    <SectionLabel delay={0.35}>eye colour</SectionLabel>
+    <SectionLabel>eye colour</SectionLabel>
     <div className="flex gap-1.5">
-      {["brown", "blue", "green"].map((e, i) => (
-        <Pill key={e} label={e} delay={0.38 + i * 0.05} />
+      {["brown", "blue", "green"].map((e) => (
+        <Pill key={e} label={e} />
       ))}
     </div>
   </ScreenShell>
@@ -145,59 +145,45 @@ const Screen2 = () => (
 
 const Screen3 = () => (
   <ScreenShell screenIndex={3} title="choose her build…">
-    <Pill label="slim" delay={0.15} />
-    <Pill label="regular" delay={0.22} />
-    <Pill label="curvy" delay={0.29} />
+    <Pill label="slim" />
+    <Pill label="regular" />
+    <Pill label="curvy" />
   </ScreenShell>
 );
 
 const Screen4 = () => (
   <ScreenShell screenIndex={4} title="pick her nationality…">
-    {["american", "british", "european"].map((n, i) => (
-      <Pill key={n} label={n} delay={0.15 + i * 0.05} />
+    {["american", "british", "european"].map((n) => (
+      <Pill key={n} label={n} />
     ))}
   </ScreenShell>
 );
 
 const Screen5 = () => (
   <ScreenShell screenIndex={5} title="set her details…" contentClassName="flex-col items-start justify-start">
-    <motion.p
-      className="text-[0.65rem] font-[800] uppercase tracking-widest text-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.15, duration: 0.3 }}
-    >
+    <p className="text-[0.65rem] font-[800] uppercase tracking-widest text-white">
       example age
-    </motion.p>
-    <motion.span
-      className="-mt-0.5 text-[3.5rem] font-[900] leading-none text-white"
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.2, duration: 0.4 }}
-    >
+    </p>
+    <span className="-mt-0.5 text-[3.5rem] font-[900] leading-none text-white">
       27
-    </motion.span>
+    </span>
   </ScreenShell>
 );
 
 const Screen6 = ({ onGo }: { onGo: () => void }) => (
   <div className="relative flex w-full flex-col items-center">
     <div className="flex h-12 items-end justify-center">
-      <BigEmoji emoji="🚀" delay={0.05} screenIndex={6} />
+      <BigEmoji emoji="🚀" screenIndex={6} />
     </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <ScreenTitle>ready?</ScreenTitle>
-      <motion.button
+      <button
         onClick={(e) => { e.stopPropagation(); onGo(); }}
         className="mt-3 h-14 w-[80vw] max-w-[20rem] rounded-2xl text-[1.4rem] font-[900] lowercase tracking-tight active:scale-[0.95]"
         style={{ background: "hsl(var(--neon-yellow))", color: "#000", transition: "transform 0.05s" }}
-        initial={{ opacity: 0, y: 12, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ delay: 0.25, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-        whileTap={{ scale: 0.93 }}
       >
         let's go
-      </motion.button>
+      </button>
     </div>
   </div>
 );
