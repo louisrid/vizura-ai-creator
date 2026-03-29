@@ -4,15 +4,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IntroDots, IntroNavArrow, LIGHT_BLUE } from "./overlay/IntroSequencePrimitives";
 
 const TOTAL = 7;
-/* ── per-screen emojis (unique per slide, index 0 = welcome ✨) ── */
+/* ── per-screen emojis (unique per slide) ── */
 const screenEmojis: string[][] = [
-  ["✨"],  // 0: welcome
+  ["👁️"],  // 0: welcome
   ["🖌️"],  // 1: pick style
-  ["👁️"],  // 2: set look
+  ["💫"],  // 2: set look
   ["🫧"],  // 3: build
   ["🇺🇸"],  // 4: nationality
   ["⚙️"],  // 5: details
-  ["🚀"],  // 6: ready (used inline)
+  ["🚀"],  // 6: ready
 ];
 
 /* ── per-screen micro-animation configs — gentle floats ── */
@@ -110,7 +110,7 @@ const ScreenShell = ({
 const ScreenWelcome = () => (
   <div className="relative flex w-full flex-col items-center">
     <div className="flex h-12 items-end justify-center">
-      <BigEmoji emoji="✨" screenIndex={0} />
+      <BigEmoji emoji="👁️" screenIndex={0} />
     </div>
     <div className="mt-1.5 flex w-full flex-col items-center">
       <ScreenTitle>welcome to vizura</ScreenTitle>
