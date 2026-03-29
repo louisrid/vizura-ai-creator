@@ -10,7 +10,7 @@ const screenEmojis: string[][] = [
   ["🖌️"],  // 1: pick style
   ["💫"],  // 2: set look
   ["🫧"],  // 3: build
-  ["🇺🇸"],  // 4: nationality
+  ["🎨"],  // 4: skin
   ["⚙️"],  // 5: details
   ["🚀"],  // 6: ready
 ];
@@ -190,8 +190,8 @@ const Screen3 = () => (
 );
 
 const Screen4 = () => (
-  <ScreenShell screenIndex={4} title="pick her nationality…">
-    {["american", "british", "european"].map((n) => (
+  <ScreenShell screenIndex={4} title="pick her skin…">
+    {["pale", "tan", "asian"].map((n) => (
       <Pill key={n} label={n} />
     ))}
   </ScreenShell>
