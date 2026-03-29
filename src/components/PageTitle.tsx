@@ -1,5 +1,7 @@
-const PageTitle = ({ children }: { children: string }) => (
-  <h1 className="text-3xl font-extrabold lowercase text-foreground tracking-tight mb-10">
+import { cn } from "@/lib/utils";
+
+const PageTitle = ({ children, className }: { children: string; className?: string }) => (
+  <h1 className={cn("text-3xl font-extrabold lowercase text-foreground tracking-tight mb-10", className)}>
     {children}
   </h1>
 );
