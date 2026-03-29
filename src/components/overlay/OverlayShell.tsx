@@ -19,9 +19,40 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const skipTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const advance = useCallback(() => setStep((s) => Math.min(s + 1, totalSteps - 1)), [totalSteps]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
+
+  /* ── long-press skip: auto-advance through remaining screens ── */
+  const startSkip = useCallback(() => {
+    if (skipTimerRef.current) return;
+    const holdTimer = setTimeout(() => {
+      skipTimerRef.current = setInterval(() => {
+        setStep((s) => {
+          if (s >= totalSteps - 1) {
+            if (skipTimerRef.current) clearInterval(skipTimerRef.current);
+            skipTimerRef.current = null;
+            return s;
+          }
+          return s + 1;
+        });
+      }, 120);
+    }, 500);
+    skipTimerRef.current = holdTimer as unknown as ReturnType<typeof setInterval>;
+  }, [totalSteps]);
+
+  const stopSkip = useCallback(() => {
+    if (skipTimerRef.current) {
+      clearTimeout(skipTimerRef.current as unknown as ReturnType<typeof setTimeout>);
+      clearInterval(skipTimerRef.current);
+      skipTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => stopSkip();
+  }, [stopSkip]);
 
   useEffect(() => {
     setMounted(true);
@@ -30,6 +61,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
   useEffect(() => {
     if (!open) return;
     setStep(0);
+    stopSkip();
     const root = document.getElementById("root");
     const prev = {
       body: document.body.style.overflow,
@@ -44,7 +76,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
     };
-  }, [open]);
+  }, [open, stopSkip]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -98,7 +130,24 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited }: 
                 {!isLastStep && (
                   <div className="mb-4 flex items-center gap-4">
                     <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                    <NavArrow direction="right" onClick={advance} />
+                    <NavArrow
+                      direction="right"
+                      onClick={advance}
+                      onLongPress={() => {
+                        // Long-press triggers rapid auto-advance
+                        if (skipTimerRef.current) return;
+                        skipTimerRef.current = setInterval(() => {
+                          setStep((s) => {
+                            if (s >= totalSteps - 1) {
+                              if (skipTimerRef.current) clearInterval(skipTimerRef.current);
+                              skipTimerRef.current = null;
+                              return s;
+                            }
+                            return s + 1;
+                          });
+                        }, 120);
+                      }}
+                    />
                   </div>
                 )}
                 <Dots current={step} total={totalSteps} />

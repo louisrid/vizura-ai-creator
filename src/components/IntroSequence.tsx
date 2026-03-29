@@ -111,7 +111,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
   const startPress = () => {
     firedRef.current = false;
     if (onLongPress) {
-      timerRef.current = setTimeout(() => { firedRef.current = true; onLongPress(); }, 600);
+      timerRef.current = setTimeout(() => { firedRef.current = true; onLongPress(); }, 500);
     }
   };
   const endPress = () => {
@@ -129,7 +129,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       style={{
         backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
         border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-        boxShadow: direction === "left" ? `inset 0 0 0 5px hsl(0 0% 100%)` : "none",
+        boxShadow: direction === "left" ? "inset 0 0 0 5px #FFFFFF" : "none",
         opacity: direction === "right" && disabled ? 0.3 : 1,
         borderRadius: 16,
         outline: "none",
@@ -141,7 +141,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       }}
     >
       {direction === "left" ? (
-        <ArrowLeft size={22} strokeWidth={2.75} color="#fff" />
+        <ArrowLeft size={22} strokeWidth={2.75} color="#FFFFFF" />
       ) : (
         <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
       )}
@@ -290,11 +290,23 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const animating = useRef(false);
+  const skipIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
     if (open) { setStep(0); animating.current = false; }
   }, [open]);
+
+  const stopSkip = useCallback(() => {
+    if (skipIntervalRef.current) {
+      clearInterval(skipIntervalRef.current);
+      skipIntervalRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => stopSkip();
+  }, [stopSkip]);
 
   const goTo = useCallback((next: number) => {
     if (animating.current) return;
@@ -311,9 +323,25 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
     if (step < TOTAL - 1) advance();
   }, [step, advance]);
 
+  const handleLongPress = useCallback(() => {
+    stopSkip();
+    skipIntervalRef.current = setInterval(() => {
+      setStep((s) => {
+        if (s >= TOTAL - 1) {
+          if (skipIntervalRef.current) clearInterval(skipIntervalRef.current);
+          skipIntervalRef.current = null;
+          onComplete();
+          return s;
+        }
+        return s + 1;
+      });
+    }, 120);
+  }, [onComplete, stopSkip]);
+
   // Lock scroll
   useEffect(() => {
     if (!open) return;
+    stopSkip();
     const root = document.getElementById("root");
     const prev = {
       body: document.body.style.overflow,
@@ -328,7 +356,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
     };
-  }, [open]);
+  }, [open, stopSkip]);
 
   if (!mounted) return null;
 
@@ -364,7 +392,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             <div className="flex flex-col items-center mt-8">
               <div className="flex items-center gap-4 mb-4">
                 <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={onComplete} />
+                <NavArrow direction="right" onClick={step === TOTAL - 1 ? onComplete : advance} onLongPress={handleLongPress} />
               </div>
               <Dots current={step} total={TOTAL} />
             </div>
