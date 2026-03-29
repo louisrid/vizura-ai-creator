@@ -133,14 +133,14 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-        <main className="w-full max-w-lg mx-auto px-4 pt-10 pb-12">
-          <div className="flex items-center gap-3 mb-6">
+        <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+          <div className="flex items-center gap-3 mb-8">
             <BackButton />
             <PageTitle className="mb-0">create photo</PageTitle>
           </div>
 
           {/* Hero image box — matches CharacterCreator */}
-          <section className="mx-auto mb-5 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+          <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
             {images[0] ? (
               <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
             ) : (
