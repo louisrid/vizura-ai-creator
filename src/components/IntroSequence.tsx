@@ -324,7 +324,7 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
             {/* Content zone — pinned at vertical center of screen */}
             <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
               <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-                <AnimatePresence mode="wait" initial={false}>
+                <AnimatePresence mode="wait">
                   <motion.div
                     key={step}
                     initial={{ opacity: 0 }}
