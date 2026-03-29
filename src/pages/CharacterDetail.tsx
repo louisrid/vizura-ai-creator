@@ -78,29 +78,29 @@ const CharacterDetail = () => {
   }
 
   return (
-    <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden">
-      <main className="mx-auto w-full max-w-lg px-4 pt-10 pb-4 flex flex-col h-full">
+    <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden fixed inset-x-0 bottom-0">
+      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-3 flex flex-col h-full overflow-hidden">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-3 shrink-0">
           <BackButton />
         </div>
 
         {/* Name + Age */}
-        <div className="mb-4">
-          <h1 className="text-2xl font-extrabold lowercase tracking-tight text-foreground leading-none">
+        <div className="mb-3 shrink-0">
+          <h1 className="text-xl font-extrabold lowercase tracking-tight text-foreground leading-none">
             {character.name || "unnamed"}
           </h1>
-          <span className="text-base font-extrabold lowercase text-foreground/50 mt-0.5 block">
+          <span className="text-sm font-extrabold lowercase text-foreground/50 mt-0.5 block">
             age {character.age}
           </span>
         </div>
 
         {/* Image + Traits row */}
-        <div className="flex gap-3 mb-4">
+        <div className="flex gap-3 mb-3 shrink-0">
           {/* Image box */}
           <div
             className="shrink-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
-            style={{ width: "40%", aspectRatio: "1/1" }}
+            style={{ width: "35%", aspectRatio: "1/1" }}
           >
             {character.face_image_url ? (
               <img
@@ -109,8 +109,8 @@ const CharacterDetail = () => {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neon-yellow">
-                <Sparkles size={20} strokeWidth={2.5} className="text-black" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neon-yellow">
+                <Sparkles size={16} strokeWidth={2.5} className="text-black" />
               </div>
             )}
           </div>
@@ -120,12 +120,12 @@ const CharacterDetail = () => {
             {traits(character).map((t) => (
               <div
                 key={t.label}
-                className="rounded-xl bg-foreground px-3 py-2"
+                className="rounded-xl bg-foreground px-2.5 py-1.5"
               >
-                <span className="block text-[8px] font-extrabold lowercase text-background/50 leading-none mb-0.5">
+                <span className="block text-[7px] font-extrabold lowercase text-background/50 leading-none mb-0.5">
                   {t.label}
                 </span>
-                <span className="block text-[11px] font-extrabold lowercase text-background leading-none">
+                <span className="block text-[10px] font-extrabold lowercase text-background leading-none">
                   {t.value}
                 </span>
               </div>
@@ -133,13 +133,13 @@ const CharacterDetail = () => {
           </div>
         </div>
 
-        {/* Description */}
+        {/* Description — takes remaining space, clipped if too long */}
         {character.description?.trim() && (
-          <div className="rounded-2xl border-[5px] border-border bg-card p-3">
-            <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
+          <div className="rounded-2xl border-[5px] border-border bg-card p-3 min-h-0 shrink overflow-hidden">
+            <span className="block text-[8px] font-extrabold lowercase text-foreground/40 mb-1">
               description
             </span>
-            <p className="text-xs font-extrabold lowercase text-foreground leading-relaxed">
+            <p className="text-[11px] font-extrabold lowercase text-foreground leading-relaxed overflow-hidden">
               {character.description}
             </p>
           </div>
