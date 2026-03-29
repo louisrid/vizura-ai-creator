@@ -166,7 +166,7 @@ const CharacterCreator = () => {
       
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-6 pb-28">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-8 pb-28">
         {/* Hero image box */}
         <section className="mx-auto mb-5 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
