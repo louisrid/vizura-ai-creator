@@ -19,9 +19,8 @@ interface OverlayShellProps {
 const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, reserveLastStepNavSpace = true }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [skipping, setSkipping] = useState(false);
   const touchStartX = useRef<number | null>(null);
-  const skipTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const advance = useCallback(() => setStep((s) => Math.min(s + 1, totalSteps - 1)), [totalSteps]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
