@@ -24,7 +24,16 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const touchStartX = useRef<number | null>(null);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const advance = useCallback(() => setStep((s) => Math.min(s + 1, totalSteps - 1)), [totalSteps]);
+  const advance = useCallback(() => {
+    setStep((s) => {
+      if (s >= totalSteps - 1) {
+        // Already on last step — trigger long press skip (acts as final action)
+        if (onLongPressSkip) setTimeout(() => onLongPressSkip(), 0);
+        return s;
+      }
+      return s + 1;
+    });
+  }, [totalSteps, onLongPressSkip]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
 
   const stopSkip = useCallback(() => {
@@ -102,7 +111,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={() => {
-            if (!isLastStep) advance();
+            advance();
           }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -132,11 +141,11 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
               {showNav && (
                 <>
                   <div className={`mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0 || isLastStep} />
+                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
                     <NavArrow
                       direction="right"
                       onClick={advance}
-                      disabled={isLastStep}
+                      disabled={false}
                       onLongPress={startLongPress}
                     />
                   </div>
