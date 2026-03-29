@@ -210,12 +210,18 @@ const Screen5 = () => (
 
 const Screen6 = () => (
   <div className="relative flex w-full flex-col items-center">
-    <div className="flex h-12 items-end justify-center">
-      <BigEmoji emoji="🚀" screenIndex={6} />
-    </div>
-    <div className="mt-1.5 flex w-full flex-col items-center">
-      <ScreenTitle>ready?</ScreenTitle>
-    </div>
+    <span className="select-none pointer-events-none text-[5.5rem] mb-2">
+      <motion.span
+        className="inline-block"
+        animate={{ y: [0, -16, 4, 0], rotate: [0, -8, 6, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        🚀
+      </motion.span>
+    </span>
+    <h2 className="text-center text-[3.5rem] font-[900] lowercase leading-none tracking-tight text-white">
+      ready?
+    </h2>
   </div>
 );
 
