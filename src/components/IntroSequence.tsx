@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IntroDots, IntroNavArrow, LIGHT_BLUE } from "./overlay/IntroSequencePrimitives";
 
-const TOTAL = 6;
+const TOTAL = 7;
 /* ── per-screen emojis ── */
 const screenEmojis: string[][] = [
   ["🖌️"],
@@ -123,8 +123,28 @@ const ScreenShell = ({
 
 /* ═══════════ SCREENS ═══════════ */
 
+const ScreenWelcome = () => (
+  <div className="relative flex w-full flex-col items-center">
+    <div className="flex h-12 items-end justify-center">
+      <BigEmoji emoji="✨" delay={0.05} screenIndex={0} />
+    </div>
+    <div className="mt-1.5 flex w-full flex-col items-center">
+      <ScreenTitle>welcome to vizura</ScreenTitle>
+      <motion.p
+        className="mt-3 max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
+        style={{ color: "hsl(0 0% 100% / 0.92)" }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25, delay: 0.35, ease: "easeOut" }}
+      >
+        create your dream character in seconds
+      </motion.p>
+    </div>
+  </div>
+);
+
 const Screen1 = () => (
-  <ScreenShell screenIndex={0} title="pick her style…">
+  <ScreenShell screenIndex={1} title="pick her style…">
     <Pill label="natural" delay={0.15} />
     <Pill label="model" delay={0.22} />
     <Pill label="egirl" delay={0.29} />
@@ -205,7 +225,7 @@ const Screen6 = ({ onGo }: { onGo: () => void }) => (
   </div>
 );
 
-const screens = [Screen1, Screen2, Screen3, Screen4, Screen5];
+const screens = [ScreenWelcome, Screen1, Screen2, Screen3, Screen4, Screen5];
 
 /* ═══════════ MAIN ═══════════ */
 
@@ -309,8 +329,8 @@ const IntroSequence = ({ open, onComplete }: IntroSequenceProps) => {
                     exit={{ opacity: 0, y: -12 }}
                     transition={contentTransition}
                   >
-                    {step < 5 && (() => { const S = screens[step]; return <S />; })()}
-                    {step === 5 && <Screen6 onGo={onComplete} />}
+                    {step < 6 && (() => { const S = screens[step]; return <S />; })()}
+                    {step === 6 && <Screen6 onGo={onComplete} />}
                   </motion.div>
                 </AnimatePresence>
               </div>
