@@ -10,6 +10,7 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const categories = [
   { key: "style", label: "style", options: ["natural", "model", "egirl"] },
+  { key: "skin", label: "skin", options: ["pale", "tanned", "asian", "black"] },
   { key: "hair", label: "hair", options: ["blonde", "brunette", "black", "red", "pink", "white"] },
   { key: "eyes", label: "eyes", options: ["brown", "blue", "green", "hazel", "grey"] },
   { key: "body", label: "body", options: ["slim", "regular", "curvy"] },
@@ -86,6 +87,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
   const [values, setValues] = useState<Record<CatKey, string | null>>({
     style: null,
+    skin: null,
     hair: null,
     eyes: null,
     body: null,
@@ -99,7 +101,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
   // Reset when opening
   useEffect(() => {
     if (open) {
-      setValues({ style: null, hair: null, eyes: null, body: null });
+      setValues({ style: null, skin: null, hair: null, eyes: null, body: null });
       setExpandedKey(null);
       setDescription("");
     }
@@ -126,10 +128,11 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
   const buildPrompt = () => {
     const s = values.style || "natural";
+    const sk = values.skin || "tanned";
     const h = values.hair || "brunette";
     const e = values.eyes || "brown";
     const b = values.body || "regular";
-    let prompt = `photorealistic portrait, woman, ${b} body type, ${h} hair, ${e} eyes, ${s} style`;
+    let prompt = `photorealistic portrait, woman, ${sk} skin, ${b} body type, ${h} hair, ${e} eyes, ${s} style`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -144,6 +147,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
     setIsSaving(true);
     try {
+      const sk = values.skin || "tanned";
       const h = values.hair || "brunette";
       const e = values.eyes || "brown";
       const s = values.style || "natural";
@@ -152,7 +156,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       const charData = {
         user_id: user.id,
         name: `${h} ${e} ${s}`,
-        country: "any",
+        country: sanitiseText(sk, 50),
         age: "25",
         hair: sanitiseText(h, 50),
         eye: sanitiseText(e, 50),
