@@ -69,6 +69,7 @@ const Account = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
       <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
@@ -77,7 +78,9 @@ const Account = () => {
 
         <div className="space-y-4">
           {subscribed ? (
-            <SubscribedButton justSubscribed={justSubscribed} onCelebrationDone={() => setJustSubscribed(false)} />
+            <div className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
+              subscribed
+            </div>
           ) : (
             <button
               className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase hover:opacity-90 transition-all"
@@ -138,62 +141,47 @@ const Account = () => {
   );
 };
 
-const SPARKLE_COUNT = 12;
-
-const SubscribedButton = ({ justSubscribed, onCelebrationDone }: { justSubscribed: boolean; onCelebrationDone: () => void }) => {
+const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () => void }) => {
   useEffect(() => {
-    if (justSubscribed) {
-      const t = setTimeout(onCelebrationDone, 2500);
-      return () => clearTimeout(t);
-    }
-  }, [justSubscribed, onCelebrationDone]);
+    if (!active) return;
+    // Lock scroll
+    const root = document.getElementById("root");
+    const prev = { body: document.body.style.overflow, html: document.documentElement.style.overflow, root: root?.style.overflow ?? "" };
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    if (root) root.style.overflow = "hidden";
+
+    const t = setTimeout(onDone, 2400);
+    return () => {
+      clearTimeout(t);
+      document.body.style.overflow = prev.body;
+      document.documentElement.style.overflow = prev.html;
+      if (root) root.style.overflow = prev.root;
+    };
+  }, [active, onDone]);
 
   return (
-    <div className="relative">
-      <div className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
-        subscribed
-      </div>
-      <AnimatePresence>
-        {justSubscribed && (
-          <>
-            <motion.div
-              className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="absolute inset-y-0 w-[60%]"
-                style={{
-                  background: "linear-gradient(90deg, transparent, hsl(50 100% 70% / 0.5), hsl(45 100% 60% / 0.3), transparent)",
-                }}
-                initial={{ left: "-60%" }}
-                animate={{ left: "120%" }}
-                transition={{ duration: 0.8, ease: "easeInOut", delay: 0.15 }}
-              />
-            </motion.div>
-            {Array.from({ length: SPARKLE_COUNT }).map((_, i) => {
-              const angle = (i / SPARKLE_COUNT) * 360;
-              const radius = 40 + Math.random() * 30;
-              const dx = Math.cos((angle * Math.PI) / 180) * radius;
-              const dy = Math.sin((angle * Math.PI) / 180) * radius;
-              return (
-                <motion.div
-                  key={i}
-                  className="absolute pointer-events-none"
-                  style={{ left: "50%", top: "50%", fontSize: 10 + Math.random() * 6, color: "hsl(50 100% 65%)" }}
-                  initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
-                  animate={{ x: dx, y: dy, opacity: 0, scale: 1 }}
-                  transition={{ duration: 0.9 + Math.random() * 0.5, delay: 0.1 + Math.random() * 0.3, ease: "easeOut" }}
-                >
-                  ✦
-                </motion.div>
-              );
-            })}
-          </>
-        )}
-      </AnimatePresence>
-    </div>
+    <AnimatePresence>
+      {active && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          style={{ backgroundColor: "hsl(var(--member-green))" }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <motion.h1
+            className="text-[3rem] font-extrabold lowercase tracking-tight text-white"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            subscribed!
+          </motion.h1>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
