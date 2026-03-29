@@ -232,8 +232,8 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg px-4 pt-10 pb-12">
-        <div className="mb-6 flex items-center gap-3">
+      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
+        <div className="mb-8 flex items-center gap-3">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>

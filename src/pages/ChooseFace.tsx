@@ -187,11 +187,12 @@ const ChooseFace = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-32 pb-12">
-        <h1 className="text-heading font-extrabold lowercase text-foreground text-center">
-          choose your face
-        </h1>
-        <p className="mt-2 text-center text-sm font-extrabold lowercase text-muted-foreground">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-12">
+        <div className="flex items-center gap-3 mb-8">
+          <BackButton />
+          <PageTitle className="mb-0">choose face</PageTitle>
+        </div>
+        <p className="text-center text-sm font-extrabold lowercase text-muted-foreground mb-4">
           tap one to select it as your character's face
         </p>
 
