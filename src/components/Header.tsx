@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, Settings, type LucideIcon } from "lucide-react";
+import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, Settings, User, type LucideIcon } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -75,18 +75,13 @@ const Header = () => {
               className="shrink-0"
               aria-label="my account"
             >
-              <svg
-                width="14"
-                height="18"
-                viewBox="0 0 24 30"
-                fill="none"
+              <User
+                size={16}
+                strokeWidth={2.5}
                 style={{
                   color: subscribed ? "hsl(var(--member-green))" : "hsl(var(--nav-foreground))",
                 }}
-              >
-                <circle cx="12" cy="8" r="5" stroke="currentColor" strokeWidth="2.5" />
-                <path d="M3.5 25.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
-              </svg>
+              />
             </button>
           )}
         </div>
