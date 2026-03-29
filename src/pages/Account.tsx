@@ -11,7 +11,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, autoSignIn } = useAuth();

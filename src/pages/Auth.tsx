@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const Auth = () => {
   const { autoSignIn, user, loading: authLoading } = useAuth();

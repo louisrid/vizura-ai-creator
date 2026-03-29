@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 interface Character {
   id: string;
