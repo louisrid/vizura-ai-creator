@@ -36,7 +36,7 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (!prompt || !user) {
-      navigate("/create-character");
+      navigate("/");
       return;
     }
     generateFaces();

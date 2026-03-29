@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, Settings, Sparkles, Camera, Save, Gem, LogIn, Clock } from "lucide-react";
+import { Menu, Settings, Sparkles, Camera, Save, Gem, LogIn, Clock, User, Image } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -20,20 +20,19 @@ const YourCharsIcon = ({ size = 14, className }: { size?: number; className?: st
 );
 
 const menuItems = [
-  { label: "create character", icon: Sparkles, path: "/create-character" },
-  { label: "create photo", icon: Camera, path: "/create" },
-  { label: "your characters", icon: YourCharsIcon, path: "/characters" },
-  { label: "saved", icon: Save, path: "/storage" },
-  { label: "history", icon: Clock, path: "/history" },
+  { label: "generate face", icon: Image, path: "/generate-face" },
+  { label: "build character", icon: Sparkles, path: "/" },
+  { label: "create a photo", icon: Camera, path: "/create" },
+  { label: "your creations", icon: YourCharsIcon, path: "/characters" },
   { label: "top-ups", icon: Gem, path: "/top-ups" },
   { label: "my account", icon: Settings, path: "/account" },
 ];
 
 const pageNames: Record<string, string> = {
-  "/": "create character",
-  "/create-character": "create character",
-  "/create": "create photo",
-  "/characters": "your characters",
+  "/": "build character",
+  "/generate-face": "generate face",
+  "/create": "create a photo",
+  "/characters": "your creations",
   "/storage": "saved",
   "/history": "history",
   "/top-ups": "top-ups",

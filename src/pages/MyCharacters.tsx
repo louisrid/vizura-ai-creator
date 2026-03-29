@@ -88,7 +88,7 @@ const MyCharacters = () => {
         <div className="flex items-center gap-3 mb-10">
           <BackButton />
         </div>
-        <PageTitle>my characters</PageTitle>
+        <PageTitle>your creations</PageTitle>
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
@@ -100,16 +100,16 @@ const MyCharacters = () => {
             <Button
               variant="outline"
               className="h-12"
-              onClick={() => navigate("/create-character")}
+              onClick={() => navigate("/")}
             >
-              create character
+              build character
             </Button>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
             {/* Add new */}
             <button
-              onClick={() => navigate("/create-character")}
+              onClick={() => navigate("/")}
               className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card flex items-center justify-center hover:border-foreground/60 transition-colors active:scale-[0.97]"
             >
               <Plus size={32} strokeWidth={3} className="text-foreground" />

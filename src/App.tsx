@@ -58,8 +58,10 @@ const AnimatedRoutes = () => {
       <PageTransition key={location.pathname}>
         <Routes location={location}>
           <Route path="/" element={<CharacterCreator />} />
+          <Route path="/generate-face" element={<ChooseFace />} />
           <Route path="/choose-face" element={<ChooseFace />} />
-          <Route path="/index" element={<CharacterCreator />} />
+          <Route path="/create" element={<Index />} />
+          <Route path="/index" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/characters" element={<MyCharacters />} />
           <Route path="/storage" element={<Storage />} />
