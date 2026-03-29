@@ -2,22 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
-import { Menu, Settings, Sparkles, Camera, Save, Gem, LogIn, Clock, User, Image } from "lucide-react";
+import { Gem } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
-
-const YourCharsIcon = ({ size = 14, className }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <g opacity="0.45" transform="translate(4, 1)">
-      <circle cx="8" cy="6" r="3.5" />
-      <path d="M2 17a6 6 0 0 1 12 0c0 .5-.3.8-.8.8H2.8a.8.8 0 0 1-.8-.8Z" />
-    </g>
-    <g transform="translate(0, 1)">
-      <circle cx="8" cy="6" r="3.5" />
-      <path d="M2 17a6 6 0 0 1 12 0c0 .5-.3.8-.8.8H2.8a.8.8 0 0 1-.8-.8Z" />
-    </g>
-  </svg>
-);
 
 const menuItems = [
   { label: "create character", path: "/" },
