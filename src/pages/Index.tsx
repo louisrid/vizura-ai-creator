@@ -133,11 +133,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-        <main className="w-full max-w-lg mx-auto px-4 pt-6 pb-12">
-          <div className="flex items-center gap-3 mb-10">
+        <main className="w-full max-w-lg mx-auto px-4 pt-8 pb-12">
+          <div className="flex items-center gap-3 mb-4">
             <BackButton />
+            <PageTitle className="mb-0">create photo</PageTitle>
           </div>
-          <PageTitle>create photo</PageTitle>
 
           {/* Hero image box — matches CharacterCreator */}
           <section className="mx-auto mb-5 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>

@@ -55,11 +55,11 @@ const TopUps = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-        <div className="flex items-center gap-3 mb-10">
+      <main className="w-full max-w-lg mx-auto px-4 pt-8 pb-12">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
+          <PageTitle className="mb-0">top-ups</PageTitle>
         </div>
-        <PageTitle>top-ups</PageTitle>
 
         <div className="flex items-center gap-2 mb-10">
           <Gem size={20} strokeWidth={2.5} className="text-gem-green" />

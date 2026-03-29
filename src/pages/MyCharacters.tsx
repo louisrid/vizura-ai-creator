@@ -84,11 +84,11 @@ const MyCharacters = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-        <div className="flex items-center gap-3 mb-10">
+      <main className="w-full max-w-lg mx-auto px-4 pt-8 pb-12">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
+          <PageTitle className="mb-0">your creations</PageTitle>
         </div>
-        <PageTitle>your creations</PageTitle>
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
