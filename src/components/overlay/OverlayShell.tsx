@@ -96,7 +96,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
   // During skip: instant transitions. Normal: smooth.
   const contentTransition = skipping
     ? { duration: 0.08, ease: "linear" as const }
-    : { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const };
+    : { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const };
 
   if (!mounted) return null;
 
@@ -118,7 +118,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, re
           {/* Absolute layout: content pinned at center, nav pinned below */}
           <div className="relative flex-1 overflow-hidden">
             {/* Content zone — pinned at vertical center of screen */}
-            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
+            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
               <div className="mx-auto flex w-full max-w-xs flex-col items-center">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div

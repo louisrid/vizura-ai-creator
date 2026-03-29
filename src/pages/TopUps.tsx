@@ -39,16 +39,16 @@ const TopUps = () => {
   const handleBuy = async (plan: typeof plans[number]) => {
     setBuying(plan.label);
     try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { type: "topup", priceId: plan.envVar },
+      const { data, error } = await supabase.functions.invoke("add-credits", {
+        body: { amount: plan.gems },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      await refetch();
+      toast(`${plan.gems} gems added!`);
     } catch (e: any) {
-      toast.error(e.message || "failed to start checkout");
+      toast(e.message || "failed to add gems");
+    } finally {
       setBuying(null);
     }
   };
