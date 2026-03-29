@@ -66,7 +66,7 @@ const Scene1 = () => (
   />
 );
 
-const Scene2 = ({ buying, onSubscribe, onDismiss }: { buying: boolean; onSubscribe: () => void; onDismiss: () => void }) => (
+const Scene2 = ({ buying, onSubscribe }: { buying: boolean; onSubscribe: () => void }) => (
   <IntroStyleShell
     emoji={<span className="text-[3.5rem]">✨</span>}
     title="$7 first month"
@@ -75,7 +75,6 @@ const Scene2 = ({ buying, onSubscribe, onDismiss }: { buying: boolean; onSubscri
     <GoldButton onClick={onSubscribe} disabled={buying}>
       {buying ? <Loader2 className="animate-spin" size={20} /> : "subscribe"}
     </GoldButton>
-    <DismissLink onClick={onDismiss} label="i'll think about it" className="mt-7 text-[0.65rem]" />
   </IntroStyleShell>
 );
 
@@ -92,12 +91,19 @@ const SubscribeOverlay = ({ open, onDismiss, onSubscribe, buying }: SubscribeOve
   };
 
   return (
-    <OverlayShell open={open} totalSteps={TOTAL_STEPS}>
+    <OverlayShell
+      open={open}
+      totalSteps={TOTAL_STEPS}
+      onLongPressSkip={handleSubscribe}
+      bottomContent={
+        <DismissLink onClick={onDismiss} label="i'll think about it" className="text-[0.65rem]" />
+      }
+    >
       {(step) => (
         <>
           {step === 0 && <Scene0 />}
           {step === 1 && <Scene1 />}
-          {step === 2 && <Scene2 buying={buying} onSubscribe={handleSubscribe} onDismiss={onDismiss} />}
+          {step === 2 && <Scene2 buying={buying} onSubscribe={handleSubscribe} />}
         </>
       )}
     </OverlayShell>
