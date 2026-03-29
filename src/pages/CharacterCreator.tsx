@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
-import IntroSequence from "@/components/IntroSequence";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -63,14 +62,6 @@ const CharacterCreator = () => {
     setReferencePreview(url);
   };
 
-  // Intro sequence — show on every fresh page load (session-based)
-  const [showIntro, setShowIntro] = useState(() => {
-    return !sessionStorage.getItem("intro_seen");
-  });
-  const handleIntroComplete = useCallback(() => {
-    sessionStorage.setItem("intro_seen", "1");
-    setShowIntro(false);
-  }, []);
 
   const imageCards = useMemo(() => {
     if (generated.length === 0) return [null, null, null];
