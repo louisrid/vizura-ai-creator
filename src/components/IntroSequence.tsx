@@ -111,7 +111,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
   const startPress = () => {
     firedRef.current = false;
     if (onLongPress) {
-      timerRef.current = setTimeout(() => { firedRef.current = true; onLongPress(); }, 600);
+      timerRef.current = setTimeout(() => { firedRef.current = true; onLongPress(); }, 500);
     }
   };
   const endPress = () => {
@@ -129,7 +129,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       style={{
         backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
         border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-        boxShadow: direction === "left" ? `inset 0 0 0 5px hsl(0 0% 100%)` : "none",
+        boxShadow: direction === "left" ? "inset 0 0 0 5px #FFFFFF" : "none",
         opacity: direction === "right" && disabled ? 0.3 : 1,
         borderRadius: 16,
         outline: "none",
@@ -141,7 +141,7 @@ const NavArrow = ({ direction, onClick, onLongPress, disabled }: { direction: "l
       }}
     >
       {direction === "left" ? (
-        <ArrowLeft size={22} strokeWidth={2.75} color="#fff" />
+        <ArrowLeft size={22} strokeWidth={2.75} color="#FFFFFF" />
       ) : (
         <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000" }} />
       )}
