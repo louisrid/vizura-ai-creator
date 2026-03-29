@@ -15,7 +15,7 @@ export const IntroDots = ({ current, total }: { current: number; total: number }
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
-          background: i === current ? LIGHT_BLUE : LIGHT_BLUE_SOFT,
+          background: i === current ? LIGHT_BLUE : PURE_WHITE,
         }}
       />
     ))}
