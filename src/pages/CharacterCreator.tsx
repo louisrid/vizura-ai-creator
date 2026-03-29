@@ -4,7 +4,6 @@ import { ChevronDown, Loader2, Zap, Upload, Sparkles } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
 
 import { Button } from "@/components/ui/button";
-import { toast as shadToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CardCarousel from "@/components/CardCarousel";
