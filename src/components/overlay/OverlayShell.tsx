@@ -62,9 +62,23 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [shattering, setShattering] = useState(false);
+  const [visible, setVisible] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingActionRef = useRef<(() => void) | null>(null);
+  const prevOpenRef = useRef(open);
+
+  // Track open changes — if closing externally (dismiss), trigger shatter
+  useEffect(() => {
+    if (prevOpenRef.current && !open && visible && !shattering) {
+      // External close (e.g. dismiss) — trigger shatter
+      setShattering(true);
+    }
+    if (open && !prevOpenRef.current) {
+      setVisible(true);
+    }
+    prevOpenRef.current = open;
+  }, [open, visible, shattering]);
 
   const triggerExit = useCallback((afterAction?: () => void) => {
     if (shattering) return;
@@ -75,8 +89,13 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const handleShatterDone = useCallback(() => {
     if (pendingActionRef.current) pendingActionRef.current();
     pendingActionRef.current = null;
+    setVisible(false);
+    setShattering(false);
+    if (onDismiss && !open) {
+      // Already dismissed externally, just clean up
+    }
     if (onExited) onExited();
-  }, [onExited]);
+  }, [onExited, onDismiss, open]);
 
   const advance = useCallback(() => {
     setStep((s) => {
