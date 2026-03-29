@@ -53,11 +53,12 @@ interface OverlayShellProps {
   onExited?: () => void;
   onSkip?: () => void;
   onLongPressSkip?: () => void;
+  onDismiss?: () => void;
   reserveLastStepNavSpace?: boolean;
   bottomContent?: React.ReactNode;
 }
 
-const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onLongPressSkip, reserveLastStepNavSpace = true, bottomContent }: OverlayShellProps) => {
+const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, onLongPressSkip, onDismiss, reserveLastStepNavSpace = true, bottomContent }: OverlayShellProps) => {
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [shattering, setShattering] = useState(false);
