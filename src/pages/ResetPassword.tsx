@@ -41,11 +41,11 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-12 pb-12">
-        <div className="flex items-center gap-3 mb-10">
+      <main className="w-full max-w-lg mx-auto px-4 pt-8 pb-12">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
+          <PageTitle className="mb-0">reset password</PageTitle>
         </div>
-        <PageTitle>reset password</PageTitle>
 
         {success ? (
           <div className="border-[5px] border-border rounded-2xl p-6 text-center">
