@@ -133,7 +133,7 @@ const CharacterCreator = () => {
       return;
     }
     if (credits <= 0 && !subscribed) {
-      navigate("/account/membership");
+      navigate("/account");
       return;
     }
 

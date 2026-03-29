@@ -18,7 +18,6 @@ import MyCharacters from "./pages/MyCharacters";
 import Storage from "./pages/Storage";
 import Account from "./pages/Account";
 import TopUps from "./pages/TopUps";
-import Membership from "./pages/Membership";
 import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
 import History from "./pages/History";
@@ -97,7 +96,6 @@ const AnimatedRoutes = () => {
           <Route path="/storage" element={<Storage />} />
           <Route path="/top-ups" element={<TopUps />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/account/membership" element={<Membership />} />
           <Route path="/help" element={<Help />} />
           <Route path="/history" element={<History />} />
           <Route path="/reset-password" element={<ResetPassword />} />

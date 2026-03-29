@@ -27,7 +27,7 @@ const pageNames: Record<string, string> = {
   "/history": "history",
   "/top-ups": "top-ups",
   "/account": "my account",
-  "/account/membership": "my account",
+  
   "/help": "help",
   "/auth": "my account",
   "/reset-password": "reset password",
