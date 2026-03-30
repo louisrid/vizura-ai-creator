@@ -741,7 +741,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 initial={{ opacity: 0, y: 12, scale: 0.92 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
               >
                 {COOKING_PHRASES[cookingPhraseIndex]}
               </motion.p>
