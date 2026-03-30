@@ -769,7 +769,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.4, ease: "easeOut" }}
+              transition={{ duration: 1.0, ease: "easeOut" }}
             />
             <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
