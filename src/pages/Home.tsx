@@ -249,7 +249,7 @@ const Home = () => {
         </main>
 
         {/* Full-bleed white divider + black bottom section */}
-        <div className="mt-6 border-t-[5px] border-white" />
+        <div className="mt-10 border-t-[5px] border-white" />
         <div className="flex-1" style={{ backgroundColor: '#000000' }} />
       </div>
     </div>
