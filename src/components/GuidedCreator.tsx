@@ -467,11 +467,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
           </motion.h2>
           {!isFirstFree && (
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-2 flex items-center gap-2">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/60">{gems} gems</span>
             </div>
           )}
+          <motion.button
+            onClick={(e) => { e.stopPropagation(); advance(); }}
+            className="mt-5 h-14 w-[80vw] max-w-[20rem] rounded-2xl text-base font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
+            style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Zap size={18} strokeWidth={2.5} />
+            create
+          </motion.button>
         </div>
       );
     }
