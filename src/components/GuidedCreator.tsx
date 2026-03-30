@@ -393,32 +393,54 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               );
             })}
           </div>
-          <motion.input
-            animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-            transition={{ duration: 0.4 }}
-            value={selections.characterName}
-            onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
-            placeholder="character name..."
-            onClick={(e) => e.stopPropagation()}
-            className="mt-5 h-12 w-full max-w-[16rem] rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
-          />
-          <motion.input
-            animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-            transition={{ duration: 0.4 }}
-            type="number"
-            min={18}
-            max={40}
-            value={selections.age}
-            onChange={(e) => {
-              const v = e.target.value;
-              if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) {
-                setSelections((p) => ({ ...p, age: v }));
-              }
-            }}
-            placeholder="age (18-40)"
-            onClick={(e) => e.stopPropagation()}
-            className="mt-3 h-12 w-full max-w-[16rem] rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
-          />
+          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+            <motion.input
+              animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+              transition={{ duration: 0.4 }}
+              value={selections.characterName}
+              onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
+              placeholder="character name..."
+              onClick={(e) => e.stopPropagation()}
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+            />
+            <motion.button
+              onClick={(e) => { e.stopPropagation(); randomiseName(); }}
+              whileTap={{ scale: 0.85, rotate: 180 }}
+              whileHover={{ scale: 1.1 }}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              title="randomise name"
+            >
+              <RefreshCw size={16} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem]">
+            <motion.input
+              animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+              transition={{ duration: 0.4 }}
+              type="number"
+              min={18}
+              max={40}
+              value={selections.age}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) {
+                  setSelections((p) => ({ ...p, age: v }));
+                }
+              }}
+              placeholder="age (18-40)"
+              onClick={(e) => e.stopPropagation()}
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+            />
+            <motion.button
+              onClick={(e) => { e.stopPropagation(); randomiseAge(); }}
+              whileTap={{ scale: 0.85, rotate: 180 }}
+              whileHover={{ scale: 1.1 }}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              title="randomise age"
+            >
+              <RefreshCw size={16} strokeWidth={2.5} />
+            </motion.button>
+          </div>
         </div>
       );
     }
