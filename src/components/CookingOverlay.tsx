@@ -143,7 +143,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
+          transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
         >
           <AnimatePresence mode="wait">
             {phase === "cooking" && (
@@ -152,7 +152,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                 className="flex flex-col items-center gap-8 w-full px-10"
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.15 }}
               >
                 <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
                   {progress}%
@@ -180,14 +180,14 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                 className="flex flex-col items-center gap-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
               >
                 <GreenTick />
                 <motion.p
                   className="text-center text-2xl font-extrabold lowercase text-white"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.35, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   character ready!
                 </motion.p>

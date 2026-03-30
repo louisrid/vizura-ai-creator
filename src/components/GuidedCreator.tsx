@@ -313,7 +313,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
-    const t = setTimeout(() => setInitialFadeIn(false), 1800);
+    const t = setTimeout(() => setInitialFadeIn(false), 1200);
     return () => clearTimeout(t);
   }, [visible, initialFadeIn]);
 
@@ -489,7 +489,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     initial: { opacity: 0, x: 30 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -30 },
-    transition: { duration: 0.28, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+    transition: { duration: 0.18, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
   };
 
   const renderSlide = () => {
@@ -730,7 +730,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2 }}
         >
           <CookingSpinner />
           <div className="h-8 flex items-center">
@@ -741,7 +741,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 initial={{ opacity: 0, y: 12, scale: 0.92 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
               >
                 {COOKING_PHRASES[cookingPhraseIndex]}
               </motion.p>
@@ -759,22 +759,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.5 }}
         >
           <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
           >
             <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.4, ease: "easeOut" }}
+              transition={{ duration: 1.0, ease: "easeOut" }}
             />
             <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
+              transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
             />
           </motion.svg>
           <motion.p
@@ -782,7 +782,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.7, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.5, delay: 1.6, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
@@ -799,7 +799,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: initialFadeIn ? 1.2 : 0.3 }}
+      transition={{ duration: initialFadeIn ? 0.8 : 0.2 }}
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
     >
@@ -918,7 +918,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.4 }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
