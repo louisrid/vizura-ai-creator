@@ -268,11 +268,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (traitIdx >= 0 && traitIdx < 7) {
       const key = TRAITS[traitIdx].key;
       if (!selectionsRef.current[key]) {
-    triggerShake();
-    return;
-  }
-  setShaking(true);
-  setTimeout(() => setShaking(false), 300);
+        triggerShake();
+        return;
+      }
     }
     if (isSummarySlide) {
       const s = selectionsRef.current;
