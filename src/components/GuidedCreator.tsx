@@ -434,6 +434,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;
 
+  // Prevent any form submissions from causing page reload
+  const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
+
   if (!mounted || !visible) return null;
 
   const slideTransition = {
