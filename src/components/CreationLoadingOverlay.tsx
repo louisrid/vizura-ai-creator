@@ -206,7 +206,7 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Spinner />
+                <RippleLoader />
                 <div className="h-8 flex items-center">
                   <AnimatePresence mode="wait">
                     <PhraseText phrase={PHRASES[phraseIndex]} />
