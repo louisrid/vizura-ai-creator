@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Header from "@/components/Header";
-import CharacterCreator from "./pages/CharacterCreator";
+import Home from "./pages/Home";
 import CharacterDetail from "./pages/CharacterDetail";
 import ChooseFace from "./pages/ChooseFace";
 import Index from "./pages/Index";
@@ -69,7 +69,7 @@ const AppRoutes = () => {
     <>
       <Header />
       <Routes location={location}>
-        <Route path="/" element={<CharacterCreator />} />
+        <Route path="/" element={<Home />} />
         <Route path="/generate-face" element={<ChooseFace />} />
         <Route path="/choose-face" element={<ChooseFace />} />
         <Route path="/create" element={<Index />} />

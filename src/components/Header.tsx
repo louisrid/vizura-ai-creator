@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
-  { label: "create character", path: "/", icon: Sparkles },
+  { label: "home", path: "/", icon: Sparkles },
   { label: "create photo", path: "/create", icon: Camera },
   { label: "my characters", path: "/characters", icon: LayoutGrid },
   { label: "storage", path: "/storage", icon: FolderOpen },
@@ -17,7 +17,7 @@ const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
 ];
 
 const pageNames: Record<string, string> = {
-  "/": "create character",
+  "/": "home",
   "/generate-face": "generate face",
   "/choose-face": "generate face",
   "/create": "create photo",
@@ -69,7 +69,7 @@ const Header = () => {
 
   const handleNav = (path: string) => {
     setOpen(false);
-    if (path === "/") sessionStorage.setItem("vizura_internal_nav", "1");
+    if (path === "/") sessionStorage.removeItem("vizura_internal_nav");
     navigate(path);
   };
 
