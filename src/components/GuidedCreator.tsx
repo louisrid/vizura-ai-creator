@@ -736,7 +736,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center mt-3">
           {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
