@@ -17,7 +17,7 @@ const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
 ];
 
 const pageNames: Record<string, string> = {
-  "/": "create character",
+  "/": "home",
   "/generate-face": "generate face",
   "/choose-face": "generate face",
   "/create": "create photo",
