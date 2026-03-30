@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2, Zap, Upload, Sparkles } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import CreationLoadingOverlay from "@/components/CreationLoadingOverlay";
+import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -21,6 +22,7 @@ const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
 const makeupOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
+const WELCOME_SESSION_KEY = "vizura_welcome_seen";
 
 const PillGroup = ({
   label,
@@ -64,6 +66,40 @@ const CharacterCreator = () => {
 
   const editId = searchParams.get("editId");
   const isEditing = !!editId;
+
+  // Determine if user should see guided flow automatically
+  const [characterCount, setCharacterCount] = useState<number | null>(null);
+  const [hasSeenWelcome, setHasSeenWelcome] = useState<boolean | null>(null);
+  const [showGuided, setShowGuided] = useState(false);
+  const [guidedReady, setGuidedReady] = useState(false);
+
+  // Fetch character count and welcome status
+  useEffect(() => {
+    const fetchState = async () => {
+      if (user) {
+        const [charResult, profileResult] = await Promise.all([
+          supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+          supabase.from("profiles").select("has_seen_welcome").eq("user_id", user.id).single(),
+        ]);
+        setCharacterCount(charResult.count ?? 0);
+        setHasSeenWelcome((profileResult.data as any)?.has_seen_welcome ?? false);
+      } else {
+        // Non-logged-in: always guided first time, use session flag for welcome
+        setCharacterCount(0);
+        setHasSeenWelcome(sessionStorage.getItem(WELCOME_SESSION_KEY) === "1");
+      }
+      setGuidedReady(true);
+    };
+    fetchState();
+  }, [user]);
+
+  // Auto-launch guided for first-time / zero-character users
+  useEffect(() => {
+    if (!guidedReady || isEditing) return;
+    if (characterCount === 0) {
+      setShowGuided(true);
+    }
+  }, [guidedReady, characterCount, isEditing]);
 
   const saved = useMemo(() => {
     try {
@@ -180,7 +216,6 @@ const CharacterCreator = () => {
       setShowLoading(false);
       return;
     }
-    // Store charId for loading complete handler
     sessionStorage.setItem("vizura_pending_char_id", charId);
   };
 
@@ -194,14 +229,130 @@ const CharacterCreator = () => {
     });
   };
 
+  // Guided creator callbacks
+  const handleGuidedComplete = useCallback((selections: GuidedSelections) => {
+    // Apply selections to quick form state
+    setSkin(selections.skin || "tan");
+    setBodyType(selections.bodyType || "regular");
+    setChest(selections.chest || "medium");
+    setHairStyle(selections.hairStyle || "straight");
+    setHairColour(selections.hairColour || "brunette");
+    setEye(selections.eye || "brown");
+    setMakeup(selections.makeup || "natural");
+    setCharacterName(selections.characterName);
+    setAge(selections.age);
+    setShowGuided(false);
+
+    // Trigger creation flow after a tick
+    setTimeout(async () => {
+      if (!user) {
+        // Save to session and redirect to auth
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+          characterName: selections.characterName,
+          skin: selections.skin || "tan",
+          bodyType: selections.bodyType || "regular",
+          chest: selections.chest || "medium",
+          hairStyle: selections.hairStyle || "straight",
+          hairColour: selections.hairColour || "brunette",
+          eye: selections.eye || "brown",
+          makeup: selections.makeup || "natural",
+          age: selections.age,
+          description: "",
+        }));
+        navigate(`/account?redirect=${encodeURIComponent("/")}`);
+        return;
+      }
+
+      // Build prompt from guided selections
+      const sk = selections.skin || "tan";
+      const bt = selections.bodyType || "regular";
+      const ch = selections.chest || "medium";
+      const hs = selections.hairStyle || "straight";
+      const hc = selections.hairColour || "brunette";
+      const ey = selections.eye || "brown";
+      const mk = selections.makeup || "natural";
+      const ag = selections.age || "25";
+      const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${ch} chest, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
+
+      setShowLoading(true);
+      setIsSaving(true);
+      try {
+        const charData = {
+          user_id: user.id,
+          name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
+          country: sanitiseText(sk, 50),
+          age: ag,
+          hair: sanitiseText(hc, 50),
+          eye: sanitiseText(ey, 50),
+          body: sanitiseText(bt, 50),
+          style: sanitiseText(mk, 50),
+          description: sanitiseText(`${ch} chest, ${hs} hair.`, 500),
+          generation_prompt: prompt,
+        };
+        const { data: inserted, error: insertError } = await supabase
+          .from("characters")
+          .insert(charData)
+          .select("id")
+          .single();
+        if (insertError) throw insertError;
+        sessionStorage.setItem("vizura_pending_char_id", inserted.id);
+      } catch (err: any) {
+        toast.error(err.message || "failed to save character");
+        setShowLoading(false);
+      }
+      setIsSaving(false);
+    }, 100);
+  }, [user, navigate]);
+
+  const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {
+    // Carry over selections to quick mode
+    if (partial.skin) setSkin(partial.skin);
+    if (partial.bodyType) setBodyType(partial.bodyType);
+    if (partial.chest) setChest(partial.chest);
+    if (partial.hairStyle) setHairStyle(partial.hairStyle);
+    if (partial.hairColour) setHairColour(partial.hairColour);
+    if (partial.eye) setEye(partial.eye);
+    if (partial.makeup) setMakeup(partial.makeup);
+    if (partial.characterName) setCharacterName(partial.characterName);
+    if (partial.age) setAge(partial.age);
+    setShowGuided(false);
+  }, []);
+
+  const handleMarkWelcomeSeen = useCallback(async () => {
+    if (user) {
+      await supabase
+        .from("profiles")
+        .update({ has_seen_welcome: true } as any)
+        .eq("user_id", user.id);
+    }
+    sessionStorage.setItem(WELCOME_SESSION_KEY, "1");
+    setHasSeenWelcome(true);
+  }, [user]);
+
   return (
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
       <CreationLoadingOverlay open={showLoading} onComplete={handleLoadingComplete} />
+      <GuidedCreator
+        open={showGuided}
+        showWelcome={hasSeenWelcome === false}
+        onComplete={handleGuidedComplete}
+        onExit={handleGuidedExit}
+        onMarkWelcomeSeen={handleMarkWelcomeSeen}
+      />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
-        <div className="flex items-center mb-8">
+        <div className="flex items-center justify-between mb-8">
           <PageTitle className="mb-0">create character</PageTitle>
+          {!showGuided && (
+            <button
+              onClick={() => setShowGuided(true)}
+              className="flex items-center gap-1.5 text-xs font-extrabold lowercase text-foreground/50 hover:text-foreground transition-colors"
+            >
+              <Sparkles size={14} strokeWidth={2.5} />
+              guided creator
+            </button>
+          )}
         </div>
 
         {/* Hero image box */}
@@ -317,7 +468,7 @@ const CharacterCreator = () => {
           </div>
         )}
 
-        {/* Create button — in-flow, not fixed */}
+        {/* Create button */}
         <div className="mt-8 mb-6">
           <Button className="h-14 w-full text-sm" onClick={handleCreate} disabled={isSaving}>
             {isSaving ? (
