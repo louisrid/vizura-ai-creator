@@ -208,7 +208,6 @@ const CharacterCreator = () => {
     setShowLoading(false);
     const charId = sessionStorage.getItem("vizura_pending_char_id");
     sessionStorage.removeItem("vizura_pending_char_id");
-    toast.success("30 gems used");
     const prompt = guidedPromptRef.current || buildPrompt();
     guidedPromptRef.current = null;
     navigate("/choose-face", {
