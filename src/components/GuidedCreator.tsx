@@ -135,7 +135,8 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
   label: string; selected: boolean; shaking: boolean; onClick: () => void;
 }) => (
   <motion.button
-    onClick={(e) => { e.stopPropagation(); onClick(); }}
+    type="button"
+    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     animate={
       selected
         ? { scale: [1, 1.15, 1], transition: { duration: 0.1 } }
