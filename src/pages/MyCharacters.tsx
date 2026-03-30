@@ -65,15 +65,11 @@ const MyCharacters = () => {
 
   if (!authLoading && !user) return null;
 
-  const isBuilding = (char: Character) => !char.face_image_url;
-
   const handleCreatePhoto = () => {
-    // If only one character, auto-select and go directly
     if (characters.length === 1) {
       navigate("/create", { state: { characterId: characters[0].id } });
       return;
     }
-    // Otherwise go to create page to choose
     navigate("/create");
   };
 
@@ -93,14 +89,13 @@ const MyCharacters = () => {
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => navigate("/")}
-              className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors active:scale-[0.97]"
+              className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors duration-200 active:scale-[0.97]"
             >
               <Plus size={36} strokeWidth={3} className="text-foreground" />
             </button>
 
             <AnimatePresence>
               {characters.map((char) => {
-                const building = isBuilding(char);
                 const isNew = newCharId === char.id;
                 return (
                   <motion.button
@@ -110,39 +105,31 @@ const MyCharacters = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3, ease: "easeOut" }}
-                    onClick={() => !building && navigate(`/characters/${char.id}`)}
-                    className={`relative aspect-[3/4] rounded-2xl bg-card flex flex-col items-center justify-center overflow-hidden text-left transition-all active:scale-[0.97] ${
-                      building
-                        ? "border-[5px] border-neon-yellow/60 animate-pulse cursor-default"
-                        : isNew
-                          ? "border-[5px] border-neon-yellow"
-                          : "border-[5px] border-border hover:border-foreground/40"
+                    onClick={() => navigate(`/characters/${char.id}`)}
+                    className={`relative aspect-[3/4] rounded-2xl bg-card flex flex-col items-center justify-center overflow-hidden text-left transition-all duration-200 active:scale-[0.97] ${
+                      isNew
+                        ? "border-[5px] border-neon-yellow"
+                        : "border-[5px] border-border hover:border-foreground/40"
                     }`}
                   >
-                    {building ? (
-                      <span className="text-xs font-extrabold lowercase text-neon-yellow">building…</span>
+                    {char.face_image_url ? (
+                      <img
+                        src={char.face_image_url}
+                        alt={char.name}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
                     ) : (
-                      <>
-                        {char.face_image_url ? (
-                          <img
-                            src={char.face_image_url}
-                            alt={char.name}
-                            className="absolute inset-0 h-full w-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-4xl mb-1">{getStableEmoji(char.id)}</span>
-                        )}
-                        {/* Name/age overlay at bottom */}
-                        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6">
-                          <span className="block text-[11px] font-extrabold lowercase text-white leading-tight truncate">
-                            {char.name || "unnamed"}
-                          </span>
-                          <span className="block text-[9px] font-extrabold lowercase text-white/60">
-                            age {char.age}
-                          </span>
-                        </div>
-                      </>
+                      <span className="text-4xl mb-1">{getStableEmoji(char.id)}</span>
                     )}
+                    {/* Name/age overlay at bottom */}
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6">
+                      <span className="block text-[11px] font-extrabold lowercase text-white leading-tight truncate">
+                        {char.name || "unnamed"}
+                      </span>
+                      <span className="block text-[9px] font-extrabold lowercase text-white/60">
+                        age {char.age}
+                      </span>
+                    </div>
                   </motion.button>
                 );
               })}
@@ -151,12 +138,12 @@ const MyCharacters = () => {
         )}
       </main>
 
-      {/* Fixed bottom Create Photo button — always active */}
+      {/* Fixed bottom Create Photo button */}
       <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
         <div className="mx-auto max-w-lg">
           <button
             onClick={handleCreatePhoto}
-            className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
+            className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
           >
             <Camera size={20} strokeWidth={2.5} />
             create photo
