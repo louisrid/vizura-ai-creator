@@ -19,11 +19,11 @@ interface Character {
 }
 
 const traits = (char: Character) => [
-  { label: "style", value: char.style },
-  { label: "hair", value: char.hair },
+  { label: "skin", value: char.country },
+  { label: "body type", value: char.body },
+  { label: "hair colour", value: char.hair },
   { label: "eyes", value: char.eye },
-  { label: "body", value: char.body },
-  { label: "ethnicity", value: char.country },
+  { label: "makeup", value: char.style },
 ];
 
 const CharacterDetail = () => {
@@ -77,6 +77,17 @@ const CharacterDetail = () => {
     );
   }
 
+  // Parse description for chest and hair style
+  const descParts = character.description?.match(/^(.*?) chest, (.*?) hair\./);
+  const chestVal = descParts?.[1] || "";
+  const hairStyleVal = descParts?.[2] || "";
+
+  const allTraits = [
+    ...traits(character),
+    ...(chestVal ? [{ label: "chest", value: chestVal }] : []),
+    ...(hairStyleVal ? [{ label: "hair", value: hairStyleVal }] : []),
+  ];
+
   return (
     <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden fixed inset-x-0 bottom-0">
       <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-3 flex flex-col h-full overflow-hidden">
@@ -117,7 +128,7 @@ const CharacterDetail = () => {
 
           {/* Trait boxes */}
           <div className="flex flex-1 flex-wrap gap-1.5 content-start">
-            {traits(character).map((t) => (
+            {allTraits.map((t) => (
               <div
                 key={t.label}
                 className="rounded-xl bg-foreground px-2.5 py-1.5"
@@ -133,7 +144,7 @@ const CharacterDetail = () => {
           </div>
         </div>
 
-        {/* Description — takes remaining space, clipped if too long */}
+        {/* Description */}
         {character.description?.trim() && (
           <div className="rounded-2xl border-[5px] border-border bg-card p-3 min-h-0 shrink overflow-hidden">
             <span className="block text-[8px] font-extrabold lowercase text-foreground/40 mb-1">

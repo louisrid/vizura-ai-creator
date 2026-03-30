@@ -131,6 +131,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
   const [shattering, setShattering] = useState(false);
   const [visible, setVisible] = useState(false);
   const animating = useRef(false);
+  const pendingActionRef = useRef<(() => void) | null>(null);
 
   useEffect(() => setMounted(true), []);
 
@@ -143,6 +144,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
       setShattering(false);
       setVisible(true);
       animating.current = false;
+      pendingActionRef.current = null;
     }
   }, [open]);
 
@@ -161,7 +163,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
     };
   }, [visible]);
 
-  // Which trait index is this step? (-1 if not a trait slide)
   const getTraitIndex = (s: number) => {
     const adjusted = s - welcomeOffset;
     if (adjusted < 0 || adjusted >= 7) return -1;
@@ -180,7 +181,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
 
   const isCurrentSelected = () => {
     const key = getCurrentTraitKey();
-    if (!key) return true; // non-trait slides
+    if (!key) return true;
     return !!selections[key];
   };
 
@@ -193,48 +194,53 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
     setTimeout(() => setShaking(false), 500);
   };
 
-  const triggerExit = useCallback(() => {
+  const triggerExit = useCallback((afterAction?: () => void) => {
     if (shattering) return;
+    pendingActionRef.current = afterAction || null;
     setShattering(true);
   }, [shattering]);
 
   const handleShatterDone = useCallback(() => {
     setVisible(false);
     setShattering(false);
+    // Fire the pending action (onComplete or onExit) AFTER the exit animation finishes
+    if (pendingActionRef.current) {
+      pendingActionRef.current();
+      pendingActionRef.current = null;
+    }
   }, []);
+
+  const selectionsRef = useRef(selections);
+  selectionsRef.current = selections;
 
   const advance = useCallback(() => {
     if (animating.current) return;
-    // Welcome slide — mark as seen
     if (isWelcomeSlide) {
       onMarkWelcomeSeen();
     }
-    // Trait slides — must select before advancing
     if (currentTraitIndex >= 0 && !isCurrentSelected()) {
       triggerShake();
       return;
     }
-    // Summary slide — validate name and age
     if (isSummarySlide) {
-      const missingName = !selections.characterName.trim();
-      const ageNum = Number(selections.age);
-      const invalidAge = !selections.age || ageNum < 18 || ageNum > 40;
+      const s = selectionsRef.current;
+      const missingName = !s.characterName.trim();
+      const ageNum = Number(s.age);
+      const invalidAge = !s.age || ageNum < 18 || ageNum > 40;
       if (missingName || invalidAge) {
         setSummaryShake(true);
         setTimeout(() => setSummaryShake(false), 500);
         return;
       }
     }
-    // Create slide — trigger completion
     if (isCreateSlide) {
-      triggerExit();
-      setTimeout(() => onComplete(selections), 700);
+      triggerExit(() => onComplete(selectionsRef.current));
       return;
     }
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
     setTimeout(() => { animating.current = false; }, 100);
-  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, selections, shattering, onComplete, onMarkWelcomeSeen, triggerExit]);
+  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, shattering, onComplete, onMarkWelcomeSeen, triggerExit]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0) return;
@@ -244,15 +250,14 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
   }, [step]);
 
   const handleSkipToQuick = () => {
-    // Collect partial selections
+    const s = selectionsRef.current;
     const partial: Partial<GuidedSelections> = {};
     for (const trait of TRAITS) {
-      if (selections[trait.key]) partial[trait.key] = selections[trait.key];
+      if (s[trait.key]) partial[trait.key] = s[trait.key];
     }
-    if (selections.characterName) partial.characterName = selections.characterName;
-    if (selections.age) partial.age = selections.age;
-    triggerExit();
-    setTimeout(() => onExit(partial), 700);
+    if (s.characterName) partial.characterName = s.characterName;
+    if (s.age) partial.age = s.age;
+    triggerExit(() => onExit(partial));
   };
 
   const canAdvance = isWelcomeSlide || isCurrentSelected() || isSummarySlide || isCreateSlide;
@@ -260,7 +265,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
   if (!mounted || !visible) return null;
 
   const renderSlide = () => {
-    // Welcome slide
     if (isWelcomeSlide) {
       return (
         <div className="flex w-full flex-col items-center">
@@ -275,7 +279,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
       );
     }
 
-    // Trait slides
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key];
@@ -302,7 +305,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
       );
     }
 
-    // Summary slide
     if (isSummarySlide) {
       return (
         <div className="flex w-full flex-col items-center">
@@ -312,7 +314,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
             here's your character
           </h2>
-          {/* Selected traits as amber pills */}
           <div className="mt-4 flex flex-wrap justify-center gap-1.5">
             {TRAITS.map((t) => {
               const v = selections[t.key];
@@ -324,7 +325,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
               );
             })}
           </div>
-          {/* Name input */}
           <motion.input
             animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -334,7 +334,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
             onClick={(e) => e.stopPropagation()}
             className="mt-5 h-12 w-full max-w-[16rem] rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
           />
-          {/* Age input */}
           <motion.input
             animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -356,7 +355,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
       );
     }
 
-    // Create slide
     if (isCreateSlide) {
       const isFirstFree = !user;
       return (
@@ -384,7 +382,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
     <AnimatePresence onExitComplete={handleShatterDone}>
       {!shattering && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col bg-black"
+          className="fixed inset-0 z-[9998] flex flex-col bg-black"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
@@ -394,7 +392,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
           <AmbientGlow />
 
           <div className="relative flex-1 overflow-hidden">
-            {/* Content area */}
             <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "42%", transform: "translateY(-50%)" }}>
               <div className="w-full max-w-xs mx-auto flex flex-col items-center">
                 <AnimatePresence mode="wait">
@@ -412,7 +409,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
               </div>
             </div>
 
-            {/* Navigation area */}
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
               {isCreateSlide ? (
                 <button
@@ -426,7 +422,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
               ) : (
                 <>
                   <div className="mb-4 flex h-14 items-center gap-4">
-                    <IntroNavArrow direction="left" onClick={(e?: any) => { goBack(); }} disabled={step === 0} />
+                    <IntroNavArrow direction="left" onClick={() => goBack()} disabled={step === 0} />
                     <IntroNavArrow
                       direction="right"
                       onClick={() => advance()}
@@ -439,7 +435,6 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
                 </>
               )}
 
-              {/* Skip to quick mode link */}
               {!isCreateSlide && (
                 <button
                   onClick={(e) => { e.stopPropagation(); handleSkipToQuick(); }}
