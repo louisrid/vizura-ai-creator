@@ -178,77 +178,80 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-6">
-        <div className="grid grid-cols-2 gap-2.5">
-          <button
-            type="button"
-            onClick={handleOpenCreator}
-            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
-          >
-            <Sparkles size={16} strokeWidth={2.5} />
-            create character
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/create")}
-            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
-          >
-            <Camera size={16} strokeWidth={2.5} />
-            create photo
-          </button>
-        </div>
-
-        <section className="mt-5 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
-          <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
-          <div className="grid grid-cols-4 gap-2">
-            {photoSlots.map((photo) => {
-              const isPlaceholder = !photo.url;
-              return (
-                <button
-                  key={photo.id}
-                  type="button"
-                  onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                  className={`overflow-hidden rounded-[1rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
-                    isPlaceholder
-                      ? "border-dashed border-foreground/20 bg-secondary"
-                      : "border-border bg-secondary"
-                  }`}
-                >
-                  {isPlaceholder ? (
-                    <div className="flex h-full w-full items-center justify-center text-[9px] font-[900] lowercase text-foreground/25">
-                      empty
-                    </div>
-                  ) : (
-                    <img src={photo.url} alt="latest generated photo" className="h-full w-full object-cover" />
-                  )}
-                </button>
-              );
-            })}
+      <div className="flex h-full flex-col">
+        <main className="mx-auto w-full max-w-lg px-4 pt-8">
+          <div className="grid grid-cols-2 gap-2.5">
+            <button
+              type="button"
+              onClick={handleOpenCreator}
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
+            >
+              <Sparkles size={16} strokeWidth={2.5} />
+              create character
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/create")}
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+            >
+              <Camera size={16} strokeWidth={2.5} />
+              create photo
+            </button>
           </div>
-        </section>
 
-        <div className="mt-5 grid grid-cols-2 gap-2.5">
-          <button
-            type="button"
-            onClick={() => navigate("/top-ups")}
-            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-left text-foreground transition-transform active:scale-[0.98]"
-          >
-            <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-            <span className="text-sm font-[900] lowercase">{gems} gems</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/account")}
-            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
-          >
-            <Settings size={16} strokeWidth={2.5} />
-            settings
-          </button>
-        </div>
+          <section className="mt-6 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
+            <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
+            <div className="grid grid-cols-4 gap-2">
+              {photoSlots.map((photo) => {
+                const isPlaceholder = !photo.url;
+                return (
+                  <button
+                    key={photo.id}
+                    type="button"
+                    onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
+                    className={`overflow-hidden rounded-[1rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
+                      isPlaceholder
+                        ? "border-dashed border-foreground/20 bg-secondary"
+                        : "border-border bg-secondary"
+                    }`}
+                  >
+                    {isPlaceholder ? (
+                      <div className="flex h-full w-full items-center justify-center text-[9px] font-[900] lowercase text-foreground/25">
+                        empty
+                      </div>
+                    ) : (
+                      <img src={photo.url} alt="latest generated photo" className="h-full w-full object-cover" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
 
-        {/* Divider line matching header style */}
-        <div className="mt-6 border-t-[5px] border-white flex-1" />
-      </main>
+          <div className="mt-6 grid grid-cols-2 gap-2.5">
+            <button
+              type="button"
+              onClick={() => navigate("/top-ups")}
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-left text-foreground transition-transform active:scale-[0.98]"
+            >
+              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-sm font-[900] lowercase">{gems} gems</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/account")}
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+            >
+              <Settings size={16} strokeWidth={2.5} />
+              settings
+            </button>
+          </div>
+        </main>
+
+        {/* Full-bleed white divider + black bottom section */}
+        <div className="mt-6 border-t-[5px] border-white" />
+        <div className="flex-1" style={{ backgroundColor: '#000000' }} />
+      </div>
     </div>
   );
 };

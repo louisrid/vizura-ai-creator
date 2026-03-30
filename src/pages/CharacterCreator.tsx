@@ -1,6 +1,6 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Upload, Sparkles } from "lucide-react";
+import { Loader2, Zap, Upload, Sparkles, Gem } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
@@ -422,7 +422,11 @@ const CharacterCreator = () => {
 
         {/* Create button */}
         <div className="mt-8 mb-6">
-          <Button className="h-14 w-full text-sm" onClick={handleCreate} disabled={isSaving}>
+          <button
+            className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 disabled:opacity-50"
+            onClick={handleCreate}
+            disabled={isSaving}
+          >
             {isSaving ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
@@ -431,10 +435,12 @@ const CharacterCreator = () => {
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                {isEditing ? "update" : "create · 30 gems"}
+                {isEditing ? "update" : "create"}
+                <Gem size={14} strokeWidth={2.5} className="text-neon-yellow-foreground/60 ml-1" />
+                <span className="text-[11px] ml-0.5">30</span>
               </>
             )}
-          </Button>
+          </button>
         </div>
       </main>
       )}

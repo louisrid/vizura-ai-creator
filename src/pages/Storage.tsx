@@ -83,13 +83,12 @@ const Storage = () => {
           <div className="border-[5px] border-border rounded-2xl p-8 text-center">
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
-            <Button
-              variant="outline"
-              className="h-12"
+            <button
               onClick={() => navigate("/create")}
+              className="h-12 w-full max-w-[12rem] mx-auto rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
             >
               create a photo
-            </Button>
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
