@@ -65,19 +65,14 @@ const CharacterCreator = () => {
   const [showGuided, setShowGuided] = useState(false);
   const [guidedReady, setGuidedReady] = useState(false);
 
-  // Fetch character count and welcome status
+  // Fetch character count
   useEffect(() => {
     const fetchState = async () => {
       if (user) {
-        const [charResult, profileResult] = await Promise.all([
-          supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-          supabase.from("profiles").select("has_seen_welcome").eq("user_id", user.id).single(),
-        ]);
+        const charResult = await supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id);
         setCharacterCount(charResult.count ?? 0);
-        setHasSeenWelcome((profileResult.data as any)?.has_seen_welcome ?? false);
       } else {
         setCharacterCount(0);
-        setHasSeenWelcome(sessionStorage.getItem(WELCOME_SESSION_KEY) === "1");
       }
       setGuidedReady(true);
     };
