@@ -313,7 +313,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
-    const t = setTimeout(() => setInitialFadeIn(false), 1800);
+    const t = setTimeout(() => setInitialFadeIn(false), 1200);
     return () => clearTimeout(t);
   }, [visible, initialFadeIn]);
 
