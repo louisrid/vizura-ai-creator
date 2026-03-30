@@ -138,20 +138,29 @@ const ChooseFace = () => {
       return;
     }
 
-    await finalizeConfirm();
+    await doFinalSave();
   };
 
-  const finalizeConfirm = async () => {
+  // The actual save function - reads current user from auth context at call time
+  const doFinalSave = async () => {
+    const currentUser = (await supabase.auth.getUser()).data.user;
+    if (!currentUser) {
+      toast.error("not signed in");
+      return;
+    }
+
     const faceIdx = selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "0");
 
     let cId = characterId;
-    if (!cId && user) {
+    
+    // If no character ID exists, create from draft data
+    if (!cId) {
       try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
         if (raw) {
           const draft = JSON.parse(raw);
           const charData = {
-            user_id: user.id,
+            user_id: currentUser.id,
             name: sanitiseText(draft.characterName || "", 100) || "new character",
             country: sanitiseText(draft.skin || "", 50),
             age: draft.age || "25",
@@ -162,18 +171,29 @@ const ChooseFace = () => {
             description: sanitiseText(`${draft.chest || ""} chest, ${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
             generation_prompt: prompt || "",
           };
+          console.log("[ChooseFace] Creating character with data:", charData);
           const { data: inserted, error: insertError } = await supabase
             .from("characters")
             .insert(charData)
             .select("id")
             .single();
-          if (!insertError && inserted) {
+          if (insertError) {
+            console.error("[ChooseFace] Insert error:", insertError);
+            toast.error("failed to save character: " + insertError.message);
+            return;
+          }
+          if (inserted) {
             cId = inserted.id;
             setCharacterId(cId);
             sessionStorage.setItem("vizura_pending_char_id", cId);
+            console.log("[ChooseFace] Character created with id:", cId);
           }
+        } else {
+          console.warn("[ChooseFace] No draft data in sessionStorage");
         }
-      } catch {}
+      } catch (err) {
+        console.error("[ChooseFace] Error creating character:", err);
+      }
     }
 
     // Save face selection to character
@@ -182,18 +202,23 @@ const ChooseFace = () => {
       try {
         await supabase
           .from("characters")
-          .update({ face_image_url: faceUrl, generation_prompt: prompt } as any)
+          .update({ face_image_url: faceUrl, generation_prompt: prompt })
           .eq("id", cId);
-      } catch {}
+        console.log("[ChooseFace] Updated face for character:", cId);
+      } catch (err) {
+        console.error("[ChooseFace] Error updating face:", err);
+      }
     }
 
     if (cId) {
       sessionStorage.setItem("vizura_new_char_highlight", cId);
     }
 
+    // Cleanup
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem("vizura_pending_char_id");
 
     toast.success("character added!");
     navigate("/characters");
@@ -201,9 +226,10 @@ const ChooseFace = () => {
 
   const handleSignedIn = useCallback(async () => {
     setShowSignIn(false);
-    // After signing in, save the character from draft data then navigate
-    await finalizeConfirm();
-  }, [selectedIndex, characterId, faces, prompt, navigate]);
+    // Small delay to ensure auth state is fully propagated
+    await new Promise((r) => setTimeout(r, 300));
+    await doFinalSave();
+  }, [selectedIndex, characterId, faces, prompt]);
 
   const handleCookingComplete = () => {
     setShowCooking(false);

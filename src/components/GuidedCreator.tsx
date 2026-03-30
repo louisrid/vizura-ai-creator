@@ -14,7 +14,7 @@ const AMBER = "hsl(var(--neon-yellow))";
 
 const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
-  { key: "bodyType", label: "choose her body…", emoji: "🤘", options: ["slim", "regular", "curvy"] },
+  { key: "bodyType", label: "choose her body…", emoji: "📏", options: ["slim", "regular", "curvy"] },
   { key: "chest", label: "choose her chest…", emoji: "👙", options: ["small", "medium", "large"] },
   { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs", "short"] },
   { key: "hairColour", label: "pick her hair colour…", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
@@ -148,6 +148,57 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
   </motion.button>
 );
 
+/* ── Loading phrases for cooking phase ── */
+const COOKING_PHRASES = [
+  "mixing the pixels…",
+  "adjusting the vibe…",
+  "picking the perfect look…",
+  "almost there…",
+  "adding the finishing touches…",
+  "brewing something beautiful…",
+  "calibrating cuteness…",
+  "loading your masterpiece…",
+];
+const COOKING_PHRASE_INTERVAL = 1500;
+const COOKING_DURATION = 8000;
+const COOKING_SUCCESS_HOLD = 5000;
+
+const CookingGreenTick = () => (
+  <motion.svg
+    width="80" height="80" viewBox="0 0 80 80" fill="none"
+    initial={{ opacity: 0, scale: 0.6 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+  >
+    <motion.circle cx="40" cy="40" r="36" stroke="hsl(140, 100%, 50%)" strokeWidth="3.5" fill="none"
+      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut" }} />
+    <motion.path d="M24 42 L34 52 L56 30" stroke="hsl(140, 100%, 50%)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
+      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }} />
+  </motion.svg>
+);
+
+const CookingSpinner = () => {
+  const dotCount = 12;
+  return (
+    <div className="relative h-20 w-20">
+      {Array.from({ length: dotCount }).map((_, i) => {
+        const angle = (360 / dotCount) * i;
+        const delay = (i / dotCount) * 1.8;
+        return (
+          <motion.div key={i} className="absolute left-1/2 top-1/2 h-2.5 w-2.5 rounded-full"
+            style={{ marginLeft: -5, marginTop: -5, transform: `rotate(${angle}deg) translateY(-32px)` }}
+            animate={{
+              backgroundColor: ["hsl(40, 100%, 55%)", "hsl(185, 100%, 55%)", "hsl(140, 100%, 50%)", "hsl(40, 100%, 55%)"],
+              scale: [0.6, 1, 0.6], opacity: [0.3, 1, 0.3],
+            }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 /* ── Types ── */
 export interface GuidedSelections {
   skin: string; bodyType: string; chest: string; hairStyle: string;
@@ -176,13 +227,17 @@ interface GuidedCreatorProps {
 
 /*
  * Slide layout:
- *  0 = welcome ("welcome to vizura!")
- *  1 = intro ("time to create your first character!")
+ *  0 = welcome
+ *  1 = intro
  *  2-8 = 7 trait slides
- *  9 = details (name, age, description, reference image)
- * 10 = create button
+ *  9 = details A (summary pills + name/age)
+ * 10 = details B (description textarea)
+ * 11 = details C (reference image)
+ * 12 = create button
+ *
+ * After create: internal "cooking" phase (loading → success → navigate)
  */
-const TOTAL = 11;
+const TOTAL = 13;
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
@@ -193,12 +248,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [shaking, setShaking] = useState(false);
   const [summaryShake, setSummaryShake] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [shattering, setShattering] = useState(false);
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
   const animating = useRef(false);
-  const pendingActionRef = useRef<(() => void) | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Internal cooking phase - replaces separate CreationLoadingOverlay
+  const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success">("none");
+  const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
 
   useEffect(() => setMounted(true), []);
 
@@ -208,15 +265,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setSelections({ ...emptySelections });
       setShaking(false);
       setSummaryShake(false);
-      setShattering(false);
       setInitialFadeIn(true);
       setVisible(true);
+      setCookingPhase("none");
+      setCookingPhraseIndex(0);
       animating.current = false;
-      pendingActionRef.current = null;
     }
   }, [open, skipWelcome]);
 
-  // Fade in complete after delay
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
     const t = setTimeout(() => setInitialFadeIn(false), 1800);
@@ -237,10 +293,36 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     };
   }, [visible]);
 
+  // Cooking phase timers
+  useEffect(() => {
+    if (cookingPhase !== "loading") return;
+    const interval = setInterval(() => {
+      setCookingPhraseIndex((i) => (i + 1) % COOKING_PHRASES.length);
+    }, COOKING_PHRASE_INTERVAL);
+    return () => clearInterval(interval);
+  }, [cookingPhase]);
+
+  useEffect(() => {
+    if (cookingPhase !== "loading") return;
+    const t = setTimeout(() => setCookingPhase("success"), COOKING_DURATION);
+    return () => clearTimeout(t);
+  }, [cookingPhase]);
+
+  useEffect(() => {
+    if (cookingPhase !== "success") return;
+    const t = setTimeout(() => {
+      // Done cooking - trigger onComplete which will navigate
+      onComplete(selectionsRef.current);
+    }, COOKING_SUCCESS_HOLD);
+    return () => clearTimeout(t);
+  }, [cookingPhase]);
+
   const isWelcomeSlide = step === 0;
   const isIntroSlide = step === 1;
-  const isDetailsSlide = step === 9;
-  const isCreateSlide = step === 10;
+  const isDetailsA = step === 9;
+  const isDetailsB = step === 10;
+  const isDetailsC = step === 11;
+  const isCreateSlide = step === 12;
   const currentTraitIndex = step >= 2 && step <= 8 ? step - 2 : -1;
 
   const getCurrentTraitKey = (): TraitKey | null => {
@@ -263,21 +345,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setTimeout(() => setShaking(false), 500);
   };
 
-  const triggerExit = useCallback((afterAction?: () => void) => {
-    if (shattering) return;
-    pendingActionRef.current = afterAction || null;
-    setShattering(true);
-  }, [shattering]);
-
-  const handleShatterDone = useCallback(() => {
-    setVisible(false);
-    setShattering(false);
-    if (pendingActionRef.current) {
-      pendingActionRef.current();
-      pendingActionRef.current = null;
-    }
-  }, []);
-
   const selectionsRef = useRef(selections);
   selectionsRef.current = selections;
 
@@ -299,7 +366,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   const advance = useCallback(() => {
-    if (animating.current) return;
+    if (animating.current || cookingPhase !== "none") return;
 
     // Trait slides require selection
     if (currentTraitIndex >= 0 && currentTraitIndex < 7) {
@@ -310,8 +377,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       }
     }
 
-    // Details slide requires name + age
-    if (isDetailsSlide) {
+    // Details A requires name + age
+    if (isDetailsA) {
       const s = selectionsRef.current;
       const missingName = !s.characterName.trim();
       const ageNum = Number(s.age);
@@ -323,30 +390,30 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       }
     }
 
+    // Create slide → start cooking inside same overlay
     if (isCreateSlide) {
-      triggerExit(() => onComplete(selectionsRef.current));
+      setCookingPhase("loading");
       return;
     }
 
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
     setTimeout(() => { animating.current = false; }, 80);
-  }, [step, isDetailsSlide, isCreateSlide, shattering, onComplete, triggerExit, currentTraitIndex]);
+  }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
   const goBack = useCallback(() => {
-    if (animating.current || step <= 0) return;
+    if (animating.current || step <= 0 || cookingPhase !== "none") return;
     animating.current = true;
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, 80);
-  }, [step]);
+  }, [step, cookingPhase]);
 
   const handleSkipToLogin = () => {
-    triggerExit(() => {
-      navigate("/account?redirect=/create");
-    });
+    setVisible(false);
+    navigate("/account?redirect=/create");
   };
 
-  const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsSlide || isCreateSlide;
+  const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;
 
   if (!mounted || !visible) return null;
 
@@ -354,7 +421,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     initial: { opacity: 0, x: 30 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -30 },
-    transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+    transition: { duration: 0.28, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
   };
 
   const renderSlide = () => {
@@ -376,7 +443,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="💃" index={0} />
+            <BigEmoji emoji="🤘" index={0} />
           </div>
           <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-tight tracking-tight text-white">
             time to create your<br />first character!
@@ -413,18 +480,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    /* ── Details slide (name, age, description, reference) ── */
-    if (isDetailsSlide) {
+    /* ── Details A: summary pills + name + age ── */
+    if (isDetailsA) {
       return (
-        <div className="flex w-full flex-col items-center max-h-[60vh] overflow-y-auto px-1 pb-2" onClick={(e) => e.stopPropagation()}>
-          <div className="flex h-14 items-end justify-center shrink-0">
-            <BigEmoji emoji="✨" index={7} />
-          </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white shrink-0">
+        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
             add the details…
           </h2>
           {/* Trait summary pills */}
-          <div className="mt-4 flex flex-wrap justify-center gap-1.5 shrink-0">
+          <div className="mt-4 flex flex-wrap justify-center gap-1.5">
             {TRAITS.map((t) => {
               const v = selections[t.key];
               if (!v) return null;
@@ -436,7 +500,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             })}
           </div>
           {/* Name input */}
-          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem] shrink-0">
+          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
             <motion.input
               animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
               transition={{ duration: 0.4 }}
@@ -455,7 +519,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </motion.button>
           </div>
           {/* Age input */}
-          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem] shrink-0">
+          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem]">
             <motion.input
               animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
               transition={{ duration: 0.4 }}
@@ -481,23 +545,44 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <RefreshCw size={16} strokeWidth={2.5} />
             </motion.button>
           </div>
-          {/* Description textarea */}
-          <div className="mt-4 w-full max-w-[16rem] shrink-0">
+        </div>
+      );
+    }
+
+    /* ── Details B: description textarea ── */
+    if (isDetailsB) {
+      return (
+        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+            describe her…
+          </h2>
+          <div className="mt-5 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
               onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
               placeholder="add any details you want to see…"
-              rows={3}
+              rows={6}
               onClick={(e) => e.stopPropagation()}
               className="w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
           </div>
-          {/* Reference image upload */}
-          <div className="mt-3 w-full max-w-[16rem] shrink-0">
+        </div>
+      );
+    }
+
+    /* ── Details C: reference image ── */
+    if (isDetailsC) {
+      return (
+        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+            add a reference…
+          </h2>
+          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
+          <div className="mt-5 w-full max-w-[16rem]">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
               <div className="flex flex-col gap-2">
-                <div className="relative w-full h-24 rounded-2xl overflow-hidden border-[3px] border-white/15">
+                <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[3px] border-white/15">
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
@@ -506,15 +591,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     ×
                   </button>
                 </div>
-                {/* Strength slider */}
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-extrabold lowercase text-white/50">strength</span>
                   <span className="text-[10px] font-extrabold lowercase text-white/50">{selections.referenceStrength}%</span>
                 </div>
                 <input
-                  type="range"
-                  min={0}
-                  max={100}
+                  type="range" min={0} max={100}
                   value={selections.referenceStrength}
                   onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
                   onClick={(e) => e.stopPropagation()}
@@ -525,10 +607,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             ) : (
               <button
                 onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-4 hover:border-white/30 transition-colors"
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-8 hover:border-white/30 transition-colors"
               >
-                <Upload size={14} strokeWidth={2.5} className="text-white/30" />
-                <span className="text-xs font-extrabold lowercase text-white/30">add reference image (optional)</span>
+                <Upload size={24} strokeWidth={2.5} className="text-white/30" />
+                <span className="text-xs font-extrabold lowercase text-white/30">add reference image</span>
               </button>
             )}
           </div>
@@ -558,64 +640,120 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  return createPortal(
-    <AnimatePresence onExitComplete={handleShatterDone}>
-      {!shattering && (
+  /* ── Cooking content (inside same overlay) ── */
+  const renderCooking = () => {
+    if (cookingPhase === "loading") {
+      return (
         <motion.div
-          className="fixed inset-0 z-[9998] flex flex-col bg-black"
+          key="cooking-loading"
+          className="flex flex-col items-center gap-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: initialFadeIn ? 1.2 : 0.5, ease: [0, 0, 0.2, 1] }}
-          onClick={advance}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <AmbientGlow />
-
-          <div className="relative flex-1 overflow-hidden">
-            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "44%", transform: "translateY(-50%)" }}>
-              <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={step}
-                    className="w-full"
-                    initial={slideTransition.initial}
-                    animate={slideTransition.animate}
-                    exit={slideTransition.exit}
-                    transition={slideTransition.transition}
-                  >
-                    {renderSlide()}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Fixed bottom nav */}
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
-              <div className="mb-4 flex h-14 items-center gap-4">
-                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                <NavArrow
-                  direction="right"
-                  onClick={advance}
-                  disabled={!canAdvance && currentTraitIndex >= 0}
-                />
-              </div>
-              <div className="flex h-3 items-center">
-                <Dots current={step} total={TOTAL} />
-              </div>
-
-              {!isCreateSlide && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); handleSkipToLogin(); }}
-                  className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
-                >
-                  skip to login
-                </button>
-              )}
-            </div>
+          <CookingSpinner />
+          <div className="h-8 flex items-center">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={COOKING_PHRASES[cookingPhraseIndex]}
+                className="text-center text-base font-extrabold lowercase text-white"
+                initial={{ opacity: 0, y: 12, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              >
+                {COOKING_PHRASES[cookingPhraseIndex]}
+              </motion.p>
+            </AnimatePresence>
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>,
+      );
+    }
+    if (cookingPhase === "success") {
+      return (
+        <motion.div
+          key="cooking-success"
+          className="flex flex-col items-center gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <CookingGreenTick />
+          <motion.p
+            className="text-center text-2xl font-extrabold lowercase text-white"
+            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, delay: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            character created!
+          </motion.p>
+        </motion.div>
+      );
+    }
+    return null;
+  };
+
+  const isCooking = cookingPhase !== "none";
+
+  return createPortal(
+    <motion.div
+      className="fixed inset-0 z-[9999] flex flex-col bg-black"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: initialFadeIn ? 1.2 : 0.3 }}
+    >
+      <AmbientGlow />
+
+      <div className="relative flex-1 overflow-hidden">
+        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "44%", transform: "translateY(-50%)" }}>
+          <div className="w-full max-w-xs mx-auto flex flex-col items-center">
+            <AnimatePresence mode="wait">
+              {isCooking ? (
+                renderCooking()
+              ) : (
+                <motion.div
+                  key={step}
+                  className="w-full"
+                  initial={slideTransition.initial}
+                  animate={slideTransition.animate}
+                  exit={slideTransition.exit}
+                  transition={slideTransition.transition}
+                >
+                  {renderSlide()}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Fixed bottom nav - hidden during cooking */}
+        {!isCooking && (
+          <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
+            <div className="mb-4 flex h-14 items-center gap-4">
+              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+              <NavArrow
+                direction="right"
+                onClick={advance}
+                disabled={!canAdvance && currentTraitIndex >= 0}
+              />
+            </div>
+            <div className="flex h-3 items-center">
+              <Dots current={step} total={TOTAL} />
+            </div>
+
+            {!isCreateSlide && (
+              <button
+                onClick={(e) => { e.stopPropagation(); handleSkipToLogin(); }}
+                className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
+              >
+                skip to login
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </motion.div>,
     document.body,
   );
 };
@@ -679,7 +817,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.7 }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
