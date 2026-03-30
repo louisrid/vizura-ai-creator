@@ -238,21 +238,15 @@ const CharacterCreator = () => {
         description: sanitiseText(`${ch} chest, ${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,
       };
-      supabase
+      const { data: inserted, error: insertError } = await supabase
         .from("characters")
         .insert(charData)
         .select("id")
-        .single()
-        .then(({ data: inserted, error: insertError }) => {
-          if (!insertError && inserted) {
-            sessionStorage.setItem("vizura_pending_char_id", inserted.id);
-          }
-          // Navigate to choose-face
-          navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
-        })
-        .catch(() => {
-          navigate("/choose-face", { state: { prompt } });
-        });
+        .single();
+      if (!insertError && inserted) {
+        sessionStorage.setItem("vizura_pending_char_id", inserted.id);
+      }
+      navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
     } else {
       // Not logged in - navigate to choose-face, sign-in will happen there
       navigate("/choose-face", { state: { prompt } });
