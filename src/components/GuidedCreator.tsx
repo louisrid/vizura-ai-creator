@@ -163,18 +163,16 @@ const emptySelections: GuidedSelections = {
 
 interface GuidedCreatorProps {
   open: boolean;
-  showWelcome: boolean;
   onComplete: (selections: GuidedSelections) => void;
   onExit: (partialSelections: Partial<GuidedSelections>) => void;
-  onMarkWelcomeSeen: () => void;
 }
 
-const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSeen }: GuidedCreatorProps) => {
+const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const { credits: gems } = useCredits();
 
-  const welcomeOffset = showWelcome ? 1 : 0;
-  const TOTAL = 7 + welcomeOffset + 2; // traits + summary + create
+  // Welcome slide ALWAYS shows as slide 0
+  const TOTAL = 1 + 7 + 2; // welcome + 7 traits + summary + create
 
   const [step, setStep] = useState(0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
