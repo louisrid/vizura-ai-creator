@@ -22,7 +22,6 @@ const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
 const makeupOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
-const WELCOME_SESSION_KEY = "vizura_welcome_seen";
 
 const PillGroup = ({
   label, options, value, onChange,
@@ -62,23 +61,17 @@ const CharacterCreator = () => {
   const isEditing = !!editId;
 
   const [characterCount, setCharacterCount] = useState<number | null>(null);
-  const [hasSeenWelcome, setHasSeenWelcome] = useState<boolean | null>(null);
   const [showGuided, setShowGuided] = useState(false);
   const [guidedReady, setGuidedReady] = useState(false);
 
-  // Fetch character count and welcome status
+  // Fetch character count
   useEffect(() => {
     const fetchState = async () => {
       if (user) {
-        const [charResult, profileResult] = await Promise.all([
-          supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-          supabase.from("profiles").select("has_seen_welcome").eq("user_id", user.id).single(),
-        ]);
+        const charResult = await supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id);
         setCharacterCount(charResult.count ?? 0);
-        setHasSeenWelcome((profileResult.data as any)?.has_seen_welcome ?? false);
       } else {
         setCharacterCount(0);
-        setHasSeenWelcome(sessionStorage.getItem(WELCOME_SESSION_KEY) === "1");
       }
       setGuidedReady(true);
     };
@@ -313,16 +306,6 @@ const CharacterCreator = () => {
     setShowGuided(false);
   }, []);
 
-  const handleMarkWelcomeSeen = useCallback(async () => {
-    if (user) {
-      await supabase
-        .from("profiles")
-        .update({ has_seen_welcome: true } as any)
-        .eq("user_id", user.id);
-    }
-    sessionStorage.setItem(WELCOME_SESSION_KEY, "1");
-    setHasSeenWelcome(true);
-  }, [user]);
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -330,10 +313,8 @@ const CharacterCreator = () => {
       <CreationLoadingOverlay open={showLoading} onComplete={handleLoadingComplete} />
       <GuidedCreator
         open={showGuided}
-        showWelcome={hasSeenWelcome === false}
         onComplete={handleGuidedComplete}
         onExit={handleGuidedExit}
-        onMarkWelcomeSeen={handleMarkWelcomeSeen}
       />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">

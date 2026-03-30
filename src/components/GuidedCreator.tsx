@@ -8,7 +8,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
-const LIGHT_BLUE = "hsl(195 100% 50%)";
+const NEON_BLUE = "hsl(195 100% 55%)";
 const PURE_WHITE = "hsl(0 0% 100%)";
 const AMBER = "hsl(var(--neon-yellow))";
 
@@ -45,7 +45,7 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
-          background: i === current ? LIGHT_BLUE : PURE_WHITE,
+          background: i === current ? NEON_BLUE : PURE_WHITE,
         }}
       />
     ))}
@@ -58,9 +58,8 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
     onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
-      backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
-      border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
-      boxShadow: direction === "left" ? `inset 0 0 0 5px ${PURE_WHITE}` : "none",
+      backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
+      border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${NEON_BLUE}`,
       borderRadius: 16,
       outline: "none",
       padding: 0,
@@ -77,26 +76,35 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
   </button>
 );
 
-/* ── Background glow ── */
+/* ── Background glow — rich purple aurora ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     <motion.div
-      className="absolute rounded-full blur-[120px]"
+      className="absolute rounded-full blur-[160px]"
       style={{
-        width: "70%", height: "70%", top: "20%", left: "15%",
-        background: "radial-gradient(circle, hsl(260 80% 30% / 0.15), hsl(220 90% 20% / 0.08), transparent 70%)",
+        width: "90%", height: "80%", top: "10%", left: "5%",
+        background: "radial-gradient(circle, hsl(270 70% 35% / 0.55), hsl(240 80% 22% / 0.35), transparent 70%)",
       }}
-      animate={{ x: [0, 40, -30, 0], y: [0, -30, 20, 0], scale: [1, 1.15, 0.9, 1] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, 50, -40, 0], y: [0, -40, 30, 0], scale: [1, 1.2, 0.85, 1] }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
     />
     <motion.div
-      className="absolute rounded-full blur-[100px]"
+      className="absolute rounded-full blur-[140px]"
       style={{
-        width: "50%", height: "50%", bottom: "10%", right: "5%",
-        background: "radial-gradient(circle, hsl(200 80% 25% / 0.12), hsl(240 70% 20% / 0.06), transparent 70%)",
+        width: "70%", height: "70%", bottom: "5%", right: "0%",
+        background: "radial-gradient(circle, hsl(220 80% 28% / 0.5), hsl(260 70% 25% / 0.3), transparent 65%)",
       }}
-      animate={{ x: [0, -35, 25, 0], y: [0, 20, -25, 0], scale: [1, 0.85, 1.1, 1] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, -45, 35, 0], y: [0, 25, -35, 0], scale: [1, 0.8, 1.15, 1] }}
+      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div
+      className="absolute rounded-full blur-[180px]"
+      style={{
+        width: "60%", height: "60%", top: "30%", left: "30%",
+        background: "radial-gradient(circle, hsl(280 60% 40% / 0.3), hsl(200 70% 25% / 0.2), transparent 60%)",
+      }}
+      animate={{ x: [0, 30, -20, 0], y: [0, -20, 15, 0], scale: [0.9, 1.1, 0.95, 0.9] }}
+      transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
     />
   </div>
 );
@@ -155,18 +163,16 @@ const emptySelections: GuidedSelections = {
 
 interface GuidedCreatorProps {
   open: boolean;
-  showWelcome: boolean;
   onComplete: (selections: GuidedSelections) => void;
   onExit: (partialSelections: Partial<GuidedSelections>) => void;
-  onMarkWelcomeSeen: () => void;
 }
 
-const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSeen }: GuidedCreatorProps) => {
+const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const { credits: gems } = useCredits();
 
-  const welcomeOffset = showWelcome ? 1 : 0;
-  const TOTAL = 7 + welcomeOffset + 2; // traits + summary + create
+  // Welcome slide ALWAYS shows as slide 0
+  const TOTAL = 1 + 7 + 2; // welcome + 7 traits + summary + create
 
   const [step, setStep] = useState(0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
@@ -208,15 +214,16 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
   }, [visible]);
 
   const getTraitIndex = (s: number) => {
-    const adjusted = s - welcomeOffset;
+    // Slide 0 = welcome, slides 1-7 = traits
+    const adjusted = s - 1;
     if (adjusted < 0 || adjusted >= 7) return -1;
     return adjusted;
   };
 
   const currentTraitIndex = getTraitIndex(step);
-  const isSummarySlide = step === 7 + welcomeOffset;
-  const isCreateSlide = step === 8 + welcomeOffset;
-  const isWelcomeSlide = showWelcome && step === 0;
+  const isSummarySlide = step === 8;
+  const isCreateSlide = step === 9;
+  const isWelcomeSlide = step === 0;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= 7) return null;
@@ -258,9 +265,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
 
   const advance = useCallback(() => {
     if (animating.current) return;
-    if (isWelcomeSlide) {
-      onMarkWelcomeSeen();
-    }
+    // Welcome slide: just advance, no validation needed
     if (currentTraitIndex >= 0 && !isCurrentSelected()) {
       triggerShake();
       return;
@@ -283,7 +288,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
     setTimeout(() => { animating.current = false; }, 100);
-  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, shattering, onComplete, onMarkWelcomeSeen, triggerExit]);
+  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0) return;
@@ -315,7 +320,7 @@ const GuidedCreator = ({ open, showWelcome, onComplete, onExit, onMarkWelcomeSee
             <BigEmoji emoji="👁️" index={0} />
           </div>
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
-            let's create her…
+            let's create<br />her…
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
         </div>
