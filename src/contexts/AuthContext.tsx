@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
@@ -12,56 +12,67 @@ interface AuthContextType {
   autoSignIn: () => Promise<void>;
 }
 
+const STARTER_CHARACTER = {
+  name: "ava",
+  country: "pale",
+  age: "22",
+  hair: "blonde",
+  eye: "blue",
+  body: "slim",
+  style: "natural",
+  description: "medium chest, straight hair.",
+  generation_prompt: "photorealistic portrait, 22 year old woman, pale skin, slim body type, medium chest, straight blonde hair, blue eyes, natural makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed",
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const subscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>["data"]["subscription"] | null>(null);
+  const starterProvisionedRef = useRef<Set<string>>(new Set());
+
+  const ensureStarterCharacter = useCallback(async (userId: string) => {
+    if (starterProvisionedRef.current.has(userId)) return;
+    starterProvisionedRef.current.add(userId);
+    try {
+      const { count } = await supabase
+        .from("characters")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId);
+      if ((count ?? 0) > 0) return;
+      await supabase.from("characters").insert({ user_id: userId, ...STARTER_CHARACTER });
+    } catch (err) {
+      console.error("Starter character error:", err);
+      starterProvisionedRef.current.delete(userId);
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
-    const clearStoredAuth = () => {
-      const storages = [window.localStorage, window.sessionStorage];
-
-      storages.forEach((storage) => {
-        const keysToRemove: string[] = [];
-
-        for (let index = 0; index < storage.length; index += 1) {
-          const key = storage.key(index);
-          if (!key) continue;
-          if (key.startsWith("sb-") || key.includes("supabase") || key.includes("auth-token")) {
-            keysToRemove.push(key);
-          }
-        }
-
-        keysToRemove.forEach((key) => storage.removeItem(key));
-      });
-    };
-
     const initializeAuth = async () => {
       try {
-        clearStoredAuth();
-        await supabase.auth.signOut({ scope: "local" });
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (cancelled) return;
+        const currentUser = data.session?.user ?? null;
+        setUser(currentUser);
+        if (currentUser) void ensureStarterCharacter(currentUser.id);
       } finally {
         if (cancelled) return;
-
-        clearStoredAuth();
-
-        const { data } = supabase.auth.onAuthStateChange((event, session) => {
+        const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
           if (event === "SIGNED_OUT") {
             setUser(null);
             return;
           }
-
           if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-            setUser(session?.user ?? null);
+            const nextUser = session?.user ?? null;
+            setUser(nextUser);
+            if (nextUser) void ensureStarterCharacter(nextUser.id);
           }
         });
-
-        subscriptionRef.current = data.subscription;
-        setUser(null);
+        subscriptionRef.current = sub.subscription;
         setLoading(false);
       }
     };
@@ -72,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       cancelled = true;
       subscriptionRef.current?.unsubscribe();
     };
-  }, []);
+  }, [ensureStarterCharacter]);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
