@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const LIGHT_BLUE = "hsl(195 100% 50%)";
+const NEON_BLUE = "hsl(195 100% 55%)";
 const PURE_WHITE = "hsl(0 0% 100%)";
 
 const IntroDots = ({ current, total }: { current: number; total: number }) => (
