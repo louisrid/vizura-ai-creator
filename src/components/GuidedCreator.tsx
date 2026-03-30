@@ -273,8 +273,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (open) {
       // Restore from sessionStorage to survive tab switches
       const saved = (() => { try { const r = sessionStorage.getItem(FLOW_STATE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } })();
-      const defaultStep = skipWelcome ? 2 : 0;
-      setStep(Math.max(saved?.step ?? defaultStep, defaultStep));
+      setStep(Math.max(saved?.step ?? minStep, minStep));
       setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
       setShaking(false);
       setSummaryShake(false);
