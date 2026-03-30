@@ -178,7 +178,7 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-4">
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-6">
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
@@ -198,7 +198,7 @@ const Home = () => {
           </button>
         </div>
 
-        <section className="mt-3 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
+        <section className="mt-5 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
           <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
           <div className="grid grid-cols-4 gap-2">
             {photoSlots.map((photo) => {
@@ -227,7 +227,7 @@ const Home = () => {
           </div>
         </section>
 
-        <div className="mt-3 grid grid-cols-2 gap-2.5">
+        <div className="mt-5 grid grid-cols-2 gap-2.5">
           <button
             type="button"
             onClick={() => navigate("/top-ups")}
@@ -246,8 +246,8 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Divider line and black empty space */}
-        <div className="mt-4 border-t border-white/20 flex-1" />
+        {/* Divider line matching header style */}
+        <div className="mt-6 border-t-[5px] border-white flex-1" />
       </main>
     </div>
   );
