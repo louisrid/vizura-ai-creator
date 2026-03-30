@@ -457,7 +457,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <span className="block text-[1.4rem] font-[800]">welcome to</span>
             <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura!</span>
           </h2>
-          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
+          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
         </div>
       );
     }
