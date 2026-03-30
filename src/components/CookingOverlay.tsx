@@ -19,35 +19,36 @@ const TICK_INTERVAL = 100;
 
 const GreenTick = () => (
   <motion.svg
-    width="80"
-    height="80"
-    viewBox="0 0 80 80"
+    width="132"
+    height="132"
+    viewBox="0 0 132 132"
     fill="none"
-    initial={{ opacity: 0, scale: 0.6 }}
+    initial={{ opacity: 0, scale: 0.72 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+    transition={{ duration: 0.45, ease: [0.34, 1.56, 0.64, 1] }}
   >
     <motion.circle
-      cx="40"
-      cy="40"
-      r="36"
-      stroke="hsl(140, 100%, 50%)"
-      strokeWidth="3.5"
+      cx="66"
+      cy="66"
+      r="56"
+      stroke="hsl(0 0% 100%)"
+      strokeWidth="6"
       fill="none"
-      initial={{ pathLength: 0, opacity: 0 }}
+      strokeLinecap="round"
+      initial={{ pathLength: 0, opacity: 1 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
+      transition={{ duration: 1.6, ease: "easeInOut" }}
     />
     <motion.path
-      d="M24 42 L34 52 L56 30"
-      stroke="hsl(140, 100%, 50%)"
-      strokeWidth="4.5"
+      d="M42 69 L58 85 L92 49"
+      stroke="hsl(0 0% 100%)"
+      strokeWidth="7"
       strokeLinecap="round"
       strokeLinejoin="round"
       fill="none"
-      initial={{ pathLength: 0, opacity: 0 }}
+      initial={{ pathLength: 0, opacity: 1 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
+      transition={{ duration: 1.0, delay: 1.45, ease: "easeInOut" }}
     />
   </motion.svg>
 );
