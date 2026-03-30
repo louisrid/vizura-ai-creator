@@ -429,12 +429,23 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const isFirstFree = !user;
       return (
         <div className="flex w-full flex-col items-center">
-          <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="🚀" index={0} />
-          </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
-            {isFirstFree ? "your first character\nis free" : "ready to create?"}
-          </h2>
+          <motion.h2
+            className="text-center text-[2.8rem] font-[900] lowercase leading-tight tracking-tight text-white"
+            animate={{ textShadow: ["0 0 20px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.3)", "0 0 20px rgba(255,255,255,0)"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
+          </motion.h2>
+          {isFirstFree && (
+            <motion.div
+              className="mt-1 flex items-center gap-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.4, 0.7, 0.4] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <span className="text-lg">✨</span>
+            </motion.div>
+          )}
           {!isFirstFree && (
             <div className="mt-3 flex items-center gap-2">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
