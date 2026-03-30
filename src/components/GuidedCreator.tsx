@@ -271,27 +271,40 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => setMounted(true), []);
 
-  useEffect(() => {
-    if (open) {
-      // Restore from sessionStorage to survive tab switches
-      const saved = (() => { try { const r = sessionStorage.getItem(FLOW_STATE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } })();
+  const restoreSavedFlow = useCallback(() => {
+    try {
+      const raw = sessionStorage.getItem(FLOW_STATE_KEY);
+      if (!raw) return false;
+      const saved = JSON.parse(raw) as { step?: number; selections?: Partial<GuidedSelections> };
       setStep(Math.max(saved?.step ?? minStep, minStep));
       setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
+      return true;
+    } catch {
+      return false;
+    }
+  }, [minStep]);
+
+  const persistFlow = useCallback(() => {
+    if (!visible || cookingPhase !== "none") return;
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step: stepRef.current, selections: selectionsRef.current }));
+  }, [visible, cookingPhase]);
+
+  useEffect(() => {
+    if (open) {
+      const restored = restoreSavedFlow();
       setShaking(false);
       setSummaryShake(false);
-      setInitialFadeIn(true);
+      setInitialFadeIn(!restored);
       setVisible(true);
       setCookingPhase("none");
       setCookingPhraseIndex(0);
       animating.current = false;
     }
-  }, [open, skipWelcome]);
+  }, [open, restoreSavedFlow]);
 
-  // Persist flow state to survive tab switches (but NOT full page refreshes — those are cleared in CharacterCreator)
   useEffect(() => {
-    if (!visible || cookingPhase !== "none") return;
-    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step, selections }));
-  }, [visible, cookingPhase, step, selections]);
+    persistFlow();
+  }, [persistFlow, step, selections]);
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;

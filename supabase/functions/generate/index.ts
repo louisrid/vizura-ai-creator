@@ -48,6 +48,31 @@ function getClientIp(req: Request): string {
   );
 }
 
+/* ── helper: demo placeholder images ───────────────────── */
+function makeDemoSvg(label: string, accent: string, index: number): string {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="768" height="1024" viewBox="0 0 768 1024" fill="none">
+      <rect width="768" height="1024" fill="#111111"/>
+      <rect x="28" y="28" width="712" height="968" rx="48" fill="#1a1a1a" stroke="#ffffff22" stroke-width="8"/>
+      <circle cx="384" cy="340" r="156" fill="${accent}" opacity="0.22"/>
+      <circle cx="384" cy="320" r="112" fill="#ffffff" opacity="0.1"/>
+      <rect x="184" y="540" width="400" height="28" rx="14" fill="#ffffff" opacity="0.16"/>
+      <rect x="238" y="592" width="292" height="22" rx="11" fill="#ffffff" opacity="0.12"/>
+      <rect x="214" y="776" width="340" height="112" rx="56" fill="${accent}"/>
+      <text x="384" y="842" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#0a0a0a">pick ${index + 1}</text>
+      <text x="384" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff">demo face</text>
+      <text x="384" y="736" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="600" fill="#ffffffaa">${label}</text>
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function generateDemoImages(prompt: string, count: number): string[] {
+  const accents = ["#f5df4d", "#39ff88", "#57d4ff", "#ff8fb1", "#ffc857", "#b9ff66"];
+  const label = sanitiseText(prompt).slice(0, 36) || "character preview";
+  return Array.from({ length: count }, (_, index) => makeDemoSvg(label, accents[index % accents.length], index));
+}
+
 /* ── helper: generate images via AI ────────────────────── */
 async function generateImages(
   prompt: string,
