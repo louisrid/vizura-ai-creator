@@ -800,6 +800,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: initialFadeIn ? 1.2 : 0.3 }}
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+      onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
     >
       <AmbientGlow />
 
