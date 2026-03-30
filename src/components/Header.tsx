@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
-  { label: "create character", path: "/", icon: Sparkles },
+  { label: "home", path: "/", icon: Sparkles },
   { label: "create photo", path: "/create", icon: Camera },
   { label: "my characters", path: "/characters", icon: LayoutGrid },
   { label: "storage", path: "/storage", icon: FolderOpen },
