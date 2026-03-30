@@ -507,7 +507,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     create
                   </motion.button>
                   <div className="flex h-14 items-center gap-4">
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                    <NavArrow direction="left" onClick={goBack} disabled={false} />
                     <NavArrow direction="right" onClick={advance} disabled={false} />
                   </div>
                   <div className="flex h-3 items-center">
