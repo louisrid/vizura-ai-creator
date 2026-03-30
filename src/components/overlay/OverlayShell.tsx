@@ -258,6 +258,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                         onClick={advance}
                         disabled={false}
                         onLongPress={startLongPress}
+                        onLongPressEnd={stopSkip}
                       />
                     </div>
                     <div className="flex h-3 items-center">

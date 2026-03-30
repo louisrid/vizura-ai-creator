@@ -337,11 +337,11 @@ const ChooseFace = () => {
                       transition={{ duration: 0.3, delay: i * 0.08 }}
                       className={`aspect-[3/4] rounded-2xl border-[5px] transition-all duration-200 flex items-center justify-center ${
                         selectedIndex === i
-                          ? "border-neon-yellow bg-card"
-                          : "border-border bg-card hover:border-foreground/40"
+                          ? "border-neon-yellow bg-secondary"
+                          : "border-border bg-secondary hover:border-foreground/40"
                       }`}
                     >
-                      <span className="text-4xl">{emoji}</span>
+                      <span className="text-4xl leading-none">{emoji}</span>
                     </motion.button>
                   </AnimatePresence>
                 ))
