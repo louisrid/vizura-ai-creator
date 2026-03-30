@@ -764,7 +764,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
           >
             <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
