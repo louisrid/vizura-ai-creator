@@ -221,7 +221,7 @@ const ChooseFace = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative min-h-screen bg-black">
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
