@@ -8,7 +8,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
-const LIGHT_BLUE = "hsl(195 100% 50%)";
+const NEON_BLUE = "hsl(195 100% 55%)";
 const PURE_WHITE = "hsl(0 0% 100%)";
 const AMBER = "hsl(var(--neon-yellow))";
 
