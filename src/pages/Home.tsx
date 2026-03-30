@@ -227,7 +227,7 @@ const Home = () => {
           </div>
         </section>
 
-        <div className="mt-3 grid grid-cols-2 gap-2.5">
+        <div className="mt-5 grid grid-cols-2 gap-2.5">
           <button
             type="button"
             onClick={() => navigate("/top-ups")}
