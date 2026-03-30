@@ -467,6 +467,7 @@ const CharacterCreator = () => {
           </Button>
         </div>
       </main>
+      )}
     </div>
   );
 };
