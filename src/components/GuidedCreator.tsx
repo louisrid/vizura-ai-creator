@@ -467,7 +467,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="🤘" index={0} />
+            <BigEmoji emoji="💫" index={0} />
           </div>
           <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-tight tracking-tight text-white">
             time to create your<br />first character!
