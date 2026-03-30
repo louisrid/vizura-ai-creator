@@ -298,7 +298,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (animating.current || step <= 0) return;
     animating.current = true;
     setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 100);
+    setTimeout(() => { animating.current = false; }, 50);
   }, [step]);
 
   const handleSkipToQuick = () => {
