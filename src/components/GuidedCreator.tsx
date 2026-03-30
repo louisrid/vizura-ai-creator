@@ -288,7 +288,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
     setTimeout(() => { animating.current = false; }, 100);
-  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, shattering, onComplete, onMarkWelcomeSeen, triggerExit]);
+  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0) return;
