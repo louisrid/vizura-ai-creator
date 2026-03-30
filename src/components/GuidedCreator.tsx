@@ -434,16 +434,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           >
             {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
           </motion.h2>
-          {isFirstFree && (
-            <motion.div
-              className="mt-1 flex items-center gap-1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.4, 0.7, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <span className="text-lg">✨</span>
-            </motion.div>
-          )}
           {!isFirstFree && (
             <div className="mt-3 flex items-center gap-2">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
