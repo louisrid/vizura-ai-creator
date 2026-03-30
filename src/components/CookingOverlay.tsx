@@ -187,7 +187,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                   className="text-center text-2xl font-extrabold lowercase text-white"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.35, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   character ready!
                 </motion.p>
