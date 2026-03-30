@@ -320,7 +320,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
             <BigEmoji emoji="👁️" index={0} />
           </div>
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
-            let's create her…
+            let's create<br />her…
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
         </div>
