@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-export const LIGHT_BLUE = "hsl(195 100% 50%)";
+export const LIGHT_BLUE = "hsl(195 100% 55%)";
 const LIGHT_BLUE_SOFT = "hsl(195 100% 78%)";
 const PURE_WHITE = "hsl(0 0% 100%)";
 
