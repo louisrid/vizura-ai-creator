@@ -774,7 +774,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <CookingSpinner />
+          <RippleLoader />
           <div className="h-8 flex items-center">
             <AnimatePresence mode="wait">
               <motion.p
