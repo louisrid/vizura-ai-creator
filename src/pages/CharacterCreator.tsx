@@ -311,7 +311,7 @@ const CharacterCreator = () => {
   const pageHidden = showGuided || showLoading;
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className={`relative min-h-screen ${pageHidden ? "bg-black" : "bg-background"}`}>
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
       <CreationLoadingOverlay open={showLoading} onComplete={handleLoadingComplete} />
       <GuidedCreator

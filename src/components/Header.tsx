@@ -82,8 +82,11 @@ const Header = () => {
   const currentMenuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname)) || menuItems[0];
   const CurrentIcon = currentMenuItem?.icon || Sparkles;
 
+  // Hide header when overlays are active (guided creator, loading)
+  const isOverlayActive = location.pathname === "/" && document.querySelector("[data-overlay-active]");
+
   return (
-    <header className="bg-nav sticky top-0 z-40 border-b-[5px] border-white">
+    <header className={`bg-nav sticky top-0 z-40 border-b-[5px] border-white ${isOverlayActive ? "hidden" : ""}`}>
       <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
