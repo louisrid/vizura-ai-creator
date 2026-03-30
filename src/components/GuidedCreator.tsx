@@ -322,7 +322,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
         initial: { opacity: 0, scale: 0.8 },
         animate: { opacity: 1, scale: 1 },
         exit: { opacity: 0, scale: 1.15 },
-        transition: { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] },
+        transition: { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] },
       };
     }
     return {
