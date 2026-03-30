@@ -22,7 +22,6 @@ const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
 const makeupOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
-const WELCOME_SESSION_KEY = "vizura_welcome_seen";
 
 const PillGroup = ({
   label, options, value, onChange,
