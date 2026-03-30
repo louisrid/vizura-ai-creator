@@ -178,19 +178,20 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
             {phase === "success" && (
               <motion.div
                 key="success"
-                className="flex flex-col items-center gap-6"
+                className="fixed inset-0 flex flex-col items-center justify-center gap-8"
+                style={{ backgroundColor: "hsl(var(--member-green))" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25 }}
               >
                 <GreenTick />
                 <motion.p
-                  className="text-center text-2xl font-extrabold lowercase text-white"
-                  initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                  className="text-center text-[2rem] font-extrabold lowercase text-white"
+                  initial={{ opacity: 0, y: 18, scale: 0.86 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.35, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.55, delay: 2.45, ease: [0.34, 1.56, 0.64, 1] }}
                 >
-                  character ready!
+                  character created!
                 </motion.p>
               </motion.div>
             )}
