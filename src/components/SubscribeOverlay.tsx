@@ -3,7 +3,11 @@ import { Crown, Gem, Loader2, Camera, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import OverlayShell from "./overlay/OverlayShell";
 import { GoldButton, DismissLink } from "./overlay/OverlayPrimitives";
-import { IntroScreenTitle } from "./overlay/IntroSequencePrimitives";
+const IntroScreenTitle = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="mb-0 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+    {children}
+  </h2>
+);
 
 const TOTAL_STEPS = 3;
 
