@@ -6,10 +6,10 @@
 
 @layer base {
   :root {
-    --background: 0 0% 15%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 96%;
 
-    --card: 0 0% 11%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 96%;
 
     --popover: 0 0% 11%;
@@ -59,7 +59,7 @@
     --sidebar-ring: 0 0% 98%;
 
     /* custom tokens */
-    --nav: 0 0% 4%;
+    --nav: 0 0% 0%;
     --nav-foreground: 0 0% 98%;
     --surface-dark: 0 0% 4%;
     --surface-dark-foreground: 0 0% 98%;

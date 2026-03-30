@@ -27,16 +27,11 @@ const Home = () => {
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
-  /* Auto-open guided creator ONLY on actual full page refresh.
-     We set a flag in sessionStorage on first open so SPA re-mounts
-     of this component never re-trigger the animation. The flag is
-     cleared only by an actual browser refresh (beforeunload). */
+
   useEffect(() => {
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
     if (alreadyOpened || dismissed) return;
-
-    // Mark so it never fires again this page session
     sessionStorage.setItem("vizura_auto_opened", "1");
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setSkipWelcome(false);
@@ -45,17 +40,13 @@ const Home = () => {
 
   useEffect(() => {
     const fetchLatestPhotos = async () => {
-      if (!user) {
-        setImages([]);
-        return;
-      }
+      if (!user) { setImages([]); return; }
       const { data } = await supabase
         .from("generations")
         .select("id, image_urls, prompt, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(4);
-
       const latest = (data ?? [])
         .flatMap((generation: any) =>
           (generation.image_urls ?? []).slice(0, 1).map((url: string, index: number) => ({
@@ -66,16 +57,13 @@ const Home = () => {
           })),
         )
         .slice(0, 4);
-
       setImages(latest);
     };
-
     void fetchLatestPhotos();
   }, [user]);
 
   const handleOpenCreator = () => {
     sessionStorage.removeItem(DISMISSED_KEY);
-    // Logged-in users pressing the button skip welcome slides
     if (user) {
       sessionStorage.removeItem(FLOW_STATE_KEY);
       setSkipWelcome(true);
@@ -181,10 +169,7 @@ const Home = () => {
             <button
               type="button"
               className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-card text-foreground"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedImage(null);
-              }}
+              onClick={(e) => { e.stopPropagation(); setSelectedImage(null); }}
             >
               <X size={18} strokeWidth={2.5} />
             </button>
@@ -193,7 +178,7 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col justify-center px-4 py-3">
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-4">
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
@@ -215,7 +200,6 @@ const Home = () => {
 
         <section className="mt-3 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
           <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
-
           <div className="grid grid-cols-4 gap-2">
             {photoSlots.map((photo) => {
               const isPlaceholder = !photo.url;
@@ -223,9 +207,7 @@ const Home = () => {
                 <button
                   key={photo.id}
                   type="button"
-                  onClick={() => {
-                    if (!isPlaceholder) setSelectedImage(photo);
-                  }}
+                  onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
                   className={`overflow-hidden rounded-[1rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
                     isPlaceholder
                       ? "border-dashed border-foreground/20 bg-secondary"
@@ -263,6 +245,9 @@ const Home = () => {
             settings
           </button>
         </div>
+
+        {/* Divider line and black empty space */}
+        <div className="mt-4 border-t border-white/20 flex-1" />
       </main>
     </div>
   );
