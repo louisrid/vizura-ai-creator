@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Gem, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { Zap, Gem, ArrowLeft, ArrowRight, Loader2, RefreshCw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { lovable } from "@/integrations/lovable/index";
