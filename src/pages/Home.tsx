@@ -160,7 +160,7 @@ const Home = () => {
   }, [images]);
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative h-[calc(100dvh-73px)] overflow-hidden bg-background">
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
@@ -193,7 +193,7 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 py-3">
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col justify-center px-4 py-3">
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
@@ -213,10 +213,10 @@ const Home = () => {
           </button>
         </div>
 
-        <section className="mt-3 flex min-h-0 flex-1 flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
+        <section className="mt-3 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
           <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
 
-          <div className="grid flex-1 grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {photoSlots.map((photo) => {
               const isPlaceholder = !photo.url;
               return (

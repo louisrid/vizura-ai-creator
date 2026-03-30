@@ -243,19 +243,23 @@ interface GuidedCreatorProps {
  *
  * After create: internal "cooking" phase (loading → success → navigate)
  */
-const TOTAL = 13;
+/* When skipWelcome is true we completely remove slides 0 & 1 from the flow.
+   All step indices shift down by 2 so the trait slides start at step 0. */
+const TOTAL_FULL = 13;
+const TOTAL_SKIP = 11; // 13 - 2 welcome slides
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const isLoggedIn = !!user;
 
-  // When skipWelcome, internal steps still 0-12 but we start at 2 and hide first 2 dots
-  const minStep = skipWelcome ? 2 : 0;
+  const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
+  // Offset maps external step (0-based) to the internal slide meaning
+  const offset = skipWelcome ? 2 : 0;
 
-  const [step, setStep] = useState(minStep);
-  const dotTotal = skipWelcome ? TOTAL - 2 : TOTAL;
-  const dotCurrent = skipWelcome ? step - 2 : step;
+  const [step, setStep] = useState(0);
+  const dotTotal = TOTAL;
+  const dotCurrent = step;
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const [summaryShake, setSummaryShake] = useState(false);
@@ -280,8 +284,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         selections?: Partial<GuidedSelections>;
         skipWelcome?: boolean;
       };
-      const restoredMinStep = saved?.skipWelcome ? 2 : 0;
-      setStep(Math.max(saved?.step ?? restoredMinStep, restoredMinStep));
+      setStep(Math.max(saved?.step ?? 0, 0));
       setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
       return true;
     } catch {
@@ -379,13 +382,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => clearTimeout(t);
   }, [cookingPhase]);
 
-  const isWelcomeSlide = step === 0;
-  const isIntroSlide = step === 1;
-  const isDetailsA = step === 9;
-  const isDetailsB = step === 10;
-  const isDetailsC = step === 11;
-  const isCreateSlide = step === 12;
-  const currentTraitIndex = step >= 2 && step <= 8 ? step - 2 : -1;
+  // Map step to internal slide index (accounting for removed welcome slides)
+  const internalStep = step + offset;
+  const isWelcomeSlide = internalStep === 0 && !skipWelcome;
+  const isIntroSlide = internalStep === 1 && !skipWelcome;
+  const isDetailsA = internalStep === 9;
+  const isDetailsB = internalStep === 10;
+  const isDetailsC = internalStep === 11;
+  const isCreateSlide = internalStep === 12;
+  const currentTraitIndex = internalStep >= 2 && internalStep <= 8 ? internalStep - 2 : -1;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= 7) return null;
@@ -462,15 +467,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
-    setTimeout(() => { animating.current = false; }, 80);
+    setTimeout(() => { animating.current = false; }, 120);
   }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
   const goBack = useCallback(() => {
-    if (animating.current || step <= minStep || cookingPhase !== "none") return;
+    if (animating.current || step <= 0 || cookingPhase !== "none") return;
     animating.current = true;
     setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 80);
-  }, [step, cookingPhase]);
+    setTimeout(() => { animating.current = false; }, 120);
+  }, [step, cookingPhase, TOTAL]);
 
   const handleSkipToLogin = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
@@ -478,7 +483,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     navigate("/auth?redirect=/");
   };
 
-  const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;
+  const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;  
 
   // Prevent any form submissions from causing page reload
   const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
@@ -831,7 +836,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {!isCooking && (
           <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
             <div className="mb-4 flex h-14 items-center gap-4">
-              <NavArrow direction="left" onClick={goBack} disabled={step <= minStep} />
+              <NavArrow direction="left" onClick={goBack} disabled={step <= 0} />
               <NavArrow
                 direction="right"
                 onClick={advance}
