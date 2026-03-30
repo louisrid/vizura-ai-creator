@@ -48,23 +48,23 @@ const IntroNavArrow = ({
   </button>
 );
 
-/* ── ambient glow background — rich purple aurora ── */
+/* ── ambient glow background — subtle purple aurora ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     <motion.div
-      className="absolute rounded-full blur-[140px]"
+      className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(270 80% 40% / 0.6), hsl(240 90% 25% / 0.4), transparent 70%)",
+        background: "radial-gradient(circle, hsl(270 70% 35% / 0.3), hsl(240 80% 22% / 0.18), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
     />
     <motion.div
-      className="absolute rounded-full blur-[120px]"
+      className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(220 80% 30% / 0.55), hsl(260 70% 28% / 0.35), transparent 65%)",
+        background: "radial-gradient(circle, hsl(220 70% 28% / 0.25), hsl(260 60% 25% / 0.15), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -73,7 +73,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(280 70% 42% / 0.45), hsl(200 70% 28% / 0.25), transparent 60%)",
+        background: "radial-gradient(circle, hsl(280 60% 38% / 0.2), hsl(200 60% 25% / 0.1), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -107,10 +107,8 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const pendingActionRef = useRef<(() => void) | null>(null);
   const prevOpenRef = useRef(open);
 
-  // Track open changes — if closing externally (dismiss), trigger shatter
   useEffect(() => {
     if (prevOpenRef.current && !open && visible && !shattering) {
-      // External close (e.g. dismiss) — trigger shatter
       setShattering(true);
     }
     if (open && !prevOpenRef.current) {
@@ -130,11 +128,8 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
     pendingActionRef.current = null;
     setVisible(false);
     setShattering(false);
-    if (onDismiss && !open) {
-      // Already dismissed externally, just clean up
-    }
     if (onExited) onExited();
-  }, [onExited, onDismiss, open]);
+  }, [onExited]);
 
   const advance = useCallback(() => {
     setStep((s) => {
@@ -208,8 +203,6 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
 
   const isLastStep = step === totalSteps - 1;
 
-  const contentTransition = { duration: 0.05, ease: "linear" as const };
-
   if (!mounted) return null;
 
   return createPortal(
@@ -227,16 +220,16 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
         >
             <AmbientGlow />
             <div className="relative flex-1 overflow-hidden">
-              <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
+              <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "50%", transform: "translateY(-50%)" }}>
                 <div className="mx-auto flex w-full max-w-xs flex-col items-center">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={step}
                       className="w-full"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.05, ease: "linear" }}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
                     >
                       {children(step)}
                     </motion.div>
@@ -244,7 +237,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                 </div>
               </div>
 
-              <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "68%" }}>
+              <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "75%" }}>
                 {showNav && (
                   <>
                     <div className={`mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>

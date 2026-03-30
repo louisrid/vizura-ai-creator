@@ -62,9 +62,9 @@ const CharacterCreator = () => {
 
   const [characterCount, setCharacterCount] = useState<number | null>(null);
   const [showGuided, setShowGuided] = useState(false);
+  const [skipWelcome, setSkipWelcome] = useState(false);
   const [guidedReady, setGuidedReady] = useState(false);
 
-  // Fetch character count
   useEffect(() => {
     const fetchState = async () => {
       if (user) {
@@ -78,10 +78,10 @@ const CharacterCreator = () => {
     fetchState();
   }, [user]);
 
-  // Auto-launch guided for first-time / zero-character users
   useEffect(() => {
     if (!guidedReady || isEditing) return;
     if (characterCount === 0) {
+      setSkipWelcome(false);
       setShowGuided(true);
     }
   }, [guidedReady, characterCount, isEditing]);
@@ -134,7 +134,6 @@ const CharacterCreator = () => {
 
   const saveCharacter = async () => {
     if (!user) {
-      // Store draft and redirect to sign in
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
         characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
       }));
@@ -230,7 +229,6 @@ const CharacterCreator = () => {
     setAge(selections.age);
     setShowGuided(false);
 
-    // Store selections in sessionStorage for persistence through sign-in redirect
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
@@ -245,7 +243,6 @@ const CharacterCreator = () => {
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
-    // Build prompt
     const sk = selections.skin || "tan";
     const bt = selections.bodyType || "regular";
     const ch = selections.chest || "medium";
@@ -259,7 +256,7 @@ const CharacterCreator = () => {
     guidedPromptRef.current = prompt;
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
-    // Show loading immediately
+    // Show loading immediately — this goes to choose-face after, NOT back to guided
     setShowLoading(true);
 
     if (user) {
@@ -290,7 +287,6 @@ const CharacterCreator = () => {
       }
       setIsSaving(false);
     }
-    // For non-logged-in users, loading screen plays, then choose-face will handle sign-in
   }, [user]);
 
   const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {
@@ -306,6 +302,10 @@ const CharacterCreator = () => {
     setShowGuided(false);
   }, []);
 
+  const handleLaunchGuided = () => {
+    setSkipWelcome(true);
+    setShowGuided(true);
+  };
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -315,6 +315,7 @@ const CharacterCreator = () => {
         open={showGuided}
         onComplete={handleGuidedComplete}
         onExit={handleGuidedExit}
+        skipWelcome={skipWelcome}
       />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
@@ -322,7 +323,7 @@ const CharacterCreator = () => {
           <PageTitle className="mb-0">create character</PageTitle>
           {!showGuided && (
             <button
-              onClick={() => setShowGuided(true)}
+              onClick={handleLaunchGuided}
               className="flex items-center gap-1.5 text-xs font-extrabold lowercase text-foreground/50 hover:text-foreground transition-colors"
             >
               <Sparkles size={14} strokeWidth={2.5} />
