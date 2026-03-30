@@ -1,15 +1,4 @@
-const isReloadNavigation = () => {
-  if (typeof window === "undefined") return false;
-
-  const navigationEntry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-  if (navigationEntry?.type === "reload") return true;
-
-  const legacyNavigation = (performance as Performance & {
-    navigation?: { type?: number; TYPE_RELOAD?: number };
-  }).navigation;
-
-  return legacyNavigation?.type === legacyNavigation?.TYPE_RELOAD;
-};
+import { supabase } from "@/integrations/supabase/client";
 
 const clearBrowserState = () => {
   try {
@@ -36,8 +25,14 @@ const clearBrowserState = () => {
   }
 };
 
-export const applyReloadReset = () => {
-  if (typeof window === "undefined" || !isReloadNavigation()) return;
+export const applyReloadReset = async () => {
+  if (typeof window === "undefined") return;
+
+  try {
+    await supabase.auth.signOut({ scope: "local" });
+  } catch {
+    // ignore signout failures during reset
+  }
 
   clearBrowserState();
 
