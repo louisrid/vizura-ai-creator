@@ -769,17 +769,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
           >
             <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.0, ease: "easeOut" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
             />
             <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
+              transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
             />
           </motion.svg>
           <motion.p
@@ -787,7 +787,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 1.6, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.5, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
