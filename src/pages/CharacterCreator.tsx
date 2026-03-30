@@ -308,6 +308,9 @@ const CharacterCreator = () => {
     setShowGuided(true);
   };
 
+  // Hide page content entirely when guided or loading overlays are active
+  const pageHidden = showGuided || showLoading;
+
   return (
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
@@ -319,6 +322,7 @@ const CharacterCreator = () => {
         skipWelcome={skipWelcome}
       />
 
+      {!pageHidden && (
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
         <div className="flex items-center justify-between mb-8">
           <PageTitle className="mb-0">create character</PageTitle>
@@ -463,6 +467,7 @@ const CharacterCreator = () => {
           </Button>
         </div>
       </main>
+      )}
     </div>
   );
 };

@@ -185,7 +185,7 @@ const MyCharacters = () => {
                 <button
                   onClick={() => !deleting && setDeleteTarget(null)}
                   disabled={deleting}
-                  className="flex-1 h-14 rounded-2xl bg-foreground/20 text-sm font-extrabold lowercase text-white transition-colors hover:bg-foreground/30 disabled:opacity-50"
+                  className="flex-1 h-14 rounded-2xl bg-white text-sm font-extrabold lowercase text-black transition-colors active:bg-white/70 disabled:opacity-50"
                 >
                   go back
                 </button>

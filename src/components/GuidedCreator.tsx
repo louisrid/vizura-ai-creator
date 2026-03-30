@@ -416,8 +416,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <motion.button
               onClick={(e) => { e.stopPropagation(); randomiseName(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
-              whileHover={{ scale: 1.1 }}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
               title="randomise name"
             >
               <RefreshCw size={16} strokeWidth={2.5} />
@@ -444,8 +443,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <motion.button
               onClick={(e) => { e.stopPropagation(); randomiseAge(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
-              whileHover={{ scale: 1.1 }}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
               title="randomise age"
             >
               <RefreshCw size={16} strokeWidth={2.5} />
@@ -467,11 +465,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
           </motion.h2>
           {!isFirstFree && (
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-2 flex items-center gap-2">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/60">{gems} gems</span>
             </div>
           )}
+          <motion.button
+            onClick={(e) => { e.stopPropagation(); advance(); }}
+            className="mt-5 h-14 w-[80vw] max-w-[20rem] rounded-2xl text-base font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
+            style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Zap size={18} strokeWidth={2.5} />
+            create
+          </motion.button>
         </div>
       );
     }
@@ -512,20 +521,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: isCreateSlide ? "62%" : "72%" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
               {isCreateSlide ? (
                 <div className="mb-4 flex flex-col items-center gap-4">
-                  <motion.button
-                    onClick={(e) => { e.stopPropagation(); advance(); }}
-                    className="h-14 w-[80vw] max-w-[20rem] rounded-2xl text-base font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
-                    style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
-                    animate={{ scale: [1, 1.03, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Zap size={18} strokeWidth={2.5} />
-                    create
-                  </motion.button>
                   <div className="flex h-14 items-center gap-4">
                     <NavArrow direction="left" onClick={goBack} disabled={false} />
                     <NavArrow direction="right" onClick={advance} disabled={false} />
