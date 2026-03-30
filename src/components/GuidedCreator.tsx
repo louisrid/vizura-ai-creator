@@ -519,6 +519,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
 
               {!isCreateSlide && (
+                <>
+                  <div className="mb-4 flex h-14 items-center gap-4">
+                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                    <NavArrow
+                      direction="right"
+                      onClick={advance}
+                      disabled={!canAdvance && currentTraitIndex >= 0}
+                    />
+                  </div>
+                  <div className="flex h-3 items-center">
+                    <Dots current={step} total={TOTAL} />
+                  </div>
+                </>
+              )}
+
+              {!isCreateSlide && (
                 <button
                   onClick={(e) => { e.stopPropagation(); handleSkipToQuick(); }}
                   className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
