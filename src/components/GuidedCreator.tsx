@@ -83,7 +83,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(270 70% 35% / 0.3), hsl(240 80% 22% / 0.18), transparent 70%)",
+        background: "radial-gradient(circle, hsl(270 70% 35% / 0.35), hsl(240 80% 22% / 0.2), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -92,7 +92,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(220 70% 28% / 0.25), hsl(260 60% 25% / 0.15), transparent 65%)",
+        background: "radial-gradient(circle, hsl(220 70% 28% / 0.28), hsl(260 60% 25% / 0.17), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -101,7 +101,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(280 60% 38% / 0.2), hsl(200 60% 25% / 0.1), transparent 60%)",
+        background: "radial-gradient(circle, hsl(280 60% 38% / 0.22), hsl(200 60% 25% / 0.12), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -133,9 +133,9 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     onClick={(e) => { e.stopPropagation(); onClick(); }}
     animate={
       selected
-        ? { scale: [1, 1.15, 1], transition: { duration: 0.3 } }
+        ? { scale: [1, 1.15, 1], transition: { duration: 0.15 } }
         : shaking
-          ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.4 } }
+          ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
     className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors ${
@@ -268,9 +268,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (traitIdx >= 0 && traitIdx < 7) {
       const key = TRAITS[traitIdx].key;
       if (!selectionsRef.current[key]) {
-        triggerShake();
-        return;
-      }
+    triggerShake();
+    return;
+  }
+  setShaking(true);
+  setTimeout(() => setShaking(false), 300);
     }
     if (isSummarySlide) {
       const s = selectionsRef.current;
@@ -289,14 +291,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
-    setTimeout(() => { animating.current = false; }, 100);
+    setTimeout(() => { animating.current = false; }, 50);
   }, [step, TOTAL, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0) return;
     animating.current = true;
     setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 100);
+    setTimeout(() => { animating.current = false; }, 50);
   }, [step]);
 
   const handleSkipToQuick = () => {
@@ -320,14 +322,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         initial: { opacity: 0, scale: 0.8 },
         animate: { opacity: 1, scale: 1 },
         exit: { opacity: 0, scale: 1.15 },
-        transition: { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] },
+        transition: { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] },
       };
     }
     return {
       initial: { opacity: 0, x: 20 },
       animate: { opacity: 1, x: 0 },
       exit: { opacity: 0, x: -20 },
-      transition: { duration: 0.15, ease: "easeOut" as const },
+      transition: { duration: 0.1, ease: "easeOut" as const },
     };
   };
 
@@ -427,12 +429,23 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const isFirstFree = !user;
       return (
         <div className="flex w-full flex-col items-center">
-          <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="🚀" index={0} />
-          </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
-            {isFirstFree ? "your first character\nis free" : "ready to create?"}
-          </h2>
+          <motion.h2
+            className="text-center text-[2.8rem] font-[900] lowercase leading-tight tracking-tight text-white"
+            animate={{ textShadow: ["0 0 20px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.3)", "0 0 20px rgba(255,255,255,0)"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
+          </motion.h2>
+          {isFirstFree && (
+            <motion.div
+              className="mt-1 flex items-center gap-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.4, 0.7, 0.4] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <span className="text-lg">✨</span>
+            </motion.div>
+          )}
           {!isFirstFree && (
             <div className="mt-3 flex items-center gap-2">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
@@ -456,7 +469,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
+          transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
           onClick={advance}
         >
           <AmbientGlow />
@@ -480,16 +493,32 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
 
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "75%" }}>
-              {isCreateSlide ? (
-                <button
+              <div className="mb-4 flex flex-col items-center gap-4">
+                <motion.button
                   onClick={(e) => { e.stopPropagation(); advance(); }}
-                  className="h-14 w-[80vw] max-w-[20rem] rounded-2xl text-base font-[900] lowercase tracking-tight active:scale-[0.95] flex items-center justify-center gap-2"
+                  className="h-14 w-[80vw] max-w-[20rem] rounded-2xl text-base font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
                   style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
+                  animate={{ scale: [1, 1.03, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Zap size={18} strokeWidth={2.5} />
-                  {!user ? "create · free" : "create · 30 gems"}
-                </button>
-              ) : (
+                  create
+                </motion.button>
+                <div className="flex h-14 items-center gap-4">
+                  <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                  <NavArrow
+                    direction="right"
+                    onClick={advance}
+                    disabled={false}
+                  />
+                </div>
+                <div className="flex h-3 items-center">
+                  <Dots current={step} total={TOTAL} />
+                </div>
+              </div>
+
+              {!isCreateSlide && (
                 <>
                   <div className="mb-4 flex h-14 items-center gap-4">
                     <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
