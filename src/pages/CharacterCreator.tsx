@@ -62,7 +62,6 @@ const CharacterCreator = () => {
   const isEditing = !!editId;
 
   const [characterCount, setCharacterCount] = useState<number | null>(null);
-  const [hasSeenWelcome, setHasSeenWelcome] = useState<boolean | null>(null);
   const [showGuided, setShowGuided] = useState(false);
   const [guidedReady, setGuidedReady] = useState(false);
 
