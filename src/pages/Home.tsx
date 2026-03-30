@@ -43,21 +43,6 @@ const Home = () => {
     setShowGuided(true);
   }, []);
 
-  /* Clear flags AND sign out on actual browser refresh so
-     the animation replays fresh on next load */
-  useEffect(() => {
-    const clearOnRefresh = () => {
-      sessionStorage.removeItem("vizura_auto_opened");
-      sessionStorage.removeItem(DISMISSED_KEY);
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      // Sign out synchronously via localStorage signal — the auth
-      // provider will pick it up on next page load
-      try { supabase.auth.signOut(); } catch {}
-    };
-    window.addEventListener("beforeunload", clearOnRefresh);
-    return () => window.removeEventListener("beforeunload", clearOnRefresh);
-  }, []);
-
   useEffect(() => {
     const fetchLatestPhotos = async () => {
       if (!user) {
