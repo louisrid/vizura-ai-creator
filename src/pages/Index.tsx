@@ -176,7 +176,7 @@ const Index = () => {
             </label>
             {characters.length === 0 && user && (
               <button
-                onClick={() => navigate("/")}
+                onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
                 className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
               >
                 create your first character →
