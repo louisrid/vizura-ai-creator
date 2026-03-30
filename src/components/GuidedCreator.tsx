@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, ArrowLeft, ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
+import { Zap, ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -81,14 +81,14 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Background glow — subtle monochrome aurora ── */
+/* ── Background glow — deep blue aurora ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     <motion.div
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(0 0% 100% / 0.06), hsl(0 0% 82% / 0.03), transparent 70%)",
+        background: "radial-gradient(circle, hsl(220 80% 40% / 0.10), hsl(210 70% 30% / 0.05), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -97,7 +97,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(0 0% 96% / 0.05), hsl(0 0% 74% / 0.025), transparent 65%)",
+        background: "radial-gradient(circle, hsl(230 75% 45% / 0.08), hsl(215 60% 25% / 0.04), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -106,7 +106,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(0 0% 100% / 0.04), hsl(0 0% 70% / 0.02), transparent 60%)",
+        background: "radial-gradient(circle, hsl(225 85% 50% / 0.06), hsl(200 60% 30% / 0.03), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -183,13 +183,14 @@ const CookingGreenTick = () => (
   </motion.svg>
 );
 
+/* ── Smooth ripple loader — no flashing, always visible ── */
 const RippleLoader = () => {
   const rings = [0, 1, 2, 3, 4];
   const colors = [
     "hsl(195, 100%, 55%)",
     "hsl(50, 100%, 50%)",
     "hsl(140, 100%, 50%)",
-    "hsl(330, 100%, 50%)",
+    "hsl(330, 80%, 55%)",
     "hsl(210, 100%, 55%)",
   ];
   return (
@@ -208,8 +209,8 @@ const RippleLoader = () => {
             marginLeft: -10,
           }}
           animate={{
-            scale: [0, 4, 6],
-            opacity: [0.8, 0.4, 0],
+            scale: [1, 3, 5],
+            opacity: [1, 0.7, 0.15],
             borderColor: [
               colors[i % colors.length],
               colors[(i + 1) % colors.length],
@@ -217,28 +218,53 @@ const RippleLoader = () => {
             ],
           }}
           transition={{
-            duration: 3,
+            duration: 4,
             repeat: Infinity,
-            delay: i * 0.6,
+            delay: i * 0.8,
             ease: "easeOut",
           }}
         />
       ))}
       <motion.div
         className="absolute rounded-full"
-        style={{ width: 10, height: 10, background: "hsl(195, 100%, 55%)" }}
+        style={{ width: 12, height: 12 }}
         animate={{
-          scale: [1, 1.3, 1],
+          scale: [1, 1.2, 1],
           backgroundColor: [
             "hsl(195, 100%, 55%)",
             "hsl(50, 100%, 50%)",
             "hsl(140, 100%, 50%)",
+            "hsl(330, 80%, 55%)",
             "hsl(195, 100%, 55%)",
           ],
         }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
+  );
+};
+
+/* ── Bouncy word animation for welcome slide ── */
+const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
+  const words = text.split(" ");
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block mr-[0.3em]"
+          initial={{ opacity: 0, y: 30, scale: 0.5 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            duration: 0.5,
+            delay: delayStart + i * 0.15,
+            ease: [0.34, 1.56, 0.64, 1],
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
   );
 };
 
@@ -268,22 +294,8 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-/*
- * Slide layout:
- *  0 = welcome
- *  1 = intro
- *  2-8 = 7 trait slides
- *  9 = details A (summary pills + name/age)
- * 10 = details B (description textarea)
- * 11 = details C (reference image)
- * 12 = create button
- *
- * After create: internal "cooking" phase (loading → success → navigate)
- */
-/* When skipWelcome is true we completely remove slides 0 & 1 from the flow.
-   All step indices shift down by 2 so the trait slides start at step 0. */
 const TOTAL_FULL = 13;
-const TOTAL_SKIP = 11; // 13 - 2 welcome slides
+const TOTAL_SKIP = 11;
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
@@ -291,7 +303,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
-  // Offset maps external step (0-based) to the internal slide meaning
   const offset = skipWelcome ? 2 : 0;
 
   const [step, setStep] = useState(0);
@@ -306,7 +317,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Internal cooking phase - replaces separate CreationLoadingOverlay
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
 
@@ -419,7 +429,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => clearTimeout(t);
   }, [cookingPhase]);
 
-  // Map step to internal slide index (accounting for removed welcome slides)
   const internalStep = step + offset;
   const isWelcomeSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
@@ -474,7 +483,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
 
-    // Trait slides require selection
     if (currentTraitIndex >= 0 && currentTraitIndex < 7) {
       const key = TRAITS[currentTraitIndex].key;
       if (!selectionsRef.current[key]) {
@@ -483,7 +491,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       }
     }
 
-    // Details A requires name + age
     if (isDetailsA) {
       const s = selectionsRef.current;
       const missingName = !s.characterName.trim();
@@ -496,7 +503,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       }
     }
 
-    // Create slide → start cooking inside same overlay
     if (isCreateSlide) {
       setCookingPhase("loading");
       return;
@@ -520,9 +526,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     window.location.href = "/auth?redirect=/";
   };
 
+  const handleClose = () => {
+    sessionStorage.removeItem(FLOW_STATE_KEY);
+    setVisible(false);
+    onExit(selectionsRef.current);
+  };
+
   const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;  
 
-  // Prevent any form submissions from causing page reload
   const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
 
   if (!mounted || !visible) return null;
@@ -540,10 +551,24 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="flex w-full flex-col items-center">
           <h2 className="mt-1 text-center lowercase leading-tight tracking-tight text-white">
-            <span className="block text-[1.4rem] font-[800]">welcome to</span>
-            <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura!</span>
+            <BouncyWords text="welcome to" className="block text-[1.4rem] font-[800]" delayStart={0.2} />
+            <motion.span
+              className="block text-[5.5rem] font-[900] leading-[0.95]"
+              initial={{ opacity: 0, scale: 0.3, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              vizura!
+            </motion.span>
           </h2>
-          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
+          <motion.p
+            className="mt-3 text-sm font-extrabold lowercase text-white/40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.4 }}
+          >
+            tap to continue
+          </motion.p>
         </div>
       );
     }
@@ -597,7 +622,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
             add the details…
           </h2>
-          {/* Trait summary pills */}
           <div className="mt-4 flex flex-wrap justify-center gap-1.5">
             {TRAITS.map((t) => {
               const v = selections[t.key];
@@ -609,7 +633,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               );
             })}
           </div>
-          {/* Name input */}
           <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
             <motion.input
               animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
@@ -630,7 +653,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <RefreshCw size={16} strokeWidth={2.5} />
             </motion.button>
           </div>
-          {/* Age input */}
           <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem]">
             <motion.input
               animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
@@ -736,7 +758,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <div className="flex w-full flex-col items-center justify-center mt-3">
+        <div className="flex w-full flex-col items-center justify-center mt-5">
           {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
@@ -847,6 +869,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     >
       <AmbientGlow />
 
+      {/* Close / exit button — top right, hidden during cooking */}
+      {!isCooking && (
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+          className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors active:scale-95"
+          aria-label="close"
+        >
+          <X size={18} strokeWidth={2.5} />
+        </button>
+      )}
+
       <div className="relative flex-1 overflow-hidden">
         <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "44%", transform: "translateY(-50%)" }}>
           <div className="w-full max-w-xs mx-auto flex flex-col items-center">
@@ -888,7 +922,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
-                className="mt-5 text-xs font-extrabold lowercase text-white/40 underline hover:text-white/60 transition-colors"
+                onTouchEnd={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
+                className="mt-5 text-xs font-extrabold lowercase text-white/40 underline hover:text-white/60 transition-colors z-50 relative px-4 py-2"
               >
                 skip to login
               </button>
