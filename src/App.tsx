@@ -69,7 +69,7 @@ const AppRoutes = () => {
     <>
       <Header />
       <Routes location={location}>
-        <Route path="/" element={<CharacterCreator />} />
+        <Route path="/" element={<Home />} />
         <Route path="/generate-face" element={<ChooseFace />} />
         <Route path="/choose-face" element={<ChooseFace />} />
         <Route path="/create" element={<Index />} />
