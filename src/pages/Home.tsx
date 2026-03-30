@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Camera, Gem, Settings, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -27,28 +27,31 @@ const Home = () => {
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
-  const hasAutoOpened = useRef(false);
-
-  /* Auto-open guided creator on full page refresh */
+  /* Auto-open guided creator ONLY on actual full page refresh.
+     We set a flag in sessionStorage on first open so SPA re-mounts
+     of this component never re-trigger the animation. The flag is
+     cleared only by an actual browser refresh (beforeunload). */
   useEffect(() => {
-    if (hasAutoOpened.current) return;
-    hasAutoOpened.current = true;
-
-    // Check if this is a fresh page load (not an in-app navigation)
+    const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
-    if (dismissed) return; // User explicitly closed the creator this session
+    if (alreadyOpened || dismissed) return;
 
-    // Detect full refresh: performance nav type "reload" or "navigate" (first load)
-    const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
-    const navType = navEntries[0]?.type;
-    const isFreshLoad = navType === "reload" || navType === "navigate";
+    // Mark so it never fires again this page session
+    sessionStorage.setItem("vizura_auto_opened", "1");
+    sessionStorage.removeItem(FLOW_STATE_KEY);
+    setSkipWelcome(false);
+    setShowGuided(true);
+  }, []);
 
-    if (isFreshLoad) {
-      // Clear any saved flow state so it starts fresh from slide 1
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      setSkipWelcome(false);
-      setShowGuided(true);
-    }
+  /* Clear the auto-opened flag on actual browser refresh so
+     the animation replays on next load */
+  useEffect(() => {
+    const clearOnRefresh = () => {
+      sessionStorage.removeItem("vizura_auto_opened");
+      sessionStorage.removeItem(DISMISSED_KEY);
+    };
+    window.addEventListener("beforeunload", clearOnRefresh);
+    return () => window.removeEventListener("beforeunload", clearOnRefresh);
   }, []);
 
   useEffect(() => {
