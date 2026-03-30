@@ -1,7 +1,52 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { IntroDots, IntroNavArrow } from "./IntroSequencePrimitives";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+const LIGHT_BLUE = "hsl(195 100% 50%)";
+const PURE_WHITE = "hsl(0 0% 100%)";
+
+const IntroDots = ({ current, total }: { current: number; total: number }) => (
+  <div className="flex items-center gap-2">
+    {Array.from({ length: total }).map((_, i) => (
+      <div
+        key={i}
+        className="rounded-full transition-all duration-200"
+        style={{
+          width: i === current ? 10 : 8,
+          height: i === current ? 10 : 8,
+          background: i === current ? LIGHT_BLUE : PURE_WHITE,
+        }}
+      />
+    ))}
+  </div>
+);
+
+const IntroNavArrow = ({
+  direction, onClick, onLongPress, disabled,
+}: {
+  direction: "left" | "right"; onClick: () => void; onLongPress?: () => void; disabled?: boolean;
+}) => (
+  <button
+    onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
+    onPointerDown={onLongPress}
+    className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
+    style={{
+      backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
+      border: direction === "right" ? `5px solid ${LIGHT_BLUE}` : "none",
+      boxShadow: direction === "left" ? `inset 0 0 0 5px ${PURE_WHITE}` : "none",
+      borderRadius: 16, outline: "none", padding: 0,
+      cursor: disabled ? "default" : "pointer",
+      transition: "transform 0.05s",
+    }}
+  >
+    {direction === "left" ? (
+      <ArrowLeft size={22} strokeWidth={2.75} style={{ color: PURE_WHITE }} />
+    ) : (
+      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "hsl(0 0% 0%)" }} />
+    )}
+  </button>
+);
 
 /* ── ambient glow background ── */
 const AmbientGlow = () => (

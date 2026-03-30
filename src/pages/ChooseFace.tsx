@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2, Check, RefreshCw, Gem } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import CookingOverlay from "@/components/CookingOverlay";
+import { SignInOverlay } from "@/components/GuidedCreator";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import { sanitiseText } from "@/lib/sanitise";
+
+const STORAGE_KEY = "vizura_character_draft";
 
 const ChooseFace = () => {
   const { user } = useAuth();
@@ -20,20 +22,25 @@ const ChooseFace = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { prompt, characterId } = (location.state as {
+  const { prompt: statePrompt, characterId: stateCharId } = (location.state as {
     prompt?: string;
     characterId?: string;
   }) || {};
+
+  // Try sessionStorage fallback for prompt (e.g. after sign-in redirect)
+  const prompt = statePrompt || sessionStorage.getItem("vizura_guided_prompt") || undefined;
+  const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("vizura_pending_char_id") || undefined);
 
   const [faces, setFaces] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showCooking, setShowCooking] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
   const [rerolling, setRerolling] = useState(false);
 
   useEffect(() => {
-    if (!prompt || !user) { navigate("/"); return; }
+    if (!prompt) { navigate("/"); return; }
     generateFaces();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -41,6 +48,14 @@ const ChooseFace = () => {
   const generateFaces = async () => {
     setLoading(true);
     try {
+      // For demo / non-auth: show placeholder boxes
+      if (!user) {
+        // Simulate with placeholders
+        setFaces([]);
+        setSelectedIndex(null);
+        setLoading(false);
+        return;
+      }
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: { prompt, free_gen: true },
       });
@@ -53,7 +68,6 @@ const ChooseFace = () => {
         }
         throw new Error(data.error);
       }
-      // Take first 3 images for the 3-box layout
       const imgs = data.images || [];
       setFaces(imgs.slice(0, 3));
       setSelectedIndex(null);
@@ -89,18 +103,85 @@ const ChooseFace = () => {
   };
 
   const handleConfirm = async () => {
-    if (selectedIndex === null || !characterId || !user) return;
-    // Save face to character
-    try {
-      const selectedUrl = faces[selectedIndex];
-      await supabase
-        .from("characters")
-        .update({ face_image_url: selectedUrl, generation_prompt: prompt } as any)
-        .eq("id", characterId);
-    } catch {}
-    // Start cooking
-    setShowCooking(true);
+    if (selectedIndex === null) return;
+
+    // If not logged in, require sign-in after face selection
+    if (!user) {
+      // Store selected face index in session
+      sessionStorage.setItem("vizura_selected_face", String(selectedIndex));
+      setShowSignIn(true);
+      return;
+    }
+
+    await finalizeConfirm();
   };
+
+  const finalizeConfirm = async () => {
+    const faceIdx = selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "0");
+
+    // If we still don't have a character, create one from stored draft
+    let cId = characterId;
+    if (!cId && user) {
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const draft = JSON.parse(raw);
+          const charData = {
+            user_id: user.id,
+            name: sanitiseText(draft.characterName, 100) || "new character",
+            country: sanitiseText(draft.skin, 50),
+            age: draft.age || "25",
+            hair: sanitiseText(draft.hairColour, 50),
+            eye: sanitiseText(draft.eye, 50),
+            body: sanitiseText(draft.bodyType, 50),
+            style: sanitiseText(draft.makeup, 50),
+            description: sanitiseText(`${draft.chest} chest, ${draft.hairStyle} hair.`, 500),
+            generation_prompt: prompt || "",
+          };
+          const { data: inserted, error: insertError } = await supabase
+            .from("characters")
+            .insert(charData)
+            .select("id")
+            .single();
+          if (!insertError && inserted) {
+            cId = inserted.id;
+            setCharacterId(cId);
+            sessionStorage.setItem("vizura_pending_char_id", cId);
+          }
+        }
+      } catch {}
+    }
+
+    // Save face to character if we have faces
+    if (cId && faces[faceIdx]) {
+      try {
+        await supabase
+          .from("characters")
+          .update({ face_image_url: faces[faceIdx], generation_prompt: prompt } as any)
+          .eq("id", cId);
+      } catch {}
+    }
+
+    // Clean up session
+    sessionStorage.removeItem("vizura_selected_face");
+    sessionStorage.removeItem("vizura_guided_prompt");
+    sessionStorage.removeItem(STORAGE_KEY);
+
+    // Start cooking for subscribed users, free trial path otherwise
+    if (subscribed) {
+      setShowCooking(true);
+    } else {
+      // Free trial: show paywall after this
+      toast.success("character added!");
+      navigate("/characters");
+    }
+  };
+
+  const handleSignedIn = useCallback(() => {
+    setShowSignIn(false);
+    finalizeConfirm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIndex, characterId, faces, prompt, subscribed]);
 
   const handleCookingComplete = () => {
     setShowCooking(false);
@@ -119,6 +200,7 @@ const ChooseFace = () => {
   return (
     <div className="relative min-h-screen bg-background">
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
+      <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-8">
@@ -139,11 +221,11 @@ const ChooseFace = () => {
           </div>
         )}
 
-        {!loading && faces.length > 0 && (
+        {!loading && (
           <>
-            {/* 3 portrait boxes in a row */}
+            {/* 3 portrait boxes */}
             <div className="grid grid-cols-3 gap-3 mt-4">
-              {faces.map((url, i) => (
+              {faces.length > 0 ? faces.map((url, i) => (
                 <button
                   key={i}
                   onClick={() => setSelectedIndex(i)}
@@ -160,21 +242,33 @@ const ChooseFace = () => {
                     </div>
                   )}
                 </button>
-              ))}
-              {/* Fill remaining slots with placeholders */}
-              {Array.from({ length: Math.max(0, 3 - faces.length) }).map((_, i) => (
-                <div
-                  key={`placeholder-${i}`}
-                  className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card"
-                />
-              ))}
+              )) : (
+                // Placeholder boxes for non-auth users
+                [0, 1, 2].map((i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedIndex(i)}
+                    className={`aspect-[3/4] rounded-2xl border-[5px] transition-all ${
+                      selectedIndex === i
+                        ? "border-neon-yellow bg-card"
+                        : "border-border bg-card hover:border-foreground/40"
+                    }`}
+                  >
+                    {selectedIndex === i && (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Check size={24} strokeWidth={3} className="text-neon-yellow" />
+                      </div>
+                    )}
+                  </button>
+                ))
+              )}
             </div>
 
             {/* Action buttons */}
             <div className="flex gap-3 mt-8">
               <button
                 onClick={handleRegenerate}
-                disabled={rerolling}
+                disabled={rerolling || !user}
                 className="flex-1 h-14 rounded-2xl border-[5px] border-border bg-card text-sm font-extrabold lowercase text-foreground flex items-center justify-center gap-2 transition-colors hover:border-foreground/40 disabled:opacity-50"
               >
                 {rerolling ? (
@@ -197,14 +291,6 @@ const ChooseFace = () => {
               </button>
             </div>
           </>
-        )}
-
-        {!loading && faces.length === 0 && !showPaywall && (
-          <div className="grid grid-cols-3 gap-3 mt-4">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="aspect-[3/4] rounded-2xl border-[5px] border-border bg-card" />
-            ))}
-          </div>
         )}
       </main>
     </div>

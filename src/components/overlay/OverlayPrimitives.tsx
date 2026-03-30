@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { LIGHT_BLUE, LIGHT_BLUE_SOFT, PURE_WHITE } from "./IntroSequencePrimitives";
-
-/* ── shared palette ── */
-export { LIGHT_BLUE };
+export const LIGHT_BLUE = "hsl(195 100% 50%)";
+const LIGHT_BLUE_SOFT = "hsl(195 100% 78%)";
+const PURE_WHITE = "hsl(0 0% 100%)";
 
 export const dotColors = [
   "hsl(50 100% 50%)",
