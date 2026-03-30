@@ -101,6 +101,7 @@ const App = () => (
           <SubscriptionProvider>
             <BrowserRouter>
               <Sonner />
+              <FreshLoadRedirect />
               <ScrollToTop />
               <AnimatedRoutes />
             </BrowserRouter>
