@@ -307,16 +307,6 @@ const CharacterCreator = () => {
     setShowGuided(false);
   }, []);
 
-  const handleMarkWelcomeSeen = useCallback(async () => {
-    if (user) {
-      await supabase
-        .from("profiles")
-        .update({ has_seen_welcome: true } as any)
-        .eq("user_id", user.id);
-    }
-    sessionStorage.setItem(WELCOME_SESSION_KEY, "1");
-    setHasSeenWelcome(true);
-  }, [user]);
 
   return (
     <div className="relative min-h-screen bg-background">
