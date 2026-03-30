@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2, Check, RefreshCw, Gem } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import CookingOverlay from "@/components/CookingOverlay";
@@ -15,6 +16,19 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
 
+/* Pool of emojis for demo face placeholders */
+const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
+
+const getRandomEmojis = (count: number, exclude?: string[]): string[] => {
+  const pool = exclude ? FACE_EMOJIS.filter((e) => !exclude.includes(e)) : [...FACE_EMOJIS];
+  const result: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const idx = Math.floor(Math.random() * pool.length);
+    result.push(pool.splice(idx, 1)[0] || "😊");
+  }
+  return result;
+};
+
 const ChooseFace = () => {
   const { user } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
@@ -27,17 +41,18 @@ const ChooseFace = () => {
     characterId?: string;
   }) || {};
 
-  // Try sessionStorage fallback for prompt (e.g. after sign-in redirect)
   const prompt = statePrompt || sessionStorage.getItem("vizura_guided_prompt") || undefined;
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("vizura_pending_char_id") || undefined);
 
   const [faces, setFaces] = useState<string[]>([]);
+  const [demoEmojis, setDemoEmojis] = useState<string[]>(() => getRandomEmojis(3));
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showCooking, setShowCooking] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [rerolling, setRerolling] = useState(false);
+  const [shuffleKey, setShuffleKey] = useState(0);
 
   useEffect(() => {
     if (!prompt) { navigate("/"); return; }
@@ -48,10 +63,9 @@ const ChooseFace = () => {
   const generateFaces = async () => {
     setLoading(true);
     try {
-      // For demo / non-auth: show placeholder boxes
       if (!user) {
-        // Simulate with placeholders
         setFaces([]);
+        setDemoEmojis(getRandomEmojis(3));
         setSelectedIndex(null);
         setLoading(false);
         return;
@@ -84,6 +98,18 @@ const ChooseFace = () => {
   };
 
   const handleRegenerate = async () => {
+    if (!user) {
+      // Demo mode: shuffle emojis with animation
+      setRerolling(true);
+      setSelectedIndex(null);
+      setTimeout(() => {
+        setDemoEmojis(getRandomEmojis(3, demoEmojis));
+        setShuffleKey((k) => k + 1);
+        setRerolling(false);
+        toast("1 gem used");
+      }, 400);
+      return;
+    }
     setRerolling(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
@@ -105,9 +131,7 @@ const ChooseFace = () => {
   const handleConfirm = async () => {
     if (selectedIndex === null) return;
 
-    // If not logged in, require sign-in after face selection
     if (!user) {
-      // Store selected face index in session
       sessionStorage.setItem("vizura_selected_face", String(selectedIndex));
       setShowSignIn(true);
       return;
@@ -119,7 +143,6 @@ const ChooseFace = () => {
   const finalizeConfirm = async () => {
     const faceIdx = selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "0");
 
-    // If we still don't have a character, create one from stored draft
     let cId = characterId;
     if (!cId && user) {
       try {
@@ -152,7 +175,6 @@ const ChooseFace = () => {
       } catch {}
     }
 
-    // Save face to character if we have faces
     if (cId && faces[faceIdx]) {
       try {
         await supabase
@@ -162,16 +184,13 @@ const ChooseFace = () => {
       } catch {}
     }
 
-    // Clean up session
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
 
-    // Start cooking for subscribed users, free trial path otherwise
     if (subscribed) {
       setShowCooking(true);
     } else {
-      // Free trial: show paywall after this
       toast.success("character added!");
       navigate("/characters");
     }
@@ -243,23 +262,30 @@ const ChooseFace = () => {
                   )}
                 </button>
               )) : (
-                // Placeholder boxes for non-auth users
-                [0, 1, 2].map((i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedIndex(i)}
-                    className={`aspect-[3/4] rounded-2xl border-[5px] transition-all ${
-                      selectedIndex === i
-                        ? "border-neon-yellow bg-card"
-                        : "border-border bg-card hover:border-foreground/40"
-                    }`}
-                  >
-                    {selectedIndex === i && (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <Check size={24} strokeWidth={3} className="text-neon-yellow" />
-                      </div>
-                    )}
-                  </button>
+                /* Demo emoji placeholders */
+                demoEmojis.map((emoji, i) => (
+                  <AnimatePresence mode="wait" key={`slot-${i}`}>
+                    <motion.button
+                      key={`${shuffleKey}-${i}`}
+                      onClick={() => setSelectedIndex(i)}
+                      initial={{ rotateY: 90, opacity: 0 }}
+                      animate={{ rotateY: 0, opacity: 1 }}
+                      exit={{ rotateY: -90, opacity: 0 }}
+                      transition={{ duration: 0.3, delay: i * 0.08 }}
+                      className={`aspect-[3/4] rounded-2xl border-[5px] transition-all flex items-center justify-center ${
+                        selectedIndex === i
+                          ? "border-neon-yellow bg-card"
+                          : "border-border bg-card hover:border-foreground/40"
+                      }`}
+                    >
+                      <span className="text-4xl">{emoji}</span>
+                      {selectedIndex === i && (
+                        <div className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-neon-yellow">
+                          <Check size={14} strokeWidth={3} className="text-neon-yellow-foreground" />
+                        </div>
+                      )}
+                    </motion.button>
+                  </AnimatePresence>
                 ))
               )}
             </div>
@@ -268,8 +294,8 @@ const ChooseFace = () => {
             <div className="flex gap-3 mt-8">
               <button
                 onClick={handleRegenerate}
-                disabled={rerolling || !user}
-                className="flex-1 h-14 rounded-2xl border-[5px] border-border bg-card text-sm font-extrabold lowercase text-foreground flex items-center justify-center gap-2 transition-colors hover:border-foreground/40 disabled:opacity-50"
+                disabled={rerolling}
+                className="flex-1 h-14 rounded-2xl bg-[hsl(0_0%_12%)] text-sm font-extrabold lowercase text-white flex items-center justify-center gap-2 transition-colors hover:bg-[hsl(0_0%_18%)] disabled:opacity-50"
               >
                 {rerolling ? (
                   <Loader2 className="animate-spin" size={16} />

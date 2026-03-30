@@ -16,8 +16,8 @@ const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
   { key: "bodyType", label: "choose her body…", emoji: "💃", options: ["slim", "regular", "curvy"] },
   { key: "chest", label: "choose her chest…", emoji: "👙", options: ["small", "medium", "large"] },
-  { key: "hairStyle", label: "pick her hair…", emoji: "💇", options: ["straight", "curly", "bangs", "short"] },
-  { key: "hairColour", label: "pick her hair colour…", emoji: "🌈", options: ["blonde", "brunette", "black", "pink"] },
+  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs", "short"] },
+  { key: "hairColour", label: "pick her hair colour…", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
   { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["brown", "blue", "green", "hazel"] },
   { key: "makeup", label: "pick her makeup…", emoji: "💄", options: ["natural", "model", "egirl"] },
 ] as const;
@@ -76,35 +76,35 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
   </button>
 );
 
-/* ── Background glow — rich purple aurora ── */
+/* ── Background glow — rich purple aurora, high visibility ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     <motion.div
-      className="absolute rounded-full blur-[160px]"
-      style={{
-        width: "85%", height: "75%", top: "10%", left: "5%",
-        background: "radial-gradient(circle, hsl(270 60% 30% / 0.35), hsl(240 70% 20% / 0.2), transparent 70%)",
-      }}
-      animate={{ x: [0, 60, -30, 20, -50, 0], y: [0, -50, 20, -30, 40, 0], scale: [1, 1.15, 0.9, 1.1, 0.95, 1] }}
-      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-    />
-    <motion.div
       className="absolute rounded-full blur-[140px]"
       style={{
-        width: "65%", height: "65%", bottom: "5%", right: "0%",
-        background: "radial-gradient(circle, hsl(220 70% 25% / 0.3), hsl(260 60% 22% / 0.18), transparent 65%)",
+        width: "90%", height: "80%", top: "5%", left: "0%",
+        background: "radial-gradient(circle, hsl(270 80% 40% / 0.6), hsl(240 90% 25% / 0.4), transparent 70%)",
       }}
-      animate={{ x: [0, -55, 40, -20, 35, 0], y: [0, 30, -40, 20, -25, 0], scale: [1, 0.85, 1.12, 0.9, 1.08, 1] }}
-      transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
+      transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
     />
     <motion.div
-      className="absolute rounded-full blur-[180px]"
+      className="absolute rounded-full blur-[120px]"
       style={{
-        width: "55%", height: "55%", top: "30%", left: "30%",
-        background: "radial-gradient(circle, hsl(280 50% 35% / 0.2), hsl(200 60% 22% / 0.12), transparent 60%)",
+        width: "70%", height: "70%", bottom: "0%", right: "-5%",
+        background: "radial-gradient(circle, hsl(220 80% 30% / 0.55), hsl(260 70% 28% / 0.35), transparent 65%)",
       }}
-      animate={{ x: [0, 35, -25, 15, -30, 0], y: [0, -25, 20, -15, 10, 0], scale: [0.9, 1.08, 0.92, 1.05, 0.95, 0.9] }}
-      transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+      animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
+      transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+    />
+    <motion.div
+      className="absolute rounded-full blur-[160px]"
+      style={{
+        width: "60%", height: "60%", top: "25%", left: "25%",
+        background: "radial-gradient(circle, hsl(280 70% 42% / 0.45), hsl(200 70% 28% / 0.25), transparent 60%)",
+      }}
+      animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
+      transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
     />
   </div>
 );
@@ -214,7 +214,6 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
   }, [visible]);
 
   const getTraitIndex = (s: number) => {
-    // Slide 0 = welcome, slides 1-7 = traits
     const adjusted = s - 1;
     if (adjusted < 0 || adjusted >= 7) return -1;
     return adjusted;
@@ -316,6 +315,24 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
 
   if (!mounted || !visible) return null;
 
+  /* Slide transition variants — create slide gets dramatic animation */
+  const getSlideTransition = () => {
+    if (isCreateSlide) {
+      return {
+        initial: { opacity: 0, scale: 0.8 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 1.15 },
+        transition: { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] },
+      };
+    }
+    return {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      transition: { duration: 0.05, ease: "linear" as const },
+    };
+  };
+
   const renderSlide = () => {
     if (isWelcomeSlide) {
       return (
@@ -323,8 +340,9 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
           <div className="flex h-14 items-end justify-center">
             <BigEmoji emoji="👁️" index={0} />
           </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
-            welcome to<br /><span className="text-[2.8rem]">vizura</span>
+          <h2 className="mt-1 text-center lowercase leading-tight tracking-tight text-white">
+            <span className="block text-[1.4rem] font-[500]" style={{ opacity: 0.7 }}>welcome to</span>
+            <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura</span>
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
         </div>
@@ -364,7 +382,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
             <BigEmoji emoji="✨" index={7} />
           </div>
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
-            here's your character
+            add the details…
           </h2>
           <div className="mt-4 flex flex-wrap justify-center gap-1.5">
             {TRAITS.map((t) => {
@@ -430,6 +448,8 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
     return null;
   };
 
+  const slideProps = getSlideTransition();
+
   return createPortal(
     <AnimatePresence onExitComplete={handleShatterDone}>
       {!shattering && (
@@ -450,10 +470,10 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
                   <motion.div
                     key={step}
                     className="w-full"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.05, ease: "linear" }}
+                    initial={slideProps.initial}
+                    animate={slideProps.animate}
+                    exit={slideProps.exit}
+                    transition={slideProps.transition}
                   >
                     {renderSlide()}
                   </motion.div>
@@ -513,7 +533,6 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   useEffect(() => {
     if (open && !user) setVisible(true);
     if (user && visible) {
-      // User just signed in — fire callback
       onSignedIn();
       setVisible(false);
     }
@@ -590,7 +609,6 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         </div>
         <button
           onClick={() => {
-            // Navigate to account page for email sign-in, preserving session data
             window.location.href = "/account?redirect=" + encodeURIComponent("/choose-face");
           }}
           className="mt-4 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors"

@@ -14,8 +14,8 @@ const PHRASES = [
 ];
 
 const PHRASE_INTERVAL = 1500;
-const LOADING_DURATION = 4500;
-const SUCCESS_HOLD = 1000;
+const LOADING_DURATION = 10000; // 10 seconds
+const SUCCESS_HOLD = 3500; // Hold green tick for 3.5s
 
 /* ── Animated spinner: cycling ring of dots ── */
 const Spinner = () => {
@@ -36,10 +36,10 @@ const Spinner = () => {
             }}
             animate={{
               backgroundColor: [
-                "hsl(40 100% 55%)",   // amber
-                "hsl(185 100% 55%)",  // cyan
-                "hsl(140 100% 50%)",  // green
-                "hsl(40 100% 55%)",   // amber
+                "hsl(40 100% 55%)",
+                "hsl(185 100% 55%)",
+                "hsl(140 100% 50%)",
+                "hsl(40 100% 55%)",
               ],
               scale: [0.6, 1, 0.6],
               opacity: [0.3, 1, 0.3],
@@ -57,7 +57,7 @@ const Spinner = () => {
   );
 };
 
-/* ── Green tick with stroke draw animation ── */
+/* ── Green tick with slower stroke draw animation ── */
 const GreenTick = () => (
   <motion.svg
     width="80"
@@ -66,7 +66,7 @@ const GreenTick = () => (
     fill="none"
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
   >
     <motion.circle
       cx="40"
@@ -77,7 +77,7 @@ const GreenTick = () => (
       fill="none"
       initial={{ pathLength: 0 }}
       animate={{ pathLength: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     />
     <motion.path
       d="M24 42 L34 52 L56 30"
@@ -88,7 +88,7 @@ const GreenTick = () => (
       fill="none"
       initial={{ pathLength: 0 }}
       animate={{ pathLength: 1 }}
-      transition={{ duration: 0.4, delay: 0.35, ease: "easeOut" }}
+      transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
     />
   </motion.svg>
 );
@@ -142,7 +142,7 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
     return () => clearTimeout(t);
   }, [open, phase]);
 
-  // Success → exit transition
+  // Success → exit transition (hold for 3.5s)
   useEffect(() => {
     if (phase !== "success") return;
     const t = setTimeout(() => setPhase("exiting"), SUCCESS_HOLD);
@@ -215,7 +215,7 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
                   className="text-center text-2xl font-extrabold lowercase text-white"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
                 >
                   character created!
                 </motion.p>
