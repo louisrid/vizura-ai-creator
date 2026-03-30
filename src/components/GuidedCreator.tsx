@@ -480,7 +480,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const handleSkipToLogin = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setVisible(false);
-    navigate("/auth?redirect=/");
+    window.location.href = "/auth?redirect=/";
   };
 
   const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;  
