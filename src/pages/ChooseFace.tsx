@@ -184,23 +184,27 @@ const ChooseFace = () => {
       } catch {}
     }
 
+    // Store for highlight animation on My Characters page
+    if (cId) {
+      sessionStorage.setItem("vizura_new_char_highlight", cId);
+    }
+
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
 
-    if (subscribed) {
-      setShowCooking(true);
-    } else {
-      toast.success("character added!");
-      navigate("/characters");
-    }
+    // Always go to My Characters with a smooth transition
+    toast.success("character added!");
+    navigate("/characters");
   };
 
   const handleSignedIn = useCallback(() => {
     setShowSignIn(false);
-    finalizeConfirm();
+    // After signing in, go directly to My Characters
+    toast.success("character added!");
+    navigate("/characters");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedIndex, characterId, faces, prompt, subscribed]);
+  }, [navigate]);
 
   const handleCookingComplete = () => {
     setShowCooking(false);

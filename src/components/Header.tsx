@@ -79,8 +79,8 @@ const Header = () => {
 
   const currentPage = resolvePageName(effectivePath) || resolvePageName(location.pathname);
   const activePath = resolveActivePath(effectivePath);
-  const currentMenuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname));
-  const CurrentIcon = currentMenuItem?.icon;
+  const currentMenuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname)) || menuItems[0];
+  const CurrentIcon = currentMenuItem?.icon || Sparkles;
 
   return (
     <header className="bg-nav sticky top-0 z-40 border-b-[5px] border-white">

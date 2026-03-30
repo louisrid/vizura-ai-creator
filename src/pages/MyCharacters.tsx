@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, X } from "lucide-react";
+import { Plus, Loader2, Camera, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -27,9 +27,8 @@ const MyCharacters = () => {
   const location = useLocation();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
-  const [deleteTarget, setDeleteTarget] = useState<Character | null>(null);
-  const [deleting, setDeleting] = useState(false);
-  const [deletedId, setDeletedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [newCharId, setNewCharId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
@@ -44,52 +43,38 @@ const MyCharacters = () => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(12);
-      if (data) setCharacters(data as Character[]);
+      if (data) {
+        setCharacters(data as Character[]);
+        // Check if there's a newly added character (from session storage)
+        const pendingNew = sessionStorage.getItem("vizura_new_char_highlight");
+        if (pendingNew) {
+          sessionStorage.removeItem("vizura_new_char_highlight");
+          setNewCharId(pendingNew);
+          setTimeout(() => setNewCharId(null), 1500);
+        }
+      }
       setLoading(false);
     };
     if (user) fetchCharacters();
   }, [user]);
 
-  useEffect(() => {
-    if (!deleteTarget) return;
-    const root = document.getElementById("root");
-    const prev = { body: document.body.style.overflow, html: document.documentElement.style.overflow, root: root?.style.overflow ?? "" };
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    if (root) root.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev.body;
-      document.documentElement.style.overflow = prev.html;
-      if (root) root.style.overflow = prev.root;
-    };
-  }, [deleteTarget]);
-
   if (!authLoading && !user) return null;
-
-  const handleDelete = async () => {
-    if (!deleteTarget) return;
-    setDeleting(true);
-    const { error } = await supabase.from("characters").delete().eq("id", deleteTarget.id);
-    if (error) { toast.error("failed to delete character"); setDeleting(false); setDeleteTarget(null); return; }
-    const id = deleteTarget.id;
-    setDeleteTarget(null);
-    setDeleting(false);
-    setDeletedId(id);
-    toast.success("character deleted");
-    setTimeout(() => { setCharacters((prev) => prev.filter((c) => c.id !== id)); setDeletedId(null); }, 350);
-  };
-
-  const openDelete = (e: React.MouseEvent, char: Character) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setDeleteTarget(char);
-  };
 
   const isBuilding = (char: Character) => !char.face_image_url;
 
+  const handleCardClick = (char: Character) => {
+    if (isBuilding(char)) return;
+    setSelectedId((prev) => (prev === char.id ? null : char.id));
+  };
+
+  const handleCreatePhoto = () => {
+    if (!selectedId) return;
+    navigate("/create", { state: { characterId: selectedId } });
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-32">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -111,48 +96,61 @@ const MyCharacters = () => {
             <AnimatePresence>
               {characters.map((char) => {
                 const building = isBuilding(char);
+                const isSelected = selectedId === char.id;
+                const isNew = newCharId === char.id;
                 return (
-                  <motion.button
+                  <motion.div
                     key={char.id}
                     layout
-                    initial={{ opacity: 1, scale: 1 }}
-                    animate={{
-                      opacity: deletedId === char.id ? 0 : 1,
-                      scale: deletedId === char.id ? 0.9 : 1,
-                    }}
+                    initial={isNew ? { opacity: 0, scale: 0.7 } : { opacity: 1, scale: 1 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    onClick={() => !building && navigate(`/characters/${char.id}`)}
-                    className={`relative aspect-[3/4] rounded-2xl bg-card flex flex-col items-center justify-center overflow-hidden text-left transition-all active:scale-[0.97] ${
-                      building
-                        ? "border-[5px] border-neon-yellow/60 animate-pulse cursor-default"
-                        : "border-[5px] border-border hover:border-foreground/40"
-                    }`}
+                    transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3, ease: "easeOut" }}
+                    className="flex flex-col gap-1.5"
                   >
-                    {building ? (
-                      <span className="text-xs font-extrabold lowercase text-neon-yellow">building…</span>
-                    ) : (
-                      <>
-                        <span className="text-sm font-extrabold lowercase text-foreground leading-tight text-center px-2 truncate w-full">
-                          {char.name || "unnamed"}
-                        </span>
-                        <span className="text-[10px] font-extrabold lowercase text-foreground/50 mt-0.5">
-                          age {char.age}
-                        </span>
-                      </>
-                    )}
+                    <button
+                      onClick={() => handleCardClick(char)}
+                      className={`relative aspect-[3/4] rounded-2xl bg-card flex flex-col items-center justify-center overflow-hidden text-left transition-all active:scale-[0.97] ${
+                        building
+                          ? "border-[5px] border-neon-yellow/60 animate-pulse cursor-default"
+                          : isSelected
+                            ? "border-[5px] border-neon-yellow"
+                            : "border-[5px] border-border hover:border-foreground/40"
+                      }`}
+                    >
+                      {building ? (
+                        <span className="text-xs font-extrabold lowercase text-neon-yellow">building…</span>
+                      ) : (
+                        <>
+                          <span className="text-sm font-extrabold lowercase text-foreground leading-tight text-center px-2 truncate w-full">
+                            {char.name || "unnamed"}
+                          </span>
+                          <span className="text-[10px] font-extrabold lowercase text-foreground/50 mt-0.5">
+                            age {char.age}
+                          </span>
+                          {isSelected && (
+                            <motion.div
+                              className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-neon-yellow"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+                            >
+                              <Zap size={12} strokeWidth={3} className="text-neon-yellow-foreground" />
+                            </motion.div>
+                          )}
+                        </>
+                      )}
+                    </button>
 
                     {!building && (
-                      <div
-                        onClick={(e) => openDelete(e, char)}
-                        className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-foreground/60 text-background transition-colors hover:bg-foreground/80"
-                        role="button"
-                        aria-label={`delete ${char.name || "character"}`}
+                      <button
+                        onClick={() => navigate(`/characters/${char.id}`)}
+                        className="h-8 w-full rounded-xl bg-[hsl(210_80%_55%)] text-[10px] font-[900] lowercase text-white flex items-center justify-center gap-1 transition-colors hover:bg-[hsl(210_80%_48%)] active:bg-[hsl(210_80%_42%)]"
                       >
-                        <X size={12} strokeWidth={3} />
-                      </div>
+                        details
+                      </button>
                     )}
-                  </motion.button>
+                  </motion.div>
                 );
               })}
             </AnimatePresence>
@@ -160,47 +158,23 @@ const MyCharacters = () => {
         )}
       </main>
 
-      <AnimatePresence>
-        {deleteTarget && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-black px-6"
+      {/* Fixed bottom Create Photo button */}
+      <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
+        <div className="mx-auto max-w-lg">
+          <button
+            onClick={handleCreatePhoto}
+            disabled={!selectedId}
+            className={`flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all active:scale-[0.97] ${
+              selectedId
+                ? "bg-neon-yellow text-neon-yellow-foreground"
+                : "bg-neon-yellow/30 text-neon-yellow-foreground/40 cursor-not-allowed"
+            }`}
           >
-            <motion.div
-              className="flex flex-col items-center text-center"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25, delay: 0.05 }}
-            >
-              <h2 className="text-xl font-extrabold lowercase text-white leading-snug mb-2">
-                are you sure you want to<br />delete this character?
-              </h2>
-              <p className="text-base font-extrabold lowercase text-white/50 mb-10">
-                {deleteTarget.name || "unnamed"}
-              </p>
-              <div className="flex gap-3 w-full max-w-xs">
-                <button
-                  onClick={() => !deleting && setDeleteTarget(null)}
-                  disabled={deleting}
-                  className="flex-1 h-14 rounded-2xl bg-white text-sm font-extrabold lowercase text-black transition-colors active:bg-white/70 disabled:opacity-50"
-                >
-                  go back
-                </button>
-                <button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="flex-1 h-14 rounded-2xl bg-destructive text-sm font-extrabold lowercase text-white transition-colors hover:bg-destructive/90 disabled:opacity-50"
-                >
-                  {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Camera size={20} strokeWidth={2.5} />
+            create photo
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
