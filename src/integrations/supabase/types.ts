@@ -139,6 +139,7 @@ export type Database = {
           created_at: string
           email: string | null
           has_seen_onboarding: boolean
+          has_seen_welcome: boolean
           has_used_free_gen: boolean
           id: string
           updated_at: string
@@ -148,6 +149,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           has_seen_onboarding?: boolean
+          has_seen_welcome?: boolean
           has_used_free_gen?: boolean
           id?: string
           updated_at?: string
@@ -157,6 +159,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           has_seen_onboarding?: boolean
+          has_seen_welcome?: boolean
           has_used_free_gen?: boolean
           id?: string
           updated_at?: string
