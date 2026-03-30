@@ -146,7 +146,7 @@ const Index = () => {
               <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
             ) : (
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-                <Sparkles size={28} strokeWidth={2.5} className="text-black" />
+                <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
               </div>
             )}
           </section>

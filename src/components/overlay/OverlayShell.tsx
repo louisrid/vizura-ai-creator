@@ -189,7 +189,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
             <div className="relative flex-1 overflow-hidden">
               <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "48%", transform: "translateY(-50%)" }}>
                 <div className="mx-auto flex w-full max-w-xs flex-col items-center">
-                  <AnimatePresence mode="wait" initial={false}>
+                  <AnimatePresence mode="wait">
                     <motion.div
                       key={step}
                       className="w-full"

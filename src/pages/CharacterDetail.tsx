@@ -110,7 +110,7 @@ const CharacterDetail = () => {
               />
             ) : (
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neon-yellow">
-                <Sparkles size={16} strokeWidth={2.5} className="text-black" />
+                <Sparkles size={16} strokeWidth={2.5} className="text-neon-yellow-foreground" />
               </div>
             )}
           </div>
