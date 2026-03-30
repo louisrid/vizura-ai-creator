@@ -175,7 +175,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
             <button onClick={handleCreate} disabled={isSaving}
               className="flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-neon-yellow text-base font-[900] lowercase tracking-tight text-neon-yellow-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
               style={{ transition: "transform 0.05s" }}>
-              {isSaving ? (<><Loader2 size={18} className="animate-spin" />saving...</>) : (<><Zap size={18} strokeWidth={2.5} />create · 30 gems</>)}
+              {isSaving ? (<><Loader2 size={18} className="animate-spin" />saving...</>) : (<><Zap size={18} strokeWidth={2.5} />create<Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" /><span className="text-[11px] ml-0.5">30</span></>)}
             </button>
           </div>
         </motion.div>

@@ -200,7 +200,7 @@ const Index = () => {
               <>
                 <Zap size={18} strokeWidth={2.5} />
                 create
-                <Gem size={14} strokeWidth={2.5} className="text-neon-yellow-foreground/60 ml-1" />
+                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
                 <span className="text-[11px] ml-0.5">1</span>
               </>
             )}
