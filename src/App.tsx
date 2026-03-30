@@ -23,6 +23,24 @@ import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password"];
+
+const FreshLoadRedirect = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasRedirected = useRef(false);
+
+  useEffect(() => {
+    if (hasRedirected.current) return;
+    hasRedirected.current = true;
+    if (location.pathname !== "/" && !EXEMPT_ROUTES.includes(location.pathname)) {
+      navigate("/", { replace: true });
+    }
+  }, []);
+
+  return null;
+};
+
 const ScrollToTop = () => {
   const location = useLocation();
   const isFirst = useRef(true);
