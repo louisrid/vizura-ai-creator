@@ -88,7 +88,7 @@ const MyCharacters = () => {
         ) : (
           <div className="grid grid-cols-3 gap-3">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors duration-200 active:scale-[0.97]"
             >
               <Plus size={36} strokeWidth={3} className="text-foreground" />

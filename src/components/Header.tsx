@@ -69,6 +69,7 @@ const Header = () => {
 
   const handleNav = (path: string) => {
     setOpen(false);
+    if (path === "/") sessionStorage.setItem("vizura_internal_nav", "1");
     navigate(path);
   };
 
