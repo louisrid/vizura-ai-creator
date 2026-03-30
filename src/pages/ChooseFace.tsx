@@ -15,6 +15,8 @@ import PaywallOverlay from "@/components/PaywallOverlay";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
+const FACE_STORAGE_KEY = "vizura_face_options";
+const AUTH_RESUME_KEY = "vizura_resume_after_auth";
 
 const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
 
@@ -43,7 +45,14 @@ const ChooseFace = () => {
   const prompt = statePrompt || sessionStorage.getItem("vizura_guided_prompt") || undefined;
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("vizura_pending_char_id") || undefined);
 
-  const [faces, setFaces] = useState<string[]>([]);
+  const [faces, setFaces] = useState<string[]>(() => {
+    try {
+      const raw = sessionStorage.getItem(FACE_STORAGE_KEY);
+      return raw ? JSON.parse(raw) as string[] : [];
+    } catch {
+      return [];
+    }
+  });
   const [demoEmojis, setDemoEmojis] = useState<string[]>(() => getRandomEmojis(3));
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -55,8 +64,22 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (!prompt) { navigate("/"); return; }
+    if (faces.length > 0) {
+      setLoading(false);
+      return;
+    }
     generateFaces();
   }, []);
+
+  useEffect(() => {
+    if (showSignIn || !user || faces.length === 0 || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
+
+    const storedFace = Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
+    if (storedFace < 0) return;
+
+    setSelectedIndex(storedFace);
+    void doFinalSave(storedFace);
+  }, [user, faces.length, showSignIn]);
 
   const generateFaces = async () => {
     setLoading(true);
@@ -81,7 +104,9 @@ const ChooseFace = () => {
         throw new Error(data.error);
       }
       const imgs = data.images || [];
-      setFaces(imgs.slice(0, 3));
+      const nextFaces = imgs.slice(0, 3);
+      setFaces(nextFaces);
+      sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
     } catch (err: any) {
       const msg = err?.message || "generation failed";
@@ -113,7 +138,9 @@ const ChooseFace = () => {
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      setFaces((data.images || []).slice(0, 3));
+      const nextFaces = (data.images || []).slice(0, 3);
+      setFaces(nextFaces);
+      sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       await refetchGems();
       toast("1 gem used");
@@ -134,6 +161,7 @@ const ChooseFace = () => {
 
     if (!user) {
       sessionStorage.setItem("vizura_selected_face", String(selectedIndex));
+      sessionStorage.setItem(AUTH_RESUME_KEY, "1");
       setShowSignIn(true);
       return;
     }
@@ -142,14 +170,18 @@ const ChooseFace = () => {
   };
 
   // The actual save function - reads current user from auth context at call time
-  const doFinalSave = async () => {
+  const doFinalSave = async (forcedFaceIdx?: number) => {
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
       toast.error("not signed in");
-      return;
+      return false;
     }
 
-    const faceIdx = selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "0");
+    const faceIdx = forcedFaceIdx ?? selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
+    if (faceIdx < 0) {
+      toast.error("pick a face first");
+      return false;
+    }
 
     let cId = characterId;
     
@@ -180,7 +212,7 @@ const ChooseFace = () => {
           if (insertError) {
             console.error("[ChooseFace] Insert error:", insertError);
             toast.error("failed to save character: " + insertError.message);
-            return;
+            return false;
           }
           if (inserted) {
             cId = inserted.id;
@@ -193,6 +225,8 @@ const ChooseFace = () => {
         }
       } catch (err) {
         console.error("[ChooseFace] Error creating character:", err);
+        toast.error("failed to save character");
+        return false;
       }
     }
 
@@ -200,13 +234,17 @@ const ChooseFace = () => {
     if (cId) {
       const faceUrl = faces[faceIdx] || null;
       try {
-        await supabase
+        const { error: updateError } = await supabase
           .from("characters")
           .update({ face_image_url: faceUrl, generation_prompt: prompt })
-          .eq("id", cId);
+          .eq("id", cId)
+          .eq("user_id", currentUser.id);
+        if (updateError) throw updateError;
         console.log("[ChooseFace] Updated face for character:", cId);
       } catch (err) {
         console.error("[ChooseFace] Error updating face:", err);
+        toast.error("failed to save selected face");
+        return false;
       }
     }
 
@@ -219,13 +257,17 @@ const ChooseFace = () => {
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
     sessionStorage.removeItem("vizura_pending_char_id");
+    sessionStorage.removeItem(FACE_STORAGE_KEY);
+    sessionStorage.removeItem(AUTH_RESUME_KEY);
 
     toast.success("character added!");
     navigate("/characters");
+    return true;
   };
 
   const handleSignedIn = useCallback(async () => {
     setShowSignIn(false);
+    sessionStorage.removeItem(AUTH_RESUME_KEY);
     // Small delay to ensure auth state is fully propagated
     await new Promise((r) => setTimeout(r, 300));
     await doFinalSave();
