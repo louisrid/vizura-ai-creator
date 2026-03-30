@@ -14,40 +14,41 @@ const PHRASES = [
 
 const PHRASE_INTERVAL = 2500;
 const COOKING_DURATION = 25000;
-const SUCCESS_HOLD = 5000;
+const SUCCESS_HOLD = 4000;
 const TICK_INTERVAL = 100;
 
 const GreenTick = () => (
   <motion.svg
-    width="80"
-    height="80"
-    viewBox="0 0 80 80"
+    width="132"
+    height="132"
+    viewBox="0 0 132 132"
     fill="none"
-    initial={{ opacity: 0, scale: 0.6 }}
+    initial={{ opacity: 0, scale: 0.72 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+    transition={{ duration: 0.45, ease: [0.34, 1.56, 0.64, 1] }}
   >
     <motion.circle
-      cx="40"
-      cy="40"
-      r="36"
-      stroke="hsl(140, 100%, 50%)"
-      strokeWidth="3.5"
+      cx="66"
+      cy="66"
+      r="56"
+      stroke="hsl(0 0% 100%)"
+      strokeWidth="6"
       fill="none"
-      initial={{ pathLength: 0, opacity: 0 }}
+      strokeLinecap="round"
+      initial={{ pathLength: 0, opacity: 1 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
+      transition={{ duration: 1.6, ease: "easeInOut" }}
     />
     <motion.path
-      d="M24 42 L34 52 L56 30"
-      stroke="hsl(140, 100%, 50%)"
-      strokeWidth="4.5"
+      d="M42 69 L58 85 L92 49"
+      stroke="hsl(0 0% 100%)"
+      strokeWidth="7"
       strokeLinecap="round"
       strokeLinejoin="round"
       fill="none"
-      initial={{ pathLength: 0, opacity: 0 }}
+      initial={{ pathLength: 0, opacity: 1 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
+      transition={{ duration: 1.0, delay: 1.45, ease: "easeInOut" }}
     />
   </motion.svg>
 );
@@ -177,19 +178,20 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
             {phase === "success" && (
               <motion.div
                 key="success"
-                className="flex flex-col items-center gap-6"
+                className="fixed inset-0 flex flex-col items-center justify-center gap-8"
+                style={{ backgroundColor: "hsl(var(--member-green))" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25 }}
               >
                 <GreenTick />
                 <motion.p
-                  className="text-center text-2xl font-extrabold lowercase text-white"
-                  initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                  className="text-center text-[2rem] font-extrabold lowercase text-white"
+                  initial={{ opacity: 0, y: 18, scale: 0.86 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.35, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.55, delay: 2.45, ease: [0.34, 1.56, 0.64, 1] }}
                 >
-                  character ready!
+                  character created!
                 </motion.p>
               </motion.div>
             )}

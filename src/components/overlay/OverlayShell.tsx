@@ -23,13 +23,24 @@ const IntroDots = ({ current, total }: { current: number; total: number }) => (
 );
 
 const IntroNavArrow = ({
-  direction, onClick, onLongPress, disabled,
+  direction, onClick, onLongPress, onLongPressEnd, disabled,
 }: {
-  direction: "left" | "right"; onClick: () => void; onLongPress?: () => void; disabled?: boolean;
+  direction: "left" | "right"; onClick: () => void; onLongPress?: () => void; onLongPressEnd?: () => void; disabled?: boolean;
 }) => (
   <button
     onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
-    onPointerDown={onLongPress}
+    onPointerDown={(e) => {
+      e.stopPropagation();
+      if (!disabled) onLongPress?.();
+    }}
+    onPointerUp={(e) => {
+      e.stopPropagation();
+      onLongPressEnd?.();
+    }}
+    onPointerLeave={(e) => {
+      e.stopPropagation();
+      onLongPressEnd?.();
+    }}
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
       backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
@@ -247,6 +258,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                         onClick={advance}
                         disabled={false}
                         onLongPress={startLongPress}
+                        onLongPressEnd={stopSkip}
                       />
                     </div>
                     <div className="flex h-3 items-center">
