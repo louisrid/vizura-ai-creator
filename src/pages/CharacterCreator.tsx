@@ -5,6 +5,7 @@ import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import CreationLoadingOverlay from "@/components/CreationLoadingOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -84,6 +85,7 @@ const CharacterCreator = () => {
   const [characterName, setCharacterName] = useState(searchParams.get("name") || saved?.characterName || "");
   const [isSaving, setIsSaving] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState("");
   const [referenceStrength, setReferenceStrength] = useState(50);
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
@@ -172,16 +174,22 @@ const CharacterCreator = () => {
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
-    await saveCharacter(false);
     if (!isEditing) {
-      toast.success("character added!");
-      navigate("/characters");
+      setShowLoading(true);
     }
+    await saveCharacter(false);
+  };
+
+  const handleLoadingComplete = () => {
+    setShowLoading(false);
+    toast.success("character added!");
+    navigate("/characters");
   };
 
   return (
     <div className="relative min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
+      <CreationLoadingOverlay open={showLoading} onComplete={handleLoadingComplete} />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
         <div className="flex items-center mb-8">
