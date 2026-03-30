@@ -13,6 +13,17 @@ const isReloadNavigation = () => {
 
 const clearBrowserState = () => {
   try {
+    document.cookie.split(";").forEach((cookie) => {
+      const separatorIndex = cookie.indexOf("=");
+      const name = separatorIndex > -1 ? cookie.slice(0, separatorIndex).trim() : cookie.trim();
+      if (!name) return;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+  } catch {
+    // ignore cookie access issues
+  }
+
+  try {
     window.sessionStorage.clear();
   } catch {
     // ignore storage access issues
