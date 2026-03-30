@@ -5,7 +5,6 @@ import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
-import CreationLoadingOverlay from "@/components/CreationLoadingOverlay";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
@@ -80,7 +79,6 @@ const CharacterCreator = () => {
 
   useEffect(() => {
     if (!guidedReady || isEditing) return;
-    // Always show guided creator on fresh page load (refresh resets React state)
     setSkipWelcome(false);
     setShowGuided(true);
   }, [guidedReady, isEditing]);
@@ -89,7 +87,7 @@ const CharacterCreator = () => {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (raw) {
-        sessionStorage.removeItem(STORAGE_KEY);
+        // DON'T remove it here - ChooseFace needs it later
         return JSON.parse(raw) as Record<string, string>;
       }
     } catch {}
@@ -108,13 +106,11 @@ const CharacterCreator = () => {
   const [characterName, setCharacterName] = useState(saved?.characterName || "");
   const [isSaving, setIsSaving] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState("");
   const [referenceStrength, setReferenceStrength] = useState(50);
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referencePreview, setReferencePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const guidedPromptRef = useRef<string | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -192,46 +188,16 @@ const CharacterCreator = () => {
       return;
     }
 
-    guidedPromptRef.current = null;
-    setShowLoading(true);
     setIsSaving(true);
     const charId = await saveCharacter();
     setIsSaving(false);
-    if (!charId) {
-      setShowLoading(false);
-      return;
-    }
+    if (!charId) return;
     sessionStorage.setItem("vizura_pending_char_id", charId);
   };
 
-  const handleLoadingComplete = () => {
-    setShowLoading(false);
-    const charId = sessionStorage.getItem("vizura_pending_char_id");
-    sessionStorage.removeItem("vizura_pending_char_id");
-    const prompt = guidedPromptRef.current || buildPrompt();
-    guidedPromptRef.current = null;
-    navigate("/choose-face", {
-      state: { prompt, characterId: charId },
-    });
-  };
-
+  // Called when GuidedCreator cooking phase completes
   const handleGuidedComplete = useCallback(async (selections: GuidedSelections) => {
-    setSkin(selections.skin || "tan");
-    setBodyType(selections.bodyType || "regular");
-    setChest(selections.chest || "medium");
-    setHairStyle(selections.hairStyle || "straight");
-    setHairColour(selections.hairColour || "brunette");
-    setEye(selections.eye || "brown");
-    setMakeup(selections.makeup || "natural");
-    setCharacterName(selections.characterName);
-    setAge(selections.age);
-    // Show loading FIRST (z-9999) so it covers the screen before guided (z-9998) exits
-    setShowLoading(true);
-
-    // Small delay to ensure loading overlay is rendered before guided exits
-    await new Promise((r) => setTimeout(r, 50));
-    setShowGuided(false);
-
+    // Save draft to sessionStorage for ChooseFace to read
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
@@ -240,7 +206,7 @@ const CharacterCreator = () => {
       hairStyle: selections.hairStyle || "straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
-      makeup: selections.makeup || "normal",
+      makeup: selections.makeup || "natural",
       age: selections.age,
       description: selections.description || "",
     };
@@ -256,38 +222,39 @@ const CharacterCreator = () => {
     const ag = selections.age || "25";
     const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${ch} chest, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
 
-    guidedPromptRef.current = prompt;
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
+    // If user is already logged in, save character to DB now
     if (user) {
-      setIsSaving(true);
-      try {
-        const charData = {
-          user_id: user.id,
-          name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
-          country: sanitiseText(sk, 50),
-          age: ag,
-          hair: sanitiseText(hc, 50),
-          eye: sanitiseText(ey, 50),
-          body: sanitiseText(bt, 50),
-          style: sanitiseText(mk, 50),
-          description: sanitiseText(`${ch} chest, ${hs} hair. ${selections.description || ""}`, 500),
-          generation_prompt: prompt,
-        };
-        const { data: inserted, error: insertError } = await supabase
-          .from("characters")
-          .insert(charData)
-          .select("id")
-          .single();
-        if (insertError) throw insertError;
+      const charData = {
+        user_id: user.id,
+        name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
+        country: sanitiseText(sk, 50),
+        age: ag,
+        hair: sanitiseText(hc, 50),
+        eye: sanitiseText(ey, 50),
+        body: sanitiseText(bt, 50),
+        style: sanitiseText(mk, 50),
+        description: sanitiseText(`${ch} chest, ${hs} hair. ${selections.description || ""}`, 500),
+        generation_prompt: prompt,
+      };
+      const { data: inserted, error: insertError } = await supabase
+        .from("characters")
+        .insert(charData)
+        .select("id")
+        .single();
+      if (!insertError && inserted) {
         sessionStorage.setItem("vizura_pending_char_id", inserted.id);
-      } catch (err: any) {
-        toast.error(err.message || "failed to save character");
-        setShowLoading(false);
       }
-      setIsSaving(false);
+      navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
+    } else {
+      // Not logged in - navigate to choose-face, sign-in will happen there
+      navigate("/choose-face", { state: { prompt } });
     }
-  }, [user]);
+
+    // Close guided overlay after navigation is queued
+    setShowGuided(false);
+  }, [user, navigate]);
 
   const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {
     if (partial.skin) setSkin(partial.skin);
@@ -307,13 +274,11 @@ const CharacterCreator = () => {
     setShowGuided(true);
   };
 
-  // Hide page content entirely when guided or loading overlays are active
-  const pageHidden = showGuided || showLoading;
+  const pageHidden = showGuided;
 
   return (
     <div className={`relative min-h-screen ${pageHidden ? "bg-black" : "bg-background"}`}>
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
-      <CreationLoadingOverlay open={showLoading} onComplete={handleLoadingComplete} />
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
