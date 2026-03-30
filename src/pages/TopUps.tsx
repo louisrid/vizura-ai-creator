@@ -9,9 +9,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 
 const plans = [
-  { label: "starter", gems: 15, price: 9 },
-  { label: "popular", gems: 35, price: 20, highlighted: true },
-  { label: "pro", gems: 80, price: 40 },
+  { label: "15 gems", gems: 15, price: 9 },
+  { label: "35 gems", gems: 35, price: 20 },
+  { label: "80 gems", gems: 80, price: 40 },
 ];
 
 const TopUps = () => {
@@ -68,61 +68,26 @@ const TopUps = () => {
             return (
               <div
                 key={plan.label}
-                className={`rounded-2xl p-5 ${
-                  plan.highlighted
-                    ? "border-[5px] border-neon-yellow bg-foreground"
-                    : "border-[5px] border-border bg-card"
-                }`}
+                className="rounded-2xl p-5 border-[5px] border-border bg-card"
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span
-                    className={`text-xs font-extrabold lowercase ${
-                      plan.highlighted ? "text-background" : "text-foreground"
-                    }`}
-                  >
-                    {plan.label}
-                  </span>
-                  {plan.highlighted && (
-                    <span className="text-[10px] font-extrabold lowercase text-neon-yellow-foreground bg-neon-yellow px-2 py-0.5 rounded-full">
-                      best value
-                    </span>
-                  )}
-                </div>
-
                 <div className="flex items-center gap-2 mb-1">
-                  <Gem size={16} strokeWidth={2.5} className={plan.highlighted ? "text-background/60" : "text-gem-green"} />
-                  <span
-                    className={`text-xl font-extrabold lowercase ${
-                      plan.highlighted ? "text-background" : "text-foreground"
-                    }`}
-                  >
+                  <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+                  <span className="text-xl font-extrabold lowercase text-foreground">
                     {plan.gems} gems
                   </span>
                 </div>
 
                 <div className="flex items-baseline justify-between mb-4">
-                  <span
-                    className={`text-2xl font-extrabold lowercase ${
-                      plan.highlighted ? "text-background" : "text-foreground"
-                    }`}
-                  >
+                  <span className="text-2xl font-extrabold lowercase text-foreground">
                     ${plan.price}
                   </span>
-                  <span
-                    className={`text-[11px] font-extrabold lowercase ${
-                      plan.highlighted ? "text-background/60" : "text-foreground/50"
-                    }`}
-                  >
+                  <span className="text-[11px] font-extrabold lowercase text-foreground/50">
                     ${perGem}/gem
                   </span>
                 </div>
 
                 <button
-                  className={`w-full h-12 rounded-2xl text-sm font-extrabold lowercase transition-all ${
-                    plan.highlighted
-                      ? "bg-background text-foreground hover:bg-background/90"
-                      : "bg-neon-green text-neon-green-foreground hover:opacity-90"
-                  }`}
+                  className="w-full h-12 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
                   onClick={() => handleBuy(plan)}
                   disabled={buying !== null}
                 >

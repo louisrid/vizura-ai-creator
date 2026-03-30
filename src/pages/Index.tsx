@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Shuffle, Sparkles, ChevronDown, Gem } from "lucide-react";
+import { Loader2, Zap, Sparkles, ChevronDown, Gem } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
-import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
@@ -85,8 +84,8 @@ const Index = () => {
     if (char) setPrompt(buildPromptFromCharacter(char));
   };
 
-  const readyCharacters = characters.filter((c) => !!c.face_image_url);
-  const buildingCharacters = characters.filter((c) => !c.face_image_url);
+  // All characters are selectable — the starter "ava" has a generation_prompt so treat her as ready
+  const allCharacters = characters;
 
   const handleCreate = async () => {
     if (!user) { navigate(`/account?redirect=${encodeURIComponent("/create")}`); return; }
@@ -117,12 +116,6 @@ const Index = () => {
     } finally {
       setIsGenerating(false);
     }
-  };
-
-  const handleRandom = () => {
-    const randomPrompt = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
-    setPrompt(randomPrompt);
-    setSelectedCharId("");
   };
 
   return (
@@ -157,14 +150,9 @@ const Index = () => {
                 className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
               >
                 <option value="">none</option>
-                {readyCharacters.map((c) => (
+                {allCharacters.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
-                  </option>
-                ))}
-                {buildingCharacters.map((c) => (
-                  <option key={c.id} value="" disabled>
-                    {c.name || "unnamed"} — building…
                   </option>
                 ))}
               </select>
@@ -202,9 +190,9 @@ const Index = () => {
           </div>
         )}
 
-        <div className="flex gap-2 mt-10">
-          <Button
-            className="flex-1 h-16 text-sm"
+        <div className="mt-10">
+          <button
+            className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
             onClick={handleCreate}
             disabled={isGenerating || (!!user && !prompt.trim())}
           >
@@ -214,14 +202,11 @@ const Index = () => {
               <>
                 <Zap size={18} strokeWidth={2.5} />
                 create
-                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
+                <Gem size={14} strokeWidth={2.5} className="text-neon-yellow-foreground/60 ml-1" />
                 <span className="text-[11px] ml-0.5">1</span>
               </>
             )}
-          </Button>
-          <Button variant="outline" className="h-16 px-5" onClick={handleRandom} disabled={isGenerating}>
-            <Shuffle size={18} strokeWidth={2.5} />
-          </Button>
+          </button>
         </div>
 
         {/* Gem balance */}
