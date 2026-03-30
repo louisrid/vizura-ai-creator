@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Camera, Gem, Settings, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
+const DISMISSED_KEY = "vizura_creator_dismissed";
 
 type LatestImage = {
   id: string;
@@ -26,6 +27,29 @@ const Home = () => {
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
+  const hasAutoOpened = useRef(false);
+
+  /* Auto-open guided creator on full page refresh */
+  useEffect(() => {
+    if (hasAutoOpened.current) return;
+    hasAutoOpened.current = true;
+
+    // Check if this is a fresh page load (not an in-app navigation)
+    const dismissed = sessionStorage.getItem(DISMISSED_KEY);
+    if (dismissed) return; // User explicitly closed the creator this session
+
+    // Detect full refresh: performance nav type "reload" or "navigate" (first load)
+    const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+    const navType = navEntries[0]?.type;
+    const isFreshLoad = navType === "reload" || navType === "navigate";
+
+    if (isFreshLoad) {
+      // Clear any saved flow state so it starts fresh from slide 1
+      sessionStorage.removeItem(FLOW_STATE_KEY);
+      setSkipWelcome(false);
+      setShowGuided(true);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchLatestPhotos = async () => {
@@ -58,9 +82,15 @@ const Home = () => {
   }, [user]);
 
   const handleOpenCreator = () => {
-    const internalNav = sessionStorage.getItem("vizura_internal_nav") === "1";
-    sessionStorage.removeItem("vizura_internal_nav");
-    setSkipWelcome(internalNav && !!user);
+    sessionStorage.removeItem(DISMISSED_KEY);
+    // Logged-in users pressing the button skip welcome slides
+    if (user) {
+      sessionStorage.removeItem(FLOW_STATE_KEY);
+      setSkipWelcome(true);
+    } else {
+      sessionStorage.removeItem(FLOW_STATE_KEY);
+      setSkipWelcome(false);
+    }
     setShowGuided(true);
   };
 
@@ -118,10 +148,12 @@ const Home = () => {
     }
 
     sessionStorage.removeItem(FLOW_STATE_KEY);
+    sessionStorage.setItem(DISMISSED_KEY, "1");
     setShowGuided(false);
   };
 
   const handleGuidedExit = () => {
+    sessionStorage.setItem(DISMISSED_KEY, "1");
     setShowGuided(false);
   };
 
@@ -169,33 +201,30 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 py-4">
-        <div className="grid grid-cols-2 gap-3">
+      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 py-3">
+        <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
             onClick={handleOpenCreator}
-            className="flex h-20 items-center justify-center gap-2 rounded-[1.75rem] border-[5px] border-neon-yellow bg-neon-yellow px-4 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
+            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
           >
-            <Sparkles size={18} strokeWidth={2.5} />
+            <Sparkles size={16} strokeWidth={2.5} />
             create character
           </button>
           <button
             type="button"
             onClick={() => navigate("/create")}
-            className="flex h-20 items-center justify-center gap-2 rounded-[1.75rem] border-[5px] border-border bg-card px-4 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
           >
-            <Camera size={18} strokeWidth={2.5} />
+            <Camera size={16} strokeWidth={2.5} />
             create photo
           </button>
         </div>
 
-        <section className="mt-5 flex min-h-0 flex-1 flex-col rounded-[2rem] border-[5px] border-border bg-card px-4 py-4">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-[900] lowercase text-foreground">latest photos</h2>
-            <span className="text-[10px] font-[900] lowercase text-foreground/35">recent generations</span>
-          </div>
+        <section className="mt-3 flex min-h-0 flex-1 flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
+          <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
 
-          <div className="grid flex-1 grid-cols-2 gap-3">
+          <div className="grid flex-1 grid-cols-4 gap-2">
             {photoSlots.map((photo) => {
               const isPlaceholder = !photo.url;
               return (
@@ -205,14 +234,14 @@ const Home = () => {
                   onClick={() => {
                     if (!isPlaceholder) setSelectedImage(photo);
                   }}
-                  className={`overflow-hidden rounded-[1.35rem] border-[4px] transition-transform active:scale-[0.98] ${
+                  className={`overflow-hidden rounded-[1rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
                     isPlaceholder
                       ? "border-dashed border-foreground/20 bg-secondary"
                       : "border-border bg-secondary"
                   }`}
                 >
                   {isPlaceholder ? (
-                    <div className="flex h-full w-full items-center justify-center text-[10px] font-[900] lowercase text-foreground/25">
+                    <div className="flex h-full w-full items-center justify-center text-[9px] font-[900] lowercase text-foreground/25">
                       empty
                     </div>
                   ) : (
@@ -224,21 +253,21 @@ const Home = () => {
           </div>
         </section>
 
-        <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
           <button
             type="button"
             onClick={() => navigate("/top-ups")}
-            className="flex h-20 items-center justify-center gap-2 rounded-[1.75rem] border-[5px] border-border bg-card px-4 text-left text-foreground transition-transform active:scale-[0.98]"
+            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-left text-foreground transition-transform active:scale-[0.98]"
           >
-            <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
+            <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
             <span className="text-sm font-[900] lowercase">{gems} gems</span>
           </button>
           <button
             type="button"
             onClick={() => navigate("/account")}
-            className="flex h-20 items-center justify-center gap-2 rounded-[1.75rem] border-[5px] border-border bg-card px-4 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+            className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
           >
-            <Settings size={18} strokeWidth={2.5} />
+            <Settings size={16} strokeWidth={2.5} />
             settings
           </button>
         </div>
