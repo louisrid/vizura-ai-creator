@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Loader2, Check, RefreshCw, Gem } from "lucide-react";
+import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
@@ -16,7 +16,6 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
 
-/* Pool of emojis for demo face placeholders */
 const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
 
 const getRandomEmojis = (count: number, exclude?: string[]): string[] => {
@@ -57,7 +56,6 @@ const ChooseFace = () => {
   useEffect(() => {
     if (!prompt) { navigate("/"); return; }
     generateFaces();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const generateFaces = async () => {
@@ -99,14 +97,12 @@ const ChooseFace = () => {
 
   const handleRegenerate = async () => {
     if (!user) {
-      // Demo mode: shuffle emojis with animation
       setRerolling(true);
       setSelectedIndex(null);
       setTimeout(() => {
         setDemoEmojis(getRandomEmojis(3, demoEmojis));
         setShuffleKey((k) => k + 1);
         setRerolling(false);
-        toast("1 gem used");
       }, 400);
       return;
     }
@@ -126,6 +122,11 @@ const ChooseFace = () => {
     } finally {
       setRerolling(false);
     }
+  };
+
+  // Toggle selection — tap again to deselect
+  const handleFaceClick = (i: number) => {
+    setSelectedIndex((prev) => (prev === i ? null : i));
   };
 
   const handleConfirm = async () => {
@@ -151,14 +152,14 @@ const ChooseFace = () => {
           const draft = JSON.parse(raw);
           const charData = {
             user_id: user.id,
-            name: sanitiseText(draft.characterName, 100) || "new character",
-            country: sanitiseText(draft.skin, 50),
+            name: sanitiseText(draft.characterName || "", 100) || "new character",
+            country: sanitiseText(draft.skin || "", 50),
             age: draft.age || "25",
-            hair: sanitiseText(draft.hairColour, 50),
-            eye: sanitiseText(draft.eye, 50),
-            body: sanitiseText(draft.bodyType, 50),
-            style: sanitiseText(draft.makeup, 50),
-            description: sanitiseText(`${draft.chest} chest, ${draft.hairStyle} hair.`, 500),
+            hair: sanitiseText(draft.hairColour || "", 50),
+            eye: sanitiseText(draft.eye || "", 50),
+            body: sanitiseText(draft.bodyType || "", 50),
+            style: sanitiseText(draft.makeup || "", 50),
+            description: sanitiseText(`${draft.chest || ""} chest, ${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
             generation_prompt: prompt || "",
           };
           const { data: inserted, error: insertError } = await supabase
@@ -175,16 +176,17 @@ const ChooseFace = () => {
       } catch {}
     }
 
-    if (cId && faces[faceIdx]) {
+    // Save face selection to character
+    if (cId) {
+      const faceUrl = faces[faceIdx] || null;
       try {
         await supabase
           .from("characters")
-          .update({ face_image_url: faces[faceIdx], generation_prompt: prompt } as any)
+          .update({ face_image_url: faceUrl, generation_prompt: prompt } as any)
           .eq("id", cId);
       } catch {}
     }
 
-    // Store for highlight animation on My Characters page
     if (cId) {
       sessionStorage.setItem("vizura_new_char_highlight", cId);
     }
@@ -193,18 +195,15 @@ const ChooseFace = () => {
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
 
-    // Always go to My Characters with a smooth transition
     toast.success("character added!");
     navigate("/characters");
   };
 
-  const handleSignedIn = useCallback(() => {
+  const handleSignedIn = useCallback(async () => {
     setShowSignIn(false);
-    // After signing in, go directly to My Characters
-    toast.success("character added!");
-    navigate("/characters");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate]);
+    // After signing in, save the character from draft data then navigate
+    await finalizeConfirm();
+  }, [selectedIndex, characterId, faces, prompt, navigate]);
 
   const handleCookingComplete = () => {
     setShowCooking(false);
@@ -231,7 +230,6 @@ const ChooseFace = () => {
           <PageTitle className="mb-0">pick your face</PageTitle>
         </div>
 
-        {/* Gem balance */}
         <div className="flex items-center gap-2 mb-6">
           <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
           <span className="text-sm font-extrabold lowercase text-foreground">{gems} gems</span>
@@ -246,55 +244,42 @@ const ChooseFace = () => {
 
         {!loading && (
           <>
-            {/* 3 portrait boxes */}
             <div className="grid grid-cols-3 gap-3 mt-4">
               {faces.length > 0 ? faces.map((url, i) => (
                 <button
                   key={i}
-                  onClick={() => setSelectedIndex(i)}
-                  className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-all ${
+                  onClick={() => handleFaceClick(i)}
+                  className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-all duration-200 ${
                     selectedIndex === i
                       ? "border-neon-yellow"
                       : "border-border hover:border-foreground/40"
                   }`}
                 >
                   <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
-                  {selectedIndex === i && (
-                    <div className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-neon-yellow">
-                      <Check size={14} strokeWidth={3} className="text-neon-yellow-foreground" />
-                    </div>
-                  )}
                 </button>
               )) : (
-                /* Demo emoji placeholders */
                 demoEmojis.map((emoji, i) => (
                   <AnimatePresence mode="wait" key={`slot-${i}`}>
                     <motion.button
                       key={`${shuffleKey}-${i}`}
-                      onClick={() => setSelectedIndex(i)}
+                      onClick={() => handleFaceClick(i)}
                       initial={{ rotateY: 90, opacity: 0 }}
                       animate={{ rotateY: 0, opacity: 1 }}
                       exit={{ rotateY: -90, opacity: 0 }}
                       transition={{ duration: 0.3, delay: i * 0.08 }}
-                      className={`aspect-[3/4] rounded-2xl border-[5px] transition-all flex items-center justify-center ${
+                      className={`aspect-[3/4] rounded-2xl border-[5px] transition-all duration-200 flex items-center justify-center ${
                         selectedIndex === i
                           ? "border-neon-yellow bg-card"
                           : "border-border bg-card hover:border-foreground/40"
                       }`}
                     >
                       <span className="text-4xl">{emoji}</span>
-                      {selectedIndex === i && (
-                        <div className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-neon-yellow">
-                          <Check size={14} strokeWidth={3} className="text-neon-yellow-foreground" />
-                        </div>
-                      )}
                     </motion.button>
                   </AnimatePresence>
                 ))
               )}
             </div>
 
-            {/* Action buttons */}
             <div className="flex gap-3 mt-8">
               <button
                 onClick={handleRegenerate}
@@ -315,7 +300,7 @@ const ChooseFace = () => {
               <button
                 onClick={handleConfirm}
                 disabled={selectedIndex === null}
-                className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all hover:opacity-90 disabled:opacity-50"
+                className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
               >
                 confirm
               </button>

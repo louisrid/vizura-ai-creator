@@ -1,11 +1,11 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Gem, ArrowLeft, ArrowRight, Loader2, RefreshCw } from "lucide-react";
+import { Zap, ArrowLeft, ArrowRight, Loader2, RefreshCw, Upload } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCredits } from "@/contexts/CreditsContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
+import { useNavigate } from "react-router-dom";
 
 /* ── Constants ── */
 const NEON_BLUE = "hsl(195 100% 55%)";
@@ -14,7 +14,7 @@ const AMBER = "hsl(var(--neon-yellow))";
 
 const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
-  { key: "bodyType", label: "choose her body…", emoji: "💃", options: ["slim", "regular", "curvy"] },
+  { key: "bodyType", label: "choose her body…", emoji: "🤘", options: ["slim", "regular", "curvy"] },
   { key: "chest", label: "choose her chest…", emoji: "👙", options: ["small", "medium", "large"] },
   { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs", "short"] },
   { key: "hairColour", label: "pick her hair colour…", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
@@ -41,7 +41,7 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
     {Array.from({ length: total }).map((_, i) => (
       <div
         key={i}
-        className="rounded-full transition-all duration-200"
+        className="rounded-full transition-all duration-300"
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
@@ -125,7 +125,7 @@ const BigEmoji = ({ emoji, index }: { emoji: string; index: number }) => {
   );
 };
 
-/* ── Interactive pill with flash effect ── */
+/* ── Interactive pill ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
   label: string; selected: boolean; shaking: boolean; onClick: () => void;
 }) => (
@@ -133,12 +133,12 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     onClick={(e) => { e.stopPropagation(); onClick(); }}
     animate={
       selected
-        ? { scale: [1, 1.15, 1], transition: { duration: 0.15 } }
+        ? { scale: [1, 1.15, 1], transition: { duration: 0.1 } }
         : shaking
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors ${
+    className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
@@ -153,12 +153,18 @@ export interface GuidedSelections {
   skin: string; bodyType: string; chest: string; hairStyle: string;
   hairColour: string; eye: string; makeup: string;
   characterName: string; age: string;
+  description: string;
+  referenceImage: string | null;
+  referenceStrength: number;
 }
 
 const emptySelections: GuidedSelections = {
   skin: "", bodyType: "", chest: "", hairStyle: "",
   hairColour: "", eye: "", makeup: "",
   characterName: "", age: "",
+  description: "",
+  referenceImage: null,
+  referenceStrength: 50,
 };
 
 interface GuidedCreatorProps {
@@ -168,36 +174,54 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
+/*
+ * Slide layout:
+ *  0 = welcome ("welcome to vizura!")
+ *  1 = intro ("time to create your first character!")
+ *  2-8 = 7 trait slides
+ *  9 = details (name, age, description, reference image)
+ * 10 = create button
+ */
+const TOTAL = 11;
+
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
-  const { credits: gems } = useCredits();
+  const navigate = useNavigate();
 
-  const TOTAL = 1 + 7 + 2; // welcome + 7 traits + summary + create
-
-  const [step, setStep] = useState(skipWelcome ? 1 : 0);
+  const [step, setStep] = useState(skipWelcome ? 2 : 0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const [summaryShake, setSummaryShake] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [shattering, setShattering] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [initialFadeIn, setInitialFadeIn] = useState(true);
   const animating = useRef(false);
   const pendingActionRef = useRef<(() => void) | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (open) {
-      setStep(skipWelcome ? 1 : 0);
+      setStep(skipWelcome ? 2 : 0);
       setSelections({ ...emptySelections });
       setShaking(false);
       setSummaryShake(false);
       setShattering(false);
+      setInitialFadeIn(true);
       setVisible(true);
       animating.current = false;
       pendingActionRef.current = null;
     }
   }, [open, skipWelcome]);
+
+  // Fade in complete after delay
+  useEffect(() => {
+    if (!visible || !initialFadeIn) return;
+    const t = setTimeout(() => setInitialFadeIn(false), 1800);
+    return () => clearTimeout(t);
+  }, [visible, initialFadeIn]);
 
   useEffect(() => {
     if (!visible) return;
@@ -213,16 +237,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     };
   }, [visible]);
 
-  const getTraitIndex = (s: number) => {
-    const adjusted = s - 1;
-    if (adjusted < 0 || adjusted >= 7) return -1;
-    return adjusted;
-  };
-
-  const currentTraitIndex = getTraitIndex(step);
-  const isSummarySlide = step === 8;
-  const isCreateSlide = step === 9;
   const isWelcomeSlide = step === 0;
+  const isIntroSlide = step === 1;
+  const isDetailsSlide = step === 9;
+  const isCreateSlide = step === 10;
+  const currentTraitIndex = step >= 2 && step <= 8 ? step - 2 : -1;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= 7) return null;
@@ -262,54 +281,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const selectionsRef = useRef(selections);
   selectionsRef.current = selections;
 
-  const advance = useCallback(() => {
-    if (animating.current) return;
-    const traitIdx = step - 1;
-    if (traitIdx >= 0 && traitIdx < 7) {
-      const key = TRAITS[traitIdx].key;
-      if (!selectionsRef.current[key]) {
-        triggerShake();
-        return;
-      }
-    }
-    if (isSummarySlide) {
-      const s = selectionsRef.current;
-      const missingName = !s.characterName.trim();
-      const ageNum = Number(s.age);
-      const invalidAge = !s.age || ageNum < 18 || ageNum > 40;
-      if (missingName || invalidAge) {
-        setSummaryShake(true);
-        setTimeout(() => setSummaryShake(false), 500);
-        return;
-      }
-    }
-    if (isCreateSlide) {
-      triggerExit(() => onComplete(selectionsRef.current));
-      return;
-    }
-    animating.current = true;
-    setStep((s) => Math.min(s + 1, TOTAL - 1));
-    setTimeout(() => { animating.current = false; }, 50);
-  }, [step, TOTAL, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
-
-  const goBack = useCallback(() => {
-    if (animating.current || step <= 0) return;
-    animating.current = true;
-    setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 50);
-  }, [step]);
-
-  const handleSkipToQuick = () => {
-    const s = selectionsRef.current;
-    const partial: Partial<GuidedSelections> = {};
-    for (const trait of TRAITS) {
-      if (s[trait.key]) partial[trait.key] = s[trait.key];
-    }
-    if (s.characterName) partial.characterName = s.characterName;
-    if (s.age) partial.age = s.age;
-    triggerExit(() => onExit(partial));
-  };
-
   const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
   const randomiseName = useCallback(() => {
     const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
@@ -320,43 +291,102 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, age }));
   }, []);
 
-  const canAdvance = isWelcomeSlide || isCurrentSelected() || isSummarySlide || isCreateSlide;
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setSelections((p) => ({ ...p, referenceImage: url }));
+  };
+
+  const advance = useCallback(() => {
+    if (animating.current) return;
+
+    // Trait slides require selection
+    if (currentTraitIndex >= 0 && currentTraitIndex < 7) {
+      const key = TRAITS[currentTraitIndex].key;
+      if (!selectionsRef.current[key]) {
+        triggerShake();
+        return;
+      }
+    }
+
+    // Details slide requires name + age
+    if (isDetailsSlide) {
+      const s = selectionsRef.current;
+      const missingName = !s.characterName.trim();
+      const ageNum = Number(s.age);
+      const invalidAge = !s.age || ageNum < 18 || ageNum > 40;
+      if (missingName || invalidAge) {
+        setSummaryShake(true);
+        setTimeout(() => setSummaryShake(false), 500);
+        return;
+      }
+    }
+
+    if (isCreateSlide) {
+      triggerExit(() => onComplete(selectionsRef.current));
+      return;
+    }
+
+    animating.current = true;
+    setStep((s) => Math.min(s + 1, TOTAL - 1));
+    setTimeout(() => { animating.current = false; }, 80);
+  }, [step, isDetailsSlide, isCreateSlide, shattering, onComplete, triggerExit, currentTraitIndex]);
+
+  const goBack = useCallback(() => {
+    if (animating.current || step <= 0) return;
+    animating.current = true;
+    setStep((s) => s - 1);
+    setTimeout(() => { animating.current = false; }, 80);
+  }, [step]);
+
+  const handleSkipToLogin = () => {
+    triggerExit(() => {
+      navigate("/account?redirect=/create");
+    });
+  };
+
+  const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsSlide || isCreateSlide;
 
   if (!mounted || !visible) return null;
 
-  const getSlideTransition = () => {
-    if (isCreateSlide) {
-      return {
-        initial: { opacity: 0, scale: 0.8 },
-        animate: { opacity: 1, scale: 1 },
-        exit: { opacity: 0, scale: 1.15 },
-        transition: { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] },
-      };
-    }
-    return {
-      initial: { opacity: 0, x: 20 },
-      animate: { opacity: 1, x: 0 },
-      exit: { opacity: 0, x: -20 },
-      transition: { duration: 0.1, ease: "easeOut" as const },
-    };
+  const slideTransition = {
+    initial: { opacity: 0, x: 30 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -30 },
+    transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
   };
 
   const renderSlide = () => {
+    /* ── Welcome ── */
     if (isWelcomeSlide) {
       return (
         <div className="flex w-full flex-col items-center">
-          <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="👁️" index={0} />
-          </div>
           <h2 className="mt-1 text-center lowercase leading-tight tracking-tight text-white">
             <span className="block text-[1.4rem] font-[800]">welcome to</span>
-            <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura</span>
+            <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura!</span>
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
         </div>
       );
     }
 
+    /* ── Intro ── */
+    if (isIntroSlide) {
+      return (
+        <div className="flex w-full flex-col items-center">
+          <div className="flex h-14 items-end justify-center">
+            <BigEmoji emoji="💃" index={0} />
+          </div>
+          <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+            time to create your<br />first character!
+          </h2>
+          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
+        </div>
+      );
+    }
+
+    /* ── Trait slides ── */
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key];
@@ -383,16 +413,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    if (isSummarySlide) {
+    /* ── Details slide (name, age, description, reference) ── */
+    if (isDetailsSlide) {
       return (
-        <div className="flex w-full flex-col items-center">
-          <div className="flex h-14 items-end justify-center">
+        <div className="flex w-full flex-col items-center max-h-[60vh] overflow-y-auto px-1 pb-2" onClick={(e) => e.stopPropagation()}>
+          <div className="flex h-14 items-end justify-center shrink-0">
             <BigEmoji emoji="✨" index={7} />
           </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white shrink-0">
             add the details…
           </h2>
-          <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+          {/* Trait summary pills */}
+          <div className="mt-4 flex flex-wrap justify-center gap-1.5 shrink-0">
             {TRAITS.map((t) => {
               const v = selections[t.key];
               if (!v) return null;
@@ -403,7 +435,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               );
             })}
           </div>
-          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+          {/* Name input */}
+          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem] shrink-0">
             <motion.input
               animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
               transition={{ duration: 0.4 }}
@@ -417,12 +450,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => { e.stopPropagation(); randomiseName(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
-              title="randomise name"
             >
               <RefreshCw size={16} strokeWidth={2.5} />
             </motion.button>
           </div>
-          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem]">
+          {/* Age input */}
+          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem] shrink-0">
             <motion.input
               animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
               transition={{ duration: 0.4 }}
@@ -444,41 +477,78 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => { e.stopPropagation(); randomiseAge(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
-              title="randomise age"
             >
               <RefreshCw size={16} strokeWidth={2.5} />
             </motion.button>
+          </div>
+          {/* Description textarea */}
+          <div className="mt-4 w-full max-w-[16rem] shrink-0">
+            <textarea
+              value={selections.description}
+              onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
+              placeholder="add any details you want to see…"
+              rows={3}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+            />
+          </div>
+          {/* Reference image upload */}
+          <div className="mt-3 w-full max-w-[16rem] shrink-0">
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+            {selections.referenceImage ? (
+              <div className="flex flex-col gap-2">
+                <div className="relative w-full h-24 rounded-2xl overflow-hidden border-[3px] border-white/15">
+                  <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
+                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                  >
+                    ×
+                  </button>
+                </div>
+                {/* Strength slider */}
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold lowercase text-white/50">strength</span>
+                  <span className="text-[10px] font-extrabold lowercase text-white/50">{selections.referenceStrength}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={selections.referenceStrength}
+                  onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-full accent-neon-yellow h-1.5 rounded-full appearance-none cursor-pointer"
+                  style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(0 0% 20%) ${selections.referenceStrength}%)` }}
+                />
+              </div>
+            ) : (
+              <button
+                onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-4 hover:border-white/30 transition-colors"
+              >
+                <Upload size={14} strokeWidth={2.5} className="text-white/30" />
+                <span className="text-xs font-extrabold lowercase text-white/30">add reference image (optional)</span>
+              </button>
+            )}
           </div>
         </div>
       );
     }
 
+    /* ── Create slide ── */
     if (isCreateSlide) {
-      const isFirstFree = !user;
       return (
-        <div className="flex w-full flex-col items-center">
-          <motion.h2
-            className="text-center text-[2.8rem] font-[900] lowercase leading-tight tracking-tight text-white"
-            animate={{ textShadow: ["0 0 20px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.3)", "0 0 20px rgba(255,255,255,0)"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
-          </motion.h2>
-          {!isFirstFree && (
-            <div className="mt-2 flex items-center gap-2">
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-sm font-[900] lowercase text-white/60">{gems} gems</span>
-            </div>
-          )}
+        <div className="flex w-full flex-col items-center justify-center">
           <motion.button
             onClick={(e) => { e.stopPropagation(); advance(); }}
-            className="mt-5 h-14 w-[80vw] max-w-[20rem] rounded-2xl text-base font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
+            className="h-16 w-[80vw] max-w-[20rem] rounded-2xl text-lg font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
             style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
             animate={{ scale: [1, 1.03, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             whileTap={{ scale: 0.95 }}
           >
-            <Zap size={18} strokeWidth={2.5} />
+            <Zap size={20} strokeWidth={2.5} />
             create
           </motion.button>
         </div>
@@ -488,17 +558,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  const slideProps = getSlideTransition();
-
   return createPortal(
     <AnimatePresence onExitComplete={handleShatterDone}>
       {!shattering && (
         <motion.div
           className="fixed inset-0 z-[9998] flex flex-col bg-black"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
+          transition={{ duration: initialFadeIn ? 1.2 : 0.5, ease: [0, 0, 0.2, 1] }}
           onClick={advance}
         >
           <AmbientGlow />
@@ -510,10 +578,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   <motion.div
                     key={step}
                     className="w-full"
-                    initial={slideProps.initial}
-                    animate={slideProps.animate}
-                    exit={slideProps.exit}
-                    transition={slideProps.transition}
+                    initial={slideTransition.initial}
+                    animate={slideTransition.animate}
+                    exit={slideTransition.exit}
+                    transition={slideTransition.transition}
                   >
                     {renderSlide()}
                   </motion.div>
@@ -521,39 +589,26 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
+            {/* Fixed bottom nav */}
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
-              {isCreateSlide ? (
-                <div className="mb-4 flex flex-col items-center gap-4">
-                  <div className="flex h-14 items-center gap-4">
-                    <NavArrow direction="left" onClick={goBack} disabled={false} />
-                    <NavArrow direction="right" onClick={advance} disabled={false} />
-                  </div>
-                  <div className="flex h-3 items-center">
-                    <Dots current={step} total={TOTAL} />
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="mb-4 flex h-14 items-center gap-4">
-                    <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                    <NavArrow
-                      direction="right"
-                      onClick={advance}
-                      disabled={!canAdvance && currentTraitIndex >= 0}
-                    />
-                  </div>
-                  <div className="flex h-3 items-center">
-                    <Dots current={step} total={TOTAL} />
-                  </div>
-                </>
-              )}
+              <div className="mb-4 flex h-14 items-center gap-4">
+                <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                <NavArrow
+                  direction="right"
+                  onClick={advance}
+                  disabled={!canAdvance && currentTraitIndex >= 0}
+                />
+              </div>
+              <div className="flex h-3 items-center">
+                <Dots current={step} total={TOTAL} />
+              </div>
 
               {!isCreateSlide && (
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleSkipToQuick(); }}
+                  onClick={(e) => { e.stopPropagation(); handleSkipToLogin(); }}
                   className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
                 >
-                  skip to quick mode
+                  skip to login
                 </button>
               )}
             </div>
@@ -624,7 +679,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
