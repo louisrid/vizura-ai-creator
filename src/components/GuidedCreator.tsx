@@ -844,7 +844,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
-                className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
+                className="mt-5 text-xs font-extrabold lowercase text-white/30 underline hover:text-white/50 transition-colors"
               >
                 skip to login
               </button>
