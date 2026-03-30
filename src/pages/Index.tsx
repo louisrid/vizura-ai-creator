@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Download, Zap, Shuffle, Wand2, Sparkles, ChevronDown } from "lucide-react";
+import { Loader2, Zap, Shuffle, Sparkles, ChevronDown, Gem } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -21,6 +21,7 @@ interface Character {
   body: string;
   style: string;
   description: string;
+  face_image_url: string | null;
 }
 
 const randomPrompts = [
@@ -40,7 +41,7 @@ const buildPromptFromCharacter = (c: Character): string => {
 
 const Index = () => {
   const { user } = useAuth();
-  const { credits, refetch: refetchCredits } = useCredits();
+  const { credits, gems, refetch: refetchCredits } = useCredits();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -52,7 +53,6 @@ const Index = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharId, setSelectedCharId] = useState("");
 
-  // Accept preselected character from ChooseFace flow
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
 
   useEffect(() => {
@@ -69,13 +69,9 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        // Auto-select character if coming from ChooseFace
         if (preselectedCharacterId) {
           const char = data.find((c: any) => c.id === preselectedCharacterId);
-          if (char) {
-            setSelectedCharId(preselectedCharacterId);
-            setPrompt(buildPromptFromCharacter(char as Character));
-          }
+          if (char) { setSelectedCharId(preselectedCharacterId); setPrompt(buildPromptFromCharacter(char as Character)); }
         }
       }
     };
@@ -89,20 +85,19 @@ const Index = () => {
     if (char) setPrompt(buildPromptFromCharacter(char));
   };
 
+  const readyCharacters = characters.filter((c) => !!c.face_image_url);
+  const buildingCharacters = characters.filter((c) => !c.face_image_url);
+
   const handleCreate = async () => {
     if (!user) { navigate(`/account?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
-    if (!prompt.trim()) {
-      toast.error("describe your photo first");
-      return;
-    }
+    if (!prompt.trim()) { toast.error("describe your photo first"); return; }
 
     setIsGenerating(true);
     setImages([]);
     setError("");
 
-    const fullPrompt = prompt.trim();
-    const cleanPrompt = sanitiseText(fullPrompt);
+    const cleanPrompt = sanitiseText(prompt.trim());
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
@@ -112,6 +107,7 @@ const Index = () => {
       if (data?.error) throw new Error(data.error);
       setImages(data.images || []);
       await refetchCredits();
+      toast("1 gem used");
     } catch (e: any) {
       if (e.message?.includes("No gems") || e.message?.includes("No credits") || e.message?.includes("402")) {
         setShowPaywall(true);
@@ -129,102 +125,113 @@ const Index = () => {
     setSelectedCharId("");
   };
 
-
   return (
     <div className="min-h-screen bg-background">
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-        <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-10">
-          <div className="flex items-center gap-3 mb-8">
-            <BackButton />
-            <PageTitle className="mb-0">create photo</PageTitle>
-          </div>
+      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-10">
+        <div className="flex items-center gap-3 mb-8">
+          <BackButton />
+          <PageTitle className="mb-0">create photo</PageTitle>
+        </div>
 
-          {/* Hero image box — matches CharacterCreator */}
-          <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
-            {images[0] ? (
-              <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
-            ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-                <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
-              </div>
-            )}
-          </section>
-
-
-          <div className="space-y-6">
-            {/* Character select */}
-            <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">select character</span>
-              <label className="relative block">
-                <select
-                  value={selectedCharId}
-                  onChange={(e) => handleCharacterSelect(e.target.value)}
-                  className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
-                >
-                  <option value="">none</option>
-                  {characters.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={16}
-                  strokeWidth={2.5}
-                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
-                />
-              </label>
-              {characters.length === 0 && user && (
-                <button
-                  onClick={() => navigate("/")}
-                  className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
-                >
-                  create your first character →
-                </button>
-              )}
-            </div>
-
-            {/* Prompt */}
-            <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
-              <input
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="woman in golden hour light, rooftop..."
-                className="w-full rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground transition-colors"
-              />
-            </div>
-          </div>
-
-          {error && (
-            <div className="mt-10 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
-              {error}
+        {/* Hero image box */}
+        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+          {images[0] ? (
+            <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
+          ) : (
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
+              <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
             </div>
           )}
+        </section>
 
-          <div className="flex gap-2 mt-10">
-            <Button
-              className="flex-1 h-16 text-sm"
-              onClick={handleCreate}
-              disabled={isGenerating || (!!user && !prompt.trim())}
-            >
-              {isGenerating ? (
-                <><Loader2 className="animate-spin" size={18} />creating...</>
-              ) : (
-                <><Zap size={18} strokeWidth={2.5} />create</>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-16 px-5"
-              onClick={handleRandom}
-              disabled={isGenerating}
-            >
-              <Shuffle size={18} strokeWidth={2.5} />
-            </Button>
+        <div className="space-y-6">
+          {/* Character select */}
+          <div>
+            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">select character</span>
+            <label className="relative block">
+              <select
+                value={selectedCharId}
+                onChange={(e) => handleCharacterSelect(e.target.value)}
+                className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+              >
+                <option value="">none</option>
+                {readyCharacters.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
+                  </option>
+                ))}
+                {buildingCharacters.map((c) => (
+                  <option key={c.id} value="" disabled>
+                    {c.name || "unnamed"} — building…
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={16}
+                strokeWidth={2.5}
+                className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
+              />
+            </label>
+            {characters.length === 0 && user && (
+              <button
+                onClick={() => navigate("/")}
+                className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
+              >
+                create your first character →
+              </button>
+            )}
           </div>
-        </main>
+
+          {/* Prompt */}
+          <div>
+            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
+            <input
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="woman in golden hour light, rooftop..."
+              className="w-full rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground transition-colors"
+            />
+          </div>
+        </div>
+
+        {error && (
+          <div className="mt-10 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+            {error}
+          </div>
+        )}
+
+        <div className="flex gap-2 mt-10">
+          <Button
+            className="flex-1 h-16 text-sm"
+            onClick={handleCreate}
+            disabled={isGenerating || (!!user && !prompt.trim())}
+          >
+            {isGenerating ? (
+              <><Loader2 className="animate-spin" size={18} />creating...</>
+            ) : (
+              <>
+                <Zap size={18} strokeWidth={2.5} />
+                create
+                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
+                <span className="text-[11px] ml-0.5">1</span>
+              </>
+            )}
+          </Button>
+          <Button variant="outline" className="h-16 px-5" onClick={handleRandom} disabled={isGenerating}>
+            <Shuffle size={18} strokeWidth={2.5} />
+          </Button>
+        </div>
+
+        {/* Gem balance */}
+        {user && (
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <Gem size={14} strokeWidth={2.5} className="text-gem-green" />
+            <span className="text-xs font-extrabold lowercase text-foreground/50">{gems} gems remaining</span>
+          </div>
+        )}
+      </main>
     </div>
   );
 };
