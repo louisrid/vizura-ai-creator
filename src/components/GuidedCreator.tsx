@@ -647,16 +647,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* ── Create slide ── */
     if (isCreateSlide) {
+      const showGemCost = isLoggedIn && skipWelcome;
       return (
         <div className="flex w-full flex-col items-center justify-center">
-          {isLoggedIn && (
+          {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
-          )}
-          {!isLoggedIn && (
-            <p className="mb-4 text-sm font-extrabold lowercase text-white/40">first one's free</p>
           )}
           <motion.button
             type="button"
