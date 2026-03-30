@@ -379,7 +379,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   const selectionsRef = useRef(selections);
+  const stepRef = useRef(step);
   selectionsRef.current = selections;
+  stepRef.current = step;
 
   const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
   const randomiseName = useCallback(() => {
