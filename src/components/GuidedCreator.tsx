@@ -177,9 +177,9 @@ const CookingGreenTick = () => (
     transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
   >
     <motion.circle cx="40" cy="40" r="36" stroke="hsl(140, 100%, 50%)" strokeWidth="3.5" fill="none"
-      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut" }} />
+      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }} />
     <motion.path d="M24 42 L34 52 L56 30" stroke="hsl(140, 100%, 50%)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
-      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }} />
+      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }} />
   </motion.svg>
 );
 
