@@ -14,7 +14,7 @@ const PHRASES = [
 
 const PHRASE_INTERVAL = 2500;
 const COOKING_DURATION = 25000;
-const SUCCESS_HOLD = 5000;
+const SUCCESS_HOLD = 4000;
 const TICK_INTERVAL = 100;
 
 const GreenTick = () => (
