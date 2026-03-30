@@ -227,6 +227,11 @@ const CharacterCreator = () => {
     setMakeup(selections.makeup || "natural");
     setCharacterName(selections.characterName);
     setAge(selections.age);
+    // Show loading FIRST (z-9999) so it covers the screen before guided (z-9998) exits
+    setShowLoading(true);
+
+    // Small delay to ensure loading overlay is rendered before guided exits
+    await new Promise((r) => setTimeout(r, 50));
     setShowGuided(false);
 
     const draft = {
@@ -237,7 +242,7 @@ const CharacterCreator = () => {
       hairStyle: selections.hairStyle || "straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
-      makeup: selections.makeup || "natural",
+      makeup: selections.makeup || "normal",
       age: selections.age,
       description: "",
     };
@@ -255,9 +260,6 @@ const CharacterCreator = () => {
 
     guidedPromptRef.current = prompt;
     sessionStorage.setItem("vizura_guided_prompt", prompt);
-
-    // Show loading immediately — this goes to choose-face after, NOT back to guided
-    setShowLoading(true);
 
     if (user) {
       setIsSaving(true);
