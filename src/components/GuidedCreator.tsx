@@ -310,6 +310,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     triggerExit(() => onExit(partial));
   };
 
+  const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
+  const randomiseName = useCallback(() => {
+    const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
+    setSelections((p) => ({ ...p, characterName: name }));
+  }, []);
+  const randomiseAge = useCallback(() => {
+    const age = String(Math.floor(Math.random() * 23) + 18);
+    setSelections((p) => ({ ...p, age }));
+  }, []);
+
   const canAdvance = isWelcomeSlide || isCurrentSelected() || isSummarySlide || isCreateSlide;
 
   if (!mounted || !visible) return null;
