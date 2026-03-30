@@ -133,9 +133,9 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     onClick={(e) => { e.stopPropagation(); onClick(); }}
     animate={
       selected
-        ? { scale: [1, 1.15, 1], transition: { duration: 0.3 } }
+        ? { scale: [1, 1.15, 1], transition: { duration: 0.15 } }
         : shaking
-          ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.4 } }
+          ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
     className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors ${
