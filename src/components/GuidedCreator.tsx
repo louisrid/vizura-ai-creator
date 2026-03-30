@@ -420,7 +420,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
   const goBack = useCallback(() => {
-    if (animating.current || step <= 0 || cookingPhase !== "none") return;
+    if (animating.current || step <= minStep || cookingPhase !== "none") return;
     animating.current = true;
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, 80);
