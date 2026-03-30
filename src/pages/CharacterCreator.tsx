@@ -1,6 +1,6 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Upload, Sparkles } from "lucide-react";
+import { Loader2, Zap, Upload, Sparkles, Gem } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
