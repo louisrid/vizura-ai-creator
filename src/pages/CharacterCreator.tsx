@@ -80,11 +80,10 @@ const CharacterCreator = () => {
 
   useEffect(() => {
     if (!guidedReady || isEditing) return;
-    if (characterCount === 0) {
-      setSkipWelcome(false);
-      setShowGuided(true);
-    }
-  }, [guidedReady, characterCount, isEditing]);
+    // Always show guided creator on fresh page load (refresh resets React state)
+    setSkipWelcome(false);
+    setShowGuided(true);
+  }, [guidedReady, isEditing]);
 
   const saved = useMemo(() => {
     try {
