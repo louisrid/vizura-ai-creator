@@ -23,7 +23,6 @@ const makeupOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
 const WELCOME_SESSION_KEY = "vizura_welcome_seen";
-const INTRO_SEEN_KEY = "vizura_intro_seen";
 
 const PillGroup = ({
   label, options, value, onChange,
@@ -86,21 +85,9 @@ const CharacterCreator = () => {
     fetchState();
   }, [user]);
 
-  // Auto-launch guided for first-time / zero-character users — but ONLY after intro is done
+  // Auto-launch guided for first-time / zero-character users
   useEffect(() => {
     if (!guidedReady || isEditing) return;
-    // Wait for the welcome intro sequence to finish before launching guided creator
-    const introSeen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
-    if (!introSeen) {
-      // Poll until intro is done (it sets the flag when complete)
-      const interval = setInterval(() => {
-        if (sessionStorage.getItem(INTRO_SEEN_KEY) === "1") {
-          clearInterval(interval);
-          if (characterCount === 0) setShowGuided(true);
-        }
-      }, 200);
-      return () => clearInterval(interval);
-    }
     if (characterCount === 0) {
       setShowGuided(true);
     }
@@ -135,8 +122,6 @@ const CharacterCreator = () => {
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referencePreview, setReferencePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Ref to store the prompt built from guided selections for loading complete handler
   const guidedPromptRef = useRef<string | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +141,10 @@ const CharacterCreator = () => {
 
   const saveCharacter = async () => {
     if (!user) {
+      // Store draft and redirect to sign in
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
+      }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return null;
     }
@@ -195,12 +184,6 @@ const CharacterCreator = () => {
     }
   };
 
-  const saveFormToSession = () => {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-      characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
-    }));
-  };
-
   const handleCreate = async () => {
     const missingName = !characterName.trim();
     const ageNum = Number(age);
@@ -211,7 +194,9 @@ const CharacterCreator = () => {
       return;
     }
     if (!user) {
-      saveFormToSession();
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
+      }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
@@ -240,9 +225,7 @@ const CharacterCreator = () => {
     });
   };
 
-  // Guided creator: onComplete fires AFTER exit animation finishes — no flash
   const handleGuidedComplete = useCallback(async (selections: GuidedSelections) => {
-    // Apply selections to quick form state
     setSkin(selections.skin || "tan");
     setBodyType(selections.bodyType || "regular");
     setChest(selections.chest || "medium");
@@ -254,22 +237,20 @@ const CharacterCreator = () => {
     setAge(selections.age);
     setShowGuided(false);
 
-    if (!user) {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        characterName: selections.characterName,
-        skin: selections.skin || "tan",
-        bodyType: selections.bodyType || "regular",
-        chest: selections.chest || "medium",
-        hairStyle: selections.hairStyle || "straight",
-        hairColour: selections.hairColour || "brunette",
-        eye: selections.eye || "brown",
-        makeup: selections.makeup || "natural",
-        age: selections.age,
-        description: "",
-      }));
-      navigate(`/account?redirect=${encodeURIComponent("/")}`);
-      return;
-    }
+    // Store selections in sessionStorage for persistence through sign-in redirect
+    const draft = {
+      characterName: selections.characterName,
+      skin: selections.skin || "tan",
+      bodyType: selections.bodyType || "regular",
+      chest: selections.chest || "medium",
+      hairStyle: selections.hairStyle || "straight",
+      hairColour: selections.hairColour || "brunette",
+      eye: selections.eye || "brown",
+      makeup: selections.makeup || "natural",
+      age: selections.age,
+      description: "",
+    };
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
     // Build prompt
     const sk = selections.skin || "tan";
@@ -282,38 +263,42 @@ const CharacterCreator = () => {
     const ag = selections.age || "25";
     const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${ch} chest, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
 
-    // Store prompt for loading complete handler
     guidedPromptRef.current = prompt;
+    sessionStorage.setItem("vizura_guided_prompt", prompt);
 
-    // Show loading immediately — no gap since guided already exited
+    // Show loading immediately
     setShowLoading(true);
-    setIsSaving(true);
-    try {
-      const charData = {
-        user_id: user.id,
-        name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
-        country: sanitiseText(sk, 50),
-        age: ag,
-        hair: sanitiseText(hc, 50),
-        eye: sanitiseText(ey, 50),
-        body: sanitiseText(bt, 50),
-        style: sanitiseText(mk, 50),
-        description: sanitiseText(`${ch} chest, ${hs} hair.`, 500),
-        generation_prompt: prompt,
-      };
-      const { data: inserted, error: insertError } = await supabase
-        .from("characters")
-        .insert(charData)
-        .select("id")
-        .single();
-      if (insertError) throw insertError;
-      sessionStorage.setItem("vizura_pending_char_id", inserted.id);
-    } catch (err: any) {
-      toast.error(err.message || "failed to save character");
-      setShowLoading(false);
+
+    if (user) {
+      setIsSaving(true);
+      try {
+        const charData = {
+          user_id: user.id,
+          name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
+          country: sanitiseText(sk, 50),
+          age: ag,
+          hair: sanitiseText(hc, 50),
+          eye: sanitiseText(ey, 50),
+          body: sanitiseText(bt, 50),
+          style: sanitiseText(mk, 50),
+          description: sanitiseText(`${ch} chest, ${hs} hair.`, 500),
+          generation_prompt: prompt,
+        };
+        const { data: inserted, error: insertError } = await supabase
+          .from("characters")
+          .insert(charData)
+          .select("id")
+          .single();
+        if (insertError) throw insertError;
+        sessionStorage.setItem("vizura_pending_char_id", inserted.id);
+      } catch (err: any) {
+        toast.error(err.message || "failed to save character");
+        setShowLoading(false);
+      }
+      setIsSaving(false);
     }
-    setIsSaving(false);
-  }, [user, navigate]);
+    // For non-logged-in users, loading screen plays, then choose-face will handle sign-in
+  }, [user]);
 
   const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {
     if (partial.skin) setSkin(partial.skin);
