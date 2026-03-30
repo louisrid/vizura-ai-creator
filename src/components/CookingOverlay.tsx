@@ -13,43 +13,43 @@ const PHRASES = [
 ];
 
 const PHRASE_INTERVAL = 2500;
-const COOKING_DURATION = 25000; // 25 seconds
-const SUCCESS_HOLD = 5000; // Hold green tick for 5s
+const COOKING_DURATION = 25000;
+const SUCCESS_HOLD = 5000;
 const TICK_INTERVAL = 100;
 
 const GreenTick = () => (
-  <div className="relative">
-    <motion.div
-      className="absolute inset-0 rounded-full"
-      style={{ filter: "blur(20px)", background: "hsl(140 100% 50% / 0.3)" }}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
-      transition={{ duration: 2, repeat: Infinity, delay: 2.5, ease: "easeInOut" }}
+  <motion.svg
+    width="80"
+    height="80"
+    viewBox="0 0 80 80"
+    fill="none"
+    initial={{ opacity: 0, scale: 0.6 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+  >
+    <motion.circle
+      cx="40"
+      cy="40"
+      r="36"
+      stroke="hsl(140, 100%, 50%)"
+      strokeWidth="3.5"
+      fill="none"
+      initial={{ pathLength: 0, opacity: 0 }}
+      animate={{ pathLength: 1, opacity: 1 }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
     />
-    <motion.svg
-      width="80" height="80" viewBox="0 0 80 80" fill="none"
-      className="relative z-10"
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-    >
-      <motion.circle cx="40" cy="40" r="36" stroke="hsl(140 100% 50%)" strokeWidth="4" fill="none"
-        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, ease: "easeOut" }} />
-      <motion.path d="M24 42 L34 52 L56 30" stroke="hsl(140 100% 50%)" strokeWidth="5"
-        strokeLinecap="round" strokeLinejoin="round" fill="none"
-        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.0, delay: 1.2, ease: "easeOut" }} />
-      <motion.rect x="-10" y="0" width="20" height="80" fill="url(#shimmer2)"
-        initial={{ x: -20 }} animate={{ x: 100 }}
-        transition={{ duration: 0.6, delay: 2.5, ease: "easeInOut" }} />
-      <defs>
-        <linearGradient id="shimmer2" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="white" stopOpacity="0" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="white" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-    </motion.svg>
-  </div>
+    <motion.path
+      d="M24 42 L34 52 L56 30"
+      stroke="hsl(140, 100%, 50%)"
+      strokeWidth="4.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+      initial={{ pathLength: 0, opacity: 0 }}
+      animate={{ pathLength: 1, opacity: 1 }}
+      transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
+    />
+  </motion.svg>
 );
 
 const PhraseText = ({ phrase }: { phrase: string }) => (
@@ -154,14 +154,14 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white" key={progress}>
+                <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
                   {progress}%
                 </motion.span>
-                <div className="w-full max-w-xs h-3 rounded-full bg-foreground/10 overflow-hidden">
+                <div className="w-full max-w-xs h-3 rounded-full bg-white/10 overflow-hidden">
                   <motion.div
                     className="h-full rounded-full"
                     style={{
-                      background: "linear-gradient(90deg, hsl(40 100% 55%), hsl(185 100% 55%), hsl(140 100% 50%))",
+                      background: "linear-gradient(90deg, hsl(40, 100%, 55%), hsl(185, 100%, 55%), hsl(140, 100%, 50%))",
                       width: `${progress}%`,
                     }}
                     transition={{ duration: 0.1 }}
@@ -187,7 +187,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                   className="text-center text-2xl font-extrabold lowercase text-white"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 2.0, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.5, delay: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   character ready!
                 </motion.p>

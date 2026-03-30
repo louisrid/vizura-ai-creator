@@ -512,7 +512,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: isCreateSlide ? "62%" : "72%" }}>
               {isCreateSlide ? (
                 <div className="mb-4 flex flex-col items-center gap-4">
                   <motion.button
