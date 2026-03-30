@@ -799,7 +799,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: initialFadeIn ? 1.2 : 0.3 }}
+      transition={{ duration: initialFadeIn ? 0.8 : 0.2 }}
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
     >
