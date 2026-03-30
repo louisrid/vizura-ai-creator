@@ -644,8 +644,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       return (
         <div className="flex w-full flex-col items-center justify-center">
+          {isLoggedIn && (
+            <div className="mb-4 flex items-center gap-1.5">
+              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
+            </div>
+          )}
+          {!isLoggedIn && (
+            <p className="mb-4 text-sm font-extrabold lowercase text-white/40">first one's free</p>
+          )}
           <motion.button
-            onClick={(e) => { e.stopPropagation(); advance(); }}
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
             className="h-16 w-[80vw] max-w-[20rem] rounded-2xl text-lg font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
             style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
             animate={{ scale: [1, 1.03, 1] }}
