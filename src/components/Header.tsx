@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import VizuraLogo from "@/components/VizuraLogo";
@@ -72,15 +72,21 @@ const Header = () => {
     navigate(path);
   };
 
-  // When on /account with a redirect param, treat the redirect target as the active page
-  const searchParams = new URLSearchParams(location.search);
-  const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
-  const effectivePath = redirectTarget || location.pathname;
+  const { currentPage, CurrentIcon } = useMemo(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
+    const effectivePath = redirectTarget || location.pathname;
+    const page = resolvePageName(effectivePath) || resolvePageName(location.pathname);
+    const activePath = resolveActivePath(effectivePath);
+    const menuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname)) || menuItems[0];
+    return { currentPage: page, CurrentIcon: menuItem?.icon || Sparkles, activePath };
+  }, [location.pathname, location.search]);
 
-  const currentPage = resolvePageName(effectivePath) || resolvePageName(location.pathname);
-  const activePath = resolveActivePath(effectivePath);
-  const currentMenuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname)) || menuItems[0];
-  const CurrentIcon = currentMenuItem?.icon || Sparkles;
+  const activePath = useMemo(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
+    return resolveActivePath(redirectTarget || location.pathname);
+  }, [location.pathname, location.search]);
 
   return (
     <header className="bg-nav sticky top-0 z-40 border-b-[5px] border-white">

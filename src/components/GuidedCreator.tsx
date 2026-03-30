@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, ArrowLeft, ArrowRight, Loader2, RefreshCw, Upload } from "lucide-react";
+import { Zap, ArrowLeft, ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -58,7 +58,8 @@ Dots.displayName = "Dots";
 const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(({ direction, onClick, disabled }, ref) => (
   <button
     ref={ref}
-    onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
+    type="button"
+    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) onClick(); }}
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
       backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
@@ -134,7 +135,8 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
   label: string; selected: boolean; shaking: boolean; onClick: () => void;
 }) => (
   <motion.button
-    onClick={(e) => { e.stopPropagation(); onClick(); }}
+    type="button"
+    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     animate={
       selected
         ? { scale: [1, 1.15, 1], transition: { duration: 0.1 } }
@@ -246,8 +248,14 @@ const TOTAL = 13;
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isLoggedIn = !!user;
 
-  const [step, setStep] = useState(skipWelcome ? 2 : 0);
+  // When skipWelcome, internal steps still 0-12 but we start at 2 and hide first 2 dots
+  const minStep = skipWelcome ? 2 : 0;
+
+  const [step, setStep] = useState(minStep);
+  const dotTotal = skipWelcome ? TOTAL - 2 : TOTAL;
+  const dotCurrent = skipWelcome ? step - 2 : step;
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const [summaryShake, setSummaryShake] = useState(false);
@@ -267,8 +275,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (open) {
       // Restore from sessionStorage to survive tab switches
       const saved = (() => { try { const r = sessionStorage.getItem(FLOW_STATE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } })();
-      const defaultStep = skipWelcome ? 2 : 0;
-      setStep(Math.max(saved?.step ?? defaultStep, defaultStep));
+      setStep(Math.max(saved?.step ?? minStep, minStep));
       setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
       setShaking(false);
       setSummaryShake(false);
@@ -415,7 +422,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
   const goBack = useCallback(() => {
-    if (animating.current || step <= 0 || cookingPhase !== "none") return;
+    if (animating.current || step <= minStep || cookingPhase !== "none") return;
     animating.current = true;
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, 80);
@@ -428,6 +435,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;
+
+  // Prevent any form submissions from causing page reload
+  const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
 
   if (!mounted || !visible) return null;
 
@@ -520,12 +530,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               transition={{ duration: 0.4 }}
               value={selections.characterName}
               onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
-              placeholder="character name..."
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
               className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
             <motion.button
-              onClick={(e) => { e.stopPropagation(); randomiseName(); }}
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
             >
@@ -549,10 +560,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               }}
               placeholder="age (18-40)"
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
               className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
             <motion.button
-              onClick={(e) => { e.stopPropagation(); randomiseAge(); }}
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseAge(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
             >
@@ -636,8 +649,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       return (
         <div className="flex w-full flex-col items-center justify-center">
+          {isLoggedIn && (
+            <div className="mb-4 flex items-center gap-1.5">
+              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
+            </div>
+          )}
+          {!isLoggedIn && (
+            <p className="mb-4 text-sm font-extrabold lowercase text-white/40">first one's free</p>
+          )}
           <motion.button
-            onClick={(e) => { e.stopPropagation(); advance(); }}
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
             className="h-16 w-[80vw] max-w-[20rem] rounded-2xl text-lg font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
             style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
             animate={{ scale: [1, 1.03, 1] }}
@@ -754,7 +777,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {!isCooking && (
           <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
             <div className="mb-4 flex h-14 items-center gap-4">
-              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+              <NavArrow direction="left" onClick={goBack} disabled={step <= minStep} />
               <NavArrow
                 direction="right"
                 onClick={advance}
@@ -762,12 +785,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               />
             </div>
             <div className="flex h-3 items-center">
-              <Dots current={step} total={TOTAL} />
+              <Dots current={dotCurrent} total={dotTotal} />
             </div>
 
-            {!isCreateSlide && (
+            {!isLoggedIn && !isCreateSlide && (
               <button
-                onClick={(e) => { e.stopPropagation(); handleSkipToLogin(); }}
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
                 className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
               >
                 skip to login
