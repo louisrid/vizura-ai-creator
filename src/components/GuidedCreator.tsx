@@ -782,7 +782,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.7, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.5, delay: 1.6, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
