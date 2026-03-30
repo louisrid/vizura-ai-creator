@@ -54,29 +54,29 @@ const AmbientGlow = () => (
     <motion.div
       className="absolute rounded-full blur-[160px]"
       style={{
-        width: "90%", height: "80%", top: "10%", left: "5%",
-        background: "radial-gradient(circle, hsl(270 70% 35% / 0.55), hsl(240 80% 22% / 0.35), transparent 70%)",
+        width: "85%", height: "75%", top: "10%", left: "5%",
+        background: "radial-gradient(circle, hsl(270 60% 30% / 0.35), hsl(240 70% 20% / 0.2), transparent 70%)",
       }}
-      animate={{ x: [0, 50, -40, 0], y: [0, -40, 30, 0], scale: [1, 1.2, 0.85, 1] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, 60, -30, 20, -50, 0], y: [0, -50, 20, -30, 40, 0], scale: [1, 1.15, 0.9, 1.1, 0.95, 1] }}
+      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
     />
     <motion.div
       className="absolute rounded-full blur-[140px]"
       style={{
-        width: "70%", height: "70%", bottom: "5%", right: "0%",
-        background: "radial-gradient(circle, hsl(220 80% 28% / 0.5), hsl(260 70% 25% / 0.3), transparent 65%)",
+        width: "65%", height: "65%", bottom: "5%", right: "0%",
+        background: "radial-gradient(circle, hsl(220 70% 25% / 0.3), hsl(260 60% 22% / 0.18), transparent 65%)",
       }}
-      animate={{ x: [0, -45, 35, 0], y: [0, 25, -35, 0], scale: [1, 0.8, 1.15, 1] }}
-      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, -55, 40, -20, 35, 0], y: [0, 30, -40, 20, -25, 0], scale: [1, 0.85, 1.12, 0.9, 1.08, 1] }}
+      transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
     />
     <motion.div
       className="absolute rounded-full blur-[180px]"
       style={{
-        width: "60%", height: "60%", top: "30%", left: "30%",
-        background: "radial-gradient(circle, hsl(280 60% 40% / 0.3), hsl(200 70% 25% / 0.2), transparent 60%)",
+        width: "55%", height: "55%", top: "30%", left: "30%",
+        background: "radial-gradient(circle, hsl(280 50% 35% / 0.2), hsl(200 60% 22% / 0.12), transparent 60%)",
       }}
-      animate={{ x: [0, 30, -20, 0], y: [0, -20, 15, 0], scale: [0.9, 1.1, 0.95, 0.9] }}
-      transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, 35, -25, 15, -30, 0], y: [0, -25, 20, -15, 10, 0], scale: [0.9, 1.08, 0.92, 1.05, 0.95, 0.9] }}
+      transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
     />
   </div>
 );
