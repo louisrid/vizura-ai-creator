@@ -265,9 +265,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
 
   const advance = useCallback(() => {
     if (animating.current) return;
-    if (isWelcomeSlide) {
-      onMarkWelcomeSeen();
-    }
+    // Welcome slide: just advance, no validation needed
     if (currentTraitIndex >= 0 && !isCurrentSelected()) {
       triggerShake();
       return;
