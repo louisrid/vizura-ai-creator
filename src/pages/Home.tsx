@@ -198,7 +198,7 @@ const Home = () => {
           </button>
         </div>
 
-        <section className="mt-3 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
+        <section className="mt-5 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
           <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
           <div className="grid grid-cols-4 gap-2">
             {photoSlots.map((photo) => {
