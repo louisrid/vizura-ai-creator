@@ -714,21 +714,30 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.65 }}
+          transition={{ duration: 0.8 }}
         >
-          <motion.svg width="110" height="110" viewBox="0 0 110 110" fill="none"
-            initial={{ opacity: 0, scale: 0.8 }}
+          <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
+            initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            <motion.path d="M30 57 L47 74 L80 38" stroke="black" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.15, ease: "easeInOut" }} />
+            <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 1.4, ease: "easeOut" }}
+            />
+            <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
+            />
           </motion.svg>
           <motion.p
-            className="text-center text-3xl font-extrabold lowercase text-black"
-            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            className="text-center text-3xl font-[900] lowercase text-white"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.75, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.7, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
