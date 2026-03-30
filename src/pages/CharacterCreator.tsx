@@ -242,7 +242,7 @@ const CharacterCreator = () => {
       eye: selections.eye || "brown",
       makeup: selections.makeup || "normal",
       age: selections.age,
-      description: "",
+      description: selections.description || "",
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
