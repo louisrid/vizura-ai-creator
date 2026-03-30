@@ -22,7 +22,7 @@ const STARTER_CHARACTER = {
   style: "natural",
   description: "medium chest, straight hair.",
   generation_prompt: "photorealistic portrait, 22 year old woman, pale skin, slim body type, medium chest, straight blonde hair, blue eyes, natural makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed",
-  face_image_url: "https://ftarhquathhyxprbrbkb.supabase.co/storage/v1/object/public/placeholder",
+  face_image_url: null,
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
