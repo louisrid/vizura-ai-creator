@@ -295,7 +295,7 @@ const ChooseFace = () => {
               <button
                 onClick={handleRegenerate}
                 disabled={rerolling}
-                className="flex-1 h-14 rounded-2xl bg-[hsl(0_0%_12%)] text-sm font-extrabold lowercase text-white flex items-center justify-center gap-2 transition-colors hover:bg-[hsl(0_0%_18%)] disabled:opacity-50"
+                className="flex-1 h-14 rounded-2xl bg-white text-sm font-extrabold lowercase text-black flex items-center justify-center gap-2 transition-colors active:bg-white/70 disabled:opacity-50"
               >
                 {rerolling ? (
                   <Loader2 className="animate-spin" size={16} />

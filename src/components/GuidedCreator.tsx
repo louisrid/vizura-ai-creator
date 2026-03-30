@@ -443,8 +443,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <motion.button
               onClick={(e) => { e.stopPropagation(); randomiseAge(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
-              whileHover={{ scale: 1.1 }}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
               title="randomise age"
             >
               <RefreshCw size={16} strokeWidth={2.5} />
