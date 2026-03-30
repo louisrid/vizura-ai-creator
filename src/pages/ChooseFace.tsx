@@ -214,7 +214,7 @@ const ChooseFace = () => {
 
   if (showPaywall) {
     return (
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen bg-black">
         <PaywallOverlay open={true} onClose={() => navigate("/")} hasSubscription={subscribed} />
       </div>
     );
