@@ -19,6 +19,63 @@ type LatestImage = {
   created_at: string;
 };
 
+/* Geometric falling shapes for the black bottom section */
+const GeoPattern = () => {
+  const shapes = useMemo(() => {
+    const items: { x: number; delay: number; duration: number; size: number; type: "hex" | "diamond" | "dot"; opacity: number }[] = [];
+    for (let i = 0; i < 20; i++) {
+      items.push({
+        x: Math.random() * 100,
+        delay: Math.random() * 12,
+        duration: 14 + Math.random() * 10,
+        size: 4 + Math.random() * 8,
+        type: (["hex", "diamond", "dot"] as const)[Math.floor(Math.random() * 3)],
+        opacity: 0.04 + Math.random() * 0.06,
+      });
+    }
+    return items;
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {shapes.map((s, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          style={{
+            left: `${s.x}%`,
+            width: s.size,
+            height: s.size,
+            opacity: s.opacity,
+          }}
+          initial={{ y: "-10%", rotate: 0 }}
+          animate={{ y: "110%", rotate: 360 }}
+          transition={{
+            duration: s.duration,
+            repeat: Infinity,
+            delay: s.delay,
+            ease: "linear",
+          }}
+        >
+          {s.type === "hex" && (
+            <svg viewBox="0 0 12 14" fill="none" width="100%" height="100%">
+              <polygon points="6,0 12,3.5 12,10.5 6,14 0,10.5 0,3.5" stroke="hsl(0 0% 40%)" strokeWidth="0.8" fill="none" />
+            </svg>
+          )}
+          {s.type === "diamond" && (
+            <svg viewBox="0 0 12 12" fill="none" width="100%" height="100%">
+              <polygon points="6,0 12,6 6,12 0,6" stroke="hsl(0 0% 35%)" strokeWidth="0.8" fill="none" />
+            </svg>
+          )}
+          {s.type === "dot" && (
+            <div className="w-full h-full rounded-full" style={{ backgroundColor: "hsl(0 0% 40%)", opacity: 0.5 }} />
+          )}
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -248,9 +305,11 @@ const Home = () => {
           </div>
         </main>
 
-        {/* Full-bleed white divider + black bottom section */}
-        <div className="mt-10 border-t-[5px] border-white" />
-        <div className="flex-1" style={{ backgroundColor: '#000000' }} />
+        {/* Full-bleed white divider + black bottom section with geo pattern */}
+        <div className="mt-12 border-t-[5px] border-white" />
+        <div className="relative flex-1" style={{ backgroundColor: '#000000' }}>
+          <GeoPattern />
+        </div>
       </div>
     </div>
   );

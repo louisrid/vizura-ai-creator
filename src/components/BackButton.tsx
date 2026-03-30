@@ -18,7 +18,7 @@ const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
     <button
       ref={ref}
       onClick={handleBack}
-      className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
+      className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
       aria-label="go back"
     >
       <ArrowLeft size={14} strokeWidth={2.5} />

@@ -22,9 +22,19 @@ interface Character {
 
 const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
 
-const getStableEmoji = (id: string): string => {
+const DEFAULT_AVA_EMOJI = "👸";
+
+const getCharacterEmoji = (char: Character): string => {
+  // Check if description has an embedded emoji tag
+  const match = char.description?.match(/\[emoji:(.+?)\]/);
+  if (match) return match[1];
+  
+  // For Ava (starter character), use a fixed emoji
+  if (char.name === "ava") return DEFAULT_AVA_EMOJI;
+  
+  // Fallback: stable hash-based emoji
   let hash = 0;
-  for (let i = 0; i < id.length; i++) hash = ((hash << 5) - hash + id.charCodeAt(i)) | 0;
+  for (let i = 0; i < char.id.length; i++) hash = ((hash << 5) - hash + char.id.charCodeAt(i)) | 0;
   return FACE_EMOJIS[Math.abs(hash) % FACE_EMOJIS.length];
 };
 
@@ -119,9 +129,8 @@ const MyCharacters = () => {
                         className="absolute inset-0 h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="text-4xl mb-1">{getStableEmoji(char.id)}</span>
+                      <span className="text-4xl mb-1">{getCharacterEmoji(char)}</span>
                     )}
-                    {/* Name/age overlay at bottom */}
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6">
                       <span className="block text-[11px] font-extrabold lowercase text-white leading-tight truncate">
                         {char.name || "unnamed"}
@@ -138,7 +147,6 @@ const MyCharacters = () => {
         )}
       </main>
 
-      {/* Fixed bottom Create Photo button */}
       <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
         <div className="mx-auto max-w-lg">
           <button

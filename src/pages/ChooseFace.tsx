@@ -17,6 +17,7 @@ import { sanitiseText } from "@/lib/sanitise";
 const STORAGE_KEY = "vizura_character_draft";
 const FACE_STORAGE_KEY = "vizura_face_options";
 const AUTH_RESUME_KEY = "vizura_resume_after_auth";
+const SELECTED_EMOJI_KEY = "vizura_selected_emoji";
 
 const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
 
@@ -151,13 +152,18 @@ const ChooseFace = () => {
     }
   };
 
-  // Toggle selection — tap again to deselect
   const handleFaceClick = (i: number) => {
     setSelectedIndex((prev) => (prev === i ? null : i));
   };
 
   const handleConfirm = async () => {
     if (selectedIndex === null) return;
+
+    // Store selected emoji for character card display
+    const isEmojiMode = faces.length === 0;
+    if (isEmojiMode) {
+      sessionStorage.setItem(SELECTED_EMOJI_KEY, demoEmojis[selectedIndex]);
+    }
 
     if (!user) {
       sessionStorage.setItem("vizura_selected_face", String(selectedIndex));
@@ -169,7 +175,6 @@ const ChooseFace = () => {
     await doFinalSave();
   };
 
-  // The actual save function - reads current user from auth context at call time
   const doFinalSave = async (forcedFaceIdx?: number) => {
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
@@ -183,14 +188,20 @@ const ChooseFace = () => {
       return false;
     }
 
+    // Determine selected emoji
+    const selectedEmoji = sessionStorage.getItem(SELECTED_EMOJI_KEY) || (faces.length === 0 ? demoEmojis[faceIdx] : null);
+
     let cId = characterId;
     
-    // If no character ID exists, create from draft data
     if (!cId) {
       try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
         if (raw) {
           const draft = JSON.parse(raw);
+          const descParts = [`${draft.chest || ""} chest, ${draft.hairStyle || ""} hair. ${draft.description || ""}`];
+          if (selectedEmoji) {
+            descParts.push(`[emoji:${selectedEmoji}]`);
+          }
           const charData = {
             user_id: currentUser.id,
             name: sanitiseText(draft.characterName || "", 100) || "new character",
@@ -200,7 +211,7 @@ const ChooseFace = () => {
             eye: sanitiseText(draft.eye || "", 50),
             body: sanitiseText(draft.bodyType || "", 50),
             style: sanitiseText(draft.makeup || "", 50),
-            description: sanitiseText(`${draft.chest || ""} chest, ${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
+            description: sanitiseText(descParts.join(" "), 500),
             generation_prompt: prompt || "",
           };
           console.log("[ChooseFace] Creating character with data:", charData);
@@ -230,13 +241,24 @@ const ChooseFace = () => {
       }
     }
 
-    // Save face selection to character
     if (cId) {
       const faceUrl = faces[faceIdx] || null;
       try {
+        const updateData: any = { face_image_url: faceUrl, generation_prompt: prompt };
+        // If emoji mode and no real face, embed emoji in description
+        if (!faceUrl && selectedEmoji) {
+          const { data: existing } = await supabase
+            .from("characters")
+            .select("description")
+            .eq("id", cId)
+            .single();
+          if (existing && !existing.description?.includes("[emoji:")) {
+            updateData.description = (existing.description || "") + ` [emoji:${selectedEmoji}]`;
+          }
+        }
         const { error: updateError } = await supabase
           .from("characters")
-          .update({ face_image_url: faceUrl, generation_prompt: prompt })
+          .update(updateData)
           .eq("id", cId)
           .eq("user_id", currentUser.id);
         if (updateError) throw updateError;
@@ -252,13 +274,13 @@ const ChooseFace = () => {
       sessionStorage.setItem("vizura_new_char_highlight", cId);
     }
 
-    // Cleanup
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
     sessionStorage.removeItem("vizura_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
+    sessionStorage.removeItem(SELECTED_EMOJI_KEY);
 
     toast.success("character added!");
     navigate("/characters");
@@ -268,10 +290,9 @@ const ChooseFace = () => {
   const handleSignedIn = useCallback(async () => {
     setShowSignIn(false);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
-    // Small delay to ensure auth state is fully propagated
     await new Promise((r) => setTimeout(r, 300));
     await doFinalSave();
-  }, [selectedIndex, characterId, faces, prompt]);
+  }, [selectedIndex, characterId, faces, prompt, demoEmojis]);
 
   const handleCookingComplete = () => {
     setShowCooking(false);
@@ -335,10 +356,10 @@ const ChooseFace = () => {
                       animate={{ rotateY: 0, opacity: 1 }}
                       exit={{ rotateY: -90, opacity: 0 }}
                       transition={{ duration: 0.3, delay: i * 0.08 }}
-                      className={`aspect-[3/4] rounded-2xl border-[5px] transition-all duration-200 flex items-center justify-center ${
+                      className={`aspect-[3/4] rounded-2xl border-[5px] transition-all duration-200 flex items-center justify-center bg-card ${
                         selectedIndex === i
-                          ? "border-neon-yellow bg-secondary"
-                          : "border-border bg-secondary hover:border-foreground/40"
+                          ? "border-neon-yellow"
+                          : "border-border hover:border-foreground/40"
                       }`}
                     >
                       <span className="text-4xl leading-none">{emoji}</span>

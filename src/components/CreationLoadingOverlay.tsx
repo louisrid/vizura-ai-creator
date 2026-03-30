@@ -17,13 +17,14 @@ const PHRASE_INTERVAL = 1500;
 const LOADING_DURATION = 8000;
 const SUCCESS_HOLD = 5000;
 
+/* Smooth ripple loader — always visible, no flashing */
 const RippleLoader = () => {
   const rings = [0, 1, 2, 3, 4];
   const colors = [
     "hsl(195, 100%, 55%)",
     "hsl(50, 100%, 50%)",
     "hsl(140, 100%, 50%)",
-    "hsl(330, 100%, 50%)",
+    "hsl(330, 80%, 55%)",
     "hsl(210, 100%, 55%)",
   ];
   return (
@@ -42,8 +43,8 @@ const RippleLoader = () => {
             marginLeft: -10,
           }}
           animate={{
-            scale: [0, 4, 6],
-            opacity: [0.8, 0.4, 0],
+            scale: [1, 3, 5],
+            opacity: [1, 0.7, 0.15],
             borderColor: [
               colors[i % colors.length],
               colors[(i + 1) % colors.length],
@@ -51,26 +52,27 @@ const RippleLoader = () => {
             ],
           }}
           transition={{
-            duration: 3,
+            duration: 4,
             repeat: Infinity,
-            delay: i * 0.6,
+            delay: i * 0.8,
             ease: "easeOut",
           }}
         />
       ))}
       <motion.div
         className="absolute rounded-full"
-        style={{ width: 10, height: 10, background: "hsl(195, 100%, 55%)" }}
+        style={{ width: 12, height: 12 }}
         animate={{
-          scale: [1, 1.3, 1],
+          scale: [1, 1.2, 1],
           backgroundColor: [
             "hsl(195, 100%, 55%)",
             "hsl(50, 100%, 50%)",
             "hsl(140, 100%, 50%)",
+            "hsl(330, 80%, 55%)",
             "hsl(195, 100%, 55%)",
           ],
         }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
   );
