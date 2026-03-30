@@ -79,9 +79,6 @@ const Index = () => {
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
-    if (!charId) return;
-    const char = characters.find((c) => c.id === charId);
-    if (char) setPrompt(buildPromptFromCharacter(char));
   };
 
   // All characters are selectable — the starter "ava" has a generation_prompt so treat her as ready
@@ -175,11 +172,12 @@ const Index = () => {
           {/* Prompt */}
           <div>
             <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
-            <input
+            <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="woman in golden hour light, rooftop..."
-              className="w-full rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground transition-colors"
+              rows={5}
+              className="w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground transition-colors"
             />
           </div>
         </div>
@@ -202,7 +200,7 @@ const Index = () => {
               <>
                 <Zap size={18} strokeWidth={2.5} />
                 create
-                <Gem size={14} strokeWidth={2.5} className="text-neon-yellow-foreground/60 ml-1" />
+                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
                 <span className="text-[11px] ml-0.5">1</span>
               </>
             )}

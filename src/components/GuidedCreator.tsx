@@ -177,9 +177,9 @@ const CookingGreenTick = () => (
     transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
   >
     <motion.circle cx="40" cy="40" r="36" stroke="hsl(140, 100%, 50%)" strokeWidth="3.5" fill="none"
-      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut" }} />
+      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }} />
     <motion.path d="M24 42 L34 52 L56 30" stroke="hsl(140, 100%, 50%)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
-      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }} />
+      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }} />
   </motion.svg>
 );
 
@@ -316,7 +316,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
-    const t = setTimeout(() => setInitialFadeIn(false), 1200);
+    const t = setTimeout(() => setInitialFadeIn(false), 600);
     return () => clearTimeout(t);
   }, [visible, initialFadeIn]);
 
@@ -769,17 +769,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
           >
             <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.0, ease: "easeOut" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
             />
             <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
+              transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
             />
           </motion.svg>
           <motion.p
@@ -787,7 +787,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 1.6, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.5, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
@@ -804,7 +804,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: initialFadeIn ? 0.8 : 0.2 }}
+      transition={{ duration: initialFadeIn ? 0.4 : 0.2 }}
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
     >
@@ -851,7 +851,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
-                className="mt-5 text-xs font-extrabold lowercase text-white/30 underline hover:text-white/50 transition-colors"
+                className="mt-5 text-xs font-extrabold lowercase text-white/40 underline hover:text-white/60 transition-colors"
               >
                 skip to login
               </button>

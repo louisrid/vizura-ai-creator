@@ -75,7 +75,7 @@ const GreenTick = () => (
       fill="none"
       initial={{ pathLength: 0, opacity: 0 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.2, ease: "easeOut" }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
     />
     <motion.path
       d="M24 42 L34 52 L56 30"
@@ -86,7 +86,7 @@ const GreenTick = () => (
       fill="none"
       initial={{ pathLength: 0, opacity: 0 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
+      transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
     />
   </motion.svg>
 );
