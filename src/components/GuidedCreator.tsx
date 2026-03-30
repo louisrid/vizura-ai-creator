@@ -319,12 +319,36 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
+
+    const handleVisibilitySave = () => {
+      if (document.visibilityState === "hidden") {
+        persistFlow();
+        return;
+      }
+      if (document.visibilityState === "visible") {
+        restoreSavedFlow();
+      }
+    };
+
+    const handlePageHide = () => persistFlow();
+    const handlePageShow = () => restoreSavedFlow();
+    const handleWindowFocus = () => restoreSavedFlow();
+
+    document.addEventListener("visibilitychange", handleVisibilitySave);
+    window.addEventListener("pagehide", handlePageHide);
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("focus", handleWindowFocus);
+
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
+      document.removeEventListener("visibilitychange", handleVisibilitySave);
+      window.removeEventListener("pagehide", handlePageHide);
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("focus", handleWindowFocus);
     };
-  }, [visible]);
+  }, [visible, persistFlow, restoreSavedFlow]);
 
   // Cooking phase timers
   useEffect(() => {

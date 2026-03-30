@@ -208,6 +208,13 @@ serve(async (req) => {
       });
     }
 
+    if (IS_DEMO_MODE) {
+      return new Response(
+        JSON.stringify({ images: generateDemoImages(prompt, Math.min(imageCount, 3)), demo: true }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     /* ── admin client ── */
     const adminClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
