@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Trash2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/sonner";
 
 interface Character {
   id: string;
@@ -24,6 +26,8 @@ const CharacterDetail = () => {
   const navigate = useNavigate();
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showDelete, setShowDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -45,6 +49,20 @@ const CharacterDetail = () => {
     };
     if (user) fetch();
   }, [user, id]);
+
+  const handleDelete = async () => {
+    if (!character) return;
+    setDeleting(true);
+    const { error } = await supabase.from("characters").delete().eq("id", character.id);
+    if (error) {
+      toast.error("failed to delete character");
+      setDeleting(false);
+      setShowDelete(false);
+      return;
+    }
+    toast.success("character deleted");
+    navigate("/characters", { replace: true });
+  };
 
   if (loading || authLoading) {
     return (
@@ -151,7 +169,59 @@ const CharacterDetail = () => {
             </p>
           </div>
         )}
+
+        {/* Delete button */}
+        <button
+          onClick={() => setShowDelete(true)}
+          className="mt-4 flex items-center justify-center gap-2 h-12 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors shrink-0"
+        >
+          <Trash2 size={14} strokeWidth={2.5} />
+          delete character
+        </button>
       </main>
+
+      {/* Delete confirmation overlay */}
+      <AnimatePresence>
+        {showDelete && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-black px-6"
+          >
+            <motion.div
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, delay: 0.05 }}
+            >
+              <h2 className="text-xl font-extrabold lowercase text-white leading-snug mb-2">
+                are you sure you want to<br />delete this character?
+              </h2>
+              <p className="text-base font-extrabold lowercase text-white/50 mb-10">
+                {character.name || "unnamed"}
+              </p>
+              <div className="flex gap-3 w-full max-w-xs">
+                <button
+                  onClick={() => !deleting && setShowDelete(false)}
+                  disabled={deleting}
+                  className="flex-1 h-14 rounded-2xl bg-white text-sm font-extrabold lowercase text-black transition-colors active:bg-white/70 disabled:opacity-50"
+                >
+                  go back
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex-1 h-14 rounded-2xl bg-destructive text-sm font-extrabold lowercase text-white transition-colors hover:bg-destructive/90 disabled:opacity-50"
+                >
+                  {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

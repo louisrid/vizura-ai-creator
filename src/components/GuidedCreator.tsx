@@ -567,8 +567,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
 /* ── Sign-in overlay (post face selection) ── */
 export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn: () => void }) => {
-  const { user } = useAuth();
+  const { user, autoSignIn } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [autoLoading, setAutoLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -606,6 +607,16 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     }
   };
 
+  const handleAutoSignIn = async () => {
+    setAutoLoading(true);
+    try {
+      await autoSignIn();
+    } catch (err: any) {
+      toast.error(err.message || "sign in failed");
+      setAutoLoading(false);
+    }
+  };
+
   if (!visible) return null;
 
   return createPortal(
@@ -625,7 +636,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         </h2>
         <button
           onClick={handleGoogle}
-          disabled={googleLoading}
+          disabled={googleLoading || autoLoading}
           className="mt-8 w-full h-14 rounded-2xl text-sm font-[900] lowercase tracking-tight flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50"
           style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
         >
@@ -649,12 +660,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <div className="flex-1 h-[2px] bg-white/10" />
         </div>
         <button
-          onClick={() => {
-            window.location.href = "/account?redirect=" + encodeURIComponent("/choose-face");
-          }}
-          className="mt-4 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors"
+          onClick={handleAutoSignIn}
+          disabled={autoLoading || googleLoading}
+          className="mt-4 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors disabled:opacity-50"
         >
-          sign in with email
+          {autoLoading ? (
+            <><Loader2 className="animate-spin" size={18} />signing in...</>
+          ) : (
+            <>continue<ArrowRight size={18} strokeWidth={2.5} /></>
+          )}
         </button>
       </div>
     </motion.div>,
