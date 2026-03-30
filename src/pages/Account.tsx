@@ -168,7 +168,7 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
             className="text-[3rem] font-extrabold lowercase tracking-tight text-black"
             initial={{ opacity: 0, scale: 1.2 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.35, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.25, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
           >
             subscribed!
           </motion.h1>
