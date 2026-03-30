@@ -21,6 +21,7 @@ const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
 const makeupOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
+const FLOW_STATE_KEY = "vizura_guided_flow_state";
 
 const PillGroup = ({
   label, options, value, onChange,
@@ -79,9 +80,14 @@ const CharacterCreator = () => {
 
   useEffect(() => {
     if (!guidedReady || isEditing) return;
-    setSkipWelcome(false);
+    const shouldSkip = !!user && (characterCount ?? 0) > 0;
+    setSkipWelcome(shouldSkip);
+    if (shouldSkip) {
+      const timer = window.setTimeout(() => setShowGuided(true), 1000);
+      return () => window.clearTimeout(timer);
+    }
     setShowGuided(true);
-  }, [guidedReady, isEditing]);
+  }, [guidedReady, isEditing, user, characterCount]);
 
   const saved = useMemo(() => {
     try {
@@ -111,6 +117,13 @@ const CharacterCreator = () => {
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referencePreview, setReferencePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // On full page reload, clear flow state so it restarts fresh
+  useEffect(() => {
+    const navEntry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (navEntry?.type !== "reload") return;
+    [STORAGE_KEY, FLOW_STATE_KEY, "vizura_guided_prompt", "vizura_selected_face", "vizura_face_options", "vizura_pending_char_id"].forEach((k) => sessionStorage.removeItem(k));
+  }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -253,6 +266,7 @@ const CharacterCreator = () => {
     }
 
     // Close guided overlay after navigation is queued
+    sessionStorage.removeItem(FLOW_STATE_KEY);
     setShowGuided(false);
   }, [user, navigate]);
 
@@ -269,15 +283,12 @@ const CharacterCreator = () => {
     setShowGuided(false);
   }, []);
 
-  const handleLaunchGuided = () => {
-    setSkipWelcome(true);
-    setShowGuided(true);
-  };
-
-  const pageHidden = showGuided;
+  const pendingGuidedStart = !isEditing && guidedReady && !!user && (characterCount ?? 0) > 0 && !showGuided;
+  const pageHidden = showGuided || pendingGuidedStart || (!guidedReady && !isEditing);
 
   return (
     <div className={`relative min-h-screen ${pageHidden ? "bg-black" : "bg-background"}`}>
+      {pageHidden && <div className="fixed inset-0 z-[9997] bg-black" />}
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
       <GuidedCreator
         open={showGuided}
@@ -290,15 +301,7 @@ const CharacterCreator = () => {
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
         <div className="flex items-center justify-between mb-8">
           <PageTitle className="mb-0">create character</PageTitle>
-          {!showGuided && (
-            <button
-              onClick={handleLaunchGuided}
-              className="flex items-center gap-1.5 text-xs font-extrabold lowercase text-foreground/50 hover:text-foreground transition-colors"
-            >
-              <Sparkles size={14} strokeWidth={2.5} />
-              guided creator
-            </button>
-          )}
+
         </div>
 
         {/* Hero image box */}
@@ -403,8 +406,8 @@ const CharacterCreator = () => {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
-            rows={6}
-            className="min-h-40 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            rows={8}
+            className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 

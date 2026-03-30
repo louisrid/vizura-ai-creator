@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, ArrowLeft, ArrowRight, Loader2, RefreshCw, Upload } from "lucide-react";
@@ -8,9 +8,10 @@ import { toast } from "@/components/ui/sonner";
 import { useNavigate } from "react-router-dom";
 
 /* ── Constants ── */
-const NEON_BLUE = "hsl(195 100% 55%)";
-const PURE_WHITE = "hsl(0 0% 100%)";
+const NEON_BLUE = "hsl(var(--gem-green))";
+const PURE_WHITE = "hsl(var(--foreground))";
 const AMBER = "hsl(var(--neon-yellow))";
+const FLOW_STATE_KEY = "vizura_guided_flow_state";
 
 const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
@@ -36,8 +37,8 @@ const emojiMotions = [
 ];
 
 /* ── Dots ── */
-const Dots = ({ current, total }: { current: number; total: number }) => (
-  <div className="flex items-center gap-2">
+const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
+  <div ref={ref} className="flex items-center gap-2">
     {Array.from({ length: total }).map((_, i) => (
       <div
         key={i}
@@ -50,11 +51,13 @@ const Dots = ({ current, total }: { current: number; total: number }) => (
       />
     ))}
   </div>
-);
+));
+Dots.displayName = "Dots";
 
 /* ── Nav arrow ── */
-const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean }) => (
+const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(({ direction, onClick, disabled }, ref) => (
   <button
+    ref={ref}
     onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
@@ -74,7 +77,8 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
       <ArrowRight size={22} strokeWidth={2.5} style={{ color: "hsl(0 0% 0%)" }} />
     )}
   </button>
-);
+));
+NavArrow.displayName = "NavArrow";
 
 /* ── Background glow — subtle purple aurora ── */
 const AmbientGlow = () => (
@@ -261,8 +265,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (open) {
-      setStep(skipWelcome ? 2 : 0);
-      setSelections({ ...emptySelections });
+      // Restore from sessionStorage to survive tab switches
+      const saved = (() => { try { const r = sessionStorage.getItem(FLOW_STATE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } })();
+      const defaultStep = skipWelcome ? 2 : 0;
+      setStep(Math.max(saved?.step ?? defaultStep, defaultStep));
+      setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
       setShaking(false);
       setSummaryShake(false);
       setInitialFadeIn(true);
@@ -272,6 +279,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = false;
     }
   }, [open, skipWelcome]);
+
+  // Persist flow state to survive tab switches (but NOT full page refreshes — those are cleared in CharacterCreator)
+  useEffect(() => {
+    if (!visible || cookingPhase !== "none") return;
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step, selections }));
+  }, [visible, cookingPhase, step, selections]);
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
@@ -311,7 +324,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   useEffect(() => {
     if (cookingPhase !== "success") return;
     const t = setTimeout(() => {
-      // Done cooking - trigger onComplete which will navigate
+      sessionStorage.removeItem(FLOW_STATE_KEY);
       onComplete(selectionsRef.current);
     }, COOKING_SUCCESS_HOLD);
     return () => clearTimeout(t);
@@ -409,6 +422,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, cookingPhase]);
 
   const handleSkipToLogin = () => {
+    sessionStorage.removeItem(FLOW_STATE_KEY);
     setVisible(false);
     navigate("/account?redirect=/create");
   };
@@ -561,9 +575,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               value={selections.description}
               onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
               placeholder="add any details you want to see…"
-              rows={6}
+              rows={8}
               onClick={(e) => e.stopPropagation()}
-              className="w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
           </div>
         </div>
@@ -674,17 +688,26 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-success"
-          className="flex flex-col items-center gap-6"
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6"
+          style={{ backgroundColor: "hsl(var(--member-green))" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.65 }}
         >
-          <CookingGreenTick />
+          <motion.svg width="110" height="110" viewBox="0 0 110 110" fill="none"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            <motion.path d="M30 57 L47 74 L80 38" stroke="black" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none"
+              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.15, ease: "easeInOut" }} />
+          </motion.svg>
           <motion.p
-            className="text-center text-2xl font-extrabold lowercase text-white"
+            className="text-center text-3xl font-extrabold lowercase text-black"
             initial={{ opacity: 0, y: 15, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.7, delay: 0.75, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
@@ -791,7 +814,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     setGoogleLoading(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin + "/choose-face",
+        redirect_uri: `${window.location.origin}/account?redirect=${encodeURIComponent("/choose-face")}`,
       });
       if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
     } catch (err: any) {
