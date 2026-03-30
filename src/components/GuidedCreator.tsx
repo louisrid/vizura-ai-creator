@@ -291,7 +291,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
-    setTimeout(() => { animating.current = false; }, 100);
+    setTimeout(() => { animating.current = false; }, 50);
   }, [step, TOTAL, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
 
   const goBack = useCallback(() => {
