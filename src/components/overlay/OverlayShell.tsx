@@ -145,12 +145,11 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
   const advance = useCallback(() => {
     setStep((s) => {
       if (s >= totalSteps - 1) {
-        if (onLongPressSkip) setTimeout(() => triggerExit(() => onLongPressSkip()), 0);
         return s;
       }
       return s + 1;
     });
-  }, [totalSteps, onLongPressSkip, triggerExit]);
+  }, [totalSteps]);
   const goBack = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
 
   const stopSkip = useCallback(() => {
