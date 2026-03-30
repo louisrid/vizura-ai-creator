@@ -196,7 +196,7 @@ const CharacterCreator = () => {
   };
 
   // Called when GuidedCreator cooking phase completes
-  const handleGuidedComplete = useCallback((selections: GuidedSelections) => {
+  const handleGuidedComplete = useCallback(async (selections: GuidedSelections) => {
     // Save draft to sessionStorage for ChooseFace to read
     const draft = {
       characterName: selections.characterName,
