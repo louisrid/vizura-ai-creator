@@ -183,24 +183,61 @@ const CookingGreenTick = () => (
   </motion.svg>
 );
 
-const CookingSpinner = () => {
-  const dotCount = 12;
+const RippleLoader = () => {
+  const rings = [0, 1, 2, 3, 4];
+  const colors = [
+    "hsl(195, 100%, 55%)",
+    "hsl(50, 100%, 50%)",
+    "hsl(140, 100%, 50%)",
+    "hsl(330, 100%, 50%)",
+    "hsl(210, 100%, 55%)",
+  ];
   return (
-    <div className="relative h-20 w-20">
-      {Array.from({ length: dotCount }).map((_, i) => {
-        const angle = (360 / dotCount) * i;
-        const delay = (i / dotCount) * 1.8;
-        return (
-          <motion.div key={i} className="absolute left-1/2 top-1/2 h-2.5 w-2.5 rounded-full"
-            style={{ marginLeft: -5, marginTop: -5, transform: `rotate(${angle}deg) translateY(-32px)` }}
-            animate={{
-              backgroundColor: ["hsl(40, 100%, 55%)", "hsl(185, 100%, 55%)", "hsl(140, 100%, 50%)", "hsl(40, 100%, 55%)"],
-              scale: [0.6, 1, 0.6], opacity: [0.3, 1, 0.3],
-            }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay }}
-          />
-        );
-      })}
+    <div className="relative flex items-center justify-center" style={{ width: 120, height: 120 }}>
+      {rings.map((i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            width: 20,
+            height: 20,
+            border: `2.5px solid ${colors[i % colors.length]}`,
+            top: "50%",
+            left: "50%",
+            marginTop: -10,
+            marginLeft: -10,
+          }}
+          animate={{
+            scale: [0, 4, 6],
+            opacity: [0.8, 0.4, 0],
+            borderColor: [
+              colors[i % colors.length],
+              colors[(i + 1) % colors.length],
+              colors[(i + 2) % colors.length],
+            ],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            delay: i * 0.6,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+      <motion.div
+        className="absolute rounded-full"
+        style={{ width: 10, height: 10, background: "hsl(195, 100%, 55%)" }}
+        animate={{
+          scale: [1, 1.3, 1],
+          backgroundColor: [
+            "hsl(195, 100%, 55%)",
+            "hsl(50, 100%, 50%)",
+            "hsl(140, 100%, 50%)",
+            "hsl(195, 100%, 55%)",
+          ],
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
     </div>
   );
 };
@@ -480,7 +517,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const handleSkipToLogin = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setVisible(false);
-    navigate("/auth?redirect=/");
+    window.location.href = "/auth?redirect=/";
   };
 
   const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;  
@@ -699,7 +736,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center mt-3">
           {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
@@ -737,7 +774,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <CookingSpinner />
+          <RippleLoader />
           <div className="h-8 flex items-center">
             <AnimatePresence mode="wait">
               <motion.p
