@@ -271,27 +271,45 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => setMounted(true), []);
 
+  const restoreSavedFlow = useCallback(() => {
+    try {
+      const raw = sessionStorage.getItem(FLOW_STATE_KEY);
+      if (!raw) return false;
+      const saved = JSON.parse(raw) as {
+        step?: number;
+        selections?: Partial<GuidedSelections>;
+        skipWelcome?: boolean;
+      };
+      const restoredMinStep = saved?.skipWelcome ? 2 : 0;
+      setStep(Math.max(saved?.step ?? restoredMinStep, restoredMinStep));
+      setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const persistFlow = useCallback(() => {
+    if (!visible || cookingPhase !== "none") return;
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step: stepRef.current, selections: selectionsRef.current, skipWelcome }));
+  }, [visible, cookingPhase, skipWelcome]);
+
   useEffect(() => {
     if (open) {
-      // Restore from sessionStorage to survive tab switches
-      const saved = (() => { try { const r = sessionStorage.getItem(FLOW_STATE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } })();
-      setStep(Math.max(saved?.step ?? minStep, minStep));
-      setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
+      const restored = restoreSavedFlow();
       setShaking(false);
       setSummaryShake(false);
-      setInitialFadeIn(true);
+      setInitialFadeIn(!restored);
       setVisible(true);
       setCookingPhase("none");
       setCookingPhraseIndex(0);
       animating.current = false;
     }
-  }, [open, skipWelcome]);
+  }, [open, restoreSavedFlow]);
 
-  // Persist flow state to survive tab switches (but NOT full page refreshes — those are cleared in CharacterCreator)
   useEffect(() => {
-    if (!visible || cookingPhase !== "none") return;
-    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step, selections }));
-  }, [visible, cookingPhase, step, selections]);
+    persistFlow();
+  }, [persistFlow, step, selections]);
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
@@ -306,12 +324,36 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
+
+    const handleVisibilitySave = () => {
+      if (document.visibilityState === "hidden") {
+        persistFlow();
+        return;
+      }
+      if (document.visibilityState === "visible") {
+        restoreSavedFlow();
+      }
+    };
+
+    const handlePageHide = () => persistFlow();
+    const handlePageShow = () => restoreSavedFlow();
+    const handleWindowFocus = () => restoreSavedFlow();
+
+    document.addEventListener("visibilitychange", handleVisibilitySave);
+    window.addEventListener("pagehide", handlePageHide);
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("focus", handleWindowFocus);
+
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
+      document.removeEventListener("visibilitychange", handleVisibilitySave);
+      window.removeEventListener("pagehide", handlePageHide);
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("focus", handleWindowFocus);
     };
-  }, [visible]);
+  }, [visible, persistFlow, restoreSavedFlow]);
 
   // Cooking phase timers
   useEffect(() => {
@@ -366,7 +408,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   const selectionsRef = useRef(selections);
+  const stepRef = useRef(step);
   selectionsRef.current = selections;
+  stepRef.current = step;
 
   const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
   const randomiseName = useCallback(() => {
@@ -783,7 +827,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Fixed bottom nav - hidden during cooking */}
         {!isCooking && (
-          <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
+          <div className="absolute inset-x-0 bottom-8 flex flex-col items-center px-6">
             <div className="mb-4 flex h-14 items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step <= minStep} />
               <NavArrow
