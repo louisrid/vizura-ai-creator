@@ -178,7 +178,7 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-4">
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-6">
         <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
