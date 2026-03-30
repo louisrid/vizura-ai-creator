@@ -58,7 +58,8 @@ Dots.displayName = "Dots";
 const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(({ direction, onClick, disabled }, ref) => (
   <button
     ref={ref}
-    onClick={(e) => { e.stopPropagation(); if (!disabled) onClick(); }}
+    type="button"
+    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) onClick(); }}
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
       backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
