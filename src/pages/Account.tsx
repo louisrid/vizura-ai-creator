@@ -162,7 +162,7 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
           initial={{ opacity: 1, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
+          transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
         >
           <motion.h1
             className="text-[3rem] font-extrabold lowercase tracking-tight text-black"
