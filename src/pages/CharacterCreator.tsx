@@ -330,10 +330,8 @@ const CharacterCreator = () => {
       <CreationLoadingOverlay open={showLoading} onComplete={handleLoadingComplete} />
       <GuidedCreator
         open={showGuided}
-        showWelcome={hasSeenWelcome === false}
         onComplete={handleGuidedComplete}
         onExit={handleGuidedExit}
-        onMarkWelcomeSeen={handleMarkWelcomeSeen}
       />
 
       <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
