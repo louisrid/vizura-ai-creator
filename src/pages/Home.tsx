@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
+import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
