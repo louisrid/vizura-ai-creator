@@ -15,7 +15,7 @@ const IntroDots = ({ current, total }: { current: number; total: number }) => (
         style={{
           width: i === current ? 10 : 8,
           height: i === current ? 10 : 8,
-          background: i === current ? LIGHT_BLUE : PURE_WHITE,
+          background: i === current ? NEON_BLUE : PURE_WHITE,
         }}
       />
     ))}
