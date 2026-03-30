@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -22,6 +22,24 @@ import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
+
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password"];
+
+const FreshLoadRedirect = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasRedirected = useRef(false);
+
+  useEffect(() => {
+    if (hasRedirected.current) return;
+    hasRedirected.current = true;
+    if (location.pathname !== "/" && !EXEMPT_ROUTES.includes(location.pathname)) {
+      navigate("/", { replace: true });
+    }
+  }, []);
+
+  return null;
+};
 
 const ScrollToTop = () => {
   const location = useLocation();
@@ -83,6 +101,7 @@ const App = () => (
           <SubscriptionProvider>
             <BrowserRouter>
               <Sonner />
+              <FreshLoadRedirect />
               <ScrollToTop />
               <AnimatedRoutes />
             </BrowserRouter>
