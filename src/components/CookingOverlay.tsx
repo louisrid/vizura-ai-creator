@@ -152,7 +152,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                 className="flex flex-col items-center gap-8 w-full px-10"
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.15 }}
               >
                 <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
                   {progress}%
