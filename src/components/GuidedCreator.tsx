@@ -76,26 +76,35 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
   </button>
 );
 
-/* ── Background glow ── */
+/* ── Background glow — rich purple aurora ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     <motion.div
-      className="absolute rounded-full blur-[120px]"
+      className="absolute rounded-full blur-[160px]"
       style={{
-        width: "70%", height: "70%", top: "20%", left: "15%",
-        background: "radial-gradient(circle, hsl(260 80% 30% / 0.15), hsl(220 90% 20% / 0.08), transparent 70%)",
+        width: "90%", height: "80%", top: "10%", left: "5%",
+        background: "radial-gradient(circle, hsl(270 70% 35% / 0.55), hsl(240 80% 22% / 0.35), transparent 70%)",
       }}
-      animate={{ x: [0, 40, -30, 0], y: [0, -30, 20, 0], scale: [1, 1.15, 0.9, 1] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, 50, -40, 0], y: [0, -40, 30, 0], scale: [1, 1.2, 0.85, 1] }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
     />
     <motion.div
-      className="absolute rounded-full blur-[100px]"
+      className="absolute rounded-full blur-[140px]"
       style={{
-        width: "50%", height: "50%", bottom: "10%", right: "5%",
-        background: "radial-gradient(circle, hsl(200 80% 25% / 0.12), hsl(240 70% 20% / 0.06), transparent 70%)",
+        width: "70%", height: "70%", bottom: "5%", right: "0%",
+        background: "radial-gradient(circle, hsl(220 80% 28% / 0.5), hsl(260 70% 25% / 0.3), transparent 65%)",
       }}
-      animate={{ x: [0, -35, 25, 0], y: [0, 20, -25, 0], scale: [1, 0.85, 1.1, 1] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ x: [0, -45, 35, 0], y: [0, 25, -35, 0], scale: [1, 0.8, 1.15, 1] }}
+      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div
+      className="absolute rounded-full blur-[180px]"
+      style={{
+        width: "60%", height: "60%", top: "30%", left: "30%",
+        background: "radial-gradient(circle, hsl(280 60% 40% / 0.3), hsl(200 70% 25% / 0.2), transparent 60%)",
+      }}
+      animate={{ x: [0, 30, -20, 0], y: [0, -20, 15, 0], scale: [0.9, 1.1, 0.95, 0.9] }}
+      transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
     />
   </div>
 );
