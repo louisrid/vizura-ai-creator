@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Gem, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { Zap, Gem, ArrowLeft, ArrowRight, Loader2, RefreshCw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { lovable } from "@/integrations/lovable/index";
@@ -310,6 +310,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     triggerExit(() => onExit(partial));
   };
 
+  const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
+  const randomiseName = useCallback(() => {
+    const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
+    setSelections((p) => ({ ...p, characterName: name }));
+  }, []);
+  const randomiseAge = useCallback(() => {
+    const age = String(Math.floor(Math.random() * 23) + 18);
+    setSelections((p) => ({ ...p, age }));
+  }, []);
+
   const canAdvance = isWelcomeSlide || isCurrentSelected() || isSummarySlide || isCreateSlide;
 
   if (!mounted || !visible) return null;
@@ -393,32 +403,54 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               );
             })}
           </div>
-          <motion.input
-            animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-            transition={{ duration: 0.4 }}
-            value={selections.characterName}
-            onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
-            placeholder="character name..."
-            onClick={(e) => e.stopPropagation()}
-            className="mt-5 h-12 w-full max-w-[16rem] rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
-          />
-          <motion.input
-            animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-            transition={{ duration: 0.4 }}
-            type="number"
-            min={18}
-            max={40}
-            value={selections.age}
-            onChange={(e) => {
-              const v = e.target.value;
-              if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) {
-                setSelections((p) => ({ ...p, age: v }));
-              }
-            }}
-            placeholder="age (18-40)"
-            onClick={(e) => e.stopPropagation()}
-            className="mt-3 h-12 w-full max-w-[16rem] rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
-          />
+          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+            <motion.input
+              animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+              transition={{ duration: 0.4 }}
+              value={selections.characterName}
+              onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
+              placeholder="character name..."
+              onClick={(e) => e.stopPropagation()}
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+            />
+            <motion.button
+              onClick={(e) => { e.stopPropagation(); randomiseName(); }}
+              whileTap={{ scale: 0.85, rotate: 180 }}
+              whileHover={{ scale: 1.1 }}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              title="randomise name"
+            >
+              <RefreshCw size={16} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem]">
+            <motion.input
+              animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+              transition={{ duration: 0.4 }}
+              type="number"
+              min={18}
+              max={40}
+              value={selections.age}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) {
+                  setSelections((p) => ({ ...p, age: v }));
+                }
+              }}
+              placeholder="age (18-40)"
+              onClick={(e) => e.stopPropagation()}
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+            />
+            <motion.button
+              onClick={(e) => { e.stopPropagation(); randomiseAge(); }}
+              whileTap={{ scale: 0.85, rotate: 180 }}
+              whileHover={{ scale: 1.1 }}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[5px] border-white/15 bg-white/5 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              title="randomise age"
+            >
+              <RefreshCw size={16} strokeWidth={2.5} />
+            </motion.button>
+          </div>
         </div>
       );
     }
@@ -434,16 +466,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           >
             {isFirstFree ? "first one's\nfree" : "ready to\ncreate?"}
           </motion.h2>
-          {isFirstFree && (
-            <motion.div
-              className="mt-1 flex items-center gap-1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.4, 0.7, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <span className="text-lg">✨</span>
-            </motion.div>
-          )}
           {!isFirstFree && (
             <div className="mt-3 flex items-center gap-2">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
@@ -490,7 +512,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: isCreateSlide ? "62%" : "72%" }}>
               {isCreateSlide ? (
                 <div className="mb-4 flex flex-col items-center gap-4">
                   <motion.button
