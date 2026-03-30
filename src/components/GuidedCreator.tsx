@@ -781,12 +781,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               />
             </div>
             <div className="flex h-3 items-center">
-              <Dots current={step} total={TOTAL} />
+              <Dots current={dotCurrent} total={dotTotal} />
             </div>
 
-            {!isCreateSlide && (
+            {!isLoggedIn && !isCreateSlide && (
               <button
-                onClick={(e) => { e.stopPropagation(); handleSkipToLogin(); }}
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
                 className="mt-5 text-xs font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
               >
                 skip to login
