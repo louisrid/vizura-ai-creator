@@ -76,32 +76,32 @@ const NavArrow = ({ direction, onClick, disabled }: { direction: "left" | "right
   </button>
 );
 
-/* ── Background glow — rich purple aurora, high visibility ── */
+/* ── Background glow — subtle purple aurora ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     <motion.div
-      className="absolute rounded-full blur-[140px]"
+      className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(270 80% 40% / 0.6), hsl(240 90% 25% / 0.4), transparent 70%)",
+        background: "radial-gradient(circle, hsl(270 70% 35% / 0.3), hsl(240 80% 22% / 0.18), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
     />
     <motion.div
-      className="absolute rounded-full blur-[120px]"
+      className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(220 80% 30% / 0.55), hsl(260 70% 28% / 0.35), transparent 65%)",
+        background: "radial-gradient(circle, hsl(220 70% 28% / 0.25), hsl(260 60% 25% / 0.15), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
     />
     <motion.div
-      className="absolute rounded-full blur-[160px]"
+      className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(280 70% 42% / 0.45), hsl(200 70% 28% / 0.25), transparent 60%)",
+        background: "radial-gradient(circle, hsl(280 60% 38% / 0.2), hsl(200 60% 25% / 0.1), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -125,7 +125,7 @@ const BigEmoji = ({ emoji, index }: { emoji: string; index: number }) => {
   );
 };
 
-/* ── Interactive pill ── */
+/* ── Interactive pill with flash effect ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
   label: string; selected: boolean; shaking: boolean; onClick: () => void;
 }) => (
@@ -140,7 +140,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors ${
       selected
-        ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
+        ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
     }`}
   >
@@ -165,16 +165,16 @@ interface GuidedCreatorProps {
   open: boolean;
   onComplete: (selections: GuidedSelections) => void;
   onExit: (partialSelections: Partial<GuidedSelections>) => void;
+  skipWelcome?: boolean;
 }
 
-const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
+const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const { credits: gems } = useCredits();
 
-  // Welcome slide ALWAYS shows as slide 0
   const TOTAL = 1 + 7 + 2; // welcome + 7 traits + summary + create
 
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(skipWelcome ? 1 : 0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const [summaryShake, setSummaryShake] = useState(false);
@@ -188,7 +188,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
 
   useEffect(() => {
     if (open) {
-      setStep(0);
+      setStep(skipWelcome ? 1 : 0);
       setSelections({ ...emptySelections });
       setShaking(false);
       setSummaryShake(false);
@@ -197,7 +197,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
       animating.current = false;
       pendingActionRef.current = null;
     }
-  }, [open]);
+  }, [open, skipWelcome]);
 
   useEffect(() => {
     if (!visible) return;
@@ -264,7 +264,6 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
 
   const advance = useCallback(() => {
     if (animating.current) return;
-    // Check trait selection using ref to avoid stale closure
     const traitIdx = step - 1;
     if (traitIdx >= 0 && traitIdx < 7) {
       const key = TRAITS[traitIdx].key;
@@ -315,7 +314,6 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
 
   if (!mounted || !visible) return null;
 
-  /* Slide transition variants — create slide gets dramatic animation */
   const getSlideTransition = () => {
     if (isCreateSlide) {
       return {
@@ -326,10 +324,10 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
       };
     }
     return {
-      initial: { opacity: 0 },
-      animate: { opacity: 1 },
-      exit: { opacity: 0 },
-      transition: { duration: 0.05, ease: "linear" as const },
+      initial: { opacity: 0, x: 20 },
+      animate: { opacity: 1, x: 0 },
+      exit: { opacity: 0, x: -20 },
+      transition: { duration: 0.15, ease: "easeOut" as const },
     };
   };
 
@@ -341,7 +339,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
             <BigEmoji emoji="👁️" index={0} />
           </div>
           <h2 className="mt-1 text-center lowercase leading-tight tracking-tight text-white">
-            <span className="block text-[1.4rem] font-[500]" style={{ opacity: 0.7 }}>welcome to</span>
+            <span className="block text-[1.4rem] font-[800]">welcome to</span>
             <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura</span>
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
@@ -464,7 +462,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
           <AmbientGlow />
 
           <div className="relative flex-1 overflow-hidden">
-            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "42%", transform: "translateY(-50%)" }}>
+            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "46%", transform: "translateY(-50%)" }}>
               <div className="w-full max-w-xs mx-auto flex flex-col items-center">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -481,7 +479,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
               </div>
             </div>
 
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "75%" }}>
               {isCreateSlide ? (
                 <button
                   onClick={(e) => { e.stopPropagation(); advance(); }}

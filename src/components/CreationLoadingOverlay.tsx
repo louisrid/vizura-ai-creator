@@ -14,8 +14,8 @@ const PHRASES = [
 ];
 
 const PHRASE_INTERVAL = 1500;
-const LOADING_DURATION = 10000; // 10 seconds
-const SUCCESS_HOLD = 3500; // Hold green tick for 3.5s
+const LOADING_DURATION = 8000; // 8 seconds
+const SUCCESS_HOLD = 5000; // Hold green tick for 5s
 
 /* ── Animated spinner: cycling ring of dots ── */
 const Spinner = () => {
@@ -57,40 +57,69 @@ const Spinner = () => {
   );
 };
 
-/* ── Green tick with slower stroke draw animation ── */
+/* ── Green tick with slow dramatic stroke draw ── */
 const GreenTick = () => (
-  <motion.svg
-    width="80"
-    height="80"
-    viewBox="0 0 80 80"
-    fill="none"
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-  >
-    <motion.circle
-      cx="40"
-      cy="40"
-      r="36"
-      stroke="hsl(140 100% 50%)"
-      strokeWidth="4"
-      fill="none"
-      initial={{ pathLength: 0 }}
-      animate={{ pathLength: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+  <div className="relative">
+    {/* Green glow pulse behind tick */}
+    <motion.div
+      className="absolute inset-0 rounded-full"
+      style={{ filter: "blur(20px)", background: "hsl(140 100% 50% / 0.3)" }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
+      transition={{ duration: 2, repeat: Infinity, delay: 2.5, ease: "easeInOut" }}
     />
-    <motion.path
-      d="M24 42 L34 52 L56 30"
-      stroke="hsl(140 100% 50%)"
-      strokeWidth="5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+    <motion.svg
+      width="80"
+      height="80"
+      viewBox="0 0 80 80"
       fill="none"
-      initial={{ pathLength: 0 }}
-      animate={{ pathLength: 1 }}
-      transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-    />
-  </motion.svg>
+      className="relative z-10"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+    >
+      <motion.circle
+        cx="40"
+        cy="40"
+        r="36"
+        stroke="hsl(140 100% 50%)"
+        strokeWidth="4"
+        fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+      />
+      <motion.path
+        d="M24 42 L34 52 L56 30"
+        stroke="hsl(140 100% 50%)"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.0, delay: 1.2, ease: "easeOut" }}
+      />
+      {/* Shimmer across tick */}
+      <motion.rect
+        x="-10"
+        y="0"
+        width="20"
+        height="80"
+        fill="url(#shimmer)"
+        initial={{ x: -20 }}
+        animate={{ x: 100 }}
+        transition={{ duration: 0.6, delay: 2.5, ease: "easeInOut" }}
+      />
+      <defs>
+        <linearGradient id="shimmer" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="white" stopOpacity="0" />
+          <stop offset="50%" stopColor="white" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="white" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+    </motion.svg>
+  </div>
 );
 
 /* ── Phrase cycler ── */
@@ -117,7 +146,6 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  // Reset on open
   useEffect(() => {
     if (open) {
       setPhase("loading");
@@ -126,7 +154,6 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
     }
   }, [open]);
 
-  // Cycle phrases
   useEffect(() => {
     if (!open || phase !== "loading") return;
     const interval = setInterval(() => {
@@ -135,14 +162,12 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
     return () => clearInterval(interval);
   }, [open, phase]);
 
-  // Loading → success transition
   useEffect(() => {
     if (!open || phase !== "loading") return;
     const t = setTimeout(() => setPhase("success"), LOADING_DURATION);
     return () => clearTimeout(t);
   }, [open, phase]);
 
-  // Success → exit transition (hold for 3.5s)
   useEffect(() => {
     if (phase !== "success") return;
     const t = setTimeout(() => setPhase("exiting"), SUCCESS_HOLD);
@@ -154,7 +179,6 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
     onComplete();
   }, [onComplete]);
 
-  // Lock scroll
   useEffect(() => {
     if (!visible) return;
     const root = document.getElementById("root");
@@ -213,9 +237,9 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
                 <GreenTick />
                 <motion.p
                   className="text-center text-2xl font-extrabold lowercase text-white"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
+                  initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 2.0, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   character created!
                 </motion.p>

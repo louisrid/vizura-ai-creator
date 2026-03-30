@@ -18,14 +18,6 @@ interface Character {
   face_image_url: string | null;
 }
 
-const traits = (char: Character) => [
-  { label: "skin", value: char.country },
-  { label: "body type", value: char.body },
-  { label: "hair colour", value: char.hair },
-  { label: "eyes", value: char.eye },
-  { label: "makeup", value: char.style },
-];
-
 const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading } = useAuth();
@@ -83,10 +75,14 @@ const CharacterDetail = () => {
   const hairStyleVal = descParts?.[2] || "";
 
   const allTraits = [
-    ...traits(character),
-    ...(chestVal ? [{ label: "chest", value: chestVal }] : []),
-    ...(hairStyleVal ? [{ label: "hair", value: hairStyleVal }] : []),
-  ];
+    { label: "skin", value: character.country },
+    { label: "body type", value: character.body },
+    { label: "chest", value: chestVal },
+    { label: "hair", value: hairStyleVal },
+    { label: "hair colour", value: character.hair },
+    { label: "eyes", value: character.eye },
+    { label: "makeup", value: character.style },
+  ].filter((t) => t.value);
 
   return (
     <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden fixed inset-x-0 bottom-0">
@@ -131,12 +127,12 @@ const CharacterDetail = () => {
             {allTraits.map((t) => (
               <div
                 key={t.label}
-                className="rounded-xl bg-foreground px-2.5 py-1.5"
+                className="rounded-xl bg-secondary px-2.5 py-1.5"
               >
-                <span className="block text-[7px] font-extrabold lowercase text-background/50 leading-none mb-0.5">
+                <span className="block text-[7px] font-extrabold lowercase text-foreground/40 leading-none mb-0.5">
                   {t.label}
                 </span>
-                <span className="block text-[10px] font-extrabold lowercase text-background leading-none">
+                <span className="block text-[10px] font-extrabold lowercase text-foreground leading-none">
                   {t.value}
                 </span>
               </div>

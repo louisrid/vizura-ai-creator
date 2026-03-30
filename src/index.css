@@ -6,30 +6,30 @@
 
 @layer base {
   :root {
-    --background: 0 0% 96%;
-    --foreground: 0 0% 4%;
+    --background: 0 0% 15%;
+    --foreground: 0 0% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 4%;
+    --card: 0 0% 11%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 4%;
+    --popover: 0 0% 11%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 0 0% 4%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 0 0% 92%;
-    --secondary-foreground: 0 0% 4%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 50%;
+    --muted: 0 0% 22%;
+    --muted-foreground: 0 0% 55%;
 
     --accent: 50 100% 50%;
     --accent-foreground: 0 0% 4%;
 
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 0 0% 4%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 0 0% 96%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
@@ -63,7 +63,7 @@
     --nav-foreground: 0 0% 98%;
     --surface-dark: 0 0% 4%;
     --surface-dark-foreground: 0 0% 98%;
-    --surface-elevated: 0 0% 100%;
+    --surface-elevated: 0 0% 18%;
   }
 }
 
@@ -95,7 +95,7 @@
   }
 }
 
-/* Content pill — white rounded container on off-white bg */
+/* Content pill */
 .content-pill {
   background: hsl(var(--card));
   border-radius: 24px;
@@ -136,4 +136,3 @@ input[type="range"]::-moz-range-thumb {
   border: 3px solid hsl(var(--neon-yellow-foreground));
   cursor: pointer;
 }
-
