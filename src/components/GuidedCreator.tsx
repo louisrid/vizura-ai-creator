@@ -83,7 +83,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(270 70% 35% / 0.35), hsl(240 80% 22% / 0.2), transparent 70%)",
+        background: "radial-gradient(circle, hsl(270 70% 35% / 0.45), hsl(240 80% 22% / 0.28), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -92,7 +92,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(220 70% 28% / 0.28), hsl(260 60% 25% / 0.17), transparent 65%)",
+        background: "radial-gradient(circle, hsl(220 70% 28% / 0.38), hsl(260 60% 25% / 0.22), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -101,7 +101,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(280 60% 38% / 0.22), hsl(200 60% 25% / 0.12), transparent 60%)",
+        background: "radial-gradient(circle, hsl(280 60% 38% / 0.3), hsl(200 60% 25% / 0.18), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -268,11 +268,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (traitIdx >= 0 && traitIdx < 7) {
       const key = TRAITS[traitIdx].key;
       if (!selectionsRef.current[key]) {
-    triggerShake();
-    return;
-  }
-  setShaking(true);
-  setTimeout(() => setShaking(false), 300);
+        triggerShake();
+        return;
+      }
     }
     if (isSummarySlide) {
       const s = selectionsRef.current;
@@ -475,7 +473,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <AmbientGlow />
 
           <div className="relative flex-1 overflow-hidden">
-            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "46%", transform: "translateY(-50%)" }}>
+            <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "44%", transform: "translateY(-50%)" }}>
               <div className="w-full max-w-xs mx-auto flex flex-col items-center">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -492,7 +490,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "75%" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
               {isCreateSlide ? (
                 <div className="mb-4 flex flex-col items-center gap-4">
                   <motion.button
