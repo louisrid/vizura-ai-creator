@@ -180,7 +180,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                 className="flex flex-col items-center gap-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
               >
                 <GreenTick />
                 <motion.p
