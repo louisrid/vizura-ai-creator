@@ -214,15 +214,16 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
   }, [visible]);
 
   const getTraitIndex = (s: number) => {
-    const adjusted = s - welcomeOffset;
+    // Slide 0 = welcome, slides 1-7 = traits
+    const adjusted = s - 1;
     if (adjusted < 0 || adjusted >= 7) return -1;
     return adjusted;
   };
 
   const currentTraitIndex = getTraitIndex(step);
-  const isSummarySlide = step === 7 + welcomeOffset;
-  const isCreateSlide = step === 8 + welcomeOffset;
-  const isWelcomeSlide = showWelcome && step === 0;
+  const isSummarySlide = step === 8;
+  const isCreateSlide = step === 9;
+  const isWelcomeSlide = step === 0;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= 7) return null;
