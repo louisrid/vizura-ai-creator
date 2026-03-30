@@ -246,8 +246,8 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Divider line and black empty space */}
-        <div className="mt-4 border-t border-white/20 flex-1" />
+        {/* Divider line matching header style */}
+        <div className="mt-6 border-t-[5px] border-white flex-1" />
       </main>
     </div>
   );
