@@ -251,10 +251,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   // When skipWelcome, internal steps still 0-12 but we start at 2 and hide first 2 dots
   const minStep = skipWelcome ? 2 : 0;
-  const dotTotal = skipWelcome ? TOTAL - 2 : TOTAL;
-  const dotCurrent = skipWelcome ? step - 2 : step;
 
   const [step, setStep] = useState(minStep);
+  const dotTotal = skipWelcome ? TOTAL - 2 : TOTAL;
+  const dotCurrent = skipWelcome ? step - 2 : step;
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const [summaryShake, setSummaryShake] = useState(false);
