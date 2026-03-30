@@ -773,7 +773,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {!isCooking && (
           <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
             <div className="mb-4 flex h-14 items-center gap-4">
-              <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+              <NavArrow direction="left" onClick={goBack} disabled={step <= minStep} />
               <NavArrow
                 direction="right"
                 onClick={advance}
