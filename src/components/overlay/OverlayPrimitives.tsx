@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 export const LIGHT_BLUE = "hsl(195 100% 55%)";
-const LIGHT_BLUE_SOFT = "hsl(195 100% 78%)";
 const PURE_WHITE = "hsl(0 0% 100%)";
 
 export const dotColors = [
@@ -23,7 +22,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
         key={i}
         className="rounded-full"
         style={{
-          background: i === current ? LIGHT_BLUE : LIGHT_BLUE_SOFT,
+          background: i === current ? LIGHT_BLUE : PURE_WHITE,
           width: i === current ? 14 : 10,
           height: i === current ? 14 : 10,
           transition: "width 0.15s, height 0.15s, background 0.15s",
