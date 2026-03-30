@@ -265,10 +265,14 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
 
   const advance = useCallback(() => {
     if (animating.current) return;
-    // Welcome slide: just advance, no validation needed
-    if (currentTraitIndex >= 0 && !isCurrentSelected()) {
-      triggerShake();
-      return;
+    // Check trait selection using ref to avoid stale closure
+    const traitIdx = step - 1;
+    if (traitIdx >= 0 && traitIdx < 7) {
+      const key = TRAITS[traitIdx].key;
+      if (!selectionsRef.current[key]) {
+        triggerShake();
+        return;
+      }
     }
     if (isSummarySlide) {
       const s = selectionsRef.current;
@@ -288,7 +292,7 @@ const GuidedCreator = ({ open, onComplete, onExit }: GuidedCreatorProps) => {
     animating.current = true;
     setStep((s) => Math.min(s + 1, TOTAL - 1));
     setTimeout(() => { animating.current = false; }, 100);
-  }, [step, TOTAL, currentTraitIndex, isWelcomeSlide, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
+  }, [step, TOTAL, isSummarySlide, isCreateSlide, shattering, onComplete, triggerExit]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0) return;
