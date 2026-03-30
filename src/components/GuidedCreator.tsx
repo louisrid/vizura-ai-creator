@@ -795,7 +795,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <Dots current={dotCurrent} total={dotTotal} />
             </div>
 
-            {!isLoggedIn && !isCreateSlide && (
+            {!isLoggedIn && (
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
