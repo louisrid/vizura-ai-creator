@@ -275,19 +275,24 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     try {
       const raw = sessionStorage.getItem(FLOW_STATE_KEY);
       if (!raw) return false;
-      const saved = JSON.parse(raw) as { step?: number; selections?: Partial<GuidedSelections> };
-      setStep(Math.max(saved?.step ?? minStep, minStep));
+      const saved = JSON.parse(raw) as {
+        step?: number;
+        selections?: Partial<GuidedSelections>;
+        skipWelcome?: boolean;
+      };
+      const restoredMinStep = saved?.skipWelcome ? 2 : 0;
+      setStep(Math.max(saved?.step ?? restoredMinStep, restoredMinStep));
       setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
       return true;
     } catch {
       return false;
     }
-  }, [minStep]);
+  }, []);
 
   const persistFlow = useCallback(() => {
     if (!visible || cookingPhase !== "none") return;
-    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step: stepRef.current, selections: selectionsRef.current }));
-  }, [visible, cookingPhase]);
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step: stepRef.current, selections: selectionsRef.current, skipWelcome }));
+  }, [visible, cookingPhase, skipWelcome]);
 
   useEffect(() => {
     if (open) {
