@@ -827,7 +827,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Fixed bottom nav - hidden during cooking */}
         {!isCooking && (
-          <div className="absolute inset-x-0 bottom-8 flex flex-col items-center px-6">
+          <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
             <div className="mb-4 flex h-14 items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step <= minStep} />
               <NavArrow
