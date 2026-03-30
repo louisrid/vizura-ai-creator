@@ -457,7 +457,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <span className="block text-[1.4rem] font-[800]">welcome to</span>
             <span className="block text-[4.2rem] font-[900] leading-[0.95]">vizura!</span>
           </h2>
-          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to start</p>
+          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
         </div>
       );
     }
@@ -467,7 +467,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="🤘" index={0} />
+            <BigEmoji emoji="💫" index={0} />
           </div>
           <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-tight tracking-tight text-white">
             time to create your<br />first character!
@@ -530,6 +530,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               transition={{ duration: 0.4 }}
               value={selections.characterName}
               onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
+              placeholder="character name…"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
               className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
@@ -647,16 +648,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* ── Create slide ── */
     if (isCreateSlide) {
+      const showGemCost = isLoggedIn && skipWelcome;
       return (
         <div className="flex w-full flex-col items-center justify-center">
-          {isLoggedIn && (
+          {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
-          )}
-          {!isLoggedIn && (
-            <p className="mb-4 text-sm font-extrabold lowercase text-white/40">first one's free</p>
           )}
           <motion.button
             type="button"
@@ -716,21 +715,30 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.65 }}
+          transition={{ duration: 0.8 }}
         >
-          <motion.svg width="110" height="110" viewBox="0 0 110 110" fill="none"
-            initial={{ opacity: 0, scale: 0.8 }}
+          <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
+            initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            <motion.path d="M30 57 L47 74 L80 38" stroke="black" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none"
-              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.15, ease: "easeInOut" }} />
+            <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 1.4, ease: "easeOut" }}
+            />
+            <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
+            />
           </motion.svg>
           <motion.p
-            className="text-center text-3xl font-extrabold lowercase text-black"
-            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            className="text-center text-3xl font-[900] lowercase text-white"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.75, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.7, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
@@ -788,7 +796,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <Dots current={dotCurrent} total={dotTotal} />
             </div>
 
-            {!isLoggedIn && !isCreateSlide && (
+            {!isLoggedIn && (
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
