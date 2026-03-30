@@ -80,7 +80,10 @@ const CharacterCreator = () => {
 
   useEffect(() => {
     if (!guidedReady || isEditing) return;
-    const shouldSkip = !!user && (characterCount ?? 0) > 0;
+    // Only skip welcome slides when user navigated here internally (flag set by menu/button)
+    const internalNav = sessionStorage.getItem("vizura_internal_nav") === "1";
+    sessionStorage.removeItem("vizura_internal_nav"); // consume the flag
+    const shouldSkip = internalNav && !!user && (characterCount ?? 0) > 0;
     setSkipWelcome(shouldSkip);
     if (shouldSkip) {
       const timer = window.setTimeout(() => setShowGuided(true), 1000);
