@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Crown, Gem, Loader2 } from "lucide-react";
+import { Crown, Gem, Loader2, Camera, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import OverlayShell from "./overlay/OverlayShell";
 import { GoldButton, DismissLink } from "./overlay/OverlayPrimitives";
@@ -45,7 +45,7 @@ const Scene0 = () => (
   <IntroStyleShell
     emoji={<Crown size={64} strokeWidth={2} style={{ color: "hsl(55 90% 58%)" }} />}
     title="unlock vizura"
-    subtitle="create unlimited characters and bring any idea to life"
+    subtitle="$7 first month · 50 gems monthly · 30 gems = 1 character"
   />
 );
 
@@ -53,7 +53,7 @@ const Scene1 = () => (
   <IntroStyleShell
     emoji={<Gem size={60} strokeWidth={2} style={{ color: "hsl(var(--gem-green))" }} />}
     title="your imagination, no limits"
-    subtitle="full access to every style, setting, and detail. generate as many photos as you want"
+    subtitle="1 gem = 1 photo · $20/month after · create unlimited characters"
   />
 );
 
@@ -61,7 +61,7 @@ const Scene2 = ({ buying, onSubscribe }: { buying: boolean; onSubscribe: () => v
   <IntroStyleShell
     emoji={<span className="text-[3.5rem]">✨</span>}
     title="$7 first month"
-    subtitle="then $20/month. cancel anytime"
+    subtitle="then $20/month · 50 gems every month · cancel anytime"
   >
     <GoldButton onClick={onSubscribe} disabled={buying}>
       {buying ? <Loader2 className="animate-spin" size={20} /> : "subscribe"}

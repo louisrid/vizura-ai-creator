@@ -12,15 +12,16 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
-const skinOptions = ["pale", "tan", "asian", "black"] as const;
-const hairOptions = ["blonde", "brunette", "black", "pink", "white"] as const;
-const eyeOptions = ["brown", "blue", "green", "hazel", "grey"] as const;
+const skinOptions = ["pale", "tan", "asian", "dark"] as const;
 const bodyOptions = ["slim", "regular", "curvy"] as const;
-const styleOptions = ["natural", "model", "egirl"] as const;
+const chestOptions = ["small", "medium", "large"] as const;
+const hairStyleOptions = ["straight", "curly", "bangs", "short"] as const;
+const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
+const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
+const makeupOptions = ["natural", "model", "egirl"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
 
-/* ── Pill toggle group ── */
 const PillGroup = ({
   label,
   options,
@@ -75,14 +76,16 @@ const CharacterCreator = () => {
     return null;
   }, []);
 
-  const [skin, setSkin] = useState<string>(searchParams.get("skin") || saved?.skin || "tan");
-  const [age, setAge] = useState<string>(searchParams.get("age") || saved?.age || "");
-  const [hair, setHair] = useState<string>(searchParams.get("hair") || saved?.hair || "brunette");
-  const [eye, setEye] = useState<string>(searchParams.get("eye") || saved?.eye || "brown");
-  const [body, setBody] = useState<string>(searchParams.get("body") || saved?.body || "regular");
-  const [style, setStyle] = useState<string>(searchParams.get("style") || saved?.style || "natural");
-  const [description, setDescription] = useState(searchParams.get("description") || searchParams.get("edit") || saved?.description || "");
-  const [characterName, setCharacterName] = useState(searchParams.get("name") || saved?.characterName || "");
+  const [skin, setSkin] = useState<string>(saved?.skin || "tan");
+  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "regular");
+  const [chest, setChest] = useState<string>(saved?.chest || "medium");
+  const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "straight");
+  const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
+  const [eye, setEye] = useState<string>(saved?.eye || "brown");
+  const [makeup, setMakeup] = useState<string>(saved?.makeup || "natural");
+  const [age, setAge] = useState<string>(saved?.age || "");
+  const [description, setDescription] = useState(saved?.description || "");
+  const [characterName, setCharacterName] = useState(saved?.characterName || "");
   const [isSaving, setIsSaving] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
@@ -101,28 +104,28 @@ const CharacterCreator = () => {
 
   const buildPrompt = () => {
     const skinPart = skin ? `, ${skin} skin` : "";
-    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${body} body type, ${hair} hair, ${eye} eyes, ${style} style`;
+    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${chest} chest, ${hairStyle} ${hairColour} hair, ${eye} eyes, ${makeup} makeup`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
   };
 
-  const saveCharacter = async (andChooseFace = false) => {
+  const saveCharacter = async () => {
     if (!user) {
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
-      return;
+      return null;
     }
-    setIsSaving(true);
     try {
       const charData = {
-        name: sanitiseText(characterName, 100) || `${hair} ${eye} ${age}`,
+        name: sanitiseText(characterName, 100) || `${hairColour} ${eye} ${age}`,
         country: sanitiseText(skin, 50),
         age,
-        hair: sanitiseText(hair, 50),
+        hair: sanitiseText(hairColour, 50),
         eye: sanitiseText(eye, 50),
-        body: sanitiseText(body, 50),
-        style: sanitiseText(style, 50),
-        description: sanitiseText(description, 500),
+        body: sanitiseText(bodyType, 50),
+        style: sanitiseText(makeup, 50),
+        description: sanitiseText(`${chest} chest, ${hairStyle} hair. ${description}`, 500),
+        generation_prompt: buildPrompt(),
       };
 
       if (isEditing) {
@@ -132,6 +135,7 @@ const CharacterCreator = () => {
           .eq("id", editId);
         if (updateError) throw updateError;
         toast.success("character updated");
+        return editId;
       } else {
         const { data: inserted, error: insertError } = await supabase
           .from("characters")
@@ -139,24 +143,17 @@ const CharacterCreator = () => {
           .select("id")
           .single();
         if (insertError) throw insertError;
-
-        if (andChooseFace && inserted) {
-          navigate("/choose-face", {
-            state: { prompt: buildPrompt(), characterId: inserted.id },
-          });
-          return;
-        }
+        return inserted?.id || null;
       }
     } catch (err: any) {
       toast.error(err.message || "failed to save character");
-    } finally {
-      setIsSaving(false);
+      return null;
     }
   };
 
   const saveFormToSession = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-      characterName, skin, age, hair, eye, body, style, description,
+      characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
     }));
   };
 
@@ -174,16 +171,27 @@ const CharacterCreator = () => {
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
-    if (!isEditing) {
-      setShowLoading(true);
+
+    setShowLoading(true);
+    setIsSaving(true);
+    const charId = await saveCharacter();
+    setIsSaving(false);
+    if (!charId) {
+      setShowLoading(false);
+      return;
     }
-    await saveCharacter(false);
+    // Store charId for loading complete handler
+    sessionStorage.setItem("vizura_pending_char_id", charId);
   };
 
   const handleLoadingComplete = () => {
     setShowLoading(false);
-    toast.success("character added!");
-    navigate("/characters");
+    const charId = sessionStorage.getItem("vizura_pending_char_id");
+    sessionStorage.removeItem("vizura_pending_char_id");
+    toast.success("30 gems used");
+    navigate("/choose-face", {
+      state: { prompt: buildPrompt(), characterId: charId },
+    });
   };
 
   return (
@@ -217,30 +225,32 @@ const CharacterCreator = () => {
           />
         </section>
 
-        {/* Pill toggle sections */}
-        <section className="mt-5 flex flex-col gap-4">
-          <PillGroup label="style" options={styleOptions} value={style} onChange={setStyle} />
-          <PillGroup label="skin" options={skinOptions} value={skin} onChange={setSkin} />
-          <PillGroup label="hair colour" options={hairOptions} value={hair} onChange={setHair} />
-          <PillGroup label="eye colour" options={eyeOptions} value={eye} onChange={setEye} />
-          <PillGroup label="body type" options={bodyOptions} value={body} onChange={setBody} />
+        {/* Age */}
+        <section className="mt-5 flex flex-col gap-1.5">
+          <span className="text-xs font-extrabold lowercase text-foreground">age</span>
+          <input
+            type="number"
+            min={18}
+            max={40}
+            value={age}
+            placeholder="18-40"
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
+            }}
+            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+          />
+        </section>
 
-          {/* Age — text input */}
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-extrabold lowercase text-foreground">age</span>
-            <input
-              type="number"
-              min={18}
-              max={40}
-              value={age}
-              placeholder="18-40"
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
-              }}
-              className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-            />
-          </div>
+        {/* 7 Pill toggle sections */}
+        <section className="mt-5 flex flex-col gap-4">
+          <PillGroup label="skin" options={skinOptions} value={skin} onChange={setSkin} />
+          <PillGroup label="body type" options={bodyOptions} value={bodyType} onChange={setBodyType} />
+          <PillGroup label="chest" options={chestOptions} value={chest} onChange={setChest} />
+          <PillGroup label="hair" options={hairStyleOptions} value={hairStyle} onChange={setHairStyle} />
+          <PillGroup label="hair colour" options={hairColourOptions} value={hairColour} onChange={setHairColour} />
+          <PillGroup label="eyes" options={eyeOptions} value={eye} onChange={setEye} />
+          <PillGroup label="makeup" options={makeupOptions} value={makeup} onChange={setMakeup} />
         </section>
 
         {/* Reference image upload */}
@@ -293,7 +303,6 @@ const CharacterCreator = () => {
         <section className="mt-10 flex flex-col gap-1.5">
           <span className="text-xs font-extrabold lowercase text-foreground">text box</span>
           <textarea
-            id="character-description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
@@ -319,7 +328,7 @@ const CharacterCreator = () => {
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                {isEditing ? "update" : "create"}
+                {isEditing ? "update" : "create · 30 gems"}
               </>
             )}
           </Button>

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Gem, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -10,9 +9,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 
 const plans = [
-  { label: "starter", gems: 150, price: 5, envVar: "TOPUP_150_PRICE_ID" },
-  { label: "popular", gems: 600, price: 15, highlighted: true, envVar: "TOPUP_600_PRICE_ID" },
-  { label: "pro", gems: 1500, price: 30, envVar: "TOPUP_1500_PRICE_ID" },
+  { label: "starter", gems: 15, price: 9 },
+  { label: "popular", gems: 35, price: 20, highlighted: true },
+  { label: "pro", gems: 80, price: 40 },
 ];
 
 const TopUps = () => {
@@ -26,12 +25,9 @@ const TopUps = () => {
     if (!loading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
   }, [user, loading, navigate, location.pathname]);
 
-  // Refetch gems when returning from checkout
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get("checkout") === "success") {
-      refetch();
-    }
+    if (params.get("checkout") === "success") refetch();
   }, [location.search, refetch]);
 
   if (!loading && !user) return null;
@@ -68,7 +64,7 @@ const TopUps = () => {
 
         <div className="space-y-4">
           {plans.map((plan) => {
-            const perGem = (plan.price / plan.gems).toFixed(3);
+            const perGem = (plan.price / plan.gems).toFixed(2);
             return (
               <div
                 key={plan.label}
@@ -93,13 +89,14 @@ const TopUps = () => {
                   )}
                 </div>
 
-                <div className="flex items-baseline gap-2 mb-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <Gem size={16} strokeWidth={2.5} className={plan.highlighted ? "text-background/60" : "text-gem-green"} />
                   <span
                     className={`text-xl font-extrabold lowercase ${
                       plan.highlighted ? "text-background" : "text-foreground"
                     }`}
                   >
-                    {plan.gems.toLocaleString()} gems
+                    {plan.gems} gems
                   </span>
                 </div>
 

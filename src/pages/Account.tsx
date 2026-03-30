@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,20 +25,13 @@ const Account = () => {
   const searchParams = new URLSearchParams(location.search);
   const redirectTo = searchParams.get("redirect");
 
-  // Redirect back after successful login
   useEffect(() => {
-    if (user && redirectTo) {
-      navigate(redirectTo, { replace: true });
-    }
+    if (user && redirectTo) navigate(redirectTo, { replace: true });
   }, [user, redirectTo, navigate]);
 
-  // Refetch on checkout success
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get("checkout") === "success") {
-      refetchSub();
-      refetchGems();
-    }
+    if (params.get("checkout") === "success") { refetchSub(); refetchGems(); }
   }, [location.search, refetchSub, refetchGems]);
 
   if (authLoading) {
@@ -49,14 +42,9 @@ const Account = () => {
     );
   }
 
-  if (!user) {
-    return <SignInView autoSignIn={autoSignIn} redirectTo={redirectTo} />;
-  }
+  if (!user) return <SignInView autoSignIn={autoSignIn} redirectTo={redirectTo} />;
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  };
+  const handleSignOut = async () => { await signOut(); navigate("/"); };
 
   const handleSubscribe = async () => {
     setBuying(true);
@@ -64,10 +52,7 @@ const Account = () => {
     setBuying(false);
     setOverlayOpen(false);
     setJustSubscribed(true);
-    // Clear the search params but stay on /account without adding a history entry
-    if (location.search) {
-      navigate("/account", { replace: true });
-    }
+    if (location.search) navigate("/account", { replace: true });
   };
 
   return (
@@ -117,17 +102,21 @@ const Account = () => {
             <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
             <div className="flex-1">
               <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
-              <span className="block text-sm font-extrabold lowercase text-foreground">
-                {gems}
-              </span>
+              <span className="block text-sm font-extrabold lowercase text-foreground">{gems}</span>
             </div>
           </div>
 
-          <Button
-            variant="outline"
-            className="w-full h-14 text-sm mt-6"
-            onClick={handleSignOut}
-          >
+          {subscribed && (
+            <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+              <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
+              <div className="flex-1">
+                <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
+                <span className="block text-sm font-extrabold lowercase text-foreground">50 gems on renewal</span>
+              </div>
+            </div>
+          )}
+
+          <Button variant="outline" className="w-full h-14 text-sm mt-6" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
             sign out
           </Button>
@@ -155,7 +144,6 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
-
     const t = setTimeout(() => setShowing(false), 1400);
     return () => {
       clearTimeout(t);
@@ -196,9 +184,7 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
 
   const handleAutoSignIn = async () => {
     setSubmitting(true);
-    try {
-      await autoSignIn();
-    } catch (err: any) {
+    try { await autoSignIn(); } catch (err: any) {
       toast.error(err.message || "something went wrong");
       setSubmitting(false);
     }
@@ -210,17 +196,9 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
       const redirectUri = redirectTo
         ? `${window.location.origin}/account?redirect=${encodeURIComponent(redirectTo)}`
         : window.location.origin;
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: redirectUri,
-      });
-      if (result?.error) {
-        toast.error("google sign in failed");
-        setGoogleLoading(false);
-      }
-    } catch (err: any) {
-      toast.error(err.message || "google sign in failed");
-      setGoogleLoading(false);
-    }
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: redirectUri });
+      if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
+    } catch (err: any) { toast.error(err.message || "google sign in failed"); setGoogleLoading(false); }
   };
 
   return (
@@ -230,7 +208,6 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-
         <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-4">
           <button
             onClick={handleGoogleSignIn}
@@ -238,10 +215,7 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
             className="w-full h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {googleLoading ? (
-              <>
-                <Loader2 className="animate-spin" size={18} />
-                connecting...
-              </>
+              <><Loader2 className="animate-spin" size={18} />connecting...</>
             ) : (
               <>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -254,25 +228,13 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
               </>
             )}
           </button>
-
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px] bg-border" />
             <span className="text-[10px] font-extrabold lowercase text-foreground/40">or</span>
             <div className="flex-1 h-[2px] bg-border" />
           </div>
-
           <Button className="h-14 w-full text-sm" onClick={handleAutoSignIn} disabled={submitting || googleLoading}>
-            {submitting ? (
-              <>
-                <Loader2 className="animate-spin" size={18} />
-                signing in...
-              </>
-            ) : (
-              <>
-                continue
-                <ArrowRight size={14} />
-              </>
-            )}
+            {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>continue<ArrowRight size={14} /></>)}
           </Button>
         </div>
       </main>
