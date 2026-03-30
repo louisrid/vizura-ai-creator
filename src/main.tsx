@@ -1,5 +1,9 @@
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import { applyReloadReset } from "./lib/refreshReset";
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(<App />);
+applyReloadReset();
+
+void import("./App.tsx").then(({ default: App }) => {
+  createRoot(document.getElementById("root")!).render(<App />);
+});
