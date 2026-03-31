@@ -152,19 +152,14 @@ const Index = () => {
         }
       }
 
-      const minimumLoading = isDemo ? 5400 + Math.floor(Math.random() * 2400) : 1600;
-      const remaining = Math.max(0, minimumLoading - (Date.now() - startedAt));
-      if (remaining > 0) await wait(remaining);
-
+      // ProgressBarLoader handles its own timing, no minimum wait needed
       setPhotoOverlayResult(generatedPreview);
       setPhotoOverlayPhase("success");
       setImages(generatedImages);
 
       await refetchCredits();
       toast("1 gem used");
-
-      await wait(isDemo ? 5500 : 5500);
-      setPhotoOverlayPhase("hidden");
+      // User taps to dismiss — no auto-timeout
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");
       if (e.message?.includes("No gems") || e.message?.includes("No credits") || e.message?.includes("402")) {
