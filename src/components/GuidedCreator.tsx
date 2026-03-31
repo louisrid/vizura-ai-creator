@@ -654,9 +654,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+        <div
           className="mt-5 flex w-full min-h-[12rem] flex-col items-center justify-center bg-transparent text-center"
         >
           {showGemCost && (
@@ -665,6 +663,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
+          <span className="text-[2.5rem] inline-block select-none animate-bounce mb-2" style={{ animationDuration: "2s" }}>✨</span>
           <div className="max-w-[18rem] text-white">
             <BouncyWords text="ready to see" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.1} />
             <BouncyWords text="your results?" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.34} />
@@ -677,7 +676,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           >
             tap anywhere to continue
           </motion.p>
-        </button>
+        </div>
       );
     }
 
