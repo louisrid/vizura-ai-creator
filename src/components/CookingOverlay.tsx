@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import PremiumRipple from "@/components/loading/PremiumRipple";
 import SuccessRing from "@/components/loading/SuccessRing";
 
 const PHRASES = [
@@ -102,23 +103,20 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
   if (!visible) return null;
 
   return createPortal(
-    <AnimatePresence onExitComplete={handleExitComplete}>
+    <AnimatePresence onExitComplete={handleExitComplete} mode="wait">
       {phase !== "exiting" && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
-          initial={{ opacity: 1 }}
+          key={phase}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          style={{ backgroundColor: phase === "cooking" ? "#000000" : "hsl(140, 100%, 50%)" }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
         >
           {phase === "cooking" && (
-            <motion.div
-              key="cooking"
-              className="flex flex-col items-center gap-8 w-full px-10"
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0 }}
-            >
+            <div className="flex flex-col items-center gap-8 w-full px-10">
+              <PremiumRipple size={120} />
               <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
                 {progress}%
               </motion.span>
@@ -137,27 +135,20 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
                   <PhraseText phrase={PHRASES[phraseIndex]} />
                 </AnimatePresence>
               </div>
-            </motion.div>
+            </div>
           )}
           {phase === "success" && (
-            <motion.div
-              key="success"
-              className="fixed inset-0 flex flex-col items-center justify-center gap-8"
-              style={{ backgroundColor: "hsl(var(--member-green))" }}
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0 }}
-            >
-              <SuccessRing size={132} color="hsl(var(--foreground))" />
+            <div className="flex flex-col items-center justify-center gap-8">
+              <SuccessRing size={132} color="hsl(0 0% 4%)" />
               <motion.p
-                className="text-center text-[2rem] font-extrabold lowercase text-white"
+                className="text-center text-[2rem] font-extrabold lowercase text-black"
                 initial={{ opacity: 0, y: 18, scale: 0.86 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.45, delay: 1.12, ease: [0.34, 1.56, 0.64, 1] }}
               >
                 character created!
               </motion.p>
-            </motion.div>
+            </div>
           )}
         </motion.div>
       )}

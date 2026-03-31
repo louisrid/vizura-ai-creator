@@ -41,9 +41,9 @@ const TopUps = () => {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       await refetch();
-      toast(`${plan.gems} gems added!`);
+      toast.success(`${plan.gems} gems added!`);
     } catch (e: any) {
-      toast(e.message || "failed to add gems");
+      toast.error(e.message || "failed to add gems");
     } finally {
       setBuying(null);
     }
