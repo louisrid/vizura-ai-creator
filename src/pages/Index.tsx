@@ -95,10 +95,8 @@ const Index = () => {
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
-    const character = characters.find((item) => item.id === charId);
-    if (character) {
-      setPrompt(buildPromptFromCharacter(character));
-    }
+    // Don't auto-fill prompt — user types everything
+    setPrompt("");
   };
 
   // All characters are selectable — the starter "ava" has a generation_prompt so treat her as ready
