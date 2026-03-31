@@ -28,16 +28,8 @@ const TRAITS = [
 
 type TraitKey = (typeof TRAITS)[number]["key"];
 
-const emojiMotions = [
-  { y: [0, -18, 0], rotate: [0, 6, -4, 0], scale: [1, 1.12, 1], duration: 2.0 },
-  { y: [0, -14, 4, 0], rotate: [0, -10, 8, 0], scale: [1, 1.08, 0.96, 1], duration: 2.2 },
-  { y: [0, -16, 0], x: [0, 6, -6, 0], scale: [1, 1.1, 1], duration: 2.4 },
-  { y: [0, -20, 2, 0], rotate: [0, 12, -8, 0], scale: [1, 1.1, 0.95, 1], duration: 1.8 },
-  { y: [0, -12, 0], rotate: [0, -6, 10, -4, 0], scale: [1, 1.08, 1], duration: 2.6 },
-  { y: [0, -16, 4, 0], rotate: [0, -8, 6, 0], scale: [1, 1.1, 1], duration: 2.2 },
-  { y: [0, -18, 0], rotate: [0, 8, -6, 0], scale: [1, 1.12, 1], duration: 2.0 },
-  { y: [0, -14, 0], rotate: [0, -5, 5, 0], scale: [1, 1.06, 1], duration: 2.3 },
-];
+/* emoji motion config removed — using CSS bounce instead */
+
 
 /* ── Dots ── */
 const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
