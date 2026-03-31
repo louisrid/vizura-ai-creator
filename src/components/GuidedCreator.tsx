@@ -84,35 +84,24 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Background glow — deep blue aurora ── */
+/* ── Background glow — pure CSS, no JS frames ── */
 const AmbientGlow = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden">
-    <motion.div
-      className="absolute rounded-full blur-[160px]"
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div
+      className="absolute rounded-full animate-ambient-drift-1"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.035), hsl(210 70% 30% / 0.018), transparent 70%)",
+        filter: "blur(160px)",
+        background: "radial-gradient(circle, hsl(220 80% 40% / 0.04), hsl(210 70% 30% / 0.02), transparent 70%)",
       }}
-      animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
-      transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
     />
-    <motion.div
-      className="absolute rounded-full blur-[140px]"
+    <div
+      className="absolute rounded-full animate-ambient-drift-2"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.028), hsl(215 60% 25% / 0.014), transparent 65%)",
+        filter: "blur(140px)",
+        background: "radial-gradient(circle, hsl(230 75% 45% / 0.03), hsl(215 60% 25% / 0.015), transparent 65%)",
       }}
-      animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
-      transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-    />
-    <motion.div
-      className="absolute rounded-full blur-[180px]"
-      style={{
-        width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(225 85% 50% / 0.02), hsl(200 60% 30% / 0.01), transparent 60%)",
-      }}
-      animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
-      transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
     />
   </div>
 );
