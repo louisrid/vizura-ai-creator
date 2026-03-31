@@ -227,6 +227,7 @@ const TOTAL_SKIP = 11;
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
+  const navigateTo = useNavigate();
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
