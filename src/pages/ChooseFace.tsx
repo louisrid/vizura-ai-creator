@@ -63,6 +63,7 @@ const ChooseFace = () => {
   const [rerolling, setRerolling] = useState(false);
   const [shuffleKey, setShuffleKey] = useState(0);
   const [cardsRevealed, setCardsRevealed] = useState(false);
+  const [pulseIndex, setPulseIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!prompt) { navigate("/"); return; }
@@ -168,6 +169,8 @@ const ChooseFace = () => {
 
   const handleFaceClick = (i: number) => {
     setSelectedIndex((prev) => (prev === i ? null : i));
+    setPulseIndex(i);
+    window.setTimeout(() => setPulseIndex((current) => (current === i ? null : current)), 360);
   };
 
   const handleConfirm = async () => {
@@ -343,11 +346,17 @@ const ChooseFace = () => {
               {faces.length > 0 ? faces.map((url, i) => (
                 <motion.button
                   key={i}
+                  type="button"
                   onClick={() => handleFaceClick(i)}
                   initial={{ rotateY: 90, opacity: 0 }}
-                  animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
-                  transition={{ duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] }}
-                  whileTap={{ scale: 1.08 }}
+                  animate={cardsRevealed ? { rotateY: 0, opacity: 1, scale: pulseIndex === i ? [1, 1.13, 0.985, 1.035, 1] : 1 } : { rotateY: 90, opacity: 0, scale: 1 }}
+                  transition={{
+                    rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                    opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                    scale: pulseIndex === i
+                      ? { duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1], ease: [0.34, 1.56, 0.64, 1] }
+                      : { duration: 0.18 },
+                  }}
                   className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
                     selectedIndex === i
                       ? "border-neon-yellow"
@@ -360,11 +369,17 @@ const ChooseFace = () => {
                 demoEmojis.map((emoji, i) => (
                   <motion.button
                     key={`${shuffleKey}-${i}`}
+                    type="button"
                     onClick={() => handleFaceClick(i)}
                     initial={{ rotateY: 90, opacity: 0 }}
-                    animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
-                    transition={{ duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] }}
-                    whileTap={{ scale: 1.08 }}
+                    animate={cardsRevealed ? { rotateY: 0, opacity: 1, scale: pulseIndex === i ? [1, 1.13, 0.985, 1.035, 1] : 1 } : { rotateY: 90, opacity: 0, scale: 1 }}
+                    transition={{
+                      rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                      opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                      scale: pulseIndex === i
+                        ? { duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1], ease: [0.34, 1.56, 0.64, 1] }
+                        : { duration: 0.18 },
+                    }}
                     className={`aspect-[3/4] rounded-2xl border-[5px] transition-colors duration-200 flex items-center justify-center bg-card ${
                       selectedIndex === i
                         ? "border-neon-yellow"

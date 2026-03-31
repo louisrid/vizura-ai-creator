@@ -10,7 +10,8 @@ const PHRASES = [
   "final touches…",
 ];
 
-const SUCCESS_HOLD = 2000;
+const OVERLAY_FADE_DURATION = 0.75;
+const SUCCESS_HOLD = 3200;
 
 interface CookingOverlayProps {
   open: boolean;
@@ -64,7 +65,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.0, ease: "easeInOut" }}
+          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
           {phase === "cooking" && (
             <ProgressBarLoader
@@ -75,20 +76,20 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
             />
           )}
           {phase === "success" && (
-            <div className="flex flex-col items-center justify-center gap-6">
+            <div className="flex min-h-[15rem] flex-col items-center justify-center gap-7 px-6 text-center">
               <motion.span
-                className="text-[3rem] inline-block select-none"
+                className="inline-block select-none text-[5rem]"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
               >
                 ✅
               </motion.span>
               <motion.p
-                className="text-center text-[2rem] font-extrabold lowercase text-white"
+                className="text-center text-[2.35rem] font-extrabold lowercase leading-[1.02] text-white"
                 initial={{ opacity: 0, y: 18, scale: 0.86 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.45, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               >
                 character created!
               </motion.p>

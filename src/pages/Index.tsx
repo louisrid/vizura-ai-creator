@@ -6,10 +6,11 @@ import BackButton from "@/components/BackButton";
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
+import EmojiPreviewBox from "@/components/EmojiPreviewBox";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
-import { createEmojiPosterDataUrl } from "@/lib/demoImages";
+import { createEmojiPosterDataUrl, extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 import { sanitiseText } from "@/lib/sanitise";
 
 interface Character {
@@ -125,8 +126,6 @@ const Index = () => {
 
     const cleanPrompt = sanitiseText(prompt.trim());
     const demoEmoji = DEMO_RESULT_EMOJIS[Math.floor(Math.random() * DEMO_RESULT_EMOJIS.length)];
-    const startedAt = Date.now();
-
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: { prompt: cleanPrompt },
@@ -189,15 +188,23 @@ const Index = () => {
         </div>
 
         {/* Hero image box */}
-        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
-          {images[0] ? (
-            <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
-          ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-              <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
-            </div>
-          )}
-        </section>
+        {images[0] && extractEmojiFromPosterDataUrl(images[0]) ? (
+          <EmojiPreviewBox
+            emoji={extractEmojiFromPosterDataUrl(images[0]) || "✨"}
+            className="mx-auto mb-8 h-[19rem] w-[19rem] max-w-full"
+            emojiClassName="text-[4.75rem]"
+          />
+        ) : (
+          <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+            {images[0] ? (
+              <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
+                <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
+              </div>
+            )}
+          </section>
+        )}
 
         <div className="space-y-6">
           {/* Character select */}

@@ -19,6 +19,7 @@ const ProgressBarLoader = ({
   const [stepIndex, setStepIndex] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const completedRef = useRef(false);
+  const safePhrases = phrases.length > 0 ? phrases : ["working…"];
 
   const pct = STEPS[stepIndex] ?? 0;
 
@@ -39,13 +40,13 @@ const ProgressBarLoader = ({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPhraseIndex((i) => (i + 1) % phrases.length);
+      setPhraseIndex((i) => (i + 1) % safePhrases.length);
     }, phraseInterval);
     return () => clearInterval(interval);
-  }, [phrases, phraseInterval]);
+  }, [safePhrases.length, phraseInterval]);
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full px-10">
+    <div className="flex w-full flex-col items-center gap-5 px-10">
       <span
         className="text-[3rem] inline-block select-none animate-bounce"
         style={{ animationDuration: "2.2s" }}
@@ -73,17 +74,17 @@ const ProgressBarLoader = ({
       </div>
 
       {/* Cycling phrases — positioned higher */}
-      <div className="h-8 flex items-center -mt-1">
+      <div className="-mt-3 flex h-8 items-center">
         <AnimatePresence mode="wait">
           <motion.p
-            key={phrases[phraseIndex]}
+            key={safePhrases[phraseIndex]}
             className="text-center text-sm font-extrabold lowercase text-white"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            {phrases[phraseIndex]}
+            {safePhrases[phraseIndex]}
           </motion.p>
         </AnimatePresence>
       </div>

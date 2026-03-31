@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
+import EmojiPreviewBox from "@/components/EmojiPreviewBox";
+import { extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 
 interface PhotoGenerationOverlayProps {
   open: boolean;
@@ -11,10 +13,12 @@ interface PhotoGenerationOverlayProps {
 }
 
 const RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞", "🎨", "🔮"];
+const OVERLAY_FADE_DURATION = 0.75;
 
 const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoGenerationOverlayProps) => {
-  const [resultEmoji] = useState(() => RESULT_EMOJIS[Math.floor(Math.random() * RESULT_EMOJIS.length)]);
+  const [fallbackEmoji] = useState(() => RESULT_EMOJIS[Math.floor(Math.random() * RESULT_EMOJIS.length)]);
   const [loadingDone, setLoadingDone] = useState(false);
+  const resultEmoji = useMemo(() => extractEmojiFromPosterDataUrl(resultImageUrl) || fallbackEmoji, [resultImageUrl, fallbackEmoji]);
 
   useEffect(() => {
     if (!open) setLoadingDone(false);
@@ -40,16 +44,21 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
 
   if (!open) return null;
 
+  const showSuccess = phase === "success" && loadingDone;
+  const dismissOverlay = () => {
+    window.dispatchEvent(new CustomEvent("photo-overlay-dismiss"));
+  };
+
   return createPortal(
     <AnimatePresence mode="wait">
-      {phase === "loading" && !loadingDone ? (
+      {!showSuccess ? (
         <motion.div
           key="photo-loading"
           className="fixed inset-0 z-[9999] flex items-center justify-center px-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.0, ease: "easeInOut" }}
+          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
           <ProgressBarLoader
             duration={25000}
@@ -65,11 +74,9 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.0, ease: "easeInOut" }}
-          onClick={() => {
-            const event = new CustomEvent("photo-overlay-dismiss");
-            window.dispatchEvent(event);
-          }}
+          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
+          onPointerDown={dismissOverlay}
+          style={{ touchAction: "manipulation" }}
         >
           <div className="relative z-10 flex w-full max-w-xs flex-col items-center gap-6">
             <motion.p
@@ -81,15 +88,16 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               image created!
             </motion.p>
 
-            {/* Emoji preview box */}
             <motion.div
-              className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
-              style={{ width: 160, height: 190 }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              <span className="text-5xl">{resultEmoji}</span>
+              <EmojiPreviewBox
+                emoji={resultEmoji}
+                className="h-[13.5rem] w-[13.5rem]"
+                emojiClassName="text-[4.5rem]"
+              />
             </motion.div>
 
             <motion.p

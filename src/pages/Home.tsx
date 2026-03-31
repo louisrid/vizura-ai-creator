@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Camera, Gem, Settings, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
+import EmojiPreviewBox from "@/components/EmojiPreviewBox";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
+import { extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
@@ -68,6 +71,33 @@ const Home = () => {
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
 
+  const fetchLatestPhotos = useCallback(async () => {
+    if (!user) {
+      setImages([]);
+      return;
+    }
+
+    const { data } = await supabase
+      .from("generations")
+      .select("id, image_urls, prompt, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    const latest = (data ?? [])
+      .flatMap((generation: any) =>
+        (generation.image_urls ?? []).slice(0, 1).map((url: string, index: number) => ({
+          id: `${generation.id}-${index}`,
+          url,
+          prompt: generation.prompt ?? "",
+          created_at: generation.created_at,
+        })),
+      )
+      .slice(0, 5);
+
+    setImages(latest);
+  }, [user]);
+
   useEffect(() => {
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
@@ -79,28 +109,26 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const fetchLatestPhotos = async () => {
-      if (!user) { setImages([]); return; }
-      const { data } = await supabase
-        .from("generations")
-        .select("id, image_urls, prompt, created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(5);
-      const latest = (data ?? [])
-        .flatMap((generation: any) =>
-          (generation.image_urls ?? []).slice(0, 1).map((url: string, index: number) => ({
-            id: `${generation.id}-${index}`,
-            url,
-            prompt: generation.prompt ?? "",
-            created_at: generation.created_at,
-          })),
-        )
-        .slice(0, 5);
-      setImages(latest);
-    };
     void fetchLatestPhotos();
-  }, [user]);
+
+    const refresh = () => {
+      void fetchLatestPhotos();
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+
+    window.addEventListener("focus", refresh);
+    window.addEventListener("pageshow", refresh);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("pageshow", refresh);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [fetchLatestPhotos]);
 
   const handleOpenCreator = () => {
     sessionStorage.removeItem(DISMISSED_KEY);
@@ -212,7 +240,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+              transition={{ duration: 0.75, ease: "easeInOut" }}
             onClick={() => setSelectedImage(null)}
           >
             <button
@@ -222,7 +250,15 @@ const Home = () => {
             >
               <X size={18} strokeWidth={2.5} />
             </button>
-            <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
+            {extractEmojiFromPosterDataUrl(selectedImage.url) ? (
+              <EmojiPreviewBox
+                emoji={extractEmojiFromPosterDataUrl(selectedImage.url) || "✨"}
+                className="h-[18rem] w-[18rem] max-w-full"
+                emojiClassName="text-[4.5rem]"
+              />
+            ) : (
+              <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
+            )}
           </motion.button>
         )}
       </AnimatePresence>
@@ -250,27 +286,34 @@ const Home = () => {
 
           <section className="mt-6 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
             <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
-            <div className="grid grid-cols-5 gap-1.5">
+            <div className="grid grid-cols-5 gap-2">
               {photoSlots.map((photo) => {
                 const isPlaceholder = !photo.url;
+                const previewEmoji = extractEmojiFromPosterDataUrl(photo.url);
                 return (
                   <button
                     key={photo.id}
                     type="button"
                     onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                    className={`overflow-hidden rounded-[0.75rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
+                    className={`overflow-hidden rounded-[0.75rem] border-[3px] transition-transform active:scale-[0.98] ${
                       isPlaceholder
                         ? "border-dashed border-foreground/20 bg-secondary"
                         : "border-border bg-secondary"
                     }`}
                   >
-                    {isPlaceholder ? (
-                      <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">
-                        empty
-                      </div>
-                    ) : (
-                      <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />
-                    )}
+                    <AspectRatio ratio={1}>
+                      {isPlaceholder ? (
+                        <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">
+                          empty
+                        </div>
+                      ) : previewEmoji ? (
+                        <div className="flex h-full w-full items-center justify-center bg-card">
+                          <span className="text-[1.75rem] leading-none">{previewEmoji}</span>
+                        </div>
+                      ) : (
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />
+                      )}
+                    </AspectRatio>
                   </button>
                 );
               })}
