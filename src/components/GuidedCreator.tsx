@@ -28,16 +28,8 @@ const TRAITS = [
 
 type TraitKey = (typeof TRAITS)[number]["key"];
 
-const emojiMotions = [
-  { y: [0, -18, 0], rotate: [0, 6, -4, 0], scale: [1, 1.12, 1], duration: 2.0 },
-  { y: [0, -14, 4, 0], rotate: [0, -10, 8, 0], scale: [1, 1.08, 0.96, 1], duration: 2.2 },
-  { y: [0, -16, 0], x: [0, 6, -6, 0], scale: [1, 1.1, 1], duration: 2.4 },
-  { y: [0, -20, 2, 0], rotate: [0, 12, -8, 0], scale: [1, 1.1, 0.95, 1], duration: 1.8 },
-  { y: [0, -12, 0], rotate: [0, -6, 10, -4, 0], scale: [1, 1.08, 1], duration: 2.6 },
-  { y: [0, -16, 4, 0], rotate: [0, -8, 6, 0], scale: [1, 1.1, 1], duration: 2.2 },
-  { y: [0, -18, 0], rotate: [0, 8, -6, 0], scale: [1, 1.12, 1], duration: 2.0 },
-  { y: [0, -14, 0], rotate: [0, -5, 5, 0], scale: [1, 1.06, 1], duration: 2.3 },
-];
+/* emoji motion config removed — using CSS bounce instead */
+
 
 /* ── Dots ── */
 const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
@@ -84,54 +76,34 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Background glow — deep blue aurora ── */
+/* ── Background glow — pure CSS, no JS frames ── */
 const AmbientGlow = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden">
-    <motion.div
-      className="absolute rounded-full blur-[160px]"
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div
+      className="absolute rounded-full animate-ambient-drift-1"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.035), hsl(210 70% 30% / 0.018), transparent 70%)",
+        filter: "blur(160px)",
+        background: "radial-gradient(circle, hsl(220 80% 40% / 0.04), hsl(210 70% 30% / 0.02), transparent 70%)",
       }}
-      animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
-      transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
     />
-    <motion.div
-      className="absolute rounded-full blur-[140px]"
+    <div
+      className="absolute rounded-full animate-ambient-drift-2"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.028), hsl(215 60% 25% / 0.014), transparent 65%)",
+        filter: "blur(140px)",
+        background: "radial-gradient(circle, hsl(230 75% 45% / 0.03), hsl(215 60% 25% / 0.015), transparent 65%)",
       }}
-      animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
-      transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-    />
-    <motion.div
-      className="absolute rounded-full blur-[180px]"
-      style={{
-        width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(225 85% 50% / 0.02), hsl(200 60% 30% / 0.01), transparent 60%)",
-      }}
-      animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
-      transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
     />
   </div>
 );
 
-/* ── Bouncing emoji ── */
-const BigEmoji = ({ emoji, index }: { emoji: string; index: number }) => {
-  const m = emojiMotions[index % emojiMotions.length];
-  return (
-    <span className="select-none pointer-events-none text-[3.5rem]">
-      <motion.span
-        className="inline-block"
-        animate={{ y: m.y, x: (m as any).x, rotate: m.rotate, scale: m.scale }}
-        transition={{ duration: m.duration, repeat: Infinity, ease: "easeInOut" }}
-      >
-        {emoji}
-      </motion.span>
-    </span>
-  );
-};
+/* ── Simple emoji — CSS bounce only ── */
+const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
+  <span className="select-none pointer-events-none text-[3.5rem] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
+    {emoji}
+  </span>
+);
 
 /* ── Interactive pill ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
@@ -767,16 +739,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-success"
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6"
-          style={{ backgroundColor: "hsl(var(--member-green))" }}
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <SuccessRing size={120} color="hsl(0 0% 4%)" />
+          <SuccessRing size={120} color="hsl(0 0% 96%)" />
           <motion.p
-            className="text-center text-3xl font-[900] lowercase text-black"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            className="text-center text-[2rem] font-[900] lowercase text-white"
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.42, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}

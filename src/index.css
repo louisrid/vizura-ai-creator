@@ -148,3 +148,8 @@ input[type="range"]::-moz-range-thumb {
   border: 3px solid hsl(var(--neon-yellow-foreground));
   cursor: pointer;
 }
+
+@keyframes geo-fall {
+  0% { transform: translateY(-10%) rotate(0deg); }
+  100% { transform: translateY(110vh) rotate(360deg); }
+}
