@@ -466,10 +466,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setTimeout(() => { animating.current = false; }, 120);
   }, [step, cookingPhase, TOTAL]);
 
-  const handleSkipToLogin = () => {
+  const handleSkipToLogin = useCallback(() => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
-    window.location.replace(`${window.location.origin}/auth?redirect=/`);
-  };
+    setVisible(false);
+    navigateTo("/auth?redirect=/");
+  }, [navigateTo]);
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
