@@ -90,7 +90,6 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.10), hsl(210 70% 30% / 0.05), transparent 70%)",
         background: "radial-gradient(circle, hsl(220 80% 40% / 0.05), hsl(210 70% 30% / 0.025), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
@@ -100,7 +99,6 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.08), hsl(215 60% 25% / 0.04), transparent 65%)",
         background: "radial-gradient(circle, hsl(230 75% 45% / 0.04), hsl(215 60% 25% / 0.02), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
@@ -110,7 +108,6 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(225 85% 50% / 0.06), hsl(200 60% 30% / 0.03), transparent 60%)",
         background: "radial-gradient(circle, hsl(225 85% 50% / 0.03), hsl(200 60% 30% / 0.015), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
