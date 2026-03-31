@@ -500,9 +500,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <BouncyWords text="welcome to" className="block text-[1.4rem] font-[800]" delayStart={0.2} />
             <motion.span
               className="block text-[5.5rem] font-[900] leading-[0.95]"
-              initial={{ opacity: 0, scale: 0.3, y: 20 }}
+              initial={{ opacity: 0, scale: 0.6, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ duration: 0.5, delay: 0.5, ease: [0.25, 1.1, 0.5, 1] }}
             >
               vizura!
             </motion.span>
