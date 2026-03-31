@@ -49,7 +49,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
         >
           <ProgressBarLoader
             duration={25000}
@@ -65,17 +65,12 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          onClick={(e) => { e.stopPropagation(); }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
+          onClick={() => {
+            const event = new CustomEvent("photo-overlay-dismiss");
+            window.dispatchEvent(event);
+          }}
         >
-          <div
-            className="fixed inset-0 z-0"
-            onClick={() => {
-              // Tap anywhere to dismiss — handled by parent setting phase to hidden
-              const event = new CustomEvent("photo-overlay-dismiss");
-              window.dispatchEvent(event);
-            }}
-          />
           <div className="relative z-10 flex w-full max-w-xs flex-col items-center gap-6">
             <motion.p
               className="text-center text-[2rem] font-extrabold lowercase text-white"

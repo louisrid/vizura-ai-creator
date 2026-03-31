@@ -86,7 +86,7 @@ const Home = () => {
         .select("id, image_urls, prompt, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
-        .limit(4);
+        .limit(5);
       const latest = (data ?? [])
         .flatMap((generation: any) =>
           (generation.image_urls ?? []).slice(0, 1).map((url: string, index: number) => ({
@@ -96,7 +96,7 @@ const Home = () => {
             created_at: generation.created_at,
           })),
         )
-        .slice(0, 4);
+        .slice(0, 5);
       setImages(latest);
     };
     void fetchLatestPhotos();
@@ -177,14 +177,22 @@ const Home = () => {
     setShowGuided(false);
   };
 
+  // Always show 5 slots, newest first (far left)
   const photoSlots = useMemo(() => {
-    if (images.length > 0) return images;
-    return Array.from({ length: 4 }, (_, index) => ({
-      id: `placeholder-${index}`,
-      url: "",
-      prompt: "",
-      created_at: "",
-    }));
+    const slots: LatestImage[] = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < images.length) {
+        slots.push(images[i]);
+      } else {
+        slots.push({
+          id: `placeholder-${i}`,
+          url: "",
+          prompt: "",
+          created_at: "",
+        });
+      }
+    }
+    return slots;
   }, [images]);
 
   return (
@@ -204,6 +212,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
             onClick={() => setSelectedImage(null)}
           >
             <button
@@ -241,7 +250,7 @@ const Home = () => {
 
           <section className="mt-6 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
             <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-5 gap-1.5">
               {photoSlots.map((photo) => {
                 const isPlaceholder = !photo.url;
                 return (
@@ -249,18 +258,18 @@ const Home = () => {
                     key={photo.id}
                     type="button"
                     onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                    className={`overflow-hidden rounded-[1rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
+                    className={`overflow-hidden rounded-[0.75rem] border-[3px] transition-transform active:scale-[0.98] aspect-[9/16] ${
                       isPlaceholder
                         ? "border-dashed border-foreground/20 bg-secondary"
                         : "border-border bg-secondary"
                     }`}
                   >
                     {isPlaceholder ? (
-                      <div className="flex h-full w-full items-center justify-center text-[9px] font-[900] lowercase text-foreground/25">
+                      <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">
                         empty
                       </div>
                     ) : (
-                      <img src={photo.url} alt="latest generated photo" className="h-full w-full object-cover" />
+                      <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />
                     )}
                   </button>
                 );

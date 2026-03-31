@@ -62,6 +62,7 @@ const ChooseFace = () => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [rerolling, setRerolling] = useState(false);
   const [shuffleKey, setShuffleKey] = useState(0);
+  const [cardsRevealed, setCardsRevealed] = useState(false);
 
   useEffect(() => {
     if (!prompt) { navigate("/"); return; }
@@ -71,6 +72,14 @@ const ChooseFace = () => {
     }
     generateFaces();
   }, []);
+
+  // Trigger card flip reveal after loading
+  useEffect(() => {
+    if (!loading && !cardsRevealed) {
+      const t = setTimeout(() => setCardsRevealed(true), 100);
+      return () => clearTimeout(t);
+    }
+  }, [loading, cardsRevealed]);
 
   useEffect(() => {
     if (showSignIn || !user || faces.length === 0 || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
@@ -84,6 +93,7 @@ const ChooseFace = () => {
 
   const generateFaces = async () => {
     setLoading(true);
+    setCardsRevealed(false);
     try {
       if (!user) {
         setFaces([]);
@@ -125,14 +135,17 @@ const ChooseFace = () => {
     if (!user) {
       setRerolling(true);
       setSelectedIndex(null);
+      setCardsRevealed(false);
       setTimeout(() => {
         setDemoEmojis(getRandomEmojis(3, demoEmojis));
         setShuffleKey((k) => k + 1);
         setRerolling(false);
+        setTimeout(() => setCardsRevealed(true), 100);
       }, 400);
       return;
     }
     setRerolling(true);
+    setCardsRevealed(false);
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: { prompt },
@@ -149,6 +162,7 @@ const ChooseFace = () => {
       toast.error(err?.message || "regeneration failed");
     } finally {
       setRerolling(false);
+      setTimeout(() => setCardsRevealed(true), 100);
     }
   };
 
@@ -159,7 +173,6 @@ const ChooseFace = () => {
   const handleConfirm = async () => {
     if (selectedIndex === null) return;
 
-    // Store selected emoji for character card display
     const isEmojiMode = faces.length === 0;
     if (isEmojiMode) {
       sessionStorage.setItem(SELECTED_EMOJI_KEY, demoEmojis[selectedIndex]);
@@ -188,7 +201,6 @@ const ChooseFace = () => {
       return false;
     }
 
-    // Determine selected emoji
     const selectedEmoji = sessionStorage.getItem(SELECTED_EMOJI_KEY) || (faces.length === 0 ? demoEmojis[faceIdx] : null);
 
     let cId = characterId;
@@ -214,14 +226,12 @@ const ChooseFace = () => {
             description: sanitiseText(descParts.join(" "), 500),
             generation_prompt: prompt || "",
           };
-          console.log("[ChooseFace] Creating character with data:", charData);
           const { data: inserted, error: insertError } = await supabase
             .from("characters")
             .insert(charData)
             .select("id")
             .single();
           if (insertError) {
-            console.error("[ChooseFace] Insert error:", insertError);
             toast.error("failed to save character: " + insertError.message);
             return false;
           }
@@ -229,13 +239,9 @@ const ChooseFace = () => {
             cId = inserted.id;
             setCharacterId(cId);
             sessionStorage.setItem("vizura_pending_char_id", cId);
-            console.log("[ChooseFace] Character created with id:", cId);
           }
-        } else {
-          console.warn("[ChooseFace] No draft data in sessionStorage");
         }
       } catch (err) {
-        console.error("[ChooseFace] Error creating character:", err);
         toast.error("failed to save character");
         return false;
       }
@@ -245,7 +251,6 @@ const ChooseFace = () => {
       const faceUrl = faces[faceIdx] || null;
       try {
         const updateData: any = { face_image_url: faceUrl, generation_prompt: prompt };
-        // If emoji mode and no real face, embed emoji in description
         if (!faceUrl && selectedEmoji) {
           const { data: existing } = await supabase
             .from("characters")
@@ -262,9 +267,7 @@ const ChooseFace = () => {
           .eq("id", cId)
           .eq("user_id", currentUser.id);
         if (updateError) throw updateError;
-        console.log("[ChooseFace] Updated face for character:", cId);
       } catch (err) {
-        console.error("[ChooseFace] Error updating face:", err);
         toast.error("failed to save selected face");
         return false;
       }
@@ -308,6 +311,9 @@ const ChooseFace = () => {
     );
   }
 
+  // Card flip delays: left first, middle at ~2/3, right last
+  const cardDelays = [0, 0.2, 0.4];
+
   return (
     <div className="relative min-h-screen bg-background">
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
@@ -333,38 +339,40 @@ const ChooseFace = () => {
 
         {!loading && (
           <>
-            <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="grid grid-cols-3 gap-3 mt-4" style={{ perspective: "800px" }}>
               {faces.length > 0 ? faces.map((url, i) => (
-                <button
+                <motion.button
                   key={i}
                   onClick={() => handleFaceClick(i)}
-                  className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-all duration-200 ${
+                  initial={{ rotateY: 90, opacity: 0 }}
+                  animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                  transition={{ duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] }}
+                  whileTap={{ scale: 1.08 }}
+                  className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
                     selectedIndex === i
                       ? "border-neon-yellow"
                       : "border-border hover:border-foreground/40"
                   }`}
                 >
                   <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
-                </button>
+                </motion.button>
               )) : (
                 demoEmojis.map((emoji, i) => (
-                  <AnimatePresence mode="wait" key={`slot-${i}`}>
-                    <motion.button
-                      key={`${shuffleKey}-${i}`}
-                      onClick={() => handleFaceClick(i)}
-                      initial={{ rotateY: 90, opacity: 0 }}
-                      animate={{ rotateY: 0, opacity: 1 }}
-                      exit={{ rotateY: -90, opacity: 0 }}
-                      transition={{ duration: 0.3, delay: i * 0.08 }}
-                      className={`aspect-[3/4] rounded-2xl border-[5px] transition-all duration-200 flex items-center justify-center bg-card ${
-                        selectedIndex === i
-                          ? "border-neon-yellow"
-                          : "border-border hover:border-foreground/40"
-                      }`}
-                    >
-                      <span className="text-4xl leading-none">{emoji}</span>
-                    </motion.button>
-                  </AnimatePresence>
+                  <motion.button
+                    key={`${shuffleKey}-${i}`}
+                    onClick={() => handleFaceClick(i)}
+                    initial={{ rotateY: 90, opacity: 0 }}
+                    animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                    transition={{ duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] }}
+                    whileTap={{ scale: 1.08 }}
+                    className={`aspect-[3/4] rounded-2xl border-[5px] transition-colors duration-200 flex items-center justify-center bg-card ${
+                      selectedIndex === i
+                        ? "border-neon-yellow"
+                        : "border-border hover:border-foreground/40"
+                    }`}
+                  >
+                    <span className="text-4xl leading-none">{emoji}</span>
+                  </motion.button>
                 ))
               )}
             </div>
