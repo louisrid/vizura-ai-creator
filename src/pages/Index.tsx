@@ -84,9 +84,12 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        if (preselectedCharacterId) {
+        // Auto-select if only one character
+        if (data.length === 1) {
+          setSelectedCharId(data[0].id);
+        } else if (preselectedCharacterId) {
           const char = data.find((c: any) => c.id === preselectedCharacterId);
-          if (char) { setSelectedCharId(preselectedCharacterId); setPrompt(buildPromptFromCharacter(char as Character)); }
+          if (char) { setSelectedCharId(preselectedCharacterId); }
         }
       }
     };
@@ -95,10 +98,8 @@ const Index = () => {
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
-    const character = characters.find((item) => item.id === charId);
-    if (character) {
-      setPrompt(buildPromptFromCharacter(character));
-    }
+    // Don't auto-fill prompt — user types everything
+    setPrompt("");
   };
 
   // All characters are selectable — the starter "ava" has a generation_prompt so treat her as ready
@@ -155,7 +156,7 @@ const Index = () => {
       await refetchCredits();
       toast("1 gem used");
 
-      await wait(isDemo ? 2400 : 1800);
+      await wait(isDemo ? 5500 : 5500);
       setPhotoOverlayPhase("hidden");
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");

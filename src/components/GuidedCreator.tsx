@@ -769,13 +769,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           key="cooking-success"
           className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6"
           style={{ backgroundColor: "hsl(var(--member-green))" }}
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <SuccessRing size={120} color="hsl(var(--foreground))" />
+          <SuccessRing size={120} color="hsl(0 0% 4%)" />
           <motion.p
-            className="text-center text-3xl font-[900] lowercase text-white"
+            className="text-center text-3xl font-[900] lowercase text-black"
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -815,7 +815,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       )}
 
       <div className="relative flex-1 overflow-hidden">
-        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "50%", transform: "translateY(-50%)" }}>
+        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "45%", transform: "translateY(-50%)" }}>
           <div className="w-full max-w-xs mx-auto flex flex-col items-center">
             {isCooking ? (
               renderCooking()
@@ -838,7 +838,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Fixed bottom nav - hidden during cooking */}
         {!isCooking && (
-          <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "72%" }}>
+          <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "76%" }}>
             <div className="mb-4 flex h-14 items-center gap-4">
               <NavArrow direction="left" onClick={goBack} disabled={step <= 0} />
               <NavArrow
