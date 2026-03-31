@@ -303,14 +303,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     };
   }, [visible, persistFlow, restoreSavedFlow]);
 
-  // Cooking phase timers
-  useEffect(() => {
-    if (cookingPhase !== "loading") return;
-    const interval = setInterval(() => {
-      setCookingPhraseIndex((i) => (i + 1) % COOKING_PHRASES.length);
-    }, COOKING_PHRASE_INTERVAL);
-    return () => clearInterval(interval);
-  }, [cookingPhase]);
+  // Cooking phase — ProgressBarLoader handles its own timing now
+  // No separate phrase timer needed
 
   const completeCookingFlow = useCallback(() => {
     if (hasCompletedCookingRef.current) return;
