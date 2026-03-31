@@ -10,8 +10,11 @@ interface PhotoGenerationOverlayProps {
   resultImageUrl: string | null;
 }
 
+const RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞", "🎨", "🔮"];
+
 const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoGenerationOverlayProps) => {
   const [phraseIndex, setPhraseIndex] = useState(0);
+  const [resultEmoji] = useState(() => RESULT_EMOJIS[Math.floor(Math.random() * RESULT_EMOJIS.length)]);
 
   useEffect(() => {
     if (!open) return;
@@ -23,7 +26,6 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
     const interval = window.setInterval(() => {
       setPhraseIndex((current) => (current + 1) % phrases.length);
     }, 1500);
-
     return () => window.clearInterval(interval);
   }, [open, phase, phrases]);
 
@@ -35,11 +37,9 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
       html: document.documentElement.style.overflow,
       root: root?.style.overflow ?? "",
     };
-
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
-
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
@@ -96,13 +96,29 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
             >
               image created!
             </motion.p>
+
+            {/* Emoji preview box */}
+            <motion.div
+              className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
+              style={{ width: 120, height: 140 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              {resultImageUrl ? (
+                <img src={resultImageUrl} alt="created" className="h-full w-full rounded-[calc(1rem-5px)] object-cover" />
+              ) : (
+                <span className="text-4xl">{resultEmoji}</span>
+              )}
+            </motion.div>
+
             <motion.p
               className="text-center text-sm font-extrabold lowercase text-white/50"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 }}
+              transition={{ duration: 0.3, delay: 0.7 }}
             >
-              find it in your storage
+              you can find this in your storage
             </motion.p>
           </div>
         </motion.div>
