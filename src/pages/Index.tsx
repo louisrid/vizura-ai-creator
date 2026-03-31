@@ -3,11 +3,13 @@ import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Zap, Sparkles, ChevronDown, Gem } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import BackButton from "@/components/BackButton";
+import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
+import { createEmojiPosterDataUrl } from "@/lib/demoImages";
 import { sanitiseText } from "@/lib/sanitise";
 
 interface Character {
@@ -38,6 +40,18 @@ const buildPromptFromCharacter = (c: Character): string => {
   return prompt;
 };
 
+const PHOTO_LOADING_PHRASES = [
+  "composing the scene…",
+  "adding the details…",
+  "rendering your photo…",
+  "almost there…",
+  "final touches…",
+];
+
+const DEMO_RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞"];
+
+const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
 const Index = () => {
   const { user } = useAuth();
   const { credits, gems, refetch: refetchCredits } = useCredits();
@@ -51,6 +65,8 @@ const Index = () => {
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharId, setSelectedCharId] = useState("");
+  const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">("hidden");
+  const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
 
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
 
@@ -92,8 +108,12 @@ const Index = () => {
     setIsGenerating(true);
     setImages([]);
     setError("");
+    setPhotoOverlayPhase("loading");
+    setPhotoOverlayResult(null);
 
     const cleanPrompt = sanitiseText(prompt.trim());
+    const demoEmoji = DEMO_RESULT_EMOJIS[Math.floor(Math.random() * DEMO_RESULT_EMOJIS.length)];
+    const startedAt = Date.now();
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
@@ -101,10 +121,40 @@ const Index = () => {
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      setImages(data.images || []);
+
+      const isDemo = data?.demo === true;
+      const generatedPreview = isDemo
+        ? createEmojiPosterDataUrl(demoEmoji)
+        : (data.images || [])[0] || null;
+      const generatedImages = generatedPreview ? [generatedPreview] : (data.images || []);
+
+      if (isDemo && user && generatedPreview) {
+        const { error: saveError } = await supabase.from("generations").insert({
+          user_id: user.id,
+          prompt: cleanPrompt,
+          image_urls: [generatedPreview],
+        });
+
+        if (saveError) {
+          throw new Error(saveError.message || "failed to save image");
+        }
+      }
+
+      const minimumLoading = isDemo ? 5400 + Math.floor(Math.random() * 2400) : 1600;
+      const remaining = Math.max(0, minimumLoading - (Date.now() - startedAt));
+      if (remaining > 0) await wait(remaining);
+
+      setPhotoOverlayResult(generatedPreview);
+      setPhotoOverlayPhase("success");
+      setImages(generatedImages);
+
       await refetchCredits();
       toast("1 gem used");
+
+      await wait(isDemo ? 2400 : 1800);
+      setPhotoOverlayPhase("hidden");
     } catch (e: any) {
+      setPhotoOverlayPhase("hidden");
       if (e.message?.includes("No gems") || e.message?.includes("No credits") || e.message?.includes("402")) {
         setShowPaywall(true);
       } else {
@@ -117,6 +167,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <PhotoGenerationOverlay
+        open={photoOverlayPhase !== "hidden"}
+        phase={photoOverlayPhase === "hidden" ? "loading" : photoOverlayPhase}
+        phrases={PHOTO_LOADING_PHRASES}
+        resultImageUrl={photoOverlayResult}
+      />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-10">

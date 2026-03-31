@@ -3,6 +3,9 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import PremiumRipple from "@/components/loading/PremiumRipple";
+import SuccessRing from "@/components/loading/SuccessRing";
+import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { useNavigate } from "react-router-dom";
@@ -167,82 +170,7 @@ const COOKING_PHRASES = [
 ];
 const COOKING_PHRASE_INTERVAL = 1500;
 const COOKING_DURATION = 8000;
-const COOKING_SUCCESS_HOLD = 5000;
-
-const CookingGreenTick = () => (
-  <motion.svg
-    width="80" height="80" viewBox="0 0 80 80" fill="none"
-    initial={{ opacity: 0, scale: 0.6 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-  >
-    <motion.circle cx="40" cy="40" r="36" stroke="hsl(140, 100%, 50%)" strokeWidth="3.5" fill="none"
-      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }} />
-    <motion.path d="M24 42 L34 52 L56 30" stroke="hsl(140, 100%, 50%)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
-      initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }} />
-  </motion.svg>
-);
-
-/* ── Smooth ripple loader — no flashing, always visible ── */
-const RippleLoader = () => {
-  const rings = [0, 1, 2, 3, 4];
-  const colors = [
-    "hsl(195, 100%, 55%)",
-    "hsl(50, 100%, 50%)",
-    "hsl(140, 100%, 50%)",
-    "hsl(330, 80%, 55%)",
-    "hsl(210, 100%, 55%)",
-  ];
-  return (
-    <div className="relative flex items-center justify-center" style={{ width: 120, height: 120 }}>
-      {rings.map((i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: 20,
-            height: 20,
-            border: `2.5px solid ${colors[i % colors.length]}`,
-            top: "50%",
-            left: "50%",
-            marginTop: -10,
-            marginLeft: -10,
-          }}
-          animate={{
-            scale: [1, 3, 5],
-            opacity: [1, 0.7, 0.15],
-            borderColor: [
-              colors[i % colors.length],
-              colors[(i + 1) % colors.length],
-              colors[(i + 2) % colors.length],
-            ],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            delay: i * 0.8,
-            ease: "easeOut",
-          }}
-        />
-      ))}
-      <motion.div
-        className="absolute rounded-full"
-        style={{ width: 12, height: 12 }}
-        animate={{
-          scale: [1, 1.2, 1],
-          backgroundColor: [
-            "hsl(195, 100%, 55%)",
-            "hsl(50, 100%, 50%)",
-            "hsl(140, 100%, 50%)",
-            "hsl(330, 80%, 55%)",
-            "hsl(195, 100%, 55%)",
-          ],
-        }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
-  );
-};
+const COOKING_SUCCESS_HOLD = 4000;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
@@ -523,7 +451,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const handleSkipToLogin = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setVisible(false);
-    window.location.href = "/auth?redirect=/";
+    navigate("/auth?redirect=/");
   };
 
   const handleClose = () => {
@@ -791,12 +719,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <motion.div
           key="cooking-loading"
           className="flex flex-col items-center gap-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0 }}
         >
-          <RippleLoader />
+          <PremiumRipple />
           <div className="h-8 flex items-center">
             <AnimatePresence mode="wait">
               <motion.p
@@ -820,33 +747,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           key="cooking-success"
           className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6"
           style={{ backgroundColor: "hsl(var(--member-green))" }}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0 }}
         >
-          <motion.svg width="120" height="120" viewBox="0 0 120 120" fill="none"
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            <motion.circle cx="60" cy="60" r="52" stroke="white" strokeWidth="5" fill="none"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-            <motion.path d="M34 62 L52 80 L86 42" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
-            />
-          </motion.svg>
+          <SuccessRing size={120} color="hsl(var(--foreground))" />
           <motion.p
             className="text-center text-3xl font-[900] lowercase text-white"
             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 2.2, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.42, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
@@ -867,10 +778,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
     >
-      <AmbientGlow />
+      <AmbientBlueGlow />
 
       {/* Close / exit button — top right, hidden during cooking */}
-      {!isCooking && (
+      {!isCooking && isLoggedIn && skipWelcome && (
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
@@ -884,10 +795,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="relative flex-1 overflow-hidden">
         <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "44%", transform: "translateY(-50%)" }}>
           <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-            <AnimatePresence mode="wait">
-              {isCooking ? (
-                renderCooking()
-              ) : (
+            {isCooking ? (
+              renderCooking()
+            ) : (
+              <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
                   className="w-full"
@@ -898,8 +809,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 >
                   {renderSlide()}
                 </motion.div>
-              )}
-            </AnimatePresence>
+              </AnimatePresence>
+            )}
           </div>
         </div>
 
@@ -922,8 +833,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
-                onTouchEnd={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
-                className="mt-5 text-xs font-extrabold lowercase text-white/40 underline hover:text-white/60 transition-colors z-50 relative px-4 py-2"
+                onPointerUp={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
+                className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
               >
                 skip to login
               </button>
