@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import PremiumRipple from "@/components/loading/PremiumRipple";
-import SuccessRing from "@/components/loading/SuccessRing";
 
 interface PhotoGenerationOverlayProps {
   open: boolean;
