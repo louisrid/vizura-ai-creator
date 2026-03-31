@@ -181,12 +181,12 @@ const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; classN
         <motion.span
           key={i}
           className="inline-block mr-[0.3em]"
-          initial={{ opacity: 0, y: 30, scale: 0.5 }}
+          initial={{ opacity: 0, y: 18, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
-            duration: 0.5,
-            delay: delayStart + i * 0.15,
-            ease: [0.34, 1.56, 0.64, 1],
+            duration: 0.45,
+            delay: delayStart + i * 0.12,
+            ease: [0.25, 1.1, 0.5, 1],
           }}
         >
           {word}
