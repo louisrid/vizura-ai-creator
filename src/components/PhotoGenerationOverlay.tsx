@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import PremiumRipple from "@/components/loading/PremiumRipple";
+import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 
 interface PhotoGenerationOverlayProps {
   open: boolean;
@@ -13,21 +13,12 @@ interface PhotoGenerationOverlayProps {
 const RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞", "🎨", "🔮"];
 
 const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoGenerationOverlayProps) => {
-  const [phraseIndex, setPhraseIndex] = useState(0);
   const [resultEmoji] = useState(() => RESULT_EMOJIS[Math.floor(Math.random() * RESULT_EMOJIS.length)]);
+  const [loadingDone, setLoadingDone] = useState(false);
 
   useEffect(() => {
-    if (!open) return;
-    setPhraseIndex(0);
+    if (!open) setLoadingDone(false);
   }, [open]);
-
-  useEffect(() => {
-    if (!open || phase !== "loading") return;
-    const interval = window.setInterval(() => {
-      setPhraseIndex((current) => (current + 1) % phrases.length);
-    }, 1500);
-    return () => window.clearInterval(interval);
-  }, [open, phase, phrases]);
 
   useEffect(() => {
     if (!open) return;
@@ -51,32 +42,21 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
 
   return createPortal(
     <AnimatePresence mode="wait">
-      {phase === "loading" ? (
+      {phase === "loading" && !loadingDone ? (
         <motion.div
           key="photo-loading"
           className="fixed inset-0 z-[9999] flex items-center justify-center px-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          <div className="flex flex-col items-center gap-8">
-            <PremiumRipple />
-            <div className="flex h-8 items-center">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={phrases[phraseIndex]}
-                  className="text-center text-base font-extrabold lowercase text-white"
-                  initial={{ opacity: 0, y: 12, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.22, ease: [0.34, 1.56, 0.64, 1] }}
-                >
-                  {phrases[phraseIndex]}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-          </div>
+          <ProgressBarLoader
+            duration={6000}
+            phrases={phrases}
+            phraseInterval={3500}
+            onComplete={() => setLoadingDone(true)}
+          />
         </motion.div>
       ) : (
         <motion.div
@@ -85,9 +65,18 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          onClick={(e) => { e.stopPropagation(); }}
         >
-          <div className="flex w-full max-w-xs flex-col items-center gap-6">
+          <div
+            className="fixed inset-0 z-0"
+            onClick={() => {
+              // Tap anywhere to dismiss — handled by parent setting phase to hidden
+              const event = new CustomEvent("photo-overlay-dismiss");
+              window.dispatchEvent(event);
+            }}
+          />
+          <div className="relative z-10 flex w-full max-w-xs flex-col items-center gap-6">
             <motion.p
               className="text-center text-[2rem] font-extrabold lowercase text-white"
               initial={{ opacity: 0, y: 16, scale: 0.9 }}
@@ -97,7 +86,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               image created!
             </motion.p>
 
-            {/* Emoji preview box */}
+            {/* Emoji preview box — dark charcoal rounded box with emoji */}
             <motion.div
               className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
               style={{ width: 120, height: 140 }}
@@ -118,7 +107,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.7 }}
             >
-              you can find this in your storage
+              tap to continue
             </motion.p>
           </div>
         </motion.div>

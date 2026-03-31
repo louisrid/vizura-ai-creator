@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import PremiumRipple from "@/components/loading/PremiumRipple";
+import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import SuccessRing from "@/components/loading/SuccessRing";
 import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 import { lovable } from "@/integrations/lovable/index";
@@ -131,18 +131,14 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
 
 /* ── Loading phrases for cooking phase ── */
 const COOKING_PHRASES = [
-  "mixing the pixels…",
-  "adjusting the vibe…",
-  "picking the perfect look…",
-  "almost there…",
-  "adding the finishing touches…",
-  "brewing something beautiful…",
-  "calibrating cuteness…",
-  "loading your masterpiece…",
+  "scanning your face…",
+  "mapping your features…",
+  "building your look…",
+  "training the AI…",
+  "final touches…",
 ];
-const COOKING_PHRASE_INTERVAL = 1500;
-const COOKING_DURATION = 8000;
-const COOKING_SUCCESS_HOLD = 4000;
+const COOKING_DURATION = 10000;
+const COOKING_SUCCESS_HOLD = 5000;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
@@ -307,14 +303,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     };
   }, [visible, persistFlow, restoreSavedFlow]);
 
-  // Cooking phase timers
-  useEffect(() => {
-    if (cookingPhase !== "loading") return;
-    const interval = setInterval(() => {
-      setCookingPhraseIndex((i) => (i + 1) % COOKING_PHRASES.length);
-    }, COOKING_PHRASE_INTERVAL);
-    return () => clearInterval(interval);
-  }, [cookingPhase]);
+  // Cooking phase — ProgressBarLoader handles its own timing now
+  // No separate phrase timer needed
 
   const completeCookingFlow = useCallback(() => {
     if (hasCompletedCookingRef.current) return;
@@ -323,21 +313,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onComplete(selectionsRef.current);
   }, [onComplete]);
 
-  useEffect(() => {
-    if (cookingPhase !== "loading") return;
-    const successTimer = window.setTimeout(() => {
-      setCookingPhase((current) => (current === "loading" ? "success" : current));
-    }, COOKING_DURATION);
+  // ProgressBarLoader calls setCookingPhase("success") via onComplete
+  // Watchdog for success hold only
 
-    const watchdogTimer = window.setTimeout(() => {
-      completeCookingFlow();
-    }, COOKING_DURATION + COOKING_SUCCESS_HOLD + 600);
-
-    return () => {
-      window.clearTimeout(successTimer);
-      window.clearTimeout(watchdogTimer);
-    };
-  }, [cookingPhase, completeCookingFlow]);
 
   useEffect(() => {
     if (cookingPhase !== "success") return;
@@ -712,26 +690,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-loading"
-          className="flex flex-col items-center gap-8"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0 }}
+          className="flex flex-col items-center w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          <PremiumRipple />
-          <div className="h-8 flex items-center">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={COOKING_PHRASES[cookingPhraseIndex]}
-                className="text-center text-base font-extrabold lowercase text-white"
-                initial={{ opacity: 0, y: 12, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-              >
-                {COOKING_PHRASES[cookingPhraseIndex]}
-              </motion.p>
-            </AnimatePresence>
-          </div>
+          <ProgressBarLoader
+            duration={COOKING_DURATION}
+            phrases={COOKING_PHRASES}
+            phraseInterval={3500}
+            onComplete={() => setCookingPhase("success")}
+          />
         </motion.div>
       );
     }
@@ -742,14 +712,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          <SuccessRing size={120} color="hsl(0 0% 96%)" />
           <motion.p
             className="text-center text-[2rem] font-[900] lowercase text-white"
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.42, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.42, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
