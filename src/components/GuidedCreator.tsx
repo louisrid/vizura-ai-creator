@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import PremiumRipple from "@/components/loading/PremiumRipple";
+import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import SuccessRing from "@/components/loading/SuccessRing";
 import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 import { lovable } from "@/integrations/lovable/index";
