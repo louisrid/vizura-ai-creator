@@ -1,36 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import PremiumRipple from "@/components/loading/PremiumRipple";
-import SuccessRing from "@/components/loading/SuccessRing";
+import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 
 const PHRASES = [
   "scanning your face…",
   "mapping your features…",
   "building your look…",
   "training the AI…",
-  "perfecting the details…",
-  "almost ready…",
   "final touches…",
 ];
 
-const PHRASE_INTERVAL = 2500;
-const COOKING_DURATION = 25000;
-const SUCCESS_HOLD = 4000;
-const TICK_INTERVAL = 100;
-
-const PhraseText = ({ phrase }: { phrase: string }) => (
-  <motion.p
-    key={phrase}
-    className="text-center text-base font-extrabold lowercase text-white"
-    initial={{ opacity: 0, y: 12, scale: 0.92 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    exit={{ opacity: 0, y: -8 }}
-    transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-  >
-    {phrase}
-  </motion.p>
-);
+const SUCCESS_HOLD = 5000;
 
 interface CookingOverlayProps {
   open: boolean;
@@ -39,41 +20,14 @@ interface CookingOverlayProps {
 
 const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
   const [phase, setPhase] = useState<"cooking" | "success" | "exiting">("cooking");
-  const [phraseIndex, setPhraseIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (open) {
       setPhase("cooking");
-      setPhraseIndex(0);
-      setProgress(0);
       setVisible(true);
     }
   }, [open]);
-
-  useEffect(() => {
-    if (!open || phase !== "cooking") return;
-    const startTime = Date.now();
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const pct = Math.min(100, Math.round((elapsed / COOKING_DURATION) * 100));
-      setProgress(pct);
-      if (pct >= 100) {
-        clearInterval(interval);
-        setPhase("success");
-      }
-    }, TICK_INTERVAL);
-    return () => clearInterval(interval);
-  }, [open, phase]);
-
-  useEffect(() => {
-    if (!open || phase !== "cooking") return;
-    const interval = setInterval(() => {
-      setPhraseIndex((i) => (i + 1) % PHRASES.length);
-    }, PHRASE_INTERVAL);
-    return () => clearInterval(interval);
-  }, [open, phase]);
 
   useEffect(() => {
     if (phase !== "success") return;
@@ -107,44 +61,27 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
       {phase !== "exiting" && (
         <motion.div
           key={phase}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
-          style={{ backgroundColor: phase === "cooking" ? "#000000" : "hsl(140, 100%, 50%)" }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           {phase === "cooking" && (
-            <div className="flex flex-col items-center gap-8 w-full px-10">
-              <PremiumRipple size={120} />
-              <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
-                {progress}%
-              </motion.span>
-              <div className="w-full max-w-xs h-3 rounded-full bg-white/10 overflow-hidden">
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{
-                    background: "linear-gradient(90deg, hsl(var(--loader-gold)), hsl(var(--loader-cyan)), hsl(var(--loader-green)))",
-                    width: `${progress}%`,
-                  }}
-                  transition={{ duration: 0.1 }}
-                />
-              </div>
-              <div className="h-8 flex items-center">
-                <AnimatePresence mode="wait">
-                  <PhraseText phrase={PHRASES[phraseIndex]} />
-                </AnimatePresence>
-              </div>
-            </div>
+            <ProgressBarLoader
+              duration={25000}
+              phrases={PHRASES}
+              phraseInterval={3500}
+              onComplete={() => setPhase("success")}
+            />
           )}
           {phase === "success" && (
             <div className="flex flex-col items-center justify-center gap-6">
-              <SuccessRing size={120} color="hsl(0 0% 4%)" />
               <motion.p
-                className="text-center text-[2rem] font-extrabold lowercase text-black"
+                className="text-center text-[2rem] font-extrabold lowercase text-white"
                 initial={{ opacity: 0, y: 18, scale: 0.86 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.45, delay: 1.12, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.45, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               >
                 character created!
               </motion.p>
