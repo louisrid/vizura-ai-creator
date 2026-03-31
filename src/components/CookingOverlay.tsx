@@ -11,7 +11,7 @@ const PHRASES = [
   "final touches…",
 ];
 
-const SUCCESS_HOLD = 5000;
+const SUCCESS_HOLD = 3000;
 
 interface CookingOverlayProps {
   open: boolean;
