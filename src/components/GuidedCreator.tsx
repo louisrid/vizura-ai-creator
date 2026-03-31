@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
-import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
@@ -14,6 +13,8 @@ const NEON_BLUE = "hsl(var(--gem-green))";
 const PURE_WHITE = "hsl(var(--foreground))";
 const AMBER = "hsl(var(--neon-yellow))";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
+const SLIDE_FADE_DURATION = 0.55;
+const OVERLAY_FADE_DURATION = 0.75;
 
 const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
@@ -80,7 +81,7 @@ const AmbientGlow = () => (
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
         filter: "blur(160px)",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.08), hsl(210 70% 30% / 0.04), transparent 70%)",
+        background: "radial-gradient(circle, hsl(220 42% 22% / 0.035), hsl(214 28% 16% / 0.02), transparent 70%)",
       }}
     />
     <div
@@ -88,7 +89,7 @@ const AmbientGlow = () => (
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
         filter: "blur(140px)",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.06), hsl(215 60% 25% / 0.03), transparent 65%)",
+        background: "radial-gradient(circle, hsl(226 34% 20% / 0.03), hsl(214 24% 14% / 0.016), transparent 65%)",
       }}
     />
   </div>
@@ -133,7 +134,8 @@ const COOKING_PHRASES = [
   "final touches…",
 ];
 const COOKING_DURATION = 25000;
-const COOKING_SUCCESS_HOLD = 2000;
+const COOKING_SUCCESS_HOLD = 3200;
+const COOKING_EXIT_DURATION = 750;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
@@ -205,11 +207,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
-  const [hasClickedFirstArrow, setHasClickedFirstArrow] = useState(false);
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success">("none");
+  const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
 
@@ -248,7 +249,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
-      setHasClickedFirstArrow(false);
     }
   }, [open, restoreSavedFlow]);
 
@@ -310,8 +310,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   useEffect(() => {
     if (cookingPhase !== "success") return;
     const t = window.setTimeout(() => {
-      completeCookingFlow();
+      setCookingPhase("exiting");
     }, COOKING_SUCCESS_HOLD);
+    return () => window.clearTimeout(t);
+  }, [cookingPhase]);
+
+  useEffect(() => {
+    if (cookingPhase !== "exiting") return;
+    const t = window.setTimeout(() => {
+      completeCookingFlow();
+    }, COOKING_EXIT_DURATION);
     return () => window.clearTimeout(t);
   }, [cookingPhase, completeCookingFlow]);
 
@@ -370,9 +378,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
 
-    // Track first arrow click
-    if (!hasClickedFirstArrow) setHasClickedFirstArrow(true);
-
     if (currentTraitIndex >= 0 && currentTraitIndex < 7) {
       const key = TRAITS[currentTraitIndex].key;
       if (!selectionsRef.current[key]) {
@@ -403,7 +408,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 180);
-  }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex, hasClickedFirstArrow]);
+  }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0 || cookingPhase !== "none") return;
@@ -429,7 +434,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-    transition: { duration: 0.4, ease: "easeInOut" as const },
+    transition: { duration: SLIDE_FADE_DURATION, ease: "easeInOut" as const },
   };
 
   const renderSlide = () => {
@@ -600,7 +605,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
-            <p className="mt-3 text-sm font-extrabold lowercase text-white/50 text-center leading-snug">
+            <p className="mt-4 text-center text-base font-extrabold lowercase leading-snug text-white">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
@@ -670,7 +675,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const showGemCost = isLoggedIn && skipWelcome;
       return (
         <div
-          className="mt-5 flex w-full min-h-[12rem] flex-col items-center justify-center bg-transparent text-center"
+          className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center"
         >
           {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
@@ -678,16 +683,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
-          <span className="text-[2.5rem] inline-block select-none animate-bounce mb-3" style={{ animationDuration: "2s" }}>👀</span>
-          <div className="max-w-[18rem] text-white">
-            <BouncyWords text="your character is" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.1} />
-            <BouncyWords text="almost ready!" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.34} />
-          </div>
+          <span className="mb-4 inline-block select-none text-[2.6rem] leading-none">👀</span>
+          <h2 className="max-w-[16rem] text-center text-[2.8rem] font-[900] lowercase leading-[1.02] tracking-tight text-white">
+            <span className="block">your character</span>
+            <span className="block">is almost ready!</span>
+          </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.95, duration: 0.35 }}
+            transition={{ delay: 0.8, duration: SLIDE_FADE_DURATION }}
           >
             tap anywhere to continue
           </motion.p>
@@ -708,7 +713,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.0, ease: "easeInOut" }}
+          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
           <ProgressBarLoader
             duration={COOKING_DURATION}
@@ -719,32 +724,33 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         </motion.div>
       );
     }
-    if (cookingPhase === "success") {
+    if (cookingPhase === "success" || cookingPhase === "exiting") {
       return (
         <motion.div
           key="cooking-success"
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black"
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center bg-black px-6"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.0, ease: "easeInOut" }}
+          animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
+          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
-          <motion.span
-            className="text-[3rem] inline-block select-none"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            ✅
-          </motion.span>
-          <motion.p
-            className="text-center text-[2rem] font-[900] lowercase text-white"
-            initial={{ opacity: 0, y: 20, scale: 0.85 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.42, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            character created!
-          </motion.p>
+          <div className="flex min-h-[15rem] flex-col items-center justify-center gap-7 text-center">
+            <motion.span
+              className="inline-block select-none text-[5rem]"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              ✅
+            </motion.span>
+            <motion.p
+              className="text-center text-[2.35rem] font-[900] lowercase leading-[1.02] text-white"
+              initial={{ opacity: 0, y: 20, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              character created!
+            </motion.p>
+          </div>
         </motion.div>
       );
     }
@@ -756,19 +762,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "linear-gradient(160deg, hsl(220 60% 6%) 0%, hsl(225 50% 4%) 50%, hsl(0 0% 0%) 100%)" }}
+      style={{ background: "linear-gradient(160deg, hsl(220 20% 4.4%) 0%, hsl(224 18% 3.5%) 48%, hsl(0 0% 0%) 100%)" }}
     >
+      <AmbientGlow />
       {/* Foreground fades in, background is instant */}
       <motion.div
         className="absolute inset-0 flex flex-col"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: initialFadeIn ? 0.6 : 0.3 }}
+        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : SLIDE_FADE_DURATION }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-        <AmbientBlueGlow />
-
         {/* Close / exit button — top right, hidden during cooking */}
         {!isCooking && isLoggedIn && skipWelcome && (
           <button
@@ -810,19 +815,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "76%" }}>
               <div className="mb-4 flex h-14 items-center gap-4">
                 <NavArrow direction="left" onClick={goBack} disabled={step <= 0} />
-                <div className="relative flex flex-col items-center">
-                  {/* 👇 bouncing hint — only on first slide, before first click */}
-                  {step === 0 && !hasClickedFirstArrow && (
-                    <motion.span
-                      className="absolute -top-8 text-lg select-none animate-bounce"
-                      style={{ animationDuration: "1.4s" }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 1.5, duration: 0.4 }}
-                    >
-                      👇
-                    </motion.span>
-                  )}
+                <div className="flex flex-col items-center">
                   <NavArrow
                     direction="right"
                     onClick={advance}
@@ -911,7 +904,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
@@ -925,7 +918,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           onClick={handleGoogle}
           disabled={googleLoading || autoLoading}
           className="mt-8 w-full h-14 rounded-2xl text-sm font-[900] lowercase tracking-tight flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50"
-          style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
+          style={{ background: AMBER, color: "hsl(0 0% 0%)", transition: "transform 0.05s" }}
         >
           {googleLoading ? (
             <><Loader2 className="animate-spin" size={18} />connecting...</>
