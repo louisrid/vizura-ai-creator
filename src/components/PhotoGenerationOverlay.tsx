@@ -52,7 +52,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           <ProgressBarLoader
-            duration={6000}
+            duration={25000}
             phrases={phrases}
             phraseInterval={3500}
             onComplete={() => setLoadingDone(true)}
