@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
-import SuccessRing from "@/components/loading/SuccessRing";
 import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -27,9 +26,6 @@ const TRAITS = [
 ] as const;
 
 type TraitKey = (typeof TRAITS)[number]["key"];
-
-/* emoji motion config removed — using CSS bounce instead */
-
 
 /* ── Dots ── */
 const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
@@ -76,7 +72,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Background glow — pure CSS, no JS frames ── */
+/* ── Background glow — deep blue gradient ── */
 const AmbientGlow = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     <div
@@ -84,7 +80,7 @@ const AmbientGlow = () => (
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
         filter: "blur(160px)",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.04), hsl(210 70% 30% / 0.02), transparent 70%)",
+        background: "radial-gradient(circle, hsl(220 80% 40% / 0.08), hsl(210 70% 30% / 0.04), transparent 70%)",
       }}
     />
     <div
@@ -92,7 +88,7 @@ const AmbientGlow = () => (
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
         filter: "blur(140px)",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.03), hsl(215 60% 25% / 0.015), transparent 65%)",
+        background: "radial-gradient(circle, hsl(230 75% 45% / 0.06), hsl(215 60% 25% / 0.03), transparent 65%)",
       }}
     />
   </div>
@@ -131,14 +127,13 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
 
 /* ── Loading phrases for cooking phase ── */
 const COOKING_PHRASES = [
-  "scanning your face…",
   "mapping your features…",
   "building your look…",
   "training the AI…",
   "final touches…",
 ];
 const COOKING_DURATION = 25000;
-const COOKING_SUCCESS_HOLD = 3000;
+const COOKING_SUCCESS_HOLD = 2000;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
@@ -210,6 +205,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
+  const [hasClickedFirstArrow, setHasClickedFirstArrow] = useState(false);
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -252,6 +248,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
+      setHasClickedFirstArrow(false);
     }
   }, [open, restoreSavedFlow]);
 
@@ -303,19 +300,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     };
   }, [visible, persistFlow, restoreSavedFlow]);
 
-  // Cooking phase — ProgressBarLoader handles its own timing now
-  // No separate phrase timer needed
-
   const completeCookingFlow = useCallback(() => {
     if (hasCompletedCookingRef.current) return;
     hasCompletedCookingRef.current = true;
     sessionStorage.removeItem(FLOW_STATE_KEY);
     onComplete(selectionsRef.current);
   }, [onComplete]);
-
-  // ProgressBarLoader calls setCookingPhase("success") via onComplete
-  // Watchdog for success hold only
-
 
   useEffect(() => {
     if (cookingPhase !== "success") return;
@@ -333,6 +323,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isDetailsC = internalStep === 11;
   const isCreateSlide = internalStep === 12;
   const currentTraitIndex = internalStep >= 2 && internalStep <= 8 ? internalStep - 2 : -1;
+  const isSkinSlide = currentTraitIndex === 0;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= 7) return null;
@@ -379,6 +370,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
 
+    // Track first arrow click
+    if (!hasClickedFirstArrow) setHasClickedFirstArrow(true);
+
     if (currentTraitIndex >= 0 && currentTraitIndex < 7) {
       const key = TRAITS[currentTraitIndex].key;
       if (!selectionsRef.current[key]) {
@@ -406,16 +400,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     animating.current = true;
     const nextStep = step + 1;
-    if (nextStep >= TOTAL) return; // Don't wrap around
+    if (nextStep >= TOTAL) return;
     setStep(nextStep);
-    setTimeout(() => { animating.current = false; }, 120);
-  }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
+    setTimeout(() => { animating.current = false; }, 180);
+  }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex, hasClickedFirstArrow]);
 
   const goBack = useCallback(() => {
     if (animating.current || step <= 0 || cookingPhase !== "none") return;
     animating.current = true;
     setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 120);
+    setTimeout(() => { animating.current = false; }, 180);
   }, [step, cookingPhase, TOTAL]);
 
   const handleClose = () => {
@@ -430,11 +424,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   if (!mounted || !visible) return null;
 
+  // Consistent fade transitions for all slides
   const slideTransition = {
-    initial: { opacity: 0, x: 30 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -30 },
-    transition: { duration: 0.18, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: 0.4, ease: "easeInOut" as const },
   };
 
   const renderSlide = () => {
@@ -450,7 +445,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5, ease: [0.25, 1.1, 0.5, 1] }}
             >
-              vizura!
+              <motion.span
+                className="inline-block"
+                animate={{ scale: [1, 1.02, 1], y: [0, -2, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                vizura!
+              </motion.span>
             </motion.span>
           </h2>
           <motion.p
@@ -503,6 +504,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               />
             ))}
           </div>
+          {/* Helper text on skin slide only */}
+          {isSkinSlide && (
+            <p className="mt-4 text-xs font-extrabold lowercase text-white/30">
+              click any option to select
+            </p>
+          )}
         </div>
       );
     }
@@ -593,6 +600,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
+            <p className="mt-3 text-sm font-extrabold lowercase text-white/50 text-center leading-snug">
+              i.e. she has chubby cheeks, freckles and extremely thick mascara
+            </p>
           </div>
         </div>
       );
@@ -647,6 +657,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               className="mt-2 w-full cursor-pointer appearance-none rounded-full"
               style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(var(--secondary)) ${selections.referenceStrength}%)` }}
             />
+            <p className="mt-2 text-[10px] font-extrabold lowercase text-white/30">
+              (recommended: 50%)
+            </p>
           </div>
         </div>
       );
@@ -665,10 +678,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
-          <span className="text-[2.5rem] inline-block select-none animate-bounce mb-2" style={{ animationDuration: "2s" }}>✨</span>
+          <span className="text-[2.5rem] inline-block select-none animate-bounce mb-3" style={{ animationDuration: "2s" }}>👀</span>
           <div className="max-w-[18rem] text-white">
-            <BouncyWords text="ready to see" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.1} />
-            <BouncyWords text="your results?" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.34} />
+            <BouncyWords text="your character is" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.1} />
+            <BouncyWords text="almost ready!" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.34} />
           </div>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
@@ -695,7 +708,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
         >
           <ProgressBarLoader
             duration={COOKING_DURATION}
@@ -713,7 +726,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
         >
           <motion.span
             className="text-[3rem] inline-block select-none"
@@ -731,15 +745,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           >
             character created!
           </motion.p>
-          <motion.div
-            className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
-            style={{ width: 100, height: 120 }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            <span className="text-3xl">🎭</span>
-          </motion.div>
         </motion.div>
       );
     }
@@ -749,78 +754,100 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isCooking = cookingPhase !== "none";
 
   return createPortal(
-    <motion.div
-      className="fixed inset-0 z-[9999] flex flex-col bg-black"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: initialFadeIn ? 0.4 : 0.2 }}
-      onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-      onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
+    <div
+      className="fixed inset-0 z-[9999] flex flex-col"
+      style={{ background: "linear-gradient(160deg, hsl(220 60% 6%) 0%, hsl(225 50% 4%) 50%, hsl(0 0% 0%) 100%)" }}
     >
-      <AmbientBlueGlow />
+      {/* Foreground fades in, background is instant */}
+      <motion.div
+        className="absolute inset-0 flex flex-col"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: initialFadeIn ? 0.6 : 0.3 }}
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+        onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
+      >
+        <AmbientBlueGlow />
 
-      {/* Close / exit button — top right, hidden during cooking */}
-      {!isCooking && isLoggedIn && skipWelcome && (
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-          className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors active:scale-95"
-          aria-label="close"
-        >
-          <X size={18} strokeWidth={2.5} />
-        </button>
-      )}
-
-      <div className="relative flex-1 overflow-hidden">
-        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "45%", transform: "translateY(-50%)" }}>
-          <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-            {isCooking ? (
-              renderCooking()
-            ) : (
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={step}
-                  className="w-full"
-                  initial={slideTransition.initial}
-                  animate={slideTransition.animate}
-                  exit={slideTransition.exit}
-                  transition={slideTransition.transition}
-                >
-                  {renderSlide()}
-                </motion.div>
-              </AnimatePresence>
-            )}
-          </div>
-        </div>
-
-        {/* Fixed bottom nav - hidden during cooking */}
-        {!isCooking && (
-          <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "76%" }}>
-            <div className="mb-4 flex h-14 items-center gap-4">
-              <NavArrow direction="left" onClick={goBack} disabled={step <= 0} />
-              <NavArrow
-                direction="right"
-                onClick={advance}
-                disabled={!canAdvance && currentTraitIndex >= 0}
-              />
-            </div>
-            <div className="flex h-3 items-center">
-              <Dots current={dotCurrent} total={dotTotal} />
-            </div>
-
-            {!isLoggedIn && (
-              <button
-                type="button"
-                onClick={() => navigateTo(`/auth${window.location.search}`)}
-                className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
-              >
-                skip to login
-              </button>
-            )}
-          </div>
+        {/* Close / exit button — top right, hidden during cooking */}
+        {!isCooking && isLoggedIn && skipWelcome && (
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+            className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors active:scale-95"
+            aria-label="close"
+          >
+            <X size={18} strokeWidth={2.5} />
+          </button>
         )}
-      </div>
-    </motion.div>,
+
+        <div className="relative flex-1 overflow-hidden">
+          <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "45%", transform: "translateY(-50%)" }}>
+            <div className="w-full max-w-xs mx-auto flex flex-col items-center">
+              {isCooking ? (
+                <AnimatePresence mode="wait">
+                  {renderCooking()}
+                </AnimatePresence>
+              ) : (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={step}
+                    className="w-full"
+                    initial={slideTransition.initial}
+                    animate={slideTransition.animate}
+                    exit={slideTransition.exit}
+                    transition={slideTransition.transition}
+                  >
+                    {renderSlide()}
+                  </motion.div>
+                </AnimatePresence>
+              )}
+            </div>
+          </div>
+
+          {/* Fixed bottom nav - hidden during cooking */}
+          {!isCooking && (
+            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "76%" }}>
+              <div className="mb-4 flex h-14 items-center gap-4">
+                <NavArrow direction="left" onClick={goBack} disabled={step <= 0} />
+                <div className="relative flex flex-col items-center">
+                  {/* 👇 bouncing hint — only on first slide, before first click */}
+                  {step === 0 && !hasClickedFirstArrow && (
+                    <motion.span
+                      className="absolute -top-8 text-lg select-none animate-bounce"
+                      style={{ animationDuration: "1.4s" }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.5, duration: 0.4 }}
+                    >
+                      👇
+                    </motion.span>
+                  )}
+                  <NavArrow
+                    direction="right"
+                    onClick={advance}
+                    disabled={!canAdvance && currentTraitIndex >= 0}
+                  />
+                </div>
+              </div>
+              <div className="flex h-3 items-center">
+                <Dots current={dotCurrent} total={dotTotal} />
+              </div>
+
+              {!isLoggedIn && (
+                <button
+                  type="button"
+                  onClick={() => navigateTo(`/auth${window.location.search}`)}
+                  className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                >
+                  skip to login
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>,
     document.body,
   );
 };
@@ -884,7 +911,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.5 }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">

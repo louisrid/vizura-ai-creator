@@ -4,14 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 
 const PHRASES = [
-  "scanning your face…",
   "mapping your features…",
   "building your look…",
   "training the AI…",
   "final touches…",
 ];
 
-const SUCCESS_HOLD = 3000;
+const SUCCESS_HOLD = 2000;
 
 interface CookingOverlayProps {
   open: boolean;
@@ -65,7 +64,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
         >
           {phase === "cooking" && (
             <ProgressBarLoader
@@ -93,15 +92,6 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
               >
                 character created!
               </motion.p>
-              <motion.div
-                className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
-                style={{ width: 100, height: 120 }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-              >
-                <span className="text-3xl">🎭</span>
-              </motion.div>
             </div>
           )}
         </motion.div>
