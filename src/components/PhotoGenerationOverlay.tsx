@@ -51,24 +51,17 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
   if (!open) return null;
 
   return createPortal(
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-[9999] flex items-center justify-center px-6"
-        style={{ backgroundColor: phase === "loading" ? "hsl(var(--nav))" : "hsl(var(--member-green))" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.22, ease: "easeOut" }}
-      >
-        {phase === "loading" ? (
-          <motion.div
-            key="photo-loading"
-            className="flex flex-col items-center gap-8"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
-          >
+    <AnimatePresence mode="wait">
+      {phase === "loading" ? (
+        <motion.div
+          key="photo-loading"
+          className="fixed inset-0 z-[9999] flex items-center justify-center px-6 bg-black"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <div className="flex flex-col items-center gap-8">
             <PremiumRipple />
             <div className="flex h-8 items-center">
               <AnimatePresence mode="wait">
@@ -84,19 +77,22 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
                 </motion.p>
               </AnimatePresence>
             </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="photo-success"
-            className="flex w-full max-w-xs flex-col items-center gap-6"
-            initial={{ opacity: 0.98 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-          >
-            <SuccessRing size={88} />
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="photo-success"
+          className="fixed inset-0 z-[9999] flex items-center justify-center px-6"
+          style={{ backgroundColor: "hsl(var(--member-green))" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <div className="flex w-full max-w-xs flex-col items-center gap-6">
+            <SuccessRing size={88} color="hsl(0 0% 4%)" />
             <motion.div
-              className="flex aspect-[10/11] w-full items-center justify-center overflow-hidden rounded-[2rem] border-[5px] border-border bg-card"
+              className="flex aspect-[10/11] w-full items-center justify-center overflow-hidden rounded-[2rem] border-[5px] border-black/20 bg-black/10"
               initial={{ opacity: 0, y: 18, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.36, delay: 0.06, ease: [0.34, 1.56, 0.64, 1] }}
@@ -106,16 +102,16 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               ) : null}
             </motion.div>
             <motion.p
-              className="text-center text-[2rem] font-extrabold lowercase text-white"
+              className="text-center text-[2rem] font-extrabold lowercase text-black"
               initial={{ opacity: 0, y: 16, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.34, delay: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
             >
               image created!
             </motion.p>
-          </motion.div>
-        )}
-      </motion.div>
+          </div>
+        </motion.div>
+      )}
     </AnimatePresence>,
     document.body,
   );
