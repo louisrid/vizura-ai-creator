@@ -82,32 +82,28 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
       ) : (
         <motion.div
           key="photo-success"
-          className="fixed inset-0 z-[9999] flex items-center justify-center px-6"
-          style={{ backgroundColor: "hsl(var(--member-green))" }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center px-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <div className="flex w-full max-w-xs flex-col items-center gap-6">
-            <SuccessRing size={88} color="hsl(0 0% 4%)" />
-            <motion.div
-              className="flex aspect-[10/11] w-full items-center justify-center overflow-hidden rounded-[2rem] border-[5px] border-black/20 bg-black/10"
-              initial={{ opacity: 0, y: 18, scale: 0.92 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.36, delay: 0.06, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              {resultImageUrl ? (
-                <img src={resultImageUrl} alt="generated image" className="h-full w-full object-cover" />
-              ) : null}
-            </motion.div>
             <motion.p
-              className="text-center text-[2rem] font-extrabold lowercase text-black"
+              className="text-center text-[2rem] font-extrabold lowercase text-white"
               initial={{ opacity: 0, y: 16, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.34, delay: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
             >
               image created!
+            </motion.p>
+            <motion.p
+              className="text-center text-sm font-extrabold lowercase text-white/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              find it in your storage
             </motion.p>
           </div>
         </motion.div>

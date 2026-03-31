@@ -138,8 +138,8 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
             </div>
           )}
           {phase === "success" && (
-            <div className="flex flex-col items-center justify-center gap-8">
-              <SuccessRing size={132} color="hsl(0 0% 4%)" />
+            <div className="flex flex-col items-center justify-center gap-6">
+              <SuccessRing size={120} color="hsl(0 0% 4%)" />
               <motion.p
                 className="text-center text-[2rem] font-extrabold lowercase text-black"
                 initial={{ opacity: 0, y: 18, scale: 0.86 }}

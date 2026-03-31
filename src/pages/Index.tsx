@@ -156,7 +156,7 @@ const Index = () => {
       await refetchCredits();
       toast("1 gem used");
 
-      await wait(isDemo ? 2400 : 1800);
+      await wait(isDemo ? 5500 : 5500);
       setPhotoOverlayPhase("hidden");
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");
