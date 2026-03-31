@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import SuccessRing from "@/components/loading/SuccessRing";
 
 const PHRASES = [
   "scanning your face…",
@@ -16,42 +17,6 @@ const PHRASE_INTERVAL = 2500;
 const COOKING_DURATION = 25000;
 const SUCCESS_HOLD = 4000;
 const TICK_INTERVAL = 100;
-
-const GreenTick = () => (
-  <motion.svg
-    width="132"
-    height="132"
-    viewBox="0 0 132 132"
-    fill="none"
-    initial={{ opacity: 0, scale: 0.72 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.45, ease: [0.34, 1.56, 0.64, 1] }}
-  >
-    <motion.circle
-      cx="66"
-      cy="66"
-      r="56"
-      stroke="hsl(0 0% 100%)"
-      strokeWidth="6"
-      fill="none"
-      strokeLinecap="round"
-      initial={{ pathLength: 0, opacity: 1 }}
-      animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.6, ease: "easeInOut" }}
-    />
-    <motion.path
-      d="M42 69 L58 85 L92 49"
-      stroke="hsl(0 0% 100%)"
-      strokeWidth="7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-      initial={{ pathLength: 0, opacity: 1 }}
-      animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.0, delay: 1.45, ease: "easeInOut" }}
-    />
-  </motion.svg>
-);
 
 const PhraseText = ({ phrase }: { phrase: string }) => (
   <motion.p
@@ -146,56 +111,54 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
         >
-          <AnimatePresence mode="wait">
-            {phase === "cooking" && (
-              <motion.div
-                key="cooking"
-                className="flex flex-col items-center gap-8 w-full px-10"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
+          {phase === "cooking" && (
+            <motion.div
+              key="cooking"
+              className="flex flex-col items-center gap-8 w-full px-10"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0 }}
+            >
+              <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
+                {progress}%
+              </motion.span>
+              <div className="w-full max-w-xs h-3 rounded-full bg-white/10 overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{
+                    background: "linear-gradient(90deg, hsl(var(--loader-gold)), hsl(var(--loader-cyan)), hsl(var(--loader-green)))",
+                    width: `${progress}%`,
+                  }}
+                  transition={{ duration: 0.1 }}
+                />
+              </div>
+              <div className="h-8 flex items-center">
+                <AnimatePresence mode="wait">
+                  <PhraseText phrase={PHRASES[phraseIndex]} />
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+          {phase === "success" && (
+            <motion.div
+              key="success"
+              className="fixed inset-0 flex flex-col items-center justify-center gap-8"
+              style={{ backgroundColor: "hsl(var(--member-green))" }}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0 }}
+            >
+              <SuccessRing size={132} color="hsl(var(--foreground))" />
+              <motion.p
+                className="text-center text-[2rem] font-extrabold lowercase text-white"
+                initial={{ opacity: 0, y: 18, scale: 0.86 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.45, delay: 1.12, ease: [0.34, 1.56, 0.64, 1] }}
               >
-                <motion.span className="text-[4rem] font-[900] lowercase tracking-tight text-white">
-                  {progress}%
-                </motion.span>
-                <div className="w-full max-w-xs h-3 rounded-full bg-white/10 overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{
-                      background: "linear-gradient(90deg, hsl(40, 100%, 55%), hsl(185, 100%, 55%), hsl(140, 100%, 50%))",
-                      width: `${progress}%`,
-                    }}
-                    transition={{ duration: 0.1 }}
-                  />
-                </div>
-                <div className="h-8 flex items-center">
-                  <AnimatePresence mode="wait">
-                    <PhraseText phrase={PHRASES[phraseIndex]} />
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            )}
-            {phase === "success" && (
-              <motion.div
-                key="success"
-                className="fixed inset-0 flex flex-col items-center justify-center gap-8"
-                style={{ backgroundColor: "hsl(var(--member-green))" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.25 }}
-              >
-                <GreenTick />
-                <motion.p
-                  className="text-center text-[2rem] font-extrabold lowercase text-white"
-                  initial={{ opacity: 0, y: 18, scale: 0.86 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.55, delay: 2.45, ease: [0.34, 1.56, 0.64, 1] }}
-                >
-                  character created!
-                </motion.p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                character created!
+              </motion.p>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>,

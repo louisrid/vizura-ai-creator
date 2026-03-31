@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import PremiumRipple from "@/components/loading/PremiumRipple";
+import SuccessRing from "@/components/loading/SuccessRing";
 
 const PHRASES = [
   "mixing the pixels…",
@@ -15,103 +17,7 @@ const PHRASES = [
 
 const PHRASE_INTERVAL = 1500;
 const LOADING_DURATION = 8000;
-const SUCCESS_HOLD = 5000;
-
-/* Smooth ripple loader — always visible, no flashing */
-const RippleLoader = () => {
-  const rings = [0, 1, 2, 3, 4];
-  const colors = [
-    "hsl(195, 100%, 55%)",
-    "hsl(50, 100%, 50%)",
-    "hsl(140, 100%, 50%)",
-    "hsl(330, 80%, 55%)",
-    "hsl(210, 100%, 55%)",
-  ];
-  return (
-    <div className="relative flex items-center justify-center" style={{ width: 120, height: 120 }}>
-      {rings.map((i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: 20,
-            height: 20,
-            border: `2.5px solid ${colors[i % colors.length]}`,
-            top: "50%",
-            left: "50%",
-            marginTop: -10,
-            marginLeft: -10,
-          }}
-          animate={{
-            scale: [1, 3, 5],
-            opacity: [1, 0.7, 0.15],
-            borderColor: [
-              colors[i % colors.length],
-              colors[(i + 1) % colors.length],
-              colors[(i + 2) % colors.length],
-            ],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            delay: i * 0.8,
-            ease: "easeOut",
-          }}
-        />
-      ))}
-      <motion.div
-        className="absolute rounded-full"
-        style={{ width: 12, height: 12 }}
-        animate={{
-          scale: [1, 1.2, 1],
-          backgroundColor: [
-            "hsl(195, 100%, 55%)",
-            "hsl(50, 100%, 50%)",
-            "hsl(140, 100%, 50%)",
-            "hsl(330, 80%, 55%)",
-            "hsl(195, 100%, 55%)",
-          ],
-        }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
-  );
-};
-
-const GreenTick = () => (
-  <motion.svg
-    width="80"
-    height="80"
-    viewBox="0 0 80 80"
-    fill="none"
-    initial={{ opacity: 0, scale: 0.6 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-  >
-    <motion.circle
-      cx="40"
-      cy="40"
-      r="36"
-      stroke="hsl(140, 100%, 50%)"
-      strokeWidth="3.5"
-      fill="none"
-      initial={{ pathLength: 0, opacity: 0 }}
-      animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
-    />
-    <motion.path
-      d="M24 42 L34 52 L56 30"
-      stroke="hsl(140, 100%, 50%)"
-      strokeWidth="4.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-      initial={{ pathLength: 0, opacity: 0 }}
-      animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: 1.0, delay: 1.4, ease: "easeInOut" }}
-    />
-  </motion.svg>
-);
+const SUCCESS_HOLD = 4000;
 
 const PhraseText = ({ phrase }: { phrase: string }) => (
   <motion.p
@@ -208,7 +114,7 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <RippleLoader />
+                <PremiumRipple />
                 <div className="h-8 flex items-center">
                   <AnimatePresence mode="wait">
                     <PhraseText phrase={PHRASES[phraseIndex]} />
@@ -219,17 +125,18 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
             {phase === "success" && (
               <motion.div
                 key="success"
-                className="flex flex-col items-center gap-6"
-                initial={{ opacity: 0 }}
+                className="fixed inset-0 flex flex-col items-center justify-center gap-6"
+                style={{ backgroundColor: "hsl(var(--member-green))" }}
+                initial={{ opacity: 1 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0 }}
               >
-                <GreenTick />
+                <SuccessRing size={84} color="hsl(var(--foreground))" />
                 <motion.p
                   className="text-center text-2xl font-extrabold lowercase text-white"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.4, delay: 1.1, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   character created!
                 </motion.p>

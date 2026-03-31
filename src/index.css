@@ -49,6 +49,16 @@
     /* member indicator — actual neon green */
     --member-green: 140 100% 50%;
 
+    --ambient-blue-1: 222 86% 54%;
+    --ambient-blue-2: 215 84% 44%;
+    --ambient-blue-3: 231 74% 38%;
+
+    --loader-cyan: 195 100% 55%;
+    --loader-gold: 50 100% 50%;
+    --loader-green: 140 100% 50%;
+    --loader-pink: 330 80% 55%;
+    --loader-blue: 210 100% 55%;
+
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
