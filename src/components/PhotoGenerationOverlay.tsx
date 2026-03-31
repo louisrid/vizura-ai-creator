@@ -86,19 +86,15 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               image created!
             </motion.p>
 
-            {/* Emoji preview box — dark charcoal rounded box with emoji */}
+            {/* Emoji preview box */}
             <motion.div
               className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
-              style={{ width: 120, height: 140 }}
+              style={{ width: 160, height: 190 }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              {resultImageUrl ? (
-                <img src={resultImageUrl} alt="created" className="h-full w-full rounded-[calc(1rem-5px)] object-cover" />
-              ) : (
-                <span className="text-4xl">{resultEmoji}</span>
-              )}
+              <span className="text-5xl">{resultEmoji}</span>
             </motion.div>
 
             <motion.p

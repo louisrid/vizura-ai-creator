@@ -405,7 +405,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     animating.current = true;
-    setStep((s) => Math.min(s + 1, TOTAL - 1));
+    const nextStep = step + 1;
+    if (nextStep >= TOTAL) return; // Don't wrap around
+    setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 120);
   }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
