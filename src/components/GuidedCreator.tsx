@@ -747,16 +747,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-success"
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6"
-          style={{ backgroundColor: "hsl(var(--member-green))" }}
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <SuccessRing size={120} color="hsl(0 0% 4%)" />
+          <SuccessRing size={120} color="hsl(0 0% 96%)" />
           <motion.p
-            className="text-center text-3xl font-[900] lowercase text-black"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            className="text-center text-[2rem] font-[900] lowercase text-white"
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.42, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
