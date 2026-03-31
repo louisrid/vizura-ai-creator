@@ -131,18 +131,14 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
 
 /* ── Loading phrases for cooking phase ── */
 const COOKING_PHRASES = [
-  "mixing the pixels…",
-  "adjusting the vibe…",
-  "picking the perfect look…",
-  "almost there…",
-  "adding the finishing touches…",
-  "brewing something beautiful…",
-  "calibrating cuteness…",
-  "loading your masterpiece…",
+  "scanning your face…",
+  "mapping your features…",
+  "building your look…",
+  "training the AI…",
+  "final touches…",
 ];
-const COOKING_PHRASE_INTERVAL = 1500;
-const COOKING_DURATION = 8000;
-const COOKING_SUCCESS_HOLD = 4000;
+const COOKING_DURATION = 10000;
+const COOKING_SUCCESS_HOLD = 5000;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
