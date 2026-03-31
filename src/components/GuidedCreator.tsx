@@ -854,7 +854,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {!isLoggedIn && (
               <button
                 type="button"
-                onClick={() => { window.location.href = "/auth"; }}
+                onClick={() => navigateTo(`/auth${window.location.search}`)}
                 className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
               >
                 skip to login
