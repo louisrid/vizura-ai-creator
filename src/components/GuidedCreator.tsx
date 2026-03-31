@@ -466,7 +466,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const handleSkipToLogin = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
-    window.location.assign("/auth?redirect=/");
+    window.location.replace(`${window.location.origin}/auth?redirect=/`);
   };
 
   const handleClose = () => {
