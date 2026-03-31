@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, X, RefreshCw, Upload, Gem } from "lucide-react";
+import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import PremiumRipple from "@/components/loading/PremiumRipple";
 import SuccessRing from "@/components/loading/SuccessRing";
