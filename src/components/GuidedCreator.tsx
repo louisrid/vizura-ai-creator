@@ -137,8 +137,8 @@ const COOKING_PHRASES = [
   "training the AI…",
   "final touches…",
 ];
-const COOKING_DURATION = 10000;
-const COOKING_SUCCESS_HOLD = 5000;
+const COOKING_DURATION = 25000;
+const COOKING_SUCCESS_HOLD = 3000;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
