@@ -68,6 +68,13 @@ const Index = () => {
   const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">("hidden");
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
 
+  // Listen for tap-to-dismiss from photo overlay
+  useEffect(() => {
+    const handler = () => setPhotoOverlayPhase("hidden");
+    window.addEventListener("photo-overlay-dismiss", handler);
+    return () => window.removeEventListener("photo-overlay-dismiss", handler);
+  }, []);
+
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
 
   useEffect(() => {
