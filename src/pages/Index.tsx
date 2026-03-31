@@ -84,9 +84,12 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        if (preselectedCharacterId) {
+        // Auto-select if only one character
+        if (data.length === 1) {
+          setSelectedCharId(data[0].id);
+        } else if (preselectedCharacterId) {
           const char = data.find((c: any) => c.id === preselectedCharacterId);
-          if (char) { setSelectedCharId(preselectedCharacterId); setPrompt(buildPromptFromCharacter(char as Character)); }
+          if (char) { setSelectedCharId(preselectedCharacterId); }
         }
       }
     };
