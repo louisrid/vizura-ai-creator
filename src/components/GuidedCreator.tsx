@@ -815,7 +815,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       )}
 
       <div className="relative flex-1 overflow-hidden">
-        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "50%", transform: "translateY(-50%)" }}>
+        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "45%", transform: "translateY(-50%)" }}>
           <div className="w-full max-w-xs mx-auto flex flex-col items-center">
             {isCooking ? (
               renderCooking()
