@@ -466,12 +466,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setTimeout(() => { animating.current = false; }, 120);
   }, [step, cookingPhase, TOTAL]);
 
-  const handleSkipToLogin = useCallback(() => {
-    sessionStorage.removeItem(FLOW_STATE_KEY);
-    setVisible(false);
-    navigateTo("/auth?redirect=/");
-  }, [navigateTo]);
-
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setVisible(false);
@@ -860,7 +854,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {!isLoggedIn && (
               <button
                 type="button"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
+                onClick={() => navigateTo("/auth")}
                 className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
               >
                 skip to login
