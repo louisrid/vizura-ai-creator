@@ -106,21 +106,12 @@ const AmbientGlow = () => (
   </div>
 );
 
-/* ── Bouncing emoji ── */
-const BigEmoji = ({ emoji, index }: { emoji: string; index: number }) => {
-  const m = emojiMotions[index % emojiMotions.length];
-  return (
-    <span className="select-none pointer-events-none text-[3.5rem]">
-      <motion.span
-        className="inline-block"
-        animate={{ y: m.y, x: (m as any).x, rotate: m.rotate, scale: m.scale }}
-        transition={{ duration: m.duration, repeat: Infinity, ease: "easeInOut" }}
-      >
-        {emoji}
-      </motion.span>
-    </span>
-  );
-};
+/* ── Simple emoji — CSS bounce only ── */
+const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
+  <span className="select-none pointer-events-none text-[3.5rem] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
+    {emoji}
+  </span>
+);
 
 /* ── Interactive pill ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
