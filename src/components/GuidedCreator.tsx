@@ -90,7 +90,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.10), hsl(210 70% 30% / 0.05), transparent 70%)",
+        background: "radial-gradient(circle, hsl(220 80% 40% / 0.05), hsl(210 70% 30% / 0.025), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -99,7 +99,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.08), hsl(215 60% 25% / 0.04), transparent 65%)",
+        background: "radial-gradient(circle, hsl(230 75% 45% / 0.04), hsl(215 60% 25% / 0.02), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -108,7 +108,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(225 85% 50% / 0.06), hsl(200 60% 30% / 0.03), transparent 60%)",
+        background: "radial-gradient(circle, hsl(225 85% 50% / 0.03), hsl(200 60% 30% / 0.015), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -504,15 +504,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               vizura!
             </motion.span>
           </h2>
-          <motion.div
-            className="mt-5 text-[2.15rem] leading-none"
-            animate={{ y: [0, -8, 0], scale: [1, 1.06, 1] }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            🤍
-          </motion.div>
           <motion.p
-            className="mt-3 text-sm font-extrabold lowercase text-white/40"
+            className="mt-2 text-sm font-extrabold lowercase text-white/40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.4 }}
@@ -825,7 +818,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       )}
 
       <div className="relative flex-1 overflow-hidden">
-        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "44%", transform: "translateY(-50%)" }}>
+        <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "50%", transform: "translateY(-50%)" }}>
           <div className="w-full max-w-xs mx-auto flex flex-col items-center">
             {isCooking ? (
               renderCooking()
