@@ -313,21 +313,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onComplete(selectionsRef.current);
   }, [onComplete]);
 
-  useEffect(() => {
-    if (cookingPhase !== "loading") return;
-    const successTimer = window.setTimeout(() => {
-      setCookingPhase((current) => (current === "loading" ? "success" : current));
-    }, COOKING_DURATION);
+  // ProgressBarLoader calls setCookingPhase("success") via onComplete
+  // Watchdog for success hold only
 
-    const watchdogTimer = window.setTimeout(() => {
-      completeCookingFlow();
-    }, COOKING_DURATION + COOKING_SUCCESS_HOLD + 600);
-
-    return () => {
-      window.clearTimeout(successTimer);
-      window.clearTimeout(watchdogTimer);
-    };
-  }, [cookingPhase, completeCookingFlow]);
 
   useEffect(() => {
     if (cookingPhase !== "success") return;
