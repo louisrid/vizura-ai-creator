@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles, Trash2 } from "lucide-react";
+import { Loader2, Sparkles, Trash2, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -170,10 +170,22 @@ const CharacterDetail = () => {
           </div>
         )}
 
+        {/* Create photo button */}
+        <button
+          onClick={() => {
+            sessionStorage.setItem("vizura_internal_nav", "1");
+            navigate("/create", { state: { preselectedCharacterId: character.id } });
+          }}
+          className="mt-4 flex items-center justify-center gap-2 h-12 w-full rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all shrink-0"
+        >
+          <Zap size={14} strokeWidth={2.5} />
+          create photo
+        </button>
+
         {/* Delete button */}
         <button
           onClick={() => setShowDelete(true)}
-          className="mt-4 flex items-center justify-center gap-2 h-12 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors shrink-0"
+          className="mt-3 flex items-center justify-center gap-2 h-12 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors shrink-0"
         >
           <Trash2 size={14} strokeWidth={2.5} />
           delete character

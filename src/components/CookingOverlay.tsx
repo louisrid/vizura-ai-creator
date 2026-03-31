@@ -11,7 +11,7 @@ const PHRASES = [
   "final touches…",
 ];
 
-const SUCCESS_HOLD = 5000;
+const SUCCESS_HOLD = 3000;
 
 interface CookingOverlayProps {
   open: boolean;
@@ -77,6 +77,14 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
           )}
           {phase === "success" && (
             <div className="flex flex-col items-center justify-center gap-6">
+              <motion.span
+                className="text-[3rem] inline-block select-none"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+              >
+                ✅
+              </motion.span>
               <motion.p
                 className="text-center text-[2rem] font-extrabold lowercase text-white"
                 initial={{ opacity: 0, y: 18, scale: 0.86 }}
@@ -85,6 +93,15 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
               >
                 character created!
               </motion.p>
+              <motion.div
+                className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
+                style={{ width: 100, height: 120 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+              >
+                <span className="text-3xl">🎭</span>
+              </motion.div>
             </div>
           )}
         </motion.div>

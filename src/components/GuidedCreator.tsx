@@ -137,8 +137,8 @@ const COOKING_PHRASES = [
   "training the AI…",
   "final touches…",
 ];
-const COOKING_DURATION = 10000;
-const COOKING_SUCCESS_HOLD = 5000;
+const COOKING_DURATION = 25000;
+const COOKING_SUCCESS_HOLD = 3000;
 
 /* ── Bouncy word animation for welcome slide ── */
 const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
@@ -405,7 +405,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     animating.current = true;
-    setStep((s) => Math.min(s + 1, TOTAL - 1));
+    const nextStep = step + 1;
+    if (nextStep >= TOTAL) return; // Don't wrap around
+    setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 120);
   }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
@@ -654,9 +656,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+        <div
           className="mt-5 flex w-full min-h-[12rem] flex-col items-center justify-center bg-transparent text-center"
         >
           {showGemCost && (
@@ -665,6 +665,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
+          <span className="text-[2.5rem] inline-block select-none animate-bounce mb-2" style={{ animationDuration: "2s" }}>✨</span>
           <div className="max-w-[18rem] text-white">
             <BouncyWords text="ready to see" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.1} />
             <BouncyWords text="your results?" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.34} />
@@ -677,7 +678,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           >
             tap anywhere to continue
           </motion.p>
-        </button>
+        </div>
       );
     }
 
@@ -714,6 +715,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
+          <motion.span
+            className="text-[3rem] inline-block select-none"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            ✅
+          </motion.span>
           <motion.p
             className="text-center text-[2rem] font-[900] lowercase text-white"
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
@@ -722,6 +731,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           >
             character created!
           </motion.p>
+          <motion.div
+            className="flex items-center justify-center rounded-2xl bg-card border-[5px] border-border"
+            style={{ width: 100, height: 120 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            <span className="text-3xl">🎭</span>
+          </motion.div>
         </motion.div>
       );
     }
