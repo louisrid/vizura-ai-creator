@@ -128,11 +128,11 @@ const Index = () => {
         : (data.images || [])[0] || null;
       const generatedImages = generatedPreview ? [generatedPreview] : (data.images || []);
 
-      if (isDemo && user && generatedPreview) {
+      if (user && generatedImages.length > 0) {
         const { error: saveError } = await supabase.from("generations").insert({
           user_id: user.id,
           prompt: cleanPrompt,
-          image_urls: [generatedPreview],
+          image_urls: generatedImages,
         });
 
         if (saveError) {

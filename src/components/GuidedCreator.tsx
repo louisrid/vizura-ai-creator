@@ -1,14 +1,13 @@
 import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
+import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import PremiumRipple from "@/components/loading/PremiumRipple";
 import SuccessRing from "@/components/loading/SuccessRing";
 import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
-import { useNavigate } from "react-router-dom";
 
 /* ── Constants ── */
 const NEON_BLUE = "hsl(var(--gem-green))";
@@ -227,7 +226,6 @@ const TOTAL_SKIP = 11;
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
@@ -247,6 +245,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
+  const hasCompletedCookingRef = useRef(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -281,6 +280,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setVisible(true);
       setCookingPhase("none");
       setCookingPhraseIndex(0);
+      hasCompletedCookingRef.current = false;
       animating.current = false;
     }
   }, [open, restoreSavedFlow]);
@@ -342,20 +342,36 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => clearInterval(interval);
   }, [cookingPhase]);
 
+  const completeCookingFlow = useCallback(() => {
+    if (hasCompletedCookingRef.current) return;
+    hasCompletedCookingRef.current = true;
+    sessionStorage.removeItem(FLOW_STATE_KEY);
+    onComplete(selectionsRef.current);
+  }, [onComplete]);
+
   useEffect(() => {
     if (cookingPhase !== "loading") return;
-    const t = setTimeout(() => setCookingPhase("success"), COOKING_DURATION);
-    return () => clearTimeout(t);
-  }, [cookingPhase]);
+    const successTimer = window.setTimeout(() => {
+      setCookingPhase((current) => (current === "loading" ? "success" : current));
+    }, COOKING_DURATION);
+
+    const watchdogTimer = window.setTimeout(() => {
+      completeCookingFlow();
+    }, COOKING_DURATION + COOKING_SUCCESS_HOLD + 600);
+
+    return () => {
+      window.clearTimeout(successTimer);
+      window.clearTimeout(watchdogTimer);
+    };
+  }, [cookingPhase, completeCookingFlow]);
 
   useEffect(() => {
     if (cookingPhase !== "success") return;
-    const t = setTimeout(() => {
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      onComplete(selectionsRef.current);
+    const t = window.setTimeout(() => {
+      completeCookingFlow();
     }, COOKING_SUCCESS_HOLD);
-    return () => clearTimeout(t);
-  }, [cookingPhase]);
+    return () => window.clearTimeout(t);
+  }, [cookingPhase, completeCookingFlow]);
 
   const internalStep = step + offset;
   const isWelcomeSlide = internalStep === 0 && !skipWelcome;
@@ -450,8 +466,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const handleSkipToLogin = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
-    setVisible(false);
-    navigate("/auth?redirect=/");
+    window.location.replace(`${window.location.origin}/auth?redirect=/`);
   };
 
   const handleClose = () => {
@@ -489,6 +504,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               vizura!
             </motion.span>
           </h2>
+          <motion.div
+            className="mt-5 text-[2.15rem] leading-none"
+            animate={{ y: [0, -8, 0], scale: [1, 1.06, 1] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            🤍
+          </motion.div>
           <motion.p
             className="mt-3 text-sm font-extrabold lowercase text-white/40"
             initial={{ opacity: 0 }}
@@ -645,38 +667,44 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="mt-5 w-full max-w-[16rem]">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[3px] border-white/15">
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
+                    type="button"
                     onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
                     className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
                   >
                     ×
                   </button>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold lowercase text-white/50">strength</span>
-                  <span className="text-[10px] font-extrabold lowercase text-white/50">{selections.referenceStrength}%</span>
-                </div>
-                <input
-                  type="range" min={0} max={100}
-                  value={selections.referenceStrength}
-                  onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="w-full accent-neon-yellow h-1.5 rounded-full appearance-none cursor-pointer"
-                  style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(0 0% 20%) ${selections.referenceStrength}%)` }}
-                />
               </div>
             ) : (
-              <button
-                onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-8 hover:border-white/30 transition-colors"
-              >
-                <Upload size={24} strokeWidth={2.5} className="text-white/30" />
-                <span className="text-xs font-extrabold lowercase text-white/30">add reference image</span>
-              </button>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-8 hover:border-white/30 transition-colors"
+                >
+                  <Upload size={24} strokeWidth={2.5} className="text-white/30" />
+                  <span className="text-xs font-extrabold lowercase text-white/30">add reference image</span>
+                </button>
+              </div>
             )}
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-[10px] font-extrabold lowercase text-white/50">strength</span>
+              <span className="text-[10px] font-extrabold lowercase text-white/50">{selections.referenceStrength}%</span>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={selections.referenceStrength}
+              onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
+              onClick={(e) => e.stopPropagation()}
+              className="mt-2 w-full cursor-pointer appearance-none rounded-full"
+              style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(var(--secondary)) ${selections.referenceStrength}%)` }}
+            />
           </div>
         </div>
       );
@@ -686,26 +714,30 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <div className="flex w-full flex-col items-center justify-center mt-5">
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+          className="mt-5 flex w-full min-h-[12rem] flex-col items-center justify-center bg-transparent text-center"
+        >
           {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
-          <motion.button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-            className="h-16 w-[80vw] max-w-[20rem] rounded-2xl text-lg font-[900] lowercase tracking-tight flex items-center justify-center gap-2"
-            style={{ background: AMBER, color: "#000", transition: "transform 0.05s" }}
-            animate={{ scale: [1, 1.03, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            whileTap={{ scale: 0.95 }}
+          <div className="max-w-[18rem] text-white">
+            <BouncyWords text="ready to see" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.1} />
+            <BouncyWords text="your results?" className="block text-[2.35rem] font-[900] leading-tight" delayStart={0.34} />
+          </div>
+          <motion.p
+            className="mt-4 text-sm font-extrabold lowercase text-white/40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.95, duration: 0.35 }}
           >
-            <Zap size={20} strokeWidth={2.5} />
-            create
-          </motion.button>
-        </div>
+            tap anywhere to continue
+          </motion.p>
+        </button>
       );
     }
 
