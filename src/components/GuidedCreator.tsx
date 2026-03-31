@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -90,7 +91,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[160px]"
       style={{
         width: "90%", height: "80%", top: "5%", left: "0%",
-        background: "radial-gradient(circle, hsl(220 80% 40% / 0.05), hsl(210 70% 30% / 0.025), transparent 70%)",
+        background: "radial-gradient(circle, hsl(220 80% 40% / 0.035), hsl(210 70% 30% / 0.018), transparent 70%)",
       }}
       animate={{ x: [0, 80, -40, 30, -60, 10, 0], y: [0, -60, 30, -40, 50, -20, 0], scale: [1, 1.2, 0.85, 1.15, 0.9, 1.1, 1] }}
       transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -99,7 +100,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[140px]"
       style={{
         width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        background: "radial-gradient(circle, hsl(230 75% 45% / 0.04), hsl(215 60% 25% / 0.02), transparent 65%)",
+        background: "radial-gradient(circle, hsl(230 75% 45% / 0.028), hsl(215 60% 25% / 0.014), transparent 65%)",
       }}
       animate={{ x: [0, -70, 50, -30, 45, -15, 0], y: [0, 40, -50, 30, -35, 15, 0], scale: [1, 0.8, 1.18, 0.85, 1.12, 0.95, 1] }}
       transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -108,7 +109,7 @@ const AmbientGlow = () => (
       className="absolute rounded-full blur-[180px]"
       style={{
         width: "60%", height: "60%", top: "25%", left: "25%",
-        background: "radial-gradient(circle, hsl(225 85% 50% / 0.03), hsl(200 60% 30% / 0.015), transparent 60%)",
+        background: "radial-gradient(circle, hsl(225 85% 50% / 0.02), hsl(200 60% 30% / 0.01), transparent 60%)",
       }}
       animate={{ x: [0, 45, -35, 20, -40, 25, 0], y: [0, -35, 25, -20, 15, -30, 0], scale: [0.85, 1.12, 0.88, 1.1, 0.92, 1.05, 0.85] }}
       transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
@@ -180,12 +181,12 @@ const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; classN
         <motion.span
           key={i}
           className="inline-block mr-[0.3em]"
-          initial={{ opacity: 0, y: 30, scale: 0.5 }}
+          initial={{ opacity: 0, y: 18, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
-            duration: 0.5,
-            delay: delayStart + i * 0.15,
-            ease: [0.34, 1.56, 0.64, 1],
+            duration: 0.45,
+            delay: delayStart + i * 0.12,
+            ease: [0.25, 1.1, 0.5, 1],
           }}
         >
           {word}
@@ -226,6 +227,7 @@ const TOTAL_SKIP = 11;
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
+  const navigateTo = useNavigate();
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
@@ -464,10 +466,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setTimeout(() => { animating.current = false; }, 120);
   }, [step, cookingPhase, TOTAL]);
 
-  const handleSkipToLogin = () => {
+  const handleSkipToLogin = useCallback(() => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
-    window.location.replace(`${window.location.origin}/auth?redirect=/`);
-  };
+    setVisible(false);
+    navigateTo("/auth?redirect=/");
+  }, [navigateTo]);
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
@@ -497,9 +500,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <BouncyWords text="welcome to" className="block text-[1.4rem] font-[800]" delayStart={0.2} />
             <motion.span
               className="block text-[5.5rem] font-[900] leading-[0.95]"
-              initial={{ opacity: 0, scale: 0.3, y: 20 }}
+              initial={{ opacity: 0, scale: 0.6, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ duration: 0.5, delay: 0.5, ease: [0.25, 1.1, 0.5, 1] }}
             >
               vizura!
             </motion.span>
@@ -858,7 +861,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
-                onPointerUp={(e) => { e.preventDefault(); e.stopPropagation(); handleSkipToLogin(); }}
                 className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
               >
                 skip to login
