@@ -702,26 +702,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-loading"
-          className="flex flex-col items-center gap-8"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0 }}
+          className="flex flex-col items-center w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          <PremiumRipple />
-          <div className="h-8 flex items-center">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={COOKING_PHRASES[cookingPhraseIndex]}
-                className="text-center text-base font-extrabold lowercase text-white"
-                initial={{ opacity: 0, y: 12, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-              >
-                {COOKING_PHRASES[cookingPhraseIndex]}
-              </motion.p>
-            </AnimatePresence>
-          </div>
+          <ProgressBarLoader
+            duration={COOKING_DURATION}
+            phrases={COOKING_PHRASES}
+            phraseInterval={3500}
+            onComplete={() => setCookingPhase("success")}
+          />
         </motion.div>
       );
     }
@@ -732,14 +724,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          <SuccessRing size={120} color="hsl(0 0% 96%)" />
           <motion.p
             className="text-center text-[2rem] font-[900] lowercase text-white"
             initial={{ opacity: 0, y: 20, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.42, delay: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.42, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
           >
             character created!
           </motion.p>
