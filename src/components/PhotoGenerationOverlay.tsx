@@ -53,7 +53,8 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
   return createPortal(
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black px-6"
+        className="fixed inset-0 z-[9999] flex items-center justify-center px-6"
+        style={{ backgroundColor: phase === "loading" ? "hsl(var(--nav))" : "hsl(var(--member-green))" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
