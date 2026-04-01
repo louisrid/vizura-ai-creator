@@ -191,7 +191,7 @@ const Home = () => {
   }, [images]);
 
   return (
-    <div className="relative h-[calc(100dvh-73px)] overflow-hidden bg-background">
+    <div className="relative h-[calc(100dvh-81px)] overflow-hidden bg-background">
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
