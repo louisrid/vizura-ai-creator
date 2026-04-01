@@ -221,8 +221,7 @@ const ChooseFace = () => {
         const raw = sessionStorage.getItem(STORAGE_KEY);
         if (raw) {
           const draft = JSON.parse(raw);
-          const descParts: string[] = [];
-          if (draft.description) descParts.push(draft.description);
+          const descParts: string[] = [`${draft.chest || ""} chest, ${draft.hairStyle || ""} hair. ${draft.description || ""}`];
           if (selectedEmoji) descParts.push(`[emoji:${selectedEmoji}]`);
           const charData = {
             user_id: currentUser.id,
