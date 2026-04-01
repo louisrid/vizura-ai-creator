@@ -428,29 +428,10 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-10 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-5 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
-
-        <div className="mt-10">
-          <button
-            className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
-            onClick={handleCreate}
-            disabled={isGenerating || (!!user && !prompt.trim())}
-          >
-            {isGenerating ? (
-              <><Loader2 className="animate-spin" size={18} />creating...</>
-            ) : (
-              <>
-                <Zap size={18} strokeWidth={2.5} />
-                create
-                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
-                <span className="text-[11px] ml-0.5">1</span>
-              </>
-            )}
-          </button>
-        </div>
 
         {/* Gem balance */}
         {user && (

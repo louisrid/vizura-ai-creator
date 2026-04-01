@@ -156,17 +156,17 @@ const CharacterDetail = () => {
             )}
           </div>
 
-          {/* Trait boxes — yellow fill, black text */}
+        {/* Trait boxes — white fill, black text */}
           <div className="flex flex-1 flex-wrap gap-1.5 content-start">
             {allTraits.map((t) => (
               <div
                 key={t.label}
-                className="rounded-xl bg-neon-yellow px-2.5 py-1.5"
+                className="rounded-xl bg-primary px-2.5 py-1.5"
               >
-                <span className="block text-[7px] font-extrabold lowercase text-neon-yellow-foreground/50 leading-none mb-0.5">
+                <span className="block text-[7px] font-extrabold lowercase text-primary-foreground/50 leading-none mb-0.5">
                   {t.label}
                 </span>
-                <span className="block text-[10px] font-extrabold lowercase text-neon-yellow-foreground leading-none">
+                <span className="block text-[10px] font-extrabold lowercase text-primary-foreground leading-none">
                   {t.value}
                 </span>
               </div>

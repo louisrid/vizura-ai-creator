@@ -730,6 +730,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             phrases={COOKING_PHRASES}
             phraseInterval={5200}
             requireTapToContinue
+            expandTapTarget
             onComplete={() => setCookingPhase("success")}
           />
         </div>
