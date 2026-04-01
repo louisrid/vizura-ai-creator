@@ -940,7 +940,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <div className="flex h-14 items-end justify-center mb-2">
           <BigEmoji emoji="🔐" index={3} />
         </div>
-        <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+        <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
           sign in to<br />save her
         </h2>
         <button
