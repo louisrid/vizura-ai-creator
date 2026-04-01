@@ -58,6 +58,15 @@ const Home = () => {
     setImages(latest);
   }, [user]);
 
+  // Handle openCreator from navigation state (e.g. from create photo page)
+  useEffect(() => {
+    const state = window.history.state?.usr;
+    if (state?.openCreator) {
+      window.history.replaceState({ ...window.history.state, usr: {} }, "");
+      handleOpenCreator();
+    }
+  }, []);
+
   useEffect(() => {
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
