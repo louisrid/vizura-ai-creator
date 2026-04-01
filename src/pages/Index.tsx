@@ -352,7 +352,7 @@ const Index = () => {
 
           {/* Prompt with cycling placeholder */}
           <div>
-            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">scene, pose & outfit</span>
+            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
             <div className="relative">
               <textarea
                 value={prompt}
