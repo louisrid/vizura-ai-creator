@@ -365,11 +365,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const randomiseName = useCallback(() => {
     const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
     setSelections((p) => ({ ...p, characterName: name }));
-  }, []);
+    if (!detailsToastShown) {
+      setDetailsToastShown(true);
+      toast("great choice!");
+    }
+  }, [detailsToastShown]);
   const randomiseAge = useCallback(() => {
     const age = String(Math.floor(Math.random() * 23) + 18);
     setSelections((p) => ({ ...p, age }));
-  }, []);
+    if (!detailsToastShown) {
+      setDetailsToastShown(true);
+      toast("great choice!");
+    }
+  }, [detailsToastShown]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
