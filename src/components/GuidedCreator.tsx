@@ -575,7 +575,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="character name…"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <motion.button
               type="button"
