@@ -13,12 +13,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
 const skinOptions = ["pale", "tan", "asian", "dark"] as const;
-const bodyOptions = ["slim", "regular", "curvy"] as const;
-const chestOptions = ["small", "medium", "large"] as const;
-const hairStyleOptions = ["straight", "curly", "bangs", "short"] as const;
+const bodyOptions = ["slim", "average", "curvy"] as const;
+const hairStyleOptions = ["straight", "curly", "bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
-const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
+const eyeOptions = ["brown", "blue", "green"] as const;
 const makeupOptions = ["natural", "model", "egirl"] as const;
+const ageOptions = ["18-23", "24-28", "29+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
