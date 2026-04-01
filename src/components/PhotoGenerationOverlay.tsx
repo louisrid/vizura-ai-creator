@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
@@ -13,15 +13,21 @@ interface PhotoGenerationOverlayProps {
 }
 
 const RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞", "🎨", "🔮"];
-const OVERLAY_FADE_DURATION = 0.75;
+const OVERLAY_FADE_DURATION = 0.55;
 
 const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoGenerationOverlayProps) => {
   const [fallbackEmoji] = useState(() => RESULT_EMOJIS[Math.floor(Math.random() * RESULT_EMOJIS.length)]);
   const [loadingDone, setLoadingDone] = useState(false);
+  const [dismissing, setDismissing] = useState(false);
+  const loadingKeyRef = useRef(0);
   const resultEmoji = useMemo(() => extractEmojiFromPosterDataUrl(resultImageUrl) || fallbackEmoji, [resultImageUrl, fallbackEmoji]);
 
   useEffect(() => {
-    if (!open) setLoadingDone(false);
+    if (!open) {
+      setLoadingDone(false);
+      setDismissing(false);
+      loadingKeyRef.current += 1;
+    }
   }, [open]);
 
   useEffect(() => {
@@ -44,16 +50,28 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
 
   if (!open) return null;
 
-  const showSuccess = phase === "success" && loadingDone;
+  const showSuccess = phase === "success" && loadingDone && !dismissing;
+
   const dismissOverlay = () => {
-    window.dispatchEvent(new CustomEvent("photo-overlay-dismiss"));
+    setDismissing(true);
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("photo-overlay-dismiss"));
+    }, 450);
   };
 
   return createPortal(
     <AnimatePresence mode="wait">
-      {!showSuccess ? (
+      {dismissing ? (
         <motion.div
-          key="photo-loading"
+          key="photo-dismissing"
+          className="fixed inset-0 z-[9999] bg-black"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+        />
+      ) : !showSuccess ? (
+        <motion.div
+          key={`photo-loading-${loadingKeyRef.current}`}
           className="fixed inset-0 z-[9999] flex items-center justify-center px-6 bg-black"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -76,7 +94,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           exit={{ opacity: 0 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
           onPointerDown={dismissOverlay}
-          style={{ touchAction: "manipulation" }}
+          style={{ touchAction: "manipulation", cursor: "pointer" }}
         >
           <div className="relative z-10 flex w-full max-w-xs flex-col items-center gap-6">
             <motion.p

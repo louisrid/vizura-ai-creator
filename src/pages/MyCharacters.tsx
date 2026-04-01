@@ -25,14 +25,9 @@ const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "�
 const DEFAULT_AVA_EMOJI = "👸";
 
 const getCharacterEmoji = (char: Character): string => {
-  // Check if description has an embedded emoji tag
   const match = char.description?.match(/\[emoji:(.+?)\]/);
   if (match) return match[1];
-  
-  // For Ava (starter character), use a fixed emoji
   if (char.name === "ava") return DEFAULT_AVA_EMOJI;
-  
-  // Fallback: stable hash-based emoji
   let hash = 0;
   for (let i = 0; i < char.id.length; i++) hash = ((hash << 5) - hash + char.id.charCodeAt(i)) | 0;
   return FACE_EMOJIS[Math.abs(hash) % FACE_EMOJIS.length];
@@ -45,6 +40,7 @@ const MyCharacters = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
   const [newCharId, setNewCharId] = useState<string | null>(null);
+  const [isFirstCharacter, setIsFirstCharacter] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
@@ -65,6 +61,10 @@ const MyCharacters = () => {
         if (pendingNew) {
           sessionStorage.removeItem("vizura_new_char_highlight");
           setNewCharId(pendingNew);
+          // If this is the only character, it's the first one
+          if (data.length === 1) {
+            setIsFirstCharacter(true);
+          }
           setTimeout(() => setNewCharId(null), 1500);
         }
       }
@@ -83,11 +83,22 @@ const MyCharacters = () => {
     navigate("/create");
   };
 
+  const handleBack = () => {
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-32">
         <div className="flex items-center gap-3 mb-8">
-          <BackButton />
+          <button
+            type="button"
+            onClick={handleBack}
+            className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
+            aria-label="go back"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          </button>
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
 
@@ -149,13 +160,15 @@ const MyCharacters = () => {
 
       <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
         <div className="mx-auto max-w-lg">
-          <button
+          <motion.button
             onClick={handleCreatePhoto}
+            animate={isFirstCharacter ? { y: [0, -6, 0] } : {}}
+            transition={isFirstCharacter ? { duration: 0.8, repeat: Infinity, ease: "easeInOut" } : {}}
             className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
           >
             <Camera size={20} strokeWidth={2.5} />
             create photo
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>
