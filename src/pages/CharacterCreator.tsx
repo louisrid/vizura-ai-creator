@@ -14,10 +14,10 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const skinOptions = ["pale", "tan", "asian", "dark"] as const;
 const bodyOptions = ["slim", "average", "curvy"] as const;
-const hairStyleOptions = ["straight", "curly", "bangs"] as const;
+const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
-const eyeOptions = ["brown", "blue", "green"] as const;
-const makeupOptions = ["natural", "model", "egirl"] as const;
+const eyeOptions = ["blue", "brown", "green", "grey"] as const;
+const makeupOptions = ["natural", "classic", "egirl"] as const;
 const ageOptions = ["18-23", "24-28", "29+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
