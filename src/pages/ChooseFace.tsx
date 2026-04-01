@@ -85,8 +85,7 @@ const ChooseFace = () => {
 
   // After returning from OAuth, immediately save and redirect — don't show the face screen
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
-  const doFinalSaveRef = useRef(doFinalSave);
-  doFinalSaveRef.current = doFinalSave;
+  const doFinalSaveRef = useRef<(forcedFaceIdx?: number) => Promise<boolean>>(async () => false);
   
   useEffect(() => {
     if (showSignIn || !user || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
