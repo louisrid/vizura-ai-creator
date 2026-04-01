@@ -83,7 +83,7 @@ export const Toaster = () => {
 
   return (
     <ToastContext.Provider value={value}>
-      <div className="pointer-events-none fixed top-24 left-0 right-0 z-[9999] mx-auto w-full max-w-lg px-4">
+      <div className="pointer-events-none fixed top-24 left-0 right-0 z-[99999] mx-auto w-full max-w-lg px-4">
         <div className="flex flex-col items-end gap-2">
           <AnimatePresence>
             {toasts.map((t) => (
