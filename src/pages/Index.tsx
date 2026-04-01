@@ -383,70 +383,47 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Collapsible "match this vibe" reference section */}
+          {/* Reference section — always visible */}
           <div>
-            <button
-              type="button"
-              onClick={() => setVibeOpen((v) => !v)}
-              className="flex w-full items-center justify-between py-2"
-            >
-              <span className="text-xs font-extrabold lowercase text-foreground">match this vibe</span>
-              <motion.div
-                animate={{ rotate: vibeOpen ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ChevronDown size={14} strokeWidth={2.5} className="text-foreground/50" />
-              </motion.div>
-            </button>
-            <AnimatePresence>
-              {vibeOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="overflow-hidden"
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
+              <span className="text-[10px] font-extrabold lowercase text-muted-foreground">(optional)</span>
+            </div>
+            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+            {referenceImage ? (
+              <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[5px] border-border">
+                <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => setReferenceImage(null)}
+                  className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
                 >
-                  <div className="pt-2 pb-1">
-                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-                    {referenceImage ? (
-                      <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[5px] border-border">
-                        <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
-                        <button
-                          type="button"
-                          onClick={() => setReferenceImage(null)}
-                          className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-8 hover:border-foreground/30 transition-colors"
-                      >
-                        <Upload size={24} strokeWidth={2.5} className="text-foreground/30" />
-                        <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
-                      </button>
-                    )}
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
-                      <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      value={referenceStrength}
-                      onChange={(e) => setReferenceStrength(Number(e.target.value))}
-                      className="mt-2 w-full cursor-pointer appearance-none rounded-full h-2"
-                      style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(var(--secondary)) ${referenceStrength}%)` }}
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  ×
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-8 hover:border-foreground/30 transition-colors"
+              >
+                <Upload size={24} strokeWidth={2.5} className="text-foreground/30" />
+                <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
+              </button>
+            )}
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
+              <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={referenceStrength}
+              onChange={(e) => setReferenceStrength(Number(e.target.value))}
+              className="mt-2 w-full cursor-pointer appearance-none rounded-full h-2"
+              style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(var(--secondary)) ${referenceStrength}%)` }}
+            />
           </div>
         </div>
 
