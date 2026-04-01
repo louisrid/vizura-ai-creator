@@ -343,10 +343,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     // Convert age range to number before completing
     const final = { ...selectionsRef.current };
     final.age = ageRangeToNumber(final.age);
-    // Default chest since screen was removed
-    final.chest = "medium";
-    // Map "average" to "regular" for backward compat
-    if (final.bodyType === "average") final.bodyType = "regular";
     onComplete(final);
   }, [onComplete]);
 
