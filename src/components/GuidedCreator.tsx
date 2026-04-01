@@ -983,7 +983,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           )}
         </button>
       </div>
-    </motion.div>,
+      </motion.div>
+    </div>,
     document.body,
   );
 };
