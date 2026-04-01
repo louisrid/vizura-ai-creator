@@ -441,7 +441,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const ageNum = Number(selections.age);
       if (ageNum >= 18 && ageNum <= 40) {
         setDetailsToastShown(true);
-        toast("great choice!", { position: "top-right" });
+        toast("great choice!");
       }
     }
   }, [isDetailsA, selections.characterName, selections.age, detailsToastShown]);

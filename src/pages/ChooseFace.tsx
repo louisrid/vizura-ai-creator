@@ -137,7 +137,7 @@ const ChooseFace = () => {
 
   const handleRegenerate = async () => {
     if (isFreeUser) {
-      toast("please add gems to regenerate!", { position: "top-right" });
+      toast("please add gems to regenerate!");
       return;
     }
 
