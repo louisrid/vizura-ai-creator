@@ -463,7 +463,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isWelcomeSlide) {
       return (
         <div className="flex w-full flex-col items-center">
-          <h2 className="mt-1 text-center lowercase leading-tight tracking-tight text-white">
+          <h2 className="mt-1 text-center lowercase leading-[0.95] tracking-tight text-white">
             <BouncyWords text="welcome to" className="block text-[1.4rem] font-[800]" delayStart={0.2} />
             <motion.span
               className="block text-[5.5rem] font-[900] leading-[0.95]"
