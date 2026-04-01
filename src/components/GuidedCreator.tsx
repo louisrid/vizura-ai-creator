@@ -13,7 +13,7 @@ const NEON_BLUE = "hsl(var(--gem-green))";
 const PURE_WHITE = "hsl(var(--foreground))";
 const AMBER = "hsl(var(--neon-yellow))";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
-const DETAILS_TOAST_SESSION_KEY = "vizura_details_toast_shown";
+const NAME_TOAST_SESSION_KEY = "vizura_name_toast_shown";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
 
