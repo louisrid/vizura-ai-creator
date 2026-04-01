@@ -327,6 +327,11 @@ const ChooseFace = () => {
     );
   }
 
+  // Show black screen while processing post-auth save to prevent flash
+  if (pendingAuthSave) {
+    return <div className="fixed inset-0 bg-black z-[9999]" />;
+  }
+
   const cardDelays = [0, 0.2, 0.4];
 
   return (
