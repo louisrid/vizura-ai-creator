@@ -1,17 +1,12 @@
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { getNavDepth } from "@/lib/navigation";
 
 const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    if (getNavDepth() > 1) {
-      navigate(-1);
-    } else {
-      navigate("/");
-    }
+    navigate("/");
   };
 
   return (

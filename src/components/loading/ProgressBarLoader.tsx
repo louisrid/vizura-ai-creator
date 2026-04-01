@@ -39,11 +39,13 @@ const ProgressBarLoader = ({
   const startTimeRef = useRef(Date.now());
   const safePhrases = useMemo(() => (phrases.length > 0 ? phrases : ["working…"]), [phrases]);
   const effectivePhraseInterval = Math.max(phraseInterval, 4200);
+  const maxPctRef = useRef(0);
 
   useEffect(() => {
     startTimeRef.current = Date.now();
     completedRef.current = false;
     continuedRef.current = false;
+    maxPctRef.current = 0;
     setPct(0);
     setPhraseIndex(0);
     setPhraseVisible(true);
@@ -52,12 +54,16 @@ const ProgressBarLoader = ({
     const updateProgress = () => {
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
+      const newPct = mapProgressToPct(progress);
 
-      setPct((prev) => Math.max(prev, mapProgressToPct(progress)));
+      // Never go backwards
+      maxPctRef.current = Math.max(maxPctRef.current, newPct);
+      setPct(maxPctRef.current);
 
       if (progress >= 1) {
         if (!completedRef.current) {
           completedRef.current = true;
+          maxPctRef.current = 100;
           setPct(100);
           setIsComplete(true);
 
