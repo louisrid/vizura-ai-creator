@@ -83,15 +83,19 @@ const ChooseFace = () => {
     }
   }, [loading, cardsRevealed]);
 
+  // After returning from OAuth, immediately save and redirect — don't show the face screen
+  const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
+  
   useEffect(() => {
-    if (showSignIn || !user || faces.length === 0 || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
+    if (showSignIn || !user || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
 
     const storedFace = Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
     if (storedFace < 0) return;
 
+    setPendingAuthSave(true);
     setSelectedIndex(storedFace);
     void doFinalSave(storedFace);
-  }, [user, faces.length, showSignIn]);
+  }, [user, showSignIn]);
 
   const generateFaces = async () => {
     setLoading(true);

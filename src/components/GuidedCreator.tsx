@@ -909,7 +909,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     setGoogleLoading(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/characters`,
+        redirect_uri: `${window.location.origin}/choose-face`,
       });
       if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
     } catch (err: any) {
