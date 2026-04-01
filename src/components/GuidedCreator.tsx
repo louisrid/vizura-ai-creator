@@ -717,9 +717,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           )}
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="mx-auto max-w-[18rem] px-2 text-center text-[2.95rem] font-[900] lowercase leading-[0.96] tracking-tight text-white">
-            <span className="block whitespace-nowrap">your character</span>
-            <span className="block whitespace-nowrap">
+          <h2 className="w-full text-center text-[2.95rem] font-[900] lowercase leading-[0.96] tracking-tight">
+            <span className="block text-white">your character</span>
+            <span className="block">
               <span className="text-white">is </span>
               <span className="text-gem-green">almost here!</span>
             </span>
