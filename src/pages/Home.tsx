@@ -341,7 +341,7 @@ const Home = () => {
       </main>
 
       {/* Balanced bottom padding before divider */}
-      <div className="flex-1 min-h-[3.5rem]" />
+      <div className="flex-1 min-h-[2rem]" />
 
       {/* Full-bleed white divider + black bottom section with geo pattern */}
       <div className="border-t-[5px] border-white" />
