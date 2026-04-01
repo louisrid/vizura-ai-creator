@@ -159,7 +159,7 @@ const CharacterCreator = () => {
         eye: sanitiseText(eye, 50),
         body: sanitiseText(bodyType, 50),
         style: sanitiseText(makeup, 50),
-        description: sanitiseText(`${chest} chest, ${hairStyle} hair. ${description}`, 500),
+        description: sanitiseText(`${hairStyle} hair. ${description}`, 500),
         generation_prompt: buildPrompt(),
       };
 
