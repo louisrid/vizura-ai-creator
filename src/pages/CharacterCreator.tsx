@@ -275,7 +275,6 @@ const CharacterCreator = () => {
   const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {
     if (partial.skin) setSkin(partial.skin);
     if (partial.bodyType) setBodyType(partial.bodyType);
-    if (partial.chest) setChest(partial.chest);
     if (partial.hairStyle) setHairStyle(partial.hairStyle);
     if (partial.hairColour) setHairColour(partial.hairColour);
     if (partial.eye) setEye(partial.eye);
