@@ -104,8 +104,8 @@ const CharacterCreator = () => {
   }, []);
 
   const [skin, setSkin] = useState<string>(saved?.skin || "tan");
-  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "regular");
-  const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "straight");
+  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "average");
+  const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "long straight");
   const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
   const [eye, setEye] = useState<string>(saved?.eye || "brown");
   const [makeup, setMakeup] = useState<string>(saved?.makeup || "natural");
