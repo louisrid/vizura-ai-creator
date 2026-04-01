@@ -216,7 +216,6 @@ const CharacterCreator = () => {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
       bodyType: selections.bodyType || "regular",
-      chest: selections.chest || "medium",
       hairStyle: selections.hairStyle || "straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
@@ -228,13 +227,12 @@ const CharacterCreator = () => {
 
     const sk = selections.skin || "tan";
     const bt = selections.bodyType || "regular";
-    const ch = selections.chest || "medium";
     const hs = selections.hairStyle || "straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
     const mk = selections.makeup || "natural";
     const ag = selections.age || "25";
-    const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${ch} chest, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
+    const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
