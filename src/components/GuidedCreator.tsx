@@ -25,10 +25,10 @@ const OVERLAY_FADE_DURATION = 0.75;
  *  3: Skin        (TRAITS[0])
  *  4: Body        (TRAITS[1]) — slim, average, curvy (no chest)
  *  5: Age pills   (TRAITS[2]) — 18-23, 24-28, 29+
- *  6: Hair        (TRAITS[3]) — straight, curly, bangs (no "short")
+ *  6: Hair        (TRAITS[3]) — long straight, long curly, fringe/bangs
  *  7: Hair colour (TRAITS[4]) — blonde, brunette, black, pink
- *  8: Eyes        (TRAITS[5]) — brown, blue, green (no "hazel")
- *  9: Makeup      (TRAITS[6]) — natural, model, egirl
+ *  8: Eyes        (TRAITS[5]) — blue, brown, green, grey
+ *  9: Makeup      (TRAITS[6]) — natural, classic, egirl
  * 10: Description (optional)
  * 11: Reference   (optional)
  * 12: Create slide
@@ -38,10 +38,10 @@ const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
   { key: "bodyType", label: "choose her body…", emoji: "📏", options: ["slim", "average", "curvy"] },
   { key: "age", label: "pick her age…", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
-  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs"] },
+  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["long straight", "long curly", "fringe/bangs"] },
   { key: "hairColour", label: "pick her hair colour…", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
-  { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["brown", "blue", "green"] },
-  { key: "makeup", label: "pick her makeup…", emoji: "💄", options: ["natural", "model", "egirl"] },
+  { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["blue", "brown", "green", "grey"] },
+  { key: "makeup", label: "pick her makeup…", emoji: "💄", options: ["natural", "classic", "egirl"] },
 ] as const;
 
 type TraitKey = (typeof TRAITS)[number]["key"];
