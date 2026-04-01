@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, Camera, ArrowLeft } from "lucide-react";
+import { Plus, Loader2, Camera } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -61,7 +61,6 @@ const MyCharacters = () => {
         if (pendingNew) {
           sessionStorage.removeItem("vizura_new_char_highlight");
           setNewCharId(pendingNew);
-          // If this is the only character, it's the first one
           if (data.length === 1) {
             setIsFirstCharacter(true);
           }
@@ -77,28 +76,17 @@ const MyCharacters = () => {
 
   const handleCreatePhoto = () => {
     if (characters.length === 1) {
-      navigate("/create", { state: { characterId: characters[0].id } });
+      navigate("/create", { state: { preselectedCharacterId: characters[0].id } });
       return;
     }
     navigate("/create");
-  };
-
-  const handleBack = () => {
-    navigate("/", { replace: true });
   };
 
   return (
     <div className="min-h-screen bg-background">
       <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-32">
         <div className="flex items-center gap-3 mb-8">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
-            aria-label="go back"
-          >
-            <ArrowLeft size={14} strokeWidth={2.5} />
-          </button>
+          <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
 

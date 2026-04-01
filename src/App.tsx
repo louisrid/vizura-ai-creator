@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -69,23 +70,33 @@ const AppRoutes = () => {
   return (
     <>
       <Header />
-      <Routes location={location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/generate-face" element={<ChooseFace />} />
-        <Route path="/choose-face" element={<ChooseFace />} />
-        <Route path="/create" element={<Index />} />
-        <Route path="/index" element={<Index />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/characters" element={<MyCharacters />} />
-        <Route path="/characters/:id" element={<CharacterDetail />} />
-        <Route path="/storage" element={<Storage />} />
-        <Route path="/top-ups" element={<TopUps />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/help" element={<Help />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: "easeInOut" }}
+        >
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/generate-face" element={<ChooseFace />} />
+            <Route path="/choose-face" element={<ChooseFace />} />
+            <Route path="/create" element={<Index />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/characters/:id" element={<CharacterDetail />} />
+            <Route path="/storage" element={<Storage />} />
+            <Route path="/top-ups" element={<TopUps />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 };
