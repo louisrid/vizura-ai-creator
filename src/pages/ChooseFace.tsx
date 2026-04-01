@@ -301,18 +301,20 @@ const ChooseFace = () => {
     navigate("/characters", { replace: true });
     return true;
   };
+  doFinalSaveRef.current = doFinalSave;
 
   const handleSignedIn = useCallback(async () => {
     // Don't hide the sign-in overlay yet — save first, then navigate directly
     sessionStorage.removeItem(AUTH_RESUME_KEY);
+    setPendingAuthSave(true);
     await new Promise((r) => setTimeout(r, 300));
-    const saved = await doFinalSave();
+    const saved = await doFinalSaveRef.current();
     if (!saved) {
-      // Only hide overlay if save failed so user can retry
+      setPendingAuthSave(false);
       setShowSignIn(false);
     }
     // If saved, doFinalSave already navigated to /characters
-  }, [selectedIndex, characterId, faces, prompt, demoEmojis]);
+  }, []);
 
   const handleCookingComplete = () => {
     setShowCooking(false);
