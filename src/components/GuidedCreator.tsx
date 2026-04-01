@@ -614,10 +614,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDetailsB) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             describe her…
           </h2>
-          <div className="mt-5 w-full max-w-[18rem]">
+          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional, but recommended)</p>
+          <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
               onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
@@ -626,7 +627,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
-            <p className="mt-4 text-center text-base font-extrabold lowercase leading-snug text-white">
+            <p className="mt-2 text-center text-xs font-extrabold lowercase leading-snug text-white/30">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
