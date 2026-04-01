@@ -289,6 +289,26 @@ const Index = () => {
           )}
         </div>
 
+        {/* Generate button — right below preview */}
+        <div className="mt-5 mb-5">
+          <button
+            className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
+            onClick={handleCreate}
+            disabled={isGenerating || (!!user && !prompt.trim())}
+          >
+            {isGenerating ? (
+              <><Loader2 className="animate-spin" size={18} />creating...</>
+            ) : (
+              <>
+                <Zap size={18} strokeWidth={2.5} />
+                create
+                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
+                <span className="text-[11px] ml-0.5">1</span>
+              </>
+            )}
+          </button>
+        </div>
+
         <div className="space-y-5">
           {/* Character select — hidden if only 1 character */}
           {!singleCharAutoSelected && (
