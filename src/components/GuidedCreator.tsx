@@ -770,7 +770,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              ✓
+              ✅
             </motion.span>
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.85 }}
