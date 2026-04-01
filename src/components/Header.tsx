@@ -91,7 +91,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 border-b-[5px] border-white" style={{ backgroundColor: '#000000' }}>
-      <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-5">
+      <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-4 md:px-8 py-5">
         <div className="flex items-center gap-3">
           <VizuraLogo className="text-nav-foreground text-2xl" />
           <GemsBadge />

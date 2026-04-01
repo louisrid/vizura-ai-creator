@@ -22,12 +22,9 @@ interface Character {
 
 const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
 
-const DEFAULT_AVA_EMOJI = "👸";
-
 const getCharacterEmoji = (char: Character): string => {
   const match = char.description?.match(/\[emoji:(.+?)\]/);
   if (match) return match[1];
-  if (char.name === "ava") return DEFAULT_AVA_EMOJI;
   let hash = 0;
   for (let i = 0; i < char.id.length; i++) hash = ((hash << 5) - hash + char.id.charCodeAt(i)) | 0;
   return FACE_EMOJIS[Math.abs(hash) % FACE_EMOJIS.length];

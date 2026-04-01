@@ -14,10 +14,10 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const skinOptions = ["pale", "tan", "asian", "dark"] as const;
 const bodyOptions = ["slim", "average", "curvy"] as const;
-const hairStyleOptions = ["straight", "curly", "bangs"] as const;
+const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
-const eyeOptions = ["brown", "blue", "green"] as const;
-const makeupOptions = ["natural", "model", "egirl"] as const;
+const eyeOptions = ["blue", "brown", "green", "grey"] as const;
+const makeupOptions = ["natural", "classic", "egirl"] as const;
 const ageOptions = ["18-23", "24-28", "29+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
@@ -104,8 +104,8 @@ const CharacterCreator = () => {
   }, []);
 
   const [skin, setSkin] = useState<string>(saved?.skin || "tan");
-  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "regular");
-  const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "straight");
+  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "average");
+  const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "long straight");
   const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
   const [eye, setEye] = useState<string>(saved?.eye || "brown");
   const [makeup, setMakeup] = useState<string>(saved?.makeup || "natural");
@@ -215,8 +215,8 @@ const CharacterCreator = () => {
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
-      bodyType: selections.bodyType || "regular",
-      hairStyle: selections.hairStyle || "straight",
+      bodyType: selections.bodyType || "average",
+      hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
       makeup: selections.makeup || "natural",
@@ -226,8 +226,8 @@ const CharacterCreator = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
     const sk = selections.skin || "tan";
-    const bt = selections.bodyType || "regular";
-    const hs = selections.hairStyle || "straight";
+    const bt = selections.bodyType || "average";
+    const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
     const mk = selections.makeup || "natural";

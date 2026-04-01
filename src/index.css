@@ -102,6 +102,17 @@
     overscroll-behavior: none;
   }
 
+  /* Desktop: remove fixed positioning, full-height scroll */
+  @media (min-width: 768px) {
+    html, body {
+      position: static;
+      overflow: hidden;
+    }
+    #root {
+      height: 100vh;
+    }
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-extrabold lowercase tracking-tight;
   }

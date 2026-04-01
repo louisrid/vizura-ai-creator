@@ -13,7 +13,7 @@ const NEON_BLUE = "hsl(var(--gem-green))";
 const PURE_WHITE = "hsl(var(--foreground))";
 const AMBER = "hsl(var(--neon-yellow))";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
-const DETAILS_TOAST_SESSION_KEY = "vizura_details_toast_shown";
+const NAME_TOAST_SESSION_KEY = "vizura_name_toast_shown";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
 
@@ -25,10 +25,10 @@ const OVERLAY_FADE_DURATION = 0.75;
  *  3: Skin        (TRAITS[0])
  *  4: Body        (TRAITS[1]) — slim, average, curvy (no chest)
  *  5: Age pills   (TRAITS[2]) — 18-23, 24-28, 29+
- *  6: Hair        (TRAITS[3]) — straight, curly, bangs (no "short")
+ *  6: Hair        (TRAITS[3]) — long straight, long curly, fringe/bangs
  *  7: Hair colour (TRAITS[4]) — blonde, brunette, black, pink
- *  8: Eyes        (TRAITS[5]) — brown, blue, green (no "hazel")
- *  9: Makeup      (TRAITS[6]) — natural, model, egirl
+ *  8: Eyes        (TRAITS[5]) — blue, brown, green, grey
+ *  9: Makeup      (TRAITS[6]) — natural, classic, egirl
  * 10: Description (optional)
  * 11: Reference   (optional)
  * 12: Create slide
@@ -38,10 +38,10 @@ const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
   { key: "bodyType", label: "choose her body…", emoji: "📏", options: ["slim", "average", "curvy"] },
   { key: "age", label: "pick her age…", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
-  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs"] },
+  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["long straight", "long curly", "fringe/bangs"] },
   { key: "hairColour", label: "pick her hair colour…", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
-  { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["brown", "blue", "green"] },
-  { key: "makeup", label: "pick her makeup…", emoji: "💄", options: ["natural", "model", "egirl"] },
+  { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["blue", "brown", "green", "grey"] },
+  { key: "makeup", label: "pick her makeup…", emoji: "💄", options: ["natural", "classic", "egirl"] },
 ] as const;
 
 type TraitKey = (typeof TRAITS)[number]["key"];
@@ -121,8 +121,8 @@ const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
 );
 
 /* ── Interactive pill ── */
-const InteractivePill = ({ label, selected, shaking, onClick }: {
-  label: string; selected: boolean; shaking: boolean; onClick: () => void;
+const InteractivePill = ({ label, selected, shaking, onClick, compact = false, subLabel }: {
+  label: string; selected: boolean; shaking: boolean; onClick: () => void; compact?: boolean; subLabel?: string;
 }) => (
   <motion.button
     type="button"
@@ -134,13 +134,18 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`rounded-xl ${compact ? "px-2.5 py-2 text-[0.72rem]" : "px-4 py-2.5 text-sm"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
     }`}
   >
-    {label}
+    <span className="block leading-none">{label}</span>
+    {subLabel && (
+      <span className={`mt-0.5 block text-center text-[7px] font-extrabold normal-case leading-none ${selected ? "text-neon-yellow-foreground/50" : "text-white/30"}`}>
+        {subLabel}
+      </span>
+    )}
   </motion.button>
 );
 
@@ -181,7 +186,7 @@ const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; classN
 
 /* ── Types ── */
 export interface GuidedSelections {
-  skin: string; bodyType: string; chest: string; hairStyle: string;
+  skin: string; bodyType: string; hairStyle: string;
   hairColour: string; eye: string; makeup: string;
   characterName: string; age: string;
   description: string;
@@ -190,7 +195,7 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", chest: "",
+  skin: "", bodyType: "",
   hairStyle: "", hairColour: "", eye: "", makeup: "",
   characterName: "", age: "",
   description: "",
@@ -237,7 +242,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
-  const [detailsToastShown, setDetailsToastShown] = useState(false);
+  const [nameToastShown, setNameToastShown] = useState(() => sessionStorage.getItem(NAME_TOAST_SESSION_KEY) === "1");
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -279,7 +284,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
-      setDetailsToastShown(sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1");
+      setNameToastShown(sessionStorage.getItem(NAME_TOAST_SESSION_KEY) === "1");
     }
   }, [open, restoreSavedFlow]);
 
@@ -338,10 +343,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     // Convert age range to number before completing
     const final = { ...selectionsRef.current };
     final.age = ageRangeToNumber(final.age);
-    // Default chest since screen was removed
-    final.chest = "medium";
-    // Map "average" to "regular" for backward compat
-    if (final.bodyType === "average") final.bodyType = "regular";
     onComplete(final);
   }, [onComplete]);
 
@@ -404,6 +405,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, characterName: name }));
   }, []);
 
+  // Show "great choice!" once per session when valid name appears
+  useEffect(() => {
+    if (!visible || !isNameSlide || nameToastShown) return;
+    if (selections.characterName.trim()) {
+      setNameToastShown(true);
+      sessionStorage.setItem(NAME_TOAST_SESSION_KEY, "1");
+      toast("great choice!");
+    }
+  }, [visible, isNameSlide, nameToastShown, selections.characterName]);
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -411,29 +422,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, referenceImage: url }));
   };
 
-  const showDetailsToastOnce = useCallback(() => {
-    if (sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1") {
-      setDetailsToastShown(true);
-      return;
-    }
-    sessionStorage.setItem(DETAILS_TOAST_SESSION_KEY, "1");
-    setDetailsToastShown(true);
-    toast("great choice!");
-  }, []);
-
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
 
-    // Name slide validation
+    // Name slide — dismiss toast before advancing
     if (isNameSlide) {
       if (!selectionsRef.current.characterName.trim()) {
         triggerShake();
         return;
       }
-      // Show "great choice!" toast once when advancing from name screen
-      if (!detailsToastShown) {
-        showDetailsToastOnce();
-      }
+      toast.dismiss();
     }
 
     // Trait slide validation — must select an option
@@ -456,7 +454,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 180);
-  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, detailsToastShown, showDetailsToastOnce, TOTAL]);
+  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, TOTAL]);
 
   const goBack = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
@@ -557,8 +555,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="type a name…"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ color: selections.characterName.trim() ? AMBER : PURE_WHITE }}
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <motion.button
               type="button"
@@ -585,13 +582,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             {trait.label}
           </h2>
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <div className={`mt-5 flex justify-center gap-2 ${trait.key === "hairColour" ? "w-full max-w-[17rem] flex-nowrap" : "flex-wrap"}`}>
             {trait.options.map((opt) => (
               <InteractivePill
                 key={opt}
                 label={opt}
                 selected={selectedVal === opt}
                 shaking={shaking && selectedVal !== opt}
+                compact={trait.key === "hairColour"}
+                subLabel={trait.key === "makeup" && opt === "classic" ? "(recommended)" : undefined}
                 onClick={() => setTrait(trait.key, opt)}
               />
             ))}
@@ -728,6 +727,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             phrases={COOKING_PHRASES}
             phraseInterval={5200}
             requireTapToContinue
+            expandTapTarget
             onComplete={() => setCookingPhase("success")}
           />
         </div>
