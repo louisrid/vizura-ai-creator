@@ -298,10 +298,15 @@ const ChooseFace = () => {
   };
 
   const handleSignedIn = useCallback(async () => {
-    setShowSignIn(false);
+    // Don't hide the sign-in overlay yet — save first, then navigate directly
     sessionStorage.removeItem(AUTH_RESUME_KEY);
     await new Promise((r) => setTimeout(r, 300));
-    await doFinalSave();
+    const saved = await doFinalSave();
+    if (!saved) {
+      // Only hide overlay if save failed so user can retry
+      setShowSignIn(false);
+    }
+    // If saved, doFinalSave already navigated to /characters
   }, [selectedIndex, characterId, faces, prompt, demoEmojis]);
 
   const handleCookingComplete = () => {
