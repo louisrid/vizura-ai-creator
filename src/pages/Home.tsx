@@ -236,7 +236,7 @@ const Home = () => {
             <button
               type="button"
               onClick={() => navigate("/create")}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
             >
               <Camera size={16} strokeWidth={2.5} />
               create photo
@@ -244,7 +244,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
             >
               <Sparkles size={16} strokeWidth={2.5} />
               create character
