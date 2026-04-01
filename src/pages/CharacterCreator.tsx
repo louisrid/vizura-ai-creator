@@ -197,7 +197,7 @@ const CharacterCreator = () => {
     }
     if (!user) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
+        characterName, skin, bodyType, hairStyle, hairColour, eye, makeup, age, description,
       }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
