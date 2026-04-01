@@ -13,12 +13,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
 const skinOptions = ["pale", "tan", "asian", "dark"] as const;
-const bodyOptions = ["slim", "regular", "curvy"] as const;
-const chestOptions = ["small", "medium", "large"] as const;
-const hairStyleOptions = ["straight", "curly", "bangs", "short"] as const;
+const bodyOptions = ["slim", "average", "curvy"] as const;
+const hairStyleOptions = ["straight", "curly", "bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
-const eyeOptions = ["brown", "blue", "green", "hazel"] as const;
+const eyeOptions = ["brown", "blue", "green"] as const;
 const makeupOptions = ["natural", "model", "egirl"] as const;
+const ageOptions = ["18-23", "24-28", "29+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
@@ -105,7 +105,6 @@ const CharacterCreator = () => {
 
   const [skin, setSkin] = useState<string>(saved?.skin || "tan");
   const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "regular");
-  const [chest, setChest] = useState<string>(saved?.chest || "medium");
   const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "straight");
   const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
   const [eye, setEye] = useState<string>(saved?.eye || "brown");
@@ -137,7 +136,7 @@ const CharacterCreator = () => {
 
   const buildPrompt = () => {
     const skinPart = skin ? `, ${skin} skin` : "";
-    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${chest} chest, ${hairStyle} ${hairColour} hair, ${eye} eyes, ${makeup} makeup`;
+    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${hairStyle} ${hairColour} hair, ${eye} eyes, ${makeup} makeup`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -146,7 +145,7 @@ const CharacterCreator = () => {
   const saveCharacter = async () => {
     if (!user) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
+        characterName, skin, bodyType, hairStyle, hairColour, eye, makeup, age, description,
       }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return null;
@@ -160,7 +159,7 @@ const CharacterCreator = () => {
         eye: sanitiseText(eye, 50),
         body: sanitiseText(bodyType, 50),
         style: sanitiseText(makeup, 50),
-        description: sanitiseText(`${chest} chest, ${hairStyle} hair. ${description}`, 500),
+        description: sanitiseText(`${hairStyle} hair. ${description}`, 500),
         generation_prompt: buildPrompt(),
       };
 
@@ -189,16 +188,15 @@ const CharacterCreator = () => {
 
   const handleCreate = async () => {
     const missingName = !characterName.trim();
-    const ageNum = Number(age);
-    const invalidAge = !age || ageNum < 18 || ageNum > 40;
-    if (missingName || invalidAge) {
+    const missingAge = !age;
+    if (missingName || missingAge) {
       if (missingName) toast.error("name is required");
-      if (invalidAge) toast.error(age && (ageNum < 18 || ageNum > 40) ? "age must be between 18-40" : "age is required");
+      if (missingAge) toast.error("age is required");
       return;
     }
     if (!user) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        characterName, skin, bodyType, chest, hairStyle, hairColour, eye, makeup, age, description,
+        characterName, skin, bodyType, hairStyle, hairColour, eye, makeup, age, description,
       }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
@@ -276,7 +274,6 @@ const CharacterCreator = () => {
   const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {
     if (partial.skin) setSkin(partial.skin);
     if (partial.bodyType) setBodyType(partial.bodyType);
-    if (partial.chest) setChest(partial.chest);
     if (partial.hairStyle) setHairStyle(partial.hairStyle);
     if (partial.hairColour) setHairColour(partial.hairColour);
     if (partial.eye) setEye(partial.eye);
@@ -328,28 +325,13 @@ const CharacterCreator = () => {
           />
         </section>
 
-        {/* Age */}
-        <section className="mt-5 flex flex-col gap-1.5">
-          <span className="text-xs font-extrabold lowercase text-foreground">age</span>
-          <input
-            type="number"
-            min={18}
-            max={40}
-            value={age}
-            placeholder="18-40"
-            onChange={(e) => {
-              const v = e.target.value;
-              if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
-            }}
-            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-          />
-        </section>
+        {/* Age is now in the pill group section below */}
 
         {/* 7 Pill toggle sections */}
         <section className="mt-5 flex flex-col gap-4">
           <PillGroup label="skin" options={skinOptions} value={skin} onChange={setSkin} />
           <PillGroup label="body type" options={bodyOptions} value={bodyType} onChange={setBodyType} />
-          <PillGroup label="chest" options={chestOptions} value={chest} onChange={setChest} />
+          <PillGroup label="age" options={ageOptions} value={age} onChange={setAge} />
           <PillGroup label="hair" options={hairStyleOptions} value={hairStyle} onChange={setHairStyle} />
           <PillGroup label="hair colour" options={hairColourOptions} value={hairColour} onChange={setHairColour} />
           <PillGroup label="eyes" options={eyeOptions} value={eye} onChange={setEye} />
