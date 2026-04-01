@@ -191,7 +191,7 @@ const Home = () => {
   }, [images]);
 
   return (
-    <div className="relative h-[calc(100dvh-73px)] overflow-hidden bg-background">
+    <div className="relative h-[calc(100dvh-81px)] overflow-hidden bg-background">
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
@@ -231,12 +231,12 @@ const Home = () => {
       </AnimatePresence>
 
       <div className="flex h-full flex-col">
-        <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-14 md:scale-110 md:origin-top md:pt-16 md:pb-20">
+        <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-14 md:scale-[1.18] md:origin-top md:pt-16 md:pb-20">
           <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
               onClick={() => navigate("/create")}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
             >
               <Camera size={16} strokeWidth={2.5} />
               create photo
@@ -244,7 +244,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
             >
               <Sparkles size={16} strokeWidth={2.5} />
               create character
@@ -268,7 +268,7 @@ const Home = () => {
                         : "border-border bg-secondary"
                     }`}
                   >
-                    <AspectRatio ratio={1}>
+                    <AspectRatio ratio={4 / 5}>
                       {isPlaceholder ? (
                         <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">
                           empty

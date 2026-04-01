@@ -134,7 +134,7 @@ const InteractivePill = ({ label, selected, shaking, onClick, compact = false, s
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl ${compact ? "px-3.5 py-2.5 text-[0.8rem]" : "px-4 py-2.5 text-sm"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`rounded-xl ${compact ? "px-4 py-3.5 text-[0.9rem]" : "px-5 py-3.5 text-[0.95rem]"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
@@ -603,7 +603,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className="mt-2 text-center text-[10px] font-medium lowercase leading-snug text-white/25">
+            <p className="mt-2 text-center text-[10px] font-extrabold lowercase leading-snug text-white/70">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
