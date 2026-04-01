@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, Camera } from "lucide-react";
+import { Plus, Loader2, Camera, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -94,10 +94,10 @@ const MyCharacters = () => {
           <button
             type="button"
             onClick={handleBack}
-            className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
+            className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
             aria-label="go back"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            <ArrowLeft size={14} strokeWidth={2.5} />
           </button>
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>

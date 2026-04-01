@@ -463,7 +463,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isWelcomeSlide) {
       return (
         <div className="flex w-full flex-col items-center">
-          <h2 className="mt-1 text-center lowercase leading-tight tracking-tight text-white">
+          <h2 className="mt-1 text-center lowercase leading-[0.95] tracking-tight text-white">
             <BouncyWords text="welcome to" className="block text-[1.4rem] font-[800]" delayStart={0.2} />
             <motion.span
               className="block text-[5.5rem] font-[900] leading-[0.95]"
@@ -499,7 +499,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="flex h-14 items-end justify-center">
             <BigEmoji emoji="💫" index={0} />
           </div>
-          <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             time to create your<br />first character!
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
@@ -516,7 +516,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="flex h-14 items-end justify-center">
             <BigEmoji emoji={trait.emoji} index={currentTraitIndex + 1} />
           </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             {trait.label}
           </h2>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
@@ -544,7 +544,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDetailsA) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             add the details…
           </h2>
           <div className="mt-4 flex flex-wrap justify-center gap-1.5">
@@ -614,10 +614,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDetailsB) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             describe her…
           </h2>
-          <div className="mt-5 w-full max-w-[18rem]">
+          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional, but recommended)</p>
+          <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
               onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
@@ -626,7 +627,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
             />
-            <p className="mt-4 text-center text-base font-extrabold lowercase leading-snug text-white">
+            <p className="mt-2 text-center text-xs font-extrabold lowercase leading-snug text-white/30">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
@@ -638,7 +639,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDetailsC) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             add a reference…
           </h2>
           <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
@@ -932,14 +933,14 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
+      transition={{ duration: SLIDE_FADE_DURATION, ease: "easeInOut" }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
         <div className="flex h-14 items-end justify-center mb-2">
           <BigEmoji emoji="🔐" index={3} />
         </div>
-        <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+        <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
           sign in to<br />save her
         </h2>
         <button

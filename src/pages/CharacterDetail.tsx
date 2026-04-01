@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles, Trash2, Zap } from "lucide-react";
+import { Loader2, Sparkles, Trash2, Zap, Camera, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import BackButton from "@/components/BackButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
@@ -19,6 +18,27 @@ interface Character {
   description: string;
   face_image_url: string | null;
 }
+
+const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
+
+const getCharacterEmoji = (char: Character): string => {
+  const match = char.description?.match(/\[emoji:(.+?)\]/);
+  if (match) return match[1];
+  if (char.name === "ava") return "👸";
+  let hash = 0;
+  for (let i = 0; i < char.id.length; i++) hash = ((hash << 5) - hash + char.id.charCodeAt(i)) | 0;
+  return FACE_EMOJIS[Math.abs(hash) % FACE_EMOJIS.length];
+};
+
+/** Extract user-typed description, stripping trait prefix and emoji tag */
+const getCleanDescription = (raw: string | null | undefined): string => {
+  if (!raw) return "";
+  // Remove leading trait pattern like "medium chest, short hair. "
+  let cleaned = raw.replace(/^[a-z]+ chest,\s*[a-z]+ hair\.\s*/i, "");
+  // Remove emoji tags
+  cleaned = cleaned.replace(/\[emoji:.+?\]/g, "").trim();
+  return cleaned;
+};
 
 const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -77,7 +97,14 @@ const CharacterDetail = () => {
       <div className="min-h-screen bg-background">
         <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
           <div className="flex items-center gap-3 mb-8">
-            <BackButton />
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
+              aria-label="go back"
+            >
+              <ArrowLeft size={14} strokeWidth={2.5} />
+            </button>
           </div>
           <p className="text-sm font-extrabold lowercase text-foreground/50 text-center mt-16">
             character not found
@@ -102,17 +129,26 @@ const CharacterDetail = () => {
     { label: "makeup", value: character.style },
   ].filter((t) => t.value);
 
+  const cleanDescription = getCleanDescription(character.description);
+
   return (
     <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden fixed inset-x-0 bottom-0">
-      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-3 flex flex-col h-full overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-3 shrink-0">
-          <BackButton />
+      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-3 flex flex-col h-full overflow-hidden">
+        {/* Header — consistent pt-14 with all other pages */}
+        <div className="flex items-center gap-3 mb-4 shrink-0">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
+            aria-label="go back"
+          >
+            <ArrowLeft size={14} strokeWidth={2.5} />
+          </button>
         </div>
 
         {/* Name + Age */}
         <div className="mb-3 shrink-0">
-          <h1 className="text-xl font-extrabold lowercase tracking-tight text-foreground leading-none">
+          <h1 className="text-xl font-extrabold lowercase tracking-tight text-foreground leading-[0.95]">
             {character.name || "unnamed"}
           </h1>
           <span className="text-sm font-extrabold lowercase text-foreground/50 mt-0.5 block">
@@ -134,23 +170,21 @@ const CharacterDetail = () => {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neon-yellow">
-                <Sparkles size={16} strokeWidth={2.5} className="text-neon-yellow-foreground" />
-              </div>
+              <span className="text-4xl">{getCharacterEmoji(character)}</span>
             )}
           </div>
 
-          {/* Trait boxes */}
+          {/* Trait boxes — yellow fill, black text */}
           <div className="flex flex-1 flex-wrap gap-1.5 content-start">
             {allTraits.map((t) => (
               <div
                 key={t.label}
-                className="rounded-xl bg-secondary px-2.5 py-1.5"
+                className="rounded-xl bg-neon-yellow px-2.5 py-1.5"
               >
-                <span className="block text-[7px] font-extrabold lowercase text-foreground/40 leading-none mb-0.5">
+                <span className="block text-[7px] font-extrabold lowercase text-neon-yellow-foreground/50 leading-none mb-0.5">
                   {t.label}
                 </span>
-                <span className="block text-[10px] font-extrabold lowercase text-foreground leading-none">
+                <span className="block text-[10px] font-extrabold lowercase text-neon-yellow-foreground leading-none">
                   {t.value}
                 </span>
               </div>
@@ -158,14 +192,14 @@ const CharacterDetail = () => {
           </div>
         </div>
 
-        {/* Description */}
-        {character.description?.trim() && (
+        {/* Description — only show if user actually typed something */}
+        {cleanDescription && (
           <div className="rounded-2xl border-[5px] border-border bg-card p-3 min-h-0 shrink overflow-hidden">
             <span className="block text-[8px] font-extrabold lowercase text-foreground/40 mb-1">
               description
             </span>
             <p className="text-[11px] font-extrabold lowercase text-foreground leading-relaxed overflow-hidden">
-              {character.description}
+              {cleanDescription}
             </p>
           </div>
         )}
@@ -178,7 +212,7 @@ const CharacterDetail = () => {
           }}
           className="mt-4 flex items-center justify-center gap-2 h-12 w-full rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all shrink-0"
         >
-          <Zap size={14} strokeWidth={2.5} />
+          <Camera size={14} strokeWidth={2.5} />
           create photo
         </button>
 
@@ -208,7 +242,7 @@ const CharacterDetail = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: 0.05 }}
             >
-              <h2 className="text-xl font-extrabold lowercase text-white leading-snug mb-2">
+              <h2 className="text-xl font-extrabold lowercase text-white leading-[0.95] mb-2">
                 are you sure you want to<br />delete this character?
               </h2>
               <p className="text-base font-extrabold lowercase text-white/50 mb-10">
