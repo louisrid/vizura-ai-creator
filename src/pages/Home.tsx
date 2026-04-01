@@ -268,7 +268,7 @@ const Home = () => {
                         : "border-border bg-secondary"
                     }`}
                   >
-                    <AspectRatio ratio={1}>
+                    <AspectRatio ratio={4 / 5}>
                       {isPlaceholder ? (
                         <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">
                           empty
