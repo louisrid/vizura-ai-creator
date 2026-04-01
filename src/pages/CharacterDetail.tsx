@@ -105,15 +105,13 @@ const CharacterDetail = () => {
     );
   }
 
-  // Parse description for chest and hair style
-  const descParts = character.description?.match(/^(.*?) chest, (.*?) hair\./);
-  const chestVal = descParts?.[1] || "";
-  const hairStyleVal = descParts?.[2] || "";
+  // Parse hair style from description
+  const hairStyleMatch = character.description?.match(/^(?:.*?chest,\s*)?(.*?)\s*hair\./i);
+  const hairStyleVal = hairStyleMatch?.[1] || "";
 
   const allTraits = [
     { label: "skin", value: character.country },
     { label: "body type", value: character.body },
-    { label: "chest", value: chestVal },
     { label: "hair", value: hairStyleVal },
     { label: "hair colour", value: character.hair },
     { label: "eyes", value: character.eye },
