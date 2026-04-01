@@ -135,14 +135,22 @@ const ProgressBarLoader = ({
         tabIndex={isComplete && requireTapToContinue ? 0 : -1}
         aria-label={isComplete && requireTapToContinue ? "tap to continue" : undefined}
       >
-        <span
+        <motion.span
           className="text-[3rem] inline-block select-none animate-bounce"
           style={{ animationDuration: "2.2s" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
         >
           ⚙️
-        </span>
+        </motion.span>
 
-        <div className="w-full max-w-xs flex flex-col gap-2">
+        <motion.div
+          className="w-full max-w-xs flex flex-col gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.0, delay: 0.7, ease: "easeOut" }}
+        >
           <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
             <div
               className="h-full rounded-full transition-all ease-out"
