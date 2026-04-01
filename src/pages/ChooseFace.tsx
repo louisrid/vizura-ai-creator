@@ -326,11 +326,11 @@ const ChooseFace = () => {
   const cardDelays = [0, 0.2, 0.4];
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative h-[calc(100dvh-73px)] overflow-hidden" style={{ backgroundColor: "#000000" }}>
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-0">
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-14 pb-0 overflow-hidden" style={{ backgroundColor: "hsl(var(--background))" }}>
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">pick your face</PageTitle>
@@ -350,7 +350,7 @@ const ChooseFace = () => {
 
         {!loading && (
           <>
-            <div className="grid grid-cols-3 gap-3 mt-4" style={{ perspective: "800px" }}>
+            <div className="grid grid-cols-3 gap-3 mt-4 shrink-0" style={{ perspective: "800px" }}>
               {faces.length > 0 ? faces.map((url, i) => (
                 <motion.button
                   key={i}
@@ -404,13 +404,13 @@ const ChooseFace = () => {
               )}
             </div>
 
-            {/* Symmetrical grey padding before white divider */}
-            <div className="min-h-[3.5rem]" />
+            {/* Balanced spacing before divider */}
+            <div className="flex-1 min-h-[2.5rem]" />
 
             {/* White divider + pure black bottom area */}
-            <div className="-mx-4">
+            <div className="-mx-4 shrink-0">
               <div className="border-t-[5px] border-white" />
-              <div className="px-4 pt-6 pb-8" style={{ backgroundColor: "#000000" }}>
+              <div className="px-4 pt-6 pb-[max(env(safe-area-inset-bottom),2rem)]" style={{ backgroundColor: "#000000" }}>
                 <div className="flex gap-3">
                   <button
                     onClick={handleRegenerate}

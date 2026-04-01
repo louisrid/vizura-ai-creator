@@ -41,6 +41,7 @@ const MyCharacters = () => {
   const [loading, setLoading] = useState(true);
   const [newCharId, setNewCharId] = useState<string | null>(null);
   const [isFirstCharacter, setIsFirstCharacter] = useState(false);
+  const [bounceActive, setBounceActive] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
@@ -63,6 +64,8 @@ const MyCharacters = () => {
           setNewCharId(pendingNew);
           if (data.length === 1) {
             setIsFirstCharacter(true);
+              setBounceActive(true);
+              setTimeout(() => setBounceActive(false), 3500);
           }
           setTimeout(() => setNewCharId(null), 1500);
         }
@@ -150,8 +153,8 @@ const MyCharacters = () => {
         <div className="mx-auto max-w-lg">
           <motion.button
             onClick={handleCreatePhoto}
-            animate={isFirstCharacter ? { y: [0, -6, 0] } : {}}
-            transition={isFirstCharacter ? { duration: 0.8, repeat: Infinity, ease: "easeInOut" } : {}}
+            animate={bounceActive ? { y: [0, -6, 0] } : {}}
+            transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
             className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
           >
             <Camera size={20} strokeWidth={2.5} />

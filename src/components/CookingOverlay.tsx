@@ -79,7 +79,7 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
           {phase === "success" && (
             <div className="flex min-h-[18rem] flex-col items-center justify-center gap-5 px-6 text-center">
               <motion.span
-                className="inline-block select-none text-[7rem] leading-none"
+                  className="inline-block select-none text-[5rem] leading-none"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
