@@ -325,22 +325,7 @@ const CharacterCreator = () => {
           />
         </section>
 
-        {/* Age */}
-        <section className="mt-5 flex flex-col gap-1.5">
-          <span className="text-xs font-extrabold lowercase text-foreground">age</span>
-          <input
-            type="number"
-            min={18}
-            max={40}
-            value={age}
-            placeholder="18-40"
-            onChange={(e) => {
-              const v = e.target.value;
-              if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) setAge(v);
-            }}
-            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
-          />
-        </section>
+        {/* Age is now in the pill group section below */}
 
         {/* 7 Pill toggle sections */}
         <section className="mt-5 flex flex-col gap-4">
