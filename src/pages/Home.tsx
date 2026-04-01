@@ -106,9 +106,8 @@ const Home = () => {
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
-      bodyType: selections.bodyType || "regular",
-      chest: selections.chest || "medium",
-      hairStyle: selections.hairStyle || "straight",
+      bodyType: selections.bodyType || "average",
+      hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
       makeup: selections.makeup || "natural",
@@ -118,14 +117,13 @@ const Home = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
     const sk = selections.skin || "tan";
-    const bt = selections.bodyType || "regular";
-    const ch = selections.chest || "medium";
-    const hs = selections.hairStyle || "straight";
+    const bt = selections.bodyType || "average";
+    const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
     const mk = selections.makeup || "natural";
     const ag = selections.age || "25";
-    const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${ch} chest, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
+    const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
