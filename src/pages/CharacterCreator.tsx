@@ -136,7 +136,7 @@ const CharacterCreator = () => {
 
   const buildPrompt = () => {
     const skinPart = skin ? `, ${skin} skin` : "";
-    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${chest} chest, ${hairStyle} ${hairColour} hair, ${eye} eyes, ${makeup} makeup`;
+    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${hairStyle} ${hairColour} hair, ${eye} eyes, ${makeup} makeup`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
