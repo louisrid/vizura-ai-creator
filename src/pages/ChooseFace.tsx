@@ -330,7 +330,7 @@ const ChooseFace = () => {
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-14 pb-0 overflow-hidden" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-8 pb-0 overflow-hidden" style={{ backgroundColor: "hsl(var(--background))" }}>
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">pick your face</PageTitle>
