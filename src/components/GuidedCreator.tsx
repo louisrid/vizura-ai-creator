@@ -405,6 +405,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, characterName: name }));
   }, []);
 
+  // Show "great choice!" once per session when valid name appears
+  useEffect(() => {
+    if (!visible || !isNameSlide || nameToastShown) return;
+    if (selections.characterName.trim()) {
+      setNameToastShown(true);
+      sessionStorage.setItem(NAME_TOAST_SESSION_KEY, "1");
+      toast("great choice!");
+    }
+  }, [visible, isNameSlide, nameToastShown, selections.characterName]);
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -412,29 +422,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, referenceImage: url }));
   };
 
-  const showDetailsToastOnce = useCallback(() => {
-    if (sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1") {
-      setDetailsToastShown(true);
-      return;
-    }
-    sessionStorage.setItem(DETAILS_TOAST_SESSION_KEY, "1");
-    setDetailsToastShown(true);
-    toast("great choice!");
-  }, []);
-
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
 
-    // Name slide validation
+    // Name slide — dismiss toast before advancing
     if (isNameSlide) {
       if (!selectionsRef.current.characterName.trim()) {
         triggerShake();
         return;
       }
-      // Show "great choice!" toast once when advancing from name screen
-      if (!detailsToastShown) {
-        showDetailsToastOnce();
-      }
+      toast.dismiss();
     }
 
     // Trait slide validation — must select an option
@@ -457,7 +454,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 180);
-  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, detailsToastShown, showDetailsToastOnce, TOTAL]);
+  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, TOTAL]);
 
   const goBack = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;

@@ -226,8 +226,8 @@ const CharacterCreator = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
     const sk = selections.skin || "tan";
-    const bt = selections.bodyType || "regular";
-    const hs = selections.hairStyle || "straight";
+    const bt = selections.bodyType || "average";
+    const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
     const mk = selections.makeup || "natural";
