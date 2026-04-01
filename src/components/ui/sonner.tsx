@@ -91,8 +91,8 @@ export const Toaster = () => {
                 key={t.id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 80, transition: { duration: 0.35, ease: "easeIn" } }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
+                exit={{ opacity: 0, x: 80, transition: { duration: 0.45, ease: "easeIn" } }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 className="pointer-events-auto inline-flex items-center rounded-2xl px-4 py-2.5"
                 style={{ backgroundColor: "hsl(140 100% 50%)", color: "hsl(140 60% 15%)" }}
                 role="status"
