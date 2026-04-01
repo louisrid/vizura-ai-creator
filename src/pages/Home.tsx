@@ -22,46 +22,6 @@ type LatestImage = {
   created_at: string;
 };
 
-/* CSS-only geometric pattern — no JS animation */
-const GeoPattern = () => {
-  const shapes = useMemo(() => {
-    const items: { x: number; delay: number; duration: number; size: number; opacity: number }[] = [];
-    for (let i = 0; i < 14; i++) {
-      items.push({
-        x: Math.random() * 100,
-        delay: Math.random() * 12,
-        duration: 14 + Math.random() * 10,
-        size: 4 + Math.random() * 8,
-        opacity: 0.04 + Math.random() * 0.06,
-      });
-    }
-    return items;
-  }, []);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {shapes.map((s, i) => (
-        <div
-          key={i}
-          className="absolute"
-          style={{
-            left: `${s.x}%`,
-            width: s.size,
-            height: s.size,
-            opacity: s.opacity,
-            animation: `geo-fall ${s.duration}s linear ${s.delay}s infinite`,
-          }}
-        >
-          <div
-            className="w-full h-full rounded-full"
-            style={{ backgroundColor: "hsl(0 0% 40%)", opacity: 0.5 }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -240,7 +200,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-              transition={{ duration: 0.75, ease: "easeInOut" }}
+            transition={{ duration: 0.75, ease: "easeInOut" }}
             onClick={() => setSelectedImage(null)}
           >
             <button
@@ -264,7 +224,7 @@ const Home = () => {
       </AnimatePresence>
 
       <div className="flex h-full flex-col">
-        <main className="mx-auto w-full max-w-lg px-4 pt-14">
+        <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-14">
           <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
@@ -337,16 +297,10 @@ const Home = () => {
               <Settings size={16} strokeWidth={2.5} />
               settings
             </button>
-        </div>
-      </main>
-
-      {/* Full-bleed white divider + black bottom section with balanced spacing */}
-      <div className="mt-14 border-t-[5px] border-white" />
-      <div className="relative min-h-[6rem] flex-1" style={{ backgroundColor: '#000000' }}>
-        <GeoPattern />
+          </div>
+        </main>
       </div>
     </div>
-  </div>
   );
 };
 

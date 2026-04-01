@@ -83,15 +83,19 @@ const ChooseFace = () => {
     }
   }, [loading, cardsRevealed]);
 
+  // After returning from OAuth, immediately save and redirect — don't show the face screen
+  const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
+  
   useEffect(() => {
-    if (showSignIn || !user || faces.length === 0 || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
+    if (showSignIn || !user || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
 
     const storedFace = Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
     if (storedFace < 0) return;
 
+    setPendingAuthSave(true);
     setSelectedIndex(storedFace);
     void doFinalSave(storedFace);
-  }, [user, faces.length, showSignIn]);
+  }, [user, showSignIn]);
 
   const generateFaces = async () => {
     setLoading(true);
@@ -323,6 +327,11 @@ const ChooseFace = () => {
     );
   }
 
+  // Show black screen while processing post-auth save to prevent flash
+  if (pendingAuthSave) {
+    return <div className="fixed inset-0 bg-black z-[9999]" />;
+  }
+
   const cardDelays = [0, 0.2, 0.4];
 
   return (
@@ -330,7 +339,7 @@ const ChooseFace = () => {
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-14 pb-0 overflow-hidden" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-8 pb-0 overflow-hidden" style={{ backgroundColor: "hsl(var(--background))" }}>
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">pick your face</PageTitle>
@@ -405,7 +414,7 @@ const ChooseFace = () => {
             </div>
 
             {/* Balanced spacing before divider */}
-            <div className="flex-1 min-h-[2.5rem]" />
+            <div className="flex-1 min-h-[1rem]" />
 
             {/* White divider + pure black bottom area */}
             <div className="-mx-4 shrink-0">

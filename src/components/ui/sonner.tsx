@@ -49,6 +49,8 @@ const toast = Object.assign(
   },
 );
 
+const TOAST_DURATION = 3200;
+
 export const Toaster = () => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -66,7 +68,7 @@ export const Toaster = () => {
     timeoutRef.current = setTimeout(() => {
       setToasts([]);
       timeoutRef.current = null;
-    }, 6200);
+    }, TOAST_DURATION);
   }, []);
 
   useEffect(() => {
@@ -89,10 +91,10 @@ export const Toaster = () => {
             {toasts.map((t) => (
               <motion.div
                 key={t.id}
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -2, transition: { duration: 0.9, ease: "easeInOut" } }}
-                transition={{ duration: 1.05, delay: 0.2, ease: "easeInOut" }}
+                initial={{ opacity: 0, x: 80 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 80, transition: { duration: 0.3, ease: "easeIn" } }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="pointer-events-auto inline-flex items-center rounded-2xl px-4 py-2.5"
                 style={{ backgroundColor: "hsl(140 100% 50%)", color: "hsl(140 60% 15%)" }}
                 role="status"
