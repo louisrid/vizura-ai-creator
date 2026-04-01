@@ -737,21 +737,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderCooking = () => {
     if (cookingPhase === "loading") {
       return (
-        <motion.div
-          key="cooking-loading"
-          className="flex flex-col items-center w-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
-        >
+        <div className="flex flex-col items-center w-full">
           <ProgressBarLoader
             duration={COOKING_DURATION}
             phrases={COOKING_PHRASES}
-            phraseInterval={3500}
+            phraseInterval={4500}
             onComplete={() => setCookingPhase("success")}
           />
-        </motion.div>
+        </div>
       );
     }
     if (cookingPhase === "success" || cookingPhase === "exiting") {
