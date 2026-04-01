@@ -284,7 +284,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
-      setDetailsToastShown(sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1");
+      setNameToastShown(sessionStorage.getItem(NAME_TOAST_SESSION_KEY) === "1");
     }
   }, [open, restoreSavedFlow]);
 
