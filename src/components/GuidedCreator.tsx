@@ -639,7 +639,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDetailsC) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             add a reference…
           </h2>
           <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
