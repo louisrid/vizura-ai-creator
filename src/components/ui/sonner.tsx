@@ -49,7 +49,7 @@ const toast = Object.assign(
   },
 );
 
-const TOAST_DURATION = 3200;
+const TOAST_DURATION = 2200;
 
 export const Toaster = () => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);

@@ -335,7 +335,11 @@ const Index = () => {
               </label>
               {characters.length === 0 && user && (
                 <button
-                  onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
+                  onClick={() => {
+                    sessionStorage.removeItem("vizura_creator_dismissed");
+                    sessionStorage.removeItem("vizura_guided_flow_state");
+                    navigate("/", { state: { openCreator: true } });
+                  }}
                   className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
                 >
                   create your first character →
@@ -352,7 +356,7 @@ const Index = () => {
 
           {/* Prompt with cycling placeholder */}
           <div>
-            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">scene, pose & outfit</span>
+            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
             <div className="relative">
               <textarea
                 value={prompt}
@@ -411,7 +415,7 @@ const Index = () => {
                 <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
               </button>
             )}
-            <div className="mt-3 flex items-center justify-between">
+            <div className="mt-5 flex items-center justify-between">
               <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
               <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
             </div>
@@ -433,13 +437,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Gem balance */}
-        {user && (
-          <div className="flex items-center justify-center gap-2 mt-4">
-            <Gem size={14} strokeWidth={2.5} className="text-gem-green" />
-            <span className="text-xs font-extrabold lowercase text-foreground/50">{gems} gems remaining</span>
-          </div>
-        )}
       </main>
     </div>
   );

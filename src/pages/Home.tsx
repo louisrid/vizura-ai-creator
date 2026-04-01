@@ -58,6 +58,15 @@ const Home = () => {
     setImages(latest);
   }, [user]);
 
+  // Handle openCreator from navigation state (e.g. from create photo page)
+  useEffect(() => {
+    const state = window.history.state?.usr;
+    if (state?.openCreator) {
+      window.history.replaceState({ ...window.history.state, usr: {} }, "");
+      handleOpenCreator();
+    }
+  }, []);
+
   useEffect(() => {
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
@@ -222,23 +231,23 @@ const Home = () => {
       </AnimatePresence>
 
       <div className="flex h-full flex-col">
-        <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-14">
+        <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-14 md:scale-110 md:origin-top md:pt-16 md:pb-20">
           <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
-              onClick={handleOpenCreator}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
-            >
-              <Sparkles size={16} strokeWidth={2.5} />
-              create character
-            </button>
-            <button
-              type="button"
               onClick={() => navigate("/create")}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
             >
               <Camera size={16} strokeWidth={2.5} />
               create photo
+            </button>
+            <button
+              type="button"
+              onClick={handleOpenCreator}
+              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+            >
+              <Sparkles size={16} strokeWidth={2.5} />
+              create character
             </button>
           </div>
 
