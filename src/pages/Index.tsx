@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Zap, Sparkles, ChevronDown, Gem } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -51,8 +52,6 @@ const PHOTO_LOADING_PHRASES = [
 
 const DEMO_RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞"];
 
-const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
-
 const Index = () => {
   const { user } = useAuth();
   const { credits, gems, refetch: refetchCredits } = useCredits();
@@ -68,10 +67,17 @@ const Index = () => {
   const [selectedCharId, setSelectedCharId] = useState("");
   const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">("hidden");
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
+  const [fadingBack, setFadingBack] = useState(false);
 
-  // Listen for tap-to-dismiss from photo overlay
+  // Listen for tap-to-dismiss from photo overlay with fade
   useEffect(() => {
-    const handler = () => setPhotoOverlayPhase("hidden");
+    const handler = () => {
+      setFadingBack(true);
+      setTimeout(() => {
+        setPhotoOverlayPhase("hidden");
+        setFadingBack(false);
+      }, 100);
+    };
     window.addEventListener("photo-overlay-dismiss", handler);
     return () => window.removeEventListener("photo-overlay-dismiss", handler);
   }, []);
@@ -92,7 +98,6 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        // Auto-select if only one character
         if (data.length === 1) {
           setSelectedCharId(data[0].id);
         } else if (preselectedCharacterId) {
@@ -106,11 +111,9 @@ const Index = () => {
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
-    // Don't auto-fill prompt — user types everything
     setPrompt("");
   };
 
-  // All characters are selectable — the starter "ava" has a generation_prompt so treat her as ready
   const allCharacters = characters;
 
   const handleCreate = async () => {
@@ -151,14 +154,13 @@ const Index = () => {
         }
       }
 
-      // ProgressBarLoader handles its own timing, no minimum wait needed
+      // Set result — ProgressBarLoader handles its own timing
       setPhotoOverlayResult(generatedPreview);
       setPhotoOverlayPhase("success");
       setImages(generatedImages);
 
       await refetchCredits();
       toast("1 gem used");
-      // User taps to dismiss — no auto-timeout
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");
       if (e.message?.includes("No gems") || e.message?.includes("No credits") || e.message?.includes("402")) {

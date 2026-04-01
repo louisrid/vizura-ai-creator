@@ -65,6 +65,9 @@ const ChooseFace = () => {
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
 
+  // Check if user is on free trial (no gems / no subscription)
+  const isFreeUser = !subscribed && gems <= 0;
+
   useEffect(() => {
     if (!prompt) { navigate("/"); return; }
     if (faces.length > 0) {
@@ -133,6 +136,11 @@ const ChooseFace = () => {
   };
 
   const handleRegenerate = async () => {
+    if (isFreeUser) {
+      toast("please add gems to regenerate!");
+      return;
+    }
+
     if (!user) {
       setRerolling(true);
       setSelectedIndex(null);
@@ -289,7 +297,8 @@ const ChooseFace = () => {
     sessionStorage.removeItem(SELECTED_EMOJI_KEY);
 
     toast.success("character added!");
-    navigate("/characters");
+    // Replace history so back button goes to home, not back to face selection
+    navigate("/characters", { replace: true });
     return true;
   };
 
@@ -303,7 +312,7 @@ const ChooseFace = () => {
   const handleCookingComplete = () => {
     setShowCooking(false);
     toast.success("character added!");
-    navigate("/characters");
+    navigate("/characters", { replace: true });
   };
 
   if (showPaywall) {
@@ -349,13 +358,11 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => handleFaceClick(i)}
                   initial={{ rotateY: 90, opacity: 0 }}
-                  animate={cardsRevealed ? { rotateY: 0, opacity: 1, scale: pulseIndex === i ? [1, 1.13, 0.985, 1.035, 1] : 1 } : { rotateY: 90, opacity: 0, scale: 1 }}
+                  animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                  whileTap={{ scale: 1.12 }}
                   transition={{
                     rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                     opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                    scale: pulseIndex === i
-                      ? { duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1], ease: [0.34, 1.56, 0.64, 1] }
-                      : { duration: 0.18 },
                   }}
                   className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
                     selectedIndex === i
@@ -364,6 +371,14 @@ const ChooseFace = () => {
                   }`}
                 >
                   <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
+                  {selectedIndex === i && pulseIndex === i && (
+                    <motion.div
+                      className="absolute inset-0 rounded-2xl border-[5px] border-neon-yellow"
+                      initial={{ scale: 1 }}
+                      animate={{ scale: [1, 1.08, 0.98, 1.03, 1] }}
+                      transition={{ duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1] }}
+                    />
+                  )}
                 </motion.button>
               )) : (
                 demoEmojis.map((emoji, i) => (
@@ -372,13 +387,11 @@ const ChooseFace = () => {
                     type="button"
                     onClick={() => handleFaceClick(i)}
                     initial={{ rotateY: 90, opacity: 0 }}
-                    animate={cardsRevealed ? { rotateY: 0, opacity: 1, scale: pulseIndex === i ? [1, 1.13, 0.985, 1.035, 1] : 1 } : { rotateY: 90, opacity: 0, scale: 1 }}
+                    animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                    whileTap={{ scale: 1.12 }}
                     transition={{
                       rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                       opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                      scale: pulseIndex === i
-                        ? { duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1], ease: [0.34, 1.56, 0.64, 1] }
-                        : { duration: 0.18 },
                     }}
                     className={`aspect-[3/4] rounded-2xl border-[5px] transition-colors duration-200 flex items-center justify-center bg-card ${
                       selectedIndex === i
@@ -392,30 +405,40 @@ const ChooseFace = () => {
               )}
             </div>
 
-            <div className="flex gap-3 mt-8">
-              <button
-                onClick={handleRegenerate}
-                disabled={rerolling}
-                className="flex-1 h-14 rounded-2xl bg-white text-sm font-extrabold lowercase text-black flex items-center justify-center gap-2 transition-colors active:bg-white/70 disabled:opacity-50"
-              >
-                {rerolling ? (
-                  <Loader2 className="animate-spin" size={16} />
-                ) : (
-                  <>
-                    <RefreshCw size={16} strokeWidth={2.5} />
-                    regenerate
-                    <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
-                    <span className="text-[11px]">1</span>
-                  </>
-                )}
-              </button>
-              <button
-                onClick={handleConfirm}
-                disabled={selectedIndex === null}
-                className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
-              >
-                confirm
-              </button>
+            {/* White divider + black bottom area mirroring homepage */}
+            <div className="mt-8 -mx-4">
+              <div className="border-t-[5px] border-white" />
+              <div className="bg-black px-4 pt-6 pb-8">
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleRegenerate}
+                    disabled={rerolling}
+                    className={`flex-1 h-14 rounded-2xl text-sm font-extrabold lowercase flex items-center justify-center gap-2 transition-colors active:bg-white/70 disabled:opacity-50 ${
+                      isFreeUser
+                        ? "bg-white/30 text-white/50 cursor-not-allowed"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    {rerolling ? (
+                      <Loader2 className="animate-spin" size={16} />
+                    ) : (
+                      <>
+                        <RefreshCw size={16} strokeWidth={2.5} />
+                        regenerate
+                        <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
+                        <span className="text-[11px]">1</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    disabled={selectedIndex === null}
+                    className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
+                  >
+                    confirm
+                  </button>
+                </div>
+              </div>
             </div>
           </>
         )}

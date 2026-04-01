@@ -47,21 +47,21 @@ const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ c
 Dots.displayName = "Dots";
 
 /* ── Nav arrow ── */
-const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(({ direction, onClick, disabled }, ref) => (
+const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean; className?: string }>(({ direction, onClick, disabled, className }, ref) => (
   <button
     ref={ref}
     type="button"
-    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) onClick(); }}
-    className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
+    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
+    className={`flex h-14 w-14 items-center justify-center active:scale-[1.05] ${className || ""}`}
     style={{
       backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
       border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${NEON_BLUE}`,
       borderRadius: 16,
       outline: "none",
       padding: 0,
-      cursor: disabled ? "default" : "pointer",
-      opacity: disabled ? 0.3 : 1,
-      transition: "transform 0.05s, opacity 0.2s",
+      cursor: "pointer",
+      opacity: 1,
+      transition: "transform 0.05s",
     }}
   >
     {direction === "left" ? (
@@ -134,7 +134,7 @@ const COOKING_PHRASES = [
   "final touches…",
 ];
 const COOKING_DURATION = 25000;
-const COOKING_SUCCESS_HOLD = 3200;
+const COOKING_SUCCESS_HOLD = 4000;
 const COOKING_EXIT_DURATION = 750;
 
 /* ── Bouncy word animation for welcome slide ── */
@@ -207,6 +207,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
+  const [backArrowShaking, setBackArrowShaking] = useState(false);
+  const [detailsToastShown, setDetailsToastShown] = useState(false);
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -249,6 +251,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
+      setDetailsToastShown(false);
     }
   }, [open, restoreSavedFlow]);
 
@@ -411,11 +414,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
 
   const goBack = useCallback(() => {
-    if (animating.current || step <= 0 || cookingPhase !== "none") return;
+    if (animating.current || cookingPhase !== "none") return;
+    if (step <= 0) {
+      // Shake the back arrow on first slide
+      setBackArrowShaking(true);
+      setTimeout(() => setBackArrowShaking(false), 500);
+      return;
+    }
     animating.current = true;
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, 180);
-  }, [step, cookingPhase, TOTAL]);
+  }, [step, cookingPhase]);
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
@@ -424,6 +433,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;  
+
+  // Show "great choice!" toast once when name and age are both filled
+  useEffect(() => {
+    if (detailsToastShown) return;
+    if (isDetailsA && selections.characterName.trim() && selections.age) {
+      const ageNum = Number(selections.age);
+      if (ageNum >= 18 && ageNum <= 40) {
+        setDetailsToastShown(true);
+        toast("great choice!");
+      }
+    }
+  }, [isDetailsA, selections.characterName, selections.age, detailsToastShown]);
 
   const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
 
@@ -686,7 +707,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <span className="mb-4 inline-block select-none text-[2.6rem] leading-none">👀</span>
           <h2 className="max-w-[16rem] text-center text-[2.8rem] font-[900] lowercase leading-[1.02] tracking-tight text-white">
             <span className="block">your character</span>
-            <span className="block">is almost ready!</span>
+            <span className="block">is here!</span>
           </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
@@ -733,23 +754,25 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
-          <div className="flex min-h-[15rem] flex-col items-center justify-center gap-7 text-center">
+          <div className="flex min-h-[18rem] flex-col items-center justify-center gap-5 text-center">
             <motion.span
-              className="inline-block select-none text-[5rem]"
+              className="inline-block select-none text-[7rem] leading-none"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             >
               ✅
             </motion.span>
-            <motion.p
-              className="text-center text-[2.35rem] font-[900] lowercase leading-[1.02] text-white"
+            <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.85 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              character created!
-            </motion.p>
+              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-white">
+                <span className="block">character</span>
+                <span className="block">created!</span>
+              </p>
+            </motion.div>
           </div>
         </motion.div>
       );
@@ -814,7 +837,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           {!isCooking && (
             <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "76%" }}>
               <div className="mb-4 flex h-14 items-center gap-4">
-                <NavArrow direction="left" onClick={goBack} disabled={step <= 0} />
+                <motion.div
+                  animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+                  transition={{ duration: 0.4 }}
+                >
+                  <NavArrow direction="left" onClick={goBack} />
+                </motion.div>
                 <div className="flex flex-col items-center">
                   <NavArrow
                     direction="right"

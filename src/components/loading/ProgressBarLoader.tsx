@@ -61,7 +61,7 @@ const ProgressBarLoader = ({
             style={{
               width: `${pct}%`,
               transitionDuration: `${duration / (STEPS.length - 1)}ms`,
-              background: "linear-gradient(90deg, hsl(var(--loader-cyan)), hsl(var(--loader-blue)))",
+              background: "linear-gradient(90deg, hsl(310 85% 55%), hsl(270 80% 55%))",
             }}
           />
         </div>
@@ -73,8 +73,8 @@ const ProgressBarLoader = ({
         </div>
       </div>
 
-      {/* Cycling phrases — positioned higher */}
-      <div className="-mt-3 flex h-8 items-center">
+      {/* Cycling phrases */}
+      <div className="-mt-1 flex h-8 items-center">
         <AnimatePresence mode="wait">
           <motion.p
             key={safePhrases[phraseIndex]}
