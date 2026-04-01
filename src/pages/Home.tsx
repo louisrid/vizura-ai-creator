@@ -179,7 +179,7 @@ const Home = () => {
         eye: sanitiseText(ey, 50),
         body: sanitiseText(bt, 50),
         style: sanitiseText(mk, 50),
-        description: sanitiseText(selections.description || "", 500),
+        description: sanitiseText(`${ch} chest, ${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,
       };
       const { data: inserted } = await supabase
@@ -337,16 +337,19 @@ const Home = () => {
               <Settings size={16} strokeWidth={2.5} />
               settings
             </button>
-          </div>
-        </main>
-
-        {/* Full-bleed white divider + black bottom section with geo pattern */}
-        <div className="mt-12 border-t-[5px] border-white" />
-        <div className="relative flex-1" style={{ backgroundColor: '#000000' }}>
-          <GeoPattern />
         </div>
+      </main>
+
+      {/* Balanced bottom padding before divider */}
+      <div className="flex-1 min-h-[3.5rem]" />
+
+      {/* Full-bleed white divider + black bottom section with geo pattern */}
+      <div className="border-t-[5px] border-white" />
+      <div className="relative min-h-[6rem]" style={{ backgroundColor: '#000000' }}>
+        <GeoPattern />
       </div>
     </div>
+  </div>
   );
 };
 

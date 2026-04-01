@@ -251,7 +251,7 @@ const CharacterCreator = () => {
         eye: sanitiseText(ey, 50),
         body: sanitiseText(bt, 50),
         style: sanitiseText(mk, 50),
-        description: sanitiseText(selections.description || "", 500),
+        description: sanitiseText(`${ch} chest, ${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,
       };
       const { data: inserted, error: insertError } = await supabase

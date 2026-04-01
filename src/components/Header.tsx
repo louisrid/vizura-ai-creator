@@ -10,8 +10,8 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
   { label: "home", path: "/", icon: Sparkles },
   { label: "create photo", path: "/create", icon: Camera },
-  { label: "my characters", path: "/characters", icon: LayoutGrid },
   { label: "storage", path: "/storage", icon: FolderOpen },
+  { label: "my characters", path: "/characters", icon: LayoutGrid },
   { label: "top-ups", path: "/top-ups", icon: Gem },
   { label: "my account", path: "/account", icon: Settings },
 ];
