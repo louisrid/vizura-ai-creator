@@ -544,7 +544,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDetailsA) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             add the details…
           </h2>
           <div className="mt-4 flex flex-wrap justify-center gap-1.5">
