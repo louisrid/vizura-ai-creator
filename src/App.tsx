@@ -24,7 +24,7 @@ import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 
 /* Routes that should NOT redirect to / on fresh load */
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/choose-face", "/characters"];
 
 const isExemptRoute = (pathname: string) =>
   EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "?"));
