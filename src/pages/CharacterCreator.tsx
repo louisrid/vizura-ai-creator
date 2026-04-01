@@ -347,7 +347,7 @@ const CharacterCreator = () => {
         <section className="mt-5 flex flex-col gap-4">
           <PillGroup label="skin" options={skinOptions} value={skin} onChange={setSkin} />
           <PillGroup label="body type" options={bodyOptions} value={bodyType} onChange={setBodyType} />
-          <PillGroup label="chest" options={chestOptions} value={chest} onChange={setChest} />
+          <PillGroup label="age" options={ageOptions} value={age} onChange={setAge} />
           <PillGroup label="hair" options={hairStyleOptions} value={hairStyle} onChange={setHairStyle} />
           <PillGroup label="hair colour" options={hairColourOptions} value={hairColour} onChange={setHairColour} />
           <PillGroup label="eyes" options={eyeOptions} value={eye} onChange={setEye} />
