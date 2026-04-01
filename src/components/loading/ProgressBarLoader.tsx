@@ -164,9 +164,14 @@ const ProgressBarLoader = ({
           <div className="flex justify-end">
             <span className="text-xs font-extrabold lowercase text-white/60">{pct}%</span>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="-mt-0.5 flex h-8 items-center justify-center">
+        <motion.div
+          className="mt-2 flex h-8 items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.0, delay: 1.0, ease: "easeOut" }}
+        >
           <AnimatePresence mode="wait" initial={false}>
             {isComplete && requireTapToContinue ? (
               <motion.p
