@@ -13,30 +13,59 @@ interface ProgressBarLoaderProps {
 const ProgressBarLoader = ({
   duration = 25000,
   phrases,
-  phraseInterval = 3500,
+  phraseInterval = 4500,
   onComplete,
 }: ProgressBarLoaderProps) => {
-  const [stepIndex, setStepIndex] = useState(0);
+  const [pct, setPct] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const completedRef = useRef(false);
+  const startTimeRef = useRef(Date.now());
   const safePhrases = phrases.length > 0 ? phrases : ["working…"];
 
-  const pct = STEPS[stepIndex] ?? 0;
-
+  // Elapsed-time based progress — survives tab switches
   useEffect(() => {
-    if (stepIndex >= STEPS.length - 1) {
-      if (!completedRef.current) {
-        completedRef.current = true;
-        const t = setTimeout(() => onComplete?.(), 1000);
-        return () => clearTimeout(t);
+    if (completedRef.current) return;
+    startTimeRef.current = Date.now();
+
+    const tick = () => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Map progress to STEPS
+      const stepFloat = progress * (STEPS.length - 1);
+      const stepLow = Math.floor(stepFloat);
+      const stepHigh = Math.min(stepLow + 1, STEPS.length - 1);
+      const frac = stepFloat - stepLow;
+      const currentPct = Math.round(STEPS[stepLow] + (STEPS[stepHigh] - STEPS[stepLow]) * frac);
+
+      setPct(currentPct);
+
+      if (progress >= 1) {
+        if (!completedRef.current) {
+          completedRef.current = true;
+          setTimeout(() => onComplete?.(), 600);
+        }
+        return;
       }
-      return;
-    }
-    const stepDuration = duration / (STEPS.length - 1);
-    const jitter = (Math.random() - 0.5) * stepDuration * 0.3;
-    const t = setTimeout(() => setStepIndex((i) => i + 1), stepDuration + jitter);
-    return () => clearTimeout(t);
-  }, [stepIndex, duration, onComplete]);
+      rafId = requestAnimationFrame(tick);
+    };
+
+    let rafId = requestAnimationFrame(tick);
+
+    // Also handle visibility change — recalc on tab return
+    const onVisible = () => {
+      if (document.visibilityState === "visible" && !completedRef.current) {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [duration, onComplete]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -60,7 +89,7 @@ const ProgressBarLoader = ({
             className="h-full rounded-full transition-all ease-out"
             style={{
               width: `${pct}%`,
-              transitionDuration: `${duration / (STEPS.length - 1)}ms`,
+              transitionDuration: "300ms",
               background: "hsl(var(--neon-yellow))",
             }}
           />
@@ -73,16 +102,17 @@ const ProgressBarLoader = ({
         </div>
       </div>
 
-      {/* Cycling phrases */}
-      <div className="-mt-2 flex h-8 items-center">
+      {/* Cycling phrases with bounce */}
+      <div className="-mt-1 flex h-8 items-center">
         <AnimatePresence mode="wait">
           <motion.p
             key={safePhrases[phraseIndex]}
-            className="text-center text-[0.95rem] font-extrabold lowercase text-white"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] }}
+            className="text-center text-[1rem] font-extrabold lowercase text-white animate-bounce"
+            style={{ animationDuration: "2.2s" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
           >
             {safePhrases[phraseIndex]}
           </motion.p>

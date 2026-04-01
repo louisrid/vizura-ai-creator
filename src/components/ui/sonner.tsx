@@ -66,7 +66,7 @@ export const Toaster = () => {
     timeoutRef.current = setTimeout(() => {
       setToasts([]);
       timeoutRef.current = null;
-    }, 2500);
+    }, 3000);
   }, []);
 
   useEffect(() => {
