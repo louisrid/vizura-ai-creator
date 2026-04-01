@@ -941,7 +941,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: SLIDE_FADE_DURATION, ease: "easeInOut" }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
