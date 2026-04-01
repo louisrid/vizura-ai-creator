@@ -134,7 +134,7 @@ const InteractivePill = ({ label, selected, shaking, onClick, compact = false, s
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl ${compact ? "px-2.5 py-2 text-[0.72rem]" : "px-4 py-2.5 text-sm"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`rounded-xl ${compact ? "px-3.5 py-2.5 text-[0.8rem]" : "px-4 py-2.5 text-sm"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
