@@ -713,10 +713,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
-          <span className="mb-4 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="max-w-[18rem] text-center text-[2.6rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
-            <span className="block">your character is</span>
-            <span className="block">almost here!</span>
+          <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
+          <h2 className="mx-4 text-center text-[2.8rem] font-[900] lowercase leading-[1] tracking-tight text-white">
+            <span className="block">your character</span>
+            <span className="block">is almost here!</span>
           </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
@@ -737,21 +737,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderCooking = () => {
     if (cookingPhase === "loading") {
       return (
-        <motion.div
-          key="cooking-loading"
-          className="flex flex-col items-center w-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
-        >
+        <div className="flex flex-col items-center w-full">
           <ProgressBarLoader
             duration={COOKING_DURATION}
             phrases={COOKING_PHRASES}
-            phraseInterval={3500}
+            phraseInterval={4500}
             onComplete={() => setCookingPhase("success")}
           />
-        </motion.div>
+        </div>
       );
     }
     if (cookingPhase === "success" || cookingPhase === "exiting") {
@@ -819,26 +812,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         )}
 
         <div className="relative flex-1 overflow-hidden">
-          <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: isCooking ? "50%" : "45%", transform: "translateY(-50%)" }}>
+          <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
             <div className="w-full max-w-xs mx-auto flex flex-col items-center">
-              {isCooking ? (
-                <AnimatePresence mode="wait">
-                  {renderCooking()}
-                </AnimatePresence>
-              ) : (
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={step}
-                    className="w-full"
-                    initial={slideTransition.initial}
-                    animate={slideTransition.animate}
-                    exit={slideTransition.exit}
-                    transition={slideTransition.transition}
-                  >
-                    {renderSlide()}
-                  </motion.div>
-                </AnimatePresence>
-              )}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isCooking ? "cooking" : step}
+                  className="w-full"
+                  initial={slideTransition.initial}
+                  animate={slideTransition.animate}
+                  exit={slideTransition.exit}
+                  transition={slideTransition.transition}
+                >
+                  {isCooking ? renderCooking() : renderSlide()}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
 
