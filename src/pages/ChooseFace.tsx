@@ -405,7 +405,7 @@ const ChooseFace = () => {
             </div>
 
             {/* Balanced spacing before divider */}
-            <div className="flex-1 min-h-[2.5rem]" />
+            <div className="flex-1 min-h-[1rem]" />
 
             {/* White divider + pure black bottom area */}
             <div className="-mx-4 shrink-0">
