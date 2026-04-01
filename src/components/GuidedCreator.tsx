@@ -186,7 +186,7 @@ const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; classN
 
 /* ── Types ── */
 export interface GuidedSelections {
-  skin: string; bodyType: string; chest: string; hairStyle: string;
+  skin: string; bodyType: string; hairStyle: string;
   hairColour: string; eye: string; makeup: string;
   characterName: string; age: string;
   description: string;
@@ -195,7 +195,7 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", chest: "",
+  skin: "", bodyType: "",
   hairStyle: "", hairColour: "", eye: "", makeup: "",
   characterName: "", age: "",
   description: "",
