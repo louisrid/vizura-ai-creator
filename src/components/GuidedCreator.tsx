@@ -625,7 +625,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             describe her…
           </h2>
-          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional, but recommended)</p>
+          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
           <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
