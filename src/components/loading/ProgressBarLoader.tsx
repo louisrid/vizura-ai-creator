@@ -212,7 +212,7 @@ const ProgressBarLoader = ({
               />
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
     </>
   );

@@ -582,7 +582,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             {trait.label}
           </h2>
-          <div className={`mt-5 flex justify-center gap-2 ${trait.key === "hairColour" ? "w-full max-w-[17rem] flex-nowrap" : "flex-wrap"}`}>
+          <div className={`mt-5 flex justify-center gap-2 ${trait.key === "hairColour" ? "w-full max-w-[19rem] flex-nowrap" : "flex-wrap"}`}>
             {trait.options.map((opt) => (
               <InteractivePill
                 key={opt}

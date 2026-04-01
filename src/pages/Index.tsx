@@ -415,7 +415,7 @@ const Index = () => {
                 <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
               </button>
             )}
-            <div className="mt-3 flex items-center justify-between">
+            <div className="mt-5 flex items-center justify-between">
               <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
               <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
             </div>
