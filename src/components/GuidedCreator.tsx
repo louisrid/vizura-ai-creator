@@ -633,7 +633,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="add any details you want to see…"
               rows={8}
               onClick={(e) => e.stopPropagation()}
-              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <p className="mt-2 text-center text-xs font-extrabold lowercase leading-snug text-white/30">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
