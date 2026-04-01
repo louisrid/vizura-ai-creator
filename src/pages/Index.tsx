@@ -433,13 +433,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Gem balance */}
-        {user && (
-          <div className="flex items-center justify-center gap-2 mt-4">
-            <Gem size={14} strokeWidth={2.5} className="text-gem-green" />
-            <span className="text-xs font-extrabold lowercase text-foreground/50">{gems} gems remaining</span>
-          </div>
-        )}
       </main>
     </div>
   );
