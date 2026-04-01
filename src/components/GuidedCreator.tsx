@@ -713,10 +713,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
-          <span className="mb-4 inline-block select-none text-[2.6rem] leading-none">👀</span>
-          <h2 className="max-w-[16rem] text-center text-[2.8rem] font-[900] lowercase leading-[1.02] tracking-tight text-white">
-            <span className="block">your character</span>
-            <span className="block">is here!</span>
+          <span className="mb-4 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
+          <h2 className="max-w-[18rem] text-center text-[2.6rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+            <span className="block">your character is</span>
+            <span className="block">almost here!</span>
           </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
