@@ -335,7 +335,11 @@ const Index = () => {
               </label>
               {characters.length === 0 && user && (
                 <button
-                  onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
+                  onClick={() => {
+                    sessionStorage.removeItem("vizura_creator_dismissed");
+                    sessionStorage.removeItem("vizura_guided_flow_state");
+                    navigate("/", { state: { openCreator: true } });
+                  }}
                   className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
                 >
                   create your first character →
