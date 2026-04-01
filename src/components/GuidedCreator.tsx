@@ -242,7 +242,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
-  const [detailsToastShown, setDetailsToastShown] = useState(false);
+  const [nameToastShown, setNameToastShown] = useState(() => sessionStorage.getItem(NAME_TOAST_SESSION_KEY) === "1");
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
