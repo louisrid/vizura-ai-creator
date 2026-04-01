@@ -17,13 +17,30 @@ const DETAILS_TOAST_SESSION_KEY = "vizura_details_toast_shown";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
 
+/*
+ * NEW SCREEN ORDER (13 screens, internalStep 0-12):
+ *  0: Welcome
+ *  1: Intro
+ *  2: Name input (NEW dedicated screen)
+ *  3: Skin        (TRAITS[0])
+ *  4: Body        (TRAITS[1]) — slim, average, curvy (no chest)
+ *  5: Age pills   (TRAITS[2]) — 18-23, 24-28, 29+
+ *  6: Hair        (TRAITS[3]) — straight, curly, bangs (no "short")
+ *  7: Hair colour (TRAITS[4]) — blonde, brunette, black, pink
+ *  8: Eyes        (TRAITS[5]) — brown, blue, green (no "hazel")
+ *  9: Makeup      (TRAITS[6]) — natural, model, egirl
+ * 10: Description (optional)
+ * 11: Reference   (optional)
+ * 12: Create slide
+ */
+
 const TRAITS = [
   { key: "skin", label: "pick her skin…", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
-  { key: "bodyType", label: "choose her body…", emoji: "📏", options: ["slim", "regular", "curvy"] },
-  { key: "chest", label: "choose her chest…", emoji: "👙", options: ["small", "medium", "large"] },
-  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs", "short"] },
+  { key: "bodyType", label: "choose her body…", emoji: "📏", options: ["slim", "average", "curvy"] },
+  { key: "age", label: "pick her age…", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
+  { key: "hairStyle", label: "pick her hair…", emoji: "✂️", options: ["straight", "curly", "bangs"] },
   { key: "hairColour", label: "pick her hair colour…", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
-  { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["brown", "blue", "green", "hazel"] },
+  { key: "eye", label: "choose her eyes…", emoji: "👁️", options: ["brown", "blue", "green"] },
   { key: "makeup", label: "pick her makeup…", emoji: "💄", options: ["natural", "model", "egirl"] },
 ] as const;
 
@@ -173,8 +190,8 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", chest: "", hairStyle: "",
-  hairColour: "", eye: "", makeup: "",
+  skin: "", bodyType: "", chest: "",
+  hairStyle: "", hairColour: "", eye: "", makeup: "",
   characterName: "", age: "",
   description: "",
   referenceImage: null,
@@ -191,6 +208,18 @@ interface GuidedCreatorProps {
 const TOTAL_FULL = 13;
 const TOTAL_SKIP = 11;
 
+/* ── Helper: convert age range pill to a representative number for prompts ── */
+const ageRangeToNumber = (range: string): string => {
+  switch (range) {
+    case "18-23": return "20";
+    case "24-28": return "26";
+    case "29+": return "32";
+    default: return "25";
+  }
+};
+
+const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
+
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const navigateTo = useNavigate();
@@ -204,7 +233,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const dotCurrent = step;
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
-  const [summaryShake, setSummaryShake] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
@@ -216,17 +244,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
-
-  const showDetailsToastOnce = useCallback(() => {
-    if (sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1") {
-      setDetailsToastShown(true);
-      return;
-    }
-
-    sessionStorage.setItem(DETAILS_TOAST_SESSION_KEY, "1");
-    setDetailsToastShown(true);
-    toast("great choice!");
-  }, []);
 
   useEffect(() => setMounted(true), []);
 
@@ -256,7 +273,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (open) {
       const restored = restoreSavedFlow();
       setShaking(false);
-      setSummaryShake(false);
       setInitialFadeIn(!restored);
       setVisible(true);
       setCookingPhase("none");
@@ -319,7 +335,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (hasCompletedCookingRef.current) return;
     hasCompletedCookingRef.current = true;
     sessionStorage.removeItem(FLOW_STATE_KEY);
-    onComplete(selectionsRef.current);
+    // Convert age range to number before completing
+    const final = { ...selectionsRef.current };
+    final.age = ageRangeToNumber(final.age);
+    // Default chest since screen was removed
+    final.chest = "medium";
+    // Map "average" to "regular" for backward compat
+    if (final.bodyType === "average") final.bodyType = "regular";
+    onComplete(final);
   }, [onComplete]);
 
   useEffect(() => {
@@ -338,28 +361,31 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => window.clearTimeout(t);
   }, [cookingPhase, completeCookingFlow]);
 
+  // Screen identity helpers based on internalStep
   const internalStep = step + offset;
   const isWelcomeSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
-  const isDetailsA = internalStep === 9;
-  const isDetailsB = internalStep === 10;
-  const isDetailsC = internalStep === 11;
+  const isNameSlide = internalStep === 2;
+  const isDescriptionSlide = internalStep === 10;
+  const isReferenceSlide = internalStep === 11;
   const isCreateSlide = internalStep === 12;
-  const currentTraitIndex = internalStep >= 2 && internalStep <= 8 ? internalStep - 2 : -1;
+
+  // Traits occupy internalStep 3-9, mapping to TRAITS index = internalStep - 3
+  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
   const isSkinSlide = currentTraitIndex === 0;
 
   const getCurrentTraitKey = (): TraitKey | null => {
-    if (currentTraitIndex < 0 || currentTraitIndex >= 7) return null;
+    if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
     return TRAITS[currentTraitIndex].key;
   };
 
-  const isCurrentSelected = () => {
+  const isCurrentTraitSelected = () => {
     const key = getCurrentTraitKey();
     if (!key) return true;
-    return !!selections[key];
+    return !!selections[key as keyof GuidedSelections];
   };
 
-  const setTrait = (key: TraitKey, value: string) => {
+  const setTrait = (key: string, value: string) => {
     setSelections((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -373,14 +399,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   selectionsRef.current = selections;
   stepRef.current = step;
 
-  const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
   const randomiseName = useCallback(() => {
     const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
     setSelections((p) => ({ ...p, characterName: name }));
-  }, []);
-  const randomiseAge = useCallback(() => {
-    const age = String(Math.floor(Math.random() * 23) + 18);
-    setSelections((p) => ({ ...p, age }));
   }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -390,29 +411,41 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, referenceImage: url }));
   };
 
+  const showDetailsToastOnce = useCallback(() => {
+    if (sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1") {
+      setDetailsToastShown(true);
+      return;
+    }
+    sessionStorage.setItem(DETAILS_TOAST_SESSION_KEY, "1");
+    setDetailsToastShown(true);
+    toast("great choice!");
+  }, []);
+
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
 
-    if (currentTraitIndex >= 0 && currentTraitIndex < 7) {
+    // Name slide validation
+    if (isNameSlide) {
+      if (!selectionsRef.current.characterName.trim()) {
+        triggerShake();
+        return;
+      }
+      // Show "great choice!" toast once when advancing from name screen
+      if (!detailsToastShown) {
+        showDetailsToastOnce();
+      }
+    }
+
+    // Trait slide validation — must select an option
+    if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
       const key = TRAITS[currentTraitIndex].key;
-      if (!selectionsRef.current[key]) {
+      if (!selectionsRef.current[key as keyof GuidedSelections]) {
         triggerShake();
         return;
       }
     }
 
-    if (isDetailsA) {
-      const s = selectionsRef.current;
-      const missingName = !s.characterName.trim();
-      const ageNum = Number(s.age);
-      const invalidAge = !s.age || ageNum < 18 || ageNum > 40;
-      if (missingName || invalidAge) {
-        setSummaryShake(true);
-        setTimeout(() => setSummaryShake(false), 500);
-        return;
-      }
-    }
-
+    // Create slide triggers cooking
     if (isCreateSlide) {
       setCookingPhase("loading");
       return;
@@ -423,12 +456,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 180);
-  }, [step, isDetailsA, isCreateSlide, cookingPhase, currentTraitIndex]);
+  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, detailsToastShown, showDetailsToastOnce, TOTAL]);
 
   const goBack = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
     if (step <= 0) {
-      // Shake the back arrow on first slide
       setBackArrowShaking(true);
       setTimeout(() => setBackArrowShaking(false), 500);
       return;
@@ -444,24 +476,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isWelcomeSlide || isIntroSlide || isCurrentSelected() || isDetailsA || isDetailsB || isDetailsC || isCreateSlide;  
-
-  // Show "great choice!" toast once when name and age are both filled
-  useEffect(() => {
-    if (detailsToastShown) return;
-    if (isDetailsA && selections.characterName.trim() && selections.age.trim()) {
-      const ageNum = Number(selections.age);
-      if (ageNum >= 18 && ageNum <= 40) {
-        showDetailsToastOnce();
-      }
-    }
-  }, [isDetailsA, selections.characterName, selections.age, detailsToastShown, showDetailsToastOnce]);
+  const canAdvance = isWelcomeSlide || isIntroSlide || isNameSlide || isDescriptionSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
 
   if (!mounted || !visible) return null;
 
-  // Consistent fade transitions for all slides
   const slideTransition = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -518,10 +538,45 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    /* ── Trait slides ── */
+    /* ── Name input slide ── */
+    if (isNameSlide) {
+      return (
+        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+          <div className="flex h-14 items-end justify-center">
+            <BigEmoji emoji="✨" />
+          </div>
+          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+            give her a name…
+          </h2>
+          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+            <motion.input
+              animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+              transition={{ duration: 0.4 }}
+              value={selections.characterName}
+              onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
+              placeholder="type a name…"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
+              style={{ color: selections.characterName.trim() ? AMBER : PURE_WHITE }}
+            />
+            <motion.button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
+              whileTap={{ scale: 0.85, rotate: 180 }}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
+            >
+              <RefreshCw size={16} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Trait slides (skin, body, age, hair, hair colour, eyes, makeup) ── */
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
-      const selectedVal = selections[trait.key];
+      const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
@@ -541,7 +596,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               />
             ))}
           </div>
-          {/* Helper text on skin slide only */}
           {isSkinSlide && (
             <p className="mt-4 text-xs font-extrabold lowercase text-white/30">
               click any option to select
@@ -551,78 +605,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    /* ── Details A: summary pills + name + age ── */
-    if (isDetailsA) {
-      return (
-        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
-            add the details…
-          </h2>
-          <div className="mt-4 flex flex-wrap justify-center gap-1.5">
-            {TRAITS.map((t) => {
-              const v = selections[t.key];
-              if (!v) return null;
-              return (
-                <span key={t.key} className="rounded-xl bg-neon-yellow px-3 py-1.5 text-xs font-[900] lowercase text-neon-yellow-foreground">
-                  {v}
-                </span>
-              );
-            })}
-          </div>
-          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
-            <motion.input
-              animate={summaryShake && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-              transition={{ duration: 0.4 }}
-              value={selections.characterName}
-              onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
-              placeholder="character name…"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
-            />
-            <motion.button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
-              whileTap={{ scale: 0.85, rotate: 180 }}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
-            >
-              <RefreshCw size={16} strokeWidth={2.5} />
-            </motion.button>
-          </div>
-          <div className="mt-3 flex items-center gap-2 w-full max-w-[16rem]">
-            <motion.input
-              animate={summaryShake && (!selections.age || Number(selections.age) < 18 || Number(selections.age) > 40) ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-              transition={{ duration: 0.4 }}
-              type="number"
-              min={18}
-              max={40}
-              value={selections.age}
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "" || (Number(v) >= 1 && Number(v) <= 99)) {
-                  setSelections((p) => ({ ...p, age: v }));
-                }
-              }}
-              placeholder="age (18-40)"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
-            />
-            <motion.button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseAge(); }}
-              whileTap={{ scale: 0.85, rotate: 180 }}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
-            >
-              <RefreshCw size={16} strokeWidth={2.5} />
-            </motion.button>
-          </div>
-        </div>
-      );
-    }
-
-    /* ── Details B: description textarea ── */
-    if (isDetailsB) {
+    /* ── Description (optional) ── */
+    if (isDescriptionSlide) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
@@ -646,8 +630,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    /* ── Details C: reference image ── */
-    if (isDetailsC) {
+    /* ── Reference image (optional) ── */
+    if (isReferenceSlide) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
@@ -707,9 +691,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const showGemCost = isLoggedIn && skipWelcome;
       return (
-        <div
-          className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center"
-        >
+        <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           {showGemCost && (
             <div className="mb-4 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
@@ -718,11 +700,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           )}
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
           <h2 className="w-full text-center text-[2.95rem] font-[900] lowercase leading-[0.96] tracking-tight">
-            <span className="block text-white">your character</span>
-            <span className="block">
-              <span className="text-white">is </span>
-              <span className="text-gem-green">almost here!</span>
-            </span>
+            <span className="block text-white">your character is</span>
+            <span className="block text-gem-green">almost here!</span>
           </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
@@ -797,7 +776,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       style={{ background: "linear-gradient(160deg, hsl(220 20% 4.4%) 0%, hsl(224 18% 3.5%) 48%, hsl(0 0% 0%) 100%)" }}
     >
       <AmbientGlow />
-      {/* Foreground fades in, background is instant */}
       <motion.div
         className="absolute inset-0 flex flex-col"
         initial={{ opacity: 0 }}
