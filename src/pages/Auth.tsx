@@ -49,6 +49,11 @@ const Auth = () => {
     }
   };
 
+  const handleBack = () => {
+    // If coming from the guided creator (skip to login), go back to homepage which will reopen the creator
+    navigate("/");
+  };
+
   if (authLoading || user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -61,7 +66,14 @@ const Auth = () => {
     <div className="min-h-screen bg-background">
       <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
         <div className="mb-8 flex items-center gap-3">
-          <BackButton />
+          <button
+            type="button"
+            onClick={handleBack}
+            className="w-9 h-9 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
+            aria-label="go back"
+          >
+            <ArrowRight size={14} strokeWidth={2.5} className="rotate-180" />
+          </button>
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 

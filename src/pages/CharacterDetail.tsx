@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles, Trash2, Zap, Camera, ArrowLeft } from "lucide-react";
+import { Loader2, Trash2, Camera, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
+import BackButton from "@/components/BackButton";
 
 interface Character {
   id: string;
@@ -33,9 +34,7 @@ const getCharacterEmoji = (char: Character): string => {
 /** Extract user-typed description, stripping trait prefix and emoji tag */
 const getCleanDescription = (raw: string | null | undefined): string => {
   if (!raw) return "";
-  // Remove leading trait pattern like "medium chest, short hair. "
   let cleaned = raw.replace(/^[a-z]+ chest,\s*[a-z]+ hair\.\s*/i, "");
-  // Remove emoji tags
   cleaned = cleaned.replace(/\[emoji:.+?\]/g, "").trim();
   return cleaned;
 };
@@ -97,14 +96,7 @@ const CharacterDetail = () => {
       <div className="min-h-screen bg-background">
         <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
           <div className="flex items-center gap-3 mb-8">
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
-              aria-label="go back"
-            >
-              <ArrowLeft size={14} strokeWidth={2.5} />
-            </button>
+            <BackButton />
           </div>
           <p className="text-sm font-extrabold lowercase text-foreground/50 text-center mt-16">
             character not found
@@ -136,14 +128,7 @@ const CharacterDetail = () => {
       <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-3 flex flex-col h-full overflow-hidden">
         {/* Header — consistent pt-14 with all other pages */}
         <div className="flex items-center gap-3 mb-4 shrink-0">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-black hover:opacity-90 transition-colors active:scale-95"
-            aria-label="go back"
-          >
-            <ArrowLeft size={14} strokeWidth={2.5} />
-          </button>
+          <BackButton />
         </div>
 
         {/* Name + Age */}

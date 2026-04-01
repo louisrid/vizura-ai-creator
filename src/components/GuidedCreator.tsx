@@ -365,11 +365,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const randomiseName = useCallback(() => {
     const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
     setSelections((p) => ({ ...p, characterName: name }));
-  }, []);
+    if (!detailsToastShown) {
+      setDetailsToastShown(true);
+      toast("great choice!");
+    }
+  }, [detailsToastShown]);
   const randomiseAge = useCallback(() => {
     const age = String(Math.floor(Math.random() * 23) + 18);
     setSelections((p) => ({ ...p, age }));
-  }, []);
+    if (!detailsToastShown) {
+      setDetailsToastShown(true);
+      toast("great choice!");
+    }
+  }, [detailsToastShown]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -567,7 +575,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="character name…"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <motion.button
               type="button"
@@ -595,7 +603,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="age (18-40)"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+              className="h-12 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <motion.button
               type="button"
@@ -617,7 +625,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             describe her…
           </h2>
-          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional, but recommended)</p>
+          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
           <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
@@ -625,7 +633,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="add any details you want to see…"
               rows={8}
               onClick={(e) => e.stopPropagation()}
-              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <p className="mt-2 text-center text-xs font-extrabold lowercase leading-snug text-white/30">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
@@ -705,10 +713,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
             </div>
           )}
-          <span className="mb-4 inline-block select-none text-[2.6rem] leading-none">👀</span>
-          <h2 className="max-w-[16rem] text-center text-[2.8rem] font-[900] lowercase leading-[1.02] tracking-tight text-white">
-            <span className="block">your character</span>
-            <span className="block">is here!</span>
+          <span className="mb-4 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
+          <h2 className="max-w-[18rem] text-center text-[2.6rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+            <span className="block">your character is</span>
+            <span className="block">almost here!</span>
           </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
@@ -933,7 +941,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: SLIDE_FADE_DURATION, ease: "easeInOut" }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
     >
       <AmbientGlow />
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">

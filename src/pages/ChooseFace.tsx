@@ -65,7 +65,6 @@ const ChooseFace = () => {
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
 
-  // Check if user is on free trial (no gems / no subscription)
   const isFreeUser = !subscribed && gems <= 0;
 
   useEffect(() => {
@@ -77,7 +76,6 @@ const ChooseFace = () => {
     generateFaces();
   }, []);
 
-  // Trigger card flip reveal after loading
   useEffect(() => {
     if (!loading && !cardsRevealed) {
       const t = setTimeout(() => setCardsRevealed(true), 100);
@@ -137,7 +135,7 @@ const ChooseFace = () => {
 
   const handleRegenerate = async () => {
     if (isFreeUser) {
-      toast("please add gems to regenerate!");
+      toast("please add gems");
       return;
     }
 
@@ -295,16 +293,20 @@ const ChooseFace = () => {
     sessionStorage.removeItem(SELECTED_EMOJI_KEY);
 
     toast.success("character added!");
-    // Replace history so back button goes to home, not back to face selection
     navigate("/characters", { replace: true });
     return true;
   };
 
   const handleSignedIn = useCallback(async () => {
-    setShowSignIn(false);
+    // Don't hide the sign-in overlay yet — save first, then navigate directly
     sessionStorage.removeItem(AUTH_RESUME_KEY);
     await new Promise((r) => setTimeout(r, 300));
-    await doFinalSave();
+    const saved = await doFinalSave();
+    if (!saved) {
+      // Only hide overlay if save failed so user can retry
+      setShowSignIn(false);
+    }
+    // If saved, doFinalSave already navigated to /characters
   }, [selectedIndex, characterId, faces, prompt, demoEmojis]);
 
   const handleCookingComplete = () => {
@@ -321,7 +323,6 @@ const ChooseFace = () => {
     );
   }
 
-  // Card flip delays: left first, middle at ~2/3, right last
   const cardDelays = [0, 0.2, 0.4];
 
   return (
@@ -329,7 +330,7 @@ const ChooseFace = () => {
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-12">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-0">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">pick your face</PageTitle>
@@ -403,19 +404,23 @@ const ChooseFace = () => {
               )}
             </div>
 
-            {/* White divider + black bottom area mirroring homepage */}
-            <div className="mt-8 -mx-4">
+            {/* Symmetrical grey padding before white divider */}
+            <div className="min-h-[3.5rem]" />
+
+            {/* White divider + pure black bottom area */}
+            <div className="-mx-4">
               <div className="border-t-[5px] border-white" />
-              <div className="bg-black px-4 pt-6 pb-8">
+              <div className="px-4 pt-6 pb-8" style={{ backgroundColor: "#000000" }}>
                 <div className="flex gap-3">
                   <button
                     onClick={handleRegenerate}
                     disabled={rerolling}
-                    className={`flex-1 h-14 rounded-2xl text-sm font-extrabold lowercase flex items-center justify-center gap-2 transition-colors active:bg-white/70 disabled:opacity-50 ${
+                    className={`flex-1 h-14 rounded-2xl text-sm font-extrabold lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 ${
                       isFreeUser
-                        ? "bg-white/30 text-white/50 cursor-not-allowed"
-                        : "bg-white text-black"
+                        ? "text-white cursor-not-allowed"
+                        : "bg-white text-black active:bg-white/70"
                     }`}
+                    style={isFreeUser ? { backgroundColor: "hsl(0 0% 18%)" } : undefined}
                   >
                     {rerolling ? (
                       <Loader2 className="animate-spin" size={16} />
