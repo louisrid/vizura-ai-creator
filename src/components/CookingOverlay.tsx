@@ -71,7 +71,8 @@ const CookingOverlay = ({ open, onComplete }: CookingOverlayProps) => {
             <ProgressBarLoader
               duration={25000}
               phrases={PHRASES}
-              phraseInterval={3500}
+              phraseInterval={5200}
+              requireTapToContinue
               onComplete={() => setPhase("success")}
             />
           )}

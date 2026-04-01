@@ -81,7 +81,8 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           <ProgressBarLoader
             duration={25000}
             phrases={phrases}
-            phraseInterval={3500}
+            phraseInterval={5200}
+            requireTapToContinue
             onComplete={() => setLoadingDone(true)}
           />
         </motion.div>

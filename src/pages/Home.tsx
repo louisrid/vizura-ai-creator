@@ -340,12 +340,9 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Balanced bottom padding before divider */}
-      <div className="flex-1 min-h-[2rem]" />
-
-      {/* Full-bleed white divider + black bottom section with geo pattern */}
-      <div className="border-t-[5px] border-white" />
-      <div className="relative min-h-[6rem]" style={{ backgroundColor: '#000000' }}>
+      {/* Full-bleed white divider + black bottom section with balanced spacing */}
+      <div className="mt-14 border-t-[5px] border-white" />
+      <div className="relative min-h-[6rem] flex-1" style={{ backgroundColor: '#000000' }}>
         <GeoPattern />
       </div>
     </div>

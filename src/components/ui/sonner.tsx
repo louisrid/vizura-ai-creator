@@ -62,11 +62,11 @@ export const Toaster = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     toastId += 1;
     const newToast: ToastItem = { id: toastId, message, tone };
-    setToasts((prev) => [...prev, newToast]);
+    setToasts([newToast]);
     timeoutRef.current = setTimeout(() => {
       setToasts([]);
       timeoutRef.current = null;
-    }, 3000);
+    }, 6200);
   }, []);
 
   useEffect(() => {
@@ -89,10 +89,10 @@ export const Toaster = () => {
             {toasts.map((t) => (
               <motion.div
                 key={t.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 80, transition: { duration: 0.45, ease: "easeIn" } }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -2, transition: { duration: 0.9, ease: "easeInOut" } }}
+                transition={{ duration: 1.05, delay: 0.2, ease: "easeInOut" }}
                 className="pointer-events-auto inline-flex items-center rounded-2xl px-4 py-2.5"
                 style={{ backgroundColor: "hsl(140 100% 50%)", color: "hsl(140 60% 15%)" }}
                 role="status"

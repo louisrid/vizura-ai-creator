@@ -13,6 +13,7 @@ const NEON_BLUE = "hsl(var(--gem-green))";
 const PURE_WHITE = "hsl(var(--foreground))";
 const AMBER = "hsl(var(--neon-yellow))";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
+const DETAILS_TOAST_SESSION_KEY = "vizura_details_toast_shown";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
 
@@ -216,6 +217,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
 
+  const showDetailsToastOnce = useCallback(() => {
+    if (sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1") {
+      setDetailsToastShown(true);
+      return;
+    }
+
+    sessionStorage.setItem(DETAILS_TOAST_SESSION_KEY, "1");
+    setDetailsToastShown(true);
+    toast("great choice!");
+  }, []);
+
   useEffect(() => setMounted(true), []);
 
   const restoreSavedFlow = useCallback(() => {
@@ -251,7 +263,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
-      setDetailsToastShown(false);
+      setDetailsToastShown(sessionStorage.getItem(DETAILS_TOAST_SESSION_KEY) === "1");
     }
   }, [open, restoreSavedFlow]);
 
@@ -365,19 +377,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const randomiseName = useCallback(() => {
     const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
     setSelections((p) => ({ ...p, characterName: name }));
-    if (!detailsToastShown) {
-      setDetailsToastShown(true);
-      toast("great choice!");
-    }
-  }, [detailsToastShown]);
+  }, []);
   const randomiseAge = useCallback(() => {
     const age = String(Math.floor(Math.random() * 23) + 18);
     setSelections((p) => ({ ...p, age }));
-    if (!detailsToastShown) {
-      setDetailsToastShown(true);
-      toast("great choice!");
-    }
-  }, [detailsToastShown]);
+  }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -445,14 +449,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   // Show "great choice!" toast once when name and age are both filled
   useEffect(() => {
     if (detailsToastShown) return;
-    if (isDetailsA && selections.characterName.trim() && selections.age) {
+    if (isDetailsA && selections.characterName.trim() && selections.age.trim()) {
       const ageNum = Number(selections.age);
       if (ageNum >= 18 && ageNum <= 40) {
-        setDetailsToastShown(true);
-        toast("great choice!");
+        showDetailsToastOnce();
       }
     }
-  }, [isDetailsA, selections.characterName, selections.age, detailsToastShown]);
+  }, [isDetailsA, selections.characterName, selections.age, detailsToastShown, showDetailsToastOnce]);
 
   const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
 
@@ -714,9 +717,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           )}
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="mx-4 text-center text-[2.8rem] font-[900] lowercase leading-[1] tracking-tight text-white">
-            <span className="block">your character</span>
-            <span className="block">is almost here!</span>
+          <h2 className="mx-auto max-w-[18rem] px-2 text-center text-[2.95rem] font-[900] lowercase leading-[0.96] tracking-tight text-white">
+            <span className="block whitespace-nowrap">your character</span>
+            <span className="block whitespace-nowrap">
+              <span className="text-white">is </span>
+              <span className="text-gem-green">almost here!</span>
+            </span>
           </h2>
           <motion.p
             className="mt-4 text-sm font-extrabold lowercase text-white/40"
@@ -741,7 +747,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <ProgressBarLoader
             duration={COOKING_DURATION}
             phrases={COOKING_PHRASES}
-            phraseInterval={4500}
+            phraseInterval={5200}
+            requireTapToContinue
             onComplete={() => setCookingPhase("success")}
           />
         </div>
