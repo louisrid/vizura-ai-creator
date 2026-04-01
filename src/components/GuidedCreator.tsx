@@ -121,8 +121,8 @@ const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
 );
 
 /* ── Interactive pill ── */
-const InteractivePill = ({ label, selected, shaking, onClick }: {
-  label: string; selected: boolean; shaking: boolean; onClick: () => void;
+const InteractivePill = ({ label, selected, shaking, onClick, compact = false, subLabel }: {
+  label: string; selected: boolean; shaking: boolean; onClick: () => void; compact?: boolean; subLabel?: string;
 }) => (
   <motion.button
     type="button"
@@ -134,13 +134,18 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl px-4 py-2.5 text-sm font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`rounded-xl ${compact ? "px-2.5 py-2 text-[0.72rem]" : "px-4 py-2.5 text-sm"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
     }`}
   >
-    {label}
+    <span className="block leading-none">{label}</span>
+    {subLabel && (
+      <span className={`mt-0.5 block text-center text-[7px] font-extrabold normal-case leading-none ${selected ? "text-neon-yellow-foreground/50" : "text-white/30"}`}>
+        {subLabel}
+      </span>
+    )}
   </motion.button>
 );
 
