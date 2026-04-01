@@ -215,8 +215,8 @@ const CharacterCreator = () => {
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
-      bodyType: selections.bodyType || "regular",
-      hairStyle: selections.hairStyle || "straight",
+      bodyType: selections.bodyType || "average",
+      hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
       makeup: selections.makeup || "natural",
