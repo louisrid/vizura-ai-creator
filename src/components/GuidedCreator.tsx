@@ -931,13 +931,14 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   if (!visible) return null;
 
   return createPortal(
-    <motion.div
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
-    >
+    <div className="fixed inset-0 z-[9999] bg-black">
       <AmbientGlow />
+      <motion.div
+        className="absolute inset-0 flex flex-col items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
+      >
       <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
         <div className="flex h-14 items-end justify-center mb-2">
           <BigEmoji emoji="🔐" index={3} />
