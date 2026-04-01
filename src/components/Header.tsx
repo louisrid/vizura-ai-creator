@@ -107,7 +107,7 @@ const Header = () => {
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 style={{
-                  color: subscribed ? "hsl(var(--member-green))" : "hsl(0 0% 60%)",
+                  color: subscribed ? "hsl(var(--member-green))" : "hsl(var(--nav-foreground))",
                 }}
               >
                 <circle cx="12" cy="8" r="5" />
