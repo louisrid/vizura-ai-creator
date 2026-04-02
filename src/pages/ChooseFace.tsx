@@ -19,6 +19,13 @@ const STORAGE_KEY = "vizura_character_draft";
 const FACE_STORAGE_KEY = "vizura_face_options";
 const AUTH_RESUME_KEY = "vizura_resume_after_auth";
 
+const FACE_GEN_PHRASES = [
+  "generating faces…",
+  "building your look…",
+  "refining features…",
+  "almost ready…",
+];
+
 const ANGLE_PHRASES = [
   "saving your character…",
   "generating extra angles…",
