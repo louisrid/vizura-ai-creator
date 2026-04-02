@@ -13,6 +13,19 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+/* ── prompt constants ──────────────────────────────────── */
+const QUALITY_SUFFIX =
+  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
+
+const NEGATIVE_SUFFIX =
+  "DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, AI generated look";
+
+const SELFIE_PREFIX =
+  "front camera perspective, slight wide angle distortion, casual angle, arm extended, iPhone selfie";
+
+const PHOTO_PREFIX =
+  "third person framing, composed perspective, natural photography angle";
+
 /* ── in-memory rate limiter ─────────────────────────────── */
 const rateBuckets = new Map<string, number[]>();
 
@@ -48,7 +61,7 @@ function getClientIp(req: Request): string {
   );
 }
 
-/* ── helper: demo placeholder images (plain charcoal boxes) ── */
+/* ── helper: demo placeholder images ── */
 function makeDemoSvg(_label: string, _accent: string, _index: number): string {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="768" height="1024" viewBox="0 0 768 1024" fill="none">
@@ -62,6 +75,44 @@ function generateDemoImages(prompt: string, count: number): string[] {
   const accents = ["#f5df4d", "#39ff88", "#57d4ff", "#ff8fb1", "#ffc857", "#b9ff66"];
   const label = sanitiseText(prompt).slice(0, 36) || "character preview";
   return Array.from({ length: count }, (_, index) => makeDemoSvg(label, accents[index % accents.length], index));
+}
+
+/* ── build character trait string from DB record ───────── */
+function buildCharacterTraits(char: any): string {
+  const parts: string[] = [];
+  // age
+  if (char.age) parts.push(`${char.age} year old woman`);
+  // skin / ethnicity (stored in 'country' column)
+  if (char.country && char.country !== "any") parts.push(`${char.country} skin`);
+  // body type
+  if (char.body && char.body !== "regular") parts.push(`${char.body} body type`);
+  // hair colour (stored in 'hair' column)
+  if (char.hair) parts.push(`${char.hair} hair`);
+  // eyes
+  if (char.eye) parts.push(`${char.eye} eyes`);
+  // makeup style
+  if (char.style && char.style !== "natural") parts.push(`${char.style} makeup`);
+  // description may contain hair style + extras
+  if (char.description && char.description.trim()) parts.push(char.description.trim());
+  return parts.join(", ");
+}
+
+/* ── build final prompt with all modifiers ─────────────── */
+function buildFinalPrompt(
+  scenePrompt: string,
+  photoType: string,
+  characterTraits: string | null,
+): string {
+  const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
+  const parts: string[] = [];
+
+  if (characterTraits) parts.push(characterTraits);
+  parts.push(scenePrompt);
+  parts.push(perspective);
+  parts.push(QUALITY_SUFFIX);
+  parts.push(`Avoid: ${NEGATIVE_SUFFIX}`);
+
+  return parts.join(". ");
 }
 
 /* ── xAI Grok Imagine: text-to-image ──────────────────── */
@@ -126,23 +177,18 @@ async function xaiImageEdit(
   return data?.data?.[0]?.url ?? null;
 }
 
-/* ── generate face options (text-to-image, 3 or 6 variations) ── */
-async function generateImages(
+/* ── generate face options (text-to-image, for character creation) ── */
+async function generateFaceImages(
   prompt: string,
   count: number,
   apiKey: string
 ): Promise<string[]> {
   const negativePrompt =
     "low quality, blurry, distorted, ugly, deformed, disfigured, bad anatomy, watermark, text, signature";
-
   const imageUrls: string[] = [];
 
   if (count <= 3) {
-    const angles = [
-      "front view",
-      "left side view, 3/4 angle",
-      "right side view, 3/4 angle",
-    ];
+    const angles = ["front view", "left side view, 3/4 angle", "right side view, 3/4 angle"];
     for (const angle of angles.slice(0, count)) {
       const fullPrompt = `Character portrait, ${prompt}, ${angle}. High quality, detailed, consistent style. Avoid: ${negativePrompt}`;
       const url = await xaiTextToImage(fullPrompt, apiKey);
@@ -150,12 +196,9 @@ async function generateImages(
     }
   } else {
     const variations = [
-      "front view, soft smile",
-      "front view, serious expression",
-      "slight left turn, gentle expression",
-      "slight right turn, confident look",
-      "front view, playful expression",
-      "front view, neutral expression",
+      "front view, soft smile", "front view, serious expression",
+      "slight left turn, gentle expression", "slight right turn, confident look",
+      "front view, playful expression", "front view, neutral expression",
     ];
     for (const variation of variations.slice(0, count)) {
       const fullPrompt = `Close-up face portrait, ${prompt}, ${variation}. High quality, detailed, consistent style. Avoid: ${negativePrompt}`;
@@ -165,6 +208,20 @@ async function generateImages(
   }
 
   return imageUrls;
+}
+
+/* ── generate photo (scene-based, with character traits + modifiers) ── */
+async function generatePhoto(
+  finalPrompt: string,
+  faceImageUrl: string | null,
+  apiKey: string
+): Promise<string | null> {
+  if (faceImageUrl) {
+    // Use image edit endpoint with face as reference
+    return await xaiImageEdit(finalPrompt, [faceImageUrl], apiKey);
+  }
+  // No face reference — plain text-to-image
+  return await xaiTextToImage(finalPrompt, apiKey);
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -192,8 +249,7 @@ serve(async (req) => {
         { global: { headers: { Authorization: authHeader } } }
       );
 
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
+      const { data: userData, error: userError } = await supabase.auth.getUser();
       if (userError || !userData?.user) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
@@ -215,6 +271,9 @@ serve(async (req) => {
     const body = await req.json();
     const rawPrompt = body?.prompt;
     const isFreeGen = body?.free_gen === true;
+    const characterId = body?.character_id || null;
+    const photoType = body?.photo_type || "selfie";
+    const aspectRatio = body?.aspect_ratio || "4:5";
     const imageCount = isFreeGen ? 6 : 3;
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
@@ -244,7 +303,24 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    /* ── FREE GENERATION FLOW ── */
+    /* ── look up character if provided ── */
+    let characterTraits: string | null = null;
+    let faceImageUrl: string | null = null;
+    if (characterId) {
+      const { data: charData } = await adminClient
+        .from("characters")
+        .select("*")
+        .eq("id", characterId)
+        .eq("user_id", userId)
+        .single();
+
+      if (charData) {
+        characterTraits = buildCharacterTraits(charData);
+        faceImageUrl = charData.face_image_url || null;
+      }
+    }
+
+    /* ── FREE GENERATION FLOW (face creation — no photo modifiers) ── */
     if (isFreeGen) {
       const { data: profile } = await adminClient
         .from("profiles")
@@ -280,7 +356,7 @@ serve(async (req) => {
 
       let imageUrls: string[];
       try {
-        imageUrls = await generateImages(prompt, 6, XAI_API_KEY);
+        imageUrls = await generateFaceImages(prompt, 6, XAI_API_KEY);
       } catch (e: any) {
         if (e?.status === 429) {
           return new Response(
@@ -322,9 +398,7 @@ serve(async (req) => {
       );
     }
 
-    /* ── STANDARD GEM-BASED FLOW ── */
-
-    // Check credits
+    /* ── STANDARD GEM-BASED FLOW (photo generation) ── */
     const { data: creditData } = await adminClient
       .from("credits")
       .select("balance")
@@ -346,10 +420,7 @@ serve(async (req) => {
           code: "NO_GEMS",
           has_subscription: hasActiveSub,
         }),
-        {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -365,9 +436,15 @@ serve(async (req) => {
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
+    // Build final prompt with character traits, photo type, and quality modifiers
+    const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits);
+    console.log("Final prompt:", finalPrompt);
+    console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
+
     let imageUrls: string[];
     try {
-      imageUrls = await generateImages(prompt, 3, XAI_API_KEY);
+      const result = await generatePhoto(finalPrompt, faceImageUrl, XAI_API_KEY);
+      imageUrls = result ? [result] : [];
     } catch (e: any) {
       // Refund gem on failure
       await adminClient
