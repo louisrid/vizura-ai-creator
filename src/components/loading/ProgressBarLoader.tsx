@@ -139,11 +139,13 @@ const ProgressBarLoader = ({
         aria-label={isComplete && requireTapToContinue ? "tap to continue" : undefined}
       >
         <motion.span
-          className="text-[3rem] inline-block select-none animate-bounce"
-          style={{ animationDuration: "2.2s" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+          className="text-[3rem] inline-block select-none"
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: 1, y: [0, -4, 0] }}
+          transition={{
+            opacity: { duration: 0.5, delay: 0.1, ease: "easeOut" },
+            y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
+          }}
         >
           ⚙️
         </motion.span>
