@@ -152,7 +152,7 @@ const ProgressBarLoader = ({
           className="w-full max-w-xs flex flex-col gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.0, delay: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
           <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
             <div
@@ -173,7 +173,7 @@ const ProgressBarLoader = ({
           className="flex h-8 items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
           <AnimatePresence mode="wait" initial={false}>
             {isComplete && requireTapToContinue ? (
@@ -184,7 +184,7 @@ const ProgressBarLoader = ({
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}
                 transition={{
-                  opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0.2, ease: "easeInOut" },
+                  opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
                   y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
                 }}
               >
@@ -198,7 +198,7 @@ const ProgressBarLoader = ({
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}
                 transition={{
-                  opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0.2, ease: "easeInOut" },
+                  opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
                   y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
                 }}
               >
