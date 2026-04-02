@@ -1,4 +1,5 @@
 # Memory: index.md
+
 Updated: now
 
 Design system: pure black (#000) + white (#fff), no colors/gradients. Plus Jakarta Sans ExtraBold. 0px border-radius. Thick spacing. Lowercase everything.
