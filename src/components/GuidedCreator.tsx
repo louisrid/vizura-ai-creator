@@ -677,8 +677,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
           <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
-            <span className="block text-white">your character</span>
-            <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
+            <span className="block whitespace-nowrap text-white">your character</span>
+            <span className="block whitespace-nowrap">
+              <span className="text-white">is </span>
+              <span className="text-gem-green">almost here!</span>
+            </span>
           </h2>
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">

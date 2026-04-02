@@ -6,6 +6,7 @@ import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, Settings, User, type Luc
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { isSpecialAccountUser } from "@/lib/specialAccount";
 
 const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
   { label: "home", path: "/", icon: Sparkles },
@@ -50,6 +51,7 @@ const Header = () => {
   const location = useLocation();
   const { user, loading } = useAuth();
   const { subscribed } = useSubscription();
+  const isSpecialAccount = isSpecialAccountUser(user);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -95,7 +97,7 @@ const Header = () => {
     return cached === "active" || cached === "trialing";
   }, [user?.id]);
 
-  const showSubscribedState = subscribed || cachedSubscribed;
+  const showSubscribedState = isSpecialAccount || subscribed || cachedSubscribed;
 
   return (
     <header className="sticky top-0 z-40 border-b-[5px] border-white" style={{ backgroundColor: '#000000' }}>

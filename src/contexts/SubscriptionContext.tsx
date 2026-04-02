@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { isSpecialAccountUser } from "@/lib/specialAccount";
 
 interface SubscriptionContextType {
   status: string | null;
@@ -38,7 +39,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     window.sessionStorage.removeItem(key);
   }, [getCacheKey]);
 
-  const isTestAccount = user?.email === "louisjridland@gmail.com";
+  const isTestAccount = isSpecialAccountUser(user);
 
   const fetchSubscription = useCallback(async () => {
     if (!user) {
@@ -48,6 +49,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
 
     if (isTestAccount) {
+      writeCachedStatus(user.id, "active");
       setStatus("active");
       setLoading(false);
       return;
@@ -87,16 +89,23 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    if (isTestAccount) {
+      writeCachedStatus(user.id, "active");
+      setStatus("active");
+      setLoading(false);
+      return;
+    }
+
     const cachedStatus = readCachedStatus(user.id);
     if (cachedStatus) {
       setStatus(cachedStatus);
     }
     setLoading(true);
     void fetchSubscription();
-  }, [fetchSubscription, readCachedStatus, user]);
+  }, [fetchSubscription, isTestAccount, readCachedStatus, user, writeCachedStatus]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || isTestAccount) return;
 
     const refreshOnReturn = () => {
       void fetchSubscription();
@@ -136,9 +145,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       document.removeEventListener("visibilitychange", refreshOnReturn);
       supabase.removeChannel(channel);
     };
-  }, [fetchSubscription, user, optimistic, writeCachedStatus]);
+  }, [fetchSubscription, user, optimistic, writeCachedStatus, isTestAccount]);
 
-  const subscribed = status !== null && ACTIVE_STATUSES.has(status);
+  const resolvedStatus = isTestAccount ? "active" : status;
+  const resolvedLoading = isTestAccount ? false : loading;
+  const subscribed = resolvedStatus !== null && ACTIVE_STATUSES.has(resolvedStatus);
 
   const optimisticSubscribe = useCallback(() => {
     setStatus("active");
@@ -146,7 +157,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription, optimisticSubscribe }}>
+    <SubscriptionContext.Provider value={{ status: resolvedStatus, subscribed, loading: resolvedLoading, refetch: fetchSubscription, optimisticSubscribe }}>
       {children}
     </SubscriptionContext.Provider>
   );

@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { isSpecialAccountUser } from "@/lib/specialAccount";
 
 interface GemsContextType {
   gems: number;
@@ -37,7 +38,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     window.sessionStorage.removeItem(key);
   }, [getCacheKey]);
 
-  const isTestAccount = user?.email === "louisjridland@gmail.com";
+  const isTestAccount = isSpecialAccountUser(user);
 
   const fetchGems = useCallback(async () => {
     if (!user) {
@@ -46,6 +47,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     if (isTestAccount) {
+      writeCachedGems(user.id, 1000);
       setGems(1000);
       setLoading(false);
       return;
@@ -79,6 +81,13 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    if (isTestAccount) {
+      writeCachedGems(user.id, 1000);
+      setGems(1000);
+      setLoading(false);
+      return;
+    }
+
     const cachedGems = readCachedGems(user.id);
     if (cachedGems !== null) {
       setGems(cachedGems);
@@ -87,8 +96,11 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     fetchGems();
   }, [fetchGems, readCachedGems, user]);
 
+  const resolvedGems = isTestAccount ? 1000 : gems;
+  const resolvedLoading = isTestAccount ? false : loading;
+
   return (
-    <GemsContext.Provider value={{ gems, credits: gems, loading, refetch: fetchGems }}>
+    <GemsContext.Provider value={{ gems: resolvedGems, credits: resolvedGems, loading: resolvedLoading, refetch: fetchGems }}>
       {children}
     </GemsContext.Provider>
   );
