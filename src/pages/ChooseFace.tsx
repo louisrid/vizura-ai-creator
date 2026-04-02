@@ -68,15 +68,20 @@ const ChooseFace = () => {
 
   const isFreeUser = !subscribed && gems <= 0;
 
+  const hasInitRef = useRef(false);
+
   useEffect(() => {
     if (authLoading) return;
     if (!prompt) { navigate("/"); return; }
+    if (hasInitRef.current) return;
+    hasInitRef.current = true;
     if (faces.length > 0) {
       setLoading(false);
       return;
     }
     void generateFaces();
-  }, [authLoading, faces.length, navigate, prompt, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authLoading]);
 
   useEffect(() => {
     if (!loading && !cardsRevealed) {

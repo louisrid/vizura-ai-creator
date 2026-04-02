@@ -131,14 +131,22 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0 }}
               >
-                <SuccessRing size={84} color="hsl(var(--foreground))" />
+                <motion.span
+                  className="inline-block select-none text-[4.75rem] leading-none"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+                >
+                  🎉
+                </motion.span>
                 <motion.p
-                  className="text-center text-2xl font-extrabold lowercase text-white"
+                  className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 1.1, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
                 >
-                  character created!
+                  <span className="block">character</span>
+                  <span className="block">created!</span>
                 </motion.p>
               </motion.div>
             )}
