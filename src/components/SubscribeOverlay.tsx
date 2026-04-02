@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import OverlayShell from "./overlay/OverlayShell";
 import { GoldButton, DismissLink } from "./overlay/OverlayPrimitives";
 const IntroScreenTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="mb-0 text-center text-[2.2rem] font-[900] lowercase leading-tight tracking-tight text-white">
+  <h2 className="mb-0 text-center text-[2.35rem] font-[900] lowercase leading-tight tracking-tight text-white">
     {children}
   </h2>
 );

@@ -12,7 +12,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
-const skinOptions = ["pale", "tan", "asian", "dark"] as const;
+const skinOptions = ["white", "tan", "asian", "black"] as const;
 const bodyOptions = ["slim", "average", "curvy"] as const;
 const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;

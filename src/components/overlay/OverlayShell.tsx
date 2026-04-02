@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import AmbientBlueGlow from "@/components/overlay/AmbientBlueGlow";
 
 const NEON_BLUE = "hsl(var(--gem-green))";
 const PURE_WHITE = "hsl(var(--foreground))";
@@ -196,7 +195,6 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-            <AmbientBlueGlow />
             <div className="relative flex-1 overflow-hidden">
               <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "50%", transform: "translateY(-50%)" }}>
                 <div className="mx-auto flex w-full max-w-xs flex-col items-center">

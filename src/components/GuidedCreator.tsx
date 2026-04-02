@@ -56,7 +56,7 @@ const TRAITS = [
   { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic", "egirl"] },
 ] as const;
 
-const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
+const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.35rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
 const SUBTEXT_CLASS = "text-sm font-extrabold lowercase text-white/40";
 const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
 
@@ -107,7 +107,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Background glow ── */
+/* ── Solid background only ── */
 const AmbientGlow = () => null;
 
 /* ── Simple emoji — CSS bounce only ── */
@@ -117,7 +117,7 @@ const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
   </span>
 );
 
-/* ── Interactive pill — bigger for mobile, single row on desktop ── */
+/* ── Interactive pill — bigger for mobile ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
   label: string; selected: boolean; shaking: boolean; onClick: () => void;
 }) => (
@@ -131,7 +131,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`w-full rounded-2xl h-14 px-4 flex items-center justify-center text-[1rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`flex h-16 w-full items-center justify-center rounded-[1.35rem] px-5 text-[1.05rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[4px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[4px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
@@ -216,6 +216,11 @@ const ageRangeToNumber = (range: string): string => {
 
 const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
 
+const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<GuidedSelections> => ({
+  ...partial,
+  skin: partial.skin === "pale" ? "white" : partial.skin === "dark" ? "black" : partial.skin,
+});
+
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const navigateTo = useNavigate();
@@ -253,7 +258,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         skipWelcome?: boolean;
       };
       setStep(Math.max(saved?.step ?? 0, 0));
-      setSelections({ ...emptySelections, ...(saved?.selections ?? {}) });
+      setSelections({ ...emptySelections, ...normaliseLegacySelections(saved?.selections ?? {}) });
       return true;
     } catch {
       return false;
@@ -369,18 +374,21 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   selectionsRef.current = selections;
   stepRef.current = step;
 
+  const maybeShowNameToast = useCallback((nextName: string) => {
+    if (!visible || !isNameSlide || nameToastShown || !nextName.trim()) return;
+    setNameToastShown(true);
+    toast.success(getRandomNameToast());
+  }, [visible, isNameSlide, nameToastShown]);
+
+  const updateCharacterName = useCallback((nextName: string) => {
+    setSelections((p) => ({ ...p, characterName: nextName }));
+    maybeShowNameToast(nextName);
+  }, [maybeShowNameToast]);
+
   const randomiseName = useCallback(() => {
     const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
-    setSelections((p) => ({ ...p, characterName: name }));
-  }, []);
-
-  useEffect(() => {
-    if (!visible || nameToastShown) return;
-    if (selections.characterName.trim() && selections.age.trim()) {
-      setNameToastShown(true);
-      toast.success(getRandomNameToast());
-    }
-  }, [visible, nameToastShown, selections.characterName, selections.age]);
+    updateCharacterName(name);
+  }, [updateCharacterName]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -457,9 +465,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="flex w-full flex-col items-center">
           <h2 className="mt-1 text-center lowercase leading-[0.95] tracking-tight text-white">
-            <BouncyWords text="welcome to" className="block text-[1.4rem] font-[800]" delayStart={0.2} />
+            <BouncyWords text="welcome to" className="block text-[1.5rem] font-[800]" delayStart={0.2} />
             <motion.span
-              className="block text-[5.5rem] font-[900] leading-[0.95]"
+              className="block text-[5.8rem] font-[900] leading-[0.95]"
               initial={{ opacity: 0, scale: 0.6, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5, ease: [0.25, 1.1, 0.5, 1] }}
@@ -515,7 +523,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
               transition={{ duration: 0.4 }}
               value={selections.characterName}
-              onChange={(e) => setSelections((p) => ({ ...p, characterName: e.target.value }))}
+              onChange={(e) => updateCharacterName(e.target.value)}
               placeholder="type a name…"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
@@ -550,7 +558,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {trait.label}
           </h2>
           <div
-            className={`mt-5 grid w-full gap-3 px-2 ${trait.options.length === 4 ? "max-w-[18rem] grid-cols-2" : "max-w-[22rem] grid-cols-3"}`}
+            className={`mt-5 grid w-full gap-3.5 px-2 ${trait.options.length === 4 ? "max-w-[20rem] grid-cols-2" : "max-w-[23.5rem] grid-cols-3"}`}
           >
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
@@ -668,7 +676,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="w-full max-w-[16rem] mx-auto text-center text-[2.8rem] font-[900] lowercase leading-[0.96] tracking-tight">
+          <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[0.96] tracking-tight">
             <span className="block text-white">your character</span>
             <span className="block">
               <span className="text-white">is </span>
