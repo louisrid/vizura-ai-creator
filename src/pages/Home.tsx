@@ -288,7 +288,10 @@ const Home = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/create")}
+                onClick={() => {
+                  if (!user) { navigate("/auth?redirect=/create"); return; }
+                  navigate("/create");
+                }}
                 className="flex h-20 items-center justify-center gap-3 rounded-[1.5rem] border-[5px] border-border bg-card px-4 text-base font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
               >
                 <Camera size={20} strokeWidth={2.5} />
