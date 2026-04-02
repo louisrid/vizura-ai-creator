@@ -170,7 +170,7 @@ const ProgressBarLoader = ({
         </motion.div>
 
         <motion.div
-          className="mt-2 flex h-8 items-center justify-center"
+          className="flex h-8 items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.0, delay: 1.0, ease: "easeOut" }}

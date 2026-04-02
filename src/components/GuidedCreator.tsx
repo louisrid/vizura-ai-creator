@@ -677,13 +677,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <span className="block text-gem-green">is almost here!</span>
           </h2>
           {!isFirstCharacter && (
-            <div className="mt-5 flex items-center gap-1.5">
+            <div className="mt-6 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
             </div>
           )}
           <motion.p
-            className={`${!isFirstCharacter ? "mt-4" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
+            className={`${!isFirstCharacter ? "mt-5" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: SLIDE_FADE_DURATION }}
