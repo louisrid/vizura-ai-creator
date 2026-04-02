@@ -570,7 +570,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   onClick={() => setTrait(trait.key, opt)}
                 />
                 {isMakeup && opt === "classic" && (
-                  <span className="text-[10px] font-extrabold lowercase text-white/40">(recommended)</span>
+                  <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
                 )}
               </div>
             ))}
@@ -601,7 +601,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className="mt-2 text-center text-sm font-extrabold lowercase leading-snug text-white/40">
+            <p className="mt-2 text-center text-base font-extrabold lowercase leading-snug text-white/40">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
@@ -677,13 +677,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <span className="block text-gem-green">is almost here!</span>
           </h2>
           {!isFirstCharacter && (
-            <div className="mt-5 flex items-center gap-1.5">
+            <div className="mt-6 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
             </div>
           )}
           <motion.p
-            className={`${!isFirstCharacter ? "mt-4" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
+            className={`${!isFirstCharacter ? "mt-5" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: SLIDE_FADE_DURATION }}

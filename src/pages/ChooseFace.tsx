@@ -287,11 +287,11 @@ const ChooseFace = () => {
   const cardDelays = [0, 0.2, 0.4];
 
   return (
-    <div className="relative h-[calc(100dvh-73px)] overflow-hidden bg-background">
+    <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background">
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex h-full w-full max-w-lg flex-col px-4 pt-8 pb-0 overflow-hidden bg-background">
+      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 pt-8 pb-0 overflow-hidden">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">pick your face</PageTitle>
