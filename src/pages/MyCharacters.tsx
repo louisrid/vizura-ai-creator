@@ -20,16 +20,6 @@ interface Character {
   face_image_url: string | null;
 }
 
-const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
-
-const getCharacterEmoji = (char: Character): string => {
-  const match = char.description?.match(/\[emoji:(.+?)\]/);
-  if (match) return match[1];
-  let hash = 0;
-  for (let i = 0; i < char.id.length; i++) hash = ((hash << 5) - hash + char.id.charCodeAt(i)) | 0;
-  return FACE_EMOJIS[Math.abs(hash) % FACE_EMOJIS.length];
-};
-
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -61,8 +51,8 @@ const MyCharacters = () => {
           setNewCharId(pendingNew);
           if (data.length === 1) {
             setIsFirstCharacter(true);
-              setBounceActive(true);
-              setTimeout(() => setBounceActive(false), 3500);
+            setBounceActive(true);
+            setTimeout(() => setBounceActive(false), 3500);
           }
           setTimeout(() => setNewCharId(null), 1500);
         }
@@ -128,7 +118,7 @@ const MyCharacters = () => {
                         className="absolute inset-0 h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="text-4xl mb-1">{getCharacterEmoji(char)}</span>
+                      <span className="text-sm font-extrabold lowercase text-foreground/30">{char.name?.[0] || "?"}</span>
                     )}
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6">
                       <span className="block text-[11px] font-extrabold lowercase text-white leading-tight truncate">

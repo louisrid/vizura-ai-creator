@@ -1,9 +1,7 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
-import EmojiPreviewBox from "@/components/EmojiPreviewBox";
-import { extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 
 interface PhotoGenerationOverlayProps {
   open: boolean;
@@ -12,15 +10,12 @@ interface PhotoGenerationOverlayProps {
   resultImageUrl: string | null;
 }
 
-const RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞", "🎨", "🔮"];
 const OVERLAY_FADE_DURATION = 0.55;
 
 const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoGenerationOverlayProps) => {
-  const [fallbackEmoji] = useState(() => RESULT_EMOJIS[Math.floor(Math.random() * RESULT_EMOJIS.length)]);
   const [loadingDone, setLoadingDone] = useState(false);
   const [dismissing, setDismissing] = useState(false);
   const loadingKeyRef = useRef(0);
-  const resultEmoji = useMemo(() => extractEmojiFromPosterDataUrl(resultImageUrl) || fallbackEmoji, [resultImageUrl, fallbackEmoji]);
 
   useEffect(() => {
     if (!open) {
@@ -108,17 +103,16 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               image created!
             </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              <EmojiPreviewBox
-                emoji={resultEmoji}
-                className="h-[13.5rem] w-[13.5rem]"
-                emojiClassName="text-[4.5rem]"
-              />
-            </motion.div>
+            {resultImageUrl && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                className="rounded-2xl border-[5px] border-border overflow-hidden"
+              >
+                <img src={resultImageUrl} alt="generated" className="w-[13.5rem] h-auto object-contain" />
+              </motion.div>
+            )}
 
             <motion.p
               className="text-center text-sm font-extrabold lowercase text-white/50"

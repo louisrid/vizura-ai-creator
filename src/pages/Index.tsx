@@ -1,17 +1,15 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Sparkles, ChevronDown, ChevronUp, Gem, Upload } from "lucide-react";
+import { Loader2, Zap, Sparkles, ChevronDown, Gem, Upload } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
-import EmojiPreviewBox from "@/components/EmojiPreviewBox";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
-import { createEmojiPosterDataUrl, extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 import { sanitiseText } from "@/lib/sanitise";
 
 interface Character {
@@ -27,19 +25,6 @@ interface Character {
   face_image_url: string | null;
 }
 
-const PLACEHOLDER_PROMPTS = [
-  "mirror selfie, pink hoodie",
-  "beach sunset, white bikini",
-  "gym, sports bra, leggings",
-];
-
-const buildPromptFromCharacter = (c: Character): string => {
-  const ethnicityPart = c.country !== "any" ? `, ${c.country} ethnicity` : "";
-  let prompt = `photorealistic portrait, ${c.age} year old woman${ethnicityPart}, ${c.body} body type, ${c.hair} hair, ${c.eye} eyes, ${c.style} style`;
-  if (c.description.trim()) prompt += `, ${c.description.trim()}`;
-  return prompt;
-};
-
 const PHOTO_LOADING_PHRASES = [
   "composing the scene…",
   "adding the details…",
@@ -48,11 +33,24 @@ const PHOTO_LOADING_PHRASES = [
   "final touches…",
 ];
 
-const DEMO_RESULT_EMOJIS = ["✨", "🌙", "💫", "🌸", "🦋", "⚡️", "💎", "🌞"];
+/* ── Ratio icon ── */
+const RatioIcon = ({ ratio, className = "" }: { ratio: string; className?: string }) => {
+  const is916 = ratio === "9:16";
+  return (
+    <div
+      className={`border-2 border-current rounded-sm ${className}`}
+      style={{
+        width: is916 ? 8 : 10,
+        height: is916 ? 16 : 13,
+      }}
+    />
+  );
+};
 
-/* ── Pill toggle (same style as character creation) ── */
-const PillToggle = ({ label, options, value, onChange }: {
+/* ── Pill toggle ── */
+const PillToggle = ({ label, options, value, onChange, renderOption }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
+  renderOption?: (opt: string) => React.ReactNode;
 }) => (
   <div className="flex flex-col gap-1.5">
     <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
@@ -62,21 +60,30 @@ const PillToggle = ({ label, options, value, onChange }: {
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
-          className={`rounded-xl px-3.5 py-2 text-xs font-extrabold lowercase transition-all ${
+          className={`rounded-xl px-3.5 py-2 text-xs font-extrabold lowercase transition-all flex items-center gap-1.5 ${
             value === opt
               ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
               : "border-[3px] border-border bg-card text-foreground/70 hover:border-foreground/40"
           }`}
         >
-          {opt}
+          {renderOption ? renderOption(opt) : opt}
         </button>
       ))}
     </div>
   </div>
 );
 
-/* ── Cycling placeholder text ── */
-const useCyclingPlaceholder = (texts: string[], interval = 3500) => {
+/* ── Cycling placeholder text with character name ── */
+const useCyclingPlaceholder = (charName: string, interval = 3500) => {
+  const templates = useMemo(() => {
+    const name = charName || "luna";
+    return [
+      `${name} at the beach, white bikini, sunset`,
+      `${name} mirror selfie, pink hoodie`,
+      `${name} at the gym, sports bra, leggings`,
+    ];
+  }, [charName]);
+
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -84,14 +91,64 @@ const useCyclingPlaceholder = (texts: string[], interval = 3500) => {
     const timer = setInterval(() => {
       setVisible(false);
       setTimeout(() => {
-        setIndex((i) => (i + 1) % texts.length);
+        setIndex((i) => (i + 1) % templates.length);
         setVisible(true);
       }, 400);
     }, interval);
     return () => clearInterval(timer);
-  }, [texts.length, interval]);
+  }, [templates.length, interval]);
 
-  return { text: texts[index], visible };
+  return { text: templates[index], visible };
+};
+
+/* ── Highlighted text input component ── */
+const HighlightedPromptArea = ({
+  value, onChange, charName, placeholder
+}: {
+  value: string; onChange: (v: string) => void; charName: string;
+  placeholder: React.ReactNode;
+}) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Build highlighted overlay
+  const highlightedHtml = useMemo(() => {
+    if (!charName || !value) return "";
+    const regex = new RegExp(`(${charName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(regex, '<mark class="text-neon-yellow bg-transparent font-extrabold">$1</mark>');
+  }, [value, charName]);
+
+  return (
+    <div className="relative">
+      {/* Hidden highlight layer */}
+      {value && charName && (
+        <div
+          className="pointer-events-none absolute inset-0 px-4 py-4 text-sm font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
+          style={{ wordBreak: "break-word" }}
+          aria-hidden
+          dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+        />
+      )}
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={5}
+        className={`w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase focus:outline-none focus:border-foreground transition-colors ${
+          charName && value ? "text-foreground" : "text-foreground"
+        }`}
+        style={{
+          caretColor: "hsl(var(--foreground))",
+          color: charName && value ? "hsl(var(--foreground))" : undefined,
+        }}
+      />
+      {/* Cycling placeholder when empty */}
+      {!value && placeholder}
+    </div>
+  );
 };
 
 const Index = () => {
@@ -102,7 +159,7 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [resultImage, setResultImage] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -111,17 +168,17 @@ const Index = () => {
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
   const [fadingBack, setFadingBack] = useState(false);
 
-  // New toggles
+  // Toggles
   const [photoType, setPhotoType] = useState("selfie");
-  const [photoRatio, setPhotoRatio] = useState("4:5");
+  const [photoRatio, setPhotoRatio] = useState("3:4");
 
-  // Collapsible vibe section
-  const [vibeOpen, setVibeOpen] = useState(false);
+  // Reference
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [referenceStrength, setReferenceStrength] = useState(50);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const placeholder = useCyclingPlaceholder(PLACEHOLDER_PROMPTS);
+  const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
+  const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
 
   // Listen for tap-to-dismiss from photo overlay with fade
   useEffect(() => {
@@ -156,7 +213,7 @@ const Index = () => {
           setSelectedCharId(data[0].id);
         } else if (preselectedCharacterId) {
           const char = data.find((c: any) => c.id === preselectedCharacterId);
-          if (char) { setSelectedCharId(preselectedCharacterId); }
+          if (char) setSelectedCharId(preselectedCharacterId);
         }
       }
     };
@@ -168,20 +225,10 @@ const Index = () => {
     setPrompt("");
   };
 
-  const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const singleCharAutoSelected = characters.length === 1;
 
-  // Get character emoji for thumbnail
-  const charEmoji = useMemo(() => {
-    if (!selectedChar?.face_image_url) return "✨";
-    return extractEmojiFromPosterDataUrl(selectedChar.face_image_url) || "✨";
-  }, [selectedChar]);
-
-  // Highlight character name in prompt
-  const renderPromptStyle = useMemo(() => {
-    if (!selectedChar?.name || !prompt) return {};
-    return {};
-  }, [selectedChar, prompt]);
+  // Preview aspect ratio
+  const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -195,13 +242,11 @@ const Index = () => {
     if (!prompt.trim()) { toast.error("describe your photo first"); return; }
 
     setIsGenerating(true);
-    setImages([]);
     setError("");
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
 
     const cleanPrompt = sanitiseText(prompt.trim());
-    const demoEmoji = DEMO_RESULT_EMOJIS[Math.floor(Math.random() * DEMO_RESULT_EMOJIS.length)];
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: {
@@ -214,36 +259,20 @@ const Index = () => {
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
 
-      const isDemo = data?.demo === true;
-      const generatedPreview = isDemo
-        ? createEmojiPosterDataUrl(demoEmoji)
-        : (data.images || [])[0] || null;
-      const generatedImages = generatedPreview ? [generatedPreview] : (data.images || []);
+      const generatedUrl = (data.images || [])[0] || null;
 
-      if (user && generatedImages.length > 0) {
-        const { error: saveError } = await supabase.from("generations").insert({
-          user_id: user.id,
-          prompt: cleanPrompt,
-          image_urls: generatedImages,
-        });
-
-        if (saveError) {
-          throw new Error(saveError.message || "failed to save image");
-        }
-      }
-
-      setPhotoOverlayResult(generatedPreview);
+      setPhotoOverlayResult(generatedUrl);
       setPhotoOverlayPhase("success");
-      setImages(generatedImages);
+      setResultImage(generatedUrl);
 
       await refetchCredits();
       toast("1 gem used");
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");
-      if (e.message?.includes("No gems") || e.message?.includes("No credits") || e.message?.includes("402")) {
+      if (e.message?.includes("No gems") || e.message?.includes("402")) {
         setShowPaywall(true);
       } else {
-        setError(e.message || "creation failed");
+        toast.error("generation failed, please try again");
       }
     } finally {
       setIsGenerating(false);
@@ -266,35 +295,36 @@ const Index = () => {
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        {/* Hero image box with character thumbnail */}
-        <div className="relative">
-          {images[0] && extractEmojiFromPosterDataUrl(images[0]) ? (
-            <EmojiPreviewBox
-              emoji={extractEmojiFromPosterDataUrl(images[0]) || "✨"}
-              className="mx-auto mb-8 h-[19rem] w-[19rem] max-w-full"
-              emojiClassName="text-[4.75rem]"
-            />
-          ) : (
-            <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
-              {images[0] ? (
-                <img src={images[0]} alt="generated photo" className="h-full w-full object-cover rounded-[calc(1rem-5px)]" />
+        {/* Hero image box — changes shape with ratio */}
+        <div className="relative flex justify-center">
+          <motion.section
+            layout
+            className="mb-8 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
+            style={{ width: photoRatio === "9:16" ? "60%" : "92%", maxWidth: photoRatio === "9:16" ? "14rem" : "22rem" }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+              {resultImage ? (
+                <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
               ) : (
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-                  <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
+                <div className="flex h-full w-full items-center justify-center">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
+                    <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
+                  </div>
                 </div>
               )}
-            </section>
-          )}
+            </motion.div>
+          </motion.section>
 
-          {/* Character emoji thumbnail */}
-          {selectedCharId && (
-            <div className="absolute top-2 right-[8%] flex h-10 w-10 items-center justify-center rounded-xl border-[3px] border-border bg-card">
-              <span className="text-lg select-none">{charEmoji}</span>
+          {/* Character face thumbnail */}
+          {selectedChar?.face_image_url && (
+            <div className="absolute top-2 right-[4%] h-10 w-10 rounded-xl border-[3px] border-border bg-card overflow-hidden">
+              <img src={selectedChar.face_image_url} alt={selectedChar.name} className="h-full w-full object-cover" />
             </div>
           )}
         </div>
 
-        {/* Generate button — right below preview */}
+        {/* Generate button */}
         <div className="mt-5 mb-5">
           <button
             className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
@@ -315,7 +345,7 @@ const Index = () => {
         </div>
 
         <div className="space-y-5">
-          {/* Character select — hidden if only 1 character */}
+          {/* Character select */}
           {!singleCharAutoSelected && (
             <div>
               <span className="block text-xs font-extrabold lowercase text-foreground mb-3">select character</span>
@@ -356,24 +386,28 @@ const Index = () => {
           {/* Type toggle */}
           <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
 
-          {/* Ratio toggle */}
-          <PillToggle label="ratio" options={["4:5", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+          {/* Ratio toggle with icons */}
+          <PillToggle
+            label="ratio"
+            options={["3:4", "9:16"]}
+            value={photoRatio}
+            onChange={setPhotoRatio}
+            renderOption={(opt) => (
+              <span className="flex items-center gap-1.5">
+                <RatioIcon ratio={opt} />
+                {opt}
+              </span>
+            )}
+          />
 
-          {/* Prompt with cycling placeholder */}
+          {/* Prompt with cycling placeholder and name highlighting */}
           <div>
             <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
-            <div className="relative">
-              <textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                rows={5}
-                className="w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground focus:outline-none focus:border-foreground transition-colors"
-                style={{
-                  caretColor: "hsl(var(--foreground))",
-                }}
-              />
-              {/* Cycling placeholder when empty */}
-              {!prompt && (
+            <HighlightedPromptArea
+              value={prompt}
+              onChange={setPrompt}
+              charName={selectedChar?.name || ""}
+              placeholder={
                 <div className="pointer-events-none absolute left-4 top-4 right-4">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -388,11 +422,11 @@ const Index = () => {
                     </motion.span>
                   </AnimatePresence>
                 </div>
-              )}
-            </div>
+              }
+            />
           </div>
 
-          {/* Reference section — always visible */}
+          {/* Reference section */}
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
@@ -441,7 +475,6 @@ const Index = () => {
             {error}
           </div>
         )}
-
       </main>
     </div>
   );

@@ -3,12 +3,10 @@ import { Camera, Gem, Settings, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
-import EmojiPreviewBox from "@/components/EmojiPreviewBox";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
-import { extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
@@ -58,7 +56,7 @@ const Home = () => {
     setImages(latest);
   }, [user]);
 
-  // Handle openCreator from navigation state (e.g. from create photo page)
+  // Handle openCreator from navigation state
   useEffect(() => {
     const state = window.history.state?.usr;
     if (state?.openCreator) {
@@ -68,7 +66,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // Don't auto-open the guided creator if the user is already logged in
     if (user) return;
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
@@ -82,10 +79,7 @@ const Home = () => {
   useEffect(() => {
     void fetchLatestPhotos();
 
-    const refresh = () => {
-      void fetchLatestPhotos();
-    };
-
+    const refresh = () => void fetchLatestPhotos();
     const handleVisibility = () => {
       if (document.visibilityState === "visible") refresh();
     };
@@ -134,7 +128,7 @@ const Home = () => {
     const ey = selections.eye || "brown";
     const mk = selections.makeup || "natural";
     const ag = selections.age || "25";
-    const prompt = `photorealistic portrait, ${ag} year old woman, ${sk} skin, ${bt} body type, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup, professional photography, natural lighting, shallow depth of field, hyperdetailed`;
+    const prompt = `${ag} year old woman, ${sk} skin, ${bt} body type, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
@@ -174,19 +168,14 @@ const Home = () => {
     setShowGuided(false);
   };
 
-  // Always show 5 slots, newest first (far left)
+  // Always show 5 slots, newest first
   const photoSlots = useMemo(() => {
     const slots: LatestImage[] = [];
     for (let i = 0; i < 5; i++) {
       if (i < images.length) {
         slots.push(images[i]);
       } else {
-        slots.push({
-          id: `placeholder-${i}`,
-          url: "",
-          prompt: "",
-          created_at: "",
-        });
+        slots.push({ id: `placeholder-${i}`, url: "", prompt: "", created_at: "" });
       }
     }
     return slots;
@@ -219,15 +208,7 @@ const Home = () => {
             >
               <X size={18} strokeWidth={2.5} />
             </button>
-            {extractEmojiFromPosterDataUrl(selectedImage.url) ? (
-              <EmojiPreviewBox
-                emoji={extractEmojiFromPosterDataUrl(selectedImage.url) || "✨"}
-                className="h-[18rem] w-[18rem] max-w-full"
-                emojiClassName="text-[4.5rem]"
-              />
-            ) : (
-              <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
-            )}
+            <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -258,7 +239,6 @@ const Home = () => {
             <div className="grid grid-cols-5 gap-2">
               {photoSlots.map((photo) => {
                 const isPlaceholder = !photo.url;
-                const previewEmoji = extractEmojiFromPosterDataUrl(photo.url);
                 return (
                   <button
                     key={photo.id}
@@ -270,14 +250,10 @@ const Home = () => {
                         : "border-border bg-secondary"
                     }`}
                   >
-                    <AspectRatio ratio={4 / 5}>
+                    <AspectRatio ratio={3 / 4}>
                       {isPlaceholder ? (
                         <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">
                           empty
-                        </div>
-                      ) : previewEmoji ? (
-                        <div className="flex h-full w-full items-center justify-center bg-card">
-                          <span className="text-[1.75rem] leading-none">{previewEmoji}</span>
                         </div>
                       ) : (
                         <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />

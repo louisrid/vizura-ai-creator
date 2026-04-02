@@ -5,10 +5,9 @@ import { Loader2, Download, Trash2, X, Calendar, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import EmojiPreviewBox from "@/components/EmojiPreviewBox";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { extractEmojiFromPosterDataUrl } from "@/lib/demoImages";
 
 interface StorageImage {
   id: string;
@@ -94,35 +93,26 @@ const Storage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            {images.map((img) => {
-              const emojiFromUrl = extractEmojiFromPosterDataUrl(img.url);
-              return (
-                <button
-                  key={img.id}
-                  onClick={() => setExpanded(img)}
-                  className="group relative rounded-2xl border-[5px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
-                >
-                  {emojiFromUrl ? (
-                    <EmojiPreviewBox
-                      emoji={emojiFromUrl}
-                      className="w-full rounded-none border-0"
-                      emojiClassName="text-[3rem]"
-                    />
-                  ) : (
-                    <img src={img.url} alt="" className="w-full aspect-square object-cover" />
-                  )}
-                  <div className="p-3">
-                    <p className="text-[10px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed mb-2">
-                      {img.prompt || "no prompt"}
-                    </p>
-                    <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
-                      <Calendar size={10} strokeWidth={2.5} />
-                      {formatDate(img.created_at)}
-                    </div>
+            {images.map((img) => (
+              <button
+                key={img.id}
+                onClick={() => setExpanded(img)}
+                className="group relative rounded-2xl border-[5px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+              >
+                <AspectRatio ratio={3 / 4}>
+                  <img src={img.url} alt="" className="h-full w-full object-cover" />
+                </AspectRatio>
+                <div className="p-3">
+                  <p className="text-[10px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed mb-2">
+                    {img.prompt || "no prompt"}
+                  </p>
+                  <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
+                    <Calendar size={10} strokeWidth={2.5} />
+                    {formatDate(img.created_at)}
                   </div>
-                </button>
-              );
-            })}
+                </div>
+              </button>
+            ))}
           </div>
         )}
       </main>
@@ -147,15 +137,7 @@ const Storage = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
-                {extractEmojiFromPosterDataUrl(expanded.url) ? (
-                  <EmojiPreviewBox
-                    emoji={extractEmojiFromPosterDataUrl(expanded.url) || "✨"}
-                    className="w-full rounded-none border-0"
-                    emojiClassName="text-[4.5rem]"
-                  />
-                ) : (
-                  <img src={expanded.url} alt="" className="w-full aspect-square object-cover" />
-                )}
+                <img src={expanded.url} alt="" className="w-full object-contain max-h-[60vh]" />
                 <button
                   onClick={() => setExpanded(null)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"

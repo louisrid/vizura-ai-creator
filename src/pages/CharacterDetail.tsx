@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Camera, ArrowLeft } from "lucide-react";
+import { Loader2, Trash2, Camera } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,16 +19,6 @@ interface Character {
   description: string;
   face_image_url: string | null;
 }
-
-const FACE_EMOJIS = ["😊", "😎", "🥰", "😏", "🤩", "😇", "🥳", "😍", "🤗", "😌", "🧐", "😜", "🤭", "🫣", "💅", "✨", "👸", "🦋", "🌸", "💃"];
-
-const getCharacterEmoji = (char: Character): string => {
-  const match = char.description?.match(/\[emoji:(.+?)\]/);
-  if (match) return match[1];
-  let hash = 0;
-  for (let i = 0; i < char.id.length; i++) hash = ((hash << 5) - hash + char.id.charCodeAt(i)) | 0;
-  return FACE_EMOJIS[Math.abs(hash) % FACE_EMOJIS.length];
-};
 
 /** Extract user-typed description, stripping trait prefix and emoji tag */
 const getCleanDescription = (raw: string | null | undefined): string => {
@@ -105,7 +95,6 @@ const CharacterDetail = () => {
     );
   }
 
-  // Parse hair style from description
   const hairStyleMatch = character.description?.match(/^(?:.*?chest,\s*)?(.*?)\s*hair\./i);
   const hairStyleVal = hairStyleMatch?.[1] || "";
 
@@ -123,12 +112,10 @@ const CharacterDetail = () => {
   return (
     <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden fixed inset-x-0 bottom-0">
       <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-3 flex flex-col h-full overflow-hidden">
-        {/* Header — consistent pt-14 with all other pages */}
         <div className="flex items-center gap-3 mb-4 shrink-0">
           <BackButton />
         </div>
 
-        {/* Name + Age */}
         <div className="mb-3 shrink-0">
           <h1 className="text-xl font-extrabold lowercase tracking-tight text-foreground leading-[0.95]">
             {character.name || "unnamed"}
@@ -138,12 +125,10 @@ const CharacterDetail = () => {
           </span>
         </div>
 
-        {/* Image + Traits row */}
         <div className="flex gap-3 mb-3 shrink-0">
-          {/* Image box */}
           <div
             className="shrink-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
-            style={{ width: "35%", aspectRatio: "1/1" }}
+            style={{ width: "35%", aspectRatio: "3/4" }}
           >
             {character.face_image_url ? (
               <img
@@ -152,17 +137,13 @@ const CharacterDetail = () => {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <span className="text-4xl">{getCharacterEmoji(character)}</span>
+              <span className="text-sm font-extrabold lowercase text-foreground/30">{character.name?.[0] || "?"}</span>
             )}
           </div>
 
-        {/* Trait boxes — white fill, black text */}
           <div className="flex flex-1 flex-wrap gap-1.5 content-start">
             {allTraits.map((t) => (
-              <div
-                key={t.label}
-                className="rounded-xl bg-primary px-2.5 py-1.5"
-              >
+              <div key={t.label} className="rounded-xl bg-primary px-2.5 py-1.5">
                 <span className="block text-[7px] font-extrabold lowercase text-primary-foreground/50 leading-none mb-0.5">
                   {t.label}
                 </span>
@@ -174,7 +155,6 @@ const CharacterDetail = () => {
           </div>
         </div>
 
-        {/* Description — only show if user actually typed something */}
         {cleanDescription && (
           <div className="rounded-2xl border-[5px] border-border bg-card p-3 min-h-0 shrink overflow-hidden">
             <span className="block text-[8px] font-extrabold lowercase text-foreground/40 mb-1">
@@ -186,7 +166,6 @@ const CharacterDetail = () => {
           </div>
         )}
 
-        {/* Create photo button */}
         <button
           onClick={() => {
             sessionStorage.setItem("vizura_internal_nav", "1");
@@ -198,7 +177,6 @@ const CharacterDetail = () => {
           create photo
         </button>
 
-        {/* Delete button */}
         <button
           onClick={() => setShowDelete(true)}
           className="mt-3 flex items-center justify-center gap-2 h-12 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors shrink-0"
@@ -208,7 +186,6 @@ const CharacterDetail = () => {
         </button>
       </main>
 
-      {/* Delete confirmation overlay */}
       <AnimatePresence>
         {showDelete && (
           <motion.div
