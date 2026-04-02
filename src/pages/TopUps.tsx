@@ -51,7 +51,7 @@ const TopUps = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">top-ups</PageTitle>
@@ -62,7 +62,7 @@ const TopUps = () => {
           <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
         </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {plans.map((plan) => {
             const perGem = (plan.price / plan.gems).toFixed(2);
             return (

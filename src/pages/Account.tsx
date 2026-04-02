@@ -58,7 +58,7 @@ const Account = () => {
   return (
     <div className="min-h-screen bg-background">
       <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+      <main className="w-full max-w-lg md:max-w-2xl mx-auto px-4 md:px-8 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
@@ -78,43 +78,45 @@ const Account = () => {
             </button>
           )}
 
-          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-            <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-            <div className="flex-1 min-w-0">
-              <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
-              <span className="block text-sm font-extrabold lowercase text-foreground truncate">
-                {user?.email || "..."}
-              </span>
-            </div>
-          </div>
-
-          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-            <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-            <div className="flex-1">
-              <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
-              <span className="block text-sm font-extrabold lowercase text-foreground">
-                {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }).toLowerCase() : "..."}
-              </span>
-            </div>
-          </div>
-
-          <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-            <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
-            <div className="flex-1">
-              <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
-              <span className="block text-sm font-extrabold lowercase text-foreground">{gems}</span>
-            </div>
-          </div>
-
-          {subscribed && (
+          <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0">
             <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
-              <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
-              <div className="flex-1">
-                <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
-                <span className="block text-sm font-extrabold lowercase text-foreground">50 gems on renewal</span>
+              <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
+              <div className="flex-1 min-w-0">
+                <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
+                <span className="block text-sm font-extrabold lowercase text-foreground truncate">
+                  {user?.email || "..."}
+                </span>
               </div>
             </div>
-          )}
+
+            <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+              <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
+              <div className="flex-1">
+                <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
+                <span className="block text-sm font-extrabold lowercase text-foreground">
+                  {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }).toLowerCase() : "..."}
+                </span>
+              </div>
+            </div>
+
+            <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+              <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
+              <div className="flex-1">
+                <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
+                <span className="block text-sm font-extrabold lowercase text-foreground">{gems}</span>
+              </div>
+            </div>
+
+            {subscribed && (
+              <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+                <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
+                <div className="flex-1">
+                  <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
+                  <span className="block text-sm font-extrabold lowercase text-foreground">50 gems on renewal</span>
+                </div>
+              </div>
+            )}
+          </div>
 
           <Button variant="outline" className="w-full h-14 text-sm mt-6" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
@@ -203,12 +205,12 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
+      <main className="mx-auto w-full max-w-lg md:max-w-2xl px-4 md:px-8 pt-14 pb-12">
         <div className="mb-8 flex items-center gap-3">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-4">
+        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-4 max-w-md">
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
