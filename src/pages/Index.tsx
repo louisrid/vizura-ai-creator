@@ -204,7 +204,12 @@ const Index = () => {
     const demoEmoji = DEMO_RESULT_EMOJIS[Math.floor(Math.random() * DEMO_RESULT_EMOJIS.length)];
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt: cleanPrompt },
+        body: {
+          prompt: cleanPrompt,
+          character_id: selectedCharId || undefined,
+          photo_type: photoType,
+          aspect_ratio: photoRatio,
+        },
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
