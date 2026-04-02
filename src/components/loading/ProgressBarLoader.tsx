@@ -177,7 +177,7 @@ const ProgressBarLoader = ({
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="wait">
             {isComplete && requireTapToContinue ? (
               <motion.p
                 key="tap-to-continue"

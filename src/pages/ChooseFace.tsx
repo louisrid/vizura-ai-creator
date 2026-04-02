@@ -375,9 +375,13 @@ const ChooseFace = () => {
         </div>
 
         {loading && (
-          <div className="mt-16 flex flex-col items-center gap-4">
-            <Loader2 className="animate-spin text-foreground" size={40} />
-            <p className="text-sm font-extrabold lowercase text-muted-foreground">generating faces...</p>
+          <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
+            <ProgressBarLoader
+              duration={120000}
+              phrases={FACE_GEN_PHRASES}
+              phraseInterval={5000}
+              requireTapToContinue={false}
+            />
           </div>
         )}
 
