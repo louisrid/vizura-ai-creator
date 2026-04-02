@@ -601,7 +601,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className="mt-2 text-center text-sm font-extrabold lowercase leading-snug text-white/40">
+            <p className="mt-2 text-center text-base font-extrabold lowercase leading-snug text-white/40">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
