@@ -74,7 +74,7 @@ const MyCharacters = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-32">
+      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-32">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -85,7 +85,7 @@ const MyCharacters = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : (
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors duration-200 active:scale-[0.97]"

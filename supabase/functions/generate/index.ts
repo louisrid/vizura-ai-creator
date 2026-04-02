@@ -24,6 +24,13 @@ const SELFIE_PREFIX =
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
 
+/* ── face generation quality prompt ─────────────────────── */
+const FACE_QUALITY =
+  "beautiful attractive woman, influencer aesthetic, clear skin, well-groomed eyebrows, photorealistic portrait, clean white studio background, passport-style headshot, soft even studio lighting, sharp focus on face, high resolution, iPhone quality photo";
+
+const FACE_NEGATIVE =
+  "Do not generate ugly, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, or AI generated look.";
+
 /* ── in-memory rate limiter ─────────────────────────────── */
 const rateBuckets = new Map<string, number[]>();
 
@@ -90,25 +97,21 @@ function ageToDescription(ageStr: string): string {
 function buildCharacterTraits(char: any): string {
   const parts: string[] = [];
 
-  // Age
   if (char.age) {
     parts.push(`${char.age} year old woman`);
     parts.push(ageToDescription(char.age));
   }
 
-  // Skin
   const skinKey = (char.country || "").toLowerCase();
   if (skinKey && skinKey !== "any") {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
   }
 
-  // Body
   const bodyKey = (char.body || "").toLowerCase();
   if (bodyKey && bodyKey !== "regular") {
     parts.push(BODY_MAP[bodyKey] || `${bodyKey} body type`);
   }
 
-  // Hair - combine style from description + colour
   const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   const hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
@@ -116,18 +119,15 @@ function buildCharacterTraits(char: any): string {
     parts.push(`${hairStyle} ${hairColour} hair`.trim());
   }
 
-  // Eyes
   if (char.eye) {
     parts.push(`bright ${char.eye} eyes`);
   }
 
-  // Makeup
   const makeupKey = (char.style || "").toLowerCase();
   if (makeupKey) {
     parts.push(MAKEUP_MAP[makeupKey] || `${makeupKey} makeup`);
   }
 
-  // Additional description (cleaned)
   if (char.description) {
     let desc = char.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
     if (desc) parts.push(desc);
@@ -154,15 +154,16 @@ function buildFinalPrompt(
   return parts.join(". ");
 }
 
+/* ── check for content policy errors ───────────────────── */
+function isContentPolicyError(status: number, text: string): boolean {
+  if (status !== 400) return false;
+  const lower = text.toLowerCase();
+  return lower.includes("safety") || lower.includes("content policy") || lower.includes("blocked") || lower.includes("moderation");
+}
+
 /* ── xAI Grok: text-to-image ──────────────────────────── */
 async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4"): Promise<string | null> {
-  // Map aspect ratio format for xAI API
-  const ratioMap: Record<string, string> = {
-    "3:4": "3:4",
-    "9:16": "9:16",
-    "4:5": "3:4",
-  };
-  const ratio = ratioMap[aspectRatio] || "3:4";
+  console.log("xaiTextToImage calling:", prompt.slice(0, 100));
 
   const response = await fetch("https://api.x.ai/v1/images/generations", {
     method: "POST",
@@ -171,25 +172,25 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-imagine-image",
+      model: "grok-2-image",
       prompt,
       n: 1,
     }),
   });
 
   if (!response.ok) {
+    const errText = await response.text();
+    console.error("xAI text-to-image error:", response.status, errText);
     if (response.status === 429) throw { status: 429 };
     if (response.status === 402) throw { status: 402 };
-    const errText = await response.text();
-    console.error("xAI text-to-image failed:", response.status, errText);
-    // Content policy rejection
-    if (response.status === 400 && errText.toLowerCase().includes("safety") || errText.toLowerCase().includes("content policy") || errText.toLowerCase().includes("blocked")) {
+    if (isContentPolicyError(response.status, errText)) {
       throw { status: 400, contentPolicy: true };
     }
-    throw new Error(`xAI generation failed: ${response.status}`);
+    throw new Error(`xAI generation failed: ${response.status} - ${errText}`);
   }
 
   const data = await response.json();
+  console.log("xAI response keys:", Object.keys(data));
   return data?.data?.[0]?.url ?? null;
 }
 
@@ -202,6 +203,8 @@ async function xaiImageEdit(
 ): Promise<string | null> {
   const images = imageUrls.map((url) => ({ type: "image_url", url }));
 
+  console.log("xaiImageEdit calling with", images.length, "images");
+
   const response = await fetch("https://api.x.ai/v1/images/edits", {
     method: "POST",
     headers: {
@@ -209,7 +212,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-imagine-image",
+      model: "grok-2-image",
       prompt,
       images,
       aspect_ratio: aspectRatio,
@@ -217,18 +220,18 @@ async function xaiImageEdit(
   });
 
   if (!response.ok) {
+    const errText = await response.text();
+    console.error("xAI image-edit error:", response.status, errText);
     if (response.status === 429) throw { status: 429 };
     if (response.status === 402) throw { status: 402 };
-    const errText = await response.text();
-    console.error("xAI image-edit failed:", response.status, errText);
-    const lower = errText.toLowerCase();
-    if (lower.includes("safety") || lower.includes("content policy") || lower.includes("blocked")) {
+    if (isContentPolicyError(response.status, errText)) {
       throw { status: 400, contentPolicy: true };
     }
-    throw new Error(`xAI image edit failed: ${response.status}`);
+    throw new Error(`xAI image edit failed: ${response.status} - ${errText}`);
   }
 
   const data = await response.json();
+  console.log("xAI edit response keys:", Object.keys(data));
   return data?.data?.[0]?.url ?? null;
 }
 
@@ -239,12 +242,18 @@ async function generateFaceImages(
   apiKey: string
 ): Promise<string[]> {
   const imageUrls: string[] = [];
-  const angles = ["front view portrait", "slight left 3/4 angle portrait", "slight right 3/4 angle portrait"];
+  
+  // Each face gets a distinct style variation for diversity
+  const variations = [
+    "looking directly at camera, slight smile, relaxed expression",
+    "looking directly at camera, confident expression, soft smile",
+    "looking directly at camera, playful expression, gentle head tilt",
+  ];
 
   for (let i = 0; i < Math.min(count, 3); i++) {
-    const angle = angles[i] || "front view portrait";
-    const fullPrompt = `${prompt}, ${angle}, close-up face and shoulders, ${QUALITY_SUFFIX}. ${NEGATIVE_INSTRUCTION}`;
-    console.log(`Face gen ${i + 1}:`, fullPrompt);
+    const variation = variations[i] || variations[0];
+    const fullPrompt = `${prompt}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    console.log(`Face gen ${i + 1}:`, fullPrompt.slice(0, 150));
     try {
       const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
       if (url) imageUrls.push(url);
@@ -424,12 +433,7 @@ serve(async (req) => {
           .upsert({ ip_address: clientIp, user_id: userId }, { onConflict: "ip_address" });
       }
 
-      await adminClient.from("generations").insert({
-        user_id: userId,
-        prompt: sanitiseText(prompt),
-        image_urls: imageUrls,
-      });
-
+      // Don't save face options to generations - only the selected face will be saved
       return new Response(
         JSON.stringify({ images: imageUrls, free_gen: true }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -478,12 +482,10 @@ serve(async (req) => {
     let imageUrls: string[];
     try {
       if (isFaceRegen) {
-        // Face regeneration: generate 3 new face options
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
       } else {
-        // Photo generation
         const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits);
-        console.log("Final prompt:", finalPrompt);
+        console.log("Final prompt:", finalPrompt.slice(0, 200));
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
 
         const result = await generatePhoto(finalPrompt, faceImageUrl, XAI_API_KEY, aspectRatio);
@@ -533,6 +535,7 @@ serve(async (req) => {
       );
     }
 
+    // Only save to generations for photo gen, not face regen
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,
