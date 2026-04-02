@@ -24,7 +24,14 @@ const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { gems } = useGems();
-  const [images, setImages] = useState<LatestImage[]>([]);
+  const [images, setImages] = useState<LatestImage[]>(() => {
+    // Hydrate from sessionStorage for instant display on refresh
+    try {
+      const cached = sessionStorage.getItem("vizura_latest_photos");
+      if (cached) return JSON.parse(cached) as LatestImage[];
+    } catch {}
+    return [];
+  });
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
@@ -49,6 +56,8 @@ const Home = () => {
       )
       .slice(0, 8);
     setImages(latest);
+    // Cache for instant hydration on next visit
+    try { sessionStorage.setItem("vizura_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
   useEffect(() => {

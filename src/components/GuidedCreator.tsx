@@ -732,13 +732,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
           <div className="flex min-h-[18rem] flex-col items-center justify-center gap-5 text-center">
+            <motion.span
+              className="inline-block select-none text-[4.75rem] leading-none"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              🎉
+            </motion.span>
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.85 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             >
               <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
-                character created!
+                <span className="block">character</span>
+                <span className="block">created!</span>
               </p>
             </motion.div>
           </div>
