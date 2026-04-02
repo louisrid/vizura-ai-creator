@@ -636,7 +636,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-8 hover:border-white/30 transition-colors"
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 hover:border-white/30 transition-colors" style={{ aspectRatio: "4/5" }}
                 >
                   <Upload size={24} strokeWidth={2.5} className="text-white/30" />
                   <span className="text-sm font-extrabold lowercase text-white/30">add reference image</span>
