@@ -18,6 +18,8 @@ interface Character {
   style: string;
   description: string;
   face_image_url: string | null;
+  face_side_url?: string | null;
+  face_angle_url?: string | null;
 }
 
 const getCleanDescription = (raw: string | null | undefined): string => {
@@ -26,6 +28,19 @@ const getCleanDescription = (raw: string | null | undefined): string => {
   cleaned = cleaned.replace(/\[emoji:.+?\]/g, "").trim();
   return cleaned;
 };
+
+const ReferenceImage = ({ url, label }: { url: string | null | undefined; label: string }) => (
+  <div className="flex flex-col items-center gap-1">
+    <div className="aspect-[3/4] w-full overflow-hidden rounded-xl border-[4px] border-border bg-card flex items-center justify-center">
+      {url ? (
+        <img src={url} alt={label} className="h-full w-full object-cover" />
+      ) : (
+        <span className="text-[10px] font-extrabold lowercase text-foreground/30 text-center px-1">not generated</span>
+      )}
+    </div>
+    <span className="text-[10px] font-extrabold lowercase text-foreground/40">{label}</span>
+  </div>
+);
 
 const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,7 +66,7 @@ const CharacterDetail = () => {
         .eq("id", id)
         .eq("user_id", user.id)
         .single();
-      if (data) setCharacter(data as Character);
+      if (data) setCharacter(data as unknown as Character);
       setLoading(false);
     };
     if (user) fetch();
@@ -157,6 +172,16 @@ const CharacterDetail = () => {
                   </span>
                 </div>
               ))}
+            </div>
+
+            {/* Reference images row */}
+            <div className="mb-4">
+              <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-2">reference images</span>
+              <div className="grid grid-cols-3 gap-2">
+                <ReferenceImage url={character.face_image_url} label="front" />
+                <ReferenceImage url={character.face_side_url} label="side" />
+                <ReferenceImage url={character.face_angle_url} label="angle" />
+              </div>
             </div>
 
             {cleanDescription && (
