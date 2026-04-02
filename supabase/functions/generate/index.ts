@@ -26,7 +26,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "beautiful attractive woman, influencer aesthetic, clear skin, well-groomed eyebrows, photorealistic portrait, clean white studio background, passport-style headshot, soft even studio lighting, sharp focus on face, high resolution, iPhone quality photo";
+  "professional passport photo style, front-facing headshot, plain white background, centred in frame, head and top of shoulders only, even soft lighting from the front, looking directly at camera, no shadows on background, consistent framing and zoom level, beautiful attractive woman, influencer aesthetic, clear skin, well-groomed eyebrows, photorealistic portrait, high resolution, iPhone quality photo";
 
 const FACE_NEGATIVE =
   "Do not generate ugly, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, or AI generated look.";
@@ -145,7 +145,7 @@ function buildFinalPrompt(
   const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
   const parts: string[] = [];
 
-  if (characterTraits) parts.push(characterTraits);
+  if (characterTraits) parts.push(`Generate a photo of the woman shown in the reference images. She has: ${characterTraits}`);
   parts.push(scenePrompt);
   parts.push(perspective);
   parts.push(QUALITY_SUFFIX);
@@ -161,6 +161,42 @@ function isContentPolicyError(status: number, text: string): boolean {
   return lower.includes("safety") || lower.includes("content policy") || lower.includes("blocked") || lower.includes("moderation");
 }
 
+/* ── download image and store permanently ─────────────── */
+async function storeImagePermanently(
+  imageUrl: string,
+  userId: string,
+  adminClient: any,
+  prefix = "gen"
+): Promise<string> {
+  try {
+    console.log("Downloading image for permanent storage:", imageUrl.slice(0, 80));
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      console.error("Failed to download image:", response.status);
+      return imageUrl; // fallback to temp URL
+    }
+    const blob = await response.blob();
+    const ext = "png";
+    const filename = `${userId}/${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+    const { error: uploadError } = await adminClient.storage
+      .from("images")
+      .upload(filename, blob, { contentType: "image/png", upsert: false });
+
+    if (uploadError) {
+      console.error("Storage upload error:", uploadError);
+      return imageUrl; // fallback
+    }
+
+    const { data: publicData } = adminClient.storage.from("images").getPublicUrl(filename);
+    console.log("Stored permanently:", publicData.publicUrl?.slice(0, 80));
+    return publicData.publicUrl;
+  } catch (e) {
+    console.error("storeImagePermanently error:", e);
+    return imageUrl; // fallback
+  }
+}
+
 /* ── xAI Grok: text-to-image ──────────────────────────── */
 async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4"): Promise<string | null> {
   console.log("xaiTextToImage calling:", prompt.slice(0, 100));
@@ -172,7 +208,7 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-imagine-image",
+      model: "grok-2-image",
       prompt,
       n: 1,
     }),
@@ -212,7 +248,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-imagine-image",
+      model: "grok-2-image",
       prompt,
       images,
       aspect_ratio: aspectRatio,
@@ -239,15 +275,16 @@ async function xaiImageEdit(
 async function generateFaceImages(
   prompt: string,
   count: number,
-  apiKey: string
+  apiKey: string,
+  adminClient: any,
+  userId: string
 ): Promise<string[]> {
   const imageUrls: string[] = [];
   
-  // Each face gets a distinct style variation for diversity
   const variations = [
-    "looking directly at camera, slight smile, relaxed expression",
+    "looking directly at camera, neutral expression, slight smile",
     "looking directly at camera, confident expression, soft smile",
-    "looking directly at camera, playful expression, gentle head tilt",
+    "looking directly at camera, gentle expression, relaxed face",
   ];
 
   for (let i = 0; i < Math.min(count, 3); i++) {
@@ -256,7 +293,10 @@ async function generateFaceImages(
     console.log(`Face gen ${i + 1}:`, fullPrompt.slice(0, 150));
     try {
       const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
-      if (url) imageUrls.push(url);
+      if (url) {
+        const permanentUrl = await storeImagePermanently(url, userId, adminClient, "face");
+        imageUrls.push(permanentUrl);
+      }
     } catch (e) {
       console.error(`Face gen ${i + 1} failed:`, e);
       throw e;
@@ -266,15 +306,51 @@ async function generateFaceImages(
   return imageUrls;
 }
 
+/* ── generate extra angle images from a reference face ── */
+async function generateExtraAngles(
+  faceUrl: string,
+  characterTraits: string,
+  apiKey: string,
+  adminClient: any,
+  userId: string
+): Promise<{ sideUrl: string | null; angleUrl: string | null }> {
+  let sideUrl: string | null = null;
+  let angleUrl: string | null = null;
+
+  try {
+    console.log("Generating side profile...");
+    const sidePrompt = `Same person exactly, side profile view, facing left, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const sideResult = await xaiImageEdit(sidePrompt, [faceUrl], apiKey, "3:4");
+    if (sideResult) {
+      sideUrl = await storeImagePermanently(sideResult, userId, adminClient, "side");
+    }
+  } catch (e) {
+    console.error("Side profile generation failed:", e);
+  }
+
+  try {
+    console.log("Generating 3/4 angle...");
+    const anglePrompt = `Same person exactly, three-quarter angle view, slight turn to the right, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
+    if (angleResult) {
+      angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
+    }
+  } catch (e) {
+    console.error("3/4 angle generation failed:", e);
+  }
+
+  return { sideUrl, angleUrl };
+}
+
 /* ── generate photo (scene-based, with character traits + modifiers) ── */
 async function generatePhoto(
   finalPrompt: string,
-  faceImageUrl: string | null,
+  faceImageUrls: string[],
   apiKey: string,
   aspectRatio: string,
 ): Promise<string | null> {
-  if (faceImageUrl) {
-    return await xaiImageEdit(finalPrompt, [faceImageUrl], apiKey, aspectRatio);
+  if (faceImageUrls.length > 0) {
+    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, aspectRatio);
   }
   return await xaiTextToImage(finalPrompt, apiKey, aspectRatio);
 }
@@ -323,6 +399,8 @@ serve(async (req) => {
     const characterId = body?.character_id || null;
     const photoType = body?.photo_type || "selfie";
     const aspectRatio = body?.aspect_ratio || "3:4";
+    const generateAngles = body?.generate_angles === true;
+    const selectedFaceUrl = body?.selected_face_url || null;
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
@@ -344,9 +422,21 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    /* ── ANGLE GENERATION FLOW ── */
+    if (generateAngles && selectedFaceUrl) {
+      console.log("Generating extra angles for face:", selectedFaceUrl.slice(0, 80));
+      const { sideUrl, angleUrl } = await generateExtraAngles(
+        selectedFaceUrl, prompt, Deno.env.get("XAI_API_KEY")!, adminClient, userId
+      );
+      return new Response(
+        JSON.stringify({ side_url: sideUrl, angle_url: angleUrl }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     /* ── look up character if provided ── */
     let characterTraits: string | null = null;
-    let faceImageUrl: string | null = null;
+    let faceImageUrls: string[] = [];
     if (characterId) {
       const { data: charData } = await adminClient
         .from("characters")
@@ -357,7 +447,10 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
-        faceImageUrl = charData.face_image_url || null;
+        // Collect all available face references
+        if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
+        if (charData.face_side_url) faceImageUrls.push(charData.face_side_url);
+        if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
       }
     }
 
@@ -397,7 +490,7 @@ serve(async (req) => {
 
       let imageUrls: string[];
       try {
-        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
+        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } catch (e: any) {
         if (e?.contentPolicy) {
           return new Response(
@@ -405,16 +498,10 @@ serve(async (req) => {
             { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
-        if (e?.status === 429) {
+        if (e?.status === 429 || e?.status === 402) {
           return new Response(
             JSON.stringify({ error: "generation failed, please try again" }),
-            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-        if (e?.status === 402) {
-          return new Response(
-            JSON.stringify({ error: "generation failed, please try again" }),
-            { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         throw e;
@@ -433,7 +520,6 @@ serve(async (req) => {
           .upsert({ ip_address: clientIp, user_id: userId }, { onConflict: "ip_address" });
       }
 
-      // Don't save face options to generations - only the selected face will be saved
       return new Response(
         JSON.stringify({ images: imageUrls, free_gen: true }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -482,14 +568,20 @@ serve(async (req) => {
     let imageUrls: string[];
     try {
       if (isFaceRegen) {
-        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
+        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } else {
         const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits);
         console.log("Final prompt:", finalPrompt.slice(0, 200));
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
+        console.log("Face references:", faceImageUrls.length);
 
-        const result = await generatePhoto(finalPrompt, faceImageUrl, XAI_API_KEY, aspectRatio);
-        imageUrls = result ? [result] : [];
+        const result = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
+        if (result) {
+          const permanentUrl = await storeImagePermanently(result, userId, adminClient, "photo");
+          imageUrls = [permanentUrl];
+        } else {
+          imageUrls = [];
+        }
       }
     } catch (e: any) {
       // Refund gem on failure

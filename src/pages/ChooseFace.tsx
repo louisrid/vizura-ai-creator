@@ -12,11 +12,19 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import PaywallOverlay from "@/components/PaywallOverlay";
+import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
 const FACE_STORAGE_KEY = "vizura_face_options";
 const AUTH_RESUME_KEY = "vizura_resume_after_auth";
+
+const ANGLE_PHRASES = [
+  "saving your character…",
+  "generating extra angles…",
+  "building identity set…",
+  "almost done…",
+];
 
 const ChooseFace = () => {
   const { user } = useAuth();
@@ -49,6 +57,7 @@ const ChooseFace = () => {
   const [rerolling, setRerolling] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
+  const [savingWithAngles, setSavingWithAngles] = useState(false);
 
   const isFreeUser = !subscribed && gems <= 0;
 
@@ -186,6 +195,7 @@ const ChooseFace = () => {
     }
 
     const faceUrl = faces[faceIdx] || null;
+    setSavingWithAngles(true);
 
     let cId = characterId;
 
@@ -214,6 +224,7 @@ const ChooseFace = () => {
             .single();
           if (insertError) {
             toast.error("failed to save character");
+            setSavingWithAngles(false);
             return false;
           }
           if (inserted) {
@@ -224,6 +235,7 @@ const ChooseFace = () => {
         }
       } catch (err) {
         toast.error("failed to save character");
+        setSavingWithAngles(false);
         return false;
       }
     } else {
@@ -236,17 +248,45 @@ const ChooseFace = () => {
         if (updateError) throw updateError;
       } catch (err) {
         toast.error("failed to save selected face");
+        setSavingWithAngles(false);
         return false;
       }
     }
 
-    // Save only the selected face to generations (not all 3)
+    // Save only the selected face to generations
     if (faceUrl) {
       await supabase.from("generations").insert({
         user_id: currentUser.id,
         prompt: prompt || "face generation",
         image_urls: [faceUrl],
       });
+    }
+
+    // Generate extra angles (side + 3/4) in background
+    if (faceUrl && cId) {
+      try {
+        const { data: angleData } = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: prompt || "",
+            generate_angles: true,
+            selected_face_url: faceUrl,
+          },
+        });
+
+        if (angleData?.side_url || angleData?.angle_url) {
+          await supabase
+            .from("characters")
+            .update({
+              face_side_url: angleData.side_url || null,
+              face_angle_url: angleData.angle_url || null,
+            })
+            .eq("id", cId)
+            .eq("user_id", currentUser.id);
+        }
+      } catch (e) {
+        console.error("Extra angle generation failed:", e);
+        // Non-fatal — character is already saved with front face
+      }
     }
 
     if (cId) {
@@ -295,6 +335,20 @@ const ChooseFace = () => {
     return <div className="fixed inset-0 bg-black z-[9999]" />;
   }
 
+  // Loading screen while saving + generating angles
+  if (savingWithAngles) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
+        <ProgressBarLoader
+          duration={35000}
+          phrases={ANGLE_PHRASES}
+          phraseInterval={5000}
+          requireTapToContinue={false}
+        />
+      </div>
+    );
+  }
+
   const cardDelays = [0, 0.2, 0.4];
 
   return (
@@ -302,7 +356,7 @@ const ChooseFace = () => {
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 pt-8 pb-0 overflow-hidden">
+      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg md:max-w-3xl flex-col px-4 md:px-8 pt-8 pb-0 overflow-hidden">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">pick your face</PageTitle>
@@ -322,7 +376,7 @@ const ChooseFace = () => {
 
         {!loading && faces.length > 0 && (
           <>
-            <div className="grid grid-cols-3 gap-3 mt-4 shrink-0" style={{ perspective: "800px" }}>
+            <div className="grid grid-cols-3 gap-3 md:gap-5 mt-4 shrink-0 md:max-w-xl md:mx-auto" style={{ perspective: "800px" }}>
               {faces.map((url, i) => (
                 <motion.button
                   key={i}
