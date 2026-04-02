@@ -570,7 +570,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   onClick={() => setTrait(trait.key, opt)}
                 />
                 {isMakeup && opt === "classic" && (
-                  <span className="text-[10px] font-extrabold lowercase text-white/40">(recommended)</span>
+                  <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
                 )}
               </div>
             ))}
