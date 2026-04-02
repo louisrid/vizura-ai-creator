@@ -172,7 +172,7 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-imagine-image",
       prompt,
       n: 1,
     }),
@@ -212,7 +212,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-imagine-image",
       prompt,
       images,
       aspect_ratio: aspectRatio,

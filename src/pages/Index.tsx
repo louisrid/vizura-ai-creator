@@ -60,7 +60,7 @@ const PillToggle = ({ label, options, value, onChange, renderOption }: {
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
-          className={`rounded-xl px-3.5 py-2 text-xs font-extrabold lowercase transition-all flex items-center gap-1.5 ${
+          className={`rounded-xl px-4 py-2.5 text-sm font-extrabold lowercase transition-all flex items-center gap-1.5 ${
             value === opt
               ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
               : "border-[3px] border-border bg-card text-foreground/70 hover:border-foreground/40"
@@ -110,7 +110,6 @@ const HighlightedPromptArea = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Build highlighted overlay
   const highlightedHtml = useMemo(() => {
     if (!charName || !value) return "";
     const regex = new RegExp(`(${charName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
@@ -123,7 +122,6 @@ const HighlightedPromptArea = ({
 
   return (
     <div className="relative">
-      {/* Hidden highlight layer */}
       {value && charName && (
         <div
           className="pointer-events-none absolute inset-0 px-4 py-4 text-sm font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
@@ -137,19 +135,35 @@ const HighlightedPromptArea = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={5}
-        className={`w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase focus:outline-none focus:border-foreground transition-colors ${
-          charName && value ? "text-foreground" : "text-foreground"
-        }`}
-        style={{
-          caretColor: "hsl(var(--foreground))",
-          color: charName && value ? "hsl(var(--foreground))" : undefined,
-        }}
+        className="w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground focus:outline-none focus:border-foreground transition-colors"
+        style={{ caretColor: "hsl(var(--foreground))" }}
       />
-      {/* Cycling placeholder when empty */}
       {!value && placeholder}
     </div>
   );
 };
+
+/* ── Create button component (reusable for top + bottom) ── */
+const CreateButton = ({ onClick, disabled, isGenerating }: {
+  onClick: () => void; disabled: boolean; isGenerating: boolean;
+}) => (
+  <button
+    className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
+    onClick={onClick}
+    disabled={disabled}
+  >
+    {isGenerating ? (
+      <><Loader2 className="animate-spin" size={18} />creating...</>
+    ) : (
+      <>
+        <Zap size={18} strokeWidth={2.5} />
+        create
+        <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
+        <span className="text-[11px] ml-0.5">1</span>
+      </>
+    )}
+  </button>
+);
 
 const Index = () => {
   const { user } = useAuth();
@@ -168,11 +182,9 @@ const Index = () => {
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
   const [fadingBack, setFadingBack] = useState(false);
 
-  // Toggles
   const [photoType, setPhotoType] = useState("selfie");
   const [photoRatio, setPhotoRatio] = useState("3:4");
 
-  // Reference
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [referenceStrength, setReferenceStrength] = useState(50);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -180,7 +192,6 @@ const Index = () => {
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
 
-  // Listen for tap-to-dismiss from photo overlay with fade
   useEffect(() => {
     const handler = () => {
       setFadingBack(true);
@@ -226,8 +237,6 @@ const Index = () => {
   };
 
   const singleCharAutoSelected = characters.length === 1;
-
-  // Preview aspect ratio
   const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -257,7 +266,14 @@ const Index = () => {
         },
       });
       if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
+      if (data?.error) {
+        if (data?.code === "CONTENT_POLICY") {
+          toast.error("please adjust your description and try again");
+          setPhotoOverlayPhase("hidden");
+          return;
+        }
+        throw new Error(data.error);
+      }
 
       const generatedUrl = (data.images || [])[0] || null;
 
@@ -279,6 +295,8 @@ const Index = () => {
     }
   };
 
+  const createDisabled = isGenerating || (!!user && !prompt.trim());
+
   return (
     <div className="min-h-screen bg-background">
       <PhotoGenerationOverlay
@@ -289,184 +307,175 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-10">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-10">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        {/* Hero image box — changes shape with ratio */}
-        <div className="relative flex justify-center">
-          <motion.section
-            layout
-            className="mb-8 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
-            style={{ width: photoRatio === "9:16" ? "60%" : "92%", maxWidth: photoRatio === "9:16" ? "14rem" : "22rem" }}
-            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
-              {resultImage ? (
-                <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-                    <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
-                  </div>
+        {/* Desktop: two-column layout */}
+        <div className="md:grid md:grid-cols-5 md:gap-8">
+          {/* Left: preview */}
+          <div className="md:col-span-2">
+            <div className="relative flex justify-center">
+              <motion.section
+                layout
+                className="mb-6 md:mb-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden w-full"
+                style={{ maxWidth: photoRatio === "9:16" ? "14rem" : "100%" }}
+                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                  {resultImage ? (
+                    <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
+                        <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              </motion.section>
+
+              {selectedChar?.face_image_url && (
+                <div className="absolute top-2 right-2 h-10 w-10 rounded-xl border-[3px] border-border bg-card overflow-hidden">
+                  <img src={selectedChar.face_image_url} alt={selectedChar.name} className="h-full w-full object-cover" />
                 </div>
               )}
-            </motion.div>
-          </motion.section>
-
-          {/* Character face thumbnail */}
-          {selectedChar?.face_image_url && (
-            <div className="absolute top-2 right-[4%] h-10 w-10 rounded-xl border-[3px] border-border bg-card overflow-hidden">
-              <img src={selectedChar.face_image_url} alt={selectedChar.name} className="h-full w-full object-cover" />
             </div>
-          )}
-        </div>
-
-        {/* Generate button */}
-        <div className="mt-5 mb-5">
-          <button
-            className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
-            onClick={handleCreate}
-            disabled={isGenerating || (!!user && !prompt.trim())}
-          >
-            {isGenerating ? (
-              <><Loader2 className="animate-spin" size={18} />creating...</>
-            ) : (
-              <>
-                <Zap size={18} strokeWidth={2.5} />
-                create
-                <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
-                <span className="text-[11px] ml-0.5">1</span>
-              </>
-            )}
-          </button>
-        </div>
-
-        <div className="space-y-5">
-          {/* Character select */}
-          {!singleCharAutoSelected && (
-            <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-3">select character</span>
-              <label className="relative block">
-                <select
-                  value={selectedCharId}
-                  onChange={(e) => handleCharacterSelect(e.target.value)}
-                  className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
-                >
-                  <option value="">none</option>
-                  {characters.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={16}
-                  strokeWidth={2.5}
-                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
-                />
-              </label>
-              {characters.length === 0 && user && (
-                <button
-                  onClick={() => {
-                    sessionStorage.removeItem("vizura_creator_dismissed");
-                    sessionStorage.removeItem("vizura_guided_flow_state");
-                    navigate("/", { state: { openCreator: true } });
-                  }}
-                  className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
-                >
-                  create your first character →
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* Type toggle */}
-          <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-
-          {/* Ratio toggle with icons */}
-          <PillToggle
-            label="ratio"
-            options={["3:4", "9:16"]}
-            value={photoRatio}
-            onChange={setPhotoRatio}
-            renderOption={(opt) => (
-              <span className="flex items-center gap-1.5">
-                <RatioIcon ratio={opt} />
-                {opt}
-              </span>
-            )}
-          />
-
-          {/* Prompt with cycling placeholder and name highlighting */}
-          <div>
-            <span className="block text-xs font-extrabold lowercase text-foreground mb-3">describe your photo</span>
-            <HighlightedPromptArea
-              value={prompt}
-              onChange={setPrompt}
-              charName={selectedChar?.name || ""}
-              placeholder={
-                <div className="pointer-events-none absolute left-4 top-4 right-4">
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={placeholder.text}
-                      className="text-sm font-extrabold lowercase text-foreground/30"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: placeholder.visible ? 1 : 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {placeholder.text}
-                    </motion.span>
-                  </AnimatePresence>
-                </div>
-              }
-            />
           </div>
 
-          {/* Reference section */}
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
-              <span className="text-[10px] font-extrabold lowercase text-muted-foreground">(optional)</span>
+          {/* Right: controls */}
+          <div className="md:col-span-3 space-y-5">
+            {/* Top create button */}
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+
+            {/* Character select */}
+            {!singleCharAutoSelected && (
+              <div>
+                <span className="block text-xs font-extrabold lowercase text-foreground mb-2">select character</span>
+                <label className="relative block">
+                  <select
+                    value={selectedCharId}
+                    onChange={(e) => handleCharacterSelect(e.target.value)}
+                    className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+                  >
+                    <option value="">none</option>
+                    {characters.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    size={16}
+                    strokeWidth={2.5}
+                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
+                  />
+                </label>
+                {characters.length === 0 && user && (
+                  <button
+                    onClick={() => {
+                      sessionStorage.removeItem("vizura_creator_dismissed");
+                      sessionStorage.removeItem("vizura_guided_flow_state");
+                      navigate("/", { state: { openCreator: true } });
+                    }}
+                    className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
+                  >
+                    create your first character →
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Type + Ratio toggles */}
+            <div className="flex gap-6">
+              <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
+              <PillToggle
+                label="ratio"
+                options={["3:4", "9:16"]}
+                value={photoRatio}
+                onChange={setPhotoRatio}
+                renderOption={(opt) => (
+                  <span className="flex items-center gap-1.5">
+                    <RatioIcon ratio={opt} />
+                    {opt}
+                  </span>
+                )}
+              />
             </div>
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-            {referenceImage ? (
-              <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[5px] border-border">
-                <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
+
+            {/* Prompt */}
+            <div>
+              <span className="block text-xs font-extrabold lowercase text-foreground mb-2">describe your photo</span>
+              <HighlightedPromptArea
+                value={prompt}
+                onChange={setPrompt}
+                charName={selectedChar?.name || ""}
+                placeholder={
+                  <div className="pointer-events-none absolute left-4 top-4 right-4">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={placeholder.text}
+                        className="text-sm font-extrabold lowercase text-foreground/30"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: placeholder.visible ? 1 : 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        {placeholder.text}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
+                }
+              />
+            </div>
+
+            {/* Reference section */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
+                <span className="text-[10px] font-extrabold lowercase text-muted-foreground">(optional)</span>
+              </div>
+              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+              {referenceImage ? (
+                <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[5px] border-border">
+                  <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setReferenceImage(null)}
+                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => setReferenceImage(null)}
-                  className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-8 hover:border-foreground/30 transition-colors"
                 >
-                  ×
+                  <Upload size={24} strokeWidth={2.5} className="text-foreground/30" />
+                  <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
                 </button>
+              )}
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
+                <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
               </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-8 hover:border-foreground/30 transition-colors"
-              >
-                <Upload size={24} strokeWidth={2.5} className="text-foreground/30" />
-                <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
-              </button>
-            )}
-            <div className="mt-5 flex items-center justify-between">
-              <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
-              <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={referenceStrength}
+                onChange={(e) => setReferenceStrength(Number(e.target.value))}
+                className="mt-2 w-full cursor-pointer appearance-none rounded-full h-2"
+                style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(var(--secondary)) ${referenceStrength}%)` }}
+              />
             </div>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={referenceStrength}
-              onChange={(e) => setReferenceStrength(Number(e.target.value))}
-              className="mt-2 w-full cursor-pointer appearance-none rounded-full h-2"
-              style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(var(--secondary)) ${referenceStrength}%)` }}
-            />
+
+            {/* Bottom create button */}
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
           </div>
         </div>
 

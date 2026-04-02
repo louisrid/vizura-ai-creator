@@ -20,7 +20,6 @@ interface Character {
   face_image_url: string | null;
 }
 
-/** Extract user-typed description, stripping trait prefix and emoji tag */
 const getCleanDescription = (raw: string | null | undefined): string => {
   if (!raw) return "";
   let cleaned = raw.replace(/^[a-z]+ chest,\s*[a-z]+ hair\.\s*/i, "");
@@ -83,7 +82,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-8 pt-14 pb-12">
           <div className="flex items-center gap-3 mb-8">
             <BackButton />
           </div>
@@ -100,7 +99,7 @@ const CharacterDetail = () => {
 
   const allTraits = [
     { label: "skin", value: character.country },
-    { label: "body type", value: character.body },
+    { label: "body", value: character.body },
     { label: "hair", value: hairStyleVal },
     { label: "hair colour", value: character.hair },
     { label: "eyes", value: character.eye },
@@ -110,80 +109,87 @@ const CharacterDetail = () => {
   const cleanDescription = getCleanDescription(character.description);
 
   return (
-    <div className="h-[calc(100dvh-73px)] bg-background overflow-hidden fixed inset-x-0 bottom-0">
-      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-3 flex flex-col h-full overflow-hidden">
-        <div className="flex items-center gap-3 mb-4 shrink-0">
+    <div className="min-h-screen bg-background">
+      <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-8 pt-14 pb-12">
+        <div className="flex items-center gap-3 mb-6 shrink-0">
           <BackButton />
         </div>
 
-        <div className="mb-3 shrink-0">
-          <h1 className="text-xl font-extrabold lowercase tracking-tight text-foreground leading-[0.95]">
-            {character.name || "unnamed"}
-          </h1>
-          <span className="text-sm font-extrabold lowercase text-foreground/50 mt-0.5 block">
-            age {character.age}
-          </span>
-        </div>
-
-        <div className="flex gap-3 mb-3 shrink-0">
-          <div
-            className="shrink-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden"
-            style={{ width: "35%", aspectRatio: "3/4" }}
-          >
-            {character.face_image_url ? (
-              <img
-                src={character.face_image_url}
-                alt={character.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <span className="text-sm font-extrabold lowercase text-foreground/30">{character.name?.[0] || "?"}</span>
-            )}
+        {/* Desktop: side-by-side layout */}
+        <div className="md:grid md:grid-cols-5 md:gap-8">
+          {/* Left: face image */}
+          <div className="md:col-span-2 mb-4 md:mb-0">
+            <div
+              className="flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden w-full"
+              style={{ aspectRatio: "3/4" }}
+            >
+              {character.face_image_url ? (
+                <img
+                  src={character.face_image_url}
+                  alt={character.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="text-2xl font-extrabold lowercase text-foreground/30">{character.name?.[0] || "?"}</span>
+              )}
+            </div>
           </div>
 
-          <div className="flex flex-1 flex-wrap gap-1.5 content-start">
-            {allTraits.map((t) => (
-              <div key={t.label} className="rounded-xl bg-primary px-2.5 py-1.5">
-                <span className="block text-[7px] font-extrabold lowercase text-primary-foreground/50 leading-none mb-0.5">
-                  {t.label}
+          {/* Right: details */}
+          <div className="md:col-span-3 flex flex-col">
+            <div className="mb-4">
+              <h1 className="text-2xl font-extrabold lowercase tracking-tight text-foreground leading-[0.95]">
+                {character.name || "unnamed"}
+              </h1>
+              <span className="text-sm font-extrabold lowercase text-foreground/50 mt-1 block">
+                age {character.age}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-4">
+              {allTraits.map((t) => (
+                <div key={t.label} className="rounded-xl bg-primary px-3 py-2">
+                  <span className="block text-[8px] font-extrabold lowercase text-primary-foreground/50 leading-none mb-0.5">
+                    {t.label}
+                  </span>
+                  <span className="block text-xs font-extrabold lowercase text-primary-foreground leading-none">
+                    {t.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {cleanDescription && (
+              <div className="rounded-2xl border-[5px] border-border bg-card p-4 mb-4">
+                <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
+                  description
                 </span>
-                <span className="block text-[10px] font-extrabold lowercase text-primary-foreground leading-none">
-                  {t.value}
-                </span>
+                <p className="text-sm font-extrabold lowercase text-foreground leading-relaxed">
+                  {cleanDescription}
+                </p>
               </div>
-            ))}
+            )}
+
+            <button
+              onClick={() => {
+                sessionStorage.setItem("vizura_internal_nav", "1");
+                navigate("/create", { state: { preselectedCharacterId: character.id } });
+              }}
+              className="flex items-center justify-center gap-2 h-14 w-full rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+            >
+              <Camera size={16} strokeWidth={2.5} />
+              create photo
+            </button>
+
+            <button
+              onClick={() => setShowDelete(true)}
+              className="mt-3 flex items-center justify-center gap-2 h-14 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors"
+            >
+              <Trash2 size={14} strokeWidth={2.5} />
+              delete character
+            </button>
           </div>
         </div>
-
-        {cleanDescription && (
-          <div className="rounded-2xl border-[5px] border-border bg-card p-3 min-h-0 shrink overflow-hidden">
-            <span className="block text-[8px] font-extrabold lowercase text-foreground/40 mb-1">
-              description
-            </span>
-            <p className="text-[11px] font-extrabold lowercase text-foreground leading-relaxed overflow-hidden">
-              {cleanDescription}
-            </p>
-          </div>
-        )}
-
-        <button
-          onClick={() => {
-            sessionStorage.setItem("vizura_internal_nav", "1");
-            navigate("/create", { state: { preselectedCharacterId: character.id } });
-          }}
-          className="mt-4 flex items-center justify-center gap-2 h-12 w-full rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all shrink-0"
-        >
-          <Camera size={14} strokeWidth={2.5} />
-          create photo
-        </button>
-
-        <button
-          onClick={() => setShowDelete(true)}
-          className="mt-3 flex items-center justify-center gap-2 h-12 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors shrink-0"
-        >
-          <Trash2 size={14} strokeWidth={2.5} />
-          delete character
-        </button>
       </main>
 
       <AnimatePresence>
