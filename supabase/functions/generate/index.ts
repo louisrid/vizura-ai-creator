@@ -200,14 +200,9 @@ async function xaiImageEdit(
   apiKey: string,
   aspectRatio = "3:4"
 ): Promise<string | null> {
-  // Build multimodal messages for chat-based image editing
-  const content: any[] = [];
-  for (const url of imageUrls) {
-    content.push({ type: "image_url", image_url: { url } });
-  }
-  content.push({ type: "text", text: prompt });
+  const images = imageUrls.map((url) => ({ type: "image_url", url }));
 
-  const response = await fetch("https://api.x.ai/v1/chat/completions", {
+  const response = await fetch("https://api.x.ai/v1/images/edits", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -215,7 +210,9 @@ async function xaiImageEdit(
     },
     body: JSON.stringify({
       model: "grok-imagine-image",
-      messages: [{ role: "user", content }],
+      prompt,
+      images,
+      aspect_ratio: aspectRatio,
     }),
   });
 
@@ -224,29 +221,15 @@ async function xaiImageEdit(
     if (response.status === 402) throw { status: 402 };
     const errText = await response.text();
     console.error("xAI image-edit failed:", response.status, errText);
-    if (response.status === 400 && errText.toLowerCase().includes("safety") || errText.toLowerCase().includes("content policy") || errText.toLowerCase().includes("blocked")) {
+    const lower = errText.toLowerCase();
+    if (lower.includes("safety") || lower.includes("content policy") || lower.includes("blocked")) {
       throw { status: 400, contentPolicy: true };
     }
     throw new Error(`xAI image edit failed: ${response.status}`);
   }
 
   const data = await response.json();
-  // Extract URL from response - grok-2-image returns image URLs in choices
-  const choice = data?.choices?.[0];
-  if (choice?.message?.content) {
-    // Try to find URL in content
-    const urlMatch = choice.message.content.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/);
-    if (urlMatch) return urlMatch[1];
-    // Or it might be a direct URL
-    if (choice.message.content.startsWith("http")) return choice.message.content.trim();
-  }
-  // Fallback: check for image in content array
-  if (Array.isArray(choice?.message?.content)) {
-    for (const item of choice.message.content) {
-      if (item.type === "image_url") return item.image_url?.url;
-    }
-  }
-  return null;
+  return data?.data?.[0]?.url ?? null;
 }
 
 /* ── generate face options (text-to-image, always 3:4) ── */

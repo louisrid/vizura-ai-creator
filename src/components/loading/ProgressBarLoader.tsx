@@ -167,9 +167,6 @@ const ProgressBarLoader = ({
           <div className="flex justify-end">
             <span className="text-xs font-extrabold lowercase text-white/60">{pct}%</span>
           </div>
-          <div className="flex justify-end">
-            <span className="text-xs font-extrabold lowercase text-white/60">{pct}%</span>
-          </div>
         </motion.div>
 
         <motion.div
