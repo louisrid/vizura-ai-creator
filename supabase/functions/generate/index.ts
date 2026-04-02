@@ -284,16 +284,19 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
   const imageUrls: string[] = [];
-  
+
+  // Each variation forces distinctly different facial structure + hair presentation
   const variations = [
-    "same booth-style composition, same camera height, same crop, unique facial features and bone structure only",
-    "same booth-style composition, same camera height, same crop, unique facial features and identity only",
-    "same booth-style composition, same camera height, same crop, unique facial features only",
+    "heart-shaped face, full plump lips, small button nose, soft rounded jawline, high arched eyebrows, hair cascading over both shoulders and clearly visible past the collarbone, glamorous Instagram model look, radiant glowing skin, striking gorgeous features",
+    "oval face, thinner defined lips, straight elegant nose, angular cheekbones, low straight eyebrows, hair swept to one side draped over one shoulder clearly visible and long, editorial beauty look, sculpted bone structure, captivating alluring features",
+    "round face, medium bow-shaped lips, slightly upturned nose, strong defined jaw, thick natural eyebrows, hair parted in the middle falling evenly on both sides clearly visible and flowing, effortlessly beautiful natural look, luminous dewy skin, magnetic stunning features",
   ];
+
+  const hairVisibility = "hair must be clearly visible, long hair should visibly extend past the shoulders and frame the face, do not hide hair behind the back or crop it out";
 
   for (let i = 0; i < Math.min(count, 3); i++) {
     const variation = variations[i] || variations[0];
-    const fullPrompt = `${prompt}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const fullPrompt = `${prompt}, ${variation}, ${hairVisibility}, ${FACE_QUALITY}, attractive beautiful woman, high fashion beauty. ${FACE_NEGATIVE}`;
       console.log(`Face gen ${i + 1} prompt: ${fullPrompt}`);
     try {
       const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
