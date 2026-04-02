@@ -182,6 +182,10 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
     if (response.status === 402) throw { status: 402 };
     const errText = await response.text();
     console.error("xAI text-to-image failed:", response.status, errText);
+    // Content policy rejection
+    if (response.status === 400 && errText.toLowerCase().includes("safety") || errText.toLowerCase().includes("content policy") || errText.toLowerCase().includes("blocked")) {
+      throw { status: 400, contentPolicy: true };
+    }
     throw new Error(`xAI generation failed: ${response.status}`);
   }
 
