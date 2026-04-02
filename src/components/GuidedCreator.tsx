@@ -596,7 +596,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
             <p className={`mt-2 text-center ${SUBTEXT_CLASS}`}>
-              e.g. chubby cheeks, freckles, thick mascara
+              i.e. chubby cheeks, freckles, thick mascara
             </p>
           </div>
         </div>
