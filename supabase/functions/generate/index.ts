@@ -64,7 +64,69 @@ function generateDemoImages(prompt: string, count: number): string[] {
   return Array.from({ length: count }, (_, index) => makeDemoSvg(label, accents[index % accents.length], index));
 }
 
-/* ── helper: generate images via AI ────────────────────── */
+/* ── xAI Grok Imagine: text-to-image ──────────────────── */
+async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | null> {
+  const response = await fetch("https://api.x.ai/v1/images/generations", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "grok-imagine-image",
+      prompt,
+    }),
+  });
+
+  if (!response.ok) {
+    if (response.status === 429) throw { status: 429 };
+    if (response.status === 402) throw { status: 402 };
+    const errText = await response.text();
+    console.error("xAI text-to-image failed:", response.status, errText);
+    throw new Error(`xAI generation failed: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data?.data?.[0]?.url ?? null;
+}
+
+/* ── xAI Grok Imagine: image edit with references ─────── */
+async function xaiImageEdit(
+  prompt: string,
+  imageUrls: string[],
+  apiKey: string
+): Promise<string | null> {
+  const images = imageUrls.map((url) => ({
+    type: "image_url",
+    url,
+  }));
+
+  const response = await fetch("https://api.x.ai/v1/images/edits", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "grok-imagine-image",
+      prompt,
+      images,
+    }),
+  });
+
+  if (!response.ok) {
+    if (response.status === 429) throw { status: 429 };
+    if (response.status === 402) throw { status: 402 };
+    const errText = await response.text();
+    console.error("xAI image-edit failed:", response.status, errText);
+    throw new Error(`xAI image edit failed: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data?.data?.[0]?.url ?? null;
+}
+
+/* ── generate face options (text-to-image, 3 or 6 variations) ── */
 async function generateImages(
   prompt: string,
   count: number,
@@ -82,8 +144,8 @@ async function generateImages(
       "right side view, 3/4 angle",
     ];
     for (const angle of angles.slice(0, count)) {
-      const fullPrompt = `Character portrait, ${prompt}, ${angle}. High quality, detailed, consistent style. Negative: ${negativePrompt}`;
-      const url = await callAI(fullPrompt, apiKey);
+      const fullPrompt = `Character portrait, ${prompt}, ${angle}. High quality, detailed, consistent style. Avoid: ${negativePrompt}`;
+      const url = await xaiTextToImage(fullPrompt, apiKey);
       if (url) imageUrls.push(url);
     }
   } else {
@@ -96,43 +158,13 @@ async function generateImages(
       "front view, neutral expression",
     ];
     for (const variation of variations.slice(0, count)) {
-      const fullPrompt = `Close-up face portrait, ${prompt}, ${variation}. High quality, detailed, consistent style. Negative: ${negativePrompt}`;
-      const url = await callAI(fullPrompt, apiKey);
+      const fullPrompt = `Close-up face portrait, ${prompt}, ${variation}. High quality, detailed, consistent style. Avoid: ${negativePrompt}`;
+      const url = await xaiTextToImage(fullPrompt, apiKey);
       if (url) imageUrls.push(url);
     }
   }
 
   return imageUrls;
-}
-
-async function callAI(fullPrompt: string, apiKey: string): Promise<string | null> {
-  const response = await fetch(
-    "https://ai.gateway.lovable.dev/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash-image",
-        messages: [{ role: "user", content: fullPrompt }],
-        modalities: ["image", "text"],
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    if (response.status === 429 || response.status === 402) {
-      throw { status: response.status };
-    }
-    const errText = await response.text();
-    console.error("AI generation failed:", response.status, errText);
-    throw new Error(`AI generation failed: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data.choices?.[0]?.message?.images?.[0]?.image_url?.url ?? null;
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -243,12 +275,12 @@ serve(async (req) => {
         }
       }
 
-      const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-      if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+      const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
+      if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
       let imageUrls: string[];
       try {
-        imageUrls = await generateImages(prompt, 6, LOVABLE_API_KEY);
+        imageUrls = await generateImages(prompt, 6, XAI_API_KEY);
       } catch (e: any) {
         if (e?.status === 429) {
           return new Response(
@@ -258,7 +290,7 @@ serve(async (req) => {
         }
         if (e?.status === 402) {
           return new Response(
-            JSON.stringify({ error: "AI gems exhausted" }),
+            JSON.stringify({ error: "AI generation quota exhausted" }),
             { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
@@ -330,12 +362,12 @@ serve(async (req) => {
       })
       .eq("user_id", userId);
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
+    if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
     let imageUrls: string[];
     try {
-      imageUrls = await generateImages(prompt, 3, LOVABLE_API_KEY);
+      imageUrls = await generateImages(prompt, 3, XAI_API_KEY);
     } catch (e: any) {
       // Refund gem on failure
       await adminClient
@@ -354,7 +386,7 @@ serve(async (req) => {
       }
       if (e?.status === 402) {
         return new Response(
-          JSON.stringify({ error: "AI gems exhausted" }),
+          JSON.stringify({ error: "AI generation quota exhausted" }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }

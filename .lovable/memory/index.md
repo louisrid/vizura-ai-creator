@@ -7,7 +7,7 @@ Button variants: hero, hero-outline for on-dark surfaces.
 Nav token: --nav (black bg), --nav-foreground (white text).
 Backend: Lovable Cloud (Supabase). Tables: profiles, credits, subscriptions, generations.
 Auth: Supabase email/password. New users get 1 free credit via trigger.
-Edge functions: generate (AI image gen), create-checkout (Stripe), stripe-webhook (payment handling).
+Edge functions: generate (AI image gen via xAI Grok Imagine API), create-checkout (Stripe), stripe-webhook (payment handling).
 Stripe: needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET secrets + real price IDs.
 Credits rebranded to "gems" across entire app. DB table stays `credits` but all UI/variables say gems. Green gem icon (--gem-green: 145 72% 44%) in header badge. Gem icon from lucide-react.
 
