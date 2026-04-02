@@ -614,16 +614,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* ── Reference image (optional) ── */
     if (isReferenceSlide) {
       return (
-        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+        <div className="-mt-2 flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
           <h2 className={SLIDE_TITLE_CLASS}>
             add a reference
           </h2>
           <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
-          <div className="mt-5 w-full max-w-[14rem]">
+          <div className="mt-5 flex w-full max-w-[12.5rem] flex-col items-center gap-5">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
-              <div className="flex flex-col gap-4">
-                <div className="relative w-full rounded-2xl overflow-hidden border-[3px] border-white/15" style={{ aspectRatio: "4/5" }}>
+              <div className="w-full">
+                <div className="relative w-full overflow-hidden rounded-[1.6rem] border-[3px] border-white/15" style={{ aspectRatio: "3/4" }}>
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -635,18 +635,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-4">
+              <div className="w-full">
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 hover:border-white/30 transition-colors" style={{ aspectRatio: "4/5" }}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.6rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors hover:border-white/30" style={{ aspectRatio: "3/4" }}
                 >
-                  <Upload size={18} strokeWidth={2.5} className="text-white/30" />
+                  <Upload size={15} strokeWidth={2.5} className="text-white/30" />
                   <span className="text-sm font-extrabold lowercase text-white/30">add reference image</span>
                 </button>
               </div>
             )}
-            <div className="mt-4 space-y-2">
+            <div className="w-full space-y-2.5 pt-1">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-extrabold lowercase text-white/40">strength</span>
                 <span className="text-[10px] font-extrabold lowercase text-white/40">{selections.referenceStrength}%</span>
