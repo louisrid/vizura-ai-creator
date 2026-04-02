@@ -78,7 +78,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, optimistic, writeCachedStatus]);
+  }, [user, isTestAccount, optimistic, writeCachedStatus]);
 
   useEffect(() => {
     if (!user) {
