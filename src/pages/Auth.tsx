@@ -82,13 +82,13 @@ const Auth = () => {
       <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12">
         <div className="mb-8 flex items-center gap-3">
           <button
-70:             type="button"
-71:             onClick={handleBack}
-72:             className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
-73:             aria-label="go back"
-74:           >
-75:             <ArrowLeft size={18} strokeWidth={3} />
-76:           </button>
+            type="button"
+            onClick={handleBack}
+            className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
+            aria-label="go back"
+          >
+            <ArrowLeft size={18} strokeWidth={3} />
+          </button>
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
