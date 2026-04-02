@@ -618,12 +618,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className={SLIDE_TITLE_CLASS}>
             add a reference
           </h2>
-          <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
-          <div className="mt-5 flex w-full max-w-[12.5rem] flex-col items-center gap-5">
+          <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
+          <div className="mt-4 flex w-full max-w-[10rem] flex-col items-center gap-4">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
               <div className="w-full">
-                <div className="relative w-full overflow-hidden rounded-[1.6rem] border-[3px] border-white/15" style={{ aspectRatio: "3/4" }}>
+                <div className="relative w-full overflow-hidden rounded-[1.4rem] border-[3px] border-white/15" style={{ aspectRatio: "3/4" }}>
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -639,14 +639,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.6rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors hover:border-white/30" style={{ aspectRatio: "3/4" }}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.4rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors hover:border-white/30" style={{ aspectRatio: "3/4" }}
                 >
-                  <Upload size={15} strokeWidth={2.5} className="text-white/30" />
-                  <span className="text-sm font-extrabold lowercase text-white/30">add reference image</span>
+                  <Upload size={14} strokeWidth={2.5} className="text-white/30" />
+                  <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
                 </button>
               </div>
             )}
-            <div className="w-full space-y-2.5 pt-1">
+            <div className="w-full space-y-2 mb-4">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-extrabold lowercase text-white/40">strength</span>
                 <span className="text-[10px] font-extrabold lowercase text-white/40">{selections.referenceStrength}%</span>

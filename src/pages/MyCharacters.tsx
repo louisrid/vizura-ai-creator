@@ -147,13 +147,16 @@ const MyCharacters = () => {
       <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
         <div className="mx-auto max-w-lg md:max-w-6xl">
           <motion.button
-            onClick={handleCreatePhoto}
+            onClick={handleBottomButton}
             animate={bounceActive ? { y: [0, -6, 0] } : {}}
             transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
             className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
           >
-            <Camera size={20} strokeWidth={2.5} />
-            create photo
+            {hasCharacters ? (
+              <><Camera size={20} strokeWidth={2.5} />create photo</>
+            ) : (
+              <><Sparkles size={20} strokeWidth={2.5} />create character</>
+            )}
           </motion.button>
         </div>
       </div>
