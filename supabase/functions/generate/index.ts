@@ -214,7 +214,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-imagine-image",
       messages: [{ role: "user", content }],
     }),
   });
