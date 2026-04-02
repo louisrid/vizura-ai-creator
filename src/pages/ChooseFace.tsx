@@ -68,7 +68,6 @@ const ChooseFace = () => {
     }
   }, [loading, cardsRevealed]);
 
-  // After returning from OAuth, immediately save and redirect
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
   const doFinalSaveRef = useRef<(forcedFaceIdx?: number) => Promise<boolean>>(async () => false);
 
@@ -86,7 +85,6 @@ const ChooseFace = () => {
     setCardsRevealed(false);
     try {
       if (!user) {
-        // Can't generate without auth — show sign in
         setFaces([]);
         setLoading(false);
         setShowSignIn(true);
@@ -99,6 +97,11 @@ const ChooseFace = () => {
       if (data?.error) {
         if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
           setShowPaywall(true);
+          setLoading(false);
+          return;
+        }
+        if (data.code === "CONTENT_POLICY") {
+          toast.error("please adjust your description and try again");
           setLoading(false);
           return;
         }
@@ -224,7 +227,6 @@ const ChooseFace = () => {
         return false;
       }
     } else {
-      // Update existing character with face URL
       try {
         const { error: updateError } = await supabase
           .from("characters")
@@ -236,6 +238,15 @@ const ChooseFace = () => {
         toast.error("failed to save selected face");
         return false;
       }
+    }
+
+    // Save only the selected face to generations (not all 3)
+    if (faceUrl) {
+      await supabase.from("generations").insert({
+        user_id: currentUser.id,
+        prompt: prompt || "face generation",
+        image_urls: [faceUrl],
+      });
     }
 
     if (cId) {
@@ -287,7 +298,7 @@ const ChooseFace = () => {
   const cardDelays = [0, 0.2, 0.4];
 
   return (
-    <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background">
+    <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background w-full">
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
