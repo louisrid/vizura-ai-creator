@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
 const categories = [
-  { key: "skin", label: "skin", options: ["pale", "tan", "asian", "dark"] },
+  { key: "skin", label: "skin", options: ["white", "tan", "asian", "black"] },
   { key: "bodyType", label: "body type", options: ["slim", "regular", "curvy"] },
   { key: "chest", label: "chest", options: ["small", "medium", "large"] },
   { key: "hairStyle", label: "hair", options: ["straight", "curly", "bangs", "short"] },
