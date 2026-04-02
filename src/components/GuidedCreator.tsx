@@ -753,7 +753,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "linear-gradient(160deg, hsl(220 20% 4.4%) 0%, hsl(224 18% 3.5%) 48%, hsl(0 0% 0%) 100%)" }}
+      style={{ background: "hsl(0 0% 0%)" }}
     >
       <AmbientGlow />
       <motion.div
