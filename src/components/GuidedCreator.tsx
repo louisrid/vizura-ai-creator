@@ -593,7 +593,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className={SLIDE_TITLE_CLASS}>
             describe her
           </h2>
-          <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
+          <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
           <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
@@ -603,7 +603,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className={`mt-2 text-center ${SUBTEXT_CLASS}`}>
+            <p className={`mt-2 text-center ${HELPER_CLASS}`}>
               i.e. chubby cheeks, freckles, thick mascara
             </p>
           </div>
@@ -618,12 +618,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className={SLIDE_TITLE_CLASS}>
             add a reference
           </h2>
-          <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
-          <div className="mt-5 flex w-full max-w-[12.5rem] flex-col items-center gap-5">
+          <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
+          <div className="mt-4 flex w-full max-w-[10rem] flex-col items-center gap-4">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
               <div className="w-full">
-                <div className="relative w-full overflow-hidden rounded-[1.6rem] border-[3px] border-white/15" style={{ aspectRatio: "3/4" }}>
+                <div className="relative w-full overflow-hidden rounded-[1.4rem] border-[3px] border-white/15" style={{ aspectRatio: "3/4" }}>
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -639,14 +639,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.6rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors hover:border-white/30" style={{ aspectRatio: "3/4" }}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.4rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors hover:border-white/30" style={{ aspectRatio: "3/4" }}
                 >
-                  <Upload size={15} strokeWidth={2.5} className="text-white/30" />
-                  <span className="text-sm font-extrabold lowercase text-white/30">add reference image</span>
+                  <Upload size={14} strokeWidth={2.5} className="text-white/30" />
+                  <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
                 </button>
               </div>
             )}
-            <div className="w-full space-y-2.5 pt-1">
+            <div className="w-full space-y-2 mb-4">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-extrabold lowercase text-white/40">strength</span>
                 <span className="text-[10px] font-extrabold lowercase text-white/40">{selections.referenceStrength}%</span>
@@ -676,12 +676,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[0.96] tracking-tight">
+          <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
-            <span className="block">
-              <span className="text-white">is </span>
-              <span className="text-gem-green">almost here!</span>
-            </span>
+            <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">
