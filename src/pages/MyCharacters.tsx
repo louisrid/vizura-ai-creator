@@ -64,13 +64,21 @@ const MyCharacters = () => {
 
   if (!authLoading && !user) return null;
 
-  const handleCreatePhoto = () => {
+  const handleBottomButton = () => {
+    if (characters.length === 0) {
+      // No characters — go to homepage to open character creator
+      sessionStorage.setItem("vizura_internal_nav", "1");
+      navigate("/");
+      return;
+    }
     if (characters.length === 1) {
       navigate("/create", { state: { preselectedCharacterId: characters[0].id } });
       return;
     }
     navigate("/create");
   };
+
+  const hasCharacters = characters.length > 0;
 
   return (
     <div className="min-h-screen bg-background">
