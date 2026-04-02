@@ -48,13 +48,17 @@ const getRandomNameToast = () =>
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["white", "tan", "asian", "black"] },
-  { key: "bodyType", label: "choose body shape", emoji: "🏊", options: ["slim", "average", "curvy"] },
-  { key: "age", label: "choose age range", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
-  { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["straight", "curly", "bangs"] },
+  { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"] },
+  { key: "age", label: "choose her age", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
+  { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
-  { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["blue", "brown", "green"] },
+  { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
   { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic", "egirl"] },
 ] as const;
+
+const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
+const SUBTEXT_CLASS = "text-sm font-extrabold lowercase text-white/40";
+const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
 
 type TraitKey = (typeof TRAITS)[number]["key"];
 
@@ -127,10 +131,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl min-w-[5.5rem] h-[3.25rem] px-4 flex items-center justify-center text-[0.95rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`w-full rounded-2xl h-14 px-4 flex items-center justify-center text-[1rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
-        ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
-        : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
+        ? "bg-neon-yellow text-neon-yellow-foreground border-[4px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
+        : "border-[4px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
     }`}
   >
     <span className="block leading-none text-center whitespace-nowrap">{label}</span>
@@ -488,7 +492,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="flex h-14 items-end justify-center">
             <BigEmoji emoji="💫" index={0} />
           </div>
-          <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+          <h2 className={SLIDE_TITLE_CLASS}>
             time to create your<br />first character!
           </h2>
           <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
@@ -503,7 +507,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="flex h-14 items-end justify-center">
             <BigEmoji emoji="✨" />
           </div>
-          <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+          <h2 className={SLIDE_TITLE_CLASS}>
             give her a name
           </h2>
           <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
@@ -542,10 +546,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="flex h-14 items-end justify-center">
             <BigEmoji emoji={trait.emoji} index={currentTraitIndex + 1} />
           </div>
-          <h2 className="mt-2 text-center text-[2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+          <h2 className={SLIDE_TITLE_CLASS}>
             {trait.label}
           </h2>
-          <div className="mt-5 flex justify-center gap-2.5 flex-wrap px-2 md:px-0 md:flex-nowrap md:gap-3 max-w-[22rem]">
+          <div
+            className={`mt-5 grid w-full gap-3 px-2 ${trait.options.length === 4 ? "max-w-[18rem] grid-cols-2" : "max-w-[22rem] grid-cols-3"}`}
+          >
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
                 <InteractivePill
@@ -555,21 +561,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   onClick={() => setTrait(trait.key, opt)}
                 />
                 {isMakeup && opt === "classic" && (
-                  <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
+                  <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                 )}
                 {isBody && opt === "average" && (
-                  <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
+                  <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                 )}
               </div>
             ))}
           </div>
-          {isAge && (
-            <p className="mt-4 text-[11px] font-[800] lowercase text-white/40">
-              (this determines how youthful your character looks)
-            </p>
-          )}
           {isSkinSlide && (
-            <p className="mt-4 text-base font-extrabold lowercase text-white/40">
+            <p className="mt-4 text-sm font-extrabold lowercase text-white/40">
               tap to select
             </p>
           )}
@@ -581,10 +582,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isDescriptionSlide) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+          <h2 className={SLIDE_TITLE_CLASS}>
             describe her
           </h2>
-          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
+          <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
           <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
@@ -594,8 +595,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className="mt-2 text-center text-base font-extrabold lowercase leading-snug text-white/40">
-              e.g. chubby cheeks, freckles, thick mascara
+            <p className={`mt-2 text-center ${SUBTEXT_CLASS}`}>
+              i.e. chubby cheeks, freckles, thick mascara
             </p>
           </div>
         </div>
@@ -606,14 +607,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isReferenceSlide) {
       return (
         <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-center text-[2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
+          <h2 className={SLIDE_TITLE_CLASS}>
             add a reference
           </h2>
-          <p className="mt-1 text-sm font-extrabold lowercase text-white/40">(optional)</p>
-          <div className="mt-5 w-full max-w-[16rem]">
+          <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
+          <div className="mt-5 w-full max-w-[14rem]">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 <div className="relative w-full rounded-2xl overflow-hidden border-[3px] border-white/15" style={{ aspectRatio: "4/5" }}>
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
@@ -626,34 +627,36 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
                   className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 hover:border-white/30 transition-colors" style={{ aspectRatio: "4/5" }}
                 >
-                  <Upload size={24} strokeWidth={2.5} className="text-white/30" />
+                  <Upload size={18} strokeWidth={2.5} className="text-white/30" />
                   <span className="text-sm font-extrabold lowercase text-white/30">add reference image</span>
                 </button>
               </div>
             )}
-            <div className="mt-3 flex items-center justify-between">
-              <span className="text-[10px] font-extrabold lowercase text-white/40">strength</span>
-              <span className="text-[10px] font-extrabold lowercase text-white/40">{selections.referenceStrength}%</span>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-extrabold lowercase text-white/40">strength</span>
+                <span className="text-[10px] font-extrabold lowercase text-white/40">{selections.referenceStrength}%</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={selections.referenceStrength}
+                onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full cursor-pointer appearance-none rounded-full"
+                style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(var(--secondary)) ${selections.referenceStrength}%)` }}
+              />
+              <p className="text-[10px] font-extrabold lowercase text-white/40">
+                (recommended: 50%)
+              </p>
             </div>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={selections.referenceStrength}
-              onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
-              onClick={(e) => e.stopPropagation()}
-              className="mt-2 w-full cursor-pointer appearance-none rounded-full"
-              style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(var(--secondary)) ${selections.referenceStrength}%)` }}
-            />
-            <p className="mt-2 text-[10px] font-extrabold lowercase text-white/40">
-              (recommended: 50%)
-            </p>
           </div>
         </div>
       );

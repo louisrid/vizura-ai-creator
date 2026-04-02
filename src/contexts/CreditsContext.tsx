@@ -10,11 +10,32 @@ interface GemsContextType {
 }
 
 const GemsContext = createContext<GemsContextType | undefined>(undefined);
+const GEMS_CACHE_PREFIX = "vizura_gems_balance:";
 
 export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [gems, setGems] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const getCacheKey = useCallback((userId: string) => `${GEMS_CACHE_PREFIX}${userId}`, []);
+
+  const readCachedGems = useCallback((userId: string) => {
+    if (typeof window === "undefined") return null;
+    const raw = window.sessionStorage.getItem(getCacheKey(userId));
+    if (raw === null) return null;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : null;
+  }, [getCacheKey]);
+
+  const writeCachedGems = useCallback((userId: string, value: number | null) => {
+    if (typeof window === "undefined") return;
+    const key = getCacheKey(userId);
+    if (typeof value === "number") {
+      window.sessionStorage.setItem(key, String(value));
+      return;
+    }
+    window.sessionStorage.removeItem(key);
+  }, [getCacheKey]);
 
   const fetchGems = useCallback(async () => {
     if (!user) {
@@ -32,7 +53,9 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
         console.error("Failed to fetch gems:", error);
         setGems(0);
       } else {
-        setGems(data?.balance ?? 0);
+        const balance = data?.balance ?? 0;
+        writeCachedGems(user.id, balance);
+        setGems(balance);
       }
     } catch (e) {
       console.error("Gems fetch error:", e);
@@ -40,11 +63,22 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, writeCachedGems]);
 
   useEffect(() => {
+    if (!user) {
+      setGems(0);
+      setLoading(false);
+      return;
+    }
+
+    const cachedGems = readCachedGems(user.id);
+    if (cachedGems !== null) {
+      setGems(cachedGems);
+    }
+    setLoading(true);
     fetchGems();
-  }, [fetchGems]);
+  }, [fetchGems, readCachedGems, user]);
 
   return (
     <GemsContext.Provider value={{ gems, credits: gems, loading, refetch: fetchGems }}>
