@@ -19,12 +19,12 @@ const OVERLAY_FADE_DURATION = 0.75;
 
 /* ── Name toast variations ── */
 const NAME_TOAST_MESSAGES = [
-  "great choice! 💫",
-  "love that name! ✨",
-  "perfect name! 🔥",
-  "she's gonna be amazing! 💖",
-  "nice pick! 🌟",
-  "beautiful name! 💎",
+  "great choice!",
+  "great choice!",
+  "great choice!",
+  "great choice!",
+  "great choice!",
+  "great choice!",
 ];
 
 const getRandomNameToast = () =>
