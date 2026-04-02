@@ -168,10 +168,17 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 );
 
 const Index = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { credits, gems, refetch: refetchCredits } = useCredits();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Auth guard: redirect logged-out users to sign-in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth?redirect=/create", { replace: true });
+    }
+  }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
