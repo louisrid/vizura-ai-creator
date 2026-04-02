@@ -22,7 +22,9 @@ export type Database = {
           created_at: string
           description: string
           eye: string
+          face_angle_url: string | null
           face_image_url: string | null
+          face_side_url: string | null
           generation_prompt: string | null
           hair: string
           id: string
@@ -38,7 +40,9 @@ export type Database = {
           created_at?: string
           description?: string
           eye?: string
+          face_angle_url?: string | null
           face_image_url?: string | null
+          face_side_url?: string | null
           generation_prompt?: string | null
           hair?: string
           id?: string
@@ -54,7 +58,9 @@ export type Database = {
           created_at?: string
           description?: string
           eye?: string
+          face_angle_url?: string | null
           face_image_url?: string | null
+          face_side_url?: string | null
           generation_prompt?: string | null
           hair?: string
           id?: string
