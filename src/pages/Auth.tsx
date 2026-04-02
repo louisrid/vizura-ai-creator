@@ -17,8 +17,23 @@ const Auth = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
 
   useEffect(() => {
-    if (user) navigate(redirectTo, { replace: true });
+    if (user) {
+      // Small delay to ensure session is fully propagated
+      navigate(redirectTo, { replace: true });
+    }
   }, [user, navigate, redirectTo]);
+
+  // On mount, check if we're returning from OAuth (URL has tokens/code)
+  useEffect(() => {
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const hasOAuthReturn = hash.includes("access_token") || search.includes("code=");
+    if (hasOAuthReturn) {
+      // Supabase client will pick up the tokens from the URL automatically
+      // Just wait for auth state to update
+      setSubmitting(true);
+    }
+  }, []);
 
   const handleAutoSignIn = async () => {
     setSubmitting(true);

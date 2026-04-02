@@ -207,7 +207,10 @@ const Home = () => {
           <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
-              onClick={() => navigate("/create")}
+              onClick={() => {
+                if (!user) { navigate("/auth?redirect=/create"); return; }
+                navigate("/create");
+              }}
               className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
             >
               <Camera size={16} strokeWidth={2.5} />
@@ -285,7 +288,10 @@ const Home = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/create")}
+                onClick={() => {
+                  if (!user) { navigate("/auth?redirect=/create"); return; }
+                  navigate("/create");
+                }}
                 className="flex h-20 items-center justify-center gap-3 rounded-[1.5rem] border-[5px] border-border bg-card px-4 text-base font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
               >
                 <Camera size={20} strokeWidth={2.5} />

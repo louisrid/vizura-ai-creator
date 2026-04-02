@@ -39,12 +39,25 @@ const FreshLoadRedirect = () => {
   useEffect(() => {
     if (hasRedirected.current || loading) return;
     hasRedirected.current = true;
-    if (user && location.pathname !== "/") {
+
+    // Logged-in users: redirect to homepage from deep links (except exempt routes)
+    if (user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
       navigate("/", { replace: true });
       return;
     }
+
+    // Logged-out users: ALWAYS go to homepage (which triggers the guided creator)
     if (!user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
+      // Clear session flags so the guided creator auto-opens fresh
+      sessionStorage.removeItem("vizura_auto_opened");
+      sessionStorage.removeItem("vizura_creator_dismissed");
       navigate("/", { replace: true });
+    }
+
+    // Logged-out users already on "/" but refreshed — reset flags so animation replays
+    if (!user && location.pathname === "/") {
+      sessionStorage.removeItem("vizura_auto_opened");
+      sessionStorage.removeItem("vizura_creator_dismissed");
     }
   }, [loading, location.pathname, navigate, user]);
 

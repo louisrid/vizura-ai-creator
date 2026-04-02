@@ -37,9 +37,16 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     window.sessionStorage.removeItem(key);
   }, [getCacheKey]);
 
+  const isTestAccount = user?.email === "louisjridland@gmail.com";
+
   const fetchGems = useCallback(async () => {
     if (!user) {
       setGems(0);
+      setLoading(false);
+      return;
+    }
+    if (isTestAccount) {
+      setGems(1000);
       setLoading(false);
       return;
     }
@@ -63,7 +70,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, writeCachedGems]);
+  }, [user, isTestAccount, writeCachedGems]);
 
   useEffect(() => {
     if (!user) {
