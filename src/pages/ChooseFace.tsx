@@ -34,7 +34,7 @@ const ANGLE_PHRASES = [
 ];
 
 const ChooseFace = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const { subscribed } = useSubscription();
   const navigate = useNavigate();
@@ -69,13 +69,14 @@ const ChooseFace = () => {
   const isFreeUser = !subscribed && gems <= 0;
 
   useEffect(() => {
+    if (authLoading) return;
     if (!prompt) { navigate("/"); return; }
     if (faces.length > 0) {
       setLoading(false);
       return;
     }
-    generateFaces();
-  }, []);
+    void generateFaces();
+  }, [authLoading, faces.length, navigate, prompt, user]);
 
   useEffect(() => {
     if (!loading && !cardsRevealed) {
@@ -106,6 +107,7 @@ const ChooseFace = () => {
         setShowSignIn(true);
         return;
       }
+      setShowSignIn(false);
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: { prompt, free_gen: true },
       });
@@ -307,13 +309,22 @@ const ChooseFace = () => {
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
 
-    toast.success("character added!");
-    navigate("/characters", { replace: true });
+    setSavingWithAngles(false);
+    setPendingAuthSave(false);
+    setShowSignIn(false);
+    setShowCooking(true);
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
 
   const handleSignedIn = useCallback(async () => {
+    if (faces.length === 0) {
+      setShowSignIn(false);
+      setPendingAuthSave(false);
+      await generateFaces();
+      return;
+    }
+
     sessionStorage.removeItem(AUTH_RESUME_KEY);
     setPendingAuthSave(true);
     await new Promise((r) => setTimeout(r, 300));
@@ -322,7 +333,7 @@ const ChooseFace = () => {
       setPendingAuthSave(false);
       setShowSignIn(false);
     }
-  }, []);
+  }, [faces.length, user]);
 
   const handleCookingComplete = () => {
     setShowCooking(false);
@@ -360,7 +371,7 @@ const ChooseFace = () => {
 
   return (
     <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background w-full">
-      <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
+      <CookingOverlay open={showCooking} onComplete={handleCookingComplete} startPhase="success" />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
       <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg md:max-w-3xl flex-col px-4 md:px-8 pt-8 pb-0 overflow-hidden">

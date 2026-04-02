@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { isSpecialAccountUser } from "@/lib/specialAccount";
+import { hasSpecialAccountOverride } from "@/lib/specialAccount";
 
 interface GemsContextType {
   gems: number;
@@ -38,7 +38,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     window.sessionStorage.removeItem(key);
   }, [getCacheKey]);
 
-  const isTestAccount = isSpecialAccountUser(user);
+  const isTestAccount = hasSpecialAccountOverride(user);
 
   const fetchGems = useCallback(async () => {
     if (!user) {

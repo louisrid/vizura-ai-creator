@@ -87,7 +87,7 @@ const BODY_MAP: Record<string, string> = {
 const MAKEUP_MAP: Record<string, string> = {
   natural: "natural minimal makeup fresh-faced",
   classic: "classic polished makeup defined features",
-  egirl: "egirl style makeup bold eyeliner colorful accents",
+  glam: "soft glam makeup polished lashes subtle definition",
 };
 
 function ageToDescription(ageStr: string): string {
