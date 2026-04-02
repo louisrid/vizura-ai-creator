@@ -8,13 +8,11 @@ const normaliseEmail = (value: unknown) =>
 export const getResolvedUserEmail = (user?: User | null): string => {
   if (!user) return "";
 
-  const identityEmails = Array.isArray((user as User & {
-    identities?: Array<{ email?: string | null; identity_data?: { email?: string | null } | null }>;
-  }).identities)
-    ? ((user as User & {
-        identities?: Array<{ email?: string | null; identity_data?: { email?: string | null } | null }>;
-      }).identities ?? [])
-        .flatMap((identity) => [identity?.email, identity?.identity_data?.email])
+  const identityEmails = Array.isArray(user.identities)
+    ? user.identities.flatMap((identity) => {
+        const record = identity as { email?: string | null; identity_data?: { email?: string | null } | null };
+        return [record.email, record.identity_data?.email];
+      })
     : [];
 
   const candidates = [
