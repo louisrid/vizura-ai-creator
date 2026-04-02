@@ -287,7 +287,7 @@ const ChooseFace = () => {
   const cardDelays = [0, 0.2, 0.4];
 
   return (
-    <div className="relative h-[calc(100dvh-73px)] overflow-hidden" style={{ backgroundColor: "#000000" }}>
+    <div className="relative h-[calc(100dvh-73px)] overflow-hidden bg-background">
       <CookingOverlay open={showCooking} onComplete={handleCookingComplete} />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
