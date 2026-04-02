@@ -53,7 +53,7 @@ const TRAITS = [
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
-  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic", "egirl"] },
+  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic", "glam"] },
 ] as const;
 
 const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.35rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
@@ -676,10 +676,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
-            <span className="block whitespace-nowrap text-white">your character</span>
-            <span className="block whitespace-nowrap">
-              <span className="text-white">is </span>
+          <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+            your character
+            <br />
+            <span className="whitespace-nowrap">
+              <span>is </span>
               <span className="text-gem-green">almost here!</span>
             </span>
           </h2>
