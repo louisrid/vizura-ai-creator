@@ -13,12 +13,30 @@ interface SubscriptionContextType {
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 const ACTIVE_STATUSES = new Set(["active", "trialing"]);
+const SUBSCRIPTION_CACHE_PREFIX = "vizura_subscription_status:";
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [optimistic, setOptimistic] = useState(false);
+
+  const getCacheKey = useCallback((userId: string) => `${SUBSCRIPTION_CACHE_PREFIX}${userId}`, []);
+
+  const readCachedStatus = useCallback((userId: string) => {
+    if (typeof window === "undefined") return null;
+    return window.sessionStorage.getItem(getCacheKey(userId));
+  }, [getCacheKey]);
+
+  const writeCachedStatus = useCallback((userId: string, nextStatus: string | null) => {
+    if (typeof window === "undefined") return;
+    const key = getCacheKey(userId);
+    if (nextStatus) {
+      window.sessionStorage.setItem(key, nextStatus);
+      return;
+    }
+    window.sessionStorage.removeItem(key);
+  }, [getCacheKey]);
 
   const fetchSubscription = useCallback(async () => {
     if (!user) {
@@ -39,6 +57,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         if (!optimistic) setStatus(null);
       } else {
         const serverStatus = data?.status ?? null;
+        writeCachedStatus(user.id, serverStatus);
         // Only overwrite optimistic if server confirms active
         if (optimistic && serverStatus && ACTIVE_STATUSES.has(serverStatus)) {
           setStatus(serverStatus);
@@ -51,11 +70,22 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, optimistic]);
+  }, [user, optimistic, writeCachedStatus]);
 
   useEffect(() => {
+    if (!user) {
+      setStatus(null);
+      setLoading(false);
+      return;
+    }
+
+    const cachedStatus = readCachedStatus(user.id);
+    if (cachedStatus) {
+      setStatus(cachedStatus);
+    }
+    setLoading(true);
     void fetchSubscription();
-  }, [fetchSubscription]);
+  }, [fetchSubscription, readCachedStatus, user]);
 
   useEffect(() => {
     if (!user) return;
@@ -82,6 +112,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
             payload.eventType === "DELETE"
               ? null
               : (payload.new as { status?: string | null } | null)?.status ?? null;
+          writeCachedStatus(user.id, nextStatus);
           if (nextStatus && ACTIVE_STATUSES.has(nextStatus)) {
             setStatus(nextStatus);
           } else if (!optimistic) {
@@ -97,7 +128,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       document.removeEventListener("visibilitychange", refreshOnReturn);
       supabase.removeChannel(channel);
     };
-  }, [fetchSubscription, user, optimistic]);
+  }, [fetchSubscription, user, optimistic, writeCachedStatus]);
 
   const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 

@@ -26,7 +26,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "professional passport photo style, front-facing headshot, plain white background, centred in frame, head and top of shoulders only, even soft lighting from the front, looking directly at camera, no shadows on background, consistent framing and zoom level, beautiful attractive woman, influencer aesthetic, clear skin, well-groomed eyebrows, photorealistic portrait, high resolution, iPhone quality photo";
+  "professional passport photo style, front-facing headshot, plain white background, centred in frame, head and top of shoulders only, neutral expression, even soft lighting from the front, looking directly at camera, no shadows on background, consistent framing and zoom level across all images, identical white background, identical zoom, identical positioning, same photo booth setup, photorealistic portrait, high resolution";
 
 const FACE_NEGATIVE =
   "Do not generate ugly, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, or AI generated look.";
@@ -286,15 +286,15 @@ async function generateFaceImages(
   const imageUrls: string[] = [];
   
   const variations = [
-    "looking directly at camera, neutral expression, slight smile",
-    "looking directly at camera, confident expression, soft smile",
-    "looking directly at camera, gentle expression, relaxed face",
+    "same booth-style composition, same camera height, same crop, unique facial features and bone structure only",
+    "same booth-style composition, same camera height, same crop, unique facial features and identity only",
+    "same booth-style composition, same camera height, same crop, unique facial features only",
   ];
 
   for (let i = 0; i < Math.min(count, 3); i++) {
     const variation = variations[i] || variations[0];
     const fullPrompt = `${prompt}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
-    console.log(`Face gen ${i + 1}:`, fullPrompt.slice(0, 150));
+      console.log(`Face gen ${i + 1} prompt: ${fullPrompt}`);
     try {
       const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
       if (url) {

@@ -89,6 +89,14 @@ const Header = () => {
     return resolveActivePath(redirectTarget || location.pathname);
   }, [location.pathname, location.search]);
 
+  const cachedSubscribed = useMemo(() => {
+    if (typeof window === "undefined" || !user?.id) return false;
+    const cached = window.sessionStorage.getItem(`vizura_subscription_status:${user.id}`);
+    return cached === "active" || cached === "trialing";
+  }, [user?.id]);
+
+  const showSubscribedState = subscribed || cachedSubscribed;
+
   return (
     <header className="sticky top-0 z-40 border-b-[5px] border-white" style={{ backgroundColor: '#000000' }}>
       <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-4 md:px-8 py-6">
@@ -107,7 +115,7 @@ const Header = () => {
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 style={{
-                  color: subscribed ? "hsl(var(--member-green))" : "hsl(var(--nav-foreground))",
+                  color: showSubscribedState ? "hsl(var(--member-green))" : "hsl(var(--nav-foreground))",
                 }}
               >
                 <circle cx="12" cy="8" r="5" />
