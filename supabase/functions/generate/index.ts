@@ -407,6 +407,12 @@ serve(async (req) => {
       try {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
       } catch (e: any) {
+        if (e?.contentPolicy) {
+          return new Response(
+            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
         if (e?.status === 429) {
           return new Response(
             JSON.stringify({ error: "generation failed, please try again" }),

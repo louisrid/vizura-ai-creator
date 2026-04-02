@@ -668,22 +668,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* ── Create slide ── */
     if (isCreateSlide) {
-      const showGemCost = isLoggedIn && skipWelcome;
+      const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
-          {showGemCost && (
-            <div className="mb-4 flex items-center gap-1.5">
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
-            </div>
-          )}
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
           <h2 className="w-full text-center text-[2.95rem] font-[900] lowercase leading-[0.96] tracking-tight">
-            <span className="block text-white">your character is</span>
-            <span className="block text-gem-green">almost here!</span>
+            <span className="block text-white">your character</span>
+            <span className="block text-gem-green">is almost here!</span>
           </h2>
+          {!isFirstCharacter && (
+            <div className="mt-5 flex items-center gap-1.5">
+              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
+            </div>
+          )}
           <motion.p
-            className="mt-4 text-sm font-extrabold lowercase text-white/40"
+            className={`${!isFirstCharacter ? "mt-4" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: SLIDE_FADE_DURATION }}
