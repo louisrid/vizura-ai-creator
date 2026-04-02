@@ -19,12 +19,12 @@ const OVERLAY_FADE_DURATION = 0.75;
 
 /* ── Name toast variations ── */
 const NAME_TOAST_MESSAGES = [
-  "great choice! 💫",
-  "love that name! ✨",
-  "perfect name! 🔥",
-  "she's gonna be amazing! 💖",
-  "nice pick! 🌟",
-  "beautiful name! 💎",
+  "great choice!",
+  "great choice!",
+  "great choice!",
+  "great choice!",
+  "great choice!",
+  "great choice!",
 ];
 
 const getRandomNameToast = () =>
@@ -48,12 +48,12 @@ const getRandomNameToast = () =>
  */
 
 const TRAITS = [
-  { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["pale", "tan", "asian", "dark"] },
-  { key: "bodyType", label: "choose body shape", emoji: "👗", options: ["slim", "average", "curvy"] },
+  { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["white", "tan", "asian", "black"] },
+  { key: "bodyType", label: "choose body shape", emoji: "🏊", options: ["slim", "average", "curvy"] },
   { key: "age", label: "choose age range", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
-  { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["long straight", "long curly", "bangs"] },
+  { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["straight", "curly", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
-  { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["blue", "brown", "green", "grey"] },
+  { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["blue", "brown", "green"] },
   { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic", "egirl"] },
 ] as const;
 
@@ -105,26 +105,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 NavArrow.displayName = "NavArrow";
 
 /* ── Background glow ── */
-const AmbientGlow = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-    <div
-      className="absolute rounded-full animate-ambient-drift-1"
-      style={{
-        width: "90%", height: "80%", top: "5%", left: "0%",
-        filter: "blur(160px)",
-        background: "radial-gradient(circle, hsl(220 42% 22% / 0.035), hsl(214 28% 16% / 0.02), transparent 70%)",
-      }}
-    />
-    <div
-      className="absolute rounded-full animate-ambient-drift-2"
-      style={{
-        width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        filter: "blur(140px)",
-        background: "radial-gradient(circle, hsl(226 34% 20% / 0.03), hsl(214 24% 14% / 0.016), transparent 65%)",
-      }}
-    />
-  </div>
-);
+const AmbientGlow = () => null;
 
 /* ── Simple emoji — CSS bounce only ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
@@ -560,6 +541,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       const isMakeup = trait.key === "makeup";
+      const isBody = trait.key === "bodyType";
+      const isAge = trait.key === "age";
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
@@ -580,9 +563,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 {isMakeup && opt === "classic" && (
                   <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
                 )}
+                {isBody && opt === "average" && (
+                  <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
+                )}
               </div>
             ))}
           </div>
+          {isAge && (
+            <p className="mt-4 text-[11px] font-[800] lowercase text-white/40">
+              (this determines how youthful your character looks)
+            </p>
+          )}
           {isSkinSlide && (
             <p className="mt-4 text-base font-extrabold lowercase text-white/40">
               tap to select
@@ -629,7 +620,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {selections.referenceImage ? (
               <div className="flex flex-col gap-3">
-                <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[3px] border-white/15">
+                <div className="relative w-full rounded-2xl overflow-hidden border-[3px] border-white/15" style={{ aspectRatio: "4/5" }}>
                   <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -645,7 +636,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 py-8 hover:border-white/30 transition-colors"
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-white/15 bg-white/5 hover:border-white/30 transition-colors" style={{ aspectRatio: "4/5" }}
                 >
                   <Upload size={24} strokeWidth={2.5} className="text-white/30" />
                   <span className="text-sm font-extrabold lowercase text-white/30">add reference image</span>
@@ -682,7 +673,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
           <h2 className="w-full max-w-[16rem] mx-auto text-center text-[2.8rem] font-[900] lowercase leading-[0.96] tracking-tight">
             <span className="block text-white">your character</span>
-            <span className="block text-gem-green">is almost here!</span>
+            <span className="block text-gem-green italic">is almost here!</span>
           </h2>
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">
@@ -725,7 +716,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-success"
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center bg-black px-6"
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
+          style={{ background: "hsl(var(--gem-green))" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
@@ -744,7 +736,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-white">
+              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
                 <span className="block">character</span>
                 <span className="block">created!</span>
               </p>
@@ -761,7 +753,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "linear-gradient(160deg, hsl(220 20% 4.4%) 0%, hsl(224 18% 3.5%) 48%, hsl(0 0% 0%) 100%)" }}
+      style={{ background: "hsl(0 0% 0%)" }}
     >
       <AmbientGlow />
       <motion.div

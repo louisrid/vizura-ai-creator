@@ -68,9 +68,11 @@ function getClientIp(req: Request): string {
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
+  white: "pale fair skin",
   pale: "pale fair skin",
   tan: "tanned warm skin",
   asian: "asian skin tone",
+  black: "dark skin",
   dark: "dark skin",
 };
 
@@ -208,7 +210,7 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-2-image-1212",
       prompt,
       n: 1,
     }),
@@ -248,7 +250,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-2-image-1212",
       prompt,
       images,
       aspect_ratio: aspectRatio,

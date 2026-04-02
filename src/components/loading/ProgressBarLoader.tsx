@@ -143,7 +143,7 @@ const ProgressBarLoader = ({
           style={{ animationDuration: "2.2s" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
           ⚙️
         </motion.span>
@@ -173,7 +173,7 @@ const ProgressBarLoader = ({
           className="flex h-8 items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.0, delay: 1.0, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         >
           <AnimatePresence mode="wait" initial={false}>
             {isComplete && requireTapToContinue ? (
