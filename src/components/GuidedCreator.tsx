@@ -105,26 +105,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 NavArrow.displayName = "NavArrow";
 
 /* ── Background glow ── */
-const AmbientGlow = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-    <div
-      className="absolute rounded-full animate-ambient-drift-1"
-      style={{
-        width: "90%", height: "80%", top: "5%", left: "0%",
-        filter: "blur(160px)",
-        background: "radial-gradient(circle, hsl(220 42% 22% / 0.035), hsl(214 28% 16% / 0.02), transparent 70%)",
-      }}
-    />
-    <div
-      className="absolute rounded-full animate-ambient-drift-2"
-      style={{
-        width: "70%", height: "70%", bottom: "0%", right: "-5%",
-        filter: "blur(140px)",
-        background: "radial-gradient(circle, hsl(226 34% 20% / 0.03), hsl(214 24% 14% / 0.016), transparent 65%)",
-      }}
-    />
-  </div>
-);
+const AmbientGlow = () => null;
 
 /* ── Simple emoji — CSS bounce only ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
