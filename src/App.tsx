@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
@@ -32,15 +33,20 @@ const isExemptRoute = (pathname: string) =>
 const FreshLoadRedirect = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const hasRedirected = useRef(false);
 
   useEffect(() => {
-    if (hasRedirected.current) return;
+    if (hasRedirected.current || loading) return;
     hasRedirected.current = true;
-    if (location.pathname !== "/" && !isExemptRoute(location.pathname)) {
+    if (user && location.pathname !== "/") {
+      navigate("/", { replace: true });
+      return;
+    }
+    if (!user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
       navigate("/", { replace: true });
     }
-  }, []);
+  }, [loading, location.pathname, navigate, user]);
 
   return null;
 };

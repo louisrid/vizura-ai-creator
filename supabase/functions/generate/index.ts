@@ -31,6 +31,8 @@ const FACE_QUALITY =
 const FACE_NEGATIVE =
   "Do not generate ugly, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, or AI generated look.";
 
+const XAI_IMAGE_MODEL = "grok-imagine-image";
+
 /* ── in-memory rate limiter ─────────────────────────────── */
 const rateBuckets = new Map<string, number[]>();
 
@@ -202,6 +204,7 @@ async function storeImagePermanently(
 /* ── xAI Grok: text-to-image ──────────────────────────── */
 async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4"): Promise<string | null> {
   console.log("xaiTextToImage calling:", prompt.slice(0, 100));
+  void aspectRatio;
 
   const response = await fetch("https://api.x.ai/v1/images/generations", {
     method: "POST",
@@ -210,9 +213,8 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image-1212",
+      model: XAI_IMAGE_MODEL,
       prompt,
-      n: 1,
     }),
   });
 
@@ -250,7 +252,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image-1212",
+      model: XAI_IMAGE_MODEL,
       prompt,
       images,
       aspect_ratio: aspectRatio,

@@ -13,7 +13,6 @@ const NEON_BLUE = "hsl(var(--gem-green))";
 const PURE_WHITE = "hsl(var(--foreground))";
 const AMBER = "hsl(var(--neon-yellow))";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
-const NAME_TOAST_SESSION_KEY = "vizura_name_toast_shown";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
 
@@ -230,7 +229,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
-  const [nameToastShown, setNameToastShown] = useState(() => sessionStorage.getItem(NAME_TOAST_SESSION_KEY) === "1");
+  const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -272,7 +271,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
-      setNameToastShown(sessionStorage.getItem(NAME_TOAST_SESSION_KEY) === "1");
+      setNameToastShown(false);
     }
   }, [open, restoreSavedFlow]);
 
@@ -371,18 +370,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSelections((p) => ({ ...p, characterName: name }));
   }, []);
 
-  // Show name toast only for first-ever character (not previously shown in session)
   useEffect(() => {
-    if (!visible || !isNameSlide || nameToastShown) return;
-    if (selections.characterName.trim()) {
+    if (!visible || nameToastShown) return;
+    if (selections.characterName.trim() && selections.age.trim()) {
       setNameToastShown(true);
-      sessionStorage.setItem(NAME_TOAST_SESSION_KEY, "1");
-      // Only show if this is the first character (not skipWelcome — which means returning user)
-      if (!skipWelcome) {
-        toast(getRandomNameToast());
-      }
+      toast.success(getRandomNameToast());
     }
-  }, [visible, isNameSlide, nameToastShown, selections.characterName, skipWelcome]);
+  }, [visible, nameToastShown, selections.characterName, selections.age]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -673,7 +667,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
           <h2 className="w-full max-w-[16rem] mx-auto text-center text-[2.8rem] font-[900] lowercase leading-[0.96] tracking-tight">
             <span className="block text-white">your character</span>
-            <span className="block text-gem-green italic">is almost here!</span>
+            <span className="block">
+              <span className="text-white">is </span>
+              <span className="text-gem-green">almost here!</span>
+            </span>
           </h2>
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">
@@ -717,28 +714,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <motion.div
           key="cooking-success"
           className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
-          style={{ background: "hsl(var(--gem-green))" }}
+          style={{ background: "hsl(var(--member-green))" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
           <div className="flex min-h-[18rem] flex-col items-center justify-center gap-5 text-center">
-            <motion.span
-              className="inline-block select-none text-[5rem] leading-none"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              ✅
-            </motion.span>
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.85 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
-                <span className="block">character</span>
-                <span className="block">created!</span>
+              <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
+                character created!
               </p>
             </motion.div>
           </div>
