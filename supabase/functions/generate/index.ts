@@ -2,8 +2,6 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
-const IS_DEMO_MODE = false;
-const DEMO_USER_ID = "00000000-0000-0000-0000-000000000000";
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 
@@ -17,8 +15,8 @@ const corsHeaders = {
 const QUALITY_SUFFIX =
   "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
 
-const NEGATIVE_SUFFIX =
-  "DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, AI generated look";
+const NEGATIVE_INSTRUCTION =
+  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, or AI generated look.";
 
 const SELFIE_PREFIX =
   "front camera perspective, slight wide angle distortion, casual angle, arm extended, iPhone selfie";
@@ -61,39 +59,80 @@ function getClientIp(req: Request): string {
   );
 }
 
-/* ── helper: demo placeholder images ── */
-function makeDemoSvg(_label: string, _accent: string, _index: number): string {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="768" height="1024" viewBox="0 0 768 1024" fill="none">
-      <rect width="768" height="1024" rx="48" fill="#1a1a1a"/>
-    </svg>
-  `;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
+/* ── trait mapping ─────────────────────────────────────── */
+const SKIN_MAP: Record<string, string> = {
+  pale: "pale fair skin",
+  tan: "tanned warm skin",
+  asian: "asian skin tone",
+  dark: "dark skin",
+};
 
-function generateDemoImages(prompt: string, count: number): string[] {
-  const accents = ["#f5df4d", "#39ff88", "#57d4ff", "#ff8fb1", "#ffc857", "#b9ff66"];
-  const label = sanitiseText(prompt).slice(0, 36) || "character preview";
-  return Array.from({ length: count }, (_, index) => makeDemoSvg(label, accents[index % accents.length], index));
+const BODY_MAP: Record<string, string> = {
+  slim: "slim petite frame",
+  average: "average build",
+  curvy: "curvy voluptuous figure",
+};
+
+const MAKEUP_MAP: Record<string, string> = {
+  natural: "natural minimal makeup fresh-faced",
+  classic: "classic polished makeup defined features",
+  egirl: "egirl style makeup bold eyeliner colorful accents",
+};
+
+function ageToDescription(ageStr: string): string {
+  const num = parseInt(ageStr, 10);
+  if (isNaN(num) || num <= 23) return "youthful round soft features, baby face, smooth skin, soft jawline, full cheeks";
+  if (num <= 28) return "young adult features, slightly more defined cheekbones and jawline, still youthful skin";
+  return "mature defined features, prominent cheekbones, defined jawline, confident composed expression";
 }
 
 /* ── build character trait string from DB record ───────── */
 function buildCharacterTraits(char: any): string {
   const parts: string[] = [];
-  // age
-  if (char.age) parts.push(`${char.age} year old woman`);
-  // skin / ethnicity (stored in 'country' column)
-  if (char.country && char.country !== "any") parts.push(`${char.country} skin`);
-  // body type
-  if (char.body && char.body !== "regular") parts.push(`${char.body} body type`);
-  // hair colour (stored in 'hair' column)
-  if (char.hair) parts.push(`${char.hair} hair`);
-  // eyes
-  if (char.eye) parts.push(`${char.eye} eyes`);
-  // makeup style
-  if (char.style && char.style !== "natural") parts.push(`${char.style} makeup`);
-  // description may contain hair style + extras
-  if (char.description && char.description.trim()) parts.push(char.description.trim());
+
+  // Age
+  if (char.age) {
+    parts.push(`${char.age} year old woman`);
+    parts.push(ageToDescription(char.age));
+  }
+
+  // Skin
+  const skinKey = (char.country || "").toLowerCase();
+  if (skinKey && skinKey !== "any") {
+    parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
+  }
+
+  // Body
+  const bodyKey = (char.body || "").toLowerCase();
+  if (bodyKey && bodyKey !== "regular") {
+    parts.push(BODY_MAP[bodyKey] || `${bodyKey} body type`);
+  }
+
+  // Hair - combine style from description + colour
+  const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
+  const hairStyle = hairStyleMatch?.[1]?.trim() || "";
+  const hairColour = char.hair || "";
+  if (hairStyle || hairColour) {
+    parts.push(`${hairStyle} ${hairColour} hair`.trim());
+  }
+
+  // Eyes
+  if (char.eye) {
+    parts.push(`bright ${char.eye} eyes`);
+  }
+
+  // Makeup
+  const makeupKey = (char.style || "").toLowerCase();
+  if (makeupKey) {
+    parts.push(MAKEUP_MAP[makeupKey] || `${makeupKey} makeup`);
+  }
+
+  // Additional description (cleaned)
+  if (char.description) {
+    let desc = char.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
+    if (desc) parts.push(desc);
+  }
+
   return parts.join(", ");
 }
 
@@ -110,13 +149,21 @@ function buildFinalPrompt(
   parts.push(scenePrompt);
   parts.push(perspective);
   parts.push(QUALITY_SUFFIX);
-  parts.push(`Avoid: ${NEGATIVE_SUFFIX}`);
+  parts.push(NEGATIVE_INSTRUCTION);
 
   return parts.join(". ");
 }
 
-/* ── xAI Grok Imagine: text-to-image ──────────────────── */
-async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | null> {
+/* ── xAI Grok: text-to-image ──────────────────────────── */
+async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4"): Promise<string | null> {
+  // Map aspect ratio format for xAI API
+  const ratioMap: Record<string, string> = {
+    "3:4": "3:4",
+    "9:16": "9:16",
+    "4:5": "3:4",
+  };
+  const ratio = ratioMap[aspectRatio] || "3:4";
+
   const response = await fetch("https://api.x.ai/v1/images/generations", {
     method: "POST",
     headers: {
@@ -124,8 +171,10 @@ async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | 
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-imagine-image",
+      model: "grok-2-image",
       prompt,
+      response_format: "url",
+      n: 1,
     }),
   });
 
@@ -141,27 +190,29 @@ async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | 
   return data?.data?.[0]?.url ?? null;
 }
 
-/* ── xAI Grok Imagine: image edit with references ─────── */
+/* ── xAI Grok: image edit with references ─────── */
 async function xaiImageEdit(
   prompt: string,
   imageUrls: string[],
-  apiKey: string
+  apiKey: string,
+  aspectRatio = "3:4"
 ): Promise<string | null> {
-  const images = imageUrls.map((url) => ({
-    type: "image_url",
-    url,
-  }));
+  // Build multimodal messages for chat-based image editing
+  const content: any[] = [];
+  for (const url of imageUrls) {
+    content.push({ type: "image_url", image_url: { url } });
+  }
+  content.push({ type: "text", text: prompt });
 
-  const response = await fetch("https://api.x.ai/v1/images/edits", {
+  const response = await fetch("https://api.x.ai/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-imagine-image",
-      prompt,
-      images,
+      model: "grok-2-image",
+      messages: [{ role: "user", content }],
     }),
   });
 
@@ -174,36 +225,43 @@ async function xaiImageEdit(
   }
 
   const data = await response.json();
-  return data?.data?.[0]?.url ?? null;
+  // Extract URL from response - grok-2-image returns image URLs in choices
+  const choice = data?.choices?.[0];
+  if (choice?.message?.content) {
+    // Try to find URL in content
+    const urlMatch = choice.message.content.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/);
+    if (urlMatch) return urlMatch[1];
+    // Or it might be a direct URL
+    if (choice.message.content.startsWith("http")) return choice.message.content.trim();
+  }
+  // Fallback: check for image in content array
+  if (Array.isArray(choice?.message?.content)) {
+    for (const item of choice.message.content) {
+      if (item.type === "image_url") return item.image_url?.url;
+    }
+  }
+  return null;
 }
 
-/* ── generate face options (text-to-image, for character creation) ── */
+/* ── generate face options (text-to-image, always 3:4) ── */
 async function generateFaceImages(
   prompt: string,
   count: number,
   apiKey: string
 ): Promise<string[]> {
-  const negativePrompt =
-    "low quality, blurry, distorted, ugly, deformed, disfigured, bad anatomy, watermark, text, signature";
   const imageUrls: string[] = [];
+  const angles = ["front view portrait", "slight left 3/4 angle portrait", "slight right 3/4 angle portrait"];
 
-  if (count <= 3) {
-    const angles = ["front view", "left side view, 3/4 angle", "right side view, 3/4 angle"];
-    for (const angle of angles.slice(0, count)) {
-      const fullPrompt = `Character portrait, ${prompt}, ${angle}. High quality, detailed, consistent style. Avoid: ${negativePrompt}`;
-      const url = await xaiTextToImage(fullPrompt, apiKey);
+  for (let i = 0; i < Math.min(count, 3); i++) {
+    const angle = angles[i] || "front view portrait";
+    const fullPrompt = `${prompt}, ${angle}, close-up face and shoulders, ${QUALITY_SUFFIX}. ${NEGATIVE_INSTRUCTION}`;
+    console.log(`Face gen ${i + 1}:`, fullPrompt);
+    try {
+      const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
       if (url) imageUrls.push(url);
-    }
-  } else {
-    const variations = [
-      "front view, soft smile", "front view, serious expression",
-      "slight left turn, gentle expression", "slight right turn, confident look",
-      "front view, playful expression", "front view, neutral expression",
-    ];
-    for (const variation of variations.slice(0, count)) {
-      const fullPrompt = `Close-up face portrait, ${prompt}, ${variation}. High quality, detailed, consistent style. Avoid: ${negativePrompt}`;
-      const url = await xaiTextToImage(fullPrompt, apiKey);
-      if (url) imageUrls.push(url);
+    } catch (e) {
+      console.error(`Face gen ${i + 1} failed:`, e);
+      throw e;
     }
   }
 
@@ -214,14 +272,13 @@ async function generateFaceImages(
 async function generatePhoto(
   finalPrompt: string,
   faceImageUrl: string | null,
-  apiKey: string
+  apiKey: string,
+  aspectRatio: string,
 ): Promise<string | null> {
   if (faceImageUrl) {
-    // Use image edit endpoint with face as reference
-    return await xaiImageEdit(finalPrompt, [faceImageUrl], apiKey);
+    return await xaiImageEdit(finalPrompt, [faceImageUrl], apiKey, aspectRatio);
   }
-  // No face reference — plain text-to-image
-  return await xaiTextToImage(finalPrompt, apiKey);
+  return await xaiTextToImage(finalPrompt, apiKey, aspectRatio);
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -230,37 +287,31 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
 
   try {
-    let userId: string;
-
-    if (IS_DEMO_MODE) {
-      userId = DEMO_USER_ID;
-    } else {
-      const authHeader = req.headers.get("Authorization");
-      if (!authHeader?.startsWith("Bearer ")) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const supabase = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_ANON_KEY")!,
-        { global: { headers: { Authorization: authHeader } } }
-      );
-
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData?.user) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      userId = userData.user.id;
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData?.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const userId = userData.user.id;
+
     /* ── rate limit ── */
-    if (!IS_DEMO_MODE && isRateLimited(userId)) {
+    if (isRateLimited(userId)) {
       return new Response(
         JSON.stringify({ error: "Rate limit exceeded — max 10 per minute" }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -273,8 +324,7 @@ serve(async (req) => {
     const isFreeGen = body?.free_gen === true;
     const characterId = body?.character_id || null;
     const photoType = body?.photo_type || "selfie";
-    const aspectRatio = body?.aspect_ratio || "4:5";
-    const imageCount = isFreeGen ? 6 : 3;
+    const aspectRatio = body?.aspect_ratio || "3:4";
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
@@ -288,13 +338,6 @@ serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    }
-
-    if (IS_DEMO_MODE) {
-      return new Response(
-        JSON.stringify({ images: generateDemoImages(prompt, Math.min(imageCount, 3)), demo: true }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
     }
 
     /* ── admin client ── */
@@ -320,7 +363,7 @@ serve(async (req) => {
       }
     }
 
-    /* ── FREE GENERATION FLOW (face creation — no photo modifiers) ── */
+    /* ── FREE GENERATION FLOW (face creation — no gem cost) ── */
     if (isFreeGen) {
       const { data: profile } = await adminClient
         .from("profiles")
@@ -356,17 +399,17 @@ serve(async (req) => {
 
       let imageUrls: string[];
       try {
-        imageUrls = await generateFaceImages(prompt, 6, XAI_API_KEY);
+        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
       } catch (e: any) {
         if (e?.status === 429) {
           return new Response(
-            JSON.stringify({ error: "Rate limited, please try again shortly" }),
+            JSON.stringify({ error: "generation failed, please try again" }),
             { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         if (e?.status === 402) {
           return new Response(
-            JSON.stringify({ error: "AI generation quota exhausted" }),
+            JSON.stringify({ error: "generation failed, please try again" }),
             { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
@@ -398,7 +441,7 @@ serve(async (req) => {
       );
     }
 
-    /* ── STANDARD GEM-BASED FLOW (photo generation) ── */
+    /* ── STANDARD GEM-BASED FLOW ── */
     const { data: creditData } = await adminClient
       .from("credits")
       .select("balance")
@@ -412,13 +455,11 @@ serve(async (req) => {
         .eq("user_id", userId)
         .single();
 
-      const hasActiveSub = subData?.status === "active";
-
       return new Response(
         JSON.stringify({
           error: "No gems remaining",
           code: "NO_GEMS",
-          has_subscription: hasActiveSub,
+          has_subscription: subData?.status === "active",
         }),
         { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -436,15 +477,23 @@ serve(async (req) => {
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
-    // Build final prompt with character traits, photo type, and quality modifiers
-    const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits);
-    console.log("Final prompt:", finalPrompt);
-    console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
+    // Determine if this is a face regen or photo gen
+    const isFaceRegen = body?.face_regen === true;
 
     let imageUrls: string[];
     try {
-      const result = await generatePhoto(finalPrompt, faceImageUrl, XAI_API_KEY);
-      imageUrls = result ? [result] : [];
+      if (isFaceRegen) {
+        // Face regeneration: generate 3 new face options
+        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
+      } else {
+        // Photo generation
+        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits);
+        console.log("Final prompt:", finalPrompt);
+        console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
+
+        const result = await generatePhoto(finalPrompt, faceImageUrl, XAI_API_KEY, aspectRatio);
+        imageUrls = result ? [result] : [];
+      }
     } catch (e: any) {
       // Refund gem on failure
       await adminClient
@@ -455,19 +504,17 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
 
-      if (e?.status === 429) {
+      if (e?.status === 429 || e?.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Rate limited, please try again shortly" }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          JSON.stringify({ error: "generation failed, please try again" }),
+          { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      if (e?.status === 402) {
-        return new Response(
-          JSON.stringify({ error: "AI generation quota exhausted" }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      throw e;
+      console.error("Generation error:", e);
+      return new Response(
+        JSON.stringify({ error: "generation failed, please try again" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     if (imageUrls.length === 0) {
@@ -479,14 +526,19 @@ serve(async (req) => {
           updated_at: new Date().toISOString(),
         })
         .eq("user_id", userId);
-      throw new Error("No images generated");
+      return new Response(
+        JSON.stringify({ error: "generation failed, please try again" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
-    await adminClient.from("generations").insert({
-      user_id: userId,
-      prompt: sanitiseText(prompt),
-      image_urls: imageUrls,
-    });
+    if (!isFaceRegen) {
+      await adminClient.from("generations").insert({
+        user_id: userId,
+        prompt: sanitiseText(prompt),
+        image_urls: imageUrls,
+      });
+    }
 
     return new Response(
       JSON.stringify({
@@ -498,9 +550,7 @@ serve(async (req) => {
   } catch (e) {
     console.error("generate error:", e);
     return new Response(
-      JSON.stringify({
-        error: e instanceof Error ? e.message : "Unknown error",
-      }),
+      JSON.stringify({ error: "generation failed, please try again" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
