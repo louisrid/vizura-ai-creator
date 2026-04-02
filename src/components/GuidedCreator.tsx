@@ -593,7 +593,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className={SLIDE_TITLE_CLASS}>
             describe her
           </h2>
-          <p className={`mt-1 ${SUBTEXT_CLASS}`}>(optional)</p>
+          <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
           <div className="mt-4 w-full max-w-[18rem]">
             <textarea
               value={selections.description}
@@ -603,7 +603,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className={`mt-2 text-center ${SUBTEXT_CLASS}`}>
+            <p className={`mt-2 text-center ${HELPER_CLASS}`}>
               i.e. chubby cheeks, freckles, thick mascara
             </p>
           </div>
