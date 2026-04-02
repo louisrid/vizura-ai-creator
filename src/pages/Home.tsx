@@ -68,6 +68,8 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    // Don't auto-open the guided creator if the user is already logged in
+    if (user) return;
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
     if (alreadyOpened || dismissed) return;
@@ -75,7 +77,7 @@ const Home = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setSkipWelcome(false);
     setShowGuided(true);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     void fetchLatestPhotos();
