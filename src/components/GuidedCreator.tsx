@@ -541,6 +541,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       const isMakeup = trait.key === "makeup";
+      const isBody = trait.key === "bodyType";
+      const isAge = trait.key === "age";
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
@@ -561,9 +563,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 {isMakeup && opt === "classic" && (
                   <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
                 )}
+                {isBody && opt === "average" && (
+                  <span className="text-[11px] font-[800] lowercase text-white/40 mt-0.5">(recommended)</span>
+                )}
               </div>
             ))}
           </div>
+          {isAge && (
+            <p className="mt-4 text-[11px] font-[800] lowercase text-white/40">
+              (this determines how youthful your character looks)
+            </p>
+          )}
           {isSkinSlide && (
             <p className="mt-4 text-base font-extrabold lowercase text-white/40">
               tap to select
