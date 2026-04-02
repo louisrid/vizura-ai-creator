@@ -716,7 +716,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <motion.div
           key="cooking-success"
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center bg-black px-6"
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
+          style={{ background: "hsl(var(--gem-green))" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
@@ -735,7 +736,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-white">
+              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
                 <span className="block">character</span>
                 <span className="block">created!</span>
               </p>
