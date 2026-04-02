@@ -248,7 +248,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-2-image-1212",
       prompt,
       images,
       aspect_ratio: aspectRatio,
