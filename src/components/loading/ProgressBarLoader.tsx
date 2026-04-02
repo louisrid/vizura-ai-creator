@@ -38,6 +38,8 @@ const ProgressBarLoader = ({
   const completedRef = useRef(false);
   const continuedRef = useRef(false);
   const startTimeRef = useRef(Date.now());
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
   const safePhrases = useMemo(() => (phrases.length > 0 ? phrases : ["working…"]), [phrases]);
   const effectivePhraseInterval = Math.max(phraseInterval, 4200);
   const maxPctRef = useRef(0);
@@ -67,7 +69,7 @@ const ProgressBarLoader = ({
           setIsComplete(true);
           if (!requireTapToContinue && !continuedRef.current) {
             continuedRef.current = true;
-            window.setTimeout(() => onComplete?.(), 250);
+            window.setTimeout(() => onCompleteRef.current?.(), 250);
           }
         }
       }
@@ -86,7 +88,8 @@ const ProgressBarLoader = ({
       window.removeEventListener("focus", syncFromElapsedTime);
       window.removeEventListener("pageshow", syncFromElapsedTime);
     };
-  }, [duration, onComplete, requireTapToContinue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, requireTapToContinue]);
 
   useEffect(() => {
     if (isComplete || safePhrases.length <= 1) {
