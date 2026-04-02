@@ -510,6 +510,12 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
 
+      if (e?.contentPolicy) {
+        return new Response(
+          JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
       if (e?.status === 429 || e?.status === 402) {
         return new Response(
           JSON.stringify({ error: "generation failed, please try again" }),
