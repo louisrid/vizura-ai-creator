@@ -551,6 +551,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
+      const isMakeup = trait.key === "makeup";
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
@@ -559,21 +560,23 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             {trait.label}
           </h2>
-          <div className={`mt-5 flex justify-center gap-2 ${trait.key === "hairColour" ? "w-full max-w-[19rem] flex-nowrap" : "flex-wrap"}`}>
+          <div className="mt-5 flex justify-center gap-2 flex-wrap max-w-[20rem]">
             {trait.options.map((opt) => (
-              <InteractivePill
-                key={opt}
-                label={opt}
-                selected={selectedVal === opt}
-                shaking={shaking && selectedVal !== opt}
-                compact={trait.key === "hairColour"}
-                subLabel={trait.key === "makeup" && opt === "classic" ? "(recommended)" : undefined}
-                onClick={() => setTrait(trait.key, opt)}
-              />
+              <div key={opt} className="flex flex-col items-center gap-1">
+                <InteractivePill
+                  label={opt}
+                  selected={selectedVal === opt}
+                  shaking={shaking && selectedVal !== opt}
+                  onClick={() => setTrait(trait.key, opt)}
+                />
+                {isMakeup && opt === "classic" && (
+                  <span className="text-[10px] font-extrabold lowercase text-white/40">(recommended)</span>
+                )}
+              </div>
             ))}
           </div>
           {isSkinSlide && (
-            <p className="mt-4 text-xs font-extrabold lowercase text-white/30">
+            <p className="mt-4 text-sm font-extrabold lowercase text-white/40">
               click any option to select
             </p>
           )}
