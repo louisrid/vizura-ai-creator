@@ -121,8 +121,8 @@ const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
 );
 
 /* ── Interactive pill ── */
-const InteractivePill = ({ label, selected, shaking, onClick, compact = false, subLabel }: {
-  label: string; selected: boolean; shaking: boolean; onClick: () => void; compact?: boolean; subLabel?: string;
+const InteractivePill = ({ label, selected, shaking, onClick, compact = false }: {
+  label: string; selected: boolean; shaking: boolean; onClick: () => void; compact?: boolean;
 }) => (
   <motion.button
     type="button"
@@ -134,18 +134,13 @@ const InteractivePill = ({ label, selected, shaking, onClick, compact = false, s
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`rounded-xl ${compact ? "px-4 py-3.5 text-[0.9rem]" : "px-5 py-3.5 text-[0.95rem]"} min-w-0 whitespace-nowrap font-[900] lowercase tracking-tight transition-colors duration-75 ${
+    className={`rounded-xl w-[5.5rem] h-[3rem] flex items-center justify-center text-[0.85rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
       selected
         ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
         : "border-[3px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
     }`}
   >
-    <span className="block leading-none">{label}</span>
-    {subLabel && (
-      <span className={`mt-0.5 block text-center text-[7px] font-extrabold normal-case leading-none ${selected ? "text-neon-yellow-foreground/50" : "text-white/30"}`}>
-        {subLabel}
-      </span>
-    )}
+    <span className="block leading-none text-center">{label}</span>
   </motion.button>
 );
 
@@ -556,6 +551,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
+      const isMakeup = trait.key === "makeup";
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
@@ -564,21 +560,23 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className="mt-2 text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
             {trait.label}
           </h2>
-          <div className={`mt-5 flex justify-center gap-2 ${trait.key === "hairColour" ? "w-full max-w-[19rem] flex-nowrap" : "flex-wrap"}`}>
+          <div className="mt-5 flex justify-center gap-2 flex-wrap max-w-[20rem]">
             {trait.options.map((opt) => (
-              <InteractivePill
-                key={opt}
-                label={opt}
-                selected={selectedVal === opt}
-                shaking={shaking && selectedVal !== opt}
-                compact={trait.key === "hairColour"}
-                subLabel={trait.key === "makeup" && opt === "classic" ? "(recommended)" : undefined}
-                onClick={() => setTrait(trait.key, opt)}
-              />
+              <div key={opt} className="flex flex-col items-center gap-1">
+                <InteractivePill
+                  label={opt}
+                  selected={selectedVal === opt}
+                  shaking={shaking && selectedVal !== opt}
+                  onClick={() => setTrait(trait.key, opt)}
+                />
+                {isMakeup && opt === "classic" && (
+                  <span className="text-[10px] font-extrabold lowercase text-white/40">(recommended)</span>
+                )}
+              </div>
             ))}
           </div>
           {isSkinSlide && (
-            <p className="mt-4 text-xs font-extrabold lowercase text-white/30">
+            <p className="mt-4 text-sm font-extrabold lowercase text-white/40">
               click any option to select
             </p>
           )}
@@ -603,7 +601,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               onClick={(e) => e.stopPropagation()}
               className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
             />
-            <p className="mt-2 text-center text-[10px] font-extrabold lowercase leading-snug text-white/70">
+            <p className="mt-2 text-center text-sm font-extrabold lowercase leading-snug text-white/40">
               i.e. she has chubby cheeks, freckles and extremely thick mascara
             </p>
           </div>
@@ -670,22 +668,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* ── Create slide ── */
     if (isCreateSlide) {
-      const showGemCost = isLoggedIn && skipWelcome;
+      const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
-          {showGemCost && (
-            <div className="mb-4 flex items-center gap-1.5">
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-sm font-[900] lowercase text-white/60">30 gems</span>
-            </div>
-          )}
           <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
           <h2 className="w-full text-center text-[2.95rem] font-[900] lowercase leading-[0.96] tracking-tight">
-            <span className="block text-white">your character is</span>
-            <span className="block text-gem-green">almost here!</span>
+            <span className="block text-white">your character</span>
+            <span className="block text-gem-green">is almost here!</span>
           </h2>
+          {!isFirstCharacter && (
+            <div className="mt-5 flex items-center gap-1.5">
+              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
+            </div>
+          )}
           <motion.p
-            className="mt-4 text-sm font-extrabold lowercase text-white/40"
+            className={`${!isFirstCharacter ? "mt-4" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: SLIDE_FADE_DURATION }}

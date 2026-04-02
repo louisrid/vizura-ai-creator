@@ -171,9 +171,8 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-imagine-image",
       prompt,
-      response_format: "url",
       n: 1,
     }),
   });
@@ -183,6 +182,10 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
     if (response.status === 402) throw { status: 402 };
     const errText = await response.text();
     console.error("xAI text-to-image failed:", response.status, errText);
+    // Content policy rejection
+    if (response.status === 400 && errText.toLowerCase().includes("safety") || errText.toLowerCase().includes("content policy") || errText.toLowerCase().includes("blocked")) {
+      throw { status: 400, contentPolicy: true };
+    }
     throw new Error(`xAI generation failed: ${response.status}`);
   }
 
@@ -211,7 +214,7 @@ async function xaiImageEdit(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "grok-2-image",
+      model: "grok-imagine-image",
       messages: [{ role: "user", content }],
     }),
   });
@@ -221,6 +224,9 @@ async function xaiImageEdit(
     if (response.status === 402) throw { status: 402 };
     const errText = await response.text();
     console.error("xAI image-edit failed:", response.status, errText);
+    if (response.status === 400 && errText.toLowerCase().includes("safety") || errText.toLowerCase().includes("content policy") || errText.toLowerCase().includes("blocked")) {
+      throw { status: 400, contentPolicy: true };
+    }
     throw new Error(`xAI image edit failed: ${response.status}`);
   }
 
@@ -401,6 +407,12 @@ serve(async (req) => {
       try {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY);
       } catch (e: any) {
+        if (e?.contentPolicy) {
+          return new Response(
+            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
         if (e?.status === 429) {
           return new Response(
             JSON.stringify({ error: "generation failed, please try again" }),
@@ -504,6 +516,12 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
 
+      if (e?.contentPolicy) {
+        return new Response(
+          JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
       if (e?.status === 429 || e?.status === 402) {
         return new Response(
           JSON.stringify({ error: "generation failed, please try again" }),

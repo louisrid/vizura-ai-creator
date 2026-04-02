@@ -38,6 +38,8 @@ const ProgressBarLoader = ({
   const completedRef = useRef(false);
   const continuedRef = useRef(false);
   const startTimeRef = useRef(Date.now());
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
   const safePhrases = useMemo(() => (phrases.length > 0 ? phrases : ["working…"]), [phrases]);
   const effectivePhraseInterval = Math.max(phraseInterval, 4200);
   const maxPctRef = useRef(0);
@@ -67,7 +69,7 @@ const ProgressBarLoader = ({
           setIsComplete(true);
           if (!requireTapToContinue && !continuedRef.current) {
             continuedRef.current = true;
-            window.setTimeout(() => onComplete?.(), 250);
+            window.setTimeout(() => onCompleteRef.current?.(), 250);
           }
         }
       }
@@ -86,7 +88,8 @@ const ProgressBarLoader = ({
       window.removeEventListener("focus", syncFromElapsedTime);
       window.removeEventListener("pageshow", syncFromElapsedTime);
     };
-  }, [duration, onComplete, requireTapToContinue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, requireTapToContinue]);
 
   useEffect(() => {
     if (isComplete || safePhrases.length <= 1) {
@@ -128,7 +131,7 @@ const ProgressBarLoader = ({
         />
       )}
       <div
-        className={`relative z-10 flex w-full flex-col items-center gap-5 px-10 pt-14 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
+        className={`relative z-10 flex w-full flex-col items-center gap-5 px-10 pt-10 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
         onClick={handleContinue}
         onKeyDown={handleKeyDown}
         role={isComplete && requireTapToContinue ? "button" : undefined}
@@ -160,6 +163,9 @@ const ProgressBarLoader = ({
                 background: "hsl(var(--neon-yellow))",
               }}
             />
+          </div>
+          <div className="flex justify-end">
+            <span className="text-xs font-extrabold lowercase text-white/60">{pct}%</span>
           </div>
           <div className="flex justify-end">
             <span className="text-xs font-extrabold lowercase text-white/60">{pct}%</span>
