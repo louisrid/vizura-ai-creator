@@ -70,7 +70,7 @@ const Storage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
