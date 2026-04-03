@@ -121,7 +121,7 @@ const AmbientGlow = () => null;
 
 /* ── Simple emoji — CSS bounce only ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
-  <span className="select-none pointer-events-none text-[3.5rem] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
+  <span className="select-none pointer-events-none text-[56px] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
     {emoji}
   </span>
 );
