@@ -13,6 +13,8 @@ interface ProgressBarLoaderProps {
   onComplete?: () => void;
   requireTapToContinue?: boolean;
   expandTapTarget?: boolean;
+  /** When set to true, smoothly accelerates to 100% regardless of elapsed time */
+  completeNow?: boolean;
 }
 
 const mapProgressToPct = (progress: number) => {
@@ -30,6 +32,7 @@ const ProgressBarLoader = ({
   onComplete,
   requireTapToContinue = false,
   expandTapTarget = false,
+  completeNow = false,
 }: ProgressBarLoaderProps) => {
   const [pct, setPct] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -90,6 +93,37 @@ const ProgressBarLoader = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, requireTapToContinue]);
+
+  // completeNow: smoothly accelerate to 100%
+  useEffect(() => {
+    if (!completeNow || completedRef.current) return;
+    const startPct = maxPctRef.current;
+    const startTs = Date.now();
+    const accelDuration = 1200; // ms to reach 100%
+    const tick = () => {
+      const elapsed = Date.now() - startTs;
+      const t = Math.min(elapsed / accelDuration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const newPct = Math.round(startPct + (100 - startPct) * eased);
+      maxPctRef.current = Math.max(maxPctRef.current, newPct);
+      setPct(maxPctRef.current);
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        if (!completedRef.current) {
+          completedRef.current = true;
+          maxPctRef.current = 100;
+          setPct(100);
+          setIsComplete(true);
+          if (!requireTapToContinue && !continuedRef.current) {
+            continuedRef.current = true;
+            window.setTimeout(() => onCompleteRef.current?.(), 250);
+          }
+        }
+      }
+    };
+    requestAnimationFrame(tick);
+  }, [completeNow, requireTapToContinue]);
 
   useEffect(() => {
     if (isComplete || safePhrases.length <= 1) {

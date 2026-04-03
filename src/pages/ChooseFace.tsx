@@ -51,6 +51,8 @@ const ChooseFace = () => {
     }
   });
   const [loading, setLoading] = useState(true);
+  const [apiDone, setApiDone] = useState(false);
+  const [barComplete, setBarComplete] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
@@ -78,15 +80,16 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
 
-  // Show green success screen after first face generation
+  // Show green success screen after bar completes (not after API finishes)
   useEffect(() => {
-    if (!loading && faces.length > 0 && !hasShownSuccess.current) {
+    if (barComplete && faces.length > 0 && !hasShownSuccess.current) {
       hasShownSuccess.current = true;
+      setLoading(false);
       setShowSuccess(true);
       const t = setTimeout(() => setShowSuccess(false), SUCCESS_HOLD);
       return () => clearTimeout(t);
     }
-  }, [loading, faces.length]);
+  }, [barComplete, faces.length]);
 
   useEffect(() => {
     if (!loading && !showSuccess && !cardsRevealed && faces.length > 0) {
@@ -109,6 +112,8 @@ const ChooseFace = () => {
 
   const generateFaces = async () => {
     setLoading(true);
+    setApiDone(false);
+    setBarComplete(false);
     setCardsRevealed(false);
     try {
       if (!user) {
@@ -141,6 +146,7 @@ const ChooseFace = () => {
           setFaces(retryFaces);
           sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(retryFaces));
           setSelectedIndex(null);
+          setApiDone(true);
           return;
         }
         if (data.code === "CONTENT_POLICY") {
@@ -155,6 +161,7 @@ const ChooseFace = () => {
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
+      setApiDone(true);
     } catch (err: any) {
       const msg = err?.message || "generation failed";
       if (msg.includes("Free generation") || msg.includes("IP_USED") || msg.includes("FREE_GEN_USED")) {
@@ -162,7 +169,6 @@ const ChooseFace = () => {
       } else {
         toast.error("generation failed, please try again");
       }
-    } finally {
       setLoading(false);
     }
   };
@@ -388,6 +394,8 @@ const ChooseFace = () => {
             phrases={FACE_GEN_PHRASES}
             phraseInterval={5000}
             requireTapToContinue={false}
+            completeNow={apiDone}
+            onComplete={() => setBarComplete(true)}
           />
         </div>
       )}

@@ -129,15 +129,14 @@ const CharacterDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Mobile layout ── */}
-      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-32 md:hidden">
+      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-12 md:hidden">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
 
         {/* Name + age */}
-        <h1 className="text-center text-[2rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1]">
-          {character.name || "unnamed"}{" "}
-          <span className="text-foreground/40">{character.age}</span>
+        <h1 className="text-center text-[2.8rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mt-2">
+          {character.name || "unnamed"}, {character.age}
         </h1>
 
         {/* Three face images in a row */}
@@ -176,6 +175,27 @@ const CharacterDetail = () => {
             </p>
           )}
         </div>
+
+        {/* Action buttons — inline, not sticky */}
+        <div className="mt-6 flex flex-col gap-2">
+          <button
+            onClick={() => {
+              sessionStorage.setItem("vizura_internal_nav", "1");
+              navigate("/create", { state: { preselectedCharacterId: character.id } });
+            }}
+            className="flex items-center justify-center gap-2 h-14 w-full rounded-2xl bg-neon-yellow text-sm font-[900] lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+          >
+            <Camera size={16} strokeWidth={2.5} />
+            create photo
+          </button>
+          <button
+            onClick={() => setShowDelete(true)}
+            className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
+          >
+            <Trash2 size={13} strokeWidth={2.5} />
+            delete
+          </button>
+        </div>
       </main>
 
       {/* ── Desktop layout ── */}
@@ -196,9 +216,8 @@ const CharacterDetail = () => {
 
           {/* Right: details */}
           <div className="col-span-3 flex flex-col">
-            <h1 className="text-2xl font-[900] lowercase tracking-tight text-foreground leading-[1.1] mb-4">
-              {character.name || "unnamed"}{" "}
-              <span className="text-foreground/40">{character.age}</span>
+            <h1 className="text-[2.4rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mb-4">
+              {character.name || "unnamed"}, {character.age}
             </h1>
 
             <div className="flex flex-wrap gap-2 mb-4">
@@ -251,28 +270,6 @@ const CharacterDetail = () => {
         </div>
       </main>
 
-      {/* Mobile fixed bottom buttons */}
-      <div className="fixed bottom-0 left-0 right-0 z-10 px-4 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent md:hidden">
-        <div className="mx-auto max-w-lg flex flex-col gap-2">
-          <button
-            onClick={() => {
-              sessionStorage.setItem("vizura_internal_nav", "1");
-              navigate("/create", { state: { preselectedCharacterId: character.id } });
-            }}
-            className="flex items-center justify-center gap-2 h-14 w-full rounded-2xl bg-neon-yellow text-sm font-[900] lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-          >
-            <Camera size={16} strokeWidth={2.5} />
-            create photo
-          </button>
-          <button
-            onClick={() => setShowDelete(true)}
-            className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
-          >
-            <Trash2 size={13} strokeWidth={2.5} />
-            delete
-          </button>
-        </div>
-      </div>
 
       <AnimatePresence>
         {showDelete && (
