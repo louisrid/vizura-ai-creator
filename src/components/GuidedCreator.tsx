@@ -100,14 +100,14 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     }}
   >
     {direction === "left" ? (
-      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 1L1 7.5L7 14" />
-        <line x1="1.5" y1="7.5" x2="17" y2="7.5" />
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+        <path d="M8 1L1.5 8L8 15" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="2" y1="8" x2="18.5" y2="8" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     ) : (
-      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M11 1L17 7.5L11 14" />
-        <line x1="1" y1="7.5" x2="16.5" y2="7.5" />
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+        <path d="M12 1L18.5 8L12 15" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="1.5" y1="8" x2="18" y2="8" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     )}
   </button>
@@ -793,9 +793,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         aria-hidden="true"
         style={{
           top: "-50%", left: "-50%", width: "200%", height: "200%",
-          background: "radial-gradient(ellipse at 20% 50%, rgba(0,40,200,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(90,0,200,0.07) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(40,0,180,0.06) 0%, transparent 50%)",
+          background: "radial-gradient(ellipse at 20% 50%, rgba(0,60,255,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(120,0,255,0.15) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(60,0,220,0.12) 0%, transparent 50%)",
           animation: "wizardBreathe 20s ease-in-out infinite",
-          filter: "blur(60px)",
+          filter: "blur(40px)",
           zIndex: 0,
         }}
       />
@@ -835,27 +835,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
-          {/* Skip to login pill — top right */}
-          {!isCooking && !isLoggedIn && (
-            <button
-              type="button"
-              onClick={() => navigateTo(`/auth${window.location.search}`)}
-              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
-              style={{
-                top: 20,
-                right: 20,
-                backgroundColor: "#facc15",
-                borderRadius: 20,
-                padding: "8px 16px",
-                fontSize: 12,
-                fontWeight: 800,
-                color: "#000",
-                textTransform: "lowercase",
-              }}
-            >
-              skip to login
-            </button>
-          )}
+          {/* Skip pill — top right (logged-in returning users only) */}
           {!isCooking && isLoggedIn && skipWelcome && (
             <button
               type="button"
@@ -879,7 +859,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 170px)" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 160px)" }}>
               <div className="mb-3.5 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
@@ -895,6 +875,26 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 </div>
               </div>
+              {/* Skip to login — below arrows, first step only, not logged in */}
+              {!isLoggedIn && step === 0 && (
+                <button
+                  type="button"
+                  onClick={() => navigateTo(`/auth${window.location.search}`)}
+                  className="mb-4 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+                  style={{
+                    backgroundColor: "#111111",
+                    border: "2px solid rgba(250,204,21,0.15)",
+                    borderRadius: 14,
+                    padding: "12px 24px",
+                    fontSize: 14,
+                    fontWeight: 800,
+                    color: "#fff",
+                    textTransform: "lowercase" as const,
+                  }}
+                >
+                  skip to login
+                </button>
+              )}
               <div className="flex items-center justify-center gap-[3px] mb-1" style={{ padding: "0 50px" }}>
                 {Array.from({ length: 12 }).map((_, i) => (
                   <div
