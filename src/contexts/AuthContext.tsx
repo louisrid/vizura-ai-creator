@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const subscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>["data"]["subscription"] | null>(null);
+  const oauthResolvedRef = useRef(false);
 
   const hydrateUser = useCallback(async (seedUser?: User | null, cancelled = false) => {
     if (!seedUser) {
@@ -49,32 +50,68 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const resolveOAuthCallback = useCallback(async () => {
+    if (typeof window === "undefined" || oauthResolvedRef.current) return;
+
+    const url = new URL(window.location.href);
+    const hashParams = new URLSearchParams(url.hash.startsWith("#") ? url.hash.slice(1) : url.hash);
+    const accessToken = hashParams.get("access_token") ?? url.searchParams.get("access_token");
+    const refreshToken = hashParams.get("refresh_token") ?? url.searchParams.get("refresh_token");
+    const code = url.searchParams.get("code");
+
+    if (!accessToken && !refreshToken && !code) return;
+
+    oauthResolvedRef.current = true;
+
+    if (accessToken && refreshToken) {
+      const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+      if (error) {
+        oauthResolvedRef.current = false;
+        throw error;
+      }
+    } else if (code) {
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (error) {
+        oauthResolvedRef.current = false;
+        throw error;
+      }
+    }
+
+    url.searchParams.delete("code");
+    url.searchParams.delete("access_token");
+    url.searchParams.delete("refresh_token");
+    url.hash = "";
+    window.history.replaceState({}, document.title, `${url.pathname}${url.search}`);
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
 
     const initializeAuth = async () => {
+      const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT" || !session?.user) {
+          setUser(null);
+          clearSpecialAccountCache();
+          return;
+        }
+
+        if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+          const nextUser = session?.user ?? null;
+          setUser(nextUser);
+          syncSpecialAccountCache(nextUser);
+          void hydrateUser(nextUser);
+        }
+      });
+      subscriptionRef.current = sub.subscription;
+
       try {
+        await resolveOAuthCallback();
         const { data, error } = await supabase.auth.getSession();
         if (error) throw error;
         if (cancelled) return;
         await hydrateUser(data.session?.user ?? null, cancelled);
       } finally {
         if (cancelled) return;
-        const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-          if (event === "SIGNED_OUT" || !session?.user) {
-            setUser(null);
-            clearSpecialAccountCache();
-            return;
-          }
-
-          if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-            const nextUser = session?.user ?? null;
-            setUser(nextUser);
-            syncSpecialAccountCache(nextUser);
-            void hydrateUser(nextUser);
-          }
-        });
-        subscriptionRef.current = sub.subscription;
         setLoading(false);
       }
     };
@@ -114,19 +151,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const autoSignIn = async () => {
-    // TEMPORARY: bypass auth and sign in as special account for testing
-    const { error } = await supabase.auth.signInWithPassword({
-      email: "louisjridland@gmail.com",
-      password: "Testing123!",
-    });
-    if (error) {
-      // If password login fails, try creating the account first
-      const { error: signUpError } = await supabase.auth.signUp({
-        email: "louisjridland@gmail.com",
-        password: "Testing123!",
-        options: { emailRedirectTo: window.location.origin },
+    const email = "louisjridland@gmail.com";
+    const password = "Testing123!";
+
+    const signInWithTestPassword = async () => {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+    };
+
+    try {
+      await signInWithTestPassword();
+      return;
+    } catch {
+      const { error: fnError } = await supabase.functions.invoke("ensure-test-account", {
+        body: { email, password },
       });
-      if (signUpError) throw signUpError;
+
+      if (fnError) throw fnError;
+      await signInWithTestPassword();
     }
   };
 
