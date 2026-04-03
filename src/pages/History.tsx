@@ -63,6 +63,7 @@ const History = () => {
         }
 
         (gen.image_urls || []).forEach((url: string, i: number) => {
+          if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return;
           allItems.push({
             id: `${gen.id}-${i}`,
             url,

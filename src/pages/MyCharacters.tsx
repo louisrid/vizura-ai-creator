@@ -119,11 +119,12 @@ const MyCharacters = () => {
                         : "border-[5px] border-border hover:border-foreground/40"
                     }`}
                   >
-                    {char.face_image_url ? (
+                    {char.face_image_url && !char.face_image_url.startsWith("data:image/svg") && !char.face_image_url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen") ? (
                       <img
                         src={char.face_image_url}
                         alt={char.name}
                         className="absolute inset-0 h-full w-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                       />
                     ) : (
                       <span className="text-sm font-extrabold lowercase text-foreground/30">{char.name?.[0] || "?"}</span>

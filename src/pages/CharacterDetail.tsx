@@ -98,7 +98,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-8 pt-6 pb-12">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-8 pt-14 pb-12">
           <div className="flex items-center gap-3 mb-8">
             <BackButton />
           </div>
@@ -115,7 +115,7 @@ const CharacterDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Mobile layout ── */}
-      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-12 md:hidden">
+      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12 md:hidden">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
@@ -176,7 +176,7 @@ const CharacterDetail = () => {
       </main>
 
       {/* ── Desktop layout ── */}
-      <main className="hidden md:block mx-auto w-full max-w-3xl px-8 pt-6 pb-12">
+      <main className="hidden md:block mx-auto w-full max-w-3xl px-8 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>

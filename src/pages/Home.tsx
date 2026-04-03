@@ -20,6 +20,14 @@ type LatestImage = {
   created_at: string;
 };
 
+/** Filter out expired xAI temp URLs and SVG data URIs */
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  if (url.startsWith("data:image/svg")) return false;
+  if (url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return false;
+  return true;
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
@@ -48,7 +56,7 @@ const Home = () => {
 
     const latest = (data ?? [])
       .flatMap((g: any) =>
-        (g.image_urls ?? []).slice(0, 1).map((url: string, i: number) => ({
+        (g.image_urls ?? []).filter(isValidImageUrl).slice(0, 1).map((url: string, i: number) => ({
           id: `${g.id}-${i}`,
           url,
           prompt: g.prompt ?? "",
@@ -266,7 +274,7 @@ const Home = () => {
                       {isPlaceholder ? (
                         <div className="flex h-full w-full items-center justify-center text-[8px] font-[900] lowercase text-foreground/25">empty</div>
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       )}
                     </AspectRatio>
                   </button>
@@ -376,7 +384,7 @@ const Home = () => {
                         {isPlaceholder ? (
                           <div className="flex h-full w-full items-center justify-center text-[9px] font-[900] lowercase text-foreground/25">empty</div>
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
                       </AspectRatio>
                     </button>
