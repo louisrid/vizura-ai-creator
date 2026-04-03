@@ -91,23 +91,22 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     style={{
       width: 52,
       height: 48,
-      backgroundColor: direction === "right" ? "#00e0ff" : "transparent",
-      border: direction === "left" ? "2px solid rgba(0,224,255,0.25)" : "2px solid #00e0ff",
+      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
+      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
       borderRadius: 12,
       outline: "none",
       padding: 0,
       cursor: "pointer",
-      opacity: direction === "left" ? 0.45 : 1,
       transition: "transform 0.05s",
     }}
   >
     {direction === "left" ? (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="7" x2="2" y2="7" />
         <polyline points="7,2 2,7 7,12" />
       </svg>
     ) : (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="2" y1="7" x2="12" y2="7" />
         <polyline points="7,2 12,7 7,12" />
       </svg>
