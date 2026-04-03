@@ -129,7 +129,7 @@ const CharacterDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Mobile layout ── */}
-      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-32 md:hidden">
+      <main className="mx-auto w-full max-w-lg px-4 pt-6 pb-12 md:hidden">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
