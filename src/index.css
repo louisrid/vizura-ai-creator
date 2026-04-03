@@ -174,36 +174,6 @@ input[type="range"]::-moz-range-thumb {
   100% { transform: translateY(110vh) rotate(360deg); }
 }
 
-@keyframes blob1 {
-  0% { transform: translate(0,0); }
-  33% { transform: translate(40px,-30px); }
-  66% { transform: translate(-20px,40px); }
-  100% { transform: translate(0,0); }
-}
-@keyframes blob2 {
-  0% { transform: translate(0,0); }
-  33% { transform: translate(-30px,20px); }
-  66% { transform: translate(30px,-40px); }
-  100% { transform: translate(0,0); }
-}
-@keyframes blob3 {
-  0% { transform: translate(0,0); }
-  33% { transform: translate(20px,30px); }
-  66% { transform: translate(-40px,-20px); }
-  100% { transform: translate(0,0); }
-}
-@keyframes blob4 {
-  0% { transform: translate(0,0); }
-  33% { transform: translate(-20px,-30px); }
-  66% { transform: translate(30px,20px); }
-  100% { transform: translate(0,0); }
-}
-@keyframes blob5 {
-  0% { transform: translate(0,0); }
-  33% { transform: translate(30px,20px); }
-  66% { transform: translate(-20px,-30px); }
-  100% { transform: translate(0,0); }
-}
 
 /* Global button press state */
 button, a[role="button"], [role="button"] {
