@@ -460,7 +460,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Intro */
     if (isIntroSlide) return (
-      <div className="flex w-full flex-col items-center" style={{ marginTop: 40 }}>
+      <div className="flex w-full flex-col items-center">
         <span className="text-[64px] mb-5">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap → to continue</p>
