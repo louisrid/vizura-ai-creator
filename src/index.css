@@ -179,3 +179,19 @@ button, a[role="button"], [role="button"] {
 button:active, a[role="button"]:active, [role="button"]:active {
   opacity: 0.85;
 }
+
+@keyframes wizard-blob-1 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(60px, -40px); }
+  66% { transform: translate(-50px, 30px); }
+}
+@keyframes wizard-blob-2 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-70px, 50px); }
+  66% { transform: translate(40px, -60px); }
+}
+@keyframes wizard-blob-3 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(50px, 80px); }
+  66% { transform: translate(-60px, -40px); }
+}
