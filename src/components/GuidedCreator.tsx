@@ -13,7 +13,7 @@ const NEON_BLUE = "#00e0ff";
 const PURE_WHITE = "#fff";
 const AMBER = "#facc15";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
-const SLIDE_FADE_DURATION = 0.55;
+const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.75;
 
 /* ── Name toast variations ── */
@@ -48,12 +48,12 @@ const getRandomNameToast = () =>
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
-  { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"] },
+  { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"], defaultOption: "average" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["pink", "black", "brunette", "blonde"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
-  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"] },
+  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"], defaultOption: "classic" },
 ] as const;
 
 const SLIDE_TITLE_CLASS = "mt-3 text-center text-[34px] font-[900] lowercase leading-[0.94] tracking-tight text-white";
@@ -87,7 +87,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     ref={ref}
     type="button"
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
-    className={`flex items-center justify-center active:scale-[1.05] ${className || ""}`}
+    className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
       width: 52,
       height: 48,
@@ -97,7 +97,6 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
       outline: "none",
       padding: 0,
       cursor: "pointer",
-      transition: "transform 0.05s",
     }}
   >
     {direction === "left" ? (
@@ -118,10 +117,15 @@ NavArrow.displayName = "NavArrow";
 /* ── Solid background only ── */
 const AmbientGlow = () => null;
 
-/* ── Simple emoji — CSS bounce only ── */
+/* ── Simple emoji with subtle yellow glow ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
-  <span className="select-none pointer-events-none text-[56px] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
-    {emoji}
+  <span className="select-none pointer-events-none text-[56px] inline-block animate-bounce relative" style={{ animationDuration: "2s" }}>
+    <span className="absolute inset-0 rounded-full" style={{
+      background: "radial-gradient(circle, rgba(250,204,21,0.06) 0%, transparent 70%)",
+      transform: "scale(2.5)",
+      filter: "blur(8px)",
+    }} />
+    <span className="relative">{emoji}</span>
   </span>
 );
 
@@ -134,12 +138,12 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     animate={
       selected
-        ? { scale: [1, 1.08, 1], transition: { duration: 0.1 } }
+        ? { scale: [1, 1.08, 1], transition: { duration: 0.15 } }
         : shaking
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="flex w-full items-center justify-center transition-colors duration-75"
+    className="flex w-full items-center justify-center"
     style={{
       height: 56,
       borderRadius: 11,
@@ -148,6 +152,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       fontWeight: 800,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
+      transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
         : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
@@ -262,6 +267,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
 
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
@@ -302,7 +308,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = false;
       setNameToastShown(false);
       setExitFade(false);
-      // Remove splash screen once overlay is ready
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
     }
   }, [open, restoreSavedFlow]);
@@ -447,10 +452,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     animating.current = true;
+    setSlideDirection(1);
     const nextStep = step + 1;
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
-    setTimeout(() => { animating.current = false; }, 180);
+    setTimeout(() => { animating.current = false; }, 200);
   }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, TOTAL]);
 
   const goBack = useCallback(() => {
@@ -461,8 +467,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return;
     }
     animating.current = true;
+    setSlideDirection(-1);
     setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 180);
+    setTimeout(() => { animating.current = false; }, 200);
   }, [step, cookingPhase]);
 
   const handleClose = () => {
@@ -477,11 +484,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   if (!mounted || !visible) return null;
 
-  const slideTransition = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
-    transition: { duration: SLIDE_FADE_DURATION, ease: "easeInOut" as const },
+  const slideVariants = {
+    enter: (dir: number) => ({
+      opacity: 0,
+      x: dir > 0 ? 30 : -30,
+    }),
+    center: {
+      opacity: 1,
+      x: 0,
+    },
+    exit: (dir: number) => ({
+      opacity: 0,
+      x: dir > 0 ? -30 : 30,
+    }),
   };
 
   const renderSlide = () => {
@@ -552,13 +567,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="type a name…"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-14 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
+              className="h-14 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors duration-150"
             />
             <motion.button
               type="button"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
               whileTap={{ scale: 0.85, rotate: 180 }}
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors duration-150"
             >
               <RefreshCw size={18} strokeWidth={2.5} />
             </motion.button>
@@ -571,9 +586,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
-      const isMakeup = trait.key === "makeup";
-      const isBody = trait.key === "bodyType";
-      const isAge = trait.key === "age";
       return (
         <div className="flex w-full flex-col items-center">
           <div className="flex h-14 items-end justify-center">
@@ -599,10 +611,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   shaking={shaking && selectedVal !== opt}
                   onClick={() => setTrait(trait.key, opt)}
                 />
-                {isMakeup && opt === "classic" && (
-                  <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
-                )}
-                {isBody && opt === "average" && (
+                {"defaultOption" in trait && trait.defaultOption === opt && (
                   <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                 )}
               </div>
@@ -627,7 +636,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               placeholder="add any details you want…"
               rows={8}
               onClick={(e) => e.stopPropagation()}
-              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors"
+              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors duration-150"
             />
             <p className={`mt-2 text-center ${HELPER_CLASS}`}>
               i.e. chubby cheeks, freckles, thick mascara
@@ -665,7 +674,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.4rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors hover:border-white/30" style={{ aspectRatio: "3/4" }}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.4rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors duration-150 hover:border-white/30" style={{ aspectRatio: "3/4" }}
                 >
                   <Upload size={14} strokeWidth={2.5} className="text-white/30" />
                   <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
@@ -779,7 +788,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "#050505" }}
     >
-      {/* Exit fade overlay — covers everything with smooth black fade */}
+      {/* Exit fade overlay */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
@@ -791,7 +800,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         className="absolute inset-0 flex flex-col"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : SLIDE_FADE_DURATION }}
+        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
@@ -799,14 +808,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div className="relative flex-1 overflow-hidden">
           <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
             <div className="w-full max-w-sm mx-auto flex flex-col items-center">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" custom={slideDirection}>
                 <motion.div
                   key={isCooking ? "cooking" : step}
                   className="w-full"
-                  initial={slideTransition.initial}
-                  animate={slideTransition.animate}
-                  exit={slideTransition.exit}
-                  transition={slideTransition.transition}
+                  custom={slideDirection}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                 >
                   {isCooking ? renderCooking() : renderSlide()}
                 </motion.div>
@@ -840,7 +851,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
                   style={{ color: "rgba(255,255,255,0.35)" }}
                 >
                   skip to login
@@ -850,7 +861,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
                   style={{ color: "rgba(255,255,255,0.35)" }}
                 >
                   skip
@@ -965,8 +976,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <button
           onClick={handleGoogle}
           disabled={googleLoading || emailLoading}
-          className="mt-8 w-full h-14 rounded-2xl text-sm font-[900] lowercase tracking-tight flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50"
-          style={{ background: AMBER, color: "hsl(0 0% 0%)", transition: "transform 0.05s" }}
+          className="mt-8 w-full h-14 rounded-2xl text-sm font-[900] lowercase tracking-tight flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+          style={{ background: AMBER, color: "hsl(0 0% 0%)" }}
         >
           {googleLoading ? (
             <><Loader2 className="animate-spin" size={18} />connecting...</>
@@ -993,7 +1004,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           value={email}
           onChange={(e) => { e.stopPropagation(); setEmail(e.target.value); }}
           onClick={(e) => e.stopPropagation()}
-          className="mt-4 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+          className="mt-4 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
           disabled={emailLoading || googleLoading}
         />
         <input
@@ -1003,13 +1014,13 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           onChange={(e) => { e.stopPropagation(); setPassword(e.target.value); }}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-          className="mt-2 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+          className="mt-2 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
           disabled={emailLoading || googleLoading}
         />
         <button
           onClick={handleEmailAuth}
           disabled={emailLoading || googleLoading}
-          className="mt-3 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors disabled:opacity-50"
+          className="mt-3 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors duration-150 disabled:opacity-50"
         >
           {emailLoading ? (
             <><Loader2 className="animate-spin" size={18} />signing in...</>
@@ -1020,7 +1031,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <button
           type="button"
           onClick={() => setIsSignUp((v) => !v)}
-          className="mt-2 w-full text-center text-[10px] font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
+          className="mt-2 w-full text-center text-[10px] font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors duration-150"
         >
           {isSignUp ? "have an account? sign in" : "no account? sign up"}
         </button>
