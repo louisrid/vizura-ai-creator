@@ -401,12 +401,6 @@ const Index = () => {
                 options={["3:4", "9:16"]}
                 value={photoRatio}
                 onChange={setPhotoRatio}
-                renderOption={(opt) => (
-                  <span className="flex items-center gap-1.5">
-                    <RatioIcon ratio={opt} />
-                    {opt}
-                  </span>
-                )}
               />
             </div>
 
