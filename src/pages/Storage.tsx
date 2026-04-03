@@ -79,7 +79,7 @@ const Storage = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : images.length === 0 ? (
-          <div className="border-[5px] border-border rounded-2xl p-8 text-center">
+          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#111111" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
