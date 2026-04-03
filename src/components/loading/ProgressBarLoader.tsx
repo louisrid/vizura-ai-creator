@@ -204,10 +204,12 @@ const ProgressBarLoader = ({
         >
           <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
             <div
-              className="h-full rounded-full transition-all ease-out"
+              className="h-full rounded-full"
               style={{
                 width: `${pct}%`,
-                transitionDuration: "300ms",
+                minWidth: `${pct}%`,
+                transition: "width 350ms cubic-bezier(0.4, 0, 0.2, 1), min-width 350ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "width",
                 background: "linear-gradient(90deg, hsl(var(--loader-bar-from)) 0%, hsl(var(--loader-bar-from)) 85%, hsl(var(--loader-bar-to)) 100%)",
               }}
             />
