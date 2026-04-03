@@ -56,8 +56,8 @@ const TRAITS = [
   { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"] },
 ] as const;
 
-const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.35rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
-const SUBTEXT_CLASS = "text-sm font-extrabold lowercase text-white/40";
+const SLIDE_TITLE_CLASS = "mt-3 text-center text-[34px] font-[900] lowercase leading-[0.94] tracking-tight text-white";
+const SUBTEXT_CLASS = "text-sm font-[900] lowercase text-white/40";
 const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
 
 type TraitKey = (typeof TRAITS)[number]["key"];
