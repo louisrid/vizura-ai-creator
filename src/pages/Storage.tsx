@@ -133,7 +133,8 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="bg-card border-[5px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              className="border-2 border-[#1a1a1a] rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              style={{ backgroundColor: "#111111" }}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
