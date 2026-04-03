@@ -42,7 +42,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[32px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[12px] font-[800] lowercase text-white/40";
+const HELPER_CLASS = "text-[12px] font-[800] lowercase text-white/70";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
