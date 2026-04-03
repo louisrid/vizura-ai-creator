@@ -58,36 +58,36 @@ const TopLine = () => (
 
 /* ── Animated rings (hero only) ── */
 const AnimatedRings = ({ t }: { t: number }) => (
-  <div className="relative flex items-center justify-center" style={{ width: 240, height: 240, marginBottom: 24 }}>
+  <div className="relative flex items-center justify-center" style={{ width: 280, height: 280, marginBottom: 18 }}>
     {/* Inner ring */}
     <div className="absolute" style={{
-      width: 130, height: 130, borderRadius: "50%",
+      width: 150, height: 150, borderRadius: "50%",
       border: `2px solid ${Y}`, borderLeftColor: "transparent",
       transform: `rotate(${t * 1.2}deg)`,
-      top: "50%", left: "50%", marginTop: -65, marginLeft: -65,
+      top: "50%", left: "50%", marginTop: -75, marginLeft: -75,
     }} />
     {/* Mid ring */}
     <div className="absolute" style={{
-      width: 170, height: 170, borderRadius: "50%",
+      width: 200, height: 200, borderRadius: "50%",
       border: `8px solid ${Y}`, borderTopColor: "transparent", borderRightColor: "transparent",
       transform: `rotate(${t * -0.8}deg)`,
-      top: "50%", left: "50%", marginTop: -85, marginLeft: -85,
+      top: "50%", left: "50%", marginTop: -100, marginLeft: -100,
     }} />
     {/* Outer ring */}
     <div className="absolute" style={{
-      width: 210, height: 210, borderRadius: "50%",
+      width: 245, height: 245, borderRadius: "50%",
       border: `3px solid ${Y}`, borderBottomColor: "transparent", borderLeftColor: "transparent",
       transform: `rotate(${t * 0.6}deg)`,
-      top: "50%", left: "50%", marginTop: -105, marginLeft: -105,
+      top: "50%", left: "50%", marginTop: -122.5, marginLeft: -122.5,
     }} />
     {/* Dashed ring */}
     <div className="absolute" style={{
-      width: 238, height: 238, borderRadius: "50%",
+      width: 278, height: 278, borderRadius: "50%",
       border: `2px dashed ${Y}`,
       transform: `rotate(${t * -0.4}deg)`,
-      top: "50%", left: "50%", marginTop: -119, marginLeft: -119,
+      top: "50%", left: "50%", marginTop: -139, marginLeft: -139,
     }} />
-    <span style={{ fontSize: 76, position: "relative", zIndex: 1 }}>👩‍🎤</span>
+    <span style={{ fontSize: 82, position: "relative", zIndex: 1 }}>👩‍🎤</span>
   </div>
 );
 
