@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
+import DotDecal from "@/components/DotDecal";
 
 const plans = [
   { label: "15 gems", gems: 15, price: 9 },
