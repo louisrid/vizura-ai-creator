@@ -183,7 +183,7 @@ const Header = () => {
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >
-                        <LogOut size={18} strokeWidth={2.5} className="shrink-0" />
+                        <LogOut size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                         log out
                       </button>
                     )}

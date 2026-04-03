@@ -227,7 +227,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg md:max-w-2xl px-4 md:px-8 pt-14 pb-8">
+      <main className="mx-auto w-full max-w-lg md:max-w-2xl px-4 md:px-8 pt-6 pb-[80px]">
         <div className="mb-5 flex items-center gap-3">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>

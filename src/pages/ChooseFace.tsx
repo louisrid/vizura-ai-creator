@@ -462,7 +462,7 @@ const ChooseFace = () => {
 
       {/* Face picker — only shown after success screen */}
       {!loading && faces.length > 0 && !showSuccess && (
-        <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg md:max-w-3xl flex-col px-[14px] md:px-8 pt-8 pb-0 overflow-hidden">
+        <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg md:max-w-3xl flex-col px-[14px] md:px-8 pt-6 pb-0 overflow-hidden">
           <div className="flex items-center gap-3 mb-8">
             <BackButton />
             <PageTitle className="mb-0">pick your face</PageTitle>
