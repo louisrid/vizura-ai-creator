@@ -91,23 +91,22 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     style={{
       width: 52,
       height: 48,
-      backgroundColor: direction === "right" ? "#00e0ff" : "transparent",
-      border: direction === "left" ? "2px solid rgba(0,224,255,0.25)" : "2px solid #00e0ff",
+      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
+      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
       borderRadius: 12,
       outline: "none",
       padding: 0,
       cursor: "pointer",
-      opacity: direction === "left" ? 0.45 : 1,
       transition: "transform 0.05s",
     }}
   >
     {direction === "left" ? (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="7" x2="2" y2="7" />
         <polyline points="7,2 2,7 7,12" />
       </svg>
     ) : (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="2" y1="7" x2="12" y2="7" />
         <polyline points="7,2 12,7 7,12" />
       </svg>
@@ -609,11 +608,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             ))}
           </div>
-          {isSkinSlide && (
-            <p className="mt-4 text-sm font-extrabold lowercase text-white/40">
-              tap to select
-            </p>
-          )}
         </div>
       );
     }
@@ -801,17 +795,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-        {/* Close / exit button */}
-        {!isCooking && isLoggedIn && skipWelcome && (
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-            className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors active:scale-95"
-            aria-label="close"
-          >
-            <X size={18} strokeWidth={2.5} />
-          </button>
-        )}
 
         <div className="relative flex-1 overflow-hidden">
           <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
@@ -833,8 +816,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-[max(env(safe-area-inset-bottom),1rem)]">
-              <div className="mb-2 flex h-14 items-center gap-4">
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 180px)" }}>
+              <div className="mb-3.5 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
@@ -857,9 +840,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
                 >
                   skip to login
+                </button>
+              )}
+              {isLoggedIn && skipWelcome && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                >
+                  skip
                 </button>
               )}
             </div>

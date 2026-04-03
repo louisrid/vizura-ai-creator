@@ -1,16 +1,11 @@
 import { useMemo } from "react";
 
-/**
- * Circular cloud of yellow dots as a background decal.
- * Center: right side ~45% down. Radius ~180px. Quadratic opacity falloff.
- * Finer dots (1.5px), tighter spacing (7px), slightly more visible (0.22 max).
- */
 const DotDecal = () => {
   const dots = useMemo(() => {
     const cx = 280;
     const cy = 320;
     const radius = 180;
-    const spacing = 7;
+    const spacing = 5.5;
     const result: { x: number; y: number; opacity: number }[] = [];
 
     for (let x = cx - radius; x <= cx + radius; x += spacing) {
@@ -38,7 +33,7 @@ const DotDecal = () => {
           key={i}
           cx={`${(d.x / 430) * 100}%`}
           cy={d.y}
-          r={1.5}
+          r={1.2}
           fill="#facc15"
           opacity={d.opacity}
         />

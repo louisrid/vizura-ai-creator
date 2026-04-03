@@ -258,7 +258,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-[54px] pb-6 md:hidden">
           {/* Hero */}
-          <h1 className="text-[46px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
+          <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
           <div className="mt-3 mb-6" style={{ width: 60, height: 6, borderRadius: 3, backgroundColor: "#facc15" }} />
@@ -269,8 +269,10 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex-1 flex items-center justify-between rounded-xl active:scale-[0.98] transition-transform"
+              className="flex items-center justify-between active:scale-[0.98] transition-transform"
               style={{
+                flex: "1 1 0%",
+                minWidth: 0,
                 backgroundColor: "#facc15",
                 padding: "16px 14px",
                 borderRadius: 12,
@@ -290,9 +292,11 @@ const Home = () => {
                 if (!user) { navigate("/auth?redirect=/create"); return; }
                 navigate("/create");
               }}
-              className="flex-1 relative flex items-center justify-between rounded-xl active:scale-[0.98] transition-transform overflow-hidden"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-hidden"
               style={{
-                backgroundColor: "#0b0b0b",
+                flex: "1 1 0%",
+                minWidth: 0,
+                backgroundColor: "#000",
                 padding: "16px 14px",
                 borderRadius: 12,
               }}
@@ -416,7 +420,7 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-8 pt-10 pb-16">
-          <h1 className="text-[46px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
+          <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
           <div className="mt-3 mb-8" style={{ width: 60, height: 6, borderRadius: 3, backgroundColor: "#facc15" }} />
