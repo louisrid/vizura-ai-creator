@@ -164,7 +164,7 @@ const Header = () => {
                             fontSize: 14,
                             fontWeight: 700,
                             textTransform: "lowercase",
-                            color: isActive ? "#facc15" : "#fff",
+                            color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
                             backgroundColor: "transparent",
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
