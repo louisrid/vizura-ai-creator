@@ -105,7 +105,8 @@ const Storage = () => {
                   href={img.url}
                   download={`vizura-${img.id}.png`}
                   target="_blank"
-                  className="flex items-center justify-center gap-1.5 rounded-b-2xl border-[5px] border-t-[3px] border-border bg-card py-2 text-[10px] font-extrabold lowercase text-foreground/60 hover:text-foreground transition-colors"
+                  className="flex items-center justify-center gap-1.5 rounded-b-2xl border-2 border-t border-[#1a1a1a] py-2 text-[10px] font-extrabold lowercase text-foreground/60 hover:text-foreground transition-colors"
+                  style={{ backgroundColor: "#111111" }}
                 >
                   <Download size={12} strokeWidth={2.5} />
                   download
