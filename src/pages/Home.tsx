@@ -269,8 +269,10 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex-1 flex items-center justify-between rounded-xl active:scale-[0.98] transition-transform"
+              className="flex items-center justify-between active:scale-[0.98] transition-transform"
               style={{
+                flex: "1 1 0%",
+                minWidth: 0,
                 backgroundColor: "#facc15",
                 padding: "16px 14px",
                 borderRadius: 12,
