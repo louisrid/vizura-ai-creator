@@ -35,19 +35,6 @@ const PHOTO_LOADING_PHRASES = [
   "final touches…",
 ];
 
-/* ── Ratio icon ── */
-const RatioIcon = ({ ratio, className = "" }: { ratio: string; className?: string }) => {
-  const is916 = ratio === "9:16";
-  return (
-    <div
-      className={`border-2 border-current rounded-sm ${className}`}
-      style={{
-        width: is916 ? 8 : 10,
-        height: is916 ? 16 : 13,
-      }}
-    />
-  );
-};
 
 /* ── Pill toggle ── */
 const PillToggle = ({ label, options, value, onChange, renderOption }: {

@@ -72,6 +72,7 @@
 
     /* custom tokens */
     --nav: 0 0% 0%;
+    --page-bg: 0 0% 0%;
     --nav-foreground: 0 0% 98%;
     --surface-dark: 0 0% 2%;
     --surface-dark-foreground: 0 0% 98%;

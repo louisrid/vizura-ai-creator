@@ -292,9 +292,11 @@ const Home = () => {
                 if (!user) { navigate("/auth?redirect=/create"); return; }
                 navigate("/create");
               }}
-              className="flex-1 relative flex items-center justify-between rounded-xl active:scale-[0.98] transition-transform overflow-hidden"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-hidden"
               style={{
-                backgroundColor: "#0b0b0b",
+                flex: "1 1 0%",
+                minWidth: 0,
+                backgroundColor: "#000",
                 padding: "16px 14px",
                 borderRadius: 12,
               }}

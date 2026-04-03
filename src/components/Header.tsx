@@ -184,8 +184,6 @@ const Header = () => {
           </AnimatePresence>
         </div>
       </div>
-      {/* Bottom border - subtle, same bg */}
-      <div style={{ height: 1, backgroundColor: "#222" }} />
     </header>
   );
 };

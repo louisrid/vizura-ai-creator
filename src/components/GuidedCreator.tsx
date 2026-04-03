@@ -836,15 +836,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <Dots current={dotCurrent} total={dotTotal} />
               </div>
 
-              {!isLoggedIn && (
-                <button
-                  type="button"
-                  onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 mt-5 px-4 py-2 text-xs font-extrabold lowercase text-white/40 underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
-                >
-                  skip to login
-                </button>
-              )}
             </div>
           )}
         </div>
