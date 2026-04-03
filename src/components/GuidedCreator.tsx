@@ -1025,6 +1025,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
           className="mt-2 w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
           style={{ backgroundColor: "#111111" }}
+          disabled={emailLoading || googleLoading}
         />
         <button
           onClick={handleEmailAuth}
