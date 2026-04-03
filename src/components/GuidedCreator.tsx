@@ -87,22 +87,30 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     ref={ref}
     type="button"
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
-    className={`flex h-14 w-14 items-center justify-center active:scale-[1.05] ${className || ""}`}
+    className={`flex items-center justify-center active:scale-[1.05] ${className || ""}`}
     style={{
-      backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
-      border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${NEON_BLUE}`,
-      borderRadius: 16,
+      width: 52,
+      height: 48,
+      backgroundColor: direction === "right" ? "#00e0ff" : "transparent",
+      border: direction === "left" ? "2px solid rgba(0,224,255,0.25)" : "2px solid #00e0ff",
+      borderRadius: 12,
       outline: "none",
       padding: 0,
       cursor: "pointer",
-      opacity: 1,
+      opacity: direction === "left" ? 0.45 : 1,
       transition: "transform 0.05s",
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.75} style={{ color: PURE_WHITE }} />
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="7" x2="2" y2="7" />
+        <polyline points="7,2 2,7 7,12" />
+      </svg>
     ) : (
-      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "hsl(0 0% 0%)" }} />
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="2" y1="7" x2="12" y2="7" />
+        <polyline points="7,2 12,7 7,12" />
+      </svg>
     )}
   </button>
 ));
