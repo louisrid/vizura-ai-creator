@@ -134,13 +134,25 @@ const ChooseFace = () => {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: { prompt, free_gen: true },
       });
-      if (fnError) throw fnError;
+      if (fnError) {
+        // supabase.functions.invoke puts non-2xx responses in error
+        // Try to parse the response body for structured error info
+        const parsed = typeof fnError === "object" && fnError?.context ? await fnError.context?.json?.().catch(() => null) : null;
+        if (parsed?.code === "FREE_GEN_USED" || parsed?.code === "IP_USED") {
+          // Fall through to retry path below
+        } else {
+          throw fnError;
+        }
+      }
       if (data?.error) {
         if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
           const { data: retryData, error: retryError } = await supabase.functions.invoke("generate", {
             body: { prompt, face_regen: true },
           });
-          if (retryError) throw retryError;
+          if (retryError) {
+            console.error("Face regen error:", retryError);
+            throw retryError;
+          }
           if (retryData?.error) {
             if (retryData.code === "NO_GEMS") {
               setShowPaywall(true);
