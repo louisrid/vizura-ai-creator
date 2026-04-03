@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
+import DotDecal from "@/components/DotDecal";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
