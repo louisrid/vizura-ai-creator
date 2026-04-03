@@ -86,8 +86,6 @@ const ChooseFace = () => {
       hasShownSuccess.current = true;
       setLoading(false);
       setShowSuccess(true);
-      const t = setTimeout(() => setShowSuccess(false), SUCCESS_HOLD);
-      return () => clearTimeout(t);
     }
   }, [barComplete, faces.length]);
 
