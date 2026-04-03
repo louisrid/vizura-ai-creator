@@ -25,8 +25,6 @@ interface Character {
 /** Extract only user-written description, stripping auto-generated trait prefix */
 const getUserDescription = (raw: string | null | undefined): string => {
   if (!raw) return "";
-  // The description is stored as "{hairStyle} hair. {userDescription}"
-  // Strip everything up to and including the first "hair." or "hair. "
   let cleaned = raw.replace(/^.*?\bhair\.\s*/i, "");
   cleaned = cleaned.replace(/\[emoji:.+?\]/g, "").trim();
   return cleaned;
@@ -112,18 +110,6 @@ const CharacterDetail = () => {
     );
   }
 
-  const hairStyleMatch = character.description?.match(/^(?:.*?chest,\s*)?(.*?)\s*hair\./i);
-  const hairStyleVal = hairStyleMatch?.[1] || "";
-
-  const allTraits = [
-    { label: "skin", value: character.country },
-    { label: "body", value: character.body },
-    { label: "hair", value: hairStyleVal },
-    { label: "hair colour", value: character.hair },
-    { label: "eyes", value: character.eye },
-    { label: "makeup", value: character.style },
-  ].filter((t) => t.value);
-
   const userDescription = getUserDescription(character.description);
 
   return (
@@ -134,50 +120,41 @@ const CharacterDetail = () => {
           <BackButton />
         </div>
 
-        {/* Name + age */}
         <h1 className="text-center text-[2.8rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mt-2">
           {character.name || "unnamed"}, {character.age}
         </h1>
 
-        {/* Three face images in a row */}
-        <div className="mt-5 grid grid-cols-3 gap-3">
+        <div className="mt-6 grid grid-cols-3 gap-3">
           <FaceImage url={character.face_side_url} label="side" />
           <FaceImage url={character.face_image_url} label="front" />
           <FaceImage url={character.face_angle_url} label="angle" />
         </div>
 
-        {/* Trait pills — centered, balanced rows */}
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          {allTraits.map((t) => (
-            <div key={t.label} className="rounded-xl bg-primary px-4 py-2.5">
-              <span className="block text-[8px] font-extrabold lowercase text-primary-foreground/50 leading-none mb-0.5">
-                {t.label}
+        {character.body && (
+          <div className="mt-5">
+            <div className="inline-block rounded-2xl bg-white px-6 py-3.5">
+              <span className="block text-[9px] font-extrabold lowercase text-black/40 leading-none mb-1">
+                body
               </span>
-              <span className="block text-[13px] font-extrabold lowercase text-primary-foreground leading-none">
-                {t.value}
+              <span className="block text-[1rem] font-[900] lowercase text-black leading-none">
+                {character.body}
               </span>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* Description — only user-written text */}
-        <div className="mt-5 rounded-2xl border-[5px] border-border bg-card p-4">
-          <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
-            description
-          </span>
-          {userDescription ? (
+        {userDescription ? (
+          <div className="mt-5 rounded-2xl border-[5px] border-border bg-card p-4">
+            <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
+              description
+            </span>
             <p className="text-sm font-extrabold lowercase text-foreground leading-relaxed">
               {userDescription}
             </p>
-          ) : (
-            <p className="text-sm font-extrabold lowercase text-foreground/25 leading-relaxed">
-              no description added
-            </p>
-          )}
-        </div>
+          </div>
+        ) : null}
 
-        {/* Action buttons — inline, not sticky */}
-        <div className="mt-6 flex flex-col gap-2">
+        <div className="mt-8 flex flex-col gap-2">
           <button
             onClick={() => {
               sessionStorage.setItem("vizura_internal_nav", "1");
@@ -205,7 +182,6 @@ const CharacterDetail = () => {
         </div>
 
         <div className="grid grid-cols-5 gap-8">
-          {/* Left: three face images stacked or row */}
           <div className="col-span-2 flex flex-col gap-3">
             <div className="grid grid-cols-3 gap-2">
               <FaceImage url={character.face_side_url} label="side" />
@@ -214,39 +190,34 @@ const CharacterDetail = () => {
             </div>
           </div>
 
-          {/* Right: details */}
           <div className="col-span-3 flex flex-col">
             <h1 className="text-[2.4rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mb-4">
               {character.name || "unnamed"}, {character.age}
             </h1>
 
-            <div className="flex flex-wrap gap-2 mb-4">
-              {allTraits.map((t) => (
-                <div key={t.label} className="rounded-xl bg-primary px-4 py-2.5">
-                  <span className="block text-[8px] font-extrabold lowercase text-primary-foreground/50 leading-none mb-0.5">
-                    {t.label}
+            {character.body && (
+              <div className="mb-5">
+                <div className="inline-block rounded-2xl bg-white px-6 py-3.5">
+                  <span className="block text-[9px] font-extrabold lowercase text-black/40 leading-none mb-1">
+                    body
                   </span>
-                  <span className="block text-[13px] font-extrabold lowercase text-primary-foreground leading-none">
-                    {t.value}
+                  <span className="block text-[1rem] font-[900] lowercase text-black leading-none">
+                    {character.body}
                   </span>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
 
-            <div className="rounded-2xl border-[5px] border-border bg-card p-4 mb-5">
-              <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
-                description
-              </span>
-              {userDescription ? (
+            {userDescription ? (
+              <div className="rounded-2xl border-[5px] border-border bg-card p-4 mb-5">
+                <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
+                  description
+                </span>
                 <p className="text-sm font-extrabold lowercase text-foreground leading-relaxed">
                   {userDescription}
                 </p>
-              ) : (
-                <p className="text-sm font-extrabold lowercase text-foreground/25 leading-relaxed">
-                  no description added
-                </p>
-              )}
-            </div>
+              </div>
+            ) : null}
 
             <button
               onClick={() => {
@@ -269,7 +240,6 @@ const CharacterDetail = () => {
           </div>
         </div>
       </main>
-
 
       <AnimatePresence>
         {showDelete && (
