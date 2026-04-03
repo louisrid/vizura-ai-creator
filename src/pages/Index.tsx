@@ -363,7 +363,8 @@ const Index = () => {
                 <select
                   value={selectedCharId}
                   onChange={(e) => handleCharacterSelect(e.target.value)}
-                  className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+                  className="h-12 w-full appearance-none px-4 pr-10 text-sm font-[900] lowercase text-foreground outline-none transition-colors"
+                  style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#151515" }}
                 >
                   <option value="">none</option>
                   {characters.map((c) => (
