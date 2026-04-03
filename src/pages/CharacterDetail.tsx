@@ -195,9 +195,8 @@ const CharacterDetail = () => {
 
           {/* Right: details */}
           <div className="col-span-3 flex flex-col">
-            <h1 className="text-2xl font-[900] lowercase tracking-tight text-foreground leading-[1.1] mb-4">
-              {character.name || "unnamed"}{" "}
-              <span className="text-foreground/40">{character.age}</span>
+            <h1 className="text-[2.4rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mb-4">
+              {character.name || "unnamed"}, {character.age}
             </h1>
 
             <div className="flex flex-wrap gap-2 mb-4">
