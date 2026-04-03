@@ -605,7 +605,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
           className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
-          style={{ marginTop: 40 }}
         >
           <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
