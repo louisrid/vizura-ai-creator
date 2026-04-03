@@ -496,10 +496,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
-        <div className="flex w-full flex-col items-center">
-          <span className="text-[56px] mb-4">{trait.emoji}</span>
+        <div className="flex w-full flex-col items-center" style={{ marginTop: 40 }}>
+          <span className="text-[64px] mb-5">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className={`mt-5 grid w-full gap-3 px-2 ${
+          <div className={`mt-6 grid w-full gap-3 px-2 ${
             trait.options.length === 4 ? "max-w-[20rem] grid-cols-2"
               : trait.options.length === 2 ? "max-w-[16rem] grid-cols-2 mx-auto"
               : "max-w-[22rem] grid-cols-3"
