@@ -89,25 +89,25 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
-      width: 48,
-      height: 48,
+      width: 60,
+      height: 56,
       backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
       border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
-      borderRadius: 14,
+      borderRadius: 16,
       outline: "none",
       padding: 0,
       cursor: "pointer",
     }}
   >
     {direction === "left" ? (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="12" y1="7" x2="2" y2="7" />
-        <polyline points="7,2 2,7 7,12" />
+      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 1L1 7.5L7 14" />
+        <line x1="1.5" y1="7.5" x2="17" y2="7.5" />
       </svg>
     ) : (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="2" y1="7" x2="12" y2="7" />
-        <polyline points="7,2 12,7 7,12" />
+      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 1L17 7.5L11 14" />
+        <line x1="1" y1="7.5" x2="16.5" y2="7.5" />
       </svg>
     )}
   </button>

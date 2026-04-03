@@ -59,8 +59,8 @@ const Header = () => {
     <header
       className="sticky top-0 z-40 relative"
       style={{
-        background: "linear-gradient(to bottom, #000000 0%, #000000 30%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.2) 85%, transparent 100%)",
-        paddingBottom: 40,
+        background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.2) 75%, transparent 100%)",
+        paddingBottom: 56,
       }}
     >
       <TopGradientBar />
