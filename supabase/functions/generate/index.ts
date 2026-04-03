@@ -473,7 +473,7 @@ serve(async (req) => {
       if (profile?.has_used_free_gen) {
         return new Response(
           JSON.stringify({ error: "Free generation already used", code: "FREE_GEN_USED" }),
-          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
@@ -488,7 +488,7 @@ serve(async (req) => {
         if (existingIp) {
           return new Response(
             JSON.stringify({ error: "Free generation already used from this network", code: "IP_USED" }),
-            { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
       }
@@ -503,7 +503,7 @@ serve(async (req) => {
         if (e?.contentPolicy) {
           return new Response(
             JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
-            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         if (e?.status === 429 || e?.status === 402) {
@@ -554,7 +554,7 @@ serve(async (req) => {
           code: "NO_GEMS",
           has_subscription: subData?.status === "active",
         }),
-        { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -604,7 +604,7 @@ serve(async (req) => {
       if (e?.contentPolicy) {
         return new Response(
           JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (e?.status === 429 || e?.status === 402) {
