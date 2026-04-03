@@ -13,6 +13,8 @@ interface ProgressBarLoaderProps {
   onComplete?: () => void;
   requireTapToContinue?: boolean;
   expandTapTarget?: boolean;
+  /** When set to true, smoothly accelerates to 100% regardless of elapsed time */
+  completeNow?: boolean;
 }
 
 const mapProgressToPct = (progress: number) => {
