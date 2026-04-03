@@ -469,7 +469,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Name */
     if (isNameSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 40 }}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <span className="text-[64px] mb-5">✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 flex items-center gap-2.5 w-full max-w-[17rem]">
