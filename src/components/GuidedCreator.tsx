@@ -116,22 +116,49 @@ NavArrow.displayName = "NavArrow";
 
 /* ── Animated gradient background ── */
 const AmbientGlow = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-    <div className="absolute inset-0 animate-wizard-gradient-1" style={{
-      width: "140%", height: "140%", top: "-20%", left: "-20%",
-      background: "radial-gradient(ellipse at 30% 50%, rgba(0,50,255,0.08) 0%, transparent 60%)",
-      filter: "blur(80px)",
-    }} />
-    <div className="absolute inset-0 animate-wizard-gradient-2" style={{
-      width: "130%", height: "130%", top: "-15%", right: "-15%",
-      background: "radial-gradient(ellipse at 70% 40%, rgba(120,0,255,0.06) 0%, transparent 55%)",
-      filter: "blur(90px)",
-    }} />
-    <div className="absolute inset-0 animate-wizard-gradient-3" style={{
-      width: "120%", height: "120%", bottom: "-10%", left: "-10%",
-      background: "radial-gradient(ellipse at 40% 70%, rgba(255,0,100,0.04) 0%, transparent 50%)",
-      filter: "blur(70px)",
-    }} />
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ zIndex: 0 }} aria-hidden="true">
+    <div
+      style={{
+        position: "absolute",
+        width: "150%",
+        height: "150%",
+        top: "-25%",
+        left: "-25%",
+        borderRadius: "50%",
+        background: "#0040ff",
+        opacity: 0.06,
+        filter: "blur(160px)",
+        animation: "wizard-blob-1 28s ease-in-out infinite 0s",
+      }}
+    />
+    <div
+      style={{
+        position: "absolute",
+        width: "150%",
+        height: "150%",
+        top: "-25%",
+        right: "-25%",
+        borderRadius: "50%",
+        background: "#5500cc",
+        opacity: 0.06,
+        filter: "blur(160px)",
+        animation: "wizard-blob-2 32s ease-in-out infinite -8s",
+      }}
+    />
+    <div
+      style={{
+        position: "absolute",
+        width: "150%",
+        height: "150%",
+        bottom: "-25%",
+        left: "-10%",
+        borderRadius: "50%",
+        background: "#3000aa",
+        opacity: 0.06,
+        filter: "blur(160px)",
+        animation: "wizard-blob-3 35s ease-in-out infinite -18s",
+      }}
+    />
   </div>
 );
 
