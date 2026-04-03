@@ -34,7 +34,17 @@ const ProgressBarLoader = ({
   expandTapTarget = false,
   completeNow = false,
 }: ProgressBarLoaderProps) => {
-  const [pct, setPct] = useState(0);
+  const [pct, _setPct] = useState(0);
+  const pctRef = useRef(0);
+
+  // Wrapper that ensures pct only ever increases
+  const setPct = (next: number | ((prev: number) => number)) => {
+    const resolved = typeof next === "function" ? next(pctRef.current) : next;
+    if (resolved > pctRef.current) {
+      pctRef.current = resolved;
+      _setPct(resolved);
+    }
+  };
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [phraseVisible, setPhraseVisible] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
@@ -52,7 +62,8 @@ const ProgressBarLoader = ({
     completedRef.current = false;
     continuedRef.current = false;
     maxPctRef.current = 0;
-    setPct(0);
+    pctRef.current = 0;
+    _setPct(0);
     setPhraseIndex(0);
     setPhraseVisible(true);
     setIsComplete(false);
