@@ -423,7 +423,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     if (isCreateSlide) {
-      completeCookingFlow();
+      // Fade to black, then complete
+      setExitFade(true);
+      setTimeout(() => completeCookingFlow(), 1200);
       return;
     }
 
