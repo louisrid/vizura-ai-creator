@@ -64,15 +64,16 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Dots ── */
 const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
-  <div ref={ref} className="flex items-center gap-2">
+  <div ref={ref} className="flex items-center justify-center gap-[3px]" style={{ padding: "0 50px" }}>
     {Array.from({ length: total }).map((_, i) => (
       <div
         key={i}
-        className="rounded-full transition-all duration-300"
+        className="transition-all duration-300"
         style={{
-          width: i === current ? 10 : 8,
-          height: i === current ? 10 : 8,
-          background: i === current ? NEON_BLUE : PURE_WHITE,
+          flex: 1,
+          height: 5,
+          borderRadius: 3,
+          background: i <= current ? "#00e0ff" : "rgba(0,224,255,0.1)",
         }}
       />
     ))}
