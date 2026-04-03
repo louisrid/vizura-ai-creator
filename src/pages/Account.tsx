@@ -91,7 +91,7 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="border-[5px] border-border rounded-2xl p-3 flex items-center gap-3">
+            <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
               <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
               <div className="flex-1">
                 <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
