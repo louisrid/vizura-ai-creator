@@ -55,18 +55,25 @@ const PillToggle = ({ label, options, value, onChange, renderOption }: {
   renderOption?: (opt: string) => React.ReactNode;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
+    <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
     <div className="flex flex-wrap gap-1.5">
       {options.map((opt) => (
         <button
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
-          className={`rounded-xl px-4 py-2.5 text-sm font-extrabold lowercase transition-all flex items-center gap-1.5 ${
-            value === opt
-              ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
-              : "border-[3px] border-border bg-card text-foreground/70 hover:border-foreground/40"
-          }`}
+          className="flex items-center gap-1.5 transition-all"
+          style={{
+            borderRadius: 11,
+            padding: "10px 18px",
+            fontSize: 16,
+            fontWeight: 800,
+            textTransform: "lowercase" as const,
+            ...(value === opt
+              ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
+              : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+            ),
+          }}
         >
           {renderOption ? renderOption(opt) : opt}
         </button>
@@ -137,8 +144,8 @@ const HighlightedPromptArea = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={4}
-        className="w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground focus:outline-none focus:border-foreground transition-colors"
-        style={{ caretColor: "hsl(var(--foreground))" }}
+        className="w-full resize-none px-4 py-3 text-sm font-[900] lowercase text-foreground focus:outline-none transition-colors"
+        style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#151515", caretColor: "hsl(var(--foreground))" }}
       />
       {!value && placeholder}
     </div>
@@ -150,19 +157,15 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
-    className="w-full h-14 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
+    className="w-full h-14 text-sm font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+    style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>
-        <Zap size={18} strokeWidth={2.5} />
-        create
-        <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
-        <span className="text-[11px] ml-0.5">1</span>
-      </>
+      <>create · 1 💎</>
     )}
   </button>
 );
@@ -305,7 +308,7 @@ const Index = () => {
   const createDisabled = isGenerating || (!!user && !prompt.trim());
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background overflow-hidden">
       <PhotoGenerationOverlay
         open={photoOverlayPhase !== "hidden"}
         phase={photoOverlayPhase === "hidden" ? "loading" : photoOverlayPhase}
@@ -314,7 +317,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-8">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-14 pb-8">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -327,8 +330,13 @@ const Index = () => {
             <div className="relative flex justify-center">
               <motion.section
                 layout
-                className="mb-4 md:mb-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden w-full"
-                style={{ maxWidth: photoRatio === "9:16" ? "14rem" : "100%" }}
+                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
+                style={{
+                  maxWidth: photoRatio === "9:16" ? "14rem" : "100%",
+                  borderRadius: 16,
+                  border: "2px solid #222",
+                  backgroundColor: "#151515",
+                }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
                 <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -336,8 +344,8 @@ const Index = () => {
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-                        <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#222" }}>
+                        <span className="text-2xl">📷</span>
                       </div>
                     </div>
                   )}
@@ -350,12 +358,13 @@ const Index = () => {
           <div className="md:col-span-3 space-y-4">
             {/* Character select — always visible */}
             <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-1.5">select character</span>
+              <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>select character</span>
               <label className="relative block">
                 <select
                   value={selectedCharId}
                   onChange={(e) => handleCharacterSelect(e.target.value)}
-                  className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+                  className="h-12 w-full appearance-none px-4 pr-10 text-sm font-[900] lowercase text-foreground outline-none transition-colors"
+                  style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#151515" }}
                 >
                   <option value="">none</option>
                   {characters.map((c) => (
@@ -403,7 +412,7 @@ const Index = () => {
 
             {/* Prompt */}
             <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-1.5">describe your photo</span>
+              <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
                 onChange={setPrompt}
@@ -430,12 +439,12 @@ const Index = () => {
             {/* Reference section */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
-                <span className="text-[10px] font-extrabold lowercase text-muted-foreground">(optional)</span>
+                <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>add a reference</span>
+                <span className="text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
               {referenceImage ? (
-                <div className="relative w-full h-28 rounded-2xl overflow-hidden border-[5px] border-border">
+                <div className="relative w-full h-28 overflow-hidden" style={{ borderRadius: 16, border: "2px solid #222" }}>
                   <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -449,15 +458,16 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-6 hover:border-foreground/30 transition-colors"
+                  className="flex w-full flex-col items-center justify-center gap-2 py-6 hover:border-foreground/30 transition-colors"
+                  style={{ borderRadius: 16, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#151515" }}
                 >
                   <Upload size={20} strokeWidth={2.5} className="text-foreground/30" />
                   <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
                 </button>
               )}
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
-                <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
+                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>strength</span>
+                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{referenceStrength}%</span>
               </div>
               <input
                 type="range"

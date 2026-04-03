@@ -1,61 +1,20 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import VizuraLogo from "@/components/VizuraLogo";
-import { Gem, Sparkles, Camera, LayoutGrid, FolderOpen, Settings, User, type LucideIcon } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, X } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { hasSpecialAccountOverride } from "@/lib/specialAccount";
-
-const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
-  { label: "home", path: "/", icon: Sparkles },
-  { label: "create photo", path: "/create", icon: Camera },
-  { label: "storage", path: "/storage", icon: FolderOpen },
-  { label: "my characters", path: "/characters", icon: LayoutGrid },
-  { label: "top-ups", path: "/top-ups", icon: Gem },
-  { label: "my account", path: "/account", icon: Settings },
-];
-
-const pageNames: Record<string, string> = {
-  "/": "home",
-  "/generate-face": "generate face",
-  "/choose-face": "generate face",
-  "/create": "create photo",
-  "/index": "create photo",
-  "/characters": "my characters",
-  "/storage": "storage",
-  "/history": "history",
-  "/top-ups": "top-ups",
-  "/account": "my account",
-  "/help": "help",
-  "/auth": "my account",
-  "/reset-password": "reset password",
-};
-
-const resolvePageName = (pathname: string): string => {
-  if (pageNames[pathname]) return pageNames[pathname];
-  // Handle dynamic routes like /characters/:id
-  if (pathname.startsWith("/characters/")) return "profile";
-  return "";
-};
-
-const resolveActivePath = (pathname: string): string => {
-  // Map sub-routes to their parent menu item path
-  if (pathname.startsWith("/characters")) return "/characters";
-  return pathname;
-};
+import TopGradientBar from "@/components/TopGradientBar";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, loading } = useAuth();
-  const { subscribed } = useSubscription();
-  const isSpecialAccount = hasSpecialAccountOverride(user);
+  const { user, loading, signOut } = useAuth();
+  const { gems } = useGems();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close menu on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOpen(false);
@@ -64,10 +23,7 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close menu on route change
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+  useEffect(() => { setOpen(false); }, [location.pathname]);
 
   const handleNav = (path: string) => {
     setOpen(false);
@@ -75,76 +31,77 @@ const Header = () => {
     navigate(path);
   };
 
-  const { currentPage, CurrentIcon } = useMemo(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
-    const effectivePath = redirectTarget || location.pathname;
-    const page = resolvePageName(effectivePath) || resolvePageName(location.pathname);
-    const activePath = resolveActivePath(effectivePath);
-    const menuItem = menuItems.find((item) => item.path === activePath) || menuItems.find((item) => item.path === resolveActivePath(location.pathname)) || menuItems[0];
-    return { currentPage: page, CurrentIcon: menuItem?.icon || Sparkles, activePath };
-  }, [location.pathname, location.search]);
+  const handleLogout = async () => {
+    setOpen(false);
+    await signOut();
+    navigate("/");
+  };
 
-  const activePath = useMemo(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const redirectTarget = location.pathname === "/account" ? searchParams.get("redirect") : null;
-    return resolveActivePath(redirectTarget || location.pathname);
-  }, [location.pathname, location.search]);
-
-  const cachedSubscribed = useMemo(() => {
-    if (typeof window === "undefined" || !user?.id) return false;
-    const cached = window.sessionStorage.getItem(`vizura_subscription_status:${user.id}`);
-    return cached === "active" || cached === "trialing";
-  }, [user?.id]);
-
-  const showSubscribedState = isSpecialAccount || subscribed || cachedSubscribed;
+  const userInitial = useMemo(() => {
+    if (!user?.email) return "?";
+    return user.email[0].toUpperCase();
+  }, [user?.email]);
 
   return (
-    <header className="sticky top-0 z-40 border-b-[5px] border-white" style={{ backgroundColor: '#000000' }}>
-      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-4 md:px-8 py-6">
-        <div className="flex items-center gap-3">
-          <VizuraLogo className="text-nav-foreground text-2xl" />
-          <GemsBadge />
-          {!loading && !!user?.id && location.pathname !== "/auth" && location.pathname !== "/reset-password" && (
+    <header className="sticky top-0 z-40 relative" style={{ backgroundColor: '#000000' }}>
+      <TopGradientBar />
+      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 py-4">
+        {/* Left: Logo */}
+        <button onClick={() => handleNav("/")} className="text-[21px] font-[900] lowercase text-white tracking-tight">
+          vizura
+        </button>
+
+        {/* Right: gems badge, avatar, hamburger */}
+        <div className="flex items-center gap-2.5" ref={menuRef}>
+          {/* Cyan gem badge */}
+          <div className="flex items-center gap-1.5 rounded-xl px-3 py-1.5"
+            style={{
+              backgroundColor: "rgba(0,224,255,0.08)",
+              border: "2px solid rgba(0,224,255,0.25)",
+            }}
+          >
+            <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+            <span className="text-[11px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+          </div>
+
+          {/* Yellow avatar circle */}
+          {!loading && !!user?.id && (
             <button
               onClick={() => navigate("/account")}
-              className="shrink-0"
+              className="flex items-center justify-center shrink-0"
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                backgroundColor: "#facc15",
+              }}
               aria-label="my account"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                style={{
-                  color: showSubscribedState ? "hsl(var(--member-green))" : "hsl(var(--nav-foreground))",
-                }}
-              >
-                <circle cx="12" cy="8" r="5" />
-                <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-              </svg>
+              <span className="text-[13px] font-[900] text-black">{userInitial}</span>
             </button>
           )}
-        </div>
 
-        <div className="relative flex items-center gap-3" ref={menuRef}>
-          <span className="text-xs font-extrabold lowercase text-nav-foreground flex items-center gap-1.5">
-            {CurrentIcon && <CurrentIcon size={14} strokeWidth={2.5} className="text-neon-yellow shrink-0" />}
-            {currentPage}
-          </span>
-
+          {/* Hamburger square */}
           <button
             onClick={() => setOpen(!open)}
-            className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground transition-opacity hover:opacity-90"
+            className="flex items-center justify-center"
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 10,
+              backgroundColor: "#1a1a1a",
+              border: "2px solid #222",
+            }}
             aria-label="open menu"
           >
-            <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
-              <rect y="0" width="18" height="3" rx="1.5" fill="currentColor" />
-              <rect y="5.5" width="18" height="3" rx="1.5" fill="currentColor" />
-              <rect y="11" width="18" height="3" rx="1.5" fill="currentColor" />
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+              <rect y="0" width="14" height="2" rx="1" fill="white" />
+              <rect y="4" width="14" height="2" rx="1" fill="white" />
+              <rect y="8" width="14" height="2" rx="1" fill="white" />
             </svg>
           </button>
 
+          {/* Dropdown menu */}
           <AnimatePresence>
             {open && (
               <motion.div
@@ -152,40 +109,65 @@ const Header = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-full mt-2 mr-0 w-48 overflow-hidden rounded-2xl border-[5px] border-nav-foreground/20 bg-nav shadow-medium"
+                className="absolute right-[14px] top-full mt-2 w-52 overflow-hidden"
+                style={{
+                  backgroundColor: "#151515",
+                  border: "2px solid #222",
+                  borderRadius: 16,
+                  zIndex: 50,
+                }}
               >
-                <div className="py-1.5">
-                  {menuItems.map((item) => (
-                    <button
-                      key={item.label}
-                      onClick={() => handleNav(item.path)}
-                      className={`w-full text-left px-4 py-2.5 text-xs font-extrabold lowercase transition-colors flex items-center gap-2 ${
-                        activePath === item.path
-                          ? "text-neon-yellow"
-                          : "text-nav-foreground hover:text-nav-foreground/80"
-                      }`}
-                    >
-                      <item.icon size={14} strokeWidth={2.5} className="shrink-0" />
-                      {item.label}
-                    </button>
-                  ))}
+                <div className="relative">
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="absolute top-3 right-3 text-white/40 hover:text-white transition-colors"
+                    aria-label="close menu"
+                  >
+                    <X size={14} strokeWidth={2.5} />
+                  </button>
+                  <div className="pt-2 pb-2">
+                    {[
+                      { label: "my characters", path: "/characters", icon: LayoutGrid },
+                      { label: "create photo", path: "/create", icon: Camera },
+                      { label: "gems", path: "/top-ups", icon: Gem },
+                      { label: "settings", path: "/account", icon: Settings },
+                    ].map((item) => (
+                      <button
+                        key={item.label}
+                        onClick={() => handleNav(item.path)}
+                        className="w-full text-left px-4 py-[14px] text-[14px] font-[800] lowercase transition-colors flex items-center gap-2.5 text-white hover:text-white"
+                        style={{
+                          borderBottom: "1px solid #222",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                      >
+                        <item.icon size={14} strokeWidth={2.5} className="shrink-0" />
+                        {item.label}
+                      </button>
+                    ))}
+                    {user && (
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-[14px] text-[14px] font-[800] lowercase flex items-center gap-2.5"
+                        style={{ color: "#ff4444" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                      >
+                        <LogOut size={14} strokeWidth={2.5} className="shrink-0" />
+                        log out
+                      </button>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
+      {/* Bottom border */}
+      <div style={{ height: 1, backgroundColor: "#222" }} />
     </header>
-  );
-};
-
-const GemsBadge = () => {
-  const { gems } = useGems();
-  return (
-    <div className="flex items-center gap-1.5 rounded-2xl border-[3px] border-gem-green bg-gem-green/10 px-3 py-1.5">
-      <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
-      <span className="text-[11px] font-extrabold lowercase text-nav-foreground">{gems}</span>
-    </div>
   );
 };
 

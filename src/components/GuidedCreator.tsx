@@ -9,9 +9,9 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
-const NEON_BLUE = "hsl(var(--gem-green))";
-const PURE_WHITE = "hsl(var(--foreground))";
-const AMBER = "hsl(var(--neon-yellow))";
+const NEON_BLUE = "#00e0ff";
+const PURE_WHITE = "#fff";
+const AMBER = "#facc15";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
@@ -56,23 +56,24 @@ const TRAITS = [
   { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"] },
 ] as const;
 
-const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.35rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
-const SUBTEXT_CLASS = "text-sm font-extrabold lowercase text-white/40";
+const SLIDE_TITLE_CLASS = "mt-3 text-center text-[34px] font-[900] lowercase leading-[0.94] tracking-tight text-white";
+const SUBTEXT_CLASS = "text-sm font-[900] lowercase text-white/40";
 const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
 
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Dots ── */
 const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
-  <div ref={ref} className="flex items-center gap-2">
+  <div ref={ref} className="flex items-center justify-center gap-[3px]" style={{ padding: "0 50px" }}>
     {Array.from({ length: total }).map((_, i) => (
       <div
         key={i}
-        className="rounded-full transition-all duration-300"
+        className="transition-all duration-300"
         style={{
-          width: i === current ? 10 : 8,
-          height: i === current ? 10 : 8,
-          background: i === current ? NEON_BLUE : PURE_WHITE,
+          flex: 1,
+          height: 5,
+          borderRadius: 3,
+          background: i <= current ? "#00e0ff" : "rgba(0,224,255,0.1)",
         }}
       />
     ))}
@@ -86,22 +87,30 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     ref={ref}
     type="button"
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
-    className={`flex h-14 w-14 items-center justify-center active:scale-[1.05] ${className || ""}`}
+    className={`flex items-center justify-center active:scale-[1.05] ${className || ""}`}
     style={{
-      backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
-      border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${NEON_BLUE}`,
-      borderRadius: 16,
+      width: 52,
+      height: 48,
+      backgroundColor: direction === "right" ? "#00e0ff" : "transparent",
+      border: direction === "left" ? "2px solid rgba(0,224,255,0.25)" : "2px solid #00e0ff",
+      borderRadius: 12,
       outline: "none",
       padding: 0,
       cursor: "pointer",
-      opacity: 1,
+      opacity: direction === "left" ? 0.45 : 1,
       transition: "transform 0.05s",
     }}
   >
     {direction === "left" ? (
-      <ArrowLeft size={22} strokeWidth={2.75} style={{ color: PURE_WHITE }} />
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="7" x2="2" y2="7" />
+        <polyline points="7,2 2,7 7,12" />
+      </svg>
     ) : (
-      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "hsl(0 0% 0%)" }} />
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="2" y1="7" x2="12" y2="7" />
+        <polyline points="7,2 12,7 7,12" />
+      </svg>
     )}
   </button>
 ));
@@ -112,7 +121,7 @@ const AmbientGlow = () => null;
 
 /* ── Simple emoji — CSS bounce only ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
-  <span className="select-none pointer-events-none text-[3.5rem] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
+  <span className="select-none pointer-events-none text-[56px] inline-block animate-bounce" style={{ animationDuration: "2s" }}>
     {emoji}
   </span>
 );
@@ -126,16 +135,25 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     animate={
       selected
-        ? { scale: [1, 1.15, 1], transition: { duration: 0.1 } }
+        ? { scale: [1, 1.08, 1], transition: { duration: 0.1 } }
         : shaking
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`flex h-16 w-full items-center justify-center rounded-[1.35rem] px-5 text-[1.05rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
-      selected
-        ? "bg-neon-yellow text-neon-yellow-foreground border-[4px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
-        : "border-[4px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
-    }`}
+    className="flex w-full items-center justify-center transition-colors duration-75"
+    style={{
+      height: 56,
+      borderRadius: 11,
+      padding: "10px 18px",
+      fontSize: 16,
+      fontWeight: 800,
+      textTransform: "lowercase",
+      letterSpacing: "-0.01em",
+      ...(selected
+        ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
+        : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+      ),
+    }}
   >
     <span className="block leading-none text-center whitespace-nowrap">{label}</span>
   </motion.button>
@@ -765,7 +783,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "hsl(0 0% 0%)" }}
+      style={{ background: "#050505" }}
     >
       {/* Exit fade overlay — covers everything with smooth black fade */}
       <motion.div
@@ -935,7 +953,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   if (!visible) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] bg-black">
+    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#050505" }}>
       <AmbientGlow />
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center"

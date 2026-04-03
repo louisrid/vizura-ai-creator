@@ -462,15 +462,15 @@ const ChooseFace = () => {
 
       {/* Face picker — only shown after success screen */}
       {!loading && faces.length > 0 && !showSuccess && (
-        <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg md:max-w-3xl flex-col px-4 md:px-8 pt-8 pb-0 overflow-hidden">
+        <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg md:max-w-3xl flex-col px-[14px] md:px-8 pt-8 pb-0 overflow-hidden">
           <div className="flex items-center gap-3 mb-8">
             <BackButton />
             <PageTitle className="mb-0">pick your face</PageTitle>
           </div>
 
           <div className="flex items-center gap-2 mb-6">
-            <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-            <span className="text-sm font-extrabold lowercase text-foreground">{gems} gems</span>
+            <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+            <span className="text-sm font-[900] lowercase text-foreground">{gems} gems</span>
           </div>
 
           <div className="grid grid-cols-3 gap-3 md:gap-5 mt-4 shrink-0 md:max-w-xl md:mx-auto" style={{ perspective: "800px" }}>
@@ -481,61 +481,62 @@ const ChooseFace = () => {
                 onClick={() => handleFaceClick(i)}
                 initial={{ rotateY: 90, opacity: 0 }}
                 animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
-                whileTap={{ scale: 1.12 }}
+                whileTap={{ scale: 1.02 }}
                 transition={{
                   rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                   opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                 }}
-                className={`relative aspect-[3/4] overflow-hidden rounded-2xl transition-all duration-300 ease-out ${
-                  selectedIndex === i
-                    ? "border-[3px] border-neon-yellow"
-                    : "border-[3px] border-border hover:border-foreground/40"
-                }`}
+                className="relative aspect-[3/4] overflow-hidden transition-all duration-300 ease-out"
+                style={{
+                  borderRadius: 16,
+                  border: selectedIndex === i ? "3px solid #facc15" : "2px solid #222",
+                }}
               >
                 <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
-                {selectedIndex === i && pulseIndex === i && (
-                  <motion.div
-                    className="absolute inset-0 rounded-[11px] border-[2px] border-neon-yellow/60"
-                    initial={{ opacity: 0.6 }}
-                    animate={{ opacity: [0.6, 1, 0] }}
-                    transition={{ duration: 0.45, ease: "easeOut" }}
-                  />
-                )}
               </motion.button>
             ))}
           </div>
 
           <div className="flex-1 min-h-[1rem]" />
 
-          <div className="-mx-4 shrink-0">
-            <div className="border-t-[5px] border-white" />
-            <div className="px-4 pt-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] bg-black">
+          <div className="-mx-[14px] shrink-0">
+            <div style={{ height: 1, backgroundColor: "#222" }} />
+            <div className="px-[14px] pt-5 pb-[max(env(safe-area-inset-bottom),1.5rem)]" style={{ backgroundColor: "#000" }}>
               <div className="flex gap-3">
+                {/* Regenerate - opaque secondary */}
                 <button
                   onClick={handleRegenerate}
                   disabled={rerolling}
-                  className={`flex-1 h-14 rounded-2xl text-sm font-extrabold lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 ${
-                    isFreeUser
-                      ? "text-white cursor-not-allowed"
-                      : "bg-white text-black active:bg-white/70"
-                  }`}
-                  style={isFreeUser ? { backgroundColor: "hsl(0 0% 18%)" } : undefined}
+                  className="flex-1 h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 relative overflow-hidden"
+                  style={{
+                    backgroundColor: isFreeUser ? "#1a1a1a" : "#0b0b0b",
+                    borderRadius: 12,
+                    color: isFreeUser ? "rgba(255,255,255,0.4)" : "#fff",
+                    cursor: isFreeUser ? "not-allowed" : "pointer",
+                  }}
                 >
-                  {rerolling ? (
-                    <Loader2 className="animate-spin" size={16} />
-                  ) : (
-                    <>
-                      <RefreshCw size={16} strokeWidth={2.5} />
-                      regenerate
-                      <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
-                      <span className="text-[11px]">1</span>
-                    </>
+                  {!isFreeUser && (
+                    <div className="absolute inset-0" style={{ backgroundColor: "rgba(250,204,21,0.06)", border: "2px solid rgba(250,204,21,0.15)", borderRadius: 12 }} />
                   )}
+                  <span className="relative z-[1] flex items-center gap-2">
+                    {rerolling ? (
+                      <Loader2 className="animate-spin" size={16} />
+                    ) : (
+                      <>
+                        <RefreshCw size={16} strokeWidth={2.5} />
+                        regenerate
+                        <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                        <span className="text-[11px]">1</span>
+                      </>
+                    )}
+                  </span>
                 </button>
+                {/* Confirm - solid yellow */}
                 <button
                   onClick={handleConfirm}
                   disabled={selectedIndex === null}
-                  className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
+                  className="flex-1 h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
+                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
                 >
                   confirm
                 </button>
@@ -546,9 +547,9 @@ const ChooseFace = () => {
       )}
 
       {!loading && faces.length === 0 && !showSignIn && (
-        <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 pt-8">
+        <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
           <div className="mt-16 flex flex-col items-center gap-4">
-            <p className="text-sm font-extrabold lowercase text-muted-foreground">no faces generated yet</p>
+            <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>no faces generated yet</p>
           </div>
         </main>
       )}

@@ -1,23 +1,27 @@
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 
 const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
   const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate("/");
-  };
 
   return (
     <button
       ref={ref}
       type="button"
-      onClick={handleBack}
-      className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95"
+      onClick={() => navigate("/")}
+      className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95"
+      style={{
+        width: 30,
+        height: 30,
+        borderRadius: "50%",
+        backgroundColor: "#facc15",
+      }}
       aria-label="go back"
     >
-      <ArrowLeft size={18} strokeWidth={3} />
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="7" x2="2" y2="7" />
+        <polyline points="7,2 2,7 7,12" />
+      </svg>
     </button>
   );
 });

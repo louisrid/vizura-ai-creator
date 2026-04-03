@@ -6,6 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { supabase } from "@/integrations/supabase/client";
+import DotDecal from "@/components/DotDecal";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Character {
   id: string;
@@ -80,8 +82,10 @@ const MyCharacters = () => {
   const hasCharacters = characters.length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-24">
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
+
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-8 pt-14 pb-24">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -95,14 +99,20 @@ const MyCharacters = () => {
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
-              className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors duration-200 active:scale-[0.97]"
+              className="overflow-hidden active:scale-[0.97] transition-transform"
+              style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#151515" }}
             >
-              <Plus size={36} strokeWidth={3} className="text-foreground" />
+              <AspectRatio ratio={3 / 4}>
+                <div className="flex h-full w-full items-center justify-center">
+                  <Plus size={28} strokeWidth={3} className="text-white/30" />
+                </div>
+              </AspectRatio>
             </button>
 
             <AnimatePresence>
               {characters.map((char) => {
                 const isNew = newCharId === char.id;
+                const hasFace = char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg");
                 return (
                   <motion.button
                     key={char.id}
@@ -112,27 +122,35 @@ const MyCharacters = () => {
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3, ease: "easeOut" }}
                     onClick={() => navigate(`/characters/${char.id}`)}
-                    className={`relative aspect-[3/4] rounded-2xl bg-card flex flex-col items-center justify-center overflow-hidden text-left transition-all duration-200 active:scale-[0.97] ${
-                      isNew
-                        ? "border-[5px] border-neon-yellow"
-                        : "border-[5px] border-border hover:border-foreground/40"
-                    }`}
+                    className="relative overflow-hidden active:scale-[0.97] transition-all duration-200"
+                    style={{
+                      borderRadius: 16,
+                      border: isNew ? "3px solid #facc15" : "2px solid #222",
+                      backgroundColor: "#151515",
+                    }}
                   >
-                    {char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg") ? (
-                      <img
-                        src={char.face_image_url}
-                        alt={char.name}
-                        className="absolute inset-0 h-full w-full object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                      />
-                    ) : (
-                      <span className="text-sm font-extrabold lowercase text-foreground/30">{char.name?.[0] || "?"}</span>
-                    )}
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6">
-                      <span className="block text-[11px] font-extrabold lowercase text-white leading-tight truncate">
+                    <AspectRatio ratio={3 / 4}>
+                      {hasFace ? (
+                        <img
+                          src={char.face_image_url!}
+                          alt={char.name}
+                          className="h-full w-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "#0e0e0e" }}>
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
+                            <circle cx="12" cy="8" r="5" />
+                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
+                          </svg>
+                        </div>
+                      )}
+                    </AspectRatio>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-5">
+                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">
                         {char.name || "unnamed"}
                       </span>
-                      <span className="block text-[9px] font-extrabold lowercase text-white/60">
+                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>
                         age {char.age}
                       </span>
                     </div>
@@ -150,7 +168,8 @@ const MyCharacters = () => {
             onClick={handleBottomButton}
             animate={bounceActive ? { y: [0, -6, 0] } : {}}
             transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-            className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
+            className="flex h-14 w-full items-center justify-center gap-2 text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+            style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
           >
             {hasCharacters ? (
               <><Camera size={20} strokeWidth={2.5} />create photo</>
