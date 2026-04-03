@@ -51,6 +51,8 @@ const ChooseFace = () => {
     }
   });
   const [loading, setLoading] = useState(true);
+  const [apiDone, setApiDone] = useState(false);
+  const [barComplete, setBarComplete] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
