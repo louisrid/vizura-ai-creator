@@ -466,8 +466,8 @@ const Index = () => {
                 </button>
               )}
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
-                <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
+                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>strength</span>
+                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{referenceStrength}%</span>
               </div>
               <input
                 type="range"
