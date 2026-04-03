@@ -426,7 +426,7 @@ const ChooseFace = () => {
               </p>
               <p className="mt-4 text-sm font-[800] lowercase text-black/50">tap to continue</p>
             </motion.div>
-          </motion.div>
+          </motion.button>
         )}
       </AnimatePresence>
 

@@ -288,16 +288,17 @@ async function generateFaceImages(
 
   // Each variation forces distinctly different facial structure + hair presentation
   const variations = [
-    "heart-shaped face, full plump lips, small button nose, soft rounded jawline, high arched eyebrows, hair cascading over both shoulders and clearly visible past the collarbone, polished social-media beauty look, radiant glowing skin, striking gorgeous features",
-    "oval face, thinner defined lips, straight elegant nose, angular cheekbones, low straight eyebrows, hair swept to one side draped over one shoulder clearly visible and long, editorial beauty look, sculpted bone structure, captivating alluring features",
-    "round face, medium bow-shaped lips, slightly upturned nose, strong defined jaw, thick natural eyebrows, hair parted in the middle falling evenly on both sides clearly visible and flowing, effortlessly beautiful natural look, luminous dewy skin, magnetic stunning features",
+    "diamond face shape, high wide cheekbones tapering to narrow forehead and pointed chin, full pillowy lips, tiny delicate upturned nose, large almond-shaped eyes set wide apart, thin high-arched eyebrows, hair cascading over both shoulders and clearly visible past the collarbone, supermodel beauty, flawless luminous dewy skin with realistic natural pores and subtle skin texture, radiant glowing complexion, stunningly gorgeous captivating features",
+    "oval elongated face, narrow thin lips with defined cupid's bow, long straight aquiline nose, sharp prominent cheekbones, low flat straight eyebrows, deep-set hooded eyes, strong angular jaw, hair swept to one side draped over one shoulder clearly visible and long, high fashion editorial beauty, realistic skin with natural texture visible pores and subtle imperfections, sculpted bone structure, breathtakingly beautiful alluring features",
+    "round soft face with full cheeks, medium bow-shaped plump lips, small slightly upturned button nose, wide round bright eyes, thick natural bushy eyebrows, soft gentle jawline, hair parted in the middle falling evenly on both sides clearly visible and flowing, effortlessly beautiful natural look, realistic dewy skin with natural pores subtle freckles and real skin texture, magnetic stunning youthful features",
   ];
 
   const hairVisibility = "hair must be clearly visible, long hair should visibly extend past the shoulders and frame the face, do not hide hair behind the back or crop it out";
+  const skinRealism = "hyper-realistic skin with natural visible pores, subtle skin texture, micro imperfections, natural subsurface scattering, realistic lighting on skin, no airbrushed or smoothed skin";
 
   for (let i = 0; i < Math.min(count, 3); i++) {
     const variation = variations[i] || variations[0];
-    const fullPrompt = `${prompt}, ${variation}, ${hairVisibility}, ${FACE_QUALITY}, attractive beautiful woman, high fashion beauty. ${FACE_NEGATIVE}`;
+    const fullPrompt = `${prompt}, ${variation}, ${hairVisibility}, ${skinRealism}, ${FACE_QUALITY}, extremely attractive beautiful woman, high fashion beauty, every face must look like a completely different person. ${FACE_NEGATIVE}`;
       console.log(`Face gen ${i + 1} prompt: ${fullPrompt}`);
     try {
       const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
