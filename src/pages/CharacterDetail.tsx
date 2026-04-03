@@ -130,7 +130,7 @@ const CharacterDetail = () => {
               <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>no photo</span>
             )}
           </div>
-          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "rgba(255,255,255,0.03)" }}>
+          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
             <Lock size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-[8px] font-[900] lowercase text-center leading-tight px-1" style={{ color: "rgba(255,255,255,0.2)" }}>left profile</span>
           </div>
