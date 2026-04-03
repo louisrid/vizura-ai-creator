@@ -284,6 +284,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       hasCompletedCookingRef.current = false;
       animating.current = false;
       setNameToastShown(false);
+      setExitFade(false);
       // Remove splash screen once overlay is ready
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
     }
