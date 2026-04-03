@@ -80,15 +80,16 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
 
-  // Show green success screen after first face generation
+  // Show green success screen after bar completes (not after API finishes)
   useEffect(() => {
-    if (!loading && faces.length > 0 && !hasShownSuccess.current) {
+    if (barComplete && faces.length > 0 && !hasShownSuccess.current) {
       hasShownSuccess.current = true;
+      setLoading(false);
       setShowSuccess(true);
       const t = setTimeout(() => setShowSuccess(false), SUCCESS_HOLD);
       return () => clearTimeout(t);
     }
-  }, [loading, faces.length]);
+  }, [barComplete, faces.length]);
 
   useEffect(() => {
     if (!loading && !showSuccess && !cardsRevealed && faces.length > 0) {
