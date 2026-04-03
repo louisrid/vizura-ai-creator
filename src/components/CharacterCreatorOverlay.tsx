@@ -145,7 +145,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       {open && (
         <motion.div className="fixed inset-0 z-[9998] flex flex-col bg-black" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
           <div className="flex items-center px-5 pt-5 pb-2">
-            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-2xl border-[5px] border-white/15 transition-colors hover:border-white/40" aria-label="close">
+            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-2xl border-2 border-[#1a1a1a] transition-colors hover:border-white/40" style={{ backgroundColor: "#111111" }} aria-label="close">
               <X size={16} strokeWidth={2.5} className="text-white" />
             </button>
           </div>
