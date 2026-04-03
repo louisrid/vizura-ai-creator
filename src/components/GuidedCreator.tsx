@@ -737,7 +737,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-neon-yellow-foreground">
             <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
               <span className="block">character</span>
               <span className="block">created!</span>
