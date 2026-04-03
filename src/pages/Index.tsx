@@ -330,8 +330,13 @@ const Index = () => {
             <div className="relative flex justify-center">
               <motion.section
                 layout
-                className="mb-4 md:mb-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden w-full"
-                style={{ maxWidth: photoRatio === "9:16" ? "14rem" : "100%" }}
+                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
+                style={{
+                  maxWidth: photoRatio === "9:16" ? "14rem" : "100%",
+                  borderRadius: 16,
+                  border: "2px solid #222",
+                  backgroundColor: "#151515",
+                }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
                 <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -339,8 +344,8 @@ const Index = () => {
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
-                        <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#222" }}>
+                        <span className="text-2xl">📷</span>
                       </div>
                     </div>
                   )}
