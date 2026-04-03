@@ -89,14 +89,15 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
-      width: 64,
-      height: 58,
-      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
-      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
+      width: 62,
+      height: 62,
+      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.08)",
+      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.25)",
       borderRadius: 16,
       outline: "none",
       padding: 0,
       cursor: "pointer",
+      color: "#00e0ff",
     }}
   >
     {direction === "left" ? (
@@ -787,12 +788,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col overflow-hidden"
       style={{ background: "#000000" }}
     >
-      {/* 5 independent animated blobs */}
-      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "10%", left: "5%", width: 200, height: 200, background: "rgba(0,40,255,0.12)", borderRadius: "50%", filter: "blur(80px)", zIndex: 0, animation: "blob1 22s ease-in-out infinite" }} />
-      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "60%", right: "10%", width: 150, height: 150, background: "rgba(100,0,220,0.10)", borderRadius: "50%", filter: "blur(70px)", zIndex: 0, animation: "blob2 26s ease-in-out infinite" }} />
-      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "30%", right: "25%", width: 180, height: 180, background: "rgba(40,0,200,0.09)", borderRadius: "50%", filter: "blur(90px)", zIndex: 0, animation: "blob3 24s ease-in-out infinite" }} />
-      <div className="pointer-events-none absolute" aria-hidden="true" style={{ bottom: "20%", left: "20%", width: 120, height: 120, background: "rgba(0,30,180,0.11)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0, animation: "blob4 28s ease-in-out infinite" }} />
-      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "50%", left: "40%", width: 160, height: 160, background: "rgba(80,0,180,0.08)", borderRadius: "50%", filter: "blur(75px)", zIndex: 0, animation: "blob5 20s ease-in-out infinite" }} />
       {/* Exit fade overlay */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
@@ -853,41 +848,42 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 140px)" }}>
-              <div className="flex h-[58px] items-center gap-4">
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: "65%" }}>
+              <div className="flex items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
                 >
                   <NavArrow direction="left" onClick={goBack} />
                 </motion.div>
-                <div className="flex flex-col items-center">
-                  <NavArrow
-                    direction="right"
-                    onClick={advance}
-                    disabled={!canAdvance && currentTraitIndex >= 0}
-                  />
-                </div>
+                <NavArrow
+                  direction="right"
+                  onClick={advance}
+                  disabled={!canAdvance && currentTraitIndex >= 0}
+                />
               </div>
               {!isLoggedIn && step === 0 && (
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="mt-3 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+                  className="active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
                   style={{
+                    marginTop: 16,
+                    width: 62 + 62 + 16, // both arrows + gap
                     backgroundColor: "#facc15",
                     borderRadius: 14,
-                    padding: "8px 18px",
-                    fontSize: 11,
-                    fontWeight: 800,
+                    padding: "14px",
+                    fontSize: 16,
+                    fontWeight: 900,
                     color: "#000",
                     textTransform: "lowercase" as const,
+                    textAlign: "center" as const,
                   }}
                 >
-                  skip to login
+                  login
                 </button>
               )}
-              <div className="flex items-center justify-center gap-[3px] mb-1" style={{ padding: "0 50px" }}>
+              <div className="flex items-center justify-center gap-[3px] mb-1 mt-4" style={{ padding: "0 50px" }}>
                 {Array.from({ length: 12 }).map((_, i) => (
                   <div
                     key={i}
