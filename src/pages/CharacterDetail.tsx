@@ -175,6 +175,27 @@ const CharacterDetail = () => {
             </p>
           )}
         </div>
+
+        {/* Action buttons — inline, not sticky */}
+        <div className="mt-6 flex flex-col gap-2">
+          <button
+            onClick={() => {
+              sessionStorage.setItem("vizura_internal_nav", "1");
+              navigate("/create", { state: { preselectedCharacterId: character.id } });
+            }}
+            className="flex items-center justify-center gap-2 h-14 w-full rounded-2xl bg-neon-yellow text-sm font-[900] lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+          >
+            <Camera size={16} strokeWidth={2.5} />
+            create photo
+          </button>
+          <button
+            onClick={() => setShowDelete(true)}
+            className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
+          >
+            <Trash2 size={13} strokeWidth={2.5} />
+            delete
+          </button>
+        </div>
       </main>
 
       {/* ── Desktop layout ── */}
