@@ -26,13 +26,6 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
-const ANGLE_PHRASES = [
-  "saving your character…",
-  "generating extra angles…",
-  "building identity set…",
-  "almost done…",
-];
-
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
@@ -64,8 +57,6 @@ const ChooseFace = () => {
   const [rerolling, setRerolling] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
-  const [savingWithAngles, setSavingWithAngles] = useState(false);
-
   const isFreeUser = !subscribed && gems <= 0;
 
   const hasInitRef = useRef(false);
@@ -209,8 +200,6 @@ const ChooseFace = () => {
     }
 
     const faceUrl = faces[faceIdx] || null;
-    setSavingWithAngles(true);
-
     let cId = characterId;
 
     if (!cId) {
@@ -238,7 +227,6 @@ const ChooseFace = () => {
             .single();
           if (insertError) {
             toast.error("failed to save character");
-            setSavingWithAngles(false);
             return false;
           }
           if (inserted) {
@@ -249,7 +237,6 @@ const ChooseFace = () => {
         }
       } catch (err) {
         toast.error("failed to save character");
-        setSavingWithAngles(false);
         return false;
       }
     } else {
@@ -262,7 +249,6 @@ const ChooseFace = () => {
         if (updateError) throw updateError;
       } catch (err) {
         toast.error("failed to save selected face");
-        setSavingWithAngles(false);
         return false;
       }
     }
@@ -276,31 +262,36 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate extra angles (side + 3/4) in background
+    // Generate extra angles (side + 3/4) in background without blocking success state
     if (faceUrl && cId) {
-      try {
-        const { data: angleData } = await supabase.functions.invoke("generate", {
-          body: {
-            prompt: prompt || "",
-            generate_angles: true,
-            selected_face_url: faceUrl,
-          },
-        });
+      const angleCharacterId = cId;
+      const anglePrompt = prompt || "";
+      const angleUserId = currentUser.id;
 
-        if (angleData?.side_url || angleData?.angle_url) {
-          await supabase
-            .from("characters")
-            .update({
-              face_side_url: angleData.side_url || null,
-              face_angle_url: angleData.angle_url || null,
-            })
-            .eq("id", cId)
-            .eq("user_id", currentUser.id);
+      void (async () => {
+        try {
+          const { data: angleData } = await supabase.functions.invoke("generate", {
+            body: {
+              prompt: anglePrompt,
+              generate_angles: true,
+              selected_face_url: faceUrl,
+            },
+          });
+
+          if (angleData?.side_url || angleData?.angle_url) {
+            await supabase
+              .from("characters")
+              .update({
+                face_side_url: angleData.side_url || null,
+                face_angle_url: angleData.angle_url || null,
+              })
+              .eq("id", angleCharacterId)
+              .eq("user_id", angleUserId);
+          }
+        } catch (e) {
+          console.error("Extra angle generation failed:", e);
         }
-      } catch (e) {
-        console.error("Extra angle generation failed:", e);
-        // Non-fatal — character is already saved with front face
-      }
+      })();
     }
 
     if (cId) {
@@ -314,7 +305,6 @@ const ChooseFace = () => {
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
 
-    setSavingWithAngles(false);
     setPendingAuthSave(false);
     setShowSignIn(false);
     setShowCooking(true);
@@ -356,20 +346,6 @@ const ChooseFace = () => {
 
   if (pendingAuthSave) {
     return <div className="fixed inset-0 bg-black z-[9999]" />;
-  }
-
-  // Loading screen while saving + generating angles
-  if (savingWithAngles) {
-    return (
-      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
-        <ProgressBarLoader
-          duration={35000}
-          phrases={ANGLE_PHRASES}
-          phraseInterval={5000}
-          requireTapToContinue={false}
-        />
-      </div>
-    );
   }
 
   const cardDelays = [0, 0.2, 0.4];

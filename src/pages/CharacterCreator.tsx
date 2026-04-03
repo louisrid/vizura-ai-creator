@@ -17,7 +17,7 @@ const bodyOptions = ["slim", "average", "curvy"] as const;
 const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
-const makeupOptions = ["natural", "classic", "glam"] as const;
+const makeupOptions = ["natural", "classic"] as const;
 const ageOptions = ["18-23", "24-28", "29+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
@@ -108,7 +108,7 @@ const CharacterCreator = () => {
   const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "long straight");
   const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
   const [eye, setEye] = useState<string>(saved?.eye || "brown");
-  const [makeup, setMakeup] = useState<string>(saved?.makeup || "natural");
+  const [makeup, setMakeup] = useState<string>(saved?.makeup === "glam" || saved?.makeup === "model" ? "classic" : saved?.makeup || "natural");
   const [age, setAge] = useState<string>(saved?.age || "");
   const [description, setDescription] = useState(saved?.description || "");
   const [characterName, setCharacterName] = useState(saved?.characterName || "");
