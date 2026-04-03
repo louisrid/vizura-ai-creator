@@ -140,11 +140,11 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 52,
-      borderRadius: 12,
+      height: 56,
+      borderRadius: 14,
       padding: "10px 18px",
-      fontSize: 16,
-      fontWeight: 800,
+      fontSize: 17,
+      fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
