@@ -135,16 +135,25 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     animate={
       selected
-        ? { scale: [1, 1.15, 1], transition: { duration: 0.1 } }
+        ? { scale: [1, 1.08, 1], transition: { duration: 0.1 } }
         : shaking
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className={`flex h-16 w-full items-center justify-center rounded-[1.35rem] px-5 text-[1.05rem] font-[900] lowercase tracking-tight transition-colors duration-75 ${
-      selected
-        ? "bg-neon-yellow text-neon-yellow-foreground border-[4px] border-neon-yellow shadow-[0_0_16px_hsl(50_100%_50%/0.4)]"
-        : "border-[4px] border-white/15 bg-white/5 text-white/70 hover:border-white/30"
-    }`}
+    className="flex w-full items-center justify-center transition-colors duration-75"
+    style={{
+      height: 56,
+      borderRadius: 11,
+      padding: "10px 18px",
+      fontSize: 16,
+      fontWeight: 800,
+      textTransform: "lowercase",
+      letterSpacing: "-0.01em",
+      ...(selected
+        ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
+        : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+      ),
+    }}
   >
     <span className="block leading-none text-center whitespace-nowrap">{label}</span>
   </motion.button>
