@@ -157,19 +157,15 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
-    className="w-full h-14 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
+    className="w-full h-14 text-sm font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+    style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>
-        <Zap size={18} strokeWidth={2.5} />
-        create
-        <Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" />
-        <span className="text-[11px] ml-0.5">1</span>
-      </>
+      <>create · 1 💎</>
     )}
   </button>
 );
