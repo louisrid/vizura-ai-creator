@@ -599,18 +599,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
           className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
+          style={{ marginTop: 40 }}
         >
-          <h2 className="mx-auto text-center text-[2.8rem] font-[900] lowercase leading-[1.05] tracking-tight">
+          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
           {!isFirstCharacter && (
-            <div className="mt-5 flex items-center gap-1.5">
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
+            <div className="mt-6 flex items-center gap-1.5">
+              <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-[15px] font-[900] lowercase text-white/40">30 gems</span>
             </div>
           )}
-          <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap to continue</p>
+          <p className="mt-6 text-[14px] font-[800] lowercase text-white/40">tap to continue</p>
         </button>
       );
     }
