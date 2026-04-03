@@ -44,11 +44,12 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
       <button
         key={opt}
         onClick={() => onSelect(opt)}
-        className={`rounded-2xl border-[5px] px-4 py-2 text-xs font-[900] lowercase transition-all ${
+          className={`rounded-2xl border-2 px-4 py-2 text-xs font-[900] lowercase transition-all ${
           value === opt
             ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
-            : "border-white/15 text-white/60 hover:border-white/40"
+            : "border-[#1a1a1a] text-white/60 hover:border-white/40"
         }`}
+        style={{ backgroundColor: value === opt ? undefined : "#111111" }}
       >
         {opt}
       </button>
