@@ -805,15 +805,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
-          <span className="text-[56px] mb-4">🔐</span>
-          <h2 className="text-center text-[2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <span className="text-[64px] mb-5">🔐</span>
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
           </h2>
           <button
             onClick={handleGoogle}
             disabled={googleLoading || emailLoading}
-            className="mt-8 w-full h-[52px] flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-            style={{ background: Y, color: "#000", borderRadius: 12, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            className="mt-8 w-full h-[56px] flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            style={{ background: Y, color: "#000", borderRadius: 14, fontSize: 16, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
               <>
