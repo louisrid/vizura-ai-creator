@@ -114,15 +114,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const autoSignIn = async () => {
-    const id = crypto.randomUUID().slice(0, 8);
-    const email = `user-${id}@vizura.app`;
-    const password = crypto.randomUUID();
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: window.location.origin },
+    // TEMPORARY: bypass auth and sign in as special account for testing
+    const { error } = await supabase.auth.signInWithPassword({
+      email: "louisjridland@gmail.com",
+      password: "Testing123!",
     });
-    if (error) throw error;
+    if (error) {
+      // If password login fails, try creating the account first
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: "louisjridland@gmail.com",
+        password: "Testing123!",
+        options: { emailRedirectTo: window.location.origin },
+      });
+      if (signUpError) throw signUpError;
+    }
   };
 
   return (
