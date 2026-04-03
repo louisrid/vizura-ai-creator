@@ -678,20 +678,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-        {/* Skip pill for logged-in returning users */}
-        {!isCooking && isLoggedIn && skipWelcome && (
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-            className="absolute z-50 active:scale-95 transition-transform duration-150"
-            style={{
-              top: 20, right: 20,
-              backgroundColor: Y, borderRadius: 20,
-              padding: "8px 16px", fontSize: 12, fontWeight: 800,
-              color: "#000", textTransform: "lowercase",
-            }}
-          >skip</button>
-        )}
+        {/* Skip button removed */}
 
         {/* Content area */}
         <div className="absolute inset-0 flex items-center justify-center px-6">
