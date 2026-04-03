@@ -9,9 +9,9 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
-const NEON_BLUE = "hsl(var(--gem-green))";
-const PURE_WHITE = "hsl(var(--foreground))";
-const AMBER = "hsl(var(--neon-yellow))";
+const NEON_BLUE = "#00e0ff";
+const PURE_WHITE = "#fff";
+const AMBER = "#facc15";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.55;
 const OVERLAY_FADE_DURATION = 0.75;
