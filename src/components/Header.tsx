@@ -122,7 +122,7 @@ const Header = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.15, ease: "easeOut" }}
-                className="absolute right-[14px] top-full mt-2 overflow-hidden"
+                className="absolute right-[14px] top-full -mt-2 overflow-hidden"
                 style={{
                   width: 220,
                   backgroundColor: "#000000",
