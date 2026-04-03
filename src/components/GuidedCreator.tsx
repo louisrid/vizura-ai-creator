@@ -283,6 +283,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       hasCompletedCookingRef.current = false;
       animating.current = false;
       setNameToastShown(false);
+      // Remove splash screen once overlay is ready
+      requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
     }
   }, [open, restoreSavedFlow]);
 
@@ -560,7 +562,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {trait.label}
           </h2>
           <div
-            className={`mt-5 grid w-full gap-3.5 px-2 ${trait.options.length === 4 ? "max-w-[20rem] grid-cols-2" : "max-w-[23.5rem] grid-cols-3"}`}
+            className={`mt-5 grid w-full gap-3.5 px-2 ${
+              trait.options.length === 4
+                ? "max-w-[20rem] grid-cols-2"
+                : trait.options.length === 2
+                  ? "max-w-[16rem] grid-cols-2 mx-auto"
+                  : "max-w-[23.5rem] grid-cols-3"
+            }`}
           >
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
@@ -676,7 +684,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
-        <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+          className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
+        >
           <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.02] tracking-tight">
             <span className="block whitespace-nowrap text-white">your character</span>
             <span className="block whitespace-nowrap">
@@ -690,15 +702,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
             </div>
           )}
-          <motion.p
-            className={`${!isFirstCharacter ? "mt-5" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: SLIDE_FADE_DURATION }}
-          >
-            tap anywhere to continue
-          </motion.p>
-        </div>
+          <p className={`${!isFirstCharacter ? "mt-5" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}>
+            tap to continue
+          </p>
+        </button>
       );
     }
 

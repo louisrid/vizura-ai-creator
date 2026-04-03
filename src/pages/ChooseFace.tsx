@@ -4,7 +4,6 @@ import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import CookingOverlay from "@/components/CookingOverlay";
 import { SignInOverlay } from "@/components/GuidedCreator";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,6 +24,8 @@ const FACE_GEN_PHRASES = [
   "refining features…",
   "almost ready…",
 ];
+
+const SUCCESS_HOLD = 3500;
 
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
@@ -52,12 +53,15 @@ const ChooseFace = () => {
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [showCooking, setShowCooking] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [rerolling, setRerolling] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
+
+  // Green success screen phase
+  const [showSuccess, setShowSuccess] = useState(false);
+  const hasShownSuccess = useRef(false);
 
   const hasInitRef = useRef(false);
 
@@ -74,12 +78,22 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
 
+  // Show green success screen after first face generation
   useEffect(() => {
-    if (!loading && !cardsRevealed) {
+    if (!loading && faces.length > 0 && !hasShownSuccess.current) {
+      hasShownSuccess.current = true;
+      setShowSuccess(true);
+      const t = setTimeout(() => setShowSuccess(false), SUCCESS_HOLD);
+      return () => clearTimeout(t);
+    }
+  }, [loading, faces.length]);
+
+  useEffect(() => {
+    if (!loading && !showSuccess && !cardsRevealed && faces.length > 0) {
       const t = setTimeout(() => setCardsRevealed(true), 100);
       return () => clearTimeout(t);
     }
-  }, [loading, cardsRevealed]);
+  }, [loading, showSuccess, cardsRevealed, faces.length]);
 
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
   const doFinalSaveRef = useRef<(forcedFaceIdx?: number) => Promise<boolean>>(async () => false);
@@ -110,7 +124,6 @@ const ChooseFace = () => {
       if (fnError) throw fnError;
       if (data?.error) {
         if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
-          // Free gen used — retry with gem-based flow
           const { data: retryData, error: retryError } = await supabase.functions.invoke("generate", {
             body: { prompt, face_regen: true },
           });
@@ -278,7 +291,7 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate extra angles (side + 3/4) in background without blocking success state
+    // Generate extra angles in background without blocking
     if (faceUrl && cId) {
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
@@ -323,7 +336,10 @@ const ChooseFace = () => {
 
     setPendingAuthSave(false);
     setShowSignIn(false);
-    setShowCooking(true);
+
+    // Navigate directly — no second loading bar
+    toast.success("character added!");
+    navigate("/characters", { replace: true });
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
@@ -346,12 +362,6 @@ const ChooseFace = () => {
     }
   }, [faces.length, user]);
 
-  const handleCookingComplete = () => {
-    setShowCooking(false);
-    toast.success("character added!");
-    navigate("/characters", { replace: true });
-  };
-
   if (showPaywall) {
     return (
       <div className="relative min-h-screen bg-background">
@@ -368,111 +378,137 @@ const ChooseFace = () => {
 
   return (
     <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background w-full">
-      <CookingOverlay open={showCooking} onComplete={handleCookingComplete} startPhase="success" />
       <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-      <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg md:max-w-3xl flex-col px-4 md:px-8 pt-8 pb-0 overflow-hidden">
-        <div className="flex items-center gap-3 mb-8">
-          <BackButton />
-          <PageTitle className="mb-0">pick your face</PageTitle>
+      {/* Full-screen loading bar while faces generate */}
+      {loading && (
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
+          <ProgressBarLoader
+            duration={120000}
+            phrases={FACE_GEN_PHRASES}
+            phraseInterval={5000}
+            requireTapToContinue={false}
+          />
         </div>
+      )}
 
-        <div className="flex items-center gap-2 mb-6">
-          <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-          <span className="text-sm font-extrabold lowercase text-foreground">{gems} gems</span>
-        </div>
-
-        {loading && (
-          <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
-            <ProgressBarLoader
-              duration={120000}
-              phrases={FACE_GEN_PHRASES}
-              phraseInterval={5000}
-              requireTapToContinue={false}
-            />
-          </div>
+      {/* Green "character created!" success screen */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            key="success-screen"
+            className="fixed inset-0 z-[9999] flex items-center justify-center"
+            style={{ backgroundColor: "hsl(var(--member-green))" }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.65, ease: "easeInOut" }}
+          >
+            <motion.p
+              className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black"
+              initial={{ opacity: 0, y: 15, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              <span className="block">character</span>
+              <span className="block">created!</span>
+            </motion.p>
+          </motion.div>
         )}
+      </AnimatePresence>
 
-        {!loading && faces.length > 0 && (
-          <>
-            <div className="grid grid-cols-3 gap-3 md:gap-5 mt-4 shrink-0 md:max-w-xl md:mx-auto" style={{ perspective: "800px" }}>
-              {faces.map((url, i) => (
-                <motion.button
-                  key={i}
-                  type="button"
-                  onClick={() => handleFaceClick(i)}
-                  initial={{ rotateY: 90, opacity: 0 }}
-                  animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
-                  whileTap={{ scale: 1.12 }}
-                  transition={{
-                    rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                    opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                  }}
-                  className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
-                    selectedIndex === i
-                      ? "border-neon-yellow"
-                      : "border-border hover:border-foreground/40"
+      {/* Face picker — only shown after success screen */}
+      {!loading && faces.length > 0 && !showSuccess && (
+        <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg md:max-w-3xl flex-col px-4 md:px-8 pt-8 pb-0 overflow-hidden">
+          <div className="flex items-center gap-3 mb-8">
+            <BackButton />
+            <PageTitle className="mb-0">pick your face</PageTitle>
+          </div>
+
+          <div className="flex items-center gap-2 mb-6">
+            <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+            <span className="text-sm font-extrabold lowercase text-foreground">{gems} gems</span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 md:gap-5 mt-4 shrink-0 md:max-w-xl md:mx-auto" style={{ perspective: "800px" }}>
+            {faces.map((url, i) => (
+              <motion.button
+                key={i}
+                type="button"
+                onClick={() => handleFaceClick(i)}
+                initial={{ rotateY: 90, opacity: 0 }}
+                animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                whileTap={{ scale: 1.12 }}
+                transition={{
+                  rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                  opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                }}
+                className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
+                  selectedIndex === i
+                    ? "border-neon-yellow"
+                    : "border-border hover:border-foreground/40"
+                }`}
+              >
+                <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
+                {selectedIndex === i && pulseIndex === i && (
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl border-[5px] border-neon-yellow"
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.08, 0.98, 1.03, 1] }}
+                    transition={{ duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1] }}
+                  />
+                )}
+              </motion.button>
+            ))}
+          </div>
+
+          <div className="flex-1 min-h-[1rem]" />
+
+          <div className="-mx-4 shrink-0">
+            <div className="border-t-[5px] border-white" />
+            <div className="px-4 pt-6 pb-[max(env(safe-area-inset-bottom),2rem)] bg-background">
+              <div className="flex gap-3">
+                <button
+                  onClick={handleRegenerate}
+                  disabled={rerolling}
+                  className={`flex-1 h-14 rounded-2xl text-sm font-extrabold lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 ${
+                    isFreeUser
+                      ? "text-white cursor-not-allowed"
+                      : "bg-white text-black active:bg-white/70"
                   }`}
+                  style={isFreeUser ? { backgroundColor: "hsl(0 0% 18%)" } : undefined}
                 >
-                  <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
-                  {selectedIndex === i && pulseIndex === i && (
-                    <motion.div
-                      className="absolute inset-0 rounded-2xl border-[5px] border-neon-yellow"
-                      initial={{ scale: 1 }}
-                      animate={{ scale: [1, 1.08, 0.98, 1.03, 1] }}
-                      transition={{ duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1] }}
-                    />
+                  {rerolling ? (
+                    <Loader2 className="animate-spin" size={16} />
+                  ) : (
+                    <>
+                      <RefreshCw size={16} strokeWidth={2.5} />
+                      regenerate
+                      <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
+                      <span className="text-[11px]">1</span>
+                    </>
                   )}
-                </motion.button>
-              ))}
-            </div>
-
-            <div className="flex-1 min-h-[1rem]" />
-
-            <div className="-mx-4 shrink-0">
-              <div className="border-t-[5px] border-white" />
-              <div className="px-4 pt-6 pb-[max(env(safe-area-inset-bottom),2rem)] bg-background">
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleRegenerate}
-                    disabled={rerolling}
-                    className={`flex-1 h-14 rounded-2xl text-sm font-extrabold lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 ${
-                      isFreeUser
-                        ? "text-white cursor-not-allowed"
-                        : "bg-white text-black active:bg-white/70"
-                    }`}
-                    style={isFreeUser ? { backgroundColor: "hsl(0 0% 18%)" } : undefined}
-                  >
-                    {rerolling ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <>
-                        <RefreshCw size={16} strokeWidth={2.5} />
-                        regenerate
-                        <Gem size={12} strokeWidth={2.5} className="text-gem-green" />
-                        <span className="text-[11px]">1</span>
-                      </>
-                    )}
-                  </button>
-                  <button
-                    onClick={handleConfirm}
-                    disabled={selectedIndex === null}
-                    className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
-                  >
-                    confirm
-                  </button>
-                </div>
+                </button>
+                <button
+                  onClick={handleConfirm}
+                  disabled={selectedIndex === null}
+                  className="flex-1 h-14 rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
+                >
+                  confirm
+                </button>
               </div>
             </div>
-          </>
-        )}
+          </div>
+        </main>
+      )}
 
-        {!loading && faces.length === 0 && !showSignIn && (
+      {!loading && faces.length === 0 && !showSignIn && (
+        <main className="mx-auto flex h-[calc(100dvh-73px)] w-full max-w-lg flex-col px-4 pt-8">
           <div className="mt-16 flex flex-col items-center gap-4">
             <p className="text-sm font-extrabold lowercase text-muted-foreground">no faces generated yet</p>
           </div>
-        )}
-      </main>
+        </main>
+      )}
     </div>
   );
 };
