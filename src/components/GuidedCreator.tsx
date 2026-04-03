@@ -816,8 +816,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-[max(env(safe-area-inset-bottom),1rem)]">
-              <div className="mb-2 flex h-14 items-center gap-4">
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 180px)" }}>
+              <div className="mb-3.5 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
