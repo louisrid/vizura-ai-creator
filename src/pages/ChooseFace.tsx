@@ -497,6 +497,27 @@ const ChooseFace = () => {
             ))}
           </div>
 
+          {/* Confirm CTA shown when a face is selected */}
+          <AnimatePresence>
+            {selectedIndex !== null && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className="mt-6 w-full flex justify-center"
+              >
+                <button
+                  onClick={handleConfirm}
+                  className="h-14 w-full max-w-[16rem] text-[15px] font-[900] lowercase flex items-center justify-center gap-2 active:scale-[0.96] transition-transform duration-150"
+                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
+                >
+                  use this face →
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <div className="flex-1 min-h-[1rem]" />
 
           <div className="-mx-[14px] shrink-0">
