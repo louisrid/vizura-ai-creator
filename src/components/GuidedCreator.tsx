@@ -89,14 +89,15 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
-      width: 64,
-      height: 58,
-      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
-      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
+      width: 62,
+      height: 62,
+      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.08)",
+      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.25)",
       borderRadius: 16,
       outline: "none",
       padding: 0,
       cursor: "pointer",
+      color: "#00e0ff",
     }}
   >
     {direction === "left" ? (
