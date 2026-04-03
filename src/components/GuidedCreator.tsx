@@ -870,8 +870,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
                 >
                   skip
                 </button>

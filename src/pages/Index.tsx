@@ -325,7 +325,7 @@ const Index = () => {
                   maxHeight: "180px",
                   borderRadius: 16,
                   border: "2px solid rgba(255,255,255,0.08)",
-                  backgroundColor: "#111111",
+                   backgroundColor: "#111111",
                 }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
