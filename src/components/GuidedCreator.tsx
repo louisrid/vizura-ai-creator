@@ -728,7 +728,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Arrow buttons — positioned below content */}
         {showNavigation && (
-          <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-3 pb-[max(env(safe-area-inset-bottom),2.5rem)]">
+          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "18%" }}>
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
             </motion.div>
