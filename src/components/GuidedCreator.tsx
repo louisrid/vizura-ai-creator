@@ -820,19 +820,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <AnimatePresence mode="wait" custom={slideDirection}>
                   <motion.div
                     key={isCooking ? "cooking" : step}
-                  className="w-full"
-                  custom={slideDirection}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
-                  {isCooking ? renderCooking() : renderSlide()}
-                </motion.div>
-              </AnimatePresence>
+                    className="w-full"
+                    custom={slideDirection}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    {isCooking ? renderCooking() : renderSlide()}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
 
           {/* Skip to login pill — top right */}
           {!isCooking && !isLoggedIn && (
