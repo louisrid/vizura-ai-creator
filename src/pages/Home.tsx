@@ -56,7 +56,7 @@ const Home = () => {
 
     const latest = (data ?? [])
       .flatMap((g: any) =>
-        (g.image_urls ?? []).slice(0, 1).map((url: string, i: number) => ({
+        (g.image_urls ?? []).filter(isValidImageUrl).slice(0, 1).map((url: string, i: number) => ({
           id: `${g.id}-${i}`,
           url,
           prompt: g.prompt ?? "",
