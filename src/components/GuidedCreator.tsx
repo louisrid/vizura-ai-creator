@@ -1028,7 +1028,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <button
           onClick={handleEmailAuth}
           disabled={emailLoading || googleLoading}
-          className="mt-3 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors duration-150 disabled:opacity-50"
+          className="mt-3 w-full h-14 rounded-2xl border-2 border-[#1a1a1a] text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors duration-150 disabled:opacity-50"
+          style={{ backgroundColor: "#111111" }}
         >
           {emailLoading ? (
             <><Loader2 className="animate-spin" size={18} />signing in...</>
