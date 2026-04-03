@@ -486,10 +486,10 @@ const ChooseFace = () => {
                   rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                   opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                 }}
-                className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
+                className={`relative aspect-[3/4] overflow-hidden rounded-2xl transition-all duration-300 ease-out ${
                   selectedIndex === i
-                    ? "border-neon-yellow"
-                    : "border-border hover:border-foreground/40"
+                    ? "border-[3px] border-neon-yellow"
+                    : "border-[3px] border-border hover:border-foreground/40"
                 }`}
               >
                 <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
