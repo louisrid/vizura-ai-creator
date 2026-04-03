@@ -813,13 +813,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-
-        <div className="relative flex-1 overflow-hidden">
-          <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
-            <div className="w-full max-w-sm mx-auto flex flex-col items-center">
-              <AnimatePresence mode="wait" custom={slideDirection}>
-                <motion.div
-                  key={isCooking ? "cooking" : step}
+        <div className="absolute inset-0 flex flex-col" style={{ zIndex: 1 }}>
+          <div className="relative flex-1 overflow-hidden">
+            <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
+              <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+                <AnimatePresence mode="wait" custom={slideDirection}>
+                  <motion.div
+                    key={isCooking ? "cooking" : step}
                   className="w-full"
                   custom={slideDirection}
                   variants={slideVariants}
