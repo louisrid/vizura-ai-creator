@@ -170,7 +170,7 @@ const Header = () => {
                           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                         >
-                          <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: isActive ? "#facc15" : "#fff" }} />
+                          <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: isActive ? "#facc15" : "#facc15" }} />
                           {item.label}
                         </button>
                       );
