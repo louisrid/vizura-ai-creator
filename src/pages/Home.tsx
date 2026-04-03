@@ -20,6 +20,14 @@ type LatestImage = {
   created_at: string;
 };
 
+/** Filter out expired xAI temp URLs and SVG data URIs */
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  if (url.startsWith("data:image/svg")) return false;
+  if (url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return false;
+  return true;
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
