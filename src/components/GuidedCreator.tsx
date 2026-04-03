@@ -104,7 +104,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         disabled={disabled}
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
         style={{
-          width: 72, height: 72, borderRadius: 18,
+          width: 56, height: 56, borderRadius: 14,
           backgroundColor: isForward ? "rgba(0,224,255,0.18)" : "rgba(0,224,255,0.06)",
           border: isForward ? `2.5px solid rgba(0,224,255,0.45)` : `2px solid rgba(0,224,255,0.25)`,
           outline: "none", padding: 0, cursor: "pointer",
@@ -112,12 +112,12 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         }}
       >
         {direction === "left" ? (
-          <svg width="24" height="20" viewBox="0 0 20 16" fill="none">
+          <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
             <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <svg width="24" height="20" viewBox="0 0 20 16" fill="none">
+          <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
             <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
@@ -144,10 +144,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 56,
-      borderRadius: 14,
-      padding: "10px 18px",
-      fontSize: 17,
+      height: 46,
+      borderRadius: 12,
+      padding: "8px 14px",
+      fontSize: 15,
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -728,7 +728,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Arrow buttons — positioned below content */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "18%" }}>
+          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "12%" }}>
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
             </motion.div>
