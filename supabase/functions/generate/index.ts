@@ -118,9 +118,12 @@ function buildCharacterTraits(char: any): string {
   }
 
   const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
-  const hairStyle = hairStyleMatch?.[1]?.trim() || "";
+  let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  if (hairStyle || hairColour) {
+  // Bangs = long hair with straight-across fringe
+  if (hairStyle.toLowerCase() === "bangs") {
+    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair past the shoulders with a full straight fringe across the forehead`.trim());
+  } else if (hairStyle || hairColour) {
     parts.push(`${hairStyle} ${hairColour} hair`.trim());
   }
 
