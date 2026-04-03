@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Image } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Archive } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import TopGradientBar from "@/components/TopGradientBar";
