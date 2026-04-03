@@ -182,7 +182,7 @@ const Index = () => {
   const [fadingBack, setFadingBack] = useState(false);
 
   const [photoType, setPhotoType] = useState("selfie");
-  const [photoRatio, setPhotoRatio] = useState("3:4");
+  const [photoRatio, setPhotoRatio] = useState("4:5");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [referenceStrength, setReferenceStrength] = useState(50);
