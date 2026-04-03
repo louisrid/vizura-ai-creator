@@ -169,7 +169,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
               <div className="mt-10">
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
-                  className="min-h-[100px] w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50" />
+                  className="min-h-[100px] w-full resize-none rounded-2xl border-2 border-[#1a1a1a] px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50" style={{ backgroundColor: "#111111" }} />
               </div>
             </div>
           </div>

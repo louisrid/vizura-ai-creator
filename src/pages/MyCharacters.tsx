@@ -126,7 +126,7 @@ const MyCharacters = () => {
                     style={{
                       borderRadius: 16,
                       border: isNew ? "3px solid #facc15" : "2px solid #222",
-                      backgroundColor: "#151515",
+                      backgroundColor: "#111111",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
