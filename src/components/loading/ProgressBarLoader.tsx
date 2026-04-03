@@ -185,9 +185,9 @@ const ProgressBarLoader = ({
         aria-label={isComplete && requireTapToContinue ? "tap to continue" : undefined}
       >
         <motion.span
-          className="text-[3rem] inline-block select-none"
+          className="text-[3.5rem] inline-block select-none"
           initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: [0, -4, 0] }}
+          animate={{ opacity: 1, y: [0, -5, 0] }}
           transition={{
             opacity: { duration: 0.5, delay: 0.1, ease: "easeOut" },
             y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
@@ -197,7 +197,7 @@ const ProgressBarLoader = ({
         </motion.span>
 
         <motion.div
-          className="w-full max-w-xs flex flex-col gap-2"
+          className="w-full max-w-xs flex flex-col gap-2.5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
@@ -215,7 +215,7 @@ const ProgressBarLoader = ({
             />
           </div>
           <div className="flex justify-end">
-            <span className="text-xs font-extrabold lowercase text-white/60">{pct}%</span>
+            <span className="text-[13px] font-[900] lowercase text-white/60">{pct}%</span>
           </div>
         </motion.div>
 
