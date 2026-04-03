@@ -794,7 +794,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         animate={{ opacity: exitFade ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeInOut" }}
       />
-      <AmbientGlow />
       <motion.div
         className="absolute inset-0 flex flex-col"
         initial={{ opacity: 0 }}
