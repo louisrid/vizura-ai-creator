@@ -358,7 +358,7 @@ const Index = () => {
           <div className="md:col-span-3 space-y-4">
             {/* Character select — always visible */}
             <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-1.5">select character</span>
+              <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>select character</span>
               <label className="relative block">
                 <select
                   value={selectedCharId}
