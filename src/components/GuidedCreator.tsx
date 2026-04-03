@@ -713,9 +713,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Bottom nav — only on non-hero slides */}
         {showNavigation && (
-          <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-[max(env(safe-area-inset-bottom),2rem)] px-4" style={{ paddingTop: 12 }}>
-            {/* Progress dots */}
-            <div className="flex items-center justify-center gap-[3px] mb-4" style={{ padding: "0 50px", width: "100%" }}>
+          <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
+            {/* Progress dots at TOP */}
+            <div className="flex items-center justify-center gap-[3px]" style={{ padding: "0 50px", width: "100%", marginBottom: 0 }}>
               {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="transition-all duration-300" style={{
                   flex: 1, height: 4, borderRadius: 2,
@@ -723,13 +723,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 }} />
               ))}
             </div>
-            {/* Arrow buttons */}
-            <div className="flex items-center gap-3">
-              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-                <NavArrow direction="left" onClick={goBack} />
-              </motion.div>
-              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
-            </div>
+          </div>
+        )}
+
+        {/* Arrow buttons — positioned below content */}
+        {showNavigation && (
+          <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-3 pb-[max(env(safe-area-inset-bottom),2.5rem)]">
+            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+              <NavArrow direction="left" onClick={goBack} />
+            </motion.div>
+            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
           </div>
         )}
       </motion.div>
