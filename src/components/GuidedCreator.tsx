@@ -853,8 +853,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 160px)" }}>
-              <div className="mb-3.5 flex h-14 items-center gap-4">
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 140px)" }}>
+              <div className="flex h-[58px] items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
@@ -869,20 +869,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 </div>
               </div>
-              {/* Skip to login — below arrows, first step only, not logged in */}
               {!isLoggedIn && step === 0 && (
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="mb-4 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+                  className="mt-3 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
                   style={{
-                    backgroundColor: "#111111",
-                    border: "2px solid rgba(250,204,21,0.15)",
+                    backgroundColor: "#facc15",
                     borderRadius: 14,
-                    padding: "12px 24px",
-                    fontSize: 14,
+                    padding: "8px 18px",
+                    fontSize: 11,
                     fontWeight: 800,
-                    color: "#fff",
+                    color: "#000",
                     textTransform: "lowercase" as const,
                   }}
                 >
