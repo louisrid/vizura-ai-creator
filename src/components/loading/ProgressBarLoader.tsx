@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const STEPS = [0, 13, 27, 41, 58, 73, 89, 96, 100];
@@ -37,14 +37,15 @@ const ProgressBarLoader = ({
   const [pct, _setPct] = useState(0);
   const pctRef = useRef(0);
 
-  // Wrapper that ensures pct only ever increases
-  const setPct = (next: number | ((prev: number) => number)) => {
-    const resolved = typeof next === "function" ? next(pctRef.current) : next;
-    if (resolved > pctRef.current) {
-      pctRef.current = resolved;
-      _setPct(resolved);
-    }
-  };
+  // Wrapper that ensures pct only ever increases — uses functional updater
+  // so React always sees the latest committed state
+  const setPct = useCallback((next: number) => {
+    _setPct((prev) => {
+      const safeNext = Math.max(next, prev, pctRef.current);
+      pctRef.current = safeNext;
+      return safeNext;
+    });
+  }, []);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [phraseVisible, setPhraseVisible] = useState(true);
   const [isComplete, setIsComplete] = useState(false);

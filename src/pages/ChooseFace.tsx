@@ -486,19 +486,19 @@ const ChooseFace = () => {
                   rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                   opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                 }}
-                className={`relative aspect-[3/4] overflow-hidden rounded-2xl border-[5px] transition-colors duration-200 ${
+                className={`relative aspect-[3/4] overflow-hidden rounded-2xl transition-all duration-300 ease-out ${
                   selectedIndex === i
-                    ? "border-neon-yellow"
-                    : "border-border hover:border-foreground/40"
+                    ? "border-[3px] border-neon-yellow"
+                    : "border-[3px] border-border hover:border-foreground/40"
                 }`}
               >
                 <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
                 {selectedIndex === i && pulseIndex === i && (
                   <motion.div
-                    className="absolute inset-0 rounded-2xl border-[5px] border-neon-yellow"
-                    initial={{ scale: 1 }}
-                    animate={{ scale: [1, 1.08, 0.98, 1.03, 1] }}
-                    transition={{ duration: 0.34, times: [0, 0.35, 0.58, 0.8, 1] }}
+                    className="absolute inset-0 rounded-[11px] border-[2px] border-neon-yellow/60"
+                    initial={{ opacity: 0.6 }}
+                    animate={{ opacity: [0.6, 1, 0] }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
                   />
                 )}
               </motion.button>

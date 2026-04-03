@@ -118,7 +118,7 @@ const MyCharacters = () => {
                         : "border-[5px] border-border hover:border-foreground/40"
                     }`}
                   >
-                    {char.face_image_url && !char.face_image_url.startsWith("data:image/svg") && !char.face_image_url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen") ? (
+                    {char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg") ? (
                       <img
                         src={char.face_image_url}
                         alt={char.name}
