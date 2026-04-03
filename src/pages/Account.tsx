@@ -14,7 +14,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 const Account = () => {
-  const { user, loading: authLoading, signOut, autoSignIn } = useAuth();
+  const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const { subscribed, status, refetch: refetchSub, optimisticSubscribe } = useSubscription();
   const [overlayOpen, setOverlayOpen] = useState(false);
@@ -42,7 +42,7 @@ const Account = () => {
     );
   }
 
-  if (!user) return <SignInView autoSignIn={autoSignIn} redirectTo={redirectTo} />;
+  if (!user) return <SignInView signIn={signIn} signUp={signUp} redirectTo={redirectTo} />;
 
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
@@ -180,13 +180,33 @@ const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () =>
   );
 };
 
-const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void>; redirectTo?: string | null }) => {
+const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: string) => Promise<void>; signUp: (e: string, p: string) => Promise<void>; redirectTo?: string | null }) => {
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
 
-  const handleAutoSignIn = async () => {
+  const handleEmailAuth = async () => {
+    if (!email.trim() || !password.trim()) {
+      toast.error("please enter email and password");
+      return;
+    }
     setSubmitting(true);
-    try { await autoSignIn(); } catch (err: any) {
+    try {
+      if (isSignUpMode) {
+        try {
+          await signUp(email.trim(), password);
+          toast.success("check your email to confirm");
+        } catch (err: any) {
+          if (err.message?.toLowerCase().includes("already registered")) {
+            await signIn(email.trim(), password);
+          } else throw err;
+        }
+      } else {
+        await signIn(email.trim(), password);
+      }
+    } catch (err: any) {
       toast.error(err.message || "something went wrong");
       setSubmitting(false);
     }
@@ -210,7 +230,7 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-4 max-w-md">
+        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-3 max-w-md">
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -232,12 +252,36 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
           </button>
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px] bg-border" />
-            <span className="text-[10px] font-extrabold lowercase text-foreground/40">or</span>
+            <span className="text-[10px] font-extrabold lowercase text-foreground/40">or use email</span>
             <div className="flex-1 h-[2px] bg-border" />
           </div>
-          <Button className="h-14 w-full text-sm" onClick={handleAutoSignIn} disabled={submitting || googleLoading}>
-            {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>continue<ArrowRight size={14} /></>)}
+          <input
+            type="email"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            disabled={submitting || googleLoading}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
+            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            disabled={submitting || googleLoading}
+          />
+          <Button className="h-14 w-full text-sm" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
+            {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
           </Button>
+          <button
+            type="button"
+            onClick={() => setIsSignUpMode((v) => !v)}
+            className="w-full text-center text-[11px] font-extrabold lowercase text-foreground/40 hover:text-foreground/60 transition-colors"
+          >
+            {isSignUpMode ? "already have an account? sign in" : "no account? sign up"}
+          </button>
         </div>
       </main>
     </div>

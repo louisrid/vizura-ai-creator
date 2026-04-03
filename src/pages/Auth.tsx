@@ -9,12 +9,15 @@ import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
 
 const Auth = () => {
-  const { autoSignIn, user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -35,10 +38,27 @@ const Auth = () => {
     }
   }, []);
 
-  const handleAutoSignIn = async () => {
+  const handleEmailAuth = async () => {
+    if (!email.trim() || !password.trim()) {
+      toast.error("please enter email and password");
+      return;
+    }
     setSubmitting(true);
     try {
-      await autoSignIn();
+      if (isSignUp) {
+        try {
+          await signUp(email.trim(), password);
+          toast.success("check your email to confirm your account");
+        } catch (err: any) {
+          if (err.message?.toLowerCase().includes("already registered")) {
+            await signIn(email.trim(), password);
+          } else {
+            throw err;
+          }
+        }
+      } else {
+        await signIn(email.trim(), password);
+      }
     } catch (err: any) {
       toast.error(err.message || "something went wrong");
       setSubmitting(false);
@@ -92,7 +112,7 @@ const Auth = () => {
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
-        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-4">
+        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-3">
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -118,11 +138,29 @@ const Auth = () => {
 
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px] bg-border" />
-            <span className="text-[10px] font-extrabold lowercase text-foreground/40">or</span>
+            <span className="text-[10px] font-extrabold lowercase text-foreground/40">or use email</span>
             <div className="flex-1 h-[2px] bg-border" />
           </div>
 
-          <Button className="h-14 w-full text-sm" onClick={handleAutoSignIn} disabled={submitting || googleLoading}>
+          <input
+            type="email"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            disabled={submitting || googleLoading}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
+            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            disabled={submitting || googleLoading}
+          />
+
+          <Button className="h-14 w-full text-sm" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
             {submitting ? (
               <>
                 <Loader2 className="animate-spin" size={18} />
@@ -130,11 +168,19 @@ const Auth = () => {
               </>
             ) : (
               <>
-                continue
+                {isSignUp ? "sign up" : "sign in"}
                 <ArrowRight size={14} />
               </>
             )}
           </Button>
+
+          <button
+            type="button"
+            onClick={() => setIsSignUp((v) => !v)}
+            className="w-full text-center text-[11px] font-extrabold lowercase text-foreground/40 hover:text-foreground/60 transition-colors"
+          >
+            {isSignUp ? "already have an account? sign in" : "no account? sign up"}
+          </button>
         </div>
       </main>
     </div>

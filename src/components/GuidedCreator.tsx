@@ -855,10 +855,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
 /* ── Sign-in overlay (post face selection) ── */
 export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn: () => void }) => {
-  const { user, autoSignIn } = useAuth();
+  const { user, signIn, signUp } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [autoLoading, setAutoLoading] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
     if (open && !user) setVisible(true);
@@ -904,13 +907,28 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     }
   };
 
-  const handleAutoSignIn = async () => {
-    setAutoLoading(true);
+  const handleEmailAuth = async () => {
+    if (!email.trim() || !password.trim()) {
+      toast.error("enter email and password");
+      return;
+    }
+    setEmailLoading(true);
     try {
-      await autoSignIn();
+      if (isSignUp) {
+        try {
+          await signUp(email.trim(), password);
+          toast.success("check your email to confirm");
+        } catch (err: any) {
+          if (err.message?.toLowerCase().includes("already registered")) {
+            await signIn(email.trim(), password);
+          } else throw err;
+        }
+      } else {
+        await signIn(email.trim(), password);
+      }
     } catch (err: any) {
       toast.error(err.message || "sign in failed");
-      setAutoLoading(false);
+      setEmailLoading(false);
     }
   };
 
@@ -934,7 +952,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         </h2>
         <button
           onClick={handleGoogle}
-          disabled={googleLoading || autoLoading}
+          disabled={googleLoading || emailLoading}
           className="mt-8 w-full h-14 rounded-2xl text-sm font-[900] lowercase tracking-tight flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50"
           style={{ background: AMBER, color: "hsl(0 0% 0%)", transition: "transform 0.05s" }}
         >
@@ -957,16 +975,42 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <span className="text-[10px] font-extrabold lowercase text-white/30">or</span>
           <div className="flex-1 h-[2px] bg-white/10" />
         </div>
+        <input
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => { e.stopPropagation(); setEmail(e.target.value); }}
+          onClick={(e) => e.stopPropagation()}
+          className="mt-4 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+          disabled={emailLoading || googleLoading}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => { e.stopPropagation(); setPassword(e.target.value); }}
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
+          className="mt-2 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors"
+          disabled={emailLoading || googleLoading}
+        />
         <button
-          onClick={handleAutoSignIn}
-          disabled={autoLoading || googleLoading}
-          className="mt-4 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors disabled:opacity-50"
+          onClick={handleEmailAuth}
+          disabled={emailLoading || googleLoading}
+          className="mt-3 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors disabled:opacity-50"
         >
-          {autoLoading ? (
+          {emailLoading ? (
             <><Loader2 className="animate-spin" size={18} />signing in...</>
           ) : (
-            <>continue<ArrowRight size={18} strokeWidth={2.5} /></>
+            <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>
           )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsSignUp((v) => !v)}
+          className="mt-2 w-full text-center text-[10px] font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors"
+        >
+          {isSignUp ? "have an account? sign in" : "no account? sign up"}
         </button>
       </div>
       </motion.div>

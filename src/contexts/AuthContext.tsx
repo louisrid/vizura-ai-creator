@@ -10,7 +10,6 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  autoSignIn: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -150,30 +149,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (error) throw error;
   };
 
-  const autoSignIn = async () => {
-    const email = "louisjridland@gmail.com";
-    const password = "Testing123!";
-
-    const signInWithTestPassword = async () => {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-    };
-
-    try {
-      await signInWithTestPassword();
-      return;
-    } catch {
-      const { error: fnError } = await supabase.functions.invoke("ensure-test-account", {
-        body: { email, password },
-      });
-
-      if (fnError) throw fnError;
-      await signInWithTestPassword();
-    }
-  };
-
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword, autoSignIn }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );
