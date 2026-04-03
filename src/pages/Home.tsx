@@ -37,6 +37,7 @@ const isValidImageUrl = (url: string): boolean => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const [images, setImages] = useState<LatestImage[]>(() => {
