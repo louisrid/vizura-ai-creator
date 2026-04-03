@@ -243,7 +243,7 @@ const Index = () => {
   };
 
   const handleCreate = async () => {
-    if (!user) { navigate(`/account?redirect=${encodeURIComponent("/create")}`); return; }
+    if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
     if (!prompt.trim()) { toast.error("describe your photo first"); return; }
 

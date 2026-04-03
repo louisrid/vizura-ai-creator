@@ -33,7 +33,7 @@ const MyCharacters = () => {
   const [bounceActive, setBounceActive] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
+    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
   }, [user, authLoading, navigate, location.pathname]);
 
   useEffect(() => {
