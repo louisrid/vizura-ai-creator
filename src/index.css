@@ -38,9 +38,9 @@
     --neon-yellow: 50 100% 50%;
     --neon-yellow-foreground: 0 0% 4%;
 
-    /* loader bar — hot pink with subtle red-pink gradient */
-    --loader-bar-from: 330 100% 55%;
-    --loader-bar-to: 345 90% 50%;
+    /* loader bar — yellow matching brand accent */
+    --loader-bar-from: 50 100% 50%;
+    --loader-bar-to: 45 100% 45%;
 
     /* neon green — actual green for subscription status */
     --neon-green: 140 100% 50%;
