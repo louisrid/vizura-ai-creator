@@ -1,64 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 5%;
+    --background: 0 0% 4.3%;
     --foreground: 0 0% 96%;
 
-    --card: 0 0% 7%;
+    --card: 0 0% 8.2%;
     --card-foreground: 0 0% 96%;
 
-    --popover: 0 0% 11%;
+    --popover: 0 0% 8.2%;
     --popover-foreground: 0 0% 96%;
 
     --primary: 0 0% 96%;
-    --primary-foreground: 0 0% 4%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 20%;
+    --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 96%;
 
-    --muted: 0 0% 22%;
+    --muted: 0 0% 13%;
     --muted-foreground: 0 0% 55%;
 
-    --accent: 50 100% 50%;
-    --accent-foreground: 0 0% 4%;
+    --accent: 48 97% 53%;
+    --accent-foreground: 0 0% 0%;
 
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
+    --border: 0 0% 13.3%;
+    --input: 0 0% 13.3%;
     --ring: 0 0% 96%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* neon yellow accent — sitewide */
-    --neon-yellow: 50 100% 50%;
-    --neon-yellow-foreground: 0 0% 4%;
+    /* neon yellow accent — #facc15 */
+    --neon-yellow: 48 97% 53%;
+    --neon-yellow-foreground: 0 0% 0%;
 
-    /* loader bar — yellow matching brand accent */
-    --loader-bar-from: 50 100% 50%;
-    --loader-bar-to: 45 100% 45%;
+    /* loader bar — yellow */
+    --loader-bar-from: 48 97% 53%;
+    --loader-bar-to: 45 95% 48%;
 
-    /* neon green — actual green for subscription status */
+    /* neon green — subscription status */
     --neon-green: 140 100% 50%;
-    --neon-green-foreground: 0 0% 4%;
+    --neon-green-foreground: 0 0% 0%;
 
-    /* gem — neon light blue */
-    --gem-green: 195 100% 55%;
+    /* gem — cyan #00e0ff */
+    --gem-green: 189 100% 50%;
     --gem-green-foreground: 0 0% 100%;
 
-    /* member indicator — actual neon green */
+    /* member indicator */
     --member-green: 140 100% 50%;
 
     --ambient-blue-1: 222 86% 54%;
     --ambient-blue-2: 215 84% 44%;
     --ambient-blue-3: 231 74% 38%;
 
-    --loader-cyan: 195 100% 55%;
-    --loader-gold: 50 100% 50%;
+    --loader-cyan: 189 100% 50%;
+    --loader-gold: 48 97% 53%;
     --loader-green: 140 100% 50%;
     --loader-pink: 330 80% 55%;
     --loader-blue: 210 100% 55%;
@@ -69,15 +67,18 @@
     --sidebar-primary-foreground: 0 0% 5%;
     --sidebar-accent: 0 0% 15%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 25%;
+    --sidebar-border: 0 0% 13.3%;
     --sidebar-ring: 0 0% 98%;
 
     /* custom tokens */
     --nav: 0 0% 0%;
     --nav-foreground: 0 0% 98%;
-    --surface-dark: 0 0% 4%;
+    --surface-dark: 0 0% 2%;
     --surface-dark-foreground: 0 0% 98%;
     --surface-elevated: 0 0% 18%;
+
+    /* wizard bg */
+    --wizard-bg: 0 0% 2%;
   }
 }
 
@@ -87,7 +88,8 @@
   }
 
   html, body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
     overflow-x: hidden;
     overscroll-behavior: none;
