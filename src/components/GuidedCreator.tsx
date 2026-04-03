@@ -910,6 +910,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
           )}
+          </div>
         </div>
       </motion.div>
     </div>,
