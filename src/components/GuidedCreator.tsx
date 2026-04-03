@@ -836,6 +836,26 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <Dots current={dotCurrent} total={dotTotal} />
               </div>
 
+              {!isLoggedIn && (
+                <button
+                  type="button"
+                  onClick={() => navigateTo(`/auth${window.location.search}`)}
+                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                >
+                  skip to login
+                </button>
+              )}
+              {isLoggedIn && skipWelcome && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                >
+                  skip
+                </button>
+              )}
             </div>
           )}
         </div>
