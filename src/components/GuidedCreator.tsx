@@ -608,11 +608,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             ))}
           </div>
-          {isSkinSlide && (
-            <p className="mt-4 text-sm font-extrabold lowercase text-white/40">
-              tap to select
-            </p>
-          )}
         </div>
       );
     }
