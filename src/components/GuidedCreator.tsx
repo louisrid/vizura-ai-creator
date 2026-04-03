@@ -861,16 +861,27 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 </div>
               </div>
-              <div className="flex h-3 items-center mb-1">
-                <Dots current={dotCurrent} total={dotTotal} />
+              <div className="flex items-center justify-center gap-[3px] mb-1" style={{ padding: "0 50px" }}>
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="transition-all duration-300"
+                    style={{
+                      flex: 1,
+                      height: 5,
+                      borderRadius: 3,
+                      background: i <= Math.round((dotCurrent / dotTotal) * 11) ? "#00e0ff" : "rgba(0,224,255,0.1)",
+                    }}
+                  />
+                ))}
               </div>
 
               {!isLoggedIn && (
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.5)" }}
                 >
                   skip to login
                 </button>
@@ -879,8 +890,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.5)" }}
                 >
                   skip
                 </button>

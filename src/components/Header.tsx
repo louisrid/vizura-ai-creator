@@ -50,7 +50,7 @@ const Header = () => {
     { label: "create character", path: "/", icon: UserPlus, state: { openCreator: true }, auth: false },
     { label: "create photo", path: "/create", icon: Camera, auth: true },
     { label: "my characters", path: "/characters", icon: LayoutGrid, auth: true },
-    { label: "pick your face", path: "/choose-face", icon: Image, auth: true },
+    { label: "storage", path: "/storage", icon: Archive, auth: true },
     { label: "gems", path: "/top-ups", icon: Gem, auth: true },
     { label: "settings", path: "/account", icon: Settings, auth: false },
   ];

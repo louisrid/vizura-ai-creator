@@ -4,6 +4,7 @@ import { Loader2, Zap, Sparkles, ChevronDown, Gem, Upload } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
+import DotDecal from "@/components/DotDecal";
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
