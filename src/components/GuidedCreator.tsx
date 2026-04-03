@@ -421,17 +421,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── HERO SLIDE (new first screen) ── */
   const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: 80 }}>
+    <div className="flex w-full flex-col items-center" style={{ marginTop: 90 }}>
       <AnimatedRings t={ringT} />
-      <div style={{ fontSize: 68, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
-      <div style={{ width: 44, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
-      <div className="flex flex-col items-center" style={{ marginTop: 22, gap: 8 }}>
+      <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div style={{ width: 40, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
+      <div className="flex flex-col items-center" style={{ marginTop: 20, gap: 8 }}>
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
           style={{
-            width: 200, padding: "13px", background: Y, border: "none", borderRadius: 12,
-            fontSize: 20, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            width: 180, padding: "11px", background: Y, border: "none", borderRadius: 12,
+            fontSize: 19, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
@@ -442,8 +442,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             style={{
-              width: 200, padding: "11px", background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontSize: 20, fontWeight: 900, color: "#fff",
+              width: 180, padding: "9px", background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontSize: 19, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
