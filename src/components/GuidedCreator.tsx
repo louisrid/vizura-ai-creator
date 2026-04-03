@@ -144,17 +144,17 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 46,
-      borderRadius: 12,
-      padding: "8px 14px",
-      fontSize: 15,
+      height: 40,
+      borderRadius: 10,
+      padding: "6px 12px",
+      fontSize: 14,
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#111", color: "rgba(255,255,255,0.85)", border: "2px solid #222" }
+        : { backgroundColor: "#111", color: "#fff", border: "2px solid #222" }
       ),
     }}
   >
