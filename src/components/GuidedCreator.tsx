@@ -42,7 +42,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[32px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[12px] font-[800] lowercase text-white/40";
+const HELPER_CLASS = "text-[12px] font-[800] lowercase text-white/70";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
@@ -104,20 +104,20 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         disabled={disabled}
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
         style={{
-          width: 68, height: 68, borderRadius: 16,
-          backgroundColor: isForward ? "rgba(0,224,255,0.12)" : "rgba(0,224,255,0.06)",
-          border: isForward ? `2px solid rgba(0,224,255,0.35)` : `2px solid rgba(0,224,255,0.2)`,
+          width: 72, height: 72, borderRadius: 18,
+          backgroundColor: isForward ? "rgba(0,224,255,0.18)" : "rgba(0,224,255,0.06)",
+          border: isForward ? `2.5px solid rgba(0,224,255,0.45)` : `2px solid rgba(0,224,255,0.25)`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: CYAN,
+          color: isForward ? "#fff" : CYAN,
         }}
       >
         {direction === "left" ? (
-          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
+          <svg width="24" height="20" viewBox="0 0 20 16" fill="none">
             <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
+          <svg width="24" height="20" viewBox="0 0 20 16" fill="none">
             <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
@@ -154,7 +154,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#111", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+        : { backgroundColor: "#111", color: "rgba(255,255,255,0.85)", border: "2px solid #222" }
       ),
     }}
   >
@@ -421,17 +421,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── HERO SLIDE (new first screen) ── */
   const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: 80 }}>
+    <div className="flex w-full flex-col items-center" style={{ marginTop: 90 }}>
       <AnimatedRings t={ringT} />
-      <div style={{ fontSize: 68, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
-      <div style={{ width: 44, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
-      <div className="flex flex-col items-center" style={{ marginTop: 22, gap: 8 }}>
+      <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div style={{ width: 40, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
+      <div className="flex flex-col items-center" style={{ marginTop: 20, gap: 8 }}>
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
           style={{
-            width: 200, padding: "13px", background: Y, border: "none", borderRadius: 12,
-            fontSize: 20, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            width: 180, padding: "11px", background: Y, border: "none", borderRadius: 12,
+            fontSize: 19, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
@@ -442,8 +442,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             style={{
-              width: 200, padding: "11px", background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontSize: 20, fontWeight: 900, color: "#fff",
+              width: 180, padding: "9px", background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontSize: 19, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
@@ -463,7 +463,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center">
         <span className="text-[64px] mb-5">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
-        <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap → to continue</p>
+        <p className="mt-5 text-[13px] font-[800] lowercase text-white/70">tap → to continue</p>
       </div>
     );
 
@@ -613,10 +613,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">
               <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-[15px] font-[900] lowercase text-white/40">30 gems</span>
+              <span className="text-[15px] font-[900] lowercase text-white/70">30 gems</span>
             </div>
           )}
-          <p className="mt-6 text-[14px] font-[800] lowercase text-white/40">tap to continue</p>
+          <p className="mt-6 text-[14px] font-[800] lowercase text-white/70">tap to continue</p>
         </button>
       );
     }
@@ -728,7 +728,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Arrow buttons — positioned below content */}
         {showNavigation && (
-          <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-3 pb-[max(env(safe-area-inset-bottom),2.5rem)]">
+          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "18%" }}>
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
             </motion.div>
