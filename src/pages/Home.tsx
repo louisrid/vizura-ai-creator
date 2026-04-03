@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
@@ -37,6 +37,7 @@ const isValidImageUrl = (url: string): boolean => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const [images, setImages] = useState<LatestImage[]>(() => {
@@ -87,12 +88,12 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    const state = window.history.state?.usr;
+    const state = (location.state as any);
     if (state?.openCreator) {
-      window.history.replaceState({ ...window.history.state, usr: {} }, "");
+      navigate(location.pathname, { replace: true, state: {} });
       handleOpenCreator();
     }
-  }, []);
+  }, [location.state]);
 
   useEffect(() => {
     if (authLoading) return;
@@ -276,9 +277,10 @@ const Home = () => {
                 backgroundColor: "#facc15",
                 padding: "16px 14px",
                 borderRadius: 12,
+                fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[14px] font-[900] lowercase leading-[1.1] text-black text-left">create<br />character</span>
+              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
@@ -299,6 +301,7 @@ const Home = () => {
                 backgroundColor: "#000",
                 padding: "16px 14px",
                 borderRadius: 12,
+                fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
               <div className="absolute inset-0" style={{
@@ -306,7 +309,7 @@ const Home = () => {
                 border: "2px solid rgba(250,204,21,0.15)",
                 borderRadius: 12,
               }} />
-              <span className="relative z-[1] text-[14px] font-[900] lowercase leading-[1.1] text-white text-left">create photo</span>
+              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-white text-left">create<br />photo</span>
               <svg className="relative z-[1]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />

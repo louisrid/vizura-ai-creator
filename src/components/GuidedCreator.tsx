@@ -89,11 +89,11 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
-      width: 52,
+      width: 48,
       height: 48,
       backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
       border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
-      borderRadius: 12,
+      borderRadius: 14,
       outline: "none",
       padding: 0,
       cursor: "pointer",
@@ -114,8 +114,26 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Solid background only ── */
-const AmbientGlow = () => null;
+/* ── Animated gradient background ── */
+const AmbientGlow = () => (
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="absolute inset-0 animate-wizard-gradient-1" style={{
+      width: "140%", height: "140%", top: "-20%", left: "-20%",
+      background: "radial-gradient(ellipse at 30% 50%, rgba(0,50,255,0.08) 0%, transparent 60%)",
+      filter: "blur(80px)",
+    }} />
+    <div className="absolute inset-0 animate-wizard-gradient-2" style={{
+      width: "130%", height: "130%", top: "-15%", right: "-15%",
+      background: "radial-gradient(ellipse at 70% 40%, rgba(120,0,255,0.06) 0%, transparent 55%)",
+      filter: "blur(90px)",
+    }} />
+    <div className="absolute inset-0 animate-wizard-gradient-3" style={{
+      width: "120%", height: "120%", bottom: "-10%", left: "-10%",
+      background: "radial-gradient(ellipse at 40% 70%, rgba(255,0,100,0.04) 0%, transparent 50%)",
+      filter: "blur(70px)",
+    }} />
+  </div>
+);
 
 /* ── Simple emoji with subtle yellow glow ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
@@ -843,16 +861,27 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 </div>
               </div>
-              <div className="flex h-3 items-center mb-1">
-                <Dots current={dotCurrent} total={dotTotal} />
+              <div className="flex items-center justify-center gap-[3px] mb-1" style={{ padding: "0 50px" }}>
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="transition-all duration-300"
+                    style={{
+                      flex: 1,
+                      height: 5,
+                      borderRadius: 3,
+                      background: i <= Math.round((dotCurrent / dotTotal) * 11) ? "#00e0ff" : "rgba(0,224,255,0.1)",
+                    }}
+                  />
+                ))}
               </div>
 
               {!isLoggedIn && (
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.5)" }}
                 >
                   skip to login
                 </button>
@@ -861,8 +890,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 mt-4 px-4 py-2 text-[11px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.5)" }}
                 >
                   skip
                 </button>

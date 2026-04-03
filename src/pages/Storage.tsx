@@ -8,6 +8,7 @@ import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import DotDecal from "@/components/DotDecal";
 
 interface StorageImage {
   id: string;
@@ -65,7 +66,8 @@ const Storage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
       <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-8">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />

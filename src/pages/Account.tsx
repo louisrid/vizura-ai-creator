@@ -12,6 +12,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
+import DotDecal from "@/components/DotDecal";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
@@ -56,7 +57,8 @@ const Account = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
       <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
       <main className="w-full max-w-lg md:max-w-2xl mx-auto px-4 md:px-8 pt-14 pb-8">
         <div className="flex items-center gap-3 mb-5">

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Image } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Archive } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import TopGradientBar from "@/components/TopGradientBar";
@@ -50,7 +50,7 @@ const Header = () => {
     { label: "create character", path: "/", icon: UserPlus, state: { openCreator: true }, auth: false },
     { label: "create photo", path: "/create", icon: Camera, auth: true },
     { label: "my characters", path: "/characters", icon: LayoutGrid, auth: true },
-    { label: "pick your face", path: "/choose-face", icon: Image, auth: true },
+    { label: "storage", path: "/storage", icon: Archive, auth: true },
     { label: "gems", path: "/top-ups", icon: Gem, auth: true },
     { label: "settings", path: "/account", icon: Settings, auth: false },
   ];
