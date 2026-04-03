@@ -785,8 +785,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "#000000" }}
+      style={{ background: "#000000", position: "relative", overflow: "hidden" }}
     >
+      {/* Animated breathing background */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          inset: "-50%",
+          background: "radial-gradient(ellipse at 20% 50%, rgba(0,40,200,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(90,0,200,0.07) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(40,0,180,0.06) 0%, transparent 50%)",
+          animation: "wizardBreathe 20s ease-in-out infinite",
+          filter: "blur(60px)",
+          zIndex: 0,
+        }}
+      />
       {/* Exit fade overlay */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
