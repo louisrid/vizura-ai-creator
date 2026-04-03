@@ -8,6 +8,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
+const Y = "#facc15";
+
 const categories = [
   { key: "skin", label: "skin", options: ["white", "tan", "asian", "black"] },
   { key: "bodyType", label: "body type", options: ["slim", "regular", "curvy"] },
@@ -23,10 +25,13 @@ type CatKey = (typeof categories)[number]["key"];
 const SelectionBox = ({ value, active, onClick }: { value: string | null; active: boolean; onClick: () => void }) => (
   <button
     onClick={onClick}
-    className={`flex h-14 w-full items-center justify-center rounded-2xl border-[5px] text-sm font-[900] lowercase tracking-tight transition-colors ${
-    active ? "border-neon-yellow bg-neon-yellow/10 text-white" : "border-[#1a1a1a] text-white/80"
-    }`}
-    style={{ backgroundColor: active ? "rgba(250,204,21,0.1)" : "#111111" }}
+    className="flex h-[52px] w-full items-center justify-center text-sm font-[900] lowercase tracking-tight transition-colors"
+    style={{
+      borderRadius: 12,
+      border: active ? `2px solid ${Y}` : "2px solid #222",
+      backgroundColor: active ? "rgba(250,204,21,0.08)" : "#111",
+      color: active ? "#fff" : "rgba(255,255,255,0.7)",
+    }}
   >
     {value || "–"}
   </button>
@@ -44,12 +49,13 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
       <button
         key={opt}
         onClick={() => onSelect(opt)}
-          className={`rounded-2xl border-2 px-4 py-2 text-xs font-[900] lowercase transition-all ${
-          value === opt
-            ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
-            : "border-[#1a1a1a] text-white/60 hover:border-white/40"
-        }`}
-        style={{ backgroundColor: value === opt ? undefined : "#111111" }}
+        className="px-4 py-2 text-xs font-[900] lowercase transition-all"
+        style={{
+          borderRadius: 12,
+          border: value === opt ? `2px solid ${Y}` : "2px solid #222",
+          backgroundColor: value === opt ? Y : "#111",
+          color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
+        }}
       >
         {opt}
       </button>
@@ -143,9 +149,9 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
   return createPortal(
     <AnimatePresence>
       {open && (
-        <motion.div className="fixed inset-0 z-[9998] flex flex-col bg-black" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+        <motion.div className="fixed inset-0 z-[9998] flex flex-col" style={{ background: "#000" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
           <div className="flex items-center px-5 pt-5 pb-2">
-            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-2xl border-2 border-[#1a1a1a] transition-colors hover:border-white/40" style={{ backgroundColor: "#111111" }} aria-label="close">
+            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center transition-colors hover:opacity-70" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }} aria-label="close">
               <X size={16} strokeWidth={2.5} className="text-white" />
             </button>
           </div>
@@ -169,14 +175,16 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
               <div className="mt-10">
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
-                  className="min-h-[100px] w-full resize-none rounded-2xl border-2 border-[#1a1a1a] px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50" style={{ backgroundColor: "#111111" }} />
+                  className="min-h-[100px] w-full resize-none px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors"
+                  style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
+                />
               </div>
             </div>
           </div>
           <div className="fixed bottom-0 left-0 right-0 z-10 px-10 pb-[max(env(safe-area-inset-bottom),2rem)] pt-3 bg-gradient-to-t from-black via-black/95 to-transparent">
             <button onClick={handleCreate} disabled={isSaving}
-              className="flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-neon-yellow text-base font-[900] lowercase tracking-tight text-neon-yellow-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
-              style={{ transition: "transform 0.05s" }}>
+              className="flex h-[52px] w-full items-center justify-center gap-2 text-base font-[900] lowercase tracking-tight transition-transform active:scale-[0.97] disabled:opacity-60"
+              style={{ backgroundColor: Y, color: "#000", borderRadius: 12, border: "none" }}>
               {isSaving ? (<><Loader2 size={18} className="animate-spin" />saving...</>) : (<><Zap size={18} strokeWidth={2.5} />create<Gem size={14} strokeWidth={2.5} className="text-gem-green ml-1" /><span className="text-[11px] ml-0.5">30</span></>)}
             </button>
           </div>

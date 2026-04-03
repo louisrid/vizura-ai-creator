@@ -2,48 +2,30 @@ import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, X, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
-const NEON_BLUE = "#00e0ff";
-const PURE_WHITE = "#fff";
-const AMBER = "#facc15";
+const Y = "#facc15";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.75;
 
-/* ── Name toast variations ── */
-const NAME_TOAST_MESSAGES = [
-  "great choice!",
-  "great choice!",
-  "great choice!",
-  "great choice!",
-  "great choice!",
-  "great choice!",
-];
-
-const getRandomNameToast = () =>
-  NAME_TOAST_MESSAGES[Math.floor(Math.random() * NAME_TOAST_MESSAGES.length)];
+/* ── Name toast ── */
+const getRandomNameToast = () => "great choice!";
 
 /*
  * SCREEN ORDER (13 screens, internalStep 0-12):
- *  0: Welcome
+ *  0: Hero (new first screen with rings)
  *  1: Intro
  *  2: Name input
- *  3: Skin        (TRAITS[0])
- *  4: Body        (TRAITS[1])
- *  5: Age pills   (TRAITS[2])
- *  6: Hair        (TRAITS[3])
- *  7: Hair colour (TRAITS[4])
- *  8: Eyes        (TRAITS[5])
- *  9: Makeup      (TRAITS[6])
- * 10: Description (optional)
- * 11: Reference   (optional)
- * 12: Create slide
+ *  3-9: Traits
+ * 10: Description
+ * 11: Reference
+ * 12: Create
  */
 
 const TRAITS = [
@@ -56,80 +38,93 @@ const TRAITS = [
   { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"], defaultOption: "classic" },
 ] as const;
 
-const SLIDE_TITLE_CLASS = "mt-3 text-center text-[34px] font-[900] lowercase leading-[0.94] tracking-tight text-white";
-const SUBTEXT_CLASS = "text-sm font-[900] lowercase text-white/40";
-const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
-
 type TraitKey = (typeof TRAITS)[number]["key"];
 
-/* ── Dots ── */
-const Dots = forwardRef<HTMLDivElement, { current: number; total: number }>(({ current, total }, ref) => (
-  <div ref={ref} className="flex items-center justify-center gap-[3px]" style={{ padding: "0 50px" }}>
-    {Array.from({ length: total }).map((_, i) => (
-      <div
-        key={i}
-        className="transition-all duration-300"
-        style={{
-          flex: 1,
-          height: 5,
-          borderRadius: 3,
-          background: i <= current ? "#00e0ff" : "rgba(0,224,255,0.1)",
-        }}
-      />
-    ))}
-  </div>
-));
-Dots.displayName = "Dots";
+/* ── Shared styles ── */
+const SLIDE_TITLE_CLASS = "text-center text-[28px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
 
-/* ── Nav arrow ── */
-const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean; className?: string }>(({ direction, onClick, disabled, className }, ref) => (
-  <button
-    ref={ref}
-    type="button"
-    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
-    className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
+/* ── Top yellow line (used on hero only) ── */
+const TopLine = () => (
+  <div
+    className="pointer-events-none absolute top-0 left-0 right-0"
     style={{
-      width: 62,
-      height: 62,
-      backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.08)",
-      border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.25)",
-      borderRadius: 16,
-      outline: "none",
-      padding: 0,
-      cursor: "pointer",
-      color: "#00e0ff",
+      height: 5,
+      zIndex: 2,
+      background: `linear-gradient(90deg, ${Y} 0%, ${Y} 20%, rgba(250,204,21,0.3) 50%, transparent 80%)`,
     }}
-  >
-    {direction === "left" ? (
-      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-        <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-      </svg>
-    ) : (
-      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-        <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-      </svg>
-    )}
-  </button>
-));
-NavArrow.displayName = "NavArrow";
-
-/* AmbientGlow removed — wizard uses pure #000 */
-
-/* ── Simple emoji with subtle yellow glow ── */
-const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
-  <span className="select-none pointer-events-none text-[56px] inline-block animate-bounce relative" style={{ animationDuration: "2s" }}>
-    <span className="absolute inset-0 rounded-full" style={{
-      background: "radial-gradient(circle, rgba(250,204,21,0.06) 0%, transparent 70%)",
-      transform: "scale(2.5)",
-      filter: "blur(8px)",
-    }} />
-    <span className="relative">{emoji}</span>
-  </span>
+  />
 );
 
-/* ── Interactive pill — bigger for mobile ── */
+/* ── Animated rings (hero only) ── */
+const AnimatedRings = ({ t }: { t: number }) => (
+  <div className="relative flex items-center justify-center" style={{ width: 240, height: 240, marginBottom: 24 }}>
+    {/* Inner ring */}
+    <div className="absolute" style={{
+      width: 130, height: 130, borderRadius: "50%",
+      border: `2px solid ${Y}`, borderLeftColor: "transparent",
+      transform: `rotate(${t * 1.2}deg)`,
+      top: "50%", left: "50%", marginTop: -65, marginLeft: -65,
+    }} />
+    {/* Mid ring */}
+    <div className="absolute" style={{
+      width: 170, height: 170, borderRadius: "50%",
+      border: `8px solid ${Y}`, borderTopColor: "transparent", borderRightColor: "transparent",
+      transform: `rotate(${t * -0.8}deg)`,
+      top: "50%", left: "50%", marginTop: -85, marginLeft: -85,
+    }} />
+    {/* Outer ring */}
+    <div className="absolute" style={{
+      width: 210, height: 210, borderRadius: "50%",
+      border: `3px solid ${Y}`, borderBottomColor: "transparent", borderLeftColor: "transparent",
+      transform: `rotate(${t * 0.6}deg)`,
+      top: "50%", left: "50%", marginTop: -105, marginLeft: -105,
+    }} />
+    {/* Dashed ring */}
+    <div className="absolute" style={{
+      width: 238, height: 238, borderRadius: "50%",
+      border: `2px dashed ${Y}`,
+      transform: `rotate(${t * -0.4}deg)`,
+      top: "50%", left: "50%", marginTop: -119, marginLeft: -119,
+    }} />
+    <span style={{ fontSize: 76, position: "relative", zIndex: 1 }}>👩‍🎤</span>
+  </div>
+);
+
+/* ── Nav arrow ── */
+const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(
+  ({ direction, onClick, disabled }, ref) => (
+    <button
+      ref={ref}
+      type="button"
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
+      disabled={disabled}
+      className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
+      style={{
+        width: 62, height: 62, borderRadius: 16,
+        backgroundColor: "#111",
+        border: "2px solid #222",
+        outline: "none", padding: 0, cursor: "pointer",
+        color: "#fff",
+      }}
+    >
+      {direction === "left" ? (
+        <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+          <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
+      ) : (
+        <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+          <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
+      )}
+    </button>
+  )
+);
+NavArrow.displayName = "NavArrow";
+
+/* ── Interactive pill ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
   label: string; selected: boolean; shaking: boolean; onClick: () => void;
 }) => (
@@ -145,8 +140,8 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 56,
-      borderRadius: 11,
+      height: 52,
+      borderRadius: 12,
       padding: "10px 18px",
       fontSize: 16,
       fontWeight: 800,
@@ -154,8 +149,8 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
-        ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
-        : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+        ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
+        : { backgroundColor: "#111", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
       ),
     }}
   >
@@ -163,40 +158,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
   </motion.button>
 );
 
-/* ── Loading phrases for cooking phase ── */
-const COOKING_PHRASES = [
-  "mapping your features…",
-  "building your look…",
-  "training the AI…",
-  "final touches…",
-];
-const COOKING_DURATION = 25000;
+/* ── Loading phrases ── */
+const COOKING_PHRASES = ["mapping your features…", "building your look…", "training the AI…", "final touches…"];
 const COOKING_SUCCESS_HOLD = 4000;
 const COOKING_EXIT_DURATION = 750;
-
-/* ── Bouncy word animation for welcome slide ── */
-const BouncyWords = ({ text, className, delayStart = 0 }: { text: string; className?: string; delayStart?: number }) => {
-  const words = text.split(" ");
-  return (
-    <span className={className}>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          className="inline-block mr-[0.3em]"
-          initial={{ opacity: 0, y: 18, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{
-            duration: 0.45,
-            delay: delayStart + i * 0.12,
-            ease: [0.25, 1.1, 0.5, 1],
-          }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </span>
-  );
-};
 
 /* ── Types ── */
 export interface GuidedSelections {
@@ -209,12 +174,9 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "",
-  hairStyle: "", hairColour: "", eye: "", makeup: "",
-  characterName: "", age: "",
-  description: "",
-  referenceImage: null,
-  referenceStrength: 50,
+  skin: "", bodyType: "", hairStyle: "", hairColour: "", eye: "", makeup: "",
+  characterName: "", age: "", description: "",
+  referenceImage: null, referenceStrength: 50,
 };
 
 interface GuidedCreatorProps {
@@ -241,12 +203,12 @@ const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","rub
 const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<GuidedSelections> => ({
   ...partial,
   skin: partial.skin === "pale" ? "white" : partial.skin === "dark" ? "black" : partial.skin,
-  makeup:
-    partial.makeup === "glam" || partial.makeup === "model"
-      ? "classic"
-      : partial.makeup,
+  makeup: partial.makeup === "glam" || partial.makeup === "model" ? "classic" : partial.makeup,
 });
 
+/* ══════════════════════════════════════════
+   MAIN COMPONENT
+   ══════════════════════════════════════════ */
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
   const navigateTo = useNavigate();
@@ -256,8 +218,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const offset = skipWelcome ? 2 : 0;
 
   const [step, setStep] = useState(0);
-  const dotTotal = TOTAL;
-  const dotCurrent = step;
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const mounted = typeof document !== "undefined";
@@ -268,28 +228,33 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const animating = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
+  const [ringT, setRingT] = useState(0);
 
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
-  const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
   const [exitFade, setExitFade] = useState(false);
+
+  /* Ring animation timer */
+  useEffect(() => {
+    const id = setInterval(() => setRingT((v) => v + 1), 16);
+    return () => clearInterval(id);
+  }, []);
 
   const restoreSavedFlow = useCallback(() => {
     try {
       const raw = sessionStorage.getItem(FLOW_STATE_KEY);
       if (!raw) return false;
-      const saved = JSON.parse(raw) as {
-        step?: number;
-        selections?: Partial<GuidedSelections>;
-        skipWelcome?: boolean;
-      };
+      const saved = JSON.parse(raw);
       setStep(Math.max(saved?.step ?? 0, 0));
       setSelections({ ...emptySelections, ...normaliseLegacySelections(saved?.selections ?? {}) });
       return true;
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   }, []);
+
+  const selectionsRef = useRef(selections);
+  const stepRef = useRef(step);
+  selectionsRef.current = selections;
+  stepRef.current = step;
 
   const persistFlow = useCallback(() => {
     if (!visible || cookingPhase !== "none") return;
@@ -303,7 +268,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setInitialFadeIn(!restored);
       setVisible(true);
       setCookingPhase("none");
-      setCookingPhraseIndex(0);
       hasCompletedCookingRef.current = false;
       animating.current = false;
       setNameToastShown(false);
@@ -312,9 +276,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
   }, [open, restoreSavedFlow]);
 
-  useEffect(() => {
-    persistFlow();
-  }, [persistFlow, step, selections]);
+  useEffect(() => { persistFlow(); }, [persistFlow, step, selections]);
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
@@ -329,10 +291,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
-
     const handlePageHide = () => persistFlow();
     window.addEventListener("pagehide", handlePageHide);
-
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
@@ -352,22 +312,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (cookingPhase !== "success") return;
-    const t = window.setTimeout(() => {
-      setCookingPhase("exiting");
-    }, COOKING_SUCCESS_HOLD);
+    const t = window.setTimeout(() => setCookingPhase("exiting"), COOKING_SUCCESS_HOLD);
     return () => window.clearTimeout(t);
   }, [cookingPhase]);
 
   useEffect(() => {
     if (cookingPhase !== "exiting") return;
-    const t = window.setTimeout(() => {
-      completeCookingFlow();
-    }, COOKING_EXIT_DURATION);
+    const t = window.setTimeout(() => completeCookingFlow(), COOKING_EXIT_DURATION);
     return () => window.clearTimeout(t);
   }, [cookingPhase, completeCookingFlow]);
 
   const internalStep = step + offset;
-  const isWelcomeSlide = internalStep === 0 && !skipWelcome;
+  const isHeroSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
   const isNameSlide = internalStep === 2;
   const isDescriptionSlide = internalStep === 10;
@@ -375,7 +331,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isCreateSlide = internalStep === 12;
 
   const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
-  const isSkinSlide = currentTraitIndex === 0;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
@@ -388,19 +343,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return !!selections[key as keyof GuidedSelections];
   };
 
-  const setTrait = (key: string, value: string) => {
-    setSelections((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const triggerShake = () => {
-    setShaking(true);
-    setTimeout(() => setShaking(false), 500);
-  };
-
-  const selectionsRef = useRef(selections);
-  const stepRef = useRef(step);
-  selectionsRef.current = selections;
-  stepRef.current = step;
+  const setTrait = (key: string, value: string) => setSelections((prev) => ({ ...prev, [key]: value }));
+  const triggerShake = () => { setShaking(true); setTimeout(() => setShaking(false), 500); };
 
   const maybeShowNameToast = useCallback((nextName: string) => {
     if (!visible || !isNameSlide || nameToastShown || !nextName.trim()) return;
@@ -414,58 +358,39 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [maybeShowNameToast]);
 
   const randomiseName = useCallback(() => {
-    const name = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
-    updateCharacterName(name);
+    updateCharacterName(RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)]);
   }, [updateCharacterName]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setSelections((p) => ({ ...p, referenceImage: url }));
+    setSelections((p) => ({ ...p, referenceImage: URL.createObjectURL(file) }));
   };
 
   const advance = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
-
-    if (isNameSlide) {
-      if (!selectionsRef.current.characterName.trim()) {
-        triggerShake();
-        return;
-      }
-      toast.dismiss();
-    }
-
+    if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
       const key = TRAITS[currentTraitIndex].key;
-      if (!selectionsRef.current[key as keyof GuidedSelections]) {
-        triggerShake();
-        return;
-      }
+      if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
-
     if (isCreateSlide) {
       window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
       setExitFade(true);
       setTimeout(() => completeCookingFlow(), 1400);
       return;
     }
-
     animating.current = true;
     setSlideDirection(1);
     const nextStep = step + 1;
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 200);
-  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, TOTAL]);
+  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, TOTAL, completeCookingFlow]);
 
   const goBack = useCallback(() => {
     if (animating.current || cookingPhase !== "none") return;
-    if (step <= 0) {
-      setBackArrowShaking(true);
-      setTimeout(() => setBackArrowShaking(false), 500);
-      return;
-    }
+    if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
     animating.current = true;
     setSlideDirection(-1);
     setStep((s) => s - 1);
@@ -478,131 +403,108 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isWelcomeSlide || isIntroSlide || isNameSlide || isDescriptionSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
-
-  const preventSubmit = useCallback((e: React.FormEvent) => { e.preventDefault(); }, []);
+  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isDescriptionSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   if (!mounted || !visible) return null;
 
   const slideVariants = {
-    enter: (dir: number) => ({
-      opacity: 0,
-      x: dir > 0 ? 30 : -30,
-    }),
-    center: {
-      opacity: 1,
-      x: 0,
-    },
-    exit: (dir: number) => ({
-      opacity: 0,
-      x: dir > 0 ? -30 : 30,
-    }),
+    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 30 : -30 }),
+    center: { opacity: 1, x: 0 },
+    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -30 : 30 }),
   };
 
-  const renderSlide = () => {
-    /* ── Welcome ── */
-    if (isWelcomeSlide) {
-      return (
-        <div className="flex w-full flex-col items-center">
-          <h2 className="mt-1 text-center lowercase leading-[0.95] tracking-tight text-white">
-            <BouncyWords text="welcome to" className="block text-[1.5rem] font-[800]" delayStart={0.2} />
-            <motion.span
-              className="block text-[5.8rem] font-[900] leading-[0.95]"
-              initial={{ opacity: 0, scale: 0.6, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5, ease: [0.25, 1.1, 0.5, 1] }}
-            >
-              <motion.span
-                className="inline-block"
-                animate={{ scale: [1, 1.02, 1], y: [0, -2, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                vizura!
-              </motion.span>
-            </motion.span>
-          </h2>
-          <motion.p
-            className="mt-2 text-sm font-extrabold lowercase text-white/40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.4 }}
+  /* ── HERO SLIDE (new first screen) ── */
+  const renderHero = () => (
+    <div className="flex w-full flex-col items-center" style={{ marginTop: -20 }}>
+      <AnimatedRings t={ringT} />
+      <div style={{ fontSize: 52, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.02em" }}>vizura</div>
+      <div style={{ width: 40, height: 4, background: Y, marginTop: 7, marginBottom: 5, borderRadius: 2 }} />
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", fontWeight: 800, textTransform: "lowercase" as const }}>create your AI character</div>
+      <div className="flex flex-col items-center" style={{ marginTop: 20, gap: 8 }}>
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+          style={{
+            width: 220, padding: "14px", background: Y, border: "none", borderRadius: 12,
+            fontSize: 16, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            cursor: "pointer",
+          }}
+        >
+          get started
+        </button>
+        {!isLoggedIn && (
+          <button
+            type="button"
+            onClick={() => navigateTo(`/auth${window.location.search}`)}
+            style={{
+              width: 220, padding: "12px", background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontSize: 13, fontWeight: 800, color: "#fff",
+              textTransform: "lowercase" as const, cursor: "pointer",
+            }}
           >
-            tap to continue
-          </motion.p>
-        </div>
-      );
-    }
+            login
+          </button>
+        )}
+      </div>
+    </div>
+  );
 
-    /* ── Intro ── */
-    if (isIntroSlide) {
-      return (
-        <div className="flex w-full flex-col items-center">
-          <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="💫" index={0} />
-          </div>
-          <h2 className={SLIDE_TITLE_CLASS}>
-            time to create your<br />first character!
-          </h2>
-          <p className="mt-3 text-sm font-extrabold lowercase text-white/40">tap to continue</p>
-        </div>
-      );
-    }
+  /* ── Slide renderer ── */
+  const renderSlide = () => {
+    if (isHeroSlide) return renderHero();
 
-    /* ── Name input slide ── */
-    if (isNameSlide) {
-      return (
-        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji="✨" />
-          </div>
-          <h2 className={SLIDE_TITLE_CLASS}>
-            give her a name
-          </h2>
-          <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
-            <motion.input
-              animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-              transition={{ duration: 0.4 }}
-              value={selections.characterName}
-              onChange={(e) => updateCharacterName(e.target.value)}
-              placeholder="type a name…"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-              className="h-14 flex-1 min-w-0 rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors duration-150"
-            />
-            <motion.button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
-              whileTap={{ scale: 0.85, rotate: 180 }}
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-white/20 bg-white text-black active:bg-white/70 transition-colors duration-150"
-            >
-              <RefreshCw size={18} strokeWidth={2.5} />
-            </motion.button>
-          </div>
-        </div>
-      );
-    }
+    /* Intro */
+    if (isIntroSlide) return (
+      <div className="flex w-full flex-col items-center">
+        <span className="text-[56px] mb-4">💫</span>
+        <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
+        <p className="mt-4 text-[13px] font-[800] lowercase text-white/40">tap → to continue</p>
+      </div>
+    );
 
-    /* ── Trait slides ── */
+    /* Name */
+    if (isNameSlide) return (
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+        <span className="text-[56px] mb-4">✨</span>
+        <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
+        <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+          <motion.input
+            animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+            transition={{ duration: 0.4 }}
+            value={selections.characterName}
+            onChange={(e) => updateCharacterName(e.target.value)}
+            placeholder="type a name…"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
+            className="h-[52px] flex-1 min-w-0 px-4 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+          />
+          <motion.button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
+            whileTap={{ scale: 0.85, rotate: 180 }}
+            className="flex h-[52px] w-[52px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            style={{ borderRadius: 12, backgroundColor: Y }}
+          >
+            <RefreshCw size={18} strokeWidth={2.5} />
+          </motion.button>
+        </div>
+      </div>
+    );
+
+    /* Trait slides */
     if (currentTraitIndex >= 0) {
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <div className="flex h-14 items-end justify-center">
-            <BigEmoji emoji={trait.emoji} index={currentTraitIndex + 1} />
-          </div>
-          <h2 className={SLIDE_TITLE_CLASS}>
-            {trait.label}
-          </h2>
-          <div
-            className={`mt-5 grid w-full gap-3.5 px-2 ${
-              trait.options.length === 4
-                ? "max-w-[20rem] grid-cols-2"
-                : trait.options.length === 2
-                  ? "max-w-[16rem] grid-cols-2 mx-auto"
-                  : "max-w-[23.5rem] grid-cols-3"
-            }`}
-          >
+          <span className="text-[56px] mb-4">{trait.emoji}</span>
+          <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
+          <div className={`mt-5 grid w-full gap-3 px-2 ${
+            trait.options.length === 4 ? "max-w-[20rem] grid-cols-2"
+              : trait.options.length === 2 ? "max-w-[16rem] grid-cols-2 mx-auto"
+              : "max-w-[22rem] grid-cols-3"
+          }`}>
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
                 <InteractivePill
@@ -621,116 +523,95 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    /* ── Description (optional) ── */
-    if (isDescriptionSlide) {
-      return (
-        <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className={SLIDE_TITLE_CLASS}>
-            describe her
-          </h2>
-          <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
-          <div className="mt-4 w-full max-w-[18rem]">
-            <textarea
-              value={selections.description}
-              onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
-              placeholder="add any details you want…"
-              rows={8}
-              onClick={(e) => e.stopPropagation()}
-              className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none focus:border-neon-yellow transition-colors duration-150"
-            />
-            <p className={`mt-2 text-center ${HELPER_CLASS}`}>
-              i.e. chubby cheeks, freckles, thick mascara
-            </p>
-          </div>
+    /* Description */
+    if (isDescriptionSlide) return (
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+        <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
+        <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
+        <div className="mt-4 w-full max-w-[18rem]">
+          <textarea
+            value={selections.description}
+            onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
+            placeholder="add any details you want…"
+            rows={6}
+            onClick={(e) => e.stopPropagation()}
+            className="min-h-[160px] w-full resize-none px-4 py-3 text-base font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
+          />
+          <p className={`mt-2 text-center ${HELPER_CLASS}`}>i.e. chubby cheeks, freckles, thick mascara</p>
         </div>
-      );
-    }
+      </div>
+    );
 
-    /* ── Reference image (optional) ── */
-    if (isReferenceSlide) {
-      return (
-        <div className="-mt-2 flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-          <h2 className={SLIDE_TITLE_CLASS}>
-            add a reference
-          </h2>
-          <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
-          <div className="mt-4 flex w-full max-w-[10rem] flex-col items-center gap-4">
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-            {selections.referenceImage ? (
-              <div className="w-full">
-                <div className="relative w-full overflow-hidden rounded-[1.4rem] border-[3px] border-white/15" style={{ aspectRatio: "3/4" }}>
-                  <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
-                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="w-full">
+    /* Reference */
+    if (isReferenceSlide) return (
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+        <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
+        <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
+        <div className="mt-4 flex w-full max-w-[10rem] flex-col items-center gap-4">
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+          {selections.referenceImage ? (
+            <div className="w-full">
+              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "2px solid #222", aspectRatio: "3/4" }}>
+                <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.4rem] border-[3px] border-dashed border-white/15 bg-white/5 transition-colors duration-150 hover:border-white/30" style={{ aspectRatio: "3/4" }}
-                >
-                  <Upload size={14} strokeWidth={2.5} className="text-white/30" />
-                  <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
-                </button>
+                  onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
+                  className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                >×</button>
               </div>
-            )}
-            <div className="w-full space-y-2 mb-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-extrabold lowercase text-white/40">strength</span>
-                <span className="text-[10px] font-extrabold lowercase text-white/40">{selections.referenceStrength}%</span>
-              </div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={selections.referenceStrength}
-                onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
-                onClick={(e) => e.stopPropagation()}
-                className="w-full cursor-pointer appearance-none rounded-full"
-                style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${selections.referenceStrength}%, hsl(var(--secondary)) ${selections.referenceStrength}%)` }}
-              />
-              <p className="text-[10px] font-extrabold lowercase text-white/40">
-                (recommended: 50%)
-              </p>
             </div>
+          ) : (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+              className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
+              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px dashed #333", backgroundColor: "#111" }}
+            >
+              <Upload size={14} strokeWidth={2.5} className="text-white/30" />
+              <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
+            </button>
+          )}
+          <div className="w-full space-y-2 mb-4">
+            <div className="flex items-center justify-between">
+              <span className={HELPER_CLASS}>strength</span>
+              <span className={HELPER_CLASS}>{selections.referenceStrength}%</span>
+            </div>
+            <input
+              type="range" min={0} max={100}
+              value={selections.referenceStrength}
+              onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full cursor-pointer appearance-none rounded-full"
+              style={{ background: `linear-gradient(to right, ${Y} ${selections.referenceStrength}%, #222 ${selections.referenceStrength}%)` }}
+            />
+            <p className={HELPER_CLASS}>(recommended: 50%)</p>
           </div>
         </div>
-      );
-    }
+      </div>
+    );
 
-    /* ── Create slide ── */
+    /* Create slide */
     if (isCreateSlide) {
       const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
-          className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
+          className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
         >
-          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.02] tracking-tight">
-            <span className="block whitespace-nowrap text-white">your character</span>
-            <span className="block whitespace-nowrap">
-              <span className="text-white">is </span>
-              <span className="text-gem-green">almost here!</span>
-            </span>
+          <h2 className="mx-auto text-center text-[2.8rem] font-[900] lowercase leading-[1.05] tracking-tight">
+            <span className="block text-white">your character</span>
+            <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
           {!isFirstCharacter && (
-            <div className="mt-6 flex items-center gap-1.5">
+            <div className="mt-5 flex items-center gap-1.5">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
             </div>
           )}
-          <p className={`${!isFirstCharacter ? "mt-5" : "mt-6"} text-sm font-extrabold lowercase text-white/40`}>
-            tap to continue
-          </p>
+          <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap to continue</p>
         </button>
       );
     }
@@ -738,57 +619,47 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  /* ── Cooking content ── */
+  /* ── Cooking ── */
   const renderCooking = () => {
-    if (cookingPhase === "loading") {
-      return (
-        <div className="flex flex-col items-center w-full">
-          <ProgressBarLoader
-            duration={COOKING_DURATION}
-            phrases={COOKING_PHRASES}
-            phraseInterval={5200}
-            requireTapToContinue
-            expandTapTarget
-            onComplete={() => setCookingPhase("success")}
-          />
-        </div>
-      );
-    }
-    if (cookingPhase === "success" || cookingPhase === "exiting") {
-      return (
+    if (cookingPhase === "loading") return (
+      <div className="flex flex-col items-center w-full">
+        <ProgressBarLoader
+          duration={25000} phrases={COOKING_PHRASES} phraseInterval={5200}
+          requireTapToContinue expandTapTarget
+          onComplete={() => setCookingPhase("success")}
+        />
+      </div>
+    );
+    if (cookingPhase === "success" || cookingPhase === "exiting") return (
+      <motion.div
+        key="cooking-success"
+        className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
+        style={{ background: "hsl(140, 100%, 50%)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
+        transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
+      >
         <motion.div
-          key="cooking-success"
-          className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
-          style={{ background: "hsl(140, 100%, 50%)" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
-          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
+          initial={{ opacity: 0, y: 20, scale: 0.85 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
         >
-          <motion.div
-            className="flex min-h-[18rem] flex-col items-center justify-center text-center"
-            initial={{ opacity: 0, y: 20, scale: 0.85 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
-              <span className="block">character</span>
-              <span className="block">created!</span>
-            </p>
-          </motion.div>
+          <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
+            <span className="block">character</span><span className="block">created!</span>
+          </p>
         </motion.div>
-      );
-    }
+      </motion.div>
+    );
     return null;
   };
 
   const isCooking = cookingPhase !== "none";
+  const showNavigation = !isCooking && !isHeroSlide;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[9999] flex flex-col overflow-hidden"
-      style={{ background: "#000000" }}
-    >
-      {/* Exit fade overlay */}
+    <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#000" }}>
+      {isHeroSlide && <TopLine />}
+      {/* Exit fade */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
@@ -801,113 +672,70 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         animate={{ opacity: 1 }}
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-        onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-        <div className="absolute inset-0 flex flex-col" style={{ zIndex: 1 }}>
-          <div className="relative flex-1 overflow-hidden">
-            <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
-              <div className="w-full max-w-sm mx-auto flex flex-col items-center">
-                <AnimatePresence mode="wait" custom={slideDirection}>
-                  <motion.div
-                    key={isCooking ? "cooking" : step}
-                    className="w-full"
-                    custom={slideDirection}
-                    variants={slideVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                  >
-                    {isCooking ? renderCooking() : renderSlide()}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
+        {/* Skip pill for logged-in returning users */}
+        {!isCooking && isLoggedIn && skipWelcome && (
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+            className="absolute z-50 active:scale-95 transition-transform duration-150"
+            style={{
+              top: 20, right: 20,
+              backgroundColor: Y, borderRadius: 20,
+              padding: "8px 16px", fontSize: 12, fontWeight: 800,
+              color: "#000", textTransform: "lowercase",
+            }}
+          >skip</button>
+        )}
 
-          {/* Skip pill — top right (logged-in returning users only) */}
-          {!isCooking && isLoggedIn && skipWelcome && (
-            <button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
-              style={{
-                top: 20,
-                right: 20,
-                backgroundColor: "#facc15",
-                borderRadius: 20,
-                padding: "8px 16px",
-                fontSize: 12,
-                fontWeight: 800,
-                color: "#000",
-                textTransform: "lowercase",
-              }}
-            >
-              skip
-            </button>
-          )}
-
-          {/* Fixed bottom nav */}
-          {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: "65%" }}>
-              <div className="flex items-center gap-4">
-                <motion.div
-                  animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-                  transition={{ duration: 0.4 }}
-                >
-                  <NavArrow direction="left" onClick={goBack} />
-                </motion.div>
-                <NavArrow
-                  direction="right"
-                  onClick={advance}
-                  disabled={!canAdvance && currentTraitIndex >= 0}
-                />
-              </div>
-              {!isLoggedIn && step === 0 && (
-                <button
-                  type="button"
-                  onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
-                  style={{
-                    marginTop: 16,
-                    width: 62 + 62 + 16, // both arrows + gap
-                    backgroundColor: "#facc15",
-                    borderRadius: 14,
-                    padding: "14px",
-                    fontSize: 16,
-                    fontWeight: 900,
-                    color: "#000",
-                    textTransform: "lowercase" as const,
-                    textAlign: "center" as const,
-                  }}
-                >
-                  login
-                </button>
-              )}
-              <div className="flex items-center justify-center gap-[3px] mb-1 mt-4" style={{ padding: "0 50px" }}>
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="transition-all duration-300"
-                    style={{
-                      flex: 1,
-                      height: 5,
-                      borderRadius: 3,
-                      background: i <= Math.round((dotCurrent / dotTotal) * 11) ? "#00e0ff" : "rgba(0,224,255,0.1)",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Content area */}
+        <div className="absolute inset-0 flex items-center justify-center px-6">
+          <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+            <AnimatePresence mode="wait" custom={slideDirection}>
+              <motion.div
+                key={isCooking ? "cooking" : step}
+                className="w-full"
+                custom={slideDirection}
+                variants={slideVariants}
+                initial="enter" animate="center" exit="exit"
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                {isCooking ? renderCooking() : renderSlide()}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
+
+        {/* Bottom nav — only on non-hero slides */}
+        {showNavigation && (
+          <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-[max(env(safe-area-inset-bottom),2rem)] px-4" style={{ paddingTop: 12 }}>
+            {/* Progress dots */}
+            <div className="flex items-center justify-center gap-[3px] mb-4" style={{ padding: "0 50px", width: "100%" }}>
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="transition-all duration-300" style={{
+                  flex: 1, height: 4, borderRadius: 2,
+                  background: i <= Math.round(((step) / TOTAL) * 11) ? Y : "rgba(250,204,21,0.1)",
+                }} />
+              ))}
+            </div>
+            {/* Arrow buttons */}
+            <div className="flex items-center gap-3">
+              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+                <NavArrow direction="left" onClick={goBack} />
+              </motion.div>
+              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
+            </div>
+          </div>
+        )}
       </motion.div>
     </div>,
     document.body,
   );
 };
 
-/* ── Sign-in overlay (post face selection) ── */
+/* ══════════════════════════════════════════
+   SIGN-IN OVERLAY
+   ══════════════════════════════════════════ */
 export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn: () => void }) => {
   const { user, signIn, signUp } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -919,10 +747,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
 
   useEffect(() => {
     if (open && !user) setVisible(true);
-    if (user && visible) {
-      onSignedIn();
-      setVisible(false);
-    }
+    if (user && visible) { onSignedIn(); setVisible(false); }
   }, [open, user, visible, onSignedIn]);
 
   useEffect(() => {
@@ -941,134 +766,103 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
 
   useEffect(() => {
     if (!visible) return;
-    const timer = window.setTimeout(() => {
-      window.dispatchEvent(new CustomEvent("vizura:blackout:end"));
-    }, 320);
-
+    const timer = window.setTimeout(() => { window.dispatchEvent(new CustomEvent("vizura:blackout:end")); }, 320);
     return () => window.clearTimeout(timer);
   }, [visible]);
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/choose-face`,
-      });
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}/choose-face` });
       if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
-    } catch (err: any) {
-      toast.error(err.message || "sign in failed");
-      setGoogleLoading(false);
-    }
+    } catch (err: any) { toast.error(err.message || "sign in failed"); setGoogleLoading(false); }
   };
 
   const handleEmailAuth = async () => {
-    if (!email.trim() || !password.trim()) {
-      toast.error("enter email and password");
-      return;
-    }
+    if (!email.trim() || !password.trim()) { toast.error("enter email and password"); return; }
     setEmailLoading(true);
     try {
       if (isSignUp) {
-        try {
-          await signUp(email.trim(), password);
-          toast.success("check your email to confirm");
-        } catch (err: any) {
-          if (err.message?.toLowerCase().includes("already registered")) {
-            await signIn(email.trim(), password);
-          } else throw err;
+        try { await signUp(email.trim(), password); toast.success("check your email to confirm"); }
+        catch (err: any) {
+          if (err.message?.toLowerCase().includes("already registered")) await signIn(email.trim(), password);
+          else throw err;
         }
-      } else {
-        await signIn(email.trim(), password);
-      }
-    } catch (err: any) {
-      toast.error(err.message || "sign in failed");
-      setEmailLoading(false);
-    }
+      } else { await signIn(email.trim(), password); }
+    } catch (err: any) { toast.error(err.message || "sign in failed"); setEmailLoading(false); }
   };
 
   if (!visible) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000000" }}>
+    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000" }}>
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
-      <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
-        <div className="flex h-14 items-end justify-center mb-2">
-          <BigEmoji emoji="🔐" index={3} />
+        <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
+          <span className="text-[56px] mb-4">🔐</span>
+          <h2 className="text-center text-[2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+            sign in to<br />save her
+          </h2>
+          <button
+            onClick={handleGoogle}
+            disabled={googleLoading || emailLoading}
+            className="mt-8 w-full h-[52px] flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            style={{ background: Y, color: "#000", borderRadius: 12, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+          >
+            {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
+              <>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                sign in with google
+              </>
+            )}
+          </button>
+          <div className="mt-4 flex items-center gap-3 w-full">
+            <div className="flex-1 h-[2px] bg-white/10" />
+            <span className="text-[10px] font-extrabold lowercase text-white/30">or</span>
+            <div className="flex-1 h-[2px] bg-white/10" />
+          </div>
+          <input
+            type="email" placeholder="email" value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            className="mt-4 w-full h-[48px] px-4 text-sm font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            disabled={emailLoading || googleLoading}
+          />
+          <input
+            type="password" placeholder="password" value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
+            className="mt-2 w-full h-[48px] px-4 text-sm font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            disabled={emailLoading || googleLoading}
+          />
+          <button
+            onClick={handleEmailAuth}
+            disabled={emailLoading || googleLoading}
+            className="mt-3 w-full h-[52px] text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
+            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+          >
+            {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsSignUp((v) => !v)}
+            className="mt-2 w-full text-center text-[10px] font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors duration-150"
+          >
+            {isSignUp ? "have an account? sign in" : "no account? sign up"}
+          </button>
         </div>
-        <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[0.95] tracking-tight text-white">
-          sign in to<br />save her
-        </h2>
-        <button
-          onClick={handleGoogle}
-          disabled={googleLoading || emailLoading}
-          className="mt-8 w-full h-14 rounded-2xl text-sm font-[900] lowercase tracking-tight flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-          style={{ background: AMBER, color: "hsl(0 0% 0%)" }}
-        >
-          {googleLoading ? (
-            <><Loader2 className="animate-spin" size={18} />connecting...</>
-          ) : (
-            <>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-              sign in with google
-            </>
-          )}
-        </button>
-        <div className="mt-4 flex items-center gap-3 w-full">
-          <div className="flex-1 h-[2px] bg-white/10" />
-          <span className="text-[10px] font-extrabold lowercase text-white/30">or</span>
-          <div className="flex-1 h-[2px] bg-white/10" />
-        </div>
-        <input
-          type="email"
-          placeholder="email"
-          value={email}
-          onChange={(e) => { e.stopPropagation(); setEmail(e.target.value); }}
-          onClick={(e) => e.stopPropagation()}
-          className="mt-4 w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
-          style={{ backgroundColor: "#111111" }}
-          disabled={emailLoading || googleLoading}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          value={password}
-          onChange={(e) => { e.stopPropagation(); setPassword(e.target.value); }}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-          className="mt-2 w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
-          style={{ backgroundColor: "#111111" }}
-          disabled={emailLoading || googleLoading}
-        />
-        <button
-          onClick={handleEmailAuth}
-          disabled={emailLoading || googleLoading}
-          className="mt-3 w-full h-14 rounded-2xl border-2 border-[#1a1a1a] text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors duration-150 disabled:opacity-50"
-          style={{ backgroundColor: "#111111" }}
-        >
-          {emailLoading ? (
-            <><Loader2 className="animate-spin" size={18} />signing in...</>
-          ) : (
-            <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsSignUp((v) => !v)}
-          className="mt-2 w-full text-center text-[10px] font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors duration-150"
-        >
-          {isSignUp ? "have an account? sign in" : "no account? sign up"}
-        </button>
-      </div>
       </motion.div>
     </div>,
     document.body,
