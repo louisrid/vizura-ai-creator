@@ -91,36 +91,40 @@ const AnimatedRings = ({ t }: { t: number }) => (
   </div>
 );
 
-/* ── Nav arrow ── */
+/* ── Nav arrow (cyan/blue style) ── */
+const CYAN = "#00e0ff";
 const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(
-  ({ direction, onClick, disabled }, ref) => (
-    <button
-      ref={ref}
-      type="button"
-      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
-      disabled={disabled}
-      className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
-      style={{
-        width: 62, height: 62, borderRadius: 16,
-        backgroundColor: "#111",
-        border: "2px solid #222",
-        outline: "none", padding: 0, cursor: "pointer",
-        color: "#fff",
-      }}
-    >
-      {direction === "left" ? (
-        <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-          <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-        </svg>
-      ) : (
-        <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-          <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-        </svg>
-      )}
-    </button>
-  )
+  ({ direction, onClick, disabled }, ref) => {
+    const isForward = direction === "right";
+    return (
+      <button
+        ref={ref}
+        type="button"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
+        disabled={disabled}
+        className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
+        style={{
+          width: 68, height: 68, borderRadius: 16,
+          backgroundColor: isForward ? "rgba(0,224,255,0.12)" : "rgba(0,224,255,0.06)",
+          border: isForward ? `2px solid rgba(0,224,255,0.35)` : `2px solid rgba(0,224,255,0.2)`,
+          outline: "none", padding: 0, cursor: "pointer",
+          color: CYAN,
+        }}
+      >
+        {direction === "left" ? (
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
+            <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+        ) : (
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
+            <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+        )}
+      </button>
+    );
+  }
 );
 NavArrow.displayName = "NavArrow";
 
@@ -417,17 +421,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── HERO SLIDE (new first screen) ── */
   const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: 60 }}>
+    <div className="flex w-full flex-col items-center" style={{ marginTop: 80 }}>
       <AnimatedRings t={ringT} />
-      <div style={{ fontSize: 86, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
-      <div style={{ width: 50, height: 5, background: Y, marginTop: 10, marginBottom: 0, borderRadius: 3 }} />
-      <div className="flex flex-col items-center" style={{ marginTop: 24, gap: 10 }}>
+      <div style={{ fontSize: 68, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div style={{ width: 44, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
+      <div className="flex flex-col items-center" style={{ marginTop: 22, gap: 8 }}>
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
           style={{
-            width: 240, padding: "16px", background: Y, border: "none", borderRadius: 14,
-            fontSize: 22, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            width: 200, padding: "13px", background: Y, border: "none", borderRadius: 12,
+            fontSize: 20, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
@@ -438,8 +442,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             style={{
-              width: 240, padding: "14px", background: "#111", border: "2px solid #222",
-              borderRadius: 14, fontSize: 20, fontWeight: 900, color: "#fff",
+              width: 200, padding: "11px", background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontSize: 20, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
@@ -456,7 +460,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Intro */
     if (isIntroSlide) return (
-      <div className="flex w-full flex-col items-center" style={{ marginTop: 40 }}>
+      <div className="flex w-full flex-col items-center">
         <span className="text-[64px] mb-5">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap → to continue</p>
@@ -465,7 +469,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Name */
     if (isNameSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 40 }}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <span className="text-[64px] mb-5">✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 flex items-center gap-2.5 w-full max-w-[17rem]">
@@ -498,7 +502,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
-        <div className="flex w-full flex-col items-center" style={{ marginTop: 40 }}>
+        <div className="flex w-full flex-col items-center">
           <span className="text-[64px] mb-5">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           <div className={`mt-6 grid w-full gap-3 px-2 ${
@@ -526,7 +530,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Description */
     if (isDescriptionSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 20 }}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
         <div className="mt-5 w-full max-w-[18rem]">
@@ -546,7 +550,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Reference */
     if (isReferenceSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 20 }}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
         <div className="mt-5 flex w-full max-w-[11rem] flex-col items-center gap-4">
@@ -601,7 +605,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
           className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
-          style={{ marginTop: 40 }}
         >
           <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
@@ -710,9 +713,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Bottom nav — only on non-hero slides */}
         {showNavigation && (
-          <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-[max(env(safe-area-inset-bottom),2rem)] px-4" style={{ paddingTop: 12 }}>
-            {/* Progress dots */}
-            <div className="flex items-center justify-center gap-[3px] mb-4" style={{ padding: "0 50px", width: "100%" }}>
+          <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
+            {/* Progress dots at TOP */}
+            <div className="flex items-center justify-center gap-[3px]" style={{ padding: "0 50px", width: "100%", marginBottom: 0 }}>
               {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="transition-all duration-300" style={{
                   flex: 1, height: 4, borderRadius: 2,
@@ -720,13 +723,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 }} />
               ))}
             </div>
-            {/* Arrow buttons */}
-            <div className="flex items-center gap-3">
-              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-                <NavArrow direction="left" onClick={goBack} />
-              </motion.div>
-              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
-            </div>
+          </div>
+        )}
+
+        {/* Arrow buttons — positioned below content */}
+        {showNavigation && (
+          <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-3 pb-[max(env(safe-area-inset-bottom),2.5rem)]">
+            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+              <NavArrow direction="left" onClick={goBack} />
+            </motion.div>
+            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
           </div>
         )}
       </motion.div>
