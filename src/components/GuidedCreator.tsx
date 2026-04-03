@@ -793,9 +793,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         aria-hidden="true"
         style={{
           top: "-50%", left: "-50%", width: "200%", height: "200%",
-          background: "radial-gradient(ellipse at 20% 50%, rgba(0,40,200,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(90,0,200,0.07) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(40,0,180,0.06) 0%, transparent 50%)",
+          background: "radial-gradient(ellipse at 20% 50%, rgba(0,60,255,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(120,0,255,0.15) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(60,0,220,0.12) 0%, transparent 50%)",
           animation: "wizardBreathe 20s ease-in-out infinite",
-          filter: "blur(60px)",
+          filter: "blur(40px)",
           zIndex: 0,
         }}
       />
