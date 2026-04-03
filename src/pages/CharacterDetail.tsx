@@ -123,7 +123,7 @@ const CharacterDetail = () => {
           {character.name || "unnamed"}
         </h1>
         <div className="grid grid-cols-3 gap-2.5">
-          <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#151515" }}>
+          <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
             {hasFace ? (
               <img src={character.face_image_url!} alt="front" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
             ) : (
