@@ -787,18 +787,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col overflow-hidden"
       style={{ background: "#000000" }}
     >
-      {/* Animated breathing background */}
-      <div
-        className="pointer-events-none absolute"
-        aria-hidden="true"
-        style={{
-          top: "-50%", left: "-50%", width: "200%", height: "200%",
-          background: "radial-gradient(ellipse at 20% 50%, rgba(0,60,255,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(120,0,255,0.15) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(60,0,220,0.12) 0%, transparent 50%)",
-          animation: "wizardBreathe 20s ease-in-out infinite",
-          filter: "blur(40px)",
-          zIndex: 0,
-        }}
-      />
+      {/* 5 independent animated blobs */}
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "10%", left: "5%", width: 200, height: 200, background: "rgba(0,40,255,0.12)", borderRadius: "50%", filter: "blur(80px)", zIndex: 0, animation: "blob1 22s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "60%", right: "10%", width: 150, height: 150, background: "rgba(100,0,220,0.10)", borderRadius: "50%", filter: "blur(70px)", zIndex: 0, animation: "blob2 26s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "30%", right: "25%", width: 180, height: 180, background: "rgba(40,0,200,0.09)", borderRadius: "50%", filter: "blur(90px)", zIndex: 0, animation: "blob3 24s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ bottom: "20%", left: "20%", width: 120, height: 120, background: "rgba(0,30,180,0.11)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0, animation: "blob4 28s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "50%", left: "40%", width: 160, height: 160, background: "rgba(80,0,180,0.08)", borderRadius: "50%", filter: "blur(75px)", zIndex: 0, animation: "blob5 20s ease-in-out infinite" }} />
       {/* Exit fade overlay */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
