@@ -530,7 +530,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Description */
     if (isDescriptionSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 20 }}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
         <div className="mt-5 w-full max-w-[18rem]">
