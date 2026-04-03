@@ -474,7 +474,7 @@ const ChooseFace = () => {
 
           <div className="-mx-4 shrink-0">
             <div className="border-t-[5px] border-white" />
-            <div className="px-4 pt-6 pb-[max(env(safe-area-inset-bottom),2rem)] bg-background">
+            <div className="px-4 pt-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] bg-black">
               <div className="flex gap-3">
                 <button
                   onClick={handleRegenerate}
