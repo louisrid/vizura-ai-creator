@@ -306,7 +306,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-20 pb-8">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-6 pb-[80px]">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -321,14 +321,15 @@ const Index = () => {
                 layout
                 className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
                 style={{
-                  maxWidth: photoRatio === "9:16" ? "14rem" : "100%",
+                  maxWidth: photoRatio === "9:16" ? "10rem" : "100%",
+                  maxHeight: "180px",
                   borderRadius: 16,
-                  border: "2px solid #222",
-                  backgroundColor: "#151515",
+                  border: "2px solid rgba(255,255,255,0.08)",
+                  backgroundColor: "#111111",
                 }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
-                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "180px" }}>
                   {resultImage ? (
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (

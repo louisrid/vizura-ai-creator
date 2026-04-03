@@ -56,7 +56,13 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 relative" style={{ backgroundColor: 'transparent' }}>
+    <header
+      className="sticky top-0 z-40 relative"
+      style={{
+        background: "linear-gradient(to bottom, #000000 0%, #000000 60%, transparent 100%)",
+        paddingBottom: 20,
+      }}
+    >
       <TopGradientBar />
       <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-8 pb-4">
         <button onClick={() => handleNav("/")} className="text-[21px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
@@ -164,7 +170,7 @@ const Header = () => {
                           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                         >
-                          <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: isActive ? "#facc15" : "#fff" }} />
+                          <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: isActive ? "#facc15" : "#facc15" }} />
                           {item.label}
                         </button>
                       );
@@ -177,7 +183,7 @@ const Header = () => {
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >
-                        <LogOut size={18} strokeWidth={2.5} className="shrink-0" />
+                        <LogOut size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                         log out
                       </button>
                     )}
