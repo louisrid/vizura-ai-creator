@@ -223,7 +223,7 @@ const ChooseFace = () => {
   };
 
   const handleFaceClick = (i: number) => {
-    setSelectedIndex((prev) => (prev === i ? null : i));
+    setSelectedIndex(i);
     setPulseIndex(i);
     window.setTimeout(() => setPulseIndex((current) => (current === i ? null : current)), 360);
   };
