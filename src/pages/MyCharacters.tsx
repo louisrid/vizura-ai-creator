@@ -66,7 +66,6 @@ const MyCharacters = () => {
 
   const handleBottomButton = () => {
     if (characters.length === 0) {
-      // No characters — go to homepage to open character creator
       sessionStorage.setItem("vizura_internal_nav", "1");
       navigate("/");
       return;
@@ -82,8 +81,8 @@ const MyCharacters = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-32">
-        <div className="flex items-center gap-3 mb-8">
+      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-24">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
@@ -93,7 +92,7 @@ const MyCharacters = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="aspect-[3/4] rounded-2xl bg-card border-[5px] border-border flex items-center justify-center hover:border-foreground/40 transition-colors duration-200 active:scale-[0.97]"
@@ -145,13 +144,13 @@ const MyCharacters = () => {
         )}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3 bg-gradient-to-t from-background via-background/95 to-transparent">
+      <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1rem)] pt-2 bg-gradient-to-t from-background via-background/95 to-transparent">
         <div className="mx-auto max-w-lg md:max-w-6xl">
           <motion.button
             onClick={handleBottomButton}
             animate={bounceActive ? { y: [0, -6, 0] } : {}}
             transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-            className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
+            className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97] bg-neon-yellow text-neon-yellow-foreground"
           >
             {hasCharacters ? (
               <><Camera size={20} strokeWidth={2.5} />create photo</>

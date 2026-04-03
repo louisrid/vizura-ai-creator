@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Download, Trash2, X, Calendar, Wand2 } from "lucide-react";
+import { Loader2, Download, Trash2, X, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
@@ -59,11 +59,6 @@ const Storage = () => {
 
   if (!authLoading && !user) return null;
 
-  const formatDate = (dateStr: string) => {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }).toLowerCase();
-  };
-
   const handleDelete = (img: StorageImage) => {
     setImages((prev) => prev.filter((i) => i.id !== img.id));
     if (expanded?.id === img.id) setExpanded(null);
@@ -71,8 +66,8 @@ const Storage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-12">
-        <div className="flex items-center gap-3 mb-8">
+      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-14 pb-8">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
         </div>
@@ -95,24 +90,25 @@ const Storage = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {images.map((img) => (
-              <button
-                key={img.id}
-                onClick={() => setExpanded(img)}
-                className="group relative rounded-2xl border-[5px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
-              >
-                <AspectRatio ratio={3 / 4}>
-                  <img src={img.url} alt="" className="h-full w-full object-cover" />
-                </AspectRatio>
-                <div className="p-3">
-                  <p className="text-[10px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed mb-2">
-                    {img.prompt || "no prompt"}
-                  </p>
-                  <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
-                    <Calendar size={10} strokeWidth={2.5} />
-                    {formatDate(img.created_at)}
-                  </div>
-                </div>
-              </button>
+              <div key={img.id} className="flex flex-col">
+                <button
+                  onClick={() => setExpanded(img)}
+                  className="group relative rounded-t-2xl border-[5px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+                >
+                  <AspectRatio ratio={3 / 4}>
+                    <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  </AspectRatio>
+                </button>
+                <a
+                  href={img.url}
+                  download={`vizura-${img.id}.png`}
+                  target="_blank"
+                  className="flex items-center justify-center gap-1.5 rounded-b-2xl border-[5px] border-t-[3px] border-border bg-card py-2 text-[10px] font-extrabold lowercase text-foreground/60 hover:text-foreground transition-colors"
+                >
+                  <Download size={12} strokeWidth={2.5} />
+                  download
+                </a>
+              </div>
             ))}
           </div>
         )}
@@ -146,28 +142,19 @@ const Storage = () => {
                   <X size={14} strokeWidth={2.5} />
                 </button>
               </div>
-              <div className="p-4 space-y-3">
-                <p className="text-[10px] font-extrabold lowercase text-foreground/60 leading-relaxed">
-                  {expanded.prompt || "no prompt"}
-                </p>
-                <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
-                  <Calendar size={10} strokeWidth={2.5} />
-                  {formatDate(expanded.created_at)}
-                </div>
-                <div className="flex gap-2">
-                  <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                    <Button variant="outline" className="w-full h-12">
-                      <Download size={14} strokeWidth={2.5} /> download
-                    </Button>
-                  </a>
-                  <Button
-                    variant="outline"
-                    className="h-12 px-4 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
-                    onClick={() => handleDelete(expanded)}
-                  >
-                    <Trash2 size={14} strokeWidth={2.5} />
+              <div className="p-4 flex gap-2">
+                <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
+                  <Button variant="outline" className="w-full h-12">
+                    <Download size={14} strokeWidth={2.5} /> download
                   </Button>
-                </div>
+                </a>
+                <Button
+                  variant="outline"
+                  className="h-12 px-4 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                  onClick={() => handleDelete(expanded)}
+                >
+                  <Trash2 size={14} strokeWidth={2.5} />
+                </Button>
               </div>
             </motion.div>
           </motion.div>
