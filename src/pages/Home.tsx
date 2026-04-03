@@ -337,7 +337,7 @@ const Home = () => {
                     style={{
                       borderRadius: 16,
                       border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
-                      backgroundColor: "#151515",
+                      backgroundColor: "#111111",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
