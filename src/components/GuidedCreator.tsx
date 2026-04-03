@@ -463,10 +463,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Name */
     if (isNameSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[56px] mb-4">✨</span>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 40 }}>
+        <span className="text-[64px] mb-5">✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+        <div className="mt-6 flex items-center gap-2.5 w-full max-w-[17rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -475,17 +475,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[52px] flex-1 min-w-0 px-4 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="h-[56px] flex-1 min-w-0 px-4 text-[17px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
           <motion.button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
             whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[52px] w-[52px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
-            style={{ borderRadius: 12, backgroundColor: Y }}
+            className="flex h-[56px] w-[56px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            style={{ borderRadius: 14, backgroundColor: Y }}
           >
-            <RefreshCw size={18} strokeWidth={2.5} />
+            <RefreshCw size={20} strokeWidth={2.5} />
           </motion.button>
         </div>
       </div>
