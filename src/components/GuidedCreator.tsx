@@ -848,41 +848,42 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 140px)" }}>
-              <div className="flex h-[58px] items-center gap-4">
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: "65%" }}>
+              <div className="flex items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
                 >
                   <NavArrow direction="left" onClick={goBack} />
                 </motion.div>
-                <div className="flex flex-col items-center">
-                  <NavArrow
-                    direction="right"
-                    onClick={advance}
-                    disabled={!canAdvance && currentTraitIndex >= 0}
-                  />
-                </div>
+                <NavArrow
+                  direction="right"
+                  onClick={advance}
+                  disabled={!canAdvance && currentTraitIndex >= 0}
+                />
               </div>
               {!isLoggedIn && step === 0 && (
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="mt-3 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+                  className="active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
                   style={{
+                    marginTop: 16,
+                    width: 62 + 62 + 16, // both arrows + gap
                     backgroundColor: "#facc15",
                     borderRadius: 14,
-                    padding: "8px 18px",
-                    fontSize: 11,
-                    fontWeight: 800,
+                    padding: "14px",
+                    fontSize: 16,
+                    fontWeight: 900,
                     color: "#000",
                     textTransform: "lowercase" as const,
+                    textAlign: "center" as const,
                   }}
                 >
-                  skip to login
+                  login
                 </button>
               )}
-              <div className="flex items-center justify-center gap-[3px] mb-1" style={{ padding: "0 50px" }}>
+              <div className="flex items-center justify-center gap-[3px] mb-1 mt-4" style={{ padding: "0 50px" }}>
                 {Array.from({ length: 12 }).map((_, i) => (
                   <div
                     key={i}
