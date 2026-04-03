@@ -89,25 +89,25 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
-      width: 48,
-      height: 48,
+      width: 60,
+      height: 56,
       backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
       border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
-      borderRadius: 14,
+      borderRadius: 16,
       outline: "none",
       padding: 0,
       cursor: "pointer",
     }}
   >
     {direction === "left" ? (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="12" y1="7" x2="2" y2="7" />
-        <polyline points="7,2 2,7 7,12" />
+      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 1L1 7.5L7 14" />
+        <line x1="1.5" y1="7.5" x2="17" y2="7.5" />
       </svg>
     ) : (
-      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#00e0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="2" y1="7" x2="12" y2="7" />
-        <polyline points="7,2 12,7 7,12" />
+      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 1L17 7.5L11 14" />
+        <line x1="1" y1="7.5" x2="16.5" y2="7.5" />
       </svg>
     )}
   </button>
@@ -785,8 +785,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "#000000" }}
+      style={{ background: "#000000", position: "relative", overflow: "hidden" }}
     >
+      {/* Animated breathing background */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          inset: "-50%",
+          background: "radial-gradient(ellipse at 20% 50%, rgba(0,40,200,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(90,0,200,0.07) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(40,0,180,0.06) 0%, transparent 50%)",
+          animation: "wizardBreathe 20s ease-in-out infinite",
+          filter: "blur(60px)",
+          zIndex: 0,
+        }}
+      />
       {/* Exit fade overlay */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
@@ -802,30 +813,72 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-
-        <div className="relative flex-1 overflow-hidden">
-          <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
-            <div className="w-full max-w-sm mx-auto flex flex-col items-center">
-              <AnimatePresence mode="wait" custom={slideDirection}>
-                <motion.div
-                  key={isCooking ? "cooking" : step}
-                  className="w-full"
-                  custom={slideDirection}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
-                  {isCooking ? renderCooking() : renderSlide()}
-                </motion.div>
-              </AnimatePresence>
+        <div className="absolute inset-0 flex flex-col" style={{ zIndex: 1 }}>
+          <div className="relative flex-1 overflow-hidden">
+            <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
+              <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+                <AnimatePresence mode="wait" custom={slideDirection}>
+                  <motion.div
+                    key={isCooking ? "cooking" : step}
+                    className="w-full"
+                    custom={slideDirection}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    {isCooking ? renderCooking() : renderSlide()}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
+
+          {/* Skip to login pill — top right */}
+          {!isCooking && !isLoggedIn && (
+            <button
+              type="button"
+              onClick={() => navigateTo(`/auth${window.location.search}`)}
+              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+              style={{
+                top: 20,
+                right: 20,
+                backgroundColor: "#facc15",
+                borderRadius: 20,
+                padding: "8px 16px",
+                fontSize: 12,
+                fontWeight: 800,
+                color: "#000",
+                textTransform: "lowercase",
+              }}
+            >
+              skip to login
+            </button>
+          )}
+          {!isCooking && isLoggedIn && skipWelcome && (
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+              style={{
+                top: 20,
+                right: 20,
+                backgroundColor: "#facc15",
+                borderRadius: 20,
+                padding: "8px 16px",
+                fontSize: 12,
+                fontWeight: 800,
+                color: "#000",
+                textTransform: "lowercase",
+              }}
+            >
+              skip
+            </button>
+          )}
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 180px)" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 170px)" }}>
               <div className="mb-3.5 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
@@ -855,29 +908,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 ))}
               </div>
-
-              {!isLoggedIn && (
-                <button
-                  type="button"
-                  onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
-                >
-                  skip to login
-                </button>
-              )}
-              {isLoggedIn && skipWelcome && (
-                <button
-                  type="button"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
-                >
-                  skip
-                </button>
-              )}
             </div>
           )}
+          </div>
         </div>
       </motion.div>
     </div>,
