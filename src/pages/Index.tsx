@@ -58,8 +58,8 @@ const PillToggle = ({ label, options, value, onChange, renderOption }: {
             fontWeight: 800,
             textTransform: "lowercase" as const,
             ...(value === opt
-              ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
-              : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+               ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
+              : { backgroundColor: "#111111", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
             ),
           }}
         >
