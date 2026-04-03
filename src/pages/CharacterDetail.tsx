@@ -38,7 +38,7 @@ const CharacterDetail = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate(`/account?redirect=${encodeURIComponent(`/characters/${id}`)}`);
+      navigate(`/auth?redirect=${encodeURIComponent(`/characters/${id}`)}`, { replace: true });
     }
   }, [user, authLoading, navigate, id]);
 

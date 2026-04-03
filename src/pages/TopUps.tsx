@@ -22,7 +22,7 @@ const TopUps = () => {
   const [buying, setBuying] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
+    if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
   }, [user, loading, navigate, location.pathname]);
 
   useEffect(() => {
