@@ -24,8 +24,9 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
   <button
     onClick={onClick}
     className={`flex h-14 w-full items-center justify-center rounded-2xl border-[5px] text-sm font-[900] lowercase tracking-tight transition-colors ${
-      active ? "border-neon-yellow bg-white/10 text-white" : "border-white/15 bg-white/5 text-white/80"
+    active ? "border-neon-yellow bg-neon-yellow/10 text-white" : "border-[#1a1a1a] text-white/80"
     }`}
+    style={{ backgroundColor: active ? "rgba(250,204,21,0.1)" : "#111111" }}
   >
     {value || "–"}
   </button>
