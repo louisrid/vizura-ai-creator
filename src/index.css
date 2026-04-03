@@ -171,3 +171,11 @@ input[type="range"]::-moz-range-thumb {
   0% { transform: translateY(-10%) rotate(0deg); }
   100% { transform: translateY(110vh) rotate(360deg); }
 }
+
+/* Global button press state */
+button, a[role="button"], [role="button"] {
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+button:active, a[role="button"]:active, [role="button"]:active {
+  opacity: 0.85;
+}
