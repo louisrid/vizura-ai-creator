@@ -9,7 +9,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
-import DotDecal from "@/components/DotDecal";
 
 interface StorageImage {
   id: string;
