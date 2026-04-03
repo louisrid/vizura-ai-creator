@@ -439,8 +439,8 @@ const Index = () => {
             {/* Reference section */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
-                <span className="text-[10px] font-extrabold lowercase text-muted-foreground">(optional)</span>
+                <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>add a reference</span>
+                <span className="text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
               {referenceImage ? (
