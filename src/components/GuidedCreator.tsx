@@ -677,10 +677,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
-          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.02] tracking-tight text-foreground">
-            <span className="block whitespace-nowrap">your character</span>
+          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.02] tracking-tight">
+            <span className="block whitespace-nowrap text-white">your character</span>
             <span className="block whitespace-nowrap">
-              <span className="text-foreground">is </span>
+              <span className="text-white">is </span>
               <span className="text-gem-green">almost here!</span>
             </span>
           </h2>
@@ -726,7 +726,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <motion.div
           key="cooking-success"
           className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
-          style={{ background: "hsl(var(--member-green))" }}
+          style={{ background: "hsl(140, 100%, 50%)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
@@ -737,7 +737,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-neon-yellow-foreground">
+            <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
               <span className="block">character</span>
               <span className="block">created!</span>
             </p>

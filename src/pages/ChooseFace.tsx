@@ -110,8 +110,24 @@ const ChooseFace = () => {
       if (fnError) throw fnError;
       if (data?.error) {
         if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
-          setShowPaywall(true);
-          setLoading(false);
+          // Free gen used — retry with gem-based flow
+          const { data: retryData, error: retryError } = await supabase.functions.invoke("generate", {
+            body: { prompt, face_regen: true },
+          });
+          if (retryError) throw retryError;
+          if (retryData?.error) {
+            if (retryData.code === "NO_GEMS") {
+              setShowPaywall(true);
+              setLoading(false);
+              return;
+            }
+            throw new Error(retryData.error);
+          }
+          const retryImgs = retryData.images || [];
+          const retryFaces = retryImgs.slice(0, 3);
+          setFaces(retryFaces);
+          sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(retryFaces));
+          setSelectedIndex(null);
           return;
         }
         if (data.code === "CONTENT_POLICY") {

@@ -124,13 +124,14 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
             {phase === "success" && (
               <motion.div
                 key="success"
-                className="fixed inset-0 flex flex-col items-center justify-center bg-member-green px-6 text-center"
+                className="fixed inset-0 flex flex-col items-center justify-center px-6 text-center"
+                style={{ backgroundColor: "hsl(140, 100%, 50%)" }}
                 initial={{ opacity: 1 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0 }}
               >
                 <motion.p
-                  className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-neon-yellow-foreground"
+                  className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
