@@ -403,9 +403,11 @@ const ChooseFace = () => {
       {/* Green "character created!" success screen */}
       <AnimatePresence>
         {showSuccess && (
-          <motion.div
+          <motion.button
             key="success-screen"
-            className="fixed inset-0 z-[9999] flex items-center justify-center"
+            type="button"
+            onClick={() => setShowSuccess(false)}
+            className="fixed inset-0 z-[9999] flex items-center justify-center cursor-pointer"
             style={{ backgroundColor: "hsl(var(--member-green))" }}
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
