@@ -176,7 +176,7 @@ const CharacterDetail = () => {
       </main>
 
       {/* ── Desktop layout ── */}
-      <main className="hidden md:block mx-auto w-full max-w-3xl px-8 pt-6 pb-12">
+      <main className="hidden md:block mx-auto w-full max-w-3xl px-8 pt-14 pb-12">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
