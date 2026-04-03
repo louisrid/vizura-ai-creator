@@ -967,8 +967,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   if (!visible) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#050505" }}>
-      <AmbientGlow />
+    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000000" }}>
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center"
         initial={{ opacity: 0 }}
