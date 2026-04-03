@@ -112,6 +112,8 @@ const ChooseFace = () => {
 
   const generateFaces = async () => {
     setLoading(true);
+    setApiDone(false);
+    setBarComplete(false);
     setCardsRevealed(false);
     try {
       if (!user) {
@@ -144,6 +146,7 @@ const ChooseFace = () => {
           setFaces(retryFaces);
           sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(retryFaces));
           setSelectedIndex(null);
+          setApiDone(true);
           return;
         }
         if (data.code === "CONTENT_POLICY") {
@@ -158,6 +161,7 @@ const ChooseFace = () => {
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
+      setApiDone(true);
     } catch (err: any) {
       const msg = err?.message || "generation failed";
       if (msg.includes("Free generation") || msg.includes("IP_USED") || msg.includes("FREE_GEN_USED")) {
@@ -165,7 +169,6 @@ const ChooseFace = () => {
       } else {
         toast.error("generation failed, please try again");
       }
-    } finally {
       setLoading(false);
     }
   };
