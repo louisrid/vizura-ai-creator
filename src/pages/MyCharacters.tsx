@@ -100,7 +100,7 @@ const MyCharacters = () => {
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="overflow-hidden active:scale-[0.97] transition-transform"
-              style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#151515" }}
+              style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#111111" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
