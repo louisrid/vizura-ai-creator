@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -85,9 +85,29 @@ const ScrollToTop = () => {
 
 const AppRoutes = () => {
   const location = useLocation();
+  const [blackoutActive, setBlackoutActive] = useState(false);
+
+  useEffect(() => {
+    const start = () => setBlackoutActive(true);
+    const end = () => setBlackoutActive(false);
+
+    window.addEventListener("vizura:blackout:start", start);
+    window.addEventListener("vizura:blackout:end", end);
+
+    return () => {
+      window.removeEventListener("vizura:blackout:start", start);
+      window.removeEventListener("vizura:blackout:end", end);
+    };
+  }, []);
 
   return (
     <>
+      <motion.div
+        className="pointer-events-none fixed inset-0 z-[2147483646] bg-black"
+        initial={false}
+        animate={{ opacity: blackoutActive ? 1 : 0 }}
+        transition={{ duration: 0.9, ease: "easeInOut" }}
+      />
       <Header />
       <AnimatePresence mode="wait">
         <motion.div

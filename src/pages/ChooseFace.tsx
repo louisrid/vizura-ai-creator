@@ -69,6 +69,16 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (authLoading) return;
+
+    const timer = window.setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("vizura:blackout:end"));
+    }, 320);
+
+    return () => window.clearTimeout(timer);
+  }, [authLoading, showSignIn, loading]);
+
+  useEffect(() => {
+    if (authLoading) return;
     if (!prompt) { navigate("/"); return; }
     if (hasInitRef.current) return;
     hasInitRef.current = true;

@@ -423,9 +423,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     if (isCreateSlide) {
-      // Fade to black, then complete
+      window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
       setExitFade(true);
-      setTimeout(() => completeCookingFlow(), 1200);
+      setTimeout(() => completeCookingFlow(), 1400);
       return;
     }
 
@@ -772,7 +772,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 1.0, ease: "easeInOut" }}
+        transition={{ duration: 0.9, ease: "easeInOut" }}
       />
       <AmbientGlow />
       <motion.div
@@ -880,6 +880,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
     };
+  }, [visible]);
+
+  useEffect(() => {
+    if (!visible) return;
+    const timer = window.setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("vizura:blackout:end"));
+    }, 320);
+
+    return () => window.clearTimeout(timer);
   }, [visible]);
 
   const handleGoogle = async () => {
