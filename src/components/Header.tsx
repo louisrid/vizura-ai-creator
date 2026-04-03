@@ -60,12 +60,12 @@ const Header = () => {
       className="sticky top-0 z-40 relative"
       style={{
         background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.2) 75%, transparent 100%)",
-        paddingBottom: 56,
+        paddingBottom: 28,
       }}
     >
       <TopGradientBar />
-      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-8 pb-4">
-        <button onClick={() => handleNav("/")} className="text-[21px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-5 pb-2">
+        <button onClick={() => handleNav("/")} className="text-[19px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
           vizura
         </button>
 
