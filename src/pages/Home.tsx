@@ -376,7 +376,7 @@ const Home = () => {
                       style={{
                         borderRadius: 16,
                         border: "2px dashed #222",
-                        backgroundColor: "#151515",
+                        backgroundColor: "#111111",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
