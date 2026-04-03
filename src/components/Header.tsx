@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, X } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Image } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -42,8 +42,18 @@ const Header = () => {
     return user.email[0].toUpperCase();
   }, [user?.email]);
 
+  const menuItems = [
+    { label: "home", path: "/", icon: Home },
+    { label: "create character", path: "/", icon: UserPlus, state: { openCreator: true } },
+    { label: "create photo", path: "/create", icon: Camera },
+    { label: "my characters", path: "/characters", icon: LayoutGrid },
+    { label: "pick your face", path: "/choose-face", icon: Image },
+    { label: "gems", path: "/top-ups", icon: Gem },
+    { label: "settings", path: "/account", icon: Settings },
+  ];
+
   return (
-    <header className="sticky top-0 z-40 relative" style={{ backgroundColor: '#000000' }}>
+    <header className="sticky top-0 z-40 relative" style={{ backgroundColor: '#0b0b0b' }}>
       <TopGradientBar />
       <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 py-4">
         {/* Left: Logo */}
@@ -109,9 +119,9 @@ const Header = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-[14px] top-full mt-2 w-52 overflow-hidden"
+                className="absolute right-[14px] top-full mt-2 w-56 overflow-hidden"
                 style={{
-                  backgroundColor: "#151515",
+                  backgroundColor: "#111111",
                   border: "2px solid #222",
                   borderRadius: 16,
                   zIndex: 50,
@@ -126,31 +136,40 @@ const Header = () => {
                     <X size={14} strokeWidth={2.5} />
                   </button>
                   <div className="pt-2 pb-2">
-                    {[
-                      { label: "my characters", path: "/characters", icon: LayoutGrid },
-                      { label: "create photo", path: "/create", icon: Camera },
-                      { label: "gems", path: "/top-ups", icon: Gem },
-                      { label: "settings", path: "/account", icon: Settings },
-                    ].map((item) => (
-                      <button
-                        key={item.label}
-                        onClick={() => handleNav(item.path)}
-                        className="w-full text-left px-4 py-[14px] text-[14px] font-[800] lowercase transition-colors flex items-center gap-2.5 text-white hover:text-white"
-                        style={{
-                          borderBottom: "1px solid #222",
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                      >
-                        <item.icon size={14} strokeWidth={2.5} className="shrink-0" />
-                        {item.label}
-                      </button>
-                    ))}
+                    {menuItems.map((item) => {
+                      const isActive = location.pathname === item.path && !item.state;
+                      return (
+                        <button
+                          key={item.label}
+                          onClick={() => {
+                            setOpen(false);
+                            if (item.state) {
+                              navigate(item.path, { state: item.state });
+                            } else {
+                              handleNav(item.path);
+                            }
+                          }}
+                          className="w-full text-left px-4 text-[14px] font-[800] lowercase transition-colors flex items-center gap-2.5"
+                          style={{
+                            paddingTop: 18,
+                            paddingBottom: 18,
+                            borderBottom: "1px solid #222",
+                            color: isActive ? "#facc15" : "#fff",
+                            backgroundColor: "transparent",
+                          }}
+                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                        >
+                          <item.icon size={14} strokeWidth={2.5} className="shrink-0" style={{ color: isActive ? "#facc15" : "#fff" }} />
+                          {item.label}
+                        </button>
+                      );
+                    })}
                     {user && (
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-[14px] text-[14px] font-[800] lowercase flex items-center gap-2.5"
-                        style={{ color: "#ff4444" }}
+                        className="w-full text-left px-4 text-[14px] font-[800] lowercase flex items-center gap-2.5"
+                        style={{ color: "#ff4444", paddingTop: 18, paddingBottom: 18 }}
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >
@@ -165,7 +184,7 @@ const Header = () => {
           </AnimatePresence>
         </div>
       </div>
-      {/* Bottom border */}
+      {/* Bottom border - subtle, same bg */}
       <div style={{ height: 1, backgroundColor: "#222" }} />
     </header>
   );

@@ -317,7 +317,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-14 pb-8">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-20 pb-8">
         <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -355,7 +355,7 @@ const Index = () => {
           </div>
 
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-4">
+          <div className="md:col-span-3 space-y-[16px]">
             {/* Character select — always visible */}
             <div>
               <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>select character</span>
@@ -401,12 +401,6 @@ const Index = () => {
                 options={["3:4", "9:16"]}
                 value={photoRatio}
                 onChange={setPhotoRatio}
-                renderOption={(opt) => (
-                  <span className="flex items-center gap-1.5">
-                    <RatioIcon ratio={opt} />
-                    {opt}
-                  </span>
-                )}
               />
             </div>
 
