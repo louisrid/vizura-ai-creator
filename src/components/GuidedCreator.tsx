@@ -249,6 +249,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
+  const [exitFade, setExitFade] = useState(false);
 
   const restoreSavedFlow = useCallback(() => {
     try {
