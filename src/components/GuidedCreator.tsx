@@ -767,6 +767,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "hsl(0 0% 0%)" }}
     >
+      {/* Exit fade overlay — covers everything with smooth black fade */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-50 bg-black"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: exitFade ? 1 : 0 }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
+      />
       <AmbientGlow />
       <motion.div
         className="absolute inset-0 flex flex-col"
