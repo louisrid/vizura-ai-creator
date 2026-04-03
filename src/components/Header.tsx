@@ -59,8 +59,8 @@ const Header = () => {
     <header
       className="sticky top-0 z-40 relative"
       style={{
-        background: "linear-gradient(to bottom, #000000 0%, #000000 60%, transparent 100%)",
-        paddingBottom: 20,
+        background: "linear-gradient(to bottom, #000000 0%, #000000 30%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.2) 85%, transparent 100%)",
+        paddingBottom: 40,
       }}
     >
       <TopGradientBar />
@@ -122,7 +122,7 @@ const Header = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.15, ease: "easeOut" }}
-                className="absolute right-[14px] top-full mt-2 overflow-hidden"
+                className="absolute right-[14px] top-full -mt-2 overflow-hidden"
                 style={{
                   width: 220,
                   backgroundColor: "#000000",
@@ -164,13 +164,13 @@ const Header = () => {
                             fontSize: 14,
                             fontWeight: 700,
                             textTransform: "lowercase",
-                            color: isActive ? "#facc15" : "#fff",
+                            color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
                             backgroundColor: "transparent",
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                         >
-                          <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: isActive ? "#facc15" : "#facc15" }} />
+                          <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
                           {item.label}
                         </button>
                       );

@@ -509,7 +509,7 @@ const ChooseFace = () => {
                   disabled={rerolling}
                   className="flex-1 h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 relative overflow-hidden"
                   style={{
-                    backgroundColor: isFreeUser ? "#1a1a1a" : "#0b0b0b",
+                    backgroundColor: isFreeUser ? "#111111" : "#111111",
                     borderRadius: 12,
                     color: isFreeUser ? "rgba(255,255,255,0.4)" : "#fff",
                     cursor: isFreeUser ? "not-allowed" : "pointer",

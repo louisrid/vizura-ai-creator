@@ -24,8 +24,9 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
   <button
     onClick={onClick}
     className={`flex h-14 w-full items-center justify-center rounded-2xl border-[5px] text-sm font-[900] lowercase tracking-tight transition-colors ${
-      active ? "border-neon-yellow bg-white/10 text-white" : "border-white/15 bg-white/5 text-white/80"
+    active ? "border-neon-yellow bg-neon-yellow/10 text-white" : "border-[#1a1a1a] text-white/80"
     }`}
+    style={{ backgroundColor: active ? "rgba(250,204,21,0.1)" : "#111111" }}
   >
     {value || "–"}
   </button>
@@ -43,11 +44,12 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
       <button
         key={opt}
         onClick={() => onSelect(opt)}
-        className={`rounded-2xl border-[5px] px-4 py-2 text-xs font-[900] lowercase transition-all ${
+          className={`rounded-2xl border-2 px-4 py-2 text-xs font-[900] lowercase transition-all ${
           value === opt
             ? "border-neon-yellow bg-neon-yellow text-neon-yellow-foreground"
-            : "border-white/15 text-white/60 hover:border-white/40"
+            : "border-[#1a1a1a] text-white/60 hover:border-white/40"
         }`}
+        style={{ backgroundColor: value === opt ? undefined : "#111111" }}
       >
         {opt}
       </button>
@@ -143,7 +145,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       {open && (
         <motion.div className="fixed inset-0 z-[9998] flex flex-col bg-black" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
           <div className="flex items-center px-5 pt-5 pb-2">
-            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-2xl border-[5px] border-white/15 transition-colors hover:border-white/40" aria-label="close">
+            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-2xl border-2 border-[#1a1a1a] transition-colors hover:border-white/40" style={{ backgroundColor: "#111111" }} aria-label="close">
               <X size={16} strokeWidth={2.5} className="text-white" />
             </button>
           </div>
@@ -167,7 +169,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
               <div className="mt-10">
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
-                  className="min-h-[100px] w-full resize-none rounded-2xl border-[5px] border-white/15 bg-white/5 px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50" />
+                  className="min-h-[100px] w-full resize-none rounded-2xl border-2 border-[#1a1a1a] px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors focus:border-white/50" style={{ backgroundColor: "#111111" }} />
               </div>
             </div>
           </div>

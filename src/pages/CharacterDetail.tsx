@@ -118,23 +118,23 @@ const CharacterDetail = () => {
   const content = (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#000", borderRadius: 16, border: "2px solid #222" }} className="p-4">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #222" }} className="p-4">
         <h1 className="text-[24px] font-[900] lowercase tracking-tight text-white leading-none mb-4">
           {character.name || "unnamed"}
         </h1>
         <div className="grid grid-cols-3 gap-2.5">
-          <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#151515" }}>
+          <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
             {hasFace ? (
               <img src={character.face_image_url!} alt="front" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
             ) : (
               <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>no photo</span>
             )}
           </div>
-          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "rgba(255,255,255,0.03)" }}>
+          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
             <Lock size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-[8px] font-[900] lowercase text-center leading-tight px-1" style={{ color: "rgba(255,255,255,0.2)" }}>left profile</span>
           </div>
-          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "rgba(255,255,255,0.03)" }}>
+          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
             <Lock size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-[8px] font-[900] lowercase text-center leading-tight px-1" style={{ color: "rgba(255,255,255,0.2)" }}>right profile</span>
           </div>
@@ -142,11 +142,11 @@ const CharacterDetail = () => {
       </div>
 
       {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#000", borderRadius: 16, border: "2px solid #222" }} className="p-4">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #222" }} className="p-4">
         <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
         <div className="flex flex-wrap gap-2">
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "rgba(255,255,255,0.08)", border: "2px solid #222" }}>
+            <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
               <span className="block text-[9px] font-[800] uppercase leading-none mb-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>{t.label}</span>
               <span className="block text-[13px] font-[800] lowercase text-white leading-none">{t.value}</span>
             </div>

@@ -58,8 +58,8 @@ const PillToggle = ({ label, options, value, onChange, renderOption }: {
             fontWeight: 800,
             textTransform: "lowercase" as const,
             ...(value === opt
-              ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
-              : { backgroundColor: "#151515", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+               ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
+              : { backgroundColor: "#111111", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
             ),
           }}
         >
@@ -133,7 +133,7 @@ const HighlightedPromptArea = ({
         onChange={(e) => onChange(e.target.value)}
         rows={4}
         className="w-full resize-none px-4 py-3 text-sm font-[900] lowercase text-foreground focus:outline-none transition-colors"
-        style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#151515", caretColor: "hsl(var(--foreground))" }}
+        style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111", caretColor: "hsl(var(--foreground))" }}
       />
       {!value && placeholder}
     </div>
@@ -325,7 +325,7 @@ const Index = () => {
                   maxHeight: "180px",
                   borderRadius: 16,
                   border: "2px solid rgba(255,255,255,0.08)",
-                  backgroundColor: "#111111",
+                   backgroundColor: "#111111",
                 }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
@@ -354,7 +354,7 @@ const Index = () => {
                   value={selectedCharId}
                   onChange={(e) => handleCharacterSelect(e.target.value)}
                   className="h-12 w-full appearance-none px-4 pr-10 text-sm font-[900] lowercase text-foreground outline-none transition-colors"
-                  style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#151515" }}
+                  style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111" }}
                 >
                   <option value="">none</option>
                   {characters.map((c) => (
@@ -443,7 +443,7 @@ const Index = () => {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   className="flex w-full flex-col items-center justify-center gap-2 py-6 hover:border-foreground/30 transition-colors"
-                  style={{ borderRadius: 16, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#151515" }}
+                  style={{ borderRadius: 16, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
                 >
                   <Upload size={20} strokeWidth={2.5} className="text-foreground/30" />
                   <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>

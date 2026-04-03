@@ -860,8 +860,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
                 >
                   skip to login
                 </button>
@@ -870,8 +870,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 mt-5 px-4 py-2 text-[14px] font-[700] lowercase underline transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
+                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
                 >
                   skip
                 </button>
@@ -1012,7 +1012,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           value={email}
           onChange={(e) => { e.stopPropagation(); setEmail(e.target.value); }}
           onClick={(e) => e.stopPropagation()}
-          className="mt-4 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
+          className="mt-4 w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
+          style={{ backgroundColor: "#111111" }}
           disabled={emailLoading || googleLoading}
         />
         <input
@@ -1022,13 +1023,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           onChange={(e) => { e.stopPropagation(); setPassword(e.target.value); }}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-          className="mt-2 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
+          className="mt-2 w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
+          style={{ backgroundColor: "#111111" }}
           disabled={emailLoading || googleLoading}
         />
         <button
           onClick={handleEmailAuth}
           disabled={emailLoading || googleLoading}
-          className="mt-3 w-full h-14 rounded-2xl border-[5px] border-white/15 bg-white/5 text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors duration-150 disabled:opacity-50"
+          className="mt-3 w-full h-14 rounded-2xl border-2 border-[#1a1a1a] text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 hover:border-white/30 transition-colors duration-150 disabled:opacity-50"
+          style={{ backgroundColor: "#111111" }}
         >
           {emailLoading ? (
             <><Loader2 className="animate-spin" size={18} />signing in...</>
