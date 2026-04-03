@@ -397,7 +397,6 @@ const ChooseFace = () => {
             completeNow={apiDone}
             onComplete={() => setBarComplete(true)}
           />
-          />
         </div>
       )}
 
