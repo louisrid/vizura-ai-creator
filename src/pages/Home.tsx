@@ -33,7 +33,6 @@ const Home = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const [images, setImages] = useState<LatestImage[]>(() => {
-    // Hydrate from sessionStorage for instant display on refresh
     try {
       const cached = sessionStorage.getItem("vizura_latest_photos");
       if (cached) return JSON.parse(cached) as LatestImage[];
@@ -65,7 +64,6 @@ const Home = () => {
       )
       .slice(0, 8);
     setImages(latest);
-    // Cache for instant hydration on next visit
     try { sessionStorage.setItem("vizura_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
@@ -92,7 +90,6 @@ const Home = () => {
       setShowGuided(true);
     }
     setAutoOpenEvaluated(true);
-    // Remove splash once we know what to show
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, user]);
 
@@ -175,7 +172,6 @@ const Home = () => {
 
     sessionStorage.removeItem(FLOW_STATE_KEY);
     sessionStorage.setItem(DISMISSED_KEY, "1");
-    // Keep guided open briefly so the black portal covers the transition
     setTimeout(() => setShowGuided(false), 400);
   };
 
@@ -232,8 +228,8 @@ const Home = () => {
       </AnimatePresence>}
 
       {!pageHidden && <div className="flex h-full flex-col">
-        {/* Mobile layout */}
-        <main className="mx-auto w-full max-w-lg px-4 pt-10 pb-14 md:hidden">
+        {/* Mobile layout — tightened spacing */}
+        <main className="mx-auto w-full max-w-lg px-4 pt-8 pb-6 md:hidden">
           <div className="grid grid-cols-2 gap-2.5">
             <button
               type="button"
@@ -241,7 +237,7 @@ const Home = () => {
                 if (!user) { navigate("/auth?redirect=/create"); return; }
                 navigate("/create");
               }}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+              className="flex h-14 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
             >
               <Camera size={16} strokeWidth={2.5} />
               create photo
@@ -249,15 +245,15 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
+              className="flex h-14 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-neon-yellow bg-neon-yellow px-3 text-sm font-[900] lowercase text-neon-yellow-foreground transition-transform active:scale-[0.98]"
             >
               <Sparkles size={16} strokeWidth={2.5} />
               create character
             </button>
           </div>
 
-          <section className="mt-5 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-3">
-            <h2 className="mb-2 text-sm font-[900] lowercase text-foreground">latest photos</h2>
+          <section className="mt-3 flex flex-col rounded-[1.75rem] border-[5px] border-border bg-card px-3 py-2.5">
+            <h2 className="mb-1.5 text-sm font-[900] lowercase text-foreground">latest photos</h2>
             <div className="grid grid-cols-4 gap-2">
               {photoSlots.slice(0, 4).map((photo) => {
                 const isPlaceholder = !photo.url;
@@ -283,11 +279,11 @@ const Home = () => {
             </div>
           </section>
 
-          <div className="mt-5 grid grid-cols-2 gap-2.5">
+          <div className="mt-3 grid grid-cols-2 gap-2.5">
             <button
               type="button"
               onClick={() => navigate("/top-ups")}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-left text-foreground transition-transform active:scale-[0.98]"
+              className="flex h-14 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-left text-foreground transition-transform active:scale-[0.98]"
             >
               <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
               <span className="text-sm font-[900] lowercase">{gems} gems</span>
@@ -295,7 +291,7 @@ const Home = () => {
             <button
               type="button"
               onClick={() => navigate("/account")}
-              className="flex h-16 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
+              className="flex h-14 items-center justify-center gap-2 rounded-[1.5rem] border-[5px] border-border bg-card px-3 text-sm font-[900] lowercase text-foreground transition-transform active:scale-[0.98]"
             >
               <Settings size={16} strokeWidth={2.5} />
               settings

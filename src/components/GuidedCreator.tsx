@@ -47,7 +47,7 @@ const getRandomNameToast = () =>
  */
 
 const TRAITS = [
-  { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["white", "tan", "asian", "black"] },
+  { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"] },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
@@ -803,8 +803,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-[max(env(safe-area-inset-bottom),1.5rem)]">
-              <div className="mb-4 flex h-14 items-center gap-4">
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-[max(env(safe-area-inset-bottom),1rem)]">
+              <div className="mb-2 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
@@ -819,7 +819,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 </div>
               </div>
-              <div className="flex h-3 items-center">
+              <div className="flex h-3 items-center mb-1">
                 <Dots current={dotCurrent} total={dotTotal} />
               </div>
 

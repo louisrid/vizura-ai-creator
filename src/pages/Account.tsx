@@ -58,28 +58,28 @@ const Account = () => {
   return (
     <div className="min-h-screen bg-background">
       <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
-      <main className="w-full max-w-lg md:max-w-2xl mx-auto px-4 md:px-8 pt-14 pb-12">
-        <div className="flex items-center gap-3 mb-8">
+      <main className="w-full max-w-lg md:max-w-2xl mx-auto px-4 md:px-8 pt-14 pb-8">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {subscribed ? (
-            <div className="w-full h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-base font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
+            <div className="w-full h-12 rounded-2xl bg-neon-green text-neon-green-foreground text-sm font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
               subscribed
             </div>
           ) : (
             <button
-              className="w-full h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-base font-extrabold lowercase hover:opacity-90 transition-all"
+              className="w-full h-12 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all"
               onClick={() => setOverlayOpen(true)}
             >
               subscribe
             </button>
           )}
 
-          <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0">
-            <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+          <div className="md:grid md:grid-cols-2 md:gap-3 space-y-3 md:space-y-0">
+            <div className="border-[5px] border-border rounded-2xl p-3 flex items-center gap-3">
               <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
               <div className="flex-1 min-w-0">
                 <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
@@ -89,7 +89,7 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+            <div className="border-[5px] border-border rounded-2xl p-3 flex items-center gap-3">
               <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
               <div className="flex-1">
                 <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
@@ -99,7 +99,7 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+            <div className="border-[5px] border-border rounded-2xl p-3 flex items-center gap-3">
               <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
               <div className="flex-1">
                 <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
@@ -108,7 +108,7 @@ const Account = () => {
             </div>
 
             {subscribed && (
-              <div className="border-[5px] border-border rounded-2xl p-4 flex items-center gap-3">
+              <div className="border-[5px] border-border rounded-2xl p-3 flex items-center gap-3">
                 <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
                 <div className="flex-1">
                   <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
@@ -118,7 +118,7 @@ const Account = () => {
             )}
           </div>
 
-          <Button variant="outline" className="w-full h-14 text-sm mt-6" onClick={handleSignOut}>
+          <Button variant="outline" className="w-full h-12 text-sm mt-4" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
             sign out
           </Button>
@@ -205,8 +205,8 @@ const SignInView = ({ autoSignIn, redirectTo }: { autoSignIn: () => Promise<void
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg md:max-w-2xl px-4 md:px-8 pt-14 pb-12">
-        <div className="mb-8 flex items-center gap-3">
+      <main className="mx-auto w-full max-w-lg md:max-w-2xl px-4 md:px-8 pt-14 pb-8">
+        <div className="mb-5 flex items-center gap-3">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>

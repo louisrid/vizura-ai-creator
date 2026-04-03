@@ -126,7 +126,7 @@ const HighlightedPromptArea = ({
     <div className="relative">
       {value && charName && (
         <div
-          className="pointer-events-none absolute inset-0 px-4 py-4 text-sm font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
+          className="pointer-events-none absolute inset-0 px-4 py-3 text-sm font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
           style={{ wordBreak: "break-word" }}
           aria-hidden
           dangerouslySetInnerHTML={{ __html: highlightedHtml }}
@@ -136,8 +136,8 @@ const HighlightedPromptArea = ({
         ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        rows={5}
-        className="w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-4 text-sm font-extrabold lowercase text-foreground focus:outline-none focus:border-foreground transition-colors"
+        rows={4}
+        className="w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground focus:outline-none focus:border-foreground transition-colors"
         style={{ caretColor: "hsl(var(--foreground))" }}
       />
       {!value && placeholder}
@@ -150,7 +150,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
-    className="w-full h-16 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
+    className="w-full h-14 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
     onClick={onClick}
     disabled={disabled}
   >
@@ -173,7 +173,6 @@ const Index = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Auth guard: redirect logged-out users to sign-in
   useEffect(() => {
     if (!authLoading && !user) {
       navigate("/auth?redirect=/create", { replace: true });
@@ -245,7 +244,6 @@ const Index = () => {
     setPrompt("");
   };
 
-  const singleCharAutoSelected = characters.length === 1;
   const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -316,8 +314,8 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-10">
-        <div className="flex items-center gap-3 mb-8">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-8">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -329,7 +327,7 @@ const Index = () => {
             <div className="relative flex justify-center">
               <motion.section
                 layout
-                className="mb-6 md:mb-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden w-full"
+                className="mb-4 md:mb-0 flex items-center justify-center rounded-2xl border-[5px] border-border bg-card overflow-hidden w-full"
                 style={{ maxWidth: photoRatio === "9:16" ? "14rem" : "100%" }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
@@ -345,57 +343,46 @@ const Index = () => {
                   )}
                 </motion.div>
               </motion.section>
-
-              {selectedChar?.face_image_url && (
-                <div className="absolute top-2 right-2 h-10 w-10 rounded-xl border-[3px] border-border bg-card overflow-hidden">
-                  <img src={selectedChar.face_image_url} alt={selectedChar.name} className="h-full w-full object-cover" />
-                </div>
-              )}
             </div>
           </div>
 
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-5">
-            {/* Top create button */}
-            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
-
-            {/* Character select */}
-            {!singleCharAutoSelected && (
-              <div>
-                <span className="block text-xs font-extrabold lowercase text-foreground mb-2">select character</span>
-                <label className="relative block">
-                  <select
-                    value={selectedCharId}
-                    onChange={(e) => handleCharacterSelect(e.target.value)}
-                    className="h-14 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
-                  >
-                    <option value="">none</option>
-                    {characters.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown
-                    size={16}
-                    strokeWidth={2.5}
-                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
-                  />
-                </label>
-                {characters.length === 0 && user && (
-                  <button
-                    onClick={() => {
-                      sessionStorage.removeItem("vizura_creator_dismissed");
-                      sessionStorage.removeItem("vizura_guided_flow_state");
-                      navigate("/", { state: { openCreator: true } });
-                    }}
-                    className="mt-2 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
-                  >
-                    create your first character →
-                  </button>
-                )}
-              </div>
-            )}
+          <div className="md:col-span-3 space-y-4">
+            {/* Character select — always visible */}
+            <div>
+              <span className="block text-xs font-extrabold lowercase text-foreground mb-1.5">select character</span>
+              <label className="relative block">
+                <select
+                  value={selectedCharId}
+                  onChange={(e) => handleCharacterSelect(e.target.value)}
+                  className="h-12 w-full appearance-none rounded-2xl border-[5px] border-border bg-card px-4 pr-10 text-sm font-extrabold lowercase text-foreground outline-none transition-colors focus:border-foreground"
+                >
+                  <option value="">none</option>
+                  {characters.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={16}
+                  strokeWidth={2.5}
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
+                />
+              </label>
+              {characters.length === 0 && user && (
+                <button
+                  onClick={() => {
+                    sessionStorage.removeItem("vizura_creator_dismissed");
+                    sessionStorage.removeItem("vizura_guided_flow_state");
+                    navigate("/", { state: { openCreator: true } });
+                  }}
+                  className="mt-1.5 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
+                >
+                  create your first character →
+                </button>
+              )}
+            </div>
 
             {/* Type + Ratio toggles */}
             <div className="flex gap-6">
@@ -416,13 +403,13 @@ const Index = () => {
 
             {/* Prompt */}
             <div>
-              <span className="block text-xs font-extrabold lowercase text-foreground mb-2">describe your photo</span>
+              <span className="block text-xs font-extrabold lowercase text-foreground mb-1.5">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
                 onChange={setPrompt}
                 charName={selectedChar?.name || ""}
                 placeholder={
-                  <div className="pointer-events-none absolute left-4 top-4 right-4">
+                  <div className="pointer-events-none absolute left-4 top-3 right-4">
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={placeholder.text}
@@ -442,13 +429,13 @@ const Index = () => {
 
             {/* Reference section */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-1.5">
                 <span className="text-xs font-extrabold lowercase text-foreground">add a reference</span>
                 <span className="text-[10px] font-extrabold lowercase text-muted-foreground">(optional)</span>
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
               {referenceImage ? (
-                <div className="relative w-full h-32 rounded-2xl overflow-hidden border-[5px] border-border">
+                <div className="relative w-full h-28 rounded-2xl overflow-hidden border-[5px] border-border">
                   <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -462,13 +449,13 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-8 hover:border-foreground/30 transition-colors"
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-[3px] border-dashed border-foreground/15 bg-card py-6 hover:border-foreground/30 transition-colors"
                 >
-                  <Upload size={24} strokeWidth={2.5} className="text-foreground/30" />
+                  <Upload size={20} strokeWidth={2.5} className="text-foreground/30" />
                   <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
                 </button>
               )}
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-3 flex items-center justify-between">
                 <span className="text-[10px] font-extrabold lowercase text-foreground/50">strength</span>
                 <span className="text-[10px] font-extrabold lowercase text-foreground/50">{referenceStrength}%</span>
               </div>
@@ -478,18 +465,18 @@ const Index = () => {
                 max={100}
                 value={referenceStrength}
                 onChange={(e) => setReferenceStrength(Number(e.target.value))}
-                className="mt-2 w-full cursor-pointer appearance-none rounded-full h-2"
+                className="mt-1.5 w-full cursor-pointer appearance-none rounded-full h-2"
                 style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(var(--secondary)) ${referenceStrength}%)` }}
               />
             </div>
 
-            {/* Bottom create button */}
+            {/* Create button */}
             <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
           </div>
         </div>
 
         {error && (
-          <div className="mt-5 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}

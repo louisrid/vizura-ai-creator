@@ -51,55 +51,48 @@ const TopUps = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-12">
-        <div className="flex items-center gap-3 mb-8">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-14 pb-8">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">top-ups</PageTitle>
         </div>
 
-        <div className="flex items-center gap-2 mb-10">
+        <div className="flex items-center gap-2 mb-6">
           <Gem size={20} strokeWidth={2.5} className="text-gem-green" />
           <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {plans.map((plan) => {
-            const perGem = (plan.price / plan.gems).toFixed(2);
-            return (
-              <div
-                key={plan.label}
-                className="rounded-2xl p-5 border-[5px] border-border bg-card"
-              >
-                <div className="flex items-center gap-2 mb-1">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {plans.map((plan) => (
+            <div
+              key={plan.label}
+              className="rounded-2xl p-4 border-[5px] border-border bg-card"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
                   <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-                  <span className="text-xl font-extrabold lowercase text-foreground">
+                  <span className="text-lg font-extrabold lowercase text-foreground">
                     {plan.gems} gems
                   </span>
                 </div>
-
-                <div className="flex items-baseline justify-between mb-4">
-                  <span className="text-2xl font-extrabold lowercase text-foreground">
-                    ${plan.price}
-                  </span>
-                  <span className="text-[11px] font-extrabold lowercase text-foreground/50">
-                    ${perGem}/gem
-                  </span>
-                </div>
-
-                <button
-                  className="w-full h-12 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
-                  onClick={() => handleBuy(plan)}
-                  disabled={buying !== null}
-                >
-                  {buying === plan.label ? (
-                    <Loader2 className="animate-spin inline" size={18} />
-                  ) : (
-                    "buy gems"
-                  )}
-                </button>
+                <span className="text-xl font-extrabold lowercase text-foreground">
+                  ${plan.price}
+                </span>
               </div>
-            );
-          })}
+
+              <button
+                className="w-full h-11 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
+                onClick={() => handleBuy(plan)}
+                disabled={buying !== null}
+              >
+                {buying === plan.label ? (
+                  <Loader2 className="animate-spin inline" size={18} />
+                ) : (
+                  "buy gems"
+                )}
+              </button>
+            </div>
+          ))}
         </div>
       </main>
     </div>

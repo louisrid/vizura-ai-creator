@@ -22,7 +22,6 @@ interface Character {
   face_angle_url?: string | null;
 }
 
-/** Extract hair style from the description prefix (e.g. "bangs hair. ...") */
 const getHairStyle = (desc: string | null | undefined): string => {
   if (!desc) return "";
   const match = desc.match(/^(.*?)\s*hair\./i);
@@ -30,12 +29,7 @@ const getHairStyle = (desc: string | null | undefined): string => {
 };
 
 const SKIN_LABELS: Record<string, string> = {
-  white: "white",
-  pale: "pale",
-  tan: "tan",
-  asian: "asian",
-  black: "black",
-  dark: "dark",
+  white: "white", pale: "pale", tan: "tan", asian: "asian", black: "black", dark: "dark",
 };
 
 const CharacterDetail = () => {
@@ -93,8 +87,8 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-8 pt-14 pb-12">
-          <div className="flex items-center gap-3 mb-8">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-8 pt-14 pb-8">
+          <div className="flex items-center gap-3 mb-5">
             <BackButton />
           </div>
           <p className="text-sm font-extrabold lowercase text-foreground/50 text-center mt-16">
@@ -108,7 +102,6 @@ const CharacterDetail = () => {
   const hairStyle = getHairStyle(character.description);
   const skinLabel = SKIN_LABELS[(character.country || "").toLowerCase()] || character.country;
 
-  // Build trait pills: age first, then all traits
   const traits: { label: string; value: string }[] = [];
   if (character.age) traits.push({ label: "age", value: character.age });
   if (skinLabel) traits.push({ label: "skin", value: skinLabel });
@@ -125,13 +118,12 @@ const CharacterDetail = () => {
   const content = (
     <>
       {/* ── Box 1: Name + Photos ── */}
-      <div className="rounded-2xl bg-black p-5">
-        <h1 className="text-[2rem] font-[900] lowercase tracking-tight text-white leading-none mb-5">
+      <div className="rounded-2xl bg-black p-4">
+        <h1 className="text-[1.75rem] font-[900] lowercase tracking-tight text-white leading-none mb-4">
           {character.name || "unnamed"}
         </h1>
 
-        <div className="grid grid-cols-3 gap-3">
-          {/* Front face — main selected photo */}
+        <div className="grid grid-cols-3 gap-2.5">
           <div className="aspect-[3/4] overflow-hidden rounded-xl bg-card flex items-center justify-center border-[3px] border-white/10">
             {hasFace ? (
               <img
@@ -145,17 +137,15 @@ const CharacterDetail = () => {
             )}
           </div>
 
-          {/* Left profile — greyed out locked */}
-          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white/5 flex flex-col items-center justify-center gap-2 border-[3px] border-white/10">
-            <Lock size={18} strokeWidth={2.5} className="text-white/20" />
+          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white/5 flex flex-col items-center justify-center gap-1.5 border-[3px] border-white/10">
+            <Lock size={16} strokeWidth={2.5} className="text-white/20" />
             <span className="text-[8px] font-extrabold lowercase text-white/20 text-center leading-tight px-1">
               left profile
             </span>
           </div>
 
-          {/* Right profile — greyed out locked */}
-          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white/5 flex flex-col items-center justify-center gap-2 border-[3px] border-white/10">
-            <Lock size={18} strokeWidth={2.5} className="text-white/20" />
+          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white/5 flex flex-col items-center justify-center gap-1.5 border-[3px] border-white/10">
+            <Lock size={16} strokeWidth={2.5} className="text-white/20" />
             <span className="text-[8px] font-extrabold lowercase text-white/20 text-center leading-tight px-1">
               right profile
             </span>
@@ -164,15 +154,15 @@ const CharacterDetail = () => {
       </div>
 
       {/* ── Box 2: Details / Trait pills ── */}
-      <div className="rounded-2xl bg-black p-5">
-        <span className="block text-base font-[900] lowercase text-white mb-4">details:</span>
+      <div className="rounded-2xl bg-black p-4">
+        <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
         <div className="flex flex-wrap gap-2">
           {traits.map((t) => (
             <div
               key={t.label}
-              className="rounded-xl bg-white/10 px-4 py-2.5 text-center"
+              className="rounded-xl bg-white/10 px-3.5 py-2 text-center"
             >
-              <span className="block text-[8px] font-extrabold lowercase text-white/40 leading-none mb-1">
+              <span className="block text-[8px] font-extrabold lowercase text-white/40 leading-none mb-0.5">
                 {t.label}
               </span>
               <span className="block text-xs font-[900] lowercase text-white leading-none">
@@ -186,7 +176,7 @@ const CharacterDetail = () => {
       {/* ── Delete button ── */}
       <button
         onClick={() => setShowDelete(true)}
-        className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
+        className="flex items-center justify-center gap-2 h-10 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
       >
         <Trash2 size={13} strokeWidth={2.5} />
         delete character
@@ -196,27 +186,24 @@ const CharacterDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* ── Mobile layout ── */}
-      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12 md:hidden">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-8 md:hidden">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {content}
         </div>
       </main>
 
-      {/* ── Desktop layout ── */}
-      <main className="hidden md:block mx-auto w-full max-w-2xl px-8 pt-14 pb-12">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="hidden md:block mx-auto w-full max-w-2xl px-8 pt-14 pb-8">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {content}
         </div>
       </main>
 
-      {/* ── Delete confirmation overlay ── */}
       <AnimatePresence>
         {showDelete && (
           <motion.div
