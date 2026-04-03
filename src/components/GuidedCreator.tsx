@@ -47,7 +47,7 @@ const getRandomNameToast = () =>
  */
 
 const TRAITS = [
-  { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["white", "tan", "asian", "black"] },
+  { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"] },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
