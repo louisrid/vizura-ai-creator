@@ -85,14 +85,14 @@ const Header = () => {
               onClick={() => navigate("/account")}
               className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
               style={{
-                width: 34,
-                height: 34,
+                width: 30,
+                height: 30,
                 borderRadius: "50%",
                 backgroundColor: "#facc15",
               }}
               aria-label="my account"
             >
-              <span className="text-[13px] font-[900] text-black">{userInitial}</span>
+              <span className="text-[11px] font-[900] text-black">{userInitial}</span>
             </button>
           )}
 
