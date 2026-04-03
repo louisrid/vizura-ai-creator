@@ -444,7 +444,7 @@ const Index = () => {
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
               {referenceImage ? (
-                <div className="relative w-full h-28 rounded-2xl overflow-hidden border-[5px] border-border">
+                <div className="relative w-full h-28 overflow-hidden" style={{ borderRadius: 16, border: "2px solid #222" }}>
                   <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
                   <button
                     type="button"
