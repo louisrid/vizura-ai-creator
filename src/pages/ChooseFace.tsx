@@ -394,6 +394,9 @@ const ChooseFace = () => {
             phrases={FACE_GEN_PHRASES}
             phraseInterval={5000}
             requireTapToContinue={false}
+            completeNow={apiDone}
+            onComplete={() => setBarComplete(true)}
+          />
           />
         </div>
       )}
