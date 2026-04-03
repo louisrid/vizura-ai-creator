@@ -834,9 +834,51 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           </div>
 
+          {/* Skip to login pill — top right */}
+          {!isCooking && !isLoggedIn && (
+            <button
+              type="button"
+              onClick={() => navigateTo(`/auth${window.location.search}`)}
+              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+              style={{
+                top: 20,
+                right: 20,
+                backgroundColor: "#facc15",
+                borderRadius: 20,
+                padding: "8px 16px",
+                fontSize: 12,
+                fontWeight: 800,
+                color: "#000",
+                textTransform: "lowercase",
+              }}
+            >
+              skip to login
+            </button>
+          )}
+          {!isCooking && isLoggedIn && skipWelcome && (
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
+              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+              style={{
+                top: 20,
+                right: 20,
+                backgroundColor: "#facc15",
+                borderRadius: 20,
+                padding: "8px 16px",
+                fontSize: 12,
+                fontWeight: 800,
+                color: "#000",
+                textTransform: "lowercase",
+              }}
+            >
+              skip
+            </button>
+          )}
+
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 180px)" }}>
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 170px)" }}>
               <div className="mb-3.5 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
@@ -866,27 +908,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 ))}
               </div>
-
-              {!isLoggedIn && (
-                <button
-                  type="button"
-                  onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
-                >
-                  skip to login
-                </button>
-              )}
-              {isLoggedIn && skipWelcome && (
-                <button
-                  type="button"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-                  className="relative z-50 px-4 py-2 text-[18px] font-[700] lowercase transition-colors duration-150 hover:text-white/60 pointer-events-auto touch-manipulation"
-                  style={{ color: "rgba(255,255,255,0.4)", marginTop: 20 }}
-                >
-                  skip
-                </button>
-              )}
             </div>
           )}
         </div>
