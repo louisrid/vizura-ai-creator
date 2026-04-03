@@ -114,53 +114,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Animated gradient background ── */
-const AmbientGlow = () => (
-  <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ zIndex: 0 }} aria-hidden="true">
-    <div
-      style={{
-        position: "absolute",
-        width: "150%",
-        height: "150%",
-        top: "-25%",
-        left: "-25%",
-        borderRadius: "50%",
-        background: "#0040ff",
-        opacity: 0.06,
-        filter: "blur(160px)",
-        animation: "wizard-blob-1 28s ease-in-out infinite 0s",
-      }}
-    />
-    <div
-      style={{
-        position: "absolute",
-        width: "150%",
-        height: "150%",
-        top: "-25%",
-        right: "-25%",
-        borderRadius: "50%",
-        background: "#5500cc",
-        opacity: 0.06,
-        filter: "blur(160px)",
-        animation: "wizard-blob-2 32s ease-in-out infinite -8s",
-      }}
-    />
-    <div
-      style={{
-        position: "absolute",
-        width: "150%",
-        height: "150%",
-        bottom: "-25%",
-        left: "-10%",
-        borderRadius: "50%",
-        background: "#3000aa",
-        opacity: 0.06,
-        filter: "blur(160px)",
-        animation: "wizard-blob-3 35s ease-in-out infinite -18s",
-      }}
-    />
-  </div>
-);
+/* AmbientGlow removed — wizard uses pure #000 */
 
 /* ── Simple emoji with subtle yellow glow ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
@@ -840,7 +794,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         animate={{ opacity: exitFade ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeInOut" }}
       />
-      <AmbientGlow />
       <motion.div
         className="absolute inset-0 flex flex-col"
         initial={{ opacity: 0 }}
@@ -1014,8 +967,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   if (!visible) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#050505" }}>
-      <AmbientGlow />
+    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000000" }}>
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center"
         initial={{ opacity: 0 }}
