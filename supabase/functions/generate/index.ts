@@ -87,7 +87,8 @@ const BODY_MAP: Record<string, string> = {
 const MAKEUP_MAP: Record<string, string> = {
   natural: "natural minimal makeup fresh-faced",
   classic: "classic polished makeup defined features",
-  glam: "soft glam makeup polished lashes subtle definition",
+  glam: "classic polished makeup defined features",
+  model: "classic polished makeup defined features",
 };
 
 function ageToDescription(ageStr: string): string {
@@ -287,7 +288,7 @@ async function generateFaceImages(
 
   // Each variation forces distinctly different facial structure + hair presentation
   const variations = [
-    "heart-shaped face, full plump lips, small button nose, soft rounded jawline, high arched eyebrows, hair cascading over both shoulders and clearly visible past the collarbone, glamorous Instagram model look, radiant glowing skin, striking gorgeous features",
+    "heart-shaped face, full plump lips, small button nose, soft rounded jawline, high arched eyebrows, hair cascading over both shoulders and clearly visible past the collarbone, polished social-media beauty look, radiant glowing skin, striking gorgeous features",
     "oval face, thinner defined lips, straight elegant nose, angular cheekbones, low straight eyebrows, hair swept to one side draped over one shoulder clearly visible and long, editorial beauty look, sculpted bone structure, captivating alluring features",
     "round face, medium bow-shaped lips, slightly upturned nose, strong defined jaw, thick natural eyebrows, hair parted in the middle falling evenly on both sides clearly visible and flowing, effortlessly beautiful natural look, luminous dewy skin, magnetic stunning features",
   ];

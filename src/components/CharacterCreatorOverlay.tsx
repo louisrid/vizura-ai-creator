@@ -15,7 +15,7 @@ const categories = [
   { key: "hairStyle", label: "hair", options: ["straight", "curly", "bangs", "short"] },
   { key: "hairColour", label: "hair colour", options: ["blonde", "brunette", "black", "pink"] },
   { key: "eyes", label: "eyes", options: ["brown", "blue", "green", "hazel"] },
-  { key: "makeup", label: "makeup", options: ["natural", "model", "glam"] },
+  { key: "makeup", label: "makeup", options: ["natural", "classic"] },
 ] as const;
 
 type CatKey = (typeof categories)[number]["key"];

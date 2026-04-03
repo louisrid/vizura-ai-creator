@@ -22,7 +22,7 @@ type LatestImage = {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const [images, setImages] = useState<LatestImage[]>(() => {
     // Hydrate from sessionStorage for instant display on refresh
@@ -35,6 +35,7 @@ const Home = () => {
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
+  const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
 
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); return; }
@@ -69,15 +70,21 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (user) return;
+    if (authLoading) return;
+    if (user) {
+      setAutoOpenEvaluated(true);
+      return;
+    }
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
-    if (alreadyOpened || dismissed) return;
-    sessionStorage.setItem("vizura_auto_opened", "1");
-    sessionStorage.removeItem(FLOW_STATE_KEY);
-    setSkipWelcome(false);
-    setShowGuided(true);
-  }, [user]);
+    if (!alreadyOpened && !dismissed) {
+      sessionStorage.setItem("vizura_auto_opened", "1");
+      sessionStorage.removeItem(FLOW_STATE_KEY);
+      setSkipWelcome(false);
+      setShowGuided(true);
+    }
+    setAutoOpenEvaluated(true);
+  }, [authLoading, user]);
 
   useEffect(() => {
     void fetchLatestPhotos();
@@ -178,8 +185,11 @@ const Home = () => {
     return slots;
   }, [images]);
 
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user);
+
   return (
-    <div className="relative min-h-[calc(100dvh-81px)] overflow-hidden bg-background">
+    <div className={`relative min-h-[calc(100dvh-81px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
+      {pageHidden && <div className="fixed inset-0 z-[9997] bg-nav" />}
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
@@ -187,7 +197,7 @@ const Home = () => {
         skipWelcome={skipWelcome}
       />
 
-      <AnimatePresence>
+      {!pageHidden && <AnimatePresence>
         {selectedImage && (
           <motion.button
             type="button"
@@ -208,9 +218,9 @@ const Home = () => {
             <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
           </motion.button>
         )}
-      </AnimatePresence>
+      </AnimatePresence>}
 
-      <div className="flex h-full flex-col">
+      {!pageHidden && <div className="flex h-full flex-col">
         {/* Mobile layout */}
         <main className="mx-auto w-full max-w-lg px-4 pt-10 pb-14 md:hidden">
           <div className="grid grid-cols-2 gap-2.5">
@@ -373,7 +383,7 @@ const Home = () => {
             </section>
           </div>
         </main>
-      </div>
+      </div>}
     </div>
   );
 };

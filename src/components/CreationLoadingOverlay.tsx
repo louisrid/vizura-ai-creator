@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PremiumRipple from "@/components/loading/PremiumRipple";
-import SuccessRing from "@/components/loading/SuccessRing";
 
 const PHRASES = [
   "mixing the pixels…",
@@ -125,25 +124,16 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
             {phase === "success" && (
               <motion.div
                 key="success"
-                className="fixed inset-0 flex flex-col items-center justify-center gap-6"
-                style={{ backgroundColor: "hsl(var(--member-green))" }}
+                className="fixed inset-0 flex flex-col items-center justify-center bg-member-green px-6 text-center"
                 initial={{ opacity: 1 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0 }}
               >
-                <motion.span
-                  className="inline-block select-none text-[4.75rem] leading-none"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-                >
-                  🎉
-                </motion.span>
                 <motion.p
-                  className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black"
+                  className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-neon-yellow-foreground"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   <span className="block">character</span>
                   <span className="block">created!</span>

@@ -53,7 +53,7 @@ const TRAITS = [
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["blonde", "brunette", "black", "pink"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
-  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic", "glam"] },
+  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"] },
 ] as const;
 
 const SLIDE_TITLE_CLASS = "mt-3 text-center text-[2.35rem] font-[900] lowercase leading-[0.95] tracking-tight text-white";
@@ -219,6 +219,10 @@ const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","rub
 const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<GuidedSelections> => ({
   ...partial,
   skin: partial.skin === "pale" ? "white" : partial.skin === "dark" ? "black" : partial.skin,
+  makeup:
+    partial.makeup === "glam" || partial.makeup === "model"
+      ? "classic"
+      : partial.makeup,
 });
 
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
@@ -234,7 +238,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const dotCurrent = step;
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(false);
   const [initialFadeIn, setInitialFadeIn] = useState(true);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
@@ -245,8 +249,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
-
-  useEffect(() => setMounted(true), []);
 
   const restoreSavedFlow = useCallback(() => {
     try {
@@ -417,7 +419,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     if (isCreateSlide) {
-      setCookingPhase("loading");
+      completeCookingFlow();
       return;
     }
 
@@ -675,12 +677,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
         <div className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
-          <span className="mb-5 inline-block select-none text-[3rem] leading-none animate-bounce" style={{ animationDuration: "2s" }}>👀</span>
-          <h2 className="mx-auto w-full max-w-[16rem] text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-            your character
-            <br />
-            <span className="whitespace-nowrap">
-              <span>is </span>
+          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.02] tracking-tight text-foreground">
+            <span className="block whitespace-nowrap">your character</span>
+            <span className="block whitespace-nowrap">
+              <span className="text-foreground">is </span>
               <span className="text-gem-green">almost here!</span>
             </span>
           </h2>
@@ -731,26 +731,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
           transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
         >
-          <div className="flex min-h-[18rem] flex-col items-center justify-center gap-5 text-center">
-            <motion.span
-              className="inline-block select-none text-[4.75rem] leading-none"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              🎉
-            </motion.span>
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.85 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
-                <span className="block">character</span>
-                <span className="block">created!</span>
-              </p>
-            </motion.div>
-          </div>
+          <motion.div
+            className="flex min-h-[18rem] flex-col items-center justify-center text-center"
+            initial={{ opacity: 0, y: 20, scale: 0.85 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-neon-yellow-foreground">
+              <span className="block">character</span>
+              <span className="block">created!</span>
+            </p>
+          </motion.div>
         </motion.div>
       );
     }
@@ -805,7 +796,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "76%" }}>
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-4 pb-[max(env(safe-area-inset-bottom),1.5rem)]">
               <div className="mb-4 flex h-14 items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}

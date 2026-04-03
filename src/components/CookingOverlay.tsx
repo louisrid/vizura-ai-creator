@@ -78,21 +78,13 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
             />
           )}
           {phase === "success" && (
-            <div className="fixed inset-0 flex min-h-[18rem] flex-col items-center justify-center gap-5 px-6 text-center" style={{ backgroundColor: "hsl(var(--member-green))" }}>
-              <motion.span
-                className="inline-block select-none text-[4.75rem] leading-none"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.45, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-              >
-                🎉
-              </motion.span>
+            <div className="fixed inset-0 flex min-h-[18rem] flex-col items-center justify-center px-6 text-center bg-member-green">
               <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.85 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
               >
-                <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
+                <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-neon-yellow-foreground">
                   <span className="block">character</span>
                   <span className="block">created!</span>
                 </p>
