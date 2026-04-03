@@ -355,7 +355,7 @@ const Index = () => {
           </div>
 
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-4">
+          <div className="md:col-span-3 space-y-[16px]">
             {/* Character select — always visible */}
             <div>
               <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>select character</span>
