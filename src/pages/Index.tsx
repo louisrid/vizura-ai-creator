@@ -388,7 +388,7 @@ const Index = () => {
               <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
               <PillToggle
                 label="ratio"
-                options={["3:4", "9:16"]}
+                options={["4:5", "9:16"]}
                 value={photoRatio}
                 onChange={setPhotoRatio}
               />
