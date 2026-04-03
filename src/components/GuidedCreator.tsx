@@ -544,10 +544,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Reference */
     if (isReferenceSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 20 }}>
         <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
-        <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-4 flex w-full max-w-[10rem] flex-col items-center gap-4">
+        <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
+        <div className="mt-5 flex w-full max-w-[11rem] flex-col items-center gap-4">
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
           {selections.referenceImage ? (
             <div className="w-full">
@@ -556,7 +556,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
-                  className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
                 >×</button>
               </div>
             </div>
@@ -567,8 +567,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
               style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px dashed #333", backgroundColor: "#111" }}
             >
-              <Upload size={14} strokeWidth={2.5} className="text-white/30" />
-              <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
+              <Upload size={16} strokeWidth={2.5} className="text-white/30" />
+              <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
             </button>
           )}
           <div className="w-full space-y-2 mb-4">
