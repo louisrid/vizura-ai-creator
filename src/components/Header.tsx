@@ -60,12 +60,12 @@ const Header = () => {
       className="sticky top-0 z-40 relative"
       style={{
         background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.2) 75%, transparent 100%)",
-        paddingBottom: 56,
+        paddingBottom: 28,
       }}
     >
       <TopGradientBar />
-      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-8 pb-4">
-        <button onClick={() => handleNav("/")} className="text-[21px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-5 pb-2">
+        <button onClick={() => handleNav("/")} className="text-[19px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
           vizura
         </button>
 
@@ -85,14 +85,14 @@ const Header = () => {
               onClick={() => navigate("/account")}
               className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
               style={{
-                width: 34,
-                height: 34,
+                width: 30,
+                height: 30,
                 borderRadius: "50%",
                 backgroundColor: "#facc15",
               }}
               aria-label="my account"
             >
-              <span className="text-[13px] font-[900] text-black">{userInitial}</span>
+              <span className="text-[11px] font-[900] text-black">{userInitial}</span>
             </button>
           )}
 
@@ -100,9 +100,9 @@ const Header = () => {
             onClick={() => setOpen(!open)}
             className="flex items-center justify-center active:scale-95 transition-transform duration-150"
             style={{
-              width: 34,
-              height: 34,
-              borderRadius: 10,
+              width: 30,
+              height: 30,
+              borderRadius: 8,
               backgroundColor: "#1a1a1a",
               border: "2px solid #222",
             }}
@@ -160,8 +160,8 @@ const Header = () => {
                           }}
                           className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
                           style={{
-                            padding: "14px 16px",
-                            fontSize: 14,
+                            padding: "10px 14px",
+                            fontSize: 13,
                             fontWeight: 700,
                             textTransform: "lowercase",
                             color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
@@ -179,7 +179,7 @@ const Header = () => {
                       <button
                         onClick={handleLogout}
                         className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
-                        style={{ color: "#ff4444", padding: "14px 16px", fontSize: 14, fontWeight: 700, textTransform: "lowercase" }}
+                        style={{ color: "#ff4444", padding: "10px 14px", fontSize: 13, fontWeight: 700, textTransform: "lowercase" }}
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >

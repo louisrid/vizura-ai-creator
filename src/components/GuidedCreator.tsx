@@ -104,7 +104,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         disabled={disabled}
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
         style={{
-          width: 56, height: 56, borderRadius: 14,
+          width: 48, height: 48, borderRadius: 12,
           backgroundColor: isForward ? "rgba(0,224,255,0.18)" : "rgba(0,224,255,0.06)",
           border: isForward ? `2.5px solid rgba(0,224,255,0.45)` : `2px solid rgba(0,224,255,0.25)`,
           outline: "none", padding: 0, cursor: "pointer",
@@ -112,12 +112,12 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         }}
       >
         {direction === "left" ? (
-          <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+          <svg width="18" height="14" viewBox="0 0 20 16" fill="none">
             <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+          <svg width="18" height="14" viewBox="0 0 20 16" fill="none">
             <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
@@ -144,17 +144,17 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 46,
-      borderRadius: 12,
-      padding: "8px 14px",
-      fontSize: 15,
+      height: 40,
+      borderRadius: 10,
+      padding: "6px 12px",
+      fontSize: 14,
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#111", color: "rgba(255,255,255,0.85)", border: "2px solid #222" }
+        : { backgroundColor: "#111", color: "#fff", border: "2px solid #222" }
       ),
     }}
   >
@@ -678,20 +678,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-        {/* Skip pill for logged-in returning users */}
-        {!isCooking && isLoggedIn && skipWelcome && (
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-            className="absolute z-50 active:scale-95 transition-transform duration-150"
-            style={{
-              top: 20, right: 20,
-              backgroundColor: Y, borderRadius: 20,
-              padding: "8px 16px", fontSize: 12, fontWeight: 800,
-              color: "#000", textTransform: "lowercase",
-            }}
-          >skip</button>
-        )}
+        {/* Skip button removed */}
 
         {/* Content area */}
         <div className="absolute inset-0 flex items-center justify-center px-6">
@@ -728,7 +715,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Arrow buttons — positioned below content */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "12%" }}>
+          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "8%" }}>
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
             </motion.div>
