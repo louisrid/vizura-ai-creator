@@ -100,14 +100,14 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     }}
   >
     {direction === "left" ? (
-      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 1L1 7.5L7 14" />
-        <line x1="1.5" y1="7.5" x2="17" y2="7.5" />
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+        <path d="M8 1L1.5 8L8 15" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="2" y1="8" x2="18.5" y2="8" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     ) : (
-      <svg width="18" height="15" viewBox="0 0 18 15" fill="none" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M11 1L17 7.5L11 14" />
-        <line x1="1" y1="7.5" x2="16.5" y2="7.5" />
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+        <path d="M12 1L18.5 8L12 15" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="1.5" y1="8" x2="18" y2="8" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     )}
   </button>
