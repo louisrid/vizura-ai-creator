@@ -89,8 +89,8 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
     className={`flex items-center justify-center active:opacity-70 transition-opacity duration-150 ${className || ""}`}
     style={{
-      width: 60,
-      height: 56,
+      width: 64,
+      height: 58,
       backgroundColor: direction === "right" ? "rgba(0,224,255,0.1)" : "rgba(0,224,255,0.05)",
       border: direction === "right" ? "2px solid rgba(0,224,255,0.3)" : "2px solid rgba(0,224,255,0.15)",
       borderRadius: 16,
@@ -101,13 +101,13 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
   >
     {direction === "left" ? (
       <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-        <path d="M8 1L1.5 8L8 15" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="2" y1="8" x2="18.5" y2="8" stroke="rgba(0,224,255,0.45)" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     ) : (
       <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-        <path d="M12 1L18.5 8L12 15" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="1.5" y1="8" x2="18" y2="8" stroke="#00e0ff" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
       </svg>
     )}
   </button>
@@ -787,18 +787,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col overflow-hidden"
       style={{ background: "#000000" }}
     >
-      {/* Animated breathing background */}
-      <div
-        className="pointer-events-none absolute"
-        aria-hidden="true"
-        style={{
-          top: "-50%", left: "-50%", width: "200%", height: "200%",
-          background: "radial-gradient(ellipse at 20% 50%, rgba(0,60,255,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(120,0,255,0.15) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(60,0,220,0.12) 0%, transparent 50%)",
-          animation: "wizardBreathe 20s ease-in-out infinite",
-          filter: "blur(40px)",
-          zIndex: 0,
-        }}
-      />
+      {/* 5 independent animated blobs */}
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "10%", left: "5%", width: 200, height: 200, background: "rgba(0,40,255,0.12)", borderRadius: "50%", filter: "blur(80px)", zIndex: 0, animation: "blob1 22s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "60%", right: "10%", width: 150, height: 150, background: "rgba(100,0,220,0.10)", borderRadius: "50%", filter: "blur(70px)", zIndex: 0, animation: "blob2 26s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "30%", right: "25%", width: 180, height: 180, background: "rgba(40,0,200,0.09)", borderRadius: "50%", filter: "blur(90px)", zIndex: 0, animation: "blob3 24s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ bottom: "20%", left: "20%", width: 120, height: 120, background: "rgba(0,30,180,0.11)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0, animation: "blob4 28s ease-in-out infinite" }} />
+      <div className="pointer-events-none absolute" aria-hidden="true" style={{ top: "50%", left: "40%", width: 160, height: 160, background: "rgba(80,0,180,0.08)", borderRadius: "50%", filter: "blur(75px)", zIndex: 0, animation: "blob5 20s ease-in-out infinite" }} />
       {/* Exit fade overlay */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
@@ -859,8 +853,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
           {/* Fixed bottom nav */}
           {!isCooking && (
-            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 160px)" }}>
-              <div className="mb-3.5 flex h-14 items-center gap-4">
+            <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ bottom: "auto", top: "calc(45% + 140px)" }}>
+              <div className="flex h-[58px] items-center gap-4">
                 <motion.div
                   animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}}
                   transition={{ duration: 0.4 }}
@@ -875,20 +869,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   />
                 </div>
               </div>
-              {/* Skip to login — below arrows, first step only, not logged in */}
               {!isLoggedIn && step === 0 && (
                 <button
                   type="button"
                   onClick={() => navigateTo(`/auth${window.location.search}`)}
-                  className="mb-4 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
+                  className="mt-3 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
                   style={{
-                    backgroundColor: "#111111",
-                    border: "2px solid rgba(250,204,21,0.15)",
+                    backgroundColor: "#facc15",
                     borderRadius: 14,
-                    padding: "12px 24px",
-                    fontSize: 14,
+                    padding: "8px 18px",
+                    fontSize: 11,
                     fontWeight: 800,
-                    color: "#fff",
+                    color: "#000",
                     textTransform: "lowercase" as const,
                   }}
                 >
