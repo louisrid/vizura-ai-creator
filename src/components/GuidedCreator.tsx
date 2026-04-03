@@ -783,7 +783,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "hsl(0 0% 0%)" }}
+      style={{ background: "#050505" }}
     >
       {/* Exit fade overlay — covers everything with smooth black fade */}
       <motion.div
