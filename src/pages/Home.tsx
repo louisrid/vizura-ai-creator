@@ -88,12 +88,12 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    const state = window.history.state?.usr;
+    const state = (location.state as any);
     if (state?.openCreator) {
-      window.history.replaceState({ ...window.history.state, usr: {} }, "");
+      navigate(location.pathname, { replace: true, state: {} });
       handleOpenCreator();
     }
-  }, []);
+  }, [location.state]);
 
   useEffect(() => {
     if (authLoading) return;
