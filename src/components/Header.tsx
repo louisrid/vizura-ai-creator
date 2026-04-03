@@ -179,7 +179,7 @@ const Header = () => {
                       <button
                         onClick={handleLogout}
                         className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
-                        style={{ color: "#ff4444", padding: "14px 16px", fontSize: 14, fontWeight: 700, textTransform: "lowercase" }}
+                        style={{ color: "#ff4444", padding: "10px 14px", fontSize: 13, fontWeight: 700, textTransform: "lowercase" }}
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >
