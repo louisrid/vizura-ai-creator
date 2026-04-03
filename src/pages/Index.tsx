@@ -296,6 +296,7 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
       <PhotoGenerationOverlay
         open={photoOverlayPhase !== "hidden"}
         phase={photoOverlayPhase === "hidden" ? "loading" : photoOverlayPhase}
