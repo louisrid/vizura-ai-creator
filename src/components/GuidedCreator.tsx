@@ -836,8 +836,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             type="email" placeholder="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
-            className="mt-4 w-full h-[48px] px-4 text-sm font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="mt-4 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
             disabled={emailLoading || googleLoading}
           />
           <input
@@ -845,15 +845,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onChange={(e) => setPassword(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-            className="mt-2 w-full h-[48px] px-4 text-sm font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="mt-2.5 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
             disabled={emailLoading || googleLoading}
           />
           <button
             onClick={handleEmailAuth}
             disabled={emailLoading || googleLoading}
-            className="mt-3 w-full h-[52px] text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="mt-3 w-full h-[56px] text-[15px] font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>}
           </button>
