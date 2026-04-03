@@ -135,9 +135,8 @@ const CharacterDetail = () => {
         </div>
 
         {/* Name + age */}
-        <h1 className="text-center text-[2rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1]">
-          {character.name || "unnamed"}{" "}
-          <span className="text-foreground/40">{character.age}</span>
+        <h1 className="text-center text-[2.8rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mt-2">
+          {character.name || "unnamed"}, {character.age}
         </h1>
 
         {/* Three face images in a row */}
