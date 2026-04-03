@@ -235,7 +235,7 @@ const Index = () => {
     setPrompt("");
   };
 
-  const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
+  const previewAspect = photoRatio === "9:16" ? "9/16" : "4/5";
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
