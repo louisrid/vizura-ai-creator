@@ -229,7 +229,7 @@ const ProgressBarLoader = ({
             {isComplete && requireTapToContinue ? (
               <motion.p
                 key="tap-to-continue"
-                className="text-center text-[1.05rem] font-extrabold lowercase text-white/60"
+                className="text-center text-[1.1rem] font-[900] lowercase text-white/60"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}
@@ -243,7 +243,7 @@ const ProgressBarLoader = ({
             ) : phraseVisible ? (
               <motion.p
                 key={safePhrases[phraseIndex]}
-                className="text-center text-[1.05rem] font-extrabold lowercase text-white"
+                className="text-center text-[1.1rem] font-[900] lowercase text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}

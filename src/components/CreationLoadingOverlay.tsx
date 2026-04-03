@@ -131,7 +131,7 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
                 transition={{ duration: 0 }}
               >
                 <motion.p
-                  className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black"
+                  className="text-center text-[3rem] font-[900] lowercase leading-[1.05] text-black"
                   initial={{ opacity: 0, y: 15, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}

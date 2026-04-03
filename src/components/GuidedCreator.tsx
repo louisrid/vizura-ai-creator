@@ -234,10 +234,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const hasCompletedCookingRef = useRef(false);
   const [exitFade, setExitFade] = useState(false);
 
-  /* Ring animation timer */
+  /* Ring animation timer — uses rAF for smooth 60fps */
   useEffect(() => {
-    const id = setInterval(() => setRingT((v) => v + 1), 16);
-    return () => clearInterval(id);
+    let raf: number;
+    const tick = () => { setRingT((v) => v + 1); raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const restoreSavedFlow = useCallback(() => {
