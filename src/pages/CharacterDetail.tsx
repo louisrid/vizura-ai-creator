@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Camera } from "lucide-react";
+import { Loader2, Trash2, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,26 +22,21 @@ interface Character {
   face_angle_url?: string | null;
 }
 
-/** Extract only user-written description, stripping auto-generated trait prefix */
-const getUserDescription = (raw: string | null | undefined): string => {
-  if (!raw) return "";
-  let cleaned = raw.replace(/^.*?\bhair\.\s*/i, "");
-  cleaned = cleaned.replace(/\[emoji:.+?\]/g, "").trim();
-  return cleaned;
+/** Extract hair style from the description prefix (e.g. "bangs hair. ...") */
+const getHairStyle = (desc: string | null | undefined): string => {
+  if (!desc) return "";
+  const match = desc.match(/^(.*?)\s*hair\./i);
+  return match?.[1]?.trim() || "";
 };
 
-const FaceImage = ({ url, label }: { url: string | null | undefined; label: string }) => (
-  <div className="flex flex-col items-center gap-1.5">
-    <div className="aspect-[3/4] w-full overflow-hidden rounded-2xl border-[4px] border-border bg-card flex items-center justify-center">
-      {url ? (
-        <img src={url} alt={label} className="h-full w-full object-cover" />
-      ) : (
-        <span className="text-[9px] font-extrabold lowercase text-foreground/25 text-center px-1">pending</span>
-      )}
-    </div>
-    <span className="text-[9px] font-extrabold lowercase text-foreground/35">{label}</span>
-  </div>
-);
+const SKIN_LABELS: Record<string, string> = {
+  white: "white",
+  pale: "pale",
+  tan: "tan",
+  asian: "asian",
+  black: "black",
+  dark: "dark",
+};
 
 const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -110,137 +105,118 @@ const CharacterDetail = () => {
     );
   }
 
-  const userDescription = getUserDescription(character.description);
+  const hairStyle = getHairStyle(character.description);
+  const skinLabel = SKIN_LABELS[(character.country || "").toLowerCase()] || character.country;
+
+  // Build trait pills: age first, then all traits
+  const traits: { label: string; value: string }[] = [];
+  if (character.age) traits.push({ label: "age", value: character.age });
+  if (skinLabel) traits.push({ label: "skin", value: skinLabel });
+  if (character.body) traits.push({ label: "body", value: character.body });
+  if (hairStyle) traits.push({ label: "hair style", value: hairStyle });
+  if (character.hair) traits.push({ label: "hair colour", value: character.hair });
+  if (character.eye) traits.push({ label: "eyes", value: character.eye });
+  if (character.style) traits.push({ label: "makeup", value: character.style });
+
+  const hasFace = character.face_image_url &&
+    !character.face_image_url.startsWith("data:image/svg") &&
+    !character.face_image_url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
+
+  const content = (
+    <>
+      {/* ── Box 1: Name + Photos ── */}
+      <div className="rounded-2xl bg-black p-5">
+        <h1 className="text-[2rem] font-[900] lowercase tracking-tight text-white leading-none mb-5">
+          {character.name || "unnamed"}
+        </h1>
+
+        <div className="grid grid-cols-3 gap-3">
+          {/* Front face — main selected photo */}
+          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-card flex items-center justify-center border-[3px] border-white/10">
+            {hasFace ? (
+              <img
+                src={character.face_image_url!}
+                alt="front"
+                className="h-full w-full object-cover"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              />
+            ) : (
+              <span className="text-[9px] font-extrabold lowercase text-white/25">no photo</span>
+            )}
+          </div>
+
+          {/* Left profile — greyed out locked */}
+          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white/5 flex flex-col items-center justify-center gap-2 border-[3px] border-white/10">
+            <Lock size={18} strokeWidth={2.5} className="text-white/20" />
+            <span className="text-[8px] font-extrabold lowercase text-white/20 text-center leading-tight px-1">
+              left profile
+            </span>
+          </div>
+
+          {/* Right profile — greyed out locked */}
+          <div className="aspect-[3/4] overflow-hidden rounded-xl bg-white/5 flex flex-col items-center justify-center gap-2 border-[3px] border-white/10">
+            <Lock size={18} strokeWidth={2.5} className="text-white/20" />
+            <span className="text-[8px] font-extrabold lowercase text-white/20 text-center leading-tight px-1">
+              right profile
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Box 2: Details / Trait pills ── */}
+      <div className="rounded-2xl bg-black p-5">
+        <span className="block text-base font-[900] lowercase text-white mb-4">details:</span>
+        <div className="flex flex-wrap gap-2">
+          {traits.map((t) => (
+            <div
+              key={t.label}
+              className="rounded-xl bg-white/10 px-4 py-2.5 text-center"
+            >
+              <span className="block text-[8px] font-extrabold lowercase text-white/40 leading-none mb-1">
+                {t.label}
+              </span>
+              <span className="block text-xs font-[900] lowercase text-white leading-none">
+                {t.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Delete button ── */}
+      <button
+        onClick={() => setShowDelete(true)}
+        className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
+      >
+        <Trash2 size={13} strokeWidth={2.5} />
+        delete character
+      </button>
+    </>
+  );
 
   return (
     <div className="min-h-screen bg-background">
       {/* ── Mobile layout ── */}
       <main className="mx-auto w-full max-w-lg px-4 pt-14 pb-12 md:hidden">
-        <div className="flex items-center gap-3 mb-5">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
         </div>
-
-        <h1 className="text-center text-[2.8rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mt-2">
-          {character.name || "unnamed"}, {character.age}
-        </h1>
-
-        <div className="mt-6 grid grid-cols-3 gap-3">
-          <FaceImage url={character.face_side_url} label="side" />
-          <FaceImage url={character.face_image_url} label="front" />
-          <FaceImage url={character.face_angle_url} label="angle" />
-        </div>
-
-        {character.body && (
-          <div className="mt-5">
-            <div className="inline-block rounded-2xl bg-white px-6 py-3.5">
-              <span className="block text-[9px] font-extrabold lowercase text-black/40 leading-none mb-1">
-                body
-              </span>
-              <span className="block text-[1rem] font-[900] lowercase text-black leading-none">
-                {character.body}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {userDescription ? (
-          <div className="mt-5 rounded-2xl border-[5px] border-border bg-card p-4">
-            <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
-              description
-            </span>
-            <p className="text-sm font-extrabold lowercase text-foreground leading-relaxed">
-              {userDescription}
-            </p>
-          </div>
-        ) : null}
-
-        <div className="mt-8 flex flex-col gap-2">
-          <button
-            onClick={() => {
-              sessionStorage.setItem("vizura_internal_nav", "1");
-              navigate("/create", { state: { preselectedCharacterId: character.id } });
-            }}
-            className="flex items-center justify-center gap-2 h-14 w-full rounded-2xl bg-neon-yellow text-sm font-[900] lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-          >
-            <Camera size={16} strokeWidth={2.5} />
-            create photo
-          </button>
-          <button
-            onClick={() => setShowDelete(true)}
-            className="flex items-center justify-center gap-2 h-12 w-full rounded-2xl text-sm font-extrabold lowercase text-destructive/60 hover:text-destructive transition-colors"
-          >
-            <Trash2 size={13} strokeWidth={2.5} />
-            delete
-          </button>
+        <div className="flex flex-col gap-4">
+          {content}
         </div>
       </main>
 
       {/* ── Desktop layout ── */}
-      <main className="hidden md:block mx-auto w-full max-w-3xl px-8 pt-14 pb-12">
-        <div className="flex items-center gap-3 mb-5">
+      <main className="hidden md:block mx-auto w-full max-w-2xl px-8 pt-14 pb-12">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
         </div>
-
-        <div className="grid grid-cols-5 gap-8">
-          <div className="col-span-2 flex flex-col gap-3">
-            <div className="grid grid-cols-3 gap-2">
-              <FaceImage url={character.face_side_url} label="side" />
-              <FaceImage url={character.face_image_url} label="front" />
-              <FaceImage url={character.face_angle_url} label="angle" />
-            </div>
-          </div>
-
-          <div className="col-span-3 flex flex-col">
-            <h1 className="text-[2.4rem] font-[900] lowercase tracking-tight text-foreground leading-[1.1] mb-4">
-              {character.name || "unnamed"}, {character.age}
-            </h1>
-
-            {character.body && (
-              <div className="mb-5">
-                <div className="inline-block rounded-2xl bg-white px-6 py-3.5">
-                  <span className="block text-[9px] font-extrabold lowercase text-black/40 leading-none mb-1">
-                    body
-                  </span>
-                  <span className="block text-[1rem] font-[900] lowercase text-black leading-none">
-                    {character.body}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {userDescription ? (
-              <div className="rounded-2xl border-[5px] border-border bg-card p-4 mb-5">
-                <span className="block text-[9px] font-extrabold lowercase text-foreground/40 mb-1">
-                  description
-                </span>
-                <p className="text-sm font-extrabold lowercase text-foreground leading-relaxed">
-                  {userDescription}
-                </p>
-              </div>
-            ) : null}
-
-            <button
-              onClick={() => {
-                sessionStorage.setItem("vizura_internal_nav", "1");
-                navigate("/create", { state: { preselectedCharacterId: character.id } });
-              }}
-              className="flex items-center justify-center gap-2 h-14 w-full rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-            >
-              <Camera size={16} strokeWidth={2.5} />
-              create photo
-            </button>
-
-            <button
-              onClick={() => setShowDelete(true)}
-              className="mt-3 flex items-center justify-center gap-2 h-14 w-full rounded-2xl border-[5px] border-destructive/30 text-sm font-extrabold lowercase text-destructive hover:bg-destructive/10 transition-colors"
-            >
-              <Trash2 size={14} strokeWidth={2.5} />
-              delete character
-            </button>
-          </div>
+        <div className="flex flex-col gap-4">
+          {content}
         </div>
       </main>
 
+      {/* ── Delete confirmation overlay ── */}
       <AnimatePresence>
         {showDelete && (
           <motion.div
