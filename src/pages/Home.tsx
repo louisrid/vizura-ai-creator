@@ -167,7 +167,8 @@ const Home = () => {
 
     sessionStorage.removeItem(FLOW_STATE_KEY);
     sessionStorage.setItem(DISMISSED_KEY, "1");
-    setShowGuided(false);
+    // Keep guided open briefly so the black portal covers the transition
+    setTimeout(() => setShowGuided(false), 400);
   };
 
   const handleGuidedExit = () => {

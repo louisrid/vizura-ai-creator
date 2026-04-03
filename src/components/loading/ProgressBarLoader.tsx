@@ -32,6 +32,7 @@ const ProgressBarLoader = ({
   onComplete,
   requireTapToContinue = false,
   expandTapTarget = false,
+  completeNow = false,
 }: ProgressBarLoaderProps) => {
   const [pct, setPct] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
