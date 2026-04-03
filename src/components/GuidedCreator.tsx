@@ -114,8 +114,26 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
 ));
 NavArrow.displayName = "NavArrow";
 
-/* ── Solid background only ── */
-const AmbientGlow = () => null;
+/* ── Animated gradient background ── */
+const AmbientGlow = () => (
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="absolute inset-0 animate-wizard-gradient-1" style={{
+      width: "140%", height: "140%", top: "-20%", left: "-20%",
+      background: "radial-gradient(ellipse at 30% 50%, rgba(0,50,255,0.08) 0%, transparent 60%)",
+      filter: "blur(80px)",
+    }} />
+    <div className="absolute inset-0 animate-wizard-gradient-2" style={{
+      width: "130%", height: "130%", top: "-15%", right: "-15%",
+      background: "radial-gradient(ellipse at 70% 40%, rgba(120,0,255,0.06) 0%, transparent 55%)",
+      filter: "blur(90px)",
+    }} />
+    <div className="absolute inset-0 animate-wizard-gradient-3" style={{
+      width: "120%", height: "120%", bottom: "-10%", left: "-10%",
+      background: "radial-gradient(ellipse at 40% 70%, rgba(255,0,100,0.04) 0%, transparent 50%)",
+      filter: "blur(70px)",
+    }} />
+  </div>
+);
 
 /* ── Simple emoji with subtle yellow glow ── */
 const BigEmoji = ({ emoji }: { emoji: string; index?: number }) => (
