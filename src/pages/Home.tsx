@@ -84,6 +84,8 @@ const Home = () => {
       setShowGuided(true);
     }
     setAutoOpenEvaluated(true);
+    // Remove splash once we know what to show
+    requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, user]);
 
   useEffect(() => {
