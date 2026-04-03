@@ -1022,8 +1022,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           onChange={(e) => { e.stopPropagation(); setPassword(e.target.value); }}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-          className="mt-2 w-full h-12 rounded-2xl border-[3px] border-white/15 bg-white/5 px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
-          disabled={emailLoading || googleLoading}
+          className="mt-2 w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none focus:border-white/40 transition-colors duration-150"
+          style={{ backgroundColor: "#111111" }}
         />
         <button
           onClick={handleEmailAuth}
