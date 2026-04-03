@@ -835,27 +835,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </div>
             </div>
 
-          {/* Skip to login pill — top right */}
-          {!isCooking && !isLoggedIn && (
-            <button
-              type="button"
-              onClick={() => navigateTo(`/auth${window.location.search}`)}
-              className="absolute z-50 active:scale-95 transition-transform duration-150 pointer-events-auto touch-manipulation"
-              style={{
-                top: 20,
-                right: 20,
-                backgroundColor: "#facc15",
-                borderRadius: 20,
-                padding: "8px 16px",
-                fontSize: 12,
-                fontWeight: 800,
-                color: "#000",
-                textTransform: "lowercase",
-              }}
-            >
-              skip to login
-            </button>
-          )}
+          {/* Skip pill — top right (logged-in returning users only) */}
           {!isCooking && isLoggedIn && skipWelcome && (
             <button
               type="button"
