@@ -795,17 +795,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
-        {/* Close / exit button */}
-        {!isCooking && isLoggedIn && skipWelcome && (
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleClose(); }}
-            className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors active:scale-95"
-            aria-label="close"
-          >
-            <X size={18} strokeWidth={2.5} />
-          </button>
-        )}
 
         <div className="relative flex-1 overflow-hidden">
           <div className="absolute inset-x-0 flex items-center justify-center px-6 md:px-8" style={{ top: "45%", transform: "translateY(-50%)" }}>
