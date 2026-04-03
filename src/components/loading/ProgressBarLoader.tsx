@@ -196,7 +196,7 @@ const ProgressBarLoader = ({
               style={{
                 width: `${pct}%`,
                 transitionDuration: "300ms",
-                background: "hsl(var(--neon-yellow))",
+                background: "linear-gradient(90deg, hsl(var(--loader-bar-from)) 0%, hsl(var(--loader-bar-from)) 85%, hsl(var(--loader-bar-to)) 100%)",
               }}
             />
           </div>

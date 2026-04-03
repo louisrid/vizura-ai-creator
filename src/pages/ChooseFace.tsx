@@ -86,8 +86,6 @@ const ChooseFace = () => {
       hasShownSuccess.current = true;
       setLoading(false);
       setShowSuccess(true);
-      const t = setTimeout(() => setShowSuccess(false), SUCCESS_HOLD);
-      return () => clearTimeout(t);
     }
   }, [barComplete, faces.length]);
 
@@ -403,25 +401,30 @@ const ChooseFace = () => {
       {/* Green "character created!" success screen */}
       <AnimatePresence>
         {showSuccess && (
-          <motion.div
+          <motion.button
             key="success-screen"
-            className="fixed inset-0 z-[9999] flex items-center justify-center"
+            type="button"
+            onClick={() => setShowSuccess(false)}
+            className="fixed inset-0 z-[9999] flex items-center justify-center cursor-pointer"
             style={{ backgroundColor: "hsl(var(--member-green))" }}
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.65, ease: "easeInOut" }}
           >
-            <motion.p
-              className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black"
+            <motion.div
+              className="flex flex-col items-center"
               initial={{ opacity: 0, y: 15, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              <span className="block">character</span>
-              <span className="block">created!</span>
-            </motion.p>
-          </motion.div>
+              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
+                <span className="block">character</span>
+                <span className="block">created!</span>
+              </p>
+              <p className="mt-4 text-sm font-[800] lowercase text-black/50">tap to continue</p>
+            </motion.div>
+          </motion.button>
         )}
       </AnimatePresence>
 
@@ -474,7 +477,7 @@ const ChooseFace = () => {
 
           <div className="-mx-4 shrink-0">
             <div className="border-t-[5px] border-white" />
-            <div className="px-4 pt-6 pb-[max(env(safe-area-inset-bottom),2rem)] bg-background">
+            <div className="px-4 pt-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] bg-black">
               <div className="flex gap-3">
                 <button
                   onClick={handleRegenerate}
