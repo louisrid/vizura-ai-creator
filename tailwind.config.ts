@@ -147,6 +147,27 @@ export default {
           "0%": { transform: "translateY(-10%) rotate(0deg)" },
           "100%": { transform: "translateY(110vh) rotate(360deg)" },
         },
+        "wizard-gradient-1": {
+          "0%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(80px, -60px) scale(1.2)" },
+          "50%": { transform: "translate(-40px, 40px) scale(0.9)" },
+          "75%": { transform: "translate(60px, 20px) scale(1.1)" },
+          "100%": { transform: "translate(0, 0) scale(1)" },
+        },
+        "wizard-gradient-2": {
+          "0%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(-70px, 50px) scale(0.85)" },
+          "50%": { transform: "translate(50px, -30px) scale(1.15)" },
+          "75%": { transform: "translate(-30px, -40px) scale(0.95)" },
+          "100%": { transform: "translate(0, 0) scale(1)" },
+        },
+        "wizard-gradient-3": {
+          "0%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(40px, 30px) scale(1.1)" },
+          "50%": { transform: "translate(-60px, -20px) scale(0.88)" },
+          "75%": { transform: "translate(20px, -50px) scale(1.05)" },
+          "100%": { transform: "translate(0, 0) scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.15s ease-out",
