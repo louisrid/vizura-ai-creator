@@ -384,7 +384,7 @@ const Home = () => {
                         {isPlaceholder ? (
                           <div className="flex h-full w-full items-center justify-center text-[9px] font-[900] lowercase text-foreground/25">empty</div>
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
                       </AspectRatio>
                     </button>
