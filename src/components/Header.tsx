@@ -160,8 +160,8 @@ const Header = () => {
                           }}
                           className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
                           style={{
-                            padding: "14px 16px",
-                            fontSize: 14,
+                            padding: "10px 14px",
+                            fontSize: 13,
                             fontWeight: 700,
                             textTransform: "lowercase",
                             color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
