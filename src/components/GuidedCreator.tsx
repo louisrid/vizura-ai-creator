@@ -249,6 +249,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
   const [cookingPhraseIndex, setCookingPhraseIndex] = useState(0);
   const hasCompletedCookingRef = useRef(false);
+  const [exitFade, setExitFade] = useState(false);
 
   const restoreSavedFlow = useCallback(() => {
     try {
@@ -283,6 +284,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       hasCompletedCookingRef.current = false;
       animating.current = false;
       setNameToastShown(false);
+      setExitFade(false);
       // Remove splash screen once overlay is ready
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
     }
@@ -421,7 +423,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     if (isCreateSlide) {
-      completeCookingFlow();
+      // Fade to black, then complete
+      setExitFade(true);
+      setTimeout(() => completeCookingFlow(), 1200);
       return;
     }
 
@@ -686,8 +690,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return (
         <button
           type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
           className="mt-5 flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
+          disabled={exitFade}
         >
           <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.02] tracking-tight">
             <span className="block whitespace-nowrap text-white">your character</span>
@@ -762,6 +767,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "hsl(0 0% 0%)" }}
     >
+      {/* Exit fade overlay — covers everything with smooth black fade */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-50 bg-black"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: exitFade ? 1 : 0 }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
+      />
       <AmbientGlow />
       <motion.div
         className="absolute inset-0 flex flex-col"

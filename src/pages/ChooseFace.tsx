@@ -386,16 +386,26 @@ const ChooseFace = () => {
 
       {/* Full-screen loading bar while faces generate */}
       {loading && (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black">
-          <ProgressBarLoader
-            duration={120000}
-            phrases={FACE_GEN_PHRASES}
-            phraseInterval={5000}
-            requireTapToContinue={false}
-            completeNow={apiDone}
-            onComplete={() => setBarComplete(true)}
-          />
-        </div>
+        <motion.div
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
+          >
+            <ProgressBarLoader
+              duration={120000}
+              phrases={FACE_GEN_PHRASES}
+              phraseInterval={5000}
+              requireTapToContinue={false}
+              completeNow={apiDone}
+              onComplete={() => setBarComplete(true)}
+            />
+          </motion.div>
+        </motion.div>
       )}
 
       {/* Green "character created!" success screen */}
