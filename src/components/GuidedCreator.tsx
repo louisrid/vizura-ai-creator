@@ -562,7 +562,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {trait.label}
           </h2>
           <div
-            className={`mt-5 grid w-full gap-3.5 px-2 ${trait.options.length === 4 ? "max-w-[20rem] grid-cols-2" : "max-w-[23.5rem] grid-cols-3"}`}
+            className={`mt-5 grid w-full gap-3.5 px-2 ${
+              trait.options.length === 4
+                ? "max-w-[20rem] grid-cols-2"
+                : trait.options.length === 2
+                  ? "max-w-[16rem] grid-cols-2 mx-auto"
+                  : "max-w-[23.5rem] grid-cols-3"
+            }`}
           >
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
