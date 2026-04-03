@@ -146,7 +146,7 @@ const CharacterDetail = () => {
         <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
         <div className="flex flex-wrap gap-2">
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "rgba(255,255,255,0.08)", border: "2px solid #222" }}>
+            <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
               <span className="block text-[9px] font-[800] uppercase leading-none mb-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>{t.label}</span>
               <span className="block text-[13px] font-[800] lowercase text-white leading-none">{t.value}</span>
             </div>
