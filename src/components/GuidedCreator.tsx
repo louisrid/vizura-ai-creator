@@ -41,8 +41,8 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[28px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[11px] font-[800] lowercase text-white/40";
+const SLIDE_TITLE_CLASS = "text-center text-[32px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const HELPER_CLASS = "text-[12px] font-[800] lowercase text-white/40";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
@@ -58,36 +58,36 @@ const TopLine = () => (
 
 /* ── Animated rings (hero only) ── */
 const AnimatedRings = ({ t }: { t: number }) => (
-  <div className="relative flex items-center justify-center" style={{ width: 240, height: 240, marginBottom: 24 }}>
+  <div className="relative flex items-center justify-center" style={{ width: 280, height: 280, marginBottom: 18 }}>
     {/* Inner ring */}
     <div className="absolute" style={{
-      width: 130, height: 130, borderRadius: "50%",
+      width: 150, height: 150, borderRadius: "50%",
       border: `2px solid ${Y}`, borderLeftColor: "transparent",
       transform: `rotate(${t * 1.2}deg)`,
-      top: "50%", left: "50%", marginTop: -65, marginLeft: -65,
+      top: "50%", left: "50%", marginTop: -75, marginLeft: -75,
     }} />
     {/* Mid ring */}
     <div className="absolute" style={{
-      width: 170, height: 170, borderRadius: "50%",
+      width: 200, height: 200, borderRadius: "50%",
       border: `8px solid ${Y}`, borderTopColor: "transparent", borderRightColor: "transparent",
       transform: `rotate(${t * -0.8}deg)`,
-      top: "50%", left: "50%", marginTop: -85, marginLeft: -85,
+      top: "50%", left: "50%", marginTop: -100, marginLeft: -100,
     }} />
     {/* Outer ring */}
     <div className="absolute" style={{
-      width: 210, height: 210, borderRadius: "50%",
+      width: 245, height: 245, borderRadius: "50%",
       border: `3px solid ${Y}`, borderBottomColor: "transparent", borderLeftColor: "transparent",
       transform: `rotate(${t * 0.6}deg)`,
-      top: "50%", left: "50%", marginTop: -105, marginLeft: -105,
+      top: "50%", left: "50%", marginTop: -122.5, marginLeft: -122.5,
     }} />
     {/* Dashed ring */}
     <div className="absolute" style={{
-      width: 238, height: 238, borderRadius: "50%",
+      width: 278, height: 278, borderRadius: "50%",
       border: `2px dashed ${Y}`,
       transform: `rotate(${t * -0.4}deg)`,
-      top: "50%", left: "50%", marginTop: -119, marginLeft: -119,
+      top: "50%", left: "50%", marginTop: -139, marginLeft: -139,
     }} />
-    <span style={{ fontSize: 76, position: "relative", zIndex: 1 }}>👩‍🎤</span>
+    <span style={{ fontSize: 82, position: "relative", zIndex: 1 }}>👩‍🎤</span>
   </div>
 );
 
@@ -140,11 +140,11 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 52,
-      borderRadius: 12,
+      height: 56,
+      borderRadius: 14,
       padding: "10px 18px",
-      fontSize: 16,
-      fontWeight: 800,
+      fontSize: 17,
+      fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
@@ -234,10 +234,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const hasCompletedCookingRef = useRef(false);
   const [exitFade, setExitFade] = useState(false);
 
-  /* Ring animation timer */
+  /* Ring animation timer — uses rAF for smooth 60fps */
   useEffect(() => {
-    const id = setInterval(() => setRingT((v) => v + 1), 16);
-    return () => clearInterval(id);
+    let raf: number;
+    const tick = () => { setRingT((v) => v + 1); raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const restoreSavedFlow = useCallback(() => {
@@ -415,30 +417,29 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── HERO SLIDE (new first screen) ── */
   const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: -20 }}>
+    <div className="flex w-full flex-col items-center" style={{ marginTop: 60 }}>
       <AnimatedRings t={ringT} />
-      <div style={{ fontSize: 52, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.02em" }}>vizura</div>
-      <div style={{ width: 40, height: 4, background: Y, marginTop: 7, marginBottom: 5, borderRadius: 2 }} />
-      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", fontWeight: 800, textTransform: "lowercase" as const }}>create your AI character</div>
-      <div className="flex flex-col items-center" style={{ marginTop: 20, gap: 8 }}>
+      <div style={{ fontSize: 86, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div style={{ width: 50, height: 5, background: Y, marginTop: 10, marginBottom: 0, borderRadius: 3 }} />
+      <div className="flex flex-col items-center" style={{ marginTop: 24, gap: 10 }}>
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
           style={{
-            width: 220, padding: "14px", background: Y, border: "none", borderRadius: 12,
-            fontSize: 16, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            width: 240, padding: "16px", background: Y, border: "none", borderRadius: 14,
+            fontSize: 22, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
-          get started
+          start now
         </button>
         {!isLoggedIn && (
           <button
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             style={{
-              width: 220, padding: "12px", background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontSize: 13, fontWeight: 800, color: "#fff",
+              width: 240, padding: "14px", background: "#111", border: "2px solid #222",
+              borderRadius: 14, fontSize: 20, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
@@ -455,19 +456,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Intro */
     if (isIntroSlide) return (
-      <div className="flex w-full flex-col items-center">
-        <span className="text-[56px] mb-4">💫</span>
+      <div className="flex w-full flex-col items-center" style={{ marginTop: 40 }}>
+        <span className="text-[64px] mb-5">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
-        <p className="mt-4 text-[13px] font-[800] lowercase text-white/40">tap → to continue</p>
+        <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap → to continue</p>
       </div>
     );
 
     /* Name */
     if (isNameSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[56px] mb-4">✨</span>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 40 }}>
+        <span className="text-[64px] mb-5">✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-5 flex items-center gap-2 w-full max-w-[16rem]">
+        <div className="mt-6 flex items-center gap-2.5 w-full max-w-[17rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -476,17 +477,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[52px] flex-1 min-w-0 px-4 text-base font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="h-[56px] flex-1 min-w-0 px-4 text-[17px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
           <motion.button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
             whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[52px] w-[52px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
-            style={{ borderRadius: 12, backgroundColor: Y }}
+            className="flex h-[56px] w-[56px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            style={{ borderRadius: 14, backgroundColor: Y }}
           >
-            <RefreshCw size={18} strokeWidth={2.5} />
+            <RefreshCw size={20} strokeWidth={2.5} />
           </motion.button>
         </div>
       </div>
@@ -497,10 +498,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const trait = TRAITS[currentTraitIndex];
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
-        <div className="flex w-full flex-col items-center">
-          <span className="text-[56px] mb-4">{trait.emoji}</span>
+        <div className="flex w-full flex-col items-center" style={{ marginTop: 40 }}>
+          <span className="text-[64px] mb-5">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className={`mt-5 grid w-full gap-3 px-2 ${
+          <div className={`mt-6 grid w-full gap-3 px-2 ${
             trait.options.length === 4 ? "max-w-[20rem] grid-cols-2"
               : trait.options.length === 2 ? "max-w-[16rem] grid-cols-2 mx-auto"
               : "max-w-[22rem] grid-cols-3"
@@ -525,30 +526,30 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Description */
     if (isDescriptionSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 20 }}>
         <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
-        <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-4 w-full max-w-[18rem]">
+        <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
+        <div className="mt-5 w-full max-w-[18rem]">
           <textarea
             value={selections.description}
             onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
             placeholder="add any details you want…"
             rows={6}
             onClick={(e) => e.stopPropagation()}
-            className="min-h-[160px] w-full resize-none px-4 py-3 text-base font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="min-h-[160px] w-full resize-none px-4 py-3 text-[16px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
-          <p className={`mt-2 text-center ${HELPER_CLASS}`}>i.e. chubby cheeks, freckles, thick mascara</p>
+          <p className={`mt-3 text-center ${HELPER_CLASS}`}>i.e. chubby cheeks, freckles, thick mascara</p>
         </div>
       </div>
     );
 
     /* Reference */
     if (isReferenceSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
+      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()} style={{ marginTop: 20 }}>
         <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
-        <p className={`mt-1 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-4 flex w-full max-w-[10rem] flex-col items-center gap-4">
+        <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
+        <div className="mt-5 flex w-full max-w-[11rem] flex-col items-center gap-4">
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
           {selections.referenceImage ? (
             <div className="w-full">
@@ -557,7 +558,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
-                  className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
                 >×</button>
               </div>
             </div>
@@ -568,8 +569,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
               style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px dashed #333", backgroundColor: "#111" }}
             >
-              <Upload size={14} strokeWidth={2.5} className="text-white/30" />
-              <span className="text-[11px] font-extrabold lowercase text-white/30">upload image</span>
+              <Upload size={16} strokeWidth={2.5} className="text-white/30" />
+              <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
             </button>
           )}
           <div className="w-full space-y-2 mb-4">
@@ -600,18 +601,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
           className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
+          style={{ marginTop: 40 }}
         >
-          <h2 className="mx-auto text-center text-[2.8rem] font-[900] lowercase leading-[1.05] tracking-tight">
+          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
           {!isFirstCharacter && (
-            <div className="mt-5 flex items-center gap-1.5">
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-sm font-[900] lowercase text-white/40">30 gems</span>
+            <div className="mt-6 flex items-center gap-1.5">
+              <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
+              <span className="text-[15px] font-[900] lowercase text-white/40">30 gems</span>
             </div>
           )}
-          <p className="mt-5 text-[13px] font-[800] lowercase text-white/40">tap to continue</p>
+          <p className="mt-6 text-[14px] font-[800] lowercase text-white/40">tap to continue</p>
         </button>
       );
     }
@@ -803,15 +805,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
-          <span className="text-[56px] mb-4">🔐</span>
-          <h2 className="text-center text-[2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <span className="text-[64px] mb-5">🔐</span>
+          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
           </h2>
           <button
             onClick={handleGoogle}
             disabled={googleLoading || emailLoading}
-            className="mt-8 w-full h-[52px] flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-            style={{ background: Y, color: "#000", borderRadius: 12, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            className="mt-8 w-full h-[56px] flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            style={{ background: Y, color: "#000", borderRadius: 14, fontSize: 16, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
               <>
@@ -834,8 +836,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             type="email" placeholder="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
-            className="mt-4 w-full h-[48px] px-4 text-sm font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="mt-4 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
             disabled={emailLoading || googleLoading}
           />
           <input
@@ -843,15 +845,15 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onChange={(e) => setPassword(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-            className="mt-2 w-full h-[48px] px-4 text-sm font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="mt-2.5 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
             disabled={emailLoading || googleLoading}
           />
           <button
             onClick={handleEmailAuth}
             disabled={emailLoading || googleLoading}
-            className="mt-3 w-full h-[52px] text-sm font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
-            style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }}
+            className="mt-3 w-full h-[56px] text-[15px] font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>}
           </button>

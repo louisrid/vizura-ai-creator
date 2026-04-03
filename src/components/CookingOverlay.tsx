@@ -84,7 +84,7 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
               >
-                <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
+                <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] text-black">
                   <span className="block">character</span>
                   <span className="block">created!</span>
                 </p>
