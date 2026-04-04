@@ -444,6 +444,7 @@ serve(async (req) => {
     const aspectRatio = body?.aspect_ratio || "3:4";
     const generateAngles = body?.generate_angles === true;
     const selectedFaceUrl = body?.selected_face_url || null;
+    const vibeReferenceUrl = body?.vibe_reference_url || null;
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
