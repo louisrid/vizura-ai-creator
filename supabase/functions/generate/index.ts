@@ -375,9 +375,9 @@ async function generatePhoto(
 ): Promise<string | null> {
   const safeRatio = mapAspectRatio(aspectRatio);
   if (faceImageUrls.length > 0) {
-    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, aspectRatio);
+    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, safeRatio);
   }
-  return await xaiTextToImage(finalPrompt, apiKey, aspectRatio);
+  return await xaiTextToImage(finalPrompt, apiKey, safeRatio);
 }
 
 /* ── handler ───────────────────────────────────────────── */
