@@ -384,7 +384,6 @@ const ChooseFace = () => {
 
     setPendingAuthSave(false);
     setShowSignIn(false);
-    setAnchorLoading(false);
 
     toast.success("character added!");
     navigate("/characters", { replace: true });
