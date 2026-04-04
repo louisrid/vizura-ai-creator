@@ -126,9 +126,18 @@ const ChooseFace = () => {
         setShowSignIn(true);
         return;
       }
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        setFaces([]);
+        setLoading(false);
+        setShowSignIn(true);
+        return;
+      }
+
       setShowSignIn(false);
 
-      const invokeAndParse = async (body: Record<string, unknown>) => {
+      const invokeAndParse = async (body: Record<string, unknown>, allowRetry = true): Promise<any> => {
         const { data, error: fnError } = await supabase.functions.invoke("generate", { body });
         if (fnError) {
           let parsed: any = null;
@@ -137,6 +146,14 @@ const ChooseFace = () => {
               parsed = await (fnError as any).context.json().catch(() => null);
             }
           } catch {}
+
+          if (allowRetry && parsed?.error === "Unauthorized") {
+            const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+            if (!refreshError && refreshed.session) {
+              return invokeAndParse(body, false);
+            }
+          }
+
           if (parsed) return parsed;
           throw fnError;
         }
@@ -150,6 +167,12 @@ const ChooseFace = () => {
       }
 
       if (result?.error) {
+        if (result.error === "Unauthorized") {
+          setFaces([]);
+          setShowSignIn(true);
+          setLoading(false);
+          return;
+        }
         if (result.code === "NO_GEMS") {
           setShowPaywall(true);
           setLoading(false);

@@ -232,7 +232,7 @@ const CharacterCreator = () => {
     const ey = selections.eye || "brown";
     const mk = selections.makeup || "natural";
     const ag = selections.age || "25";
-    const prompt = `${ag} year old woman, ${sk} skin, ${bt} body type, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup`;
+    const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
