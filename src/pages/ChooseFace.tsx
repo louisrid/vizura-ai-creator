@@ -225,25 +225,47 @@ const ChooseFace = () => {
     }
     if (!user) return;
 
-    setRerolling(true);
+    // Go back to loading bar, regenerate from scratch
+    setFaces([]);
+    setSelectedIndex(null);
+    setLoading(true);
+    setApiDone(false);
+    setBarComplete(false);
     setCardsRevealed(false);
+    setGenerationError(null);
+
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt, face_regen: true },
-      });
-      if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
-      const nextFaces = (data.images || []).slice(0, 3);
+      const invokeAndParse = async (body: Record<string, unknown>): Promise<any> => {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        if (!token) throw new Error("Unauthorized");
+        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify(body),
+        });
+        return response.json();
+      };
+
+      const result = await invokeAndParse({ prompt, face_regen: true });
+      if (result?.error) throw new Error(result.error);
+      const nextFaces = (result.images || []).slice(0, 3);
+      if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
+      setApiDone(true);
       await refetchGems();
       toast("1 gem used");
     } catch (err: any) {
       toast.error("generation failed, please try again");
-    } finally {
-      setRerolling(false);
-      setTimeout(() => setCardsRevealed(true), 100);
+      setLoading(false);
     }
   };
 
