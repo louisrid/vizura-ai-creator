@@ -317,19 +317,19 @@ const Index = () => {
           {/* Left: preview */}
           <div className="md:col-span-2">
             <div className="relative flex justify-center">
-              <motion.section
+                <motion.section
                 layout
-                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
+                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden"
                 style={{
-                  maxWidth: photoRatio === "9:16" ? "10rem" : "100%",
-                  maxHeight: "220px",
+                  width: photoRatio === "9:16" ? "10rem" : "100%",
+                  maxWidth: "100%",
                   borderRadius: 16,
                   border: "2px solid rgba(255,255,255,0.08)",
-                   backgroundColor: "#111111",
+                  backgroundColor: "#111111",
                 }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
-                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "220px" }}>
+                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                   {resultImage ? (
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (
