@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Upload, Gem, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { lovable } from "@/integrations/lovable/index";
@@ -251,11 +251,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const raw = sessionStorage.getItem(FLOW_STATE_KEY);
       if (!raw) return false;
       const saved = JSON.parse(raw);
-      setStep(Math.max(saved?.step ?? 0, 0));
+      if (!!saved?.skipWelcome !== skipWelcome) {
+        sessionStorage.removeItem(FLOW_STATE_KEY);
+        return false;
+      }
+      setStep(Math.min(Math.max(saved?.step ?? 0, 0), TOTAL - 1));
       setSelections({ ...emptySelections, ...normaliseLegacySelections(saved?.selections ?? {}) });
       return true;
-    } catch { return false; }
-  }, []);
+    } catch {
+      sessionStorage.removeItem(FLOW_STATE_KEY);
+      return false;
+    }
+  }, [TOTAL, skipWelcome]);
 
   const selectionsRef = useRef(selections);
   const stepRef = useRef(step);
@@ -270,6 +277,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   useEffect(() => {
     if (open) {
       const restored = restoreSavedFlow();
+      if (!restored) {
+        setStep(0);
+        setSelections({ ...emptySelections });
+      }
       setShaking(false);
       setInitialFadeIn(!restored);
       setVisible(true);
@@ -278,6 +289,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = false;
       setNameToastShown(false);
       setExitFade(false);
+      setSlideDirection(1);
+      setBackArrowShaking(false);
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
     }
   }, [open, restoreSavedFlow]);
@@ -383,7 +396,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
       setExitFade(true);
-      setTimeout(() => completeCookingFlow(), 1400);
+      window.setTimeout(() => {
+        setExitFade(false);
+        setCookingPhase("loading");
+      }, 900);
       return;
     }
     animating.current = true;
@@ -404,7 +420,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, cookingPhase]);
 
   const handleClose = () => {
-    sessionStorage.removeItem(FLOW_STATE_KEY);
+    persistFlow();
     setVisible(false);
     onExit(selectionsRef.current);
   };
@@ -421,7 +437,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── HERO SLIDE (new first screen) ── */
   const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: 90 }}>
+    <div className="flex w-full flex-col items-center" style={{ marginTop: 60 }}>
       <AnimatedRings t={ringT} />
       <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
       <div style={{ width: 40, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
@@ -430,8 +446,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
           style={{
-            width: 180, padding: "11px", background: Y, border: "none", borderRadius: 12,
-            fontSize: 19, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            width: 168, padding: "10px", background: Y, border: "none", borderRadius: 12,
+            fontSize: 18, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
@@ -442,8 +458,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             style={{
-              width: 180, padding: "9px", background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontSize: 19, fontWeight: 900, color: "#fff",
+              width: 168, padding: "8px", background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontSize: 18, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
@@ -660,6 +676,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const isCooking = cookingPhase !== "none";
   const showNavigation = !isCooking && !isHeroSlide;
+  const canExitFlow = skipWelcome && isLoggedIn && !isCooking;
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#000" }}>
@@ -678,6 +695,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
+        {canExitFlow && (
+          <div className="absolute inset-x-0 z-20 flex justify-end px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-2 text-[13px] font-[900] lowercase text-foreground backdrop-blur-sm transition-opacity duration-150 active:opacity-70"
+              aria-label="close character creator"
+            >
+              <X size={14} strokeWidth={2.6} />
+              <span>close</span>
+            </button>
+          </div>
+        )}
         {/* Skip button removed */}
 
         {/* Content area */}
