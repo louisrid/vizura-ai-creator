@@ -1,9 +1,13 @@
-/** Top yellow accent bar — matches the animation flow's TopLine exactly */
+/** Top yellow accent bar — flush at very top, matches animation flow TopLine */
 const TopGradientBar = () => (
-  <div className="pointer-events-none absolute inset-x-0 top-0 z-[2]">
+  <div
+    className="pointer-events-none fixed inset-x-0 top-0 z-[9998]"
+    style={{ height: 5 }}
+  >
     <div
       style={{
-        height: 5,
+        width: "100%",
+        height: "100%",
         background:
           "linear-gradient(90deg, #facc15 0%, #facc15 20%, rgba(250,204,21,0.3) 50%, transparent 80%)",
       }}
