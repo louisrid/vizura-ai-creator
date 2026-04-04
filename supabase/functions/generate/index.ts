@@ -407,6 +407,13 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
   thick: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
 };
 
+/* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
+const BODY_PROMPT_MODIFIER: Record<string, string> = {
+  slim: "TODO",
+  regular: "TODO",
+  curvy: "TODO",
+};
+
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
 async function generateAngleAndBody(
   faceUrl: string,
