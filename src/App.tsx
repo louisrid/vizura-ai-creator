@@ -23,6 +23,7 @@ import ResetPassword from "./pages/ResetPassword";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
+import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
 /* Routes that should NOT redirect to / on fresh load */
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/choose-face", "/characters"];
