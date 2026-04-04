@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Upload, Gem, X } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Upload, Gem, Home } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { lovable } from "@/integrations/lovable/index";
@@ -144,10 +144,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 50,
-      borderRadius: 12,
-      padding: "8px 14px",
-      fontSize: 16,
+      height: 56,
+      borderRadius: 14,
+      padding: "10px 16px",
+      fontSize: 17,
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -694,19 +694,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         animate={{ opacity: 1 }}
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
       >
-        {canExitFlow && (
-          <div className="absolute inset-x-0 z-20 flex justify-end px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
-            <button
-              type="button"
-              onClick={handleClose}
-              className="flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-2 text-[13px] font-[900] lowercase text-foreground backdrop-blur-sm transition-opacity duration-150 active:opacity-70"
-              aria-label="close character creator"
-            >
-              <X size={14} strokeWidth={2.6} />
-              <span>close</span>
-            </button>
-          </div>
-        )}
+        {/* Close button removed — home icon below arrows is the only exit */}
         {/* Skip button removed */}
 
         {/* Content area */}
@@ -742,13 +730,25 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           </div>
         )}
 
-        {/* Arrow buttons — positioned below content */}
+        {/* Arrow buttons + home icon — positioned below content */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex items-center justify-center gap-4" style={{ bottom: "10%" }}>
-            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-              <NavArrow direction="left" onClick={goBack} />
-            </motion.div>
-            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
+          <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "8%" }}>
+            <div className="flex items-center justify-center gap-4">
+              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+                <NavArrow direction="left" onClick={goBack} />
+              </motion.div>
+              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
+            </div>
+            {/* Home exit icon — always present after hero */}
+            <button
+              type="button"
+              onClick={handleClose}
+              className="mt-3 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
+              style={{ width: 38, height: 38, borderRadius: 10, backgroundColor: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.12)" }}
+              aria-label="go home"
+            >
+              <Home size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.45)" }} />
+            </button>
           </div>
         )}
       </motion.div>
@@ -797,7 +797,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   const handleGoogle = async () => {
     setGoogleLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}/choose-face` });
+      // After OAuth, return to current page (not /choose-face) so flow state is preserved
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
       if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
     } catch (err: any) { toast.error(err.message || "sign in failed"); setGoogleLoading(false); }
   };

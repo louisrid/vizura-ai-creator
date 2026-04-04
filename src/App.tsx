@@ -40,15 +40,9 @@ const FreshLoadRedirect = () => {
     if (hasRedirected.current || loading) return;
     hasRedirected.current = true;
 
-    // Logged-in users: redirect to homepage from deep links (except exempt routes)
-    if (user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
-      navigate("/", { replace: true });
-      return;
-    }
-
-    // Logged-out users: ALWAYS go to homepage (which triggers the guided creator)
+    // Logged-in users: let them stay wherever they are
+    // Only redirect logged-out users on non-exempt deep links
     if (!user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
-      // Clear session flags so the guided creator auto-opens fresh
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
       navigate("/", { replace: true });
