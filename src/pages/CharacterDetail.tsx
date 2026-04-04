@@ -102,8 +102,8 @@ const CharacterDetail = () => {
   };
   const hairStyle = getHairStyle(character.description);
 
+  // Build traits — exclude age (shown in header now)
   const traits: { label: string; value: string }[] = [];
-  if (character.age) traits.push({ label: "age", value: character.age });
   if (skinLabel) traits.push({ label: "skin", value: skinLabel });
   if (character.body) traits.push({ label: "body", value: character.body });
   if (hairStyle) traits.push({ label: "hair style", value: hairStyle });
@@ -115,12 +115,14 @@ const CharacterDetail = () => {
     !character.face_image_url.startsWith("data:image/svg") &&
     !character.face_image_url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
 
+  const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
+
   const content = (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #222" }} className="p-4">
-        <h1 className="text-[24px] font-[900] lowercase tracking-tight text-white leading-none mb-4">
-          {character.name || "unnamed"}
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(100,160,255,0.25)" }} className="p-5">
+        <h1 className="text-[30px] font-[900] lowercase tracking-tight text-white leading-none mb-5">
+          {nameAge}
         </h1>
         <div className="grid grid-cols-3 gap-2.5">
           <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
@@ -154,30 +156,33 @@ const CharacterDetail = () => {
         </div>
       </div>
 
-      {/* Delete */}
-      <button
-        onClick={() => setShowDelete(true)}
-        className="flex items-center justify-center gap-2 h-10 w-full text-sm font-[900] lowercase transition-colors"
-        style={{ color: "#ff4444", borderRadius: 12 }}
-      >
-        <Trash2 size={13} strokeWidth={2.5} />
-        delete character
-      </button>
+      {/* Delete — slightly lower, lighter weight */}
+      <div className="pt-4">
+        <button
+          onClick={() => setShowDelete(true)}
+          className="flex items-center justify-center gap-2 h-10 w-full text-sm font-[700] lowercase transition-colors"
+          style={{ color: "#ff4444", borderRadius: 12 }}
+        >
+          <Trash2 size={13} strokeWidth={2.5} />
+          delete character
+        </button>
+      </div>
     </>
   );
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[400px] md:hidden">
-        <div className="flex items-center gap-3 mb-4">
+      {/* Extra top padding under back arrow */}
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-6 pb-[400px] md:hidden">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>
       </main>
 
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-4 pb-[400px]">
-        <div className="flex items-center gap-3 mb-4">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-6 pb-[400px]">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>
