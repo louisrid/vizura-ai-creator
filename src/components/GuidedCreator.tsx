@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
@@ -162,11 +161,6 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
   </motion.button>
 );
 
-/* ── Loading phrases ── */
-const COOKING_PHRASES = ["mapping your features…", "building your look…", "training the AI…", "final touches…"];
-const COOKING_SUCCESS_HOLD = 4000;
-const COOKING_EXIT_DURATION = 750;
-
 /* ── Types ── */
 export interface GuidedSelections {
   skin: string; bodyType: string; hairStyle: string;
@@ -234,8 +228,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
 
-  const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
-  const hasCompletedCookingRef = useRef(false);
   const [exitFade, setExitFade] = useState(false);
 
   /* Ring animation timer — uses rAF for smooth 60fps */
