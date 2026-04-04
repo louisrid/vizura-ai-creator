@@ -147,13 +147,16 @@ const CharacterDetail = () => {
 
   const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
 
-  const imgSlot = (url: string | null | undefined, label: string) => (
-    <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+  const imgSlot = (url: string | null | undefined, label: string, caption: string) => (
+    <div className="flex flex-col items-center gap-1.5">
+    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
       {isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
+    </div>
+    <span className="text-[9px] font-[800] lowercase text-center" style={{ color: "rgba(255,255,255,0.45)" }}>{caption}</span>
     </div>
   );
 
@@ -165,9 +168,9 @@ const CharacterDetail = () => {
           {nameAge}
         </h1>
         <div className="grid grid-cols-3 gap-2.5">
-          {imgSlot(character.face_image_url, "front")}
-          {imgSlot(character.face_angle_url, "3/4 angle")}
-          {imgSlot(character.body_anchor_url, "full body")}
+          {imgSlot(character.face_image_url, "front", "front")}
+          {imgSlot(character.face_angle_url, "3/4 angle", "3/4 angle")}
+          {imgSlot(character.body_anchor_url, "full body", "full body")}
         </div>
       </div>
 
