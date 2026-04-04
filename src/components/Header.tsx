@@ -89,14 +89,14 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-2.5" ref={menuRef}>
-          <div className="flex items-center gap-1.5 rounded-xl px-3.5 py-2"
+          <div className="flex items-center gap-1.5 rounded-xl px-4 py-2.5"
             style={{
               backgroundColor: "rgba(0,224,255,0.08)",
               border: "2px solid rgba(0,224,255,0.25)",
             }}
           >
-            <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-            <span className="text-[13px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+            <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+            <span className="text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
           </div>
 
           <button
