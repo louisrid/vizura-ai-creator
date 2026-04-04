@@ -66,6 +66,9 @@ const ChooseFace = () => {
   const [rerolling, setRerolling] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
+  const [anchorLoading, setAnchorLoading] = useState(false);
+  const [anchorApiDone, setAnchorApiDone] = useState(false);
+  const [anchorBarComplete, setAnchorBarComplete] = useState(false);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Green success screen phase
