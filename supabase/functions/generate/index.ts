@@ -421,7 +421,7 @@ async function generateAngleAndBody(
 
   try {
     console.log("Generating 3/4 angle...");
-    const anglePrompt = `Same person exactly as in the reference image, three-quarter angle view, slight turn to the right, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const anglePrompt = `Same person exactly as in the reference image, three-quarter angle view, slight turn to the right, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
