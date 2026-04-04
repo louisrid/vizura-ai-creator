@@ -341,7 +341,7 @@ async function generateFaceImages(
     "heart-shaped face, delicate tapered chin, plush lips, petite nose, wide bright eyes, softly layered hair parted in the middle and falling on both sides",
   ];
 
-  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear glowing skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
+  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear matte skin, natural skin texture, no glossy or oily skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
