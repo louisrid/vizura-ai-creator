@@ -5,6 +5,8 @@ const STEPS = [0, 13, 27, 41, 58, 73, 89, 96, 100];
 const PHRASE_FADE_IN_DURATION = 0.95;
 const PHRASE_FADE_OUT_DURATION = 0.65;
 const PHRASE_GAP_MS = 650;
+const ACCEL_DURATION_MS = 1200;
+const FIXED_CONTENT_WIDTH = "min(20rem, calc(100vw - 5rem))";
 
 interface ProgressBarLoaderProps {
   duration?: number;
@@ -34,18 +36,8 @@ const ProgressBarLoader = ({
   expandTapTarget = false,
   completeNow = false,
 }: ProgressBarLoaderProps) => {
-  const [pct, _setPct] = useState(0);
+  const [pct, setPctState] = useState(0);
   const pctRef = useRef(0);
-
-  // Wrapper that ensures pct only ever increases — uses functional updater
-  // so React always sees the latest committed state
-  const setPct = useCallback((next: number) => {
-    _setPct((prev) => {
-      const safeNext = Math.max(next, prev, pctRef.current);
-      pctRef.current = safeNext;
-      return safeNext;
-    });
-  }, []);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [phraseVisible, setPhraseVisible] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
@@ -53,89 +45,99 @@ const ProgressBarLoader = ({
   const continuedRef = useRef(false);
   const startTimeRef = useRef(Date.now());
   const onCompleteRef = useRef(onComplete);
+  const animationFrameRef = useRef<number | null>(null);
+  const accelStartRef = useRef<number | null>(null);
+  const accelStartPctRef = useRef(0);
+
   onCompleteRef.current = onComplete;
+
   const safePhrases = useMemo(() => (phrases.length > 0 ? phrases : ["working…"]), [phrases]);
   const effectivePhraseInterval = Math.max(phraseInterval, 4200);
-  const maxPctRef = useRef(0);
+  const contentStyle = useMemo(() => ({ width: FIXED_CONTENT_WIDTH, maxWidth: "100%" }), []);
+
+  const setPct = useCallback((next: number) => {
+    const safeNext = Math.max(next, pctRef.current);
+    if (safeNext === pctRef.current) return;
+    pctRef.current = safeNext;
+    setPctState(safeNext);
+  }, []);
+
+  const finish = useCallback(() => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    accelStartRef.current = null;
+    setPct(100);
+    setIsComplete(true);
+
+    if (!requireTapToContinue && !continuedRef.current) {
+      continuedRef.current = true;
+      window.setTimeout(() => onCompleteRef.current?.(), 250);
+    }
+  }, [requireTapToContinue, setPct]);
+
+  const updateProgress = useCallback((timestamp: number) => {
+    if (completedRef.current) return;
+
+    let nextPct = pctRef.current;
+
+    if (accelStartRef.current !== null) {
+      const t = Math.min((timestamp - accelStartRef.current) / ACCEL_DURATION_MS, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      nextPct = Math.round(accelStartPctRef.current + (100 - accelStartPctRef.current) * eased);
+    } else {
+      const elapsed = Date.now() - startTimeRef.current;
+      const progress = Math.min(elapsed / duration, 1);
+      nextPct = mapProgressToPct(progress);
+      if (progress >= 1) nextPct = 100;
+    }
+
+    setPct(nextPct);
+    if (nextPct >= 100) finish();
+  }, [duration, finish, setPct]);
+
+  const scheduleNextFrame = useCallback((timestamp: number) => {
+    updateProgress(timestamp);
+    if (!completedRef.current) {
+      animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
+    }
+  }, [updateProgress]);
 
   useEffect(() => {
     startTimeRef.current = Date.now();
     completedRef.current = false;
     continuedRef.current = false;
-    maxPctRef.current = 0;
+    accelStartRef.current = null;
+    accelStartPctRef.current = 0;
     pctRef.current = 0;
-    _setPct(0);
+    setPctState(0);
     setPhraseIndex(0);
     setPhraseVisible(true);
     setIsComplete(false);
 
-    const updateProgress = () => {
-      const elapsed = Date.now() - startTimeRef.current;
-      const progress = Math.min(elapsed / duration, 1);
-      const newPct = mapProgressToPct(progress);
-      maxPctRef.current = Math.max(maxPctRef.current, newPct);
-      setPct(maxPctRef.current);
+    updateProgress(window.performance.now());
+    animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
 
-      if (progress >= 1) {
-        if (!completedRef.current) {
-          completedRef.current = true;
-          maxPctRef.current = 100;
-          setPct(100);
-          setIsComplete(true);
-          if (!requireTapToContinue && !continuedRef.current) {
-            continuedRef.current = true;
-            window.setTimeout(() => onCompleteRef.current?.(), 250);
-          }
-        }
-      }
-    };
-
-    updateProgress();
-    const intervalId = window.setInterval(updateProgress, 120);
-    const syncFromElapsedTime = () => updateProgress();
+    const syncFromElapsedTime = () => updateProgress(window.performance.now());
     document.addEventListener("visibilitychange", syncFromElapsedTime);
     window.addEventListener("focus", syncFromElapsedTime);
     window.addEventListener("pageshow", syncFromElapsedTime);
 
     return () => {
-      window.clearInterval(intervalId);
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
       document.removeEventListener("visibilitychange", syncFromElapsedTime);
       window.removeEventListener("focus", syncFromElapsedTime);
       window.removeEventListener("pageshow", syncFromElapsedTime);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [duration, requireTapToContinue]);
+  }, [scheduleNextFrame, updateProgress]);
 
-  // completeNow: smoothly accelerate to 100%
   useEffect(() => {
-    if (!completeNow || completedRef.current) return;
-    const startPct = maxPctRef.current;
-    const startTs = Date.now();
-    const accelDuration = 1200; // ms to reach 100%
-    const tick = () => {
-      const elapsed = Date.now() - startTs;
-      const t = Math.min(elapsed / accelDuration, 1);
-      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
-      const newPct = Math.round(startPct + (100 - startPct) * eased);
-      maxPctRef.current = Math.max(maxPctRef.current, newPct);
-      setPct(maxPctRef.current);
-      if (t < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        if (!completedRef.current) {
-          completedRef.current = true;
-          maxPctRef.current = 100;
-          setPct(100);
-          setIsComplete(true);
-          if (!requireTapToContinue && !continuedRef.current) {
-            continuedRef.current = true;
-            window.setTimeout(() => onCompleteRef.current?.(), 250);
-          }
-        }
-      }
-    };
-    requestAnimationFrame(tick);
-  }, [completeNow, requireTapToContinue]);
+    if (!completeNow || completedRef.current || accelStartRef.current !== null) return;
+    accelStartRef.current = window.performance.now();
+    accelStartPctRef.current = pctRef.current;
+  }, [completeNow]);
 
   useEffect(() => {
     if (isComplete || safePhrases.length <= 1) {
@@ -177,7 +179,8 @@ const ProgressBarLoader = ({
         />
       )}
       <div
-        className={`relative z-10 flex w-full flex-col items-center gap-5 px-10 pt-10 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
+        className={`relative z-10 flex flex-col items-center gap-5 px-2 pt-10 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
+        style={contentStyle}
         onClick={handleContinue}
         onKeyDown={handleKeyDown}
         role={isComplete && requireTapToContinue ? "button" : undefined}
@@ -197,24 +200,25 @@ const ProgressBarLoader = ({
         </motion.span>
 
         <motion.div
-          className="w-full max-w-xs flex flex-col gap-2.5"
+          className="w-full flex flex-col gap-2.5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
           <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
             <div
-              className="absolute inset-y-0 left-0 rounded-full"
+              className="absolute inset-0 rounded-full"
               style={{
-                width: `${pct}%`,
-                transition: "width 400ms linear",
-                willChange: "width",
+                transform: `scaleX(${pct / 100})`,
+                transformOrigin: "left center",
+                transition: "transform 120ms linear",
+                willChange: "transform",
                 background: "linear-gradient(90deg, hsl(var(--loader-bar-from)) 0%, hsl(var(--loader-bar-from)) 85%, hsl(var(--loader-bar-to)) 100%)",
               }}
             />
           </div>
           <div className="flex justify-end">
-            <span className="text-[13px] font-[900] lowercase text-white/60">{pct}%</span>
+            <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums text-white/60">{pct}%</span>
           </div>
         </motion.div>
 

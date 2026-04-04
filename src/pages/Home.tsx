@@ -130,13 +130,7 @@ const Home = () => {
 
   const handleOpenCreator = () => {
     sessionStorage.removeItem(DISMISSED_KEY);
-    if (user) {
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      setSkipWelcome(true);
-    } else {
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      setSkipWelcome(false);
-    }
+    setSkipWelcome(!!user);
     setShowGuided(true);
   };
 
