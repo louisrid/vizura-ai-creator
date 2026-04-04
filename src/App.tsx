@@ -106,6 +106,7 @@ const ScrollToTop = () => {
 const AppRoutes = () => {
   const location = useLocation();
   const [blackoutActive, setBlackoutActive] = useState(false);
+  useSwipeNavigation();
 
   useEffect(() => {
     const start = () => setBlackoutActive(true);
