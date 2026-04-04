@@ -521,10 +521,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div className="flex w-full flex-col items-center">
           <span className="text-[64px] mb-5">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className={`mt-6 grid w-full gap-3 px-2 ${
-            trait.options.length === 4 ? "max-w-[20rem] grid-cols-2"
-              : trait.options.length === 2 ? "max-w-[16rem] grid-cols-2 mx-auto"
-              : "max-w-[22rem] grid-cols-3"
+          <div className={`mt-6 grid w-full gap-3.5 px-2 ${
+            trait.options.length === 4 ? "max-w-[21rem] grid-cols-2"
+              : trait.options.length === 2 ? "max-w-[17rem] grid-cols-2 mx-auto"
+              : "max-w-[23rem] grid-cols-3"
           }`}>
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
