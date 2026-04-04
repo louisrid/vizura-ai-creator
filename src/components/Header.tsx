@@ -24,7 +24,7 @@ const Header = () => {
     if (!menuBtnRef.current) return;
     const rect = menuBtnRef.current.getBoundingClientRect();
     setDropdownPos({
-      top: rect.bottom + 4,
+      top: rect.bottom + 12,
       right: window.innerWidth - rect.right,
     });
   }, []);
