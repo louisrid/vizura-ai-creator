@@ -410,7 +410,8 @@ const Index = () => {
             </div>
 
             {/* Prompt */}
-            <div>
+            <div className="relative">
+              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
