@@ -12,7 +12,7 @@ export function useSwipeNavigation() {
     const onStart = (e: TouchEvent) => {
       const touch = e.touches[0];
       if (!touch) return;
-      const side = touch.clientX < window.innerWidth / 2 ? "left" : "right";
+      const side = touch.clientX < window.innerWidth * 0.6 ? "left" : "right";
       touchRef.current = { x: touch.clientX, y: touch.clientY, t: Date.now(), side };
     };
 

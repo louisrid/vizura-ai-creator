@@ -321,7 +321,7 @@ const ChooseFace = () => {
       }
     }
 
-    // Save only the selected face to generations
+    // Save the selected face to generations (angle + body will be added later)
     if (faceUrl) {
       await supabase.from("generations").insert({
         user_id: currentUser.id,

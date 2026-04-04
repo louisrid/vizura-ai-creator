@@ -87,6 +87,26 @@ const CharacterDetail = () => {
   const handleDelete = async () => {
     if (!character) return;
     setDeleting(true);
+
+    // Delete all generations that used this character's face images
+    const charUrls = [character.face_image_url, character.face_angle_url, character.body_anchor_url].filter(Boolean) as string[];
+    if (charUrls.length > 0) {
+      // Find generations whose image_urls overlap with any character reference URL
+      const { data: allGens } = await supabase
+        .from("generations")
+        .select("id, image_urls")
+        .eq("user_id", user!.id);
+      if (allGens) {
+        // Delete generations that contain any of the character's base images
+        const genIdsToDelete = allGens
+          .filter((g: any) => (g.image_urls || []).some((u: string) => charUrls.includes(u)))
+          .map((g: any) => g.id);
+        if (genIdsToDelete.length > 0) {
+          await supabase.from("generations").delete().in("id", genIdsToDelete);
+        }
+      }
+    }
+
     const { error } = await supabase.from("characters").delete().eq("id", character.id);
     if (error) {
       toast.error("failed to delete character");

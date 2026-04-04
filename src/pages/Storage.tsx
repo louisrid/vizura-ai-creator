@@ -125,7 +125,7 @@ const Storage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-6 pt-20 pb-8"
             onClick={() => setExpanded(null)}
           >
             <motion.div
@@ -133,31 +133,30 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="border-2 border-[#1a1a1a] rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
-              style={{ backgroundColor: "#111111" }}
+              className="relative w-full max-w-[280px] overflow-hidden"
+              style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative">
-                <img src={expanded.url} alt="" className="w-full object-contain max-h-[60vh]" />
-                <button
-                  onClick={() => setExpanded(null)}
-                  className="absolute top-3 right-3 w-9 h-9 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
-                >
-                  <X size={14} strokeWidth={2.5} />
-                </button>
-              </div>
-              <div className="p-4 flex gap-2">
+              <button
+                onClick={() => setExpanded(null)}
+                className="absolute top-2.5 right-2.5 z-10 w-8 h-8 flex items-center justify-center text-white bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                style={{ borderRadius: 10 }}
+              >
+                <X size={14} strokeWidth={2.5} />
+              </button>
+              <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh]" />
+              <div className="p-3 flex gap-2">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-12">
-                    <Download size={14} strokeWidth={2.5} /> download
+                  <Button variant="outline" className="w-full h-10 text-xs rounded-xl">
+                    <Download size={12} strokeWidth={2.5} /> download
                   </Button>
                 </a>
                 <Button
                   variant="outline"
-                  className="h-12 px-4 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-10 px-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground rounded-xl"
                   onClick={() => handleDelete(expanded)}
                 >
-                  <Trash2 size={14} strokeWidth={2.5} />
+                  <Trash2 size={12} strokeWidth={2.5} />
                 </Button>
               </div>
             </motion.div>
