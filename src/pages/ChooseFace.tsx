@@ -165,7 +165,7 @@ const ChooseFace = () => {
 
       const imgs = result?.images || [];
       const nextFaces = imgs.slice(0, 3);
-      if (nextFaces.length < 3) throw new Error("generation incomplete");
+      if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
