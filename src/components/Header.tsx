@@ -84,9 +84,9 @@ const Header = () => {
 
   return (
     <header
-      className="sticky top-0 z-40 relative"
+      className="sticky top-0 z-40 relative overflow-hidden"
       style={{
-        background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.2) 75%, transparent 100%)",
+        background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background)) 56%, hsl(var(--background) / 0.86) 74%, hsl(var(--background) / 0.46) 88%, transparent 100%)",
         paddingBottom: 28,
       }}
     >
