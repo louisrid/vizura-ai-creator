@@ -524,7 +524,7 @@ const ChooseFace = () => {
                 <span className="block">created!</span>
               </p>
               <motion.p
-                className="mt-4 text-sm font-[800] lowercase text-black/50"
+                className="mt-6 text-sm font-[800] lowercase text-black/50"
                 animate={{ y: [0, -4, 0] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
               >tap to continue</motion.p>
