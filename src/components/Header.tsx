@@ -207,13 +207,9 @@ const Header = () => {
               onClick={() => navigate("/top-ups")}
               className="flex items-center gap-1 px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
               style={{
-                ...({} as any),
-                borderRadius: 10,
-              }}
-
-              style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "1.5px solid rgba(0,224,255,0.25)",
+                borderRadius: 10,
               }}
             >
               <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
