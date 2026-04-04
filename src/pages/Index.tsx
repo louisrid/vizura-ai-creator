@@ -253,6 +253,7 @@ const Index = () => {
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
 
+    toast("1 gem used");
     const cleanPrompt = sanitiseText(prompt.trim());
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
