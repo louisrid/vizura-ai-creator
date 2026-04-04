@@ -408,17 +408,17 @@ async function generateFaceImages(
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
   slim: "slim toned body, smaller chest, narrow waist, lean athletic figure, visible collarbones, slender arms and legs",
-  regular: "soft feminine body, shapely figure, medium-large bust, defined waist, feminine hips, balanced proportions",
-  average: "soft feminine body, shapely figure, medium-large bust, defined waist, feminine hips, balanced proportions",
+  regular: "soft feminine body, shapely figure, large DD bust, defined waist, feminine hips, balanced proportions",
+  average: "soft feminine body, shapely figure, large DD bust, defined waist, feminine hips, balanced proportions",
   curvy: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
   thick: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
 };
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  slim: "TODO",
-  regular: "TODO",
-  curvy: "TODO",
+  slim: "petite slender frame, narrow hips, small A-B cup chest, toned flat stomach, delicate build, slim thighs",
+  regular: "hourglass figure, feminine curves, large D-DD cup bust, defined waist, wider hips, soft feminine shape",
+  curvy: "very voluptuous, extremely large G-H cup bust, very wide hips, thick thighs, maximum curves, exaggerated hourglass",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
