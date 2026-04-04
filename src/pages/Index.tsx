@@ -43,7 +43,7 @@ const PillToggle = ({ label, options, value, onChange, renderOption }: {
   renderOption?: (opt: string) => React.ReactNode;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
+    <span className="text-xs font-[900] lowercase text-white">{label}</span>
     <div className="flex flex-wrap gap-1.5">
       {options.map((opt) => (
         <button
@@ -306,8 +306,8 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-2 pb-[80px]">
-        <div className="flex items-center gap-3 mb-5">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-4 pb-[80px]">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -317,19 +317,19 @@ const Index = () => {
           {/* Left: preview */}
           <div className="md:col-span-2">
             <div className="relative flex justify-center">
-              <motion.section
+                <motion.section
                 layout
-                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
+                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden"
                 style={{
-                  maxWidth: photoRatio === "9:16" ? "10rem" : "100%",
-                  maxHeight: "220px",
+                  width: photoRatio === "9:16" ? "10rem" : "100%",
+                  maxWidth: "100%",
                   borderRadius: 16,
                   border: "2px solid rgba(255,255,255,0.08)",
-                   backgroundColor: "#111111",
+                  backgroundColor: "#111111",
                 }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
-                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "220px" }}>
+                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                   {resultImage ? (
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (
@@ -345,10 +345,10 @@ const Index = () => {
           </div>
 
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-[16px]">
+          <div className="md:col-span-3 space-y-5">
             {/* Character select — always visible */}
             <div>
-              <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>select character</span>
+              <span className="block text-xs font-[900] lowercase mb-1.5 text-white">select character</span>
               <label className="relative block">
                 <select
                   value={selectedCharId}
@@ -396,7 +396,7 @@ const Index = () => {
 
             {/* Prompt */}
             <div>
-              <span className="block text-xs font-[900] lowercase mb-1.5" style={{ color: "rgba(255,255,255,0.55)" }}>describe your photo</span>
+              <span className="block text-xs font-[900] lowercase mb-1.5 text-white">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
                 onChange={setPrompt}
@@ -423,17 +423,18 @@ const Index = () => {
             {/* Reference section */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>add a reference</span>
-                <span className="text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
+                <span className="text-xs font-[900] lowercase text-white">add a reference image</span>
+                <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
               {referenceImage ? (
-                <div className="relative w-full h-28 overflow-hidden" style={{ borderRadius: 16, border: "2px solid #222" }}>
-                  <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
+                <div className="flex items-center gap-3 px-4 py-2.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+                  <img src={referenceImage} alt="Reference" className="h-10 w-10 rounded-lg object-cover shrink-0" />
+                  <span className="text-xs font-[900] lowercase text-foreground/60 truncate flex-1">reference.jpg</span>
                   <button
                     type="button"
                     onClick={() => setReferenceImage(null)}
-                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                    className="text-foreground/40 hover:text-foreground text-sm font-bold shrink-0"
                   >
                     ×
                   </button>
@@ -442,16 +443,16 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex w-full flex-col items-center justify-center gap-2 py-6 hover:border-foreground/30 transition-colors"
-                  style={{ borderRadius: 16, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
+                  className="flex w-full items-center gap-3 px-4 py-3 hover:border-foreground/30 transition-colors"
+                  style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
                 >
-                  <Upload size={20} strokeWidth={2.5} className="text-foreground/30" />
-                  <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
+                  <Upload size={16} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
+                  <span className="text-xs font-[900] lowercase text-foreground/30">upload image</span>
                 </button>
               )}
-              <div className="mt-3 flex items-center justify-between">
-                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>strength</span>
-                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{referenceStrength}%</span>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-[10px] font-[900] lowercase text-white">strength</span>
+                <span className="text-[10px] font-[900] lowercase text-white">{referenceStrength}%</span>
               </div>
               <input
                 type="range"
@@ -465,7 +466,9 @@ const Index = () => {
             </div>
 
             {/* Create button */}
-            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+            <div className="pt-2">
+              <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+            </div>
           </div>
         </div>
 
