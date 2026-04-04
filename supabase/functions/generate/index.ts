@@ -156,7 +156,13 @@ function buildCharacterTraits(char: any): string {
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair past the shoulders with a full straight fringe across the forehead`.trim());
+    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair past the shoulders with a full straight fringe across the forehead, IMPORTANT: must have visible bangs fringe across forehead in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "straight") {
+    parts.push(`long straight ${hairColour} hair, no bangs, no fringe, hair parted naturally, IMPORTANT: must be straight hair with no curls or waves in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "curly") {
+    parts.push(`${hairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "short") {
+    parts.push(`short ${hairColour} hair, IMPORTANT: must have short hair in every image`.trim());
   } else if (hairStyle || hairColour) {
     parts.push(`${hairStyle} ${hairColour} hair`.trim());
   }
