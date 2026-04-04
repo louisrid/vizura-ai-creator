@@ -693,7 +693,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
         {canExitFlow && (
           <div className="absolute inset-x-0 z-20 flex justify-end px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
