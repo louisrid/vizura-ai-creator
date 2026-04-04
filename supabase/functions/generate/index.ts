@@ -621,6 +621,7 @@ serve(async (req) => {
 
     /* ── look up character if provided ── */
     let characterTraits: string | null = null;
+    let characterBodyType: string | undefined;
     let faceImageUrls: string[] = [];
     if (characterId) {
       const { data: charData } = await adminClient
@@ -632,6 +633,7 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
+        characterBodyType = (charData.body || "regular").toLowerCase();
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
