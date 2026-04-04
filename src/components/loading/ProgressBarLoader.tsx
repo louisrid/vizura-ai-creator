@@ -240,7 +240,7 @@ const ProgressBarLoader = ({
                 transition={{
                   opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
                   y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-                }
+                }}
               >
                 tap to continue
               </motion.p>
