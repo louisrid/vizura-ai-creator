@@ -88,22 +88,26 @@ const CharacterDetail = () => {
     if (!character) return;
     setDeleting(true);
 
-    // Delete all generations that used this character's face images
+    // Delete ALL generations linked to this character:
+    // 1. Any generation whose image_urls overlap with character reference URLs
+    // 2. Any generation created with this character's prompt
     const charUrls = [character.face_image_url, character.face_angle_url, character.body_anchor_url].filter(Boolean) as string[];
-    if (charUrls.length > 0) {
-      // Find generations whose image_urls overlap with any character reference URL
-      const { data: allGens } = await supabase
-        .from("generations")
-        .select("id, image_urls")
-        .eq("user_id", user!.id);
-      if (allGens) {
-        // Delete generations that contain any of the character's base images
-        const genIdsToDelete = allGens
-          .filter((g: any) => (g.image_urls || []).some((u: string) => charUrls.includes(u)))
-          .map((g: any) => g.id);
-        if (genIdsToDelete.length > 0) {
-          await supabase.from("generations").delete().in("id", genIdsToDelete);
-        }
+    const { data: allGens } = await supabase
+      .from("generations")
+      .select("id, image_urls, prompt")
+      .eq("user_id", user!.id);
+    if (allGens) {
+      const genIdsToDelete = allGens
+        .filter((g: any) => {
+          // Match by overlapping URLs
+          if (charUrls.length > 0 && (g.image_urls || []).some((u: string) => charUrls.includes(u))) return true;
+          // Match by character reference prompt
+          if (g.prompt === "character references" || g.prompt === "face generation") return true;
+          return false;
+        })
+        .map((g: any) => g.id);
+      if (genIdsToDelete.length > 0) {
+        await supabase.from("generations").delete().in("id", genIdsToDelete);
       }
     }
 

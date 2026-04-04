@@ -374,7 +374,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();
-      }, 900);
+      }, 350);
       return;
     }
     animating.current = true;
