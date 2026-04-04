@@ -16,7 +16,7 @@ const QUALITY_SUFFIX =
   "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, or AI generated look.";
+  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
 
 const SELFIE_PREFIX =
   "front camera perspective, slight wide angle distortion, casual angle, arm extended, iPhone selfie";
