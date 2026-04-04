@@ -232,14 +232,15 @@ const ProgressBarLoader = ({
             {isComplete && requireTapToContinue ? (
               <motion.p
                 key="tap-to-continue"
-                className="text-center text-[1.1rem] font-[900] lowercase text-white/60"
+                className="text-center text-[1.1rem] font-[900] lowercase"
+                style={{ color: "rgba(255,255,255,0.4)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}
                 transition={{
                   opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
                   y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-                }}
+                }
               >
                 tap to continue
               </motion.p>
