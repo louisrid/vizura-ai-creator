@@ -17,6 +17,8 @@ interface ProgressBarLoaderProps {
   expandTapTarget?: boolean;
   /** When set to true, smoothly accelerates to 100% regardless of elapsed time */
   completeNow?: boolean;
+  /** Controlled progress value from 0-100 for async work */
+  progressOverride?: number;
 }
 
 const mapProgressToPct = (progress: number) => {
@@ -35,6 +37,7 @@ const ProgressBarLoader = ({
   requireTapToContinue = false,
   expandTapTarget = false,
   completeNow = false,
+  progressOverride,
 }: ProgressBarLoaderProps) => {
   const [pct, setPctState] = useState(0);
   const pctRef = useRef(0);
@@ -48,6 +51,7 @@ const ProgressBarLoader = ({
   const animationFrameRef = useRef<number | null>(null);
   const accelStartRef = useRef<number | null>(null);
   const accelStartPctRef = useRef(0);
+  const isControlled = typeof progressOverride === "number";
 
   onCompleteRef.current = onComplete;
 
@@ -114,6 +118,10 @@ const ProgressBarLoader = ({
     setPhraseVisible(true);
     setIsComplete(false);
 
+    if (isControlled) {
+      return;
+    }
+
     updateProgress(window.performance.now());
     animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
 
@@ -131,7 +139,14 @@ const ProgressBarLoader = ({
       window.removeEventListener("focus", syncFromElapsedTime);
       window.removeEventListener("pageshow", syncFromElapsedTime);
     };
-  }, [scheduleNextFrame, updateProgress]);
+  }, [isControlled, scheduleNextFrame, updateProgress]);
+
+  useEffect(() => {
+    if (!isControlled) return;
+    const next = Math.max(0, Math.min(100, Math.round(progressOverride ?? 0)));
+    setPct(next);
+    if (next >= 100) finish();
+  }, [finish, isControlled, progressOverride, setPct]);
 
   useEffect(() => {
     if (!completeNow || completedRef.current || accelStartRef.current !== null) return;
