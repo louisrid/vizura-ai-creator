@@ -16,7 +16,7 @@ const QUALITY_SUFFIX =
   "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, or AI generated look.";
+  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
 
 const SELFIE_PREFIX =
   "front camera perspective, slight wide angle distortion, casual angle, arm extended, iPhone selfie";
@@ -79,9 +79,11 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  slim: "slim petite frame",
-  average: "average build",
-  curvy: "curvy voluptuous figure",
+  slim: "slim toned body, smaller chest, narrow waist, lean face",
+  regular: "soft feminine body, large bust DD, defined waist, soft face",
+  average: "soft feminine body, large bust DD, defined waist, soft face",
+  curvy: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
+  thick: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
@@ -93,7 +95,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 23) return "very youthful baby face, soft round cheeks, small delicate chin, wide doe eyes, soft undefined jawline, smooth plump skin, teenage to early twenties look, gen-z youthful energy, looks like she just turned 18-19, no mature features";
+  if (isNaN(num) || num <= 23) return "young fresh face, soft youthful bone structure, smooth skin, modern young vibe, very youthful baby face, soft round cheeks, small delicate chin, wide doe eyes, soft undefined jawline, smooth plump skin, teenage to early twenties look, gen-z youthful energy, looks like she just turned 18-19, no mature features";
   if (num <= 28) return "youthful features, soft jawline, full cheeks, smooth skin, young-looking face, early twenties appearance, still baby-faced but slightly more defined";
   return "young adult features, slightly more defined cheekbones, still youthful skin, mid twenties look, subtle maturity";
 }
@@ -112,9 +114,14 @@ function buildCharacterTraits(char: any): string {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
   }
 
-  const bodyKey = (char.body || "").toLowerCase();
-  if (bodyKey && bodyKey !== "regular") {
-    parts.push(BODY_MAP[bodyKey] || `${bodyKey} body type`);
+  const bodyKey = (char.body || "regular").toLowerCase();
+  parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
+
+  // Face-body correlation: slim/average must never have a fat face
+  if (bodyKey === "slim") {
+    parts.push("lean angular face, no roundness or puffiness in face");
+  } else if (bodyKey === "regular" || bodyKey === "average") {
+    parts.push("soft face but not fat, no round chubby face");
   }
 
   const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
@@ -437,6 +444,7 @@ serve(async (req) => {
     const aspectRatio = body?.aspect_ratio || "3:4";
     const generateAngles = body?.generate_angles === true;
     const selectedFaceUrl = body?.selected_face_url || null;
+    const vibeReferenceUrl = body?.vibe_reference_url || null;
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
@@ -484,11 +492,16 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
-        // Collect all available face references
+        // Collect all 3 reference images: front face, 3/4 angle, full-body anchor
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
+    }
+
+    // Add vibe reference as additional reference image if provided
+    if (vibeReferenceUrl) {
+      faceImageUrls.push(vibeReferenceUrl);
     }
 
     /* ── FREE GENERATION FLOW (face creation — no gem cost) ── */
