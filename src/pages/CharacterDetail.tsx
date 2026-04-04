@@ -207,14 +207,19 @@ const CharacterDetail = () => {
         </div>
       </div>
 
-      {/* Delete — slightly lower, lighter weight */}
-      <div className="pt-4">
+      {/* Delete button — pill style with red border */}
+      <div className="pt-2">
         <button
           onClick={() => setShowDelete(true)}
-          className="flex items-center justify-center gap-2 h-10 w-full text-sm font-[700] lowercase transition-colors"
-          style={{ color: "#ff4444", borderRadius: 12 }}
+          className="flex items-center justify-center gap-2 h-12 w-full text-sm font-[900] lowercase transition-colors active:scale-[0.98]"
+          style={{
+            color: "#ff4444",
+            borderRadius: 14,
+            backgroundColor: "rgba(255,68,68,0.06)",
+            border: "2px solid rgba(255,68,68,0.25)",
+          }}
         >
-          <Trash2 size={13} strokeWidth={2.5} />
+          <Trash2 size={14} strokeWidth={2.5} />
           delete character
         </button>
       </div>
