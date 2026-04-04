@@ -339,8 +339,16 @@ const Index = () => {
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#222" }}>
-                        <span className="text-2xl">📷</span>
+                      <div
+                        className="flex items-center justify-center rounded-full"
+                        style={{
+                          width: 72,
+                          height: 72,
+                          backgroundColor: "rgba(250,204,21,0.08)",
+                          border: "2.5px solid #facc15",
+                        }}
+                      >
+                        <span className="text-3xl">🪄</span>
                       </div>
                     </div>
                   )}
