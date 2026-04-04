@@ -496,6 +496,7 @@ const ChooseFace = () => {
             />
           </motion.div>
         </motion.div>
+      )}
 
       {/* Green "character created!" success screen */}
       <AnimatePresence>
