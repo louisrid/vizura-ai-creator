@@ -205,14 +205,14 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-1.5 rounded-xl px-4 py-2.5 active:scale-95 transition-transform duration-150"
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
-                border: "2px solid rgba(0,224,255,0.25)",
+                border: "1.5px solid rgba(0,224,255,0.25)",
               }}
             >
-              <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-              <span className="text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+              <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+              <span className="text-[13px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
             </button>
 
             <button
