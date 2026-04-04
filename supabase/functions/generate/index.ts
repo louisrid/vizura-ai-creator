@@ -421,7 +421,7 @@ async function generateAngleAndBody(
 
   try {
     console.log("Generating 3/4 angle...");
-    const anglePrompt = `Same person exactly as in the reference image, three-quarter angle view, slight turn to the right, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const anglePrompt = `Same person exactly as in the reference image, side profile view, head turned approximately 60-70 degrees to the right showing the side of the face, ear visible, nose in profile, jawline visible from the side, genuine side-profile angle NOT a slight head turn, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -431,10 +431,12 @@ async function generateAngleAndBody(
     console.error("3/4 angle generation failed:", e);
   }
 
+  const BODY_NEGATIVE = "Do not generate missing limbs, missing arms, missing hands, extra fingers, extra limbs, deformed arms, glitchy artifacts, warped body parts, artificial-looking skin, glossy skin, mannequin look, cropped limbs at edges, plastic skin, oily skin, watermark, text, AI generated look.";
+
   try {
     console.log("Generating full-body anchor...");
     const bodyDesc = BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, full body head to toe, three-quarter angle pose slightly turned, wearing a low cut crop top and tight black leggings, showing chest size and butt shape clearly, ${bodyDesc}, white background, natural matte skin, no glossy or oily skin, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
+    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted casual top and fitted pants, ${bodyDesc}, both arms fully visible hanging naturally at sides, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${characterTraits}, natural lighting. ${BODY_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
