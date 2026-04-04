@@ -86,7 +86,7 @@ const CharacterDetail = () => {
           <div className="flex items-center gap-3 mb-5">
             <BackButton />
           </div>
-          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "rgba(255,255,255,0.4)" }}>
             character not found
           </p>
         </main>
