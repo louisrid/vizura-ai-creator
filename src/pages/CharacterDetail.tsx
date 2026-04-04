@@ -176,8 +176,8 @@ const CharacterDetail = () => {
         <div className="flex flex-col gap-3">{content}</div>
       </main>
 
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-14 pb-8">
-        <div className="flex items-center gap-3 mb-5">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-4 pb-8">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>

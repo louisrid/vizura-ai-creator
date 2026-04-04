@@ -11,8 +11,8 @@ const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
       onClick={() => navigate("/")}
       className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95"
       style={{
-        width: 30,
-        height: 30,
+        width: 36,
+        height: 36,
         borderRadius: "50%",
         backgroundColor: "#facc15",
       }}

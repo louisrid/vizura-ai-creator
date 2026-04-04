@@ -111,10 +111,10 @@ const Header = () => {
             }}
             aria-label="open menu"
           >
-            <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
-              <rect y="0" width="14" height="2" rx="1" fill="white" />
-              <rect y="4" width="14" height="2" rx="1" fill="white" />
-              <rect y="8" width="14" height="2" rx="1" fill="white" />
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+              <rect y="0" width="16" height="2.2" rx="1" fill="white" />
+              <rect y="4.9" width="16" height="2.2" rx="1" fill="white" />
+              <rect y="9.8" width="16" height="2.2" rx="1" fill="white" />
             </svg>
           </button>
 
