@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Archive, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -13,6 +14,7 @@ const Header = () => {
   const { user, loading, signOut } = useAuth();
   const { gems } = useGems();
   const { subscribed } = useSubscription();
+  const [resolvedUserId, setResolvedUserId] = useState<string | null>(user?.id ?? null);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -25,6 +27,28 @@ const Header = () => {
   }, []);
 
   useEffect(() => { setOpen(false); }, [location.pathname]);
+
+  useEffect(() => {
+    setResolvedUserId(user?.id ?? null);
+  }, [user?.id]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    void supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      setResolvedUserId(data.session?.user?.id ?? null);
+    });
+
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setResolvedUserId(session?.user?.id ?? null);
+    });
+
+    return () => {
+      mounted = false;
+      data.subscription.unsubscribe();
+    };
+  }, []);
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
@@ -57,9 +81,9 @@ const Header = () => {
 
   return (
     <header
-      className="sticky top-0 z-40 relative"
+      className="sticky top-0 z-40 relative overflow-hidden"
       style={{
-        background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.2) 75%, transparent 100%)",
+        background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background)) 56%, hsl(var(--background) / 0.86) 74%, hsl(var(--background) / 0.46) 88%, transparent 100%)",
         paddingBottom: 28,
       }}
     >
@@ -70,7 +94,7 @@ const Header = () => {
             vizura
           </button>
           {/* User status icon — right of logo */}
-          {!loading && !!user?.id && (
+          {!!(resolvedUserId || user?.id) && (
             <button
               onClick={() => navigate("/account")}
               className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
@@ -78,12 +102,12 @@ const Header = () => {
                 width: 28,
                 height: 28,
                 borderRadius: "50%",
-                backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
-                border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
+                backgroundColor: subscribed ? "hsl(var(--gem-green) / 0.12)" : "hsl(var(--foreground) / 0.08)",
+                border: `1.5px solid ${subscribed ? "hsl(var(--gem-green) / 0.3)" : "hsl(var(--foreground) / 0.15)"}`,
               }}
               aria-label="my account"
             >
-              <User size={14} strokeWidth={2.5} style={{ color: userIconColor }} />
+              <User size={14} strokeWidth={2.5} style={{ color: subscribed ? "hsl(var(--gem-green))" : "hsl(var(--foreground))" }} />
             </button>
           )}
         </div>
