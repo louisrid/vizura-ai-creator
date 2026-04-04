@@ -442,11 +442,11 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex w-full flex-col items-center justify-center gap-2 py-6 hover:border-foreground/30 transition-colors"
-                  style={{ borderRadius: 16, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
+                  className="flex w-full items-center gap-3 px-4 py-3 hover:border-foreground/30 transition-colors"
+                  style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
                 >
-                  <Upload size={20} strokeWidth={2.5} className="text-foreground/30" />
-                  <span className="text-xs font-extrabold lowercase text-foreground/30">add reference image</span>
+                  <Upload size={16} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
+                  <span className="text-xs font-[900] lowercase text-foreground/30">upload image</span>
                 </button>
               )}
               <div className="mt-3 flex items-center justify-between">
