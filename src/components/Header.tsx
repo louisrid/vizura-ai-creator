@@ -38,12 +38,10 @@ const Header = () => {
     void supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
       setResolvedUserId(data.session?.user?.id ?? null);
-      setAuthReady(true);
     });
 
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       setResolvedUserId(session?.user?.id ?? null);
-      setAuthReady(true);
     });
 
     return () => {
