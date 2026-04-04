@@ -170,7 +170,7 @@ const CharacterDetail = () => {
         <div className="grid grid-cols-3 gap-2.5">
           {imgSlot(character.face_image_url, "front", "front")}
           {imgSlot(character.face_angle_url, "3/4 angle", "3/4 angle")}
-          {imgSlot(character.body_anchor_url, "full body", "full body")}
+          {imgSlot(character.body_anchor_url, "full body", "full body", "contain")}
         </div>
       </div>
 

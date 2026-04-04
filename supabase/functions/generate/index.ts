@@ -434,7 +434,7 @@ async function generateAngleAndBody(
   try {
     console.log("Generating full-body anchor...");
     const bodyDesc = BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, full body head to toe, neutral standing pose, white crew neck t-shirt and blue jeans, white background, ${bodyDesc}, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
+    const bodyPrompt = `Same person exactly as in the reference image, full body head to toe, three-quarter angle pose slightly turned, wearing a low cut crop top and tight black leggings, showing chest size and butt shape clearly, ${bodyDesc}, white background, natural matte skin, no glossy or oily skin, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
