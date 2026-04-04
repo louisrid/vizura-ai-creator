@@ -451,30 +451,7 @@ const ChooseFace = () => {
         </motion.div>
       )}
 
-      {/* Full-screen loading bar while generating 3/4 angle + full body */}
-      {anchorLoading && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
-          >
-            <ProgressBarLoader
-              duration={90000}
-              phrases={ANCHOR_GEN_PHRASES}
-              phraseInterval={5000}
-              requireTapToContinue={false}
-              completeNow={anchorApiDone}
-              onComplete={() => setAnchorBarComplete(true)}
-            />
-          </motion.div>
-        </motion.div>
-      )}
+
 
       {/* Green "character created!" success screen */}
       <AnimatePresence>
