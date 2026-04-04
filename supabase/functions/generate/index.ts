@@ -354,6 +354,18 @@ async function generateExtraAngles(
   return { sideUrl, angleUrl };
 }
 
+/* ── map aspect ratio to xAI-supported values ─────────── */
+const SUPPORTED_RATIOS = new Set([
+  "1:1","3:4","4:3","9:16","16:9","2:3","3:2","9:19.5","19.5:9","9:20","20:9","1:2","2:1","auto"
+]);
+function mapAspectRatio(ratio: string): string {
+  if (SUPPORTED_RATIOS.has(ratio)) return ratio;
+  // Map common unsupported ratios to closest supported
+  if (ratio === "4:5") return "3:4";
+  if (ratio === "5:4") return "4:3";
+  return "3:4"; // safe default
+}
+
 /* ── generate photo (scene-based, with character traits + modifiers) ── */
 async function generatePhoto(
   finalPrompt: string,
@@ -361,10 +373,11 @@ async function generatePhoto(
   apiKey: string,
   aspectRatio: string,
 ): Promise<string | null> {
+  const safeRatio = mapAspectRatio(aspectRatio);
   if (faceImageUrls.length > 0) {
-    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, aspectRatio);
+    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, safeRatio);
   }
-  return await xaiTextToImage(finalPrompt, apiKey, aspectRatio);
+  return await xaiTextToImage(finalPrompt, apiKey, safeRatio);
 }
 
 /* ── handler ───────────────────────────────────────────── */
