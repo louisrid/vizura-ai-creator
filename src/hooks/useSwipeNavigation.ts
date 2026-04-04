@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MIN_SWIPE_DISTANCE = 50;
-const MAX_SWIPE_TIME = 400;
+const MIN_SWIPE_DISTANCE = 30;
+const MAX_SWIPE_TIME = 600;
 
 export function useSwipeNavigation() {
   const navigate = useNavigate();
