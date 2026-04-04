@@ -458,14 +458,15 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    /* ── ANGLE GENERATION FLOW ── */
+    /* ── ANGLE + BODY GENERATION FLOW ── */
+    const bodyTypeInput = body?.body_type || "regular";
     if (generateAngles && selectedFaceUrl) {
-      console.log("Generating extra angles for face:", selectedFaceUrl.slice(0, 80));
-      const { sideUrl, angleUrl } = await generateExtraAngles(
-        selectedFaceUrl, prompt, Deno.env.get("XAI_API_KEY")!, adminClient, userId
+      console.log("Generating 3/4 angle + full-body anchor for face:", selectedFaceUrl.slice(0, 80));
+      const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
+        selectedFaceUrl, prompt, bodyTypeInput, Deno.env.get("XAI_API_KEY")!, adminClient, userId
       );
       return new Response(
-        JSON.stringify({ side_url: sideUrl, angle_url: angleUrl }),
+        JSON.stringify({ angle_url: angleUrl, body_anchor_url: bodyAnchorUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
