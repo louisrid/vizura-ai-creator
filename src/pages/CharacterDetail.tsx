@@ -57,6 +57,33 @@ const CharacterDetail = () => {
     if (user) fetch();
   }, [user, id]);
 
+  // Poll for angle/body images if they're missing (background generation)
+  useEffect(() => {
+    if (!character || !user || !id) return;
+    const needsAngle = !character.face_angle_url;
+    const needsBody = !character.body_anchor_url;
+    if (!needsAngle && !needsBody) return;
+
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from("characters")
+        .select("face_angle_url, body_anchor_url")
+        .eq("id", id)
+        .eq("user_id", user.id)
+        .single();
+      if (!data) return;
+      let changed = false;
+      if (data.face_angle_url && !character.face_angle_url) changed = true;
+      if (data.body_anchor_url && !character.body_anchor_url) changed = true;
+      if (changed) {
+        setCharacter((prev) => prev ? { ...prev, ...data } : prev);
+      }
+      if (data.face_angle_url && data.body_anchor_url) clearInterval(interval);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [character, user, id]);
+
   const handleDelete = async () => {
     if (!character) return;
     setDeleting(true);
