@@ -117,7 +117,6 @@ function buildCharacterTraits(char: any): string {
   const bodyKey = (char.body || "regular").toLowerCase();
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
-  // Face-body correlation: slim/average must never have a fat face
   if (bodyKey === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
   } else if (bodyKey === "regular" || bodyKey === "average") {
@@ -127,7 +126,6 @@ function buildCharacterTraits(char: any): string {
   const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  // Bangs = long hair with straight-across fringe
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair past the shoulders with a full straight fringe across the forehead`.trim());
   } else if (hairStyle || hairColour) {
@@ -188,7 +186,7 @@ async function storeImagePermanently(
     const response = await fetch(imageUrl);
     if (!response.ok) {
       console.error("Failed to download image:", response.status);
-      return imageUrl; // fallback to temp URL
+      return imageUrl;
     }
     const blob = await response.blob();
     const ext = "png";
@@ -200,7 +198,7 @@ async function storeImagePermanently(
 
     if (uploadError) {
       console.error("Storage upload error:", uploadError);
-      return imageUrl; // fallback
+      return imageUrl;
     }
 
     const { data: publicData } = adminClient.storage.from("images").getPublicUrl(filename);
@@ -208,14 +206,13 @@ async function storeImagePermanently(
     return publicData.publicUrl;
   } catch (e) {
     console.error("storeImagePermanently error:", e);
-    return imageUrl; // fallback
+    return imageUrl;
   }
 }
 
 /* ── xAI Grok: text-to-image ──────────────────────────── */
-async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4"): Promise<string | null> {
-  console.log("xaiTextToImage calling:", prompt.slice(0, 100));
-  void aspectRatio;
+async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | null> {
+  console.log("xaiTextToImage calling:", prompt.slice(0, 120));
 
   const response = await fetch("https://api.x.ai/v1/images/generations", {
     method: "POST",
@@ -226,6 +223,7 @@ async function xaiTextToImage(prompt: string, apiKey: string, aspectRatio = "3:4
     body: JSON.stringify({
       model: XAI_IMAGE_MODEL,
       prompt,
+      n: 1,
     }),
   });
 
@@ -252,9 +250,26 @@ async function xaiImageEdit(
   apiKey: string,
   aspectRatio = "3:4"
 ): Promise<string | null> {
-  const images = imageUrls.map((url) => ({ type: "image_url", url }));
+  console.log("xaiImageEdit calling with", imageUrls.length, "reference images");
 
-  console.log("xaiImageEdit calling with", images.length, "images");
+  // xAI API: use `image` for single, `images` for multiple — each is { url: "..." }
+  const body: Record<string, unknown> = {
+    model: XAI_IMAGE_MODEL,
+    prompt,
+    n: 1,
+  };
+
+  if (imageUrls.length === 1) {
+    body.image = { url: imageUrls[0] };
+  } else {
+    body.images = imageUrls.map((url) => ({ url }));
+  }
+
+  // Only set aspect_ratio for supported values
+  const SUPPORTED_RATIOS = new Set([
+    "1:1","3:4","4:3","9:16","16:9","2:3","3:2","9:19.5","19.5:9","9:20","20:9","1:2","2:1","auto"
+  ]);
+  body.aspect_ratio = SUPPORTED_RATIOS.has(aspectRatio) ? aspectRatio : "3:4";
 
   const response = await fetch("https://api.x.ai/v1/images/edits", {
     method: "POST",
@@ -262,12 +277,7 @@ async function xaiImageEdit(
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      model: XAI_IMAGE_MODEL,
-      prompt,
-      images,
-      aspect_ratio: aspectRatio,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -294,7 +304,6 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-  // Three variations with distinctly different facial structures — ALL must be gorgeous
   const variations = [
     "diamond face shape, high cheekbones, pointed chin, full lips, small upturned nose, large almond eyes, thin arched eyebrows, hair flowing over shoulders clearly visible",
     "oval face, defined cupid's bow lips, straight nose, sharp cheekbones, hooded eyes, angular jaw, hair swept to one side over shoulder clearly visible",
@@ -303,27 +312,51 @@ async function generateFaceImages(
 
   const beautyCore = "extremely attractive gorgeous woman, instagram model beauty, stunningly beautiful, slim face, clear glowing skin, well-styled hair clearly visible and not hidden, modern youthful look, happy pleasant expression or soft gentle smile, wearing a plain white crew neck t-shirt";
 
-  const results = await Promise.allSettled(Array.from({ length: Math.min(count, 3) }, async (_, i) => {
+  const imageUrls: string[] = [];
+  const targetCount = Math.min(count, 3);
+
+  // Generate faces sequentially to avoid rate limits and timeouts
+  for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
     const fullPrompt = `${prompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
-    console.log(`Face gen ${i + 1} prompt: ${fullPrompt.slice(0, 200)}`);
-    const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
-    if (!url) {
-      throw new Error(`face option ${i + 1} returned no image`);
-    }
-    return await storeImagePermanently(url, userId, adminClient, `face_${i + 1}`);
-  }));
+    console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
-  const imageUrls: string[] = [];
-  for (const result of results) {
-    if (result.status === "fulfilled") {
-      imageUrls.push(result.value);
-      continue;
+    let retries = 0;
+    const maxRetries = 2;
+    while (retries <= maxRetries) {
+      try {
+        const url = await xaiTextToImage(fullPrompt, apiKey);
+        if (!url) {
+          console.error(`Face ${i + 1}: no URL returned`);
+          if (retries < maxRetries) { retries++; continue; }
+          break;
+        }
+        const permanentUrl = await storeImagePermanently(url, userId, adminClient, `face_${i + 1}`);
+        imageUrls.push(permanentUrl);
+        console.log(`Face ${i + 1} done: ${permanentUrl.slice(0, 80)}`);
+        break;
+      } catch (e: any) {
+        console.error(`Face ${i + 1} attempt ${retries + 1} failed:`, e?.message || e);
+        if (e?.contentPolicy) throw e;
+        if (e?.status === 429) {
+          // Rate limited — wait a bit and retry
+          console.log("Rate limited, waiting 3s...");
+          await new Promise(r => setTimeout(r, 3000));
+          retries++;
+          continue;
+        }
+        if (retries < maxRetries) {
+          retries++;
+          await new Promise(r => setTimeout(r, 1000));
+          continue;
+        }
+        console.error(`Face ${i + 1} failed after ${maxRetries + 1} attempts`);
+        break;
+      }
     }
-    console.error("Face generation failed:", result.reason);
-    if ((result.reason as any)?.contentPolicy) throw result.reason;
   }
 
+  console.log(`generateFaceImages complete: ${imageUrls.length}/${targetCount} faces generated`);
   return imageUrls;
 }
 
@@ -350,10 +383,11 @@ async function generateAngleAndBody(
 
   try {
     console.log("Generating 3/4 angle...");
-    const anglePrompt = `Same person exactly, three-quarter angle view, slight turn to the right, wearing white t-shirt, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const anglePrompt = `Same person exactly as in the reference image, three-quarter angle view, slight turn to the right, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
+      console.log("Angle generated:", angleUrl?.slice(0, 80));
     }
   } catch (e) {
     console.error("3/4 angle generation failed:", e);
@@ -362,10 +396,11 @@ async function generateAngleAndBody(
   try {
     console.log("Generating full-body anchor...");
     const bodyDesc = BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular;
-    const bodyPrompt = `Same person exactly as in reference image, full body head to toe, neutral standing pose, white t-shirt and blue jeans, white background, ${bodyDesc}, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
+    const bodyPrompt = `Same person exactly as in the reference image, full body head to toe, neutral standing pose, white crew neck t-shirt and blue jeans, white background, ${bodyDesc}, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
+      console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
     }
   } catch (e) {
     console.error("Full-body anchor generation failed:", e);
@@ -375,15 +410,14 @@ async function generateAngleAndBody(
 }
 
 /* ── map aspect ratio to xAI-supported values ─────────── */
-const SUPPORTED_RATIOS = new Set([
+const SUPPORTED_RATIOS_SET = new Set([
   "1:1","3:4","4:3","9:16","16:9","2:3","3:2","9:19.5","19.5:9","9:20","20:9","1:2","2:1","auto"
 ]);
 function mapAspectRatio(ratio: string): string {
-  if (SUPPORTED_RATIOS.has(ratio)) return ratio;
-  // Map common unsupported ratios to closest supported
+  if (SUPPORTED_RATIOS_SET.has(ratio)) return ratio;
   if (ratio === "4:5") return "3:4";
   if (ratio === "5:4") return "4:3";
-  return "3:4"; // safe default
+  return "3:4";
 }
 
 /* ── generate photo (scene-based, with character traits + modifiers) ── */
@@ -397,7 +431,7 @@ async function generatePhoto(
   if (faceImageUrls.length > 0) {
     return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, safeRatio);
   }
-  return await xaiTextToImage(finalPrompt, apiKey, safeRatio);
+  return await xaiTextToImage(finalPrompt, apiKey);
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -429,7 +463,6 @@ serve(async (req) => {
     }
     const userId = userData.user.id;
 
-    /* ── rate limit ── */
     if (isRateLimited(userId)) {
       return new Response(
         JSON.stringify({ error: "Rate limit exceeded — max 10 per minute" }),
@@ -437,7 +470,6 @@ serve(async (req) => {
       );
     }
 
-    /* ── parse & sanitise input ── */
     const body = await req.json();
     const rawPrompt = body?.prompt;
     const isFreeGen = body?.free_gen === true;
@@ -446,6 +478,7 @@ serve(async (req) => {
     const aspectRatio = body?.aspect_ratio || "3:4";
     const generateAngles = body?.generate_angles === true;
     const selectedFaceUrl = body?.selected_face_url || null;
+    const angleCharacterId = body?.angle_character_id || null;
     const vibeReferenceUrl = body?.vibe_reference_url || null;
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
@@ -462,7 +495,6 @@ serve(async (req) => {
       });
     }
 
-    /* ── admin client ── */
     const adminClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
@@ -471,10 +503,31 @@ serve(async (req) => {
     /* ── ANGLE + BODY GENERATION FLOW ── */
     const bodyTypeInput = body?.body_type || "regular";
     if (generateAngles && selectedFaceUrl) {
-      console.log("Generating 3/4 angle + full-body anchor for face:", selectedFaceUrl.slice(0, 80));
+      console.log("=== ANGLE + BODY GENERATION ===");
+      console.log("Face URL:", selectedFaceUrl.slice(0, 80));
+      console.log("Body type:", bodyTypeInput);
+
+      // If character_id provided, build rich traits from DB
+      let traits = prompt;
+      if (angleCharacterId) {
+        const { data: charData } = await adminClient
+          .from("characters")
+          .select("*")
+          .eq("id", angleCharacterId)
+          .eq("user_id", userId)
+          .single();
+        if (charData) {
+          traits = buildCharacterTraits(charData);
+          console.log("Built character traits from DB:", traits.slice(0, 120));
+        }
+      }
+
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, prompt, bodyTypeInput, Deno.env.get("XAI_API_KEY")!, adminClient, userId
+        selectedFaceUrl, traits, bodyTypeInput, Deno.env.get("XAI_API_KEY")!, adminClient, userId
       );
+      console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
+      console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
+
       return new Response(
         JSON.stringify({ angle_url: angleUrl, body_anchor_url: bodyAnchorUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -494,14 +547,12 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
-        // Collect all 3 reference images: front face, 3/4 angle, full-body anchor
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
-    // Add vibe reference as additional reference image if provided
     if (vibeReferenceUrl) {
       faceImageUrls.push(vibeReferenceUrl);
     }
@@ -602,7 +653,6 @@ serve(async (req) => {
       );
     }
 
-    // Deduct 1 gem BEFORE generation
     await adminClient
       .from("credits")
       .update({
@@ -614,7 +664,6 @@ serve(async (req) => {
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
-    // Determine if this is a face regen or photo gen
     const isFaceRegen = body?.face_regen === true;
 
     let imageUrls: string[];
@@ -636,7 +685,6 @@ serve(async (req) => {
         }
       }
     } catch (e: any) {
-      // Refund gem on failure
       await adminClient
         .from("credits")
         .update({
@@ -665,7 +713,6 @@ serve(async (req) => {
     }
 
     if (imageUrls.length === 0) {
-      // Refund gem if no images generated
       await adminClient
         .from("credits")
         .update({
@@ -679,7 +726,6 @@ serve(async (req) => {
       );
     }
 
-    // Only save to generations for photo gen, not face regen
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,
