@@ -730,13 +730,25 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           </div>
         )}
 
-        {/* Arrow buttons — positioned below content */}
+        {/* Arrow buttons + home icon — positioned below content */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex items-center justify-center gap-4" style={{ bottom: "10%" }}>
-            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-              <NavArrow direction="left" onClick={goBack} />
-            </motion.div>
-            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
+          <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "8%" }}>
+            <div className="flex items-center justify-center gap-4">
+              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+                <NavArrow direction="left" onClick={goBack} />
+              </motion.div>
+              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
+            </div>
+            {/* Home exit icon — always present after hero */}
+            <button
+              type="button"
+              onClick={handleClose}
+              className="mt-3 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
+              style={{ width: 38, height: 38, borderRadius: 10, backgroundColor: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.12)" }}
+              aria-label="go home"
+            >
+              <Home size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.45)" }} />
+            </button>
           </div>
         )}
       </motion.div>
