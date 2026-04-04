@@ -97,8 +97,9 @@ const Header = () => {
             right: dropdownPos.right,
             width: 190,
             backgroundColor: "#000000",
-            border: "2px solid #222",
-            borderRadius: 14,
+            border: "2px solid #1a1a1a",
+            borderRadius: 16,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
           }}
         >
@@ -169,7 +170,7 @@ const Header = () => {
   return (
     <>
       <header
-        className="sticky top-0 relative"
+        className="sticky top-0"
         style={{
           zIndex: 9990,
           background: "linear-gradient(to bottom, #000000 0%, #000000 50%, rgba(0,0,0,0.95) 60%, rgba(0,0,0,0.8) 75%, rgba(0,0,0,0.4) 90%, transparent 100%)",
@@ -221,7 +222,7 @@ const Header = () => {
                 height: 40,
                 borderRadius: 10,
                 backgroundColor: "#1a1a1a",
-                border: "2px solid #222",
+                border: "2px solid #1a1a1a",
               }}
               aria-label="open menu"
             >
