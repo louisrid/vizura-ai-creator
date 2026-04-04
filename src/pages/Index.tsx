@@ -406,6 +406,7 @@ const Index = () => {
                 value={photoRatio}
                 onChange={setPhotoRatio}
               />
+              </div>
             </div>
 
             {/* Prompt */}
