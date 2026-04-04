@@ -104,20 +104,20 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         disabled={disabled}
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
         style={{
-          width: 48, height: 48, borderRadius: 12,
-          backgroundColor: isForward ? "rgba(0,224,255,0.18)" : "rgba(0,224,255,0.06)",
-          border: isForward ? `2.5px solid rgba(0,224,255,0.45)` : `2px solid rgba(0,224,255,0.25)`,
+          width: 62, height: 62, borderRadius: 16,
+          backgroundColor: isForward ? CYAN : "rgba(0,224,255,0.08)",
+          border: isForward ? "none" : `2.5px solid rgba(0,224,255,0.3)`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#fff" : CYAN,
+          color: isForward ? "#000" : CYAN,
         }}
       >
         {direction === "left" ? (
-          <svg width="18" height="14" viewBox="0 0 20 16" fill="none">
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
             <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <svg width="18" height="14" viewBox="0 0 20 16" fill="none">
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
             <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
