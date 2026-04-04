@@ -180,7 +180,7 @@ const Header = () => {
         <TopGradientBar />
         <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-6 pb-2">
           <div className="flex items-center gap-2.5">
-            <button onClick={() => handleNav("/")} className="text-[22px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+            <button onClick={() => handleNav("/")} className="text-[26px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
               vizura
             </button>
             {/* User status icon — right of logo */}
@@ -189,15 +189,15 @@ const Header = () => {
                 onClick={() => navigate("/account")}
                 className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
                 style={{
-                  width: 28,
-                  height: 28,
+                  width: 32,
+                  height: 32,
                   borderRadius: "50%",
                   backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
                   border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
                 }}
                 aria-label="my account"
               >
-                <User size={14} strokeWidth={2.5} style={{ color: subscribed ? "#22c55e" : "#ffffff" }} />
+                <User size={16} strokeWidth={2.5} style={{ color: subscribed ? "#22c55e" : "#ffffff" }} />
               </button>
             )}
           </div>
