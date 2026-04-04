@@ -522,7 +522,11 @@ const ChooseFace = () => {
                 <span className="block">character</span>
                 <span className="block">created!</span>
               </p>
-              <p className="mt-4 text-sm font-[800] lowercase text-black/50">tap to continue</p>
+              <motion.p
+                className="mt-4 text-sm font-[800] lowercase text-black/50"
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              >tap to continue</motion.p>
             </motion.div>
           </motion.button>
         )}
