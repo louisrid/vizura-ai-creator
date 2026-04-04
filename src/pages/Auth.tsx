@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
-import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
 
 const Auth = () => {
   const { user, loading: authLoading, signIn, signUp } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  // Default redirect target is always homepage
-  const redirectTo = searchParams.get("redirect") || "/";
+  const redirectTo = "/";
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -22,19 +19,15 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
-      // Small delay to ensure session is fully propagated
       navigate(redirectTo, { replace: true });
     }
   }, [user, navigate, redirectTo]);
 
-  // On mount, check if we're returning from OAuth (URL has tokens/code)
   useEffect(() => {
     const hash = window.location.hash;
     const search = window.location.search;
     const hasOAuthReturn = hash.includes("access_token") || search.includes("code=");
     if (hasOAuthReturn) {
-      // Supabase client will pick up the tokens from the URL automatically
-      // Just wait for auth state to update
       setSubmitting(true);
     }
   }, []);
@@ -69,16 +62,20 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
-      // Always redirect back to /auth with the redirect param so post-login navigation works
-      const redirectUri = `${window.location.origin}/auth?redirect=${encodeURIComponent(redirectTo)}`;
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: redirectUri,
+        redirect_uri: window.location.origin,
+        extraParams: {
+          prompt: "select_account",
+        },
       });
       if (result?.error) {
         toast.error("google sign in failed");
         setGoogleLoading(false);
+        return;
       }
-      // If result.redirected, the browser navigates away — nothing more to do
+      if (!result?.redirected) {
+        navigate("/", { replace: true });
+      }
     } catch (err: any) {
       toast.error(err.message || "google sign in failed");
       setGoogleLoading(false);
@@ -86,7 +83,6 @@ const Auth = () => {
   };
 
   const handleBack = () => {
-    // If coming from the guided creator (skip to login), go back to homepage which will reopen the creator
     navigate("/");
   };
 

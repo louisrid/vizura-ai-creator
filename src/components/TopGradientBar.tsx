@@ -1,14 +1,21 @@
-/** Yellow gradient bar at top of every page with soft fade */
+/** Smooth yellow top accent with soft fade and no clipped edge */
 const TopGradientBar = () => (
-  <div
-    className="pointer-events-none absolute top-0 left-0 right-0"
-    style={{
-      height: 6,
-      zIndex: 2,
-      background: "linear-gradient(90deg, #facc15 0%, #facc15 15%, rgba(250,204,21,0.6) 35%, rgba(250,204,21,0.2) 55%, rgba(250,204,21,0.04) 75%, transparent 95%)",
-      boxShadow: "0 0 12px 2px rgba(250,204,21,0.15), 0 2px 8px 0 rgba(250,204,21,0.08)",
-    }}
-  />
+  <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] overflow-hidden">
+    <div
+      style={{
+        height: 4,
+        background:
+          "linear-gradient(90deg, hsl(var(--neon-yellow)) 0%, hsl(var(--neon-yellow)) 14%, hsl(var(--neon-yellow) / 0.82) 30%, hsl(var(--neon-yellow) / 0.46) 50%, hsl(var(--neon-yellow) / 0.18) 70%, hsl(var(--neon-yellow) / 0.07) 86%, transparent 100%)",
+      }}
+    />
+    <div
+      style={{
+        height: 18,
+        background:
+          "linear-gradient(180deg, hsl(var(--neon-yellow) / 0.18) 0%, hsl(var(--neon-yellow) / 0.08) 38%, hsl(var(--neon-yellow) / 0.03) 68%, transparent 100%)",
+      }}
+    />
+  </div>
 );
 
 export default TopGradientBar;

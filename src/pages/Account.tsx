@@ -217,12 +217,18 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
-      const redirectUri = redirectTo
-        ? `${window.location.origin}/account?redirect=${encodeURIComponent(redirectTo)}`
-        : window.location.origin;
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: redirectUri });
-      if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
-    } catch (err: any) { toast.error(err.message || "google sign in failed"); setGoogleLoading(false); }
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+        extraParams: { prompt: "select_account" },
+      });
+      if (result?.error) {
+        toast.error("google sign in failed");
+        setGoogleLoading(false);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "google sign in failed");
+      setGoogleLoading(false);
+    }
   };
 
   return (
