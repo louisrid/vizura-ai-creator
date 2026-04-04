@@ -270,6 +270,11 @@ const Index = () => {
           setPhotoOverlayPhase("hidden");
           return;
         }
+        if (data?.code === "NO_GEMS") {
+          setPhotoOverlayPhase("hidden");
+          setShowPaywall(true);
+          return;
+        }
         throw new Error(data.error);
       }
 
