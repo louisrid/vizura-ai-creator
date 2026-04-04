@@ -138,58 +138,54 @@ const ChooseFace = () => {
         return;
       }
       setShowSignIn(false);
-      const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt, free_gen: true },
-      });
-      if (fnError) {
-        // supabase.functions.invoke puts non-2xx responses in error
-        // Try to parse the response body for structured error info
-        const parsed = typeof fnError === "object" && fnError?.context ? await fnError.context?.json?.().catch(() => null) : null;
-        if (parsed?.code === "FREE_GEN_USED" || parsed?.code === "IP_USED") {
-          // Fall through to retry path below
-        } else {
+
+      // Helper to extract data from supabase.functions.invoke response
+      const invokeAndParse = async (body: Record<string, unknown>) => {
+        const { data, error: fnError } = await supabase.functions.invoke("generate", { body });
+        if (fnError) {
+          // Try to parse the error response body for structured codes
+          let parsed: any = null;
+          try {
+            if (typeof fnError === "object" && (fnError as any)?.context) {
+              parsed = await (fnError as any).context.json().catch(() => null);
+            }
+          } catch {}
+          if (parsed) return parsed; // Return the parsed body so caller can check .code
           throw fnError;
         }
+        return data;
+      };
+
+      let result = await invokeAndParse({ prompt, free_gen: true });
+
+      // Handle free gen already used — retry with gem-based face regen
+      if (result?.error && (result.code === "FREE_GEN_USED" || result.code === "IP_USED")) {
+        result = await invokeAndParse({ prompt, face_regen: true });
       }
-      if (data?.error) {
-        if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
-          const { data: retryData, error: retryError } = await supabase.functions.invoke("generate", {
-            body: { prompt, face_regen: true },
-          });
-          if (retryError) {
-            console.error("Face regen error:", retryError);
-            throw retryError;
-          }
-          if (retryData?.error) {
-            if (retryData.code === "NO_GEMS") {
-              setShowPaywall(true);
-              setLoading(false);
-              return;
-            }
-            throw new Error(retryData.error);
-          }
-          const retryImgs = retryData.images || [];
-          const retryFaces = retryImgs.slice(0, 3);
-          setFaces(retryFaces);
-          sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(retryFaces));
-          setSelectedIndex(null);
-          setApiDone(true);
+
+      if (result?.error) {
+        if (result.code === "NO_GEMS") {
+          setShowPaywall(true);
+          setLoading(false);
           return;
         }
-        if (data.code === "CONTENT_POLICY") {
+        if (result.code === "CONTENT_POLICY") {
           toast.error("please adjust your description and try again");
           setLoading(false);
           return;
         }
-        throw new Error(data.error);
+        throw new Error(result.error);
       }
-      const imgs = data.images || [];
+
+      const imgs = result?.images || [];
       const nextFaces = imgs.slice(0, 3);
+      if (nextFaces.length === 0) throw new Error("No faces generated");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       setApiDone(true);
     } catch (err: any) {
+      console.error("generateFaces error:", err);
       const msg = err?.message || "generation failed";
       if (msg.includes("Free generation") || msg.includes("IP_USED") || msg.includes("FREE_GEN_USED")) {
         setShowPaywall(true);
