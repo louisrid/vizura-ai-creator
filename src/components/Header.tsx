@@ -103,18 +103,18 @@ const Header = () => {
             onClick={() => setOpen(!open)}
             className="flex items-center justify-center active:scale-95 transition-transform duration-150"
             style={{
-              width: 36,
-              height: 36,
+              width: 40,
+              height: 40,
               borderRadius: 10,
               backgroundColor: "#1a1a1a",
               border: "2px solid #222",
             }}
             aria-label="open menu"
           >
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-              <rect y="0" width="16" height="2.2" rx="1" fill="white" />
-              <rect y="4.9" width="16" height="2.2" rx="1" fill="white" />
-              <rect y="9.8" width="16" height="2.2" rx="1" fill="white" />
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+              <rect y="0" width="18" height="2.4" rx="1.2" fill="white" />
+              <rect y="5.8" width="18" height="2.4" rx="1.2" fill="white" />
+              <rect y="11.6" width="18" height="2.4" rx="1.2" fill="white" />
             </svg>
           </button>
 
