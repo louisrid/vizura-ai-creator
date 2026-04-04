@@ -478,7 +478,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center">
         <span className="text-[64px] mb-5">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
-        <p className="mt-5 text-[13px] font-[800] lowercase text-white/70">tap → to continue</p>
+        <motion.p
+          className="mt-5 text-[13px] font-[800] lowercase"
+          style={{ color: "rgba(255,255,255,0.4)" }}
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        >tap → to continue</motion.p>
       </div>
     );
 
