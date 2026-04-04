@@ -114,9 +114,14 @@ function buildCharacterTraits(char: any): string {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
   }
 
-  const bodyKey = (char.body || "").toLowerCase();
-  if (bodyKey && bodyKey !== "regular") {
-    parts.push(BODY_MAP[bodyKey] || `${bodyKey} body type`);
+  const bodyKey = (char.body || "regular").toLowerCase();
+  parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
+
+  // Face-body correlation: slim/average must never have a fat face
+  if (bodyKey === "slim") {
+    parts.push("lean angular face, no roundness or puffiness in face");
+  } else if (bodyKey === "regular" || bodyKey === "average") {
+    parts.push("soft face but not fat, no round chubby face");
   }
 
   const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
