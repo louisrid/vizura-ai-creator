@@ -24,7 +24,7 @@ interface Character {
   style: string;
   description: string;
   face_image_url: string | null;
-  face_side_url?: string | null;
+  body_anchor_url?: string | null;
   face_angle_url?: string | null;
 }
 

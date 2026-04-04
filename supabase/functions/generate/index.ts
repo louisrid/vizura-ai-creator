@@ -318,31 +318,30 @@ async function generateFaceImages(
   return imageUrls;
 }
 
-/* ── generate extra angle images from a reference face ── */
-async function generateExtraAngles(
+/* ── body-type descriptor for full-body anchor ─────────── */
+const BODY_ANCHOR_MAP: Record<string, string> = {
+  slim: "slim toned body, smaller chest, narrow waist",
+  regular: "soft feminine body, large bust, defined waist",
+  average: "soft feminine body, large bust, defined waist",
+  curvy: "curvy full body, very large bust, wide hips",
+  thick: "curvy full body, very large bust, wide hips",
+};
+
+/* ── generate 3/4 angle + full-body anchor from reference face ── */
+async function generateAngleAndBody(
   faceUrl: string,
   characterTraits: string,
+  bodyType: string,
   apiKey: string,
   adminClient: any,
   userId: string
-): Promise<{ sideUrl: string | null; angleUrl: string | null }> {
-  let sideUrl: string | null = null;
+): Promise<{ angleUrl: string | null; bodyAnchorUrl: string | null }> {
   let angleUrl: string | null = null;
-
-  try {
-    console.log("Generating side profile...");
-    const sidePrompt = `Same person exactly, side profile view, facing left, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
-    const sideResult = await xaiImageEdit(sidePrompt, [faceUrl], apiKey, "3:4");
-    if (sideResult) {
-      sideUrl = await storeImagePermanently(sideResult, userId, adminClient, "side");
-    }
-  } catch (e) {
-    console.error("Side profile generation failed:", e);
-  }
+  let bodyAnchorUrl: string | null = null;
 
   try {
     console.log("Generating 3/4 angle...");
-    const anglePrompt = `Same person exactly, three-quarter angle view, slight turn to the right, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const anglePrompt = `Same person exactly, three-quarter angle view, slight turn to the right, wearing white t-shirt, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -351,7 +350,19 @@ async function generateExtraAngles(
     console.error("3/4 angle generation failed:", e);
   }
 
-  return { sideUrl, angleUrl };
+  try {
+    console.log("Generating full-body anchor...");
+    const bodyDesc = BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular;
+    const bodyPrompt = `Same person exactly as in reference image, full body head to toe, neutral standing pose, white t-shirt and blue jeans, white background, ${bodyDesc}, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
+    const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+    if (bodyResult) {
+      bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
+    }
+  } catch (e) {
+    console.error("Full-body anchor generation failed:", e);
+  }
+
+  return { angleUrl, bodyAnchorUrl };
 }
 
 /* ── map aspect ratio to xAI-supported values ─────────── */
@@ -447,14 +458,15 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    /* ── ANGLE GENERATION FLOW ── */
+    /* ── ANGLE + BODY GENERATION FLOW ── */
+    const bodyTypeInput = body?.body_type || "regular";
     if (generateAngles && selectedFaceUrl) {
-      console.log("Generating extra angles for face:", selectedFaceUrl.slice(0, 80));
-      const { sideUrl, angleUrl } = await generateExtraAngles(
-        selectedFaceUrl, prompt, Deno.env.get("XAI_API_KEY")!, adminClient, userId
+      console.log("Generating 3/4 angle + full-body anchor for face:", selectedFaceUrl.slice(0, 80));
+      const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
+        selectedFaceUrl, prompt, bodyTypeInput, Deno.env.get("XAI_API_KEY")!, adminClient, userId
       );
       return new Response(
-        JSON.stringify({ side_url: sideUrl, angle_url: angleUrl }),
+        JSON.stringify({ angle_url: angleUrl, body_anchor_url: bodyAnchorUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -474,8 +486,8 @@ serve(async (req) => {
         characterTraits = buildCharacterTraits(charData);
         // Collect all available face references
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
-        if (charData.face_side_url) faceImageUrls.push(charData.face_side_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 

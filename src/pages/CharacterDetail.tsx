@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Lock } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,8 +19,8 @@ interface Character {
   style: string;
   description: string;
   face_image_url: string | null;
-  face_side_url?: string | null;
   face_angle_url?: string | null;
+  body_anchor_url?: string | null;
 }
 
 const SKIN_LABELS: Record<string, string> = {
@@ -111,11 +111,24 @@ const CharacterDetail = () => {
   if (character.eye) traits.push({ label: "eyes", value: character.eye });
   if (character.style) traits.push({ label: "makeup", value: character.style });
 
-  const hasFace = character.face_image_url &&
-    !character.face_image_url.startsWith("data:image/svg") &&
-    !character.face_image_url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
+  const isValidImg = (url: string | null | undefined) =>
+    url && !url.startsWith("data:image/svg") && !url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
+
+  const hasFace = isValidImg(character.face_image_url);
+  const hasAngle = isValidImg(character.face_angle_url);
+  const hasBody = isValidImg(character.body_anchor_url);
 
   const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
+
+  const imgSlot = (url: string | null | undefined, label: string) => (
+    <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+      {isValidImg(url) ? (
+        <img src={url!} alt={label} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+      ) : (
+        <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>no photo</span>
+      )}
+    </div>
+  );
 
   const content = (
     <>
@@ -125,21 +138,9 @@ const CharacterDetail = () => {
           {nameAge}
         </h1>
         <div className="grid grid-cols-3 gap-2.5">
-          <div className="aspect-[3/4] overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
-            {hasFace ? (
-              <img src={character.face_image_url!} alt="front" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-            ) : (
-              <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>no photo</span>
-            )}
-          </div>
-          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
-            <Lock size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.2)" }} />
-            <span className="text-[8px] font-[900] lowercase text-center leading-tight px-1" style={{ color: "rgba(255,255,255,0.2)" }}>left profile</span>
-          </div>
-          <div className="aspect-[3/4] overflow-hidden flex flex-col items-center justify-center gap-1.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
-            <Lock size={16} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.2)" }} />
-            <span className="text-[8px] font-[900] lowercase text-center leading-tight px-1" style={{ color: "rgba(255,255,255,0.2)" }}>right profile</span>
-          </div>
+          {imgSlot(character.face_image_url, "front")}
+          {imgSlot(character.face_angle_url, "3/4 angle")}
+          {imgSlot(character.body_anchor_url, "full body")}
         </div>
       </div>
 

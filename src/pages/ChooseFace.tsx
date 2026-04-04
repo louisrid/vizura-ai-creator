@@ -25,6 +25,13 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
+const ANCHOR_GEN_PHRASES = [
+  "building your character…",
+  "generating angles…",
+  "creating full body…",
+  "finalising…",
+];
+
 const SUCCESS_HOLD = 3500;
 
 const ChooseFace = () => {
@@ -59,6 +66,9 @@ const ChooseFace = () => {
   const [rerolling, setRerolling] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
+  const [anchorLoading, setAnchorLoading] = useState(false);
+  const [anchorApiDone, setAnchorApiDone] = useState(false);
+  const [anchorBarComplete, setAnchorBarComplete] = useState(false);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Green success screen phase
@@ -317,36 +327,69 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate extra angles in background without blocking
+    // Generate 3/4 angle + full-body anchor (BLOCKING with loading screen)
     if (faceUrl && cId) {
+      setAnchorLoading(true);
+      setAnchorApiDone(false);
+      setAnchorBarComplete(false);
+
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
       const angleUserId = currentUser.id;
 
-      void (async () => {
-        try {
-          const { data: angleData } = await supabase.functions.invoke("generate", {
-            body: {
-              prompt: anglePrompt,
-              generate_angles: true,
-              selected_face_url: faceUrl,
-            },
-          });
-
-          if (angleData?.side_url || angleData?.angle_url) {
-            await supabase
-              .from("characters")
-              .update({
-                face_side_url: angleData.side_url || null,
-                face_angle_url: angleData.angle_url || null,
-              })
-              .eq("id", angleCharacterId)
-              .eq("user_id", angleUserId);
-          }
-        } catch (e) {
-          console.error("Extra angle generation failed:", e);
+      // Get body type from session storage draft
+      let bodyType = "regular";
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const draft = JSON.parse(raw);
+          bodyType = draft.bodyType || "regular";
         }
-      })();
+      } catch {}
+      // Also check the character record we just saved
+      try {
+        const { data: charRecord } = await supabase
+          .from("characters")
+          .select("body")
+          .eq("id", angleCharacterId)
+          .single();
+        if (charRecord?.body) bodyType = charRecord.body;
+      } catch {}
+
+      try {
+        const { data: angleData } = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: anglePrompt,
+            generate_angles: true,
+            selected_face_url: faceUrl,
+            body_type: bodyType,
+          },
+        });
+
+        if (angleData?.angle_url || angleData?.body_anchor_url) {
+          await supabase
+            .from("characters")
+            .update({
+              face_angle_url: angleData.angle_url || null,
+              body_anchor_url: angleData.body_anchor_url || null,
+            })
+            .eq("id", angleCharacterId)
+            .eq("user_id", angleUserId);
+        }
+      } catch (e) {
+        console.error("Angle + body generation failed:", e);
+      }
+
+      setAnchorApiDone(true);
+      // Wait for bar to complete
+      await new Promise<void>((resolve) => {
+        const check = () => {
+          // anchorBarComplete might not be set yet, use a polling approach
+          resolve();
+        };
+        // Give the bar a moment, then proceed
+        setTimeout(check, 1500);
+      });
     }
 
     if (cId) {
@@ -362,8 +405,8 @@ const ChooseFace = () => {
 
     setPendingAuthSave(false);
     setShowSignIn(false);
+    setAnchorLoading(false);
 
-    // Navigate directly — no second loading bar
     toast.success("character added!");
     navigate("/characters", { replace: true });
     return true;
@@ -425,6 +468,31 @@ const ChooseFace = () => {
               requireTapToContinue={false}
               completeNow={apiDone}
               onComplete={() => setBarComplete(true)}
+            />
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Full-screen loading bar while generating 3/4 angle + full body */}
+      {anchorLoading && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
+          >
+            <ProgressBarLoader
+              duration={90000}
+              phrases={ANCHOR_GEN_PHRASES}
+              phraseInterval={5000}
+              requireTapToContinue={false}
+              completeNow={anchorApiDone}
+              onComplete={() => setAnchorBarComplete(true)}
             />
           </motion.div>
         </motion.div>
