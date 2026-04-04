@@ -170,6 +170,7 @@ const App = () => (
           <SubscriptionProvider>
             <BrowserRouter>
               <Sonner />
+              <PostAuthHomeRedirect />
               <FreshLoadRedirect />
               <ScrollToTop />
               <AppRoutes />
