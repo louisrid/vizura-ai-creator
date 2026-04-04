@@ -173,8 +173,8 @@ const Header = () => {
         className="sticky top-0"
         style={{
           zIndex: 9990,
-          background: "linear-gradient(to bottom, #000000 0%, #000000 60%, rgba(0,0,0,0.97) 70%, rgba(0,0,0,0.88) 80%, rgba(0,0,0,0.6) 90%, transparent 100%)",
-          paddingBottom: 40,
+          background: "linear-gradient(to bottom, #000000 0%, #000000 65%, rgba(0,0,0,0.97) 75%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.5) 93%, transparent 100%)",
+          paddingBottom: 56,
         }}
       >
         <TopGradientBar />
@@ -202,17 +202,17 @@ const Header = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-1.5 rounded-xl px-4 py-2.5 active:scale-95 transition-transform duration-150"
+              className="flex items-center gap-2 rounded-xl px-5 py-3 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "2px solid rgba(0,224,255,0.25)",
               }}
             >
-              <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-              <span className="text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+              <Gem size={20} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+              <span className="text-[17px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
             </button>
 
             <button
@@ -220,18 +220,18 @@ const Header = () => {
               onClick={() => setOpen(!open)}
               className="flex items-center justify-center active:scale-95 transition-transform duration-150"
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
+                width: 48,
+                height: 48,
+                borderRadius: 12,
                 backgroundColor: "#1a1a1a",
                 border: "2px solid #1a1a1a",
               }}
               aria-label="open menu"
             >
-              <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
-                <rect y="0" width="18" height="2.4" rx="1.2" fill="white" />
-                <rect y="5.8" width="18" height="2.4" rx="1.2" fill="white" />
-                <rect y="11.6" width="18" height="2.4" rx="1.2" fill="white" />
+              <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+                <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
+                <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
+                <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
               </svg>
             </button>
           </div>
