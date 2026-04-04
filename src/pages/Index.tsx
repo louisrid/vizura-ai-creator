@@ -358,7 +358,7 @@ const Index = () => {
           </div>
 
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-5">
+          <div className="md:col-span-3 space-y-6">
             {/* Character select — always visible */}
             <div>
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">select character</span>
