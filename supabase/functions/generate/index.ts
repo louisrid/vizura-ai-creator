@@ -79,9 +79,11 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  slim: "slim petite frame",
-  average: "average build",
-  curvy: "curvy voluptuous figure",
+  slim: "slim toned body, smaller chest, narrow waist, lean face",
+  regular: "soft feminine body, large bust DD, defined waist, soft face",
+  average: "soft feminine body, large bust DD, defined waist, soft face",
+  curvy: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
+  thick: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
