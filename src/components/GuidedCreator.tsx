@@ -396,7 +396,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
       setExitFade(true);
-      setTimeout(() => completeCookingFlow(), 1400);
+      window.setTimeout(() => {
+        setExitFade(false);
+        setCookingPhase("loading");
+      }, 900);
       return;
     }
     animating.current = true;
