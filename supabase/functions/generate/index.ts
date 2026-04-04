@@ -294,8 +294,6 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-  const imageUrls: string[] = [];
-
   // Three variations with distinctly different facial structures — ALL must be gorgeous
   const variations = [
     "diamond face shape, high cheekbones, pointed chin, full lips, small upturned nose, large almond eyes, thin arched eyebrows, hair flowing over shoulders clearly visible",
@@ -305,20 +303,25 @@ async function generateFaceImages(
 
   const beautyCore = "extremely attractive gorgeous woman, instagram model beauty, stunningly beautiful, slim face, clear glowing skin, well-styled hair clearly visible and not hidden, modern youthful look, happy pleasant expression or soft gentle smile, wearing a plain white crew neck t-shirt";
 
-  for (let i = 0; i < Math.min(count, 3); i++) {
+  const results = await Promise.allSettled(Array.from({ length: Math.min(count, 3) }, async (_, i) => {
     const variation = variations[i] || variations[0];
     const fullPrompt = `${prompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     console.log(`Face gen ${i + 1} prompt: ${fullPrompt.slice(0, 200)}`);
-    try {
-      const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
-      if (url) {
-        const permanentUrl = await storeImagePermanently(url, userId, adminClient, "face");
-        imageUrls.push(permanentUrl);
-      }
-    } catch (e: any) {
-      console.error(`Face gen ${i + 1} failed:`, e);
-      if (e?.contentPolicy) throw e;
+    const url = await xaiTextToImage(fullPrompt, apiKey, "3:4");
+    if (!url) {
+      throw new Error(`face option ${i + 1} returned no image`);
     }
+    return await storeImagePermanently(url, userId, adminClient, `face_${i + 1}`);
+  }));
+
+  const imageUrls: string[] = [];
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      imageUrls.push(result.value);
+      continue;
+    }
+    console.error("Face generation failed:", result.reason);
+    if ((result.reason as any)?.contentPolicy) throw result.reason;
   }
 
   return imageUrls;
