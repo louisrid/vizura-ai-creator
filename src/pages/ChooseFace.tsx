@@ -512,13 +512,14 @@ const ChooseFace = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.65, ease: "easeInOut" }}
           >
-            <motion.div
+             <motion.div
               className="flex flex-col items-center"
               initial={{ opacity: 0, y: 15, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+              style={{ marginTop: "-15vh" }}
             >
-              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
+              <p className="text-center text-[3.5rem] font-[900] lowercase leading-[1.0] text-black">
                 <span className="block">character</span>
                 <span className="block">created!</span>
               </p>
