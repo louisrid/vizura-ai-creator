@@ -68,7 +68,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-4 pb-[340px]">
+      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-4 pb-[400px]">
         <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
