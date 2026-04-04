@@ -25,9 +25,6 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
-
-const SUCCESS_HOLD = 3500;
-
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
@@ -62,10 +59,6 @@ const ChooseFace = () => {
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
 
-  // Green success screen phase
-  const [showSuccess, setShowSuccess] = useState(false);
-  const hasShownSuccess = useRef(false);
-
   const hasInitRef = useRef(false);
 
   useEffect(() => {
@@ -91,21 +84,19 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
 
-  // Show green success screen after bar completes (not after API finishes)
+  // When bar completes and faces are ready, stop loading (tap-to-continue handles transition)
   useEffect(() => {
-    if (barComplete && faces.length > 0 && !hasShownSuccess.current) {
-      hasShownSuccess.current = true;
+    if (barComplete && faces.length > 0) {
       setLoading(false);
-      setShowSuccess(true);
     }
   }, [barComplete, faces.length]);
 
   useEffect(() => {
-    if (!loading && !showSuccess && !cardsRevealed && faces.length > 0) {
+    if (!loading && !cardsRevealed && faces.length > 0) {
       const t = setTimeout(() => setCardsRevealed(true), 100);
       return () => clearTimeout(t);
     }
-  }, [loading, showSuccess, cardsRevealed, faces.length]);
+  }, [loading, cardsRevealed, faces.length]);
 
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
   const doFinalSaveRef = useRef<(forcedFaceIdx?: number) => Promise<boolean>>(async () => false);
@@ -133,18 +124,16 @@ const ChooseFace = () => {
       }
       setShowSignIn(false);
 
-      // Helper to extract data from supabase.functions.invoke response
       const invokeAndParse = async (body: Record<string, unknown>) => {
         const { data, error: fnError } = await supabase.functions.invoke("generate", { body });
         if (fnError) {
-          // Try to parse the error response body for structured codes
           let parsed: any = null;
           try {
             if (typeof fnError === "object" && (fnError as any)?.context) {
               parsed = await (fnError as any).context.json().catch(() => null);
             }
           } catch {}
-          if (parsed) return parsed; // Return the parsed body so caller can check .code
+          if (parsed) return parsed;
           throw fnError;
         }
         return data;
@@ -152,7 +141,6 @@ const ChooseFace = () => {
 
       let result = await invokeAndParse({ prompt, free_gen: true });
 
-      // Handle free gen already used — retry with gem-based face regen
       if (result?.error && (result.code === "FREE_GEN_USED" || result.code === "IP_USED")) {
         result = await invokeAndParse({ prompt, face_regen: true });
       }
@@ -225,17 +213,17 @@ const ChooseFace = () => {
     window.setTimeout(() => setPulseIndex((current) => (current === i ? null : current)), 360);
   };
 
-  const handleConfirm = async () => {
-    if (selectedIndex === null) return;
+  const handleSelectFace = async (faceIndex: number) => {
+    setSelectedIndex(faceIndex);
 
     if (!user) {
-      sessionStorage.setItem("vizura_selected_face", String(selectedIndex));
+      sessionStorage.setItem("vizura_selected_face", String(faceIndex));
       sessionStorage.setItem(AUTH_RESUME_KEY, "1");
       setShowSignIn(true);
       return;
     }
 
-    await doFinalSave();
+    await doFinalSave(faceIndex);
   };
 
   const doFinalSave = async (forcedFaceIdx?: number) => {
@@ -345,9 +333,9 @@ const ChooseFace = () => {
           selected_face_url: faceUrl,
           body_type: bodyType,
         },
-      }).then(({ data: angleData }) => {
+      }).then(async ({ data: angleData }) => {
         if (angleData?.angle_url || angleData?.body_anchor_url) {
-          supabase
+          const { error } = await supabase
             .from("characters")
             .update({
               face_angle_url: angleData.angle_url || null,
@@ -355,6 +343,8 @@ const ChooseFace = () => {
             })
             .eq("id", angleCharacterId)
             .eq("user_id", angleUserId);
+          if (error) console.error("Failed to update character with angle/body:", error);
+          else console.log("Angle + body URLs saved to character:", angleCharacterId);
         }
       }).catch((e) => {
         console.error("Angle + body generation failed:", e);
@@ -414,185 +404,147 @@ const ChooseFace = () => {
   const cardDelays = [0, 0.2, 0.4];
 
   return (
-    <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background w-full">
-      <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
+    <>
+      {/* Persistent black backdrop — always present, never unmounts */}
+      <div className="fixed inset-0 z-[9998] bg-black" />
 
-      {/* Full-screen loading bar while faces generate */}
-      {loading && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
-          >
-            <ProgressBarLoader
-              duration={120000}
-              phrases={FACE_GEN_PHRASES}
-              phraseInterval={5000}
-              requireTapToContinue={false}
-              completeNow={apiDone}
-              onComplete={() => setBarComplete(true)}
-            />
-          </motion.div>
-        </motion.div>
-      )}
+      <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background w-full" style={{ position: "relative", zIndex: 9999 }}>
+        <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-
-
-      {/* Green "character created!" success screen */}
-      <AnimatePresence>
-        {showSuccess && (
-          <motion.button
-            key="success-screen"
-            type="button"
-            onClick={() => setShowSuccess(false)}
-            className="fixed inset-0 z-[9999] flex items-center justify-center cursor-pointer"
-            style={{ backgroundColor: "hsl(var(--member-green))" }}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.65, ease: "easeInOut" }}
-          >
-             <motion.div
-              className="flex flex-col items-center"
-              initial={{ opacity: 0, y: 15, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ marginTop: "-15vh" }}
+        {/* Full-screen loading bar while faces generate */}
+        <AnimatePresence>
+          {loading && (
+            <motion.div
+              key="face-loader"
+              className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
-              <p className="text-center text-[3.5rem] font-[900] lowercase leading-[1.0] text-black">
-                <span className="block">character</span>
-                <span className="block">created!</span>
-              </p>
-              <motion.p
-                className="mt-6 text-sm font-[800] lowercase text-black/50"
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-              >tap to continue</motion.p>
-            </motion.div>
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Face picker — only shown after success screen */}
-      {!loading && faces.length > 0 && !showSuccess && (
-        <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg md:max-w-3xl flex-col px-[14px] md:px-8 pt-4 pb-0 overflow-hidden">
-          <div className="flex items-center gap-3 mb-5">
-            <BackButton />
-            <PageTitle className="mb-0">pick your face</PageTitle>
-          </div>
-
-          <div className="flex items-center gap-2 mb-6">
-            <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-            <span className="text-sm font-[900] lowercase text-foreground">{gems} gems</span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 md:gap-5 mt-4 shrink-0 md:max-w-xl md:mx-auto" style={{ perspective: "800px" }}>
-            {faces.map((url, i) => (
-              <motion.button
-                key={i}
-                type="button"
-                onClick={() => handleFaceClick(i)}
-                initial={{ rotateY: 90, opacity: 0 }}
-                animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
-                whileTap={{ scale: 1.02 }}
-                transition={{
-                  rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                  opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                }}
-                className="relative aspect-[3/4] overflow-hidden transition-all duration-300 ease-out"
-                style={{
-                  borderRadius: 16,
-                  border: selectedIndex === i ? "3px solid #facc15" : "2px solid #222",
-                }}
-              >
-                <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Confirm CTA shown when a face is selected */}
-          <AnimatePresence>
-            {selectedIndex !== null && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.2 }}
-                className="mt-6 w-full flex justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
               >
-                <button
-                  onClick={handleConfirm}
-                  className="h-14 w-full max-w-[16rem] text-[15px] font-[900] lowercase flex items-center justify-center gap-2 active:scale-[0.96] transition-transform duration-150"
-                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
-                >
-                  use this face →
-                </button>
+                <ProgressBarLoader
+                  duration={120000}
+                  phrases={FACE_GEN_PHRASES}
+                  phraseInterval={5000}
+                  requireTapToContinue={true}
+                  expandTapTarget={true}
+                  completeNow={apiDone}
+                  onComplete={() => setBarComplete(true)}
+                />
               </motion.div>
-            )}
-          </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-          <div className="flex-1 min-h-[1rem]" />
+        {/* Face picker — shown after loading completes */}
+        {!loading && faces.length > 0 && (
+          <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg md:max-w-3xl flex-col px-[14px] md:px-8 pt-4 pb-0 overflow-hidden">
+            <div className="flex items-center gap-3 mb-5">
+              <BackButton />
+              <PageTitle className="mb-0">pick your face</PageTitle>
+            </div>
 
-          <div className="-mx-[14px] shrink-0">
-            <div style={{ height: 1, backgroundColor: "#222" }} />
-            <div className="px-[14px] pt-5 pb-[max(env(safe-area-inset-bottom),1.5rem)]" style={{ backgroundColor: "#000" }}>
-              <div className="flex gap-3">
-                {/* Regenerate - opaque secondary */}
-                <button
-                  onClick={handleRegenerate}
-                  disabled={rerolling}
-                  className="flex-1 h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 relative overflow-hidden"
-                  style={{
-                    backgroundColor: isFreeUser ? "#111111" : "#111111",
-                    borderRadius: 12,
-                    color: isFreeUser ? "rgba(255,255,255,0.4)" : "#fff",
-                    cursor: isFreeUser ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {!isFreeUser && (
-                    <div className="absolute inset-0" style={{ backgroundColor: "rgba(250,204,21,0.06)", border: "2px solid rgba(250,204,21,0.15)", borderRadius: 12 }} />
-                  )}
-                  <span className="relative z-[1] flex items-center gap-2">
-                    {rerolling ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <>
-                        <RefreshCw size={16} strokeWidth={2.5} />
-                        regenerate
-                        <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                        <span className="text-[11px]">1</span>
-                      </>
+            <div className="flex items-center gap-2 mb-6">
+              <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+              <span className="text-sm font-[900] lowercase text-foreground">{gems} gems</span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 md:gap-5 mt-4 shrink-0 md:max-w-xl md:mx-auto" style={{ perspective: "800px" }}>
+              {faces.map((url, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <motion.button
+                    type="button"
+                    onClick={() => handleFaceClick(i)}
+                    initial={{ rotateY: 90, opacity: 0 }}
+                    animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                    whileTap={{ scale: 1.02 }}
+                    transition={{
+                      rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                      opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                    }}
+                    className="relative aspect-[3/4] w-full overflow-hidden transition-all duration-300 ease-out"
+                    style={{
+                      borderRadius: 16,
+                      border: selectedIndex === i ? "3px solid #facc15" : "2px solid #222",
+                    }}
+                  >
+                    <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
+                  </motion.button>
+
+                  {/* "use this face" button per card */}
+                  <AnimatePresence>
+                    {selectedIndex === i && (
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.15 }}
+                        onClick={() => handleSelectFace(i)}
+                        className="h-9 w-full text-[12px] font-[900] lowercase flex items-center justify-center active:scale-[0.96] transition-transform duration-150"
+                        style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 10 }}
+                      >
+                        use this face →
+                      </motion.button>
                     )}
-                  </span>
-                </button>
-                {/* Confirm - solid yellow */}
-                <button
-                  onClick={handleConfirm}
-                  disabled={selectedIndex === null}
-                  className="flex-1 h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 disabled:opacity-50"
-                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
-                >
-                  confirm
-                </button>
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex-1 min-h-[1rem]" />
+
+            <div className="-mx-[14px] shrink-0">
+              <div style={{ height: 1, backgroundColor: "#222" }} />
+              <div className="px-[14px] pt-5 pb-[max(env(safe-area-inset-bottom),1.5rem)]" style={{ backgroundColor: "#000" }}>
+                <div className="flex gap-3">
+                  {/* Regenerate */}
+                  <button
+                    onClick={handleRegenerate}
+                    disabled={rerolling}
+                    className="flex-1 h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-colors disabled:opacity-50 relative overflow-hidden"
+                    style={{
+                      backgroundColor: "#111111",
+                      borderRadius: 12,
+                      color: isFreeUser ? "rgba(255,255,255,0.4)" : "#fff",
+                      cursor: isFreeUser ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {!isFreeUser && (
+                      <div className="absolute inset-0" style={{ backgroundColor: "rgba(250,204,21,0.06)", border: "2px solid rgba(250,204,21,0.15)", borderRadius: 12 }} />
+                    )}
+                    <span className="relative z-[1] flex items-center gap-2">
+                      {rerolling ? (
+                        <Loader2 className="animate-spin" size={16} />
+                      ) : (
+                        <>
+                          <RefreshCw size={16} strokeWidth={2.5} />
+                          regenerate
+                          <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                          <span className="text-[11px]">1</span>
+                        </>
+                      )}
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </main>
-      )}
+          </main>
+        )}
 
-      {!loading && faces.length === 0 && !showSignIn && (
-        <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
-          <div className="mt-16 flex flex-col items-center gap-4">
-            <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no faces generated yet</p>
-          </div>
-        </main>
-      )}
-    </div>
+        {!loading && faces.length === 0 && !showSignIn && (
+          <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
+            <div className="mt-16 flex flex-col items-center gap-4">
+              <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no faces generated yet</p>
+            </div>
+          </main>
+        )}
+      </div>
+    </>
   );
 };
 
