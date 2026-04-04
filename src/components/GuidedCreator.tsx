@@ -694,19 +694,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         animate={{ opacity: 1 }}
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
       >
-        {canExitFlow && (
-          <div className="absolute inset-x-0 z-20 flex justify-end px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
-            <button
-              type="button"
-              onClick={handleClose}
-              className="flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-2 text-[13px] font-[900] lowercase text-foreground backdrop-blur-sm transition-opacity duration-150 active:opacity-70"
-              aria-label="close character creator"
-            >
-              <X size={14} strokeWidth={2.6} />
-              <span>close</span>
-            </button>
-          </div>
-        )}
+        {/* Close button removed — home icon below arrows is the only exit */}
         {/* Skip button removed */}
 
         {/* Content area */}
