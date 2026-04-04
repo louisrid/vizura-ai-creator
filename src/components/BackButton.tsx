@@ -1,14 +1,24 @@
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { getNavDepth } from "@/lib/navigation";
 
 const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
   const navigate = useNavigate();
+
+  const handleBack = () => {
+    // If we have navigation history depth > 1, go back; otherwise go home
+    if (getNavDepth() > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
     <button
       ref={ref}
       type="button"
-      onClick={() => navigate("/")}
+      onClick={handleBack}
       className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95"
       style={{
         width: 40,

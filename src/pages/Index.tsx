@@ -253,6 +253,7 @@ const Index = () => {
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
 
+    toast("1 gem used");
     const cleanPrompt = sanitiseText(prompt.trim());
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
@@ -285,7 +286,6 @@ const Index = () => {
       setResultImage(generatedUrl);
 
       await refetchCredits();
-      toast("1 gem used");
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");
       if (e.message?.includes("No gems") || e.message?.includes("402")) {
