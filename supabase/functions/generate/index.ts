@@ -95,7 +95,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 23) return "very youthful baby face, soft round cheeks, small delicate chin, wide doe eyes, soft undefined jawline, smooth plump skin, teenage to early twenties look, gen-z youthful energy, looks like she just turned 18-19, no mature features";
+  if (isNaN(num) || num <= 23) return "young fresh face, soft youthful bone structure, smooth skin, modern young vibe, very youthful baby face, soft round cheeks, small delicate chin, wide doe eyes, soft undefined jawline, smooth plump skin, teenage to early twenties look, gen-z youthful energy, looks like she just turned 18-19, no mature features";
   if (num <= 28) return "youthful features, soft jawline, full cheeks, smooth skin, young-looking face, early twenties appearance, still baby-faced but slightly more defined";
   return "young adult features, slightly more defined cheekbones, still youthful skin, mid twenties look, subtle maturity";
 }
