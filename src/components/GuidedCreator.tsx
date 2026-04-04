@@ -739,14 +739,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </motion.div>
               <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
             </div>
-            {/* Home exit icon — no border, thick white, bigger, lower */}
+            {/* Home exit icon — no border, thick white, much larger, lower */}
             <button
               type="button"
               onClick={handleClose}
-              className="mt-6 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
+              className="mt-10 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
               aria-label="go home"
             >
-              <Home size={28} strokeWidth={3} style={{ color: "rgba(255,255,255,0.7)" }} />
+              <Home size={38} strokeWidth={3} style={{ color: "rgba(255,255,255,0.85)" }} />
             </button>
           </div>
         )}

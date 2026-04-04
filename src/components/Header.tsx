@@ -173,8 +173,8 @@ const Header = () => {
         className="sticky top-0"
         style={{
           zIndex: 9990,
-          background: "linear-gradient(to bottom, #000000 0%, #000000 50%, rgba(0,0,0,0.95) 60%, rgba(0,0,0,0.8) 75%, rgba(0,0,0,0.4) 90%, transparent 100%)",
-          paddingBottom: 28,
+          background: "linear-gradient(to bottom, #000000 0%, #000000 60%, rgba(0,0,0,0.97) 70%, rgba(0,0,0,0.88) 80%, rgba(0,0,0,0.6) 90%, transparent 100%)",
+          paddingBottom: 40,
         }}
       >
         <TopGradientBar />
@@ -203,7 +203,9 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5 rounded-xl px-4 py-2.5"
+            <button
+              onClick={() => navigate("/top-ups")}
+              className="flex items-center gap-1.5 rounded-xl px-4 py-2.5 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "2px solid rgba(0,224,255,0.25)",
@@ -211,7 +213,7 @@ const Header = () => {
             >
               <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
               <span className="text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
-            </div>
+            </button>
 
             <button
               ref={menuBtnRef}

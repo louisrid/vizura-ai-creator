@@ -311,7 +311,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-4 pb-[200px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-[14px] md:px-8 pt-6 pb-[200px]">
         <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -326,7 +326,7 @@ const Index = () => {
                 layout
                 className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden"
                 style={{
-                  width: photoRatio === "9:16" ? "10rem" : "100%",
+                  width: "100%",
                   maxWidth: "100%",
                   borderRadius: 16,
                   border: "2px solid rgba(255,255,255,0.08)",
@@ -356,11 +356,11 @@ const Index = () => {
               </motion.section>
             </div>
           </div>
-
           {/* Right: controls */}
           <div className="md:col-span-3 space-y-6">
             {/* Character select — always visible */}
-            <div>
+            <div className="relative">
+              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">select character</span>
               <label className="relative block">
                 <select
@@ -396,8 +396,9 @@ const Index = () => {
               )}
             </div>
 
-            {/* Type + Ratio toggles */}
-            <div className="flex gap-6">
+            <div className="relative">
+              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
+              <div className="flex gap-6">
               <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
               <PillToggle
                 label="ratio"
@@ -405,10 +406,12 @@ const Index = () => {
                 value={photoRatio}
                 onChange={setPhotoRatio}
               />
+              </div>
             </div>
 
             {/* Prompt */}
-            <div>
+            <div className="relative">
+              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
