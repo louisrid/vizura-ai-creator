@@ -636,7 +636,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-[15px] font-[900] lowercase text-white/70">30 gems</span>
             </div>
           )}
-          <p className="mt-6 text-[14px] font-[800] lowercase text-white/70">tap to continue</p>
+          <motion.p
+            className="mt-6 text-[14px] font-[800] lowercase"
+            style={{ color: "rgba(255,255,255,0.4)" }}
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          >tap to continue</motion.p>
         </button>
       );
     }
