@@ -218,7 +218,7 @@ const ProgressBarLoader = ({
             />
           </div>
           <div className="flex justify-end">
-            <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums text-white/60">{pct}%</span>
+            <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums" style={{ color: "rgba(255,255,255,0.4)" }}>{pct}%</span>
           </div>
         </motion.div>
 

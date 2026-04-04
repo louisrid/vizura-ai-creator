@@ -707,7 +707,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Skip button removed */}
 
         {/* Content area */}
-        <div className="absolute inset-0 flex items-center justify-center px-6">
+        <div className="absolute inset-0 flex items-center px-6" style={{ justifyContent: "center", paddingBottom: "22%" }}>
           <div className="w-full max-w-sm mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
