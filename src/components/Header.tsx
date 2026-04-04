@@ -192,12 +192,12 @@ const Header = () => {
                   width: 28,
                   height: 28,
                   borderRadius: "50%",
-                  backgroundColor: subscribed ? "rgba(0,224,255,0.12)" : "rgba(255,255,255,0.08)",
-                  border: `1.5px solid ${subscribed ? "rgba(0,224,255,0.3)" : "rgba(255,255,255,0.15)"}`,
+                  backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
+                  border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
                 }}
                 aria-label="my account"
               >
-                <User size={14} strokeWidth={2.5} style={{ color: subscribed ? "#00e0ff" : "#ffffff" }} />
+                <User size={14} strokeWidth={2.5} style={{ color: subscribed ? "#22c55e" : "#ffffff" }} />
               </button>
             )}
           </div>
