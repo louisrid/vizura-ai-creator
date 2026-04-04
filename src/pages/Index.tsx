@@ -357,7 +357,7 @@ const Index = () => {
             </div>
           </div>
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-6">
+          <div className="md:col-span-3 space-y-8">
             {/* Character select — always visible */}
             <div className="relative">
               <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
