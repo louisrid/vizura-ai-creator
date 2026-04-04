@@ -49,7 +49,11 @@ const FreshLoadRedirect = () => {
     }
 
     // Logged-out users already on "/" but refreshed — reset flags so animation replays
-    if (!user && location.pathname === "/") {
+    // BUT skip if this is an OAuth return (tokens in URL)
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const isOAuthReturn = hash.includes("access_token") || search.includes("code=") || search.includes("access_token");
+    if (!user && location.pathname === "/" && !isOAuthReturn) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
     }
