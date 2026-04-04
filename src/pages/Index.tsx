@@ -43,7 +43,7 @@ const PillToggle = ({ label, options, value, onChange, renderOption }: {
   renderOption?: (opt: string) => React.ReactNode;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
+    <span className="text-xs font-[900] lowercase text-white">{label}</span>
     <div className="flex flex-wrap gap-1.5">
       {options.map((opt) => (
         <button
