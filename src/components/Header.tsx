@@ -103,9 +103,9 @@ const Header = () => {
             onClick={() => setOpen(!open)}
             className="flex items-center justify-center active:scale-95 transition-transform duration-150"
             style={{
-              width: 30,
-              height: 30,
-              borderRadius: 8,
+              width: 36,
+              height: 36,
+              borderRadius: 10,
               backgroundColor: "#1a1a1a",
               border: "2px solid #222",
             }}
