@@ -57,7 +57,7 @@ const ChooseFace = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
-  const [rerolling] = useState(false);
+  
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
