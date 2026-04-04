@@ -234,15 +234,15 @@ const CharacterDetail = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       {/* Extra top padding under back arrow */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-6 pb-[400px] md:hidden">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[400px] md:hidden">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>
       </main>
 
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-6 pb-[400px]">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-4 pb-[400px]">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>
