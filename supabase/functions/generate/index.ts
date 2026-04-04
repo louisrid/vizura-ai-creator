@@ -400,11 +400,11 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  slim: "slim toned body, smaller chest, narrow waist, lean figure",
-  regular: "soft feminine body, large bust, defined waist, medium build",
-  average: "soft feminine body, large bust, defined waist, medium build",
-  curvy: "curvy full body, very large bust, wide hips, thick thighs",
-  thick: "curvy full body, very large bust, wide hips, thick thighs",
+  slim: "slim toned body, smaller chest, narrow waist, lean athletic figure, visible collarbones, slender arms and legs",
+  regular: "soft feminine body, shapely figure, medium-large bust, defined waist, feminine hips, balanced proportions",
+  average: "soft feminine body, shapely figure, medium-large bust, defined waist, feminine hips, balanced proportions",
+  curvy: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
+  thick: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -541,13 +541,12 @@ serve(async (req) => {
     );
 
     /* ── ANGLE + BODY GENERATION FLOW ── */
-    const bodyTypeInput = body?.body_type || "regular";
     if (generateAngles && selectedFaceUrl) {
       console.log("=== ANGLE + BODY GENERATION ===");
       console.log("Face URL:", selectedFaceUrl.slice(0, 80));
-      console.log("Body type:", bodyTypeInput);
 
-      // If character_id provided, build rich traits from DB
+      // Always read body type from DB — never trust frontend
+      let dbBodyType = "regular";
       let traits = prompt;
       if (angleCharacterId) {
         const { data: charData } = await adminClient
@@ -558,12 +557,14 @@ serve(async (req) => {
           .single();
         if (charData) {
           traits = buildCharacterTraits(charData);
+          dbBodyType = (charData.body || "regular").toLowerCase();
           console.log("Built character traits from DB:", traits.slice(0, 120));
+          console.log("Body type from DB:", dbBodyType);
         }
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, traits, bodyTypeInput, Deno.env.get("XAI_API_KEY")!, adminClient, userId
+        selectedFaceUrl, traits, dbBodyType, Deno.env.get("XAI_API_KEY")!, adminClient, userId
       );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
