@@ -14,6 +14,8 @@ const Header = () => {
   const { user, loading, signOut } = useAuth();
   const { gems } = useGems();
   const { subscribed } = useSubscription();
+  const [resolvedUserId, setResolvedUserId] = useState<string | null>(user?.id ?? null);
+  const [authReady, setAuthReady] = useState(false);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
