@@ -97,7 +97,7 @@ const Header = () => {
             vizura
           </button>
           {/* User status icon — right of logo */}
-          {!loading && !!user?.id && (
+          {(resolvedUserId || (!loading && user?.id)) && authReady && (
             <button
               onClick={() => navigate("/account")}
               className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
@@ -105,12 +105,12 @@ const Header = () => {
                 width: 28,
                 height: 28,
                 borderRadius: "50%",
-                backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
-                border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
+                backgroundColor: subscribed ? "hsl(var(--gem-green) / 0.12)" : "hsl(var(--foreground) / 0.08)",
+                border: `1.5px solid ${subscribed ? "hsl(var(--gem-green) / 0.3)" : "hsl(var(--foreground) / 0.15)"}`,
               }}
               aria-label="my account"
             >
-              <User size={14} strokeWidth={2.5} style={{ color: userIconColor }} />
+              <User size={14} strokeWidth={2.5} style={{ color: subscribed ? "hsl(var(--gem-green))" : "hsl(var(--foreground))" }} />
             </button>
           )}
         </div>
