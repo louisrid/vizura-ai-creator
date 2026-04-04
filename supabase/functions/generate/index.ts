@@ -14,10 +14,10 @@ const corsHeaders = {
 
 /* ── prompt constants ──────────────────────────────────── */
 const QUALITY_SUFFIX =
-  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
+  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
+  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, glossy shiny skin, oily skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
 
 const SELFIE_PREFIX =
   "front camera perspective, slight wide angle distortion, casual angle, arm extended, iPhone selfie";
@@ -27,10 +27,10 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, youthful 18 to 23 look, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism";
+  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism, natural matte skin, no glossy or oily skin, realistic skin texture";
 
 const FACE_NEGATIVE =
-  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, revealing clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, DSLR look, bokeh, studio glamour lighting, airbrushed plastic skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, AI generated look.";
+  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, revealing clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, DSLR look, bokeh, studio glamour lighting, airbrushed plastic skin, glossy shiny skin, oily skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, AI generated look.";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -96,9 +96,9 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 23) return "fresh youthful 18 to 23 appearance, smooth skin, lively young energy, attractive young-adult features, no mature or aged traits, softly defined features, bright eyes, healthy youthful face";
-  if (num <= 28) return "young adult features, smooth skin, attractive youthful appearance, slightly more defined bone structure while still clearly young";
-  return "young adult features, slightly more defined cheekbones, still youthful skin, mid twenties look, subtle maturity";
+  if (isNaN(num) || num <= 23) return "baby face, very young looking 18 to 20 years old, soft rounded youthful features, no mature bone structure, no defined cheekbones, smooth flawless skin with zero fine lines, bright wide innocent eyes, small soft nose, full soft lips, round soft jawline, no angular features, teenager energy, looks like she just turned 18, plump youthful cheeks, no hollowness in face";
+  if (num <= 28) return "young adult 24 to 28, slightly more defined bone structure than a teenager, still youthful smooth skin, attractive young woman, subtle cheekbone definition, bright eyes";
+  return "young adult features, more defined cheekbones, still youthful skin, mid to late twenties look, subtle maturity while still attractive";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -156,7 +156,13 @@ function buildCharacterTraits(char: any): string {
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair past the shoulders with a full straight fringe across the forehead`.trim());
+    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair past the shoulders with a full straight fringe across the forehead, IMPORTANT: must have visible bangs fringe across forehead in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "straight") {
+    parts.push(`long straight ${hairColour} hair, no bangs, no fringe, hair parted naturally, IMPORTANT: must be straight hair with no curls or waves in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "curly") {
+    parts.push(`${hairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "short") {
+    parts.push(`short ${hairColour} hair, IMPORTANT: must have short hair in every image`.trim());
   } else if (hairStyle || hairColour) {
     parts.push(`${hairStyle} ${hairColour} hair`.trim());
   }
@@ -336,12 +342,12 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
   const variations = [
-    "diamond face shape, high cheekbones, softly pointed chin, elegant jawline, full lips, refined small nose, large almond eyes, softly arched brows, polished hair visible over shoulders",
-    "oval face, sculpted yet youthful jawline, defined cupid's bow lips, straight refined nose, bright hooded eyes, side-swept styled hair visible over one shoulder",
-    "heart-shaped face, delicate tapered chin, plush lips, petite nose, wide bright eyes, softly layered hair parted in the middle and falling on both sides",
+    "diamond face shape, high cheekbones, softly pointed chin, elegant jawline, full lips, refined small nose, large almond eyes, softly arched brows, EXACT SAME hair style and colour as described",
+    "oval face, sculpted yet youthful jawline, defined cupid's bow lips, straight refined nose, bright hooded eyes, EXACT SAME hair style and colour as described",
+    "heart-shaped face, delicate tapered chin, plush lips, petite nose, wide bright eyes, EXACT SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear glowing skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
+  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear matte skin, natural skin texture, no glossy or oily skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -394,11 +400,11 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  slim: "slim toned body, smaller chest, narrow waist",
-  regular: "soft feminine body, large bust, defined waist",
-  average: "soft feminine body, large bust, defined waist",
-  curvy: "curvy full body, very large bust, wide hips",
-  thick: "curvy full body, very large bust, wide hips",
+  slim: "slim toned body, smaller chest, narrow waist, lean figure",
+  regular: "soft feminine body, large bust, defined waist, medium build",
+  average: "soft feminine body, large bust, defined waist, medium build",
+  curvy: "curvy full body, very large bust, wide hips, thick thighs",
+  thick: "curvy full body, very large bust, wide hips, thick thighs",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -415,7 +421,7 @@ async function generateAngleAndBody(
 
   try {
     console.log("Generating 3/4 angle...");
-    const anglePrompt = `Same person exactly as in the reference image, three-quarter angle view, slight turn to the right, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const anglePrompt = `Same person exactly as in the reference image, three-quarter angle view, slight turn to the right, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -428,7 +434,7 @@ async function generateAngleAndBody(
   try {
     console.log("Generating full-body anchor...");
     const bodyDesc = BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, full body head to toe, neutral standing pose, white crew neck t-shirt and blue jeans, white background, ${bodyDesc}, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
+    const bodyPrompt = `Same person exactly as in the reference image, full body head to toe, three-quarter angle pose slightly turned, wearing a low cut crop top and tight black leggings, showing chest size and butt shape clearly, ${bodyDesc}, white background, natural matte skin, no glossy or oily skin, ${characterTraits}, photorealistic, natural lighting. ${FACE_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
