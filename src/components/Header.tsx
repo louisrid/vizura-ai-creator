@@ -66,7 +66,7 @@ const Header = () => {
       <TopGradientBar />
       <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-4 pb-2">
         <div className="flex items-center gap-2.5">
-          <button onClick={() => handleNav("/")} className="text-[19px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+          <button onClick={() => handleNav("/")} className="text-[22px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
             vizura
           </button>
           {/* User status icon — right of logo */}
@@ -89,32 +89,32 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-2.5" ref={menuRef}>
-          <div className="flex items-center gap-1.5 rounded-xl px-3.5 py-2"
+          <div className="flex items-center gap-1.5 rounded-xl px-4 py-2.5"
             style={{
               backgroundColor: "rgba(0,224,255,0.08)",
               border: "2px solid rgba(0,224,255,0.25)",
             }}
           >
-            <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-            <span className="text-[13px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+            <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+            <span className="text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
           </div>
 
           <button
             onClick={() => setOpen(!open)}
             className="flex items-center justify-center active:scale-95 transition-transform duration-150"
             style={{
-              width: 36,
-              height: 36,
+              width: 40,
+              height: 40,
               borderRadius: 10,
               backgroundColor: "#1a1a1a",
               border: "2px solid #222",
             }}
             aria-label="open menu"
           >
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-              <rect y="0" width="16" height="2.2" rx="1" fill="white" />
-              <rect y="4.9" width="16" height="2.2" rx="1" fill="white" />
-              <rect y="9.8" width="16" height="2.2" rx="1" fill="white" />
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+              <rect y="0" width="18" height="2.4" rx="1.2" fill="white" />
+              <rect y="5.8" width="18" height="2.4" rx="1.2" fill="white" />
+              <rect y="11.6" width="18" height="2.4" rx="1.2" fill="white" />
             </svg>
           </button>
 

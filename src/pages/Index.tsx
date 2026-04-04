@@ -182,7 +182,7 @@ const Index = () => {
   const [fadingBack, setFadingBack] = useState(false);
 
   const [photoType, setPhotoType] = useState("selfie");
-  const [photoRatio, setPhotoRatio] = useState("4:5");
+  const [photoRatio, setPhotoRatio] = useState("3:4");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const [referenceStrength, setReferenceStrength] = useState(50);
@@ -235,7 +235,7 @@ const Index = () => {
     setPrompt("");
   };
 
-  const previewAspect = photoRatio === "9:16" ? "9/16" : "4/5";
+  const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -339,8 +339,16 @@ const Index = () => {
                     <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#222" }}>
-                        <span className="text-2xl">📷</span>
+                      <div
+                        className="flex items-center justify-center rounded-full"
+                        style={{
+                          width: 72,
+                          height: 72,
+                          backgroundColor: "rgba(250,204,21,0.08)",
+                          border: "2.5px solid #facc15",
+                        }}
+                      >
+                        <span className="text-3xl">🪄</span>
                       </div>
                     </div>
                   )}
@@ -350,7 +358,7 @@ const Index = () => {
           </div>
 
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-5">
+          <div className="md:col-span-3 space-y-6">
             {/* Character select — always visible */}
             <div>
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">select character</span>
@@ -393,7 +401,7 @@ const Index = () => {
               <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
               <PillToggle
                 label="ratio"
-                options={["4:5", "9:16"]}
+                options={["3:4", "9:16"]}
                 value={photoRatio}
                 onChange={setPhotoRatio}
               />
