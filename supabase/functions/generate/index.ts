@@ -117,6 +117,18 @@ function extractXaiImageUrl(data: any): string | null {
   return null;
 }
 
+function stripFacePromptBodyLanguage(prompt: string): string {
+  return prompt
+    .replace(/\b(?:slim|average|regular|curvy|thick)\s+body\s+type\b/gi, "")
+    .replace(/\b(?:small|medium|large)\s+chest\b/gi, "")
+    .replace(/\b(?:large\s+bust(?:\s+[a-z-]+)?|smaller\s+chest|wide\s+hips|defined\s+waist|narrow\s+waist|g-h\s+cup|dd)\b/gi, "")
+    .replace(/\s+,/g, ",")
+    .replace(/,{2,}/g, ",")
+    .replace(/\s{2,}/g, " ")
+    .trim()
+    .replace(/^,|,$/g, "");
+}
+
 /* ── build character trait string from DB record ───────── */
 function buildCharacterTraits(char: any): string {
   const parts: string[] = [];
@@ -337,7 +349,8 @@ async function generateFaceImages(
   // Generate faces sequentially to avoid rate limits and timeouts
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
-    const fullPrompt = `${prompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
+    const fullPrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;

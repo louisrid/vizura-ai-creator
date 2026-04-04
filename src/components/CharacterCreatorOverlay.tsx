@@ -103,13 +103,11 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
   const buildPrompt = () => {
     const sk = values.skin || "tan";
-    const b = values.bodyType || "regular";
-    const ch = values.chest || "medium";
     const hs = values.hairStyle || "straight";
     const hc = values.hairColour || "brunette";
     const e = values.eyes || "brown";
     const m = values.makeup || "natural";
-    let prompt = `photorealistic portrait, woman, ${sk} skin, ${b} body type, ${ch} chest, ${hs} ${hc} hair, ${e} eyes, ${m} makeup`;
+    let prompt = `photorealistic portrait, woman, ${sk} skin, ${hs} ${hc} hair, ${e} eyes, ${m} makeup`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
