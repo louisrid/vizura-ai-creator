@@ -138,26 +138,36 @@ const ChooseFace = () => {
       setShowSignIn(false);
 
       const invokeAndParse = async (body: Record<string, unknown>, allowRetry = true): Promise<any> => {
-        const { data, error: fnError } = await supabase.functions.invoke("generate", { body });
-        if (fnError) {
-          let parsed: any = null;
-          try {
-            if (typeof fnError === "object" && (fnError as any)?.context) {
-              parsed = await (fnError as any).context.json().catch(() => null);
-            }
-          } catch {}
+        // Use fetch directly instead of supabase.functions.invoke to avoid
+        // connection issues when the tab is backgrounded
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        if (!token) throw new Error("Unauthorized");
 
-          if (allowRetry && parsed?.error === "Unauthorized") {
-            const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
-            if (!refreshError && refreshed.session) {
-              return invokeAndParse(body, false);
-            }
+        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify(body),
+          // No AbortSignal — let the request complete even if tab is backgrounded
+        });
+
+        const result = await response.json();
+
+        if (!response.ok && allowRetry && result?.error === "Unauthorized") {
+          const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+          if (!refreshError && refreshed.session) {
+            return invokeAndParse(body, false);
           }
-
-          if (parsed) return parsed;
-          throw fnError;
         }
-        return data;
+
+        return result;
       };
 
       let result = await invokeAndParse({ prompt, free_gen: true });
@@ -444,12 +454,12 @@ const ChooseFace = () => {
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
             >
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
               >
                 <ProgressBarLoader
                   duration={120000}

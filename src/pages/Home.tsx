@@ -320,7 +320,7 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase text-white flex items-center gap-1.5">🖼️ latest photos</h2>
-              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase" style={{ color: "#facc15" }}>
+              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
                 see all →
               </button>
             </div>
@@ -359,7 +359,7 @@ const Home = () => {
           <section>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase text-white flex items-center gap-1.5">🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase" style={{ color: "#facc15" }}>
+              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
                 manage →
               </button>
             </div>

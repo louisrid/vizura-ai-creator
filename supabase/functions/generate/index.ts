@@ -4,7 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /* ── config ─────────────────────────────────────────────── */
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const XAI_REQUEST_TIMEOUT_MS = 60_000;
+const XAI_REQUEST_TIMEOUT_MS = 120_000;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

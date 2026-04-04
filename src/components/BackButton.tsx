@@ -23,7 +23,7 @@ const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
       style={{
         width: 40,
         height: 40,
-        borderRadius: "50%",
+        borderRadius: 12,
         backgroundColor: "#facc15",
       }}
       aria-label="go back"
