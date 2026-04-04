@@ -26,6 +26,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 
 /* Routes that should NOT redirect to / on fresh load */
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/choose-face", "/characters"];
+const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
   EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "?"));
@@ -40,24 +41,44 @@ const FreshLoadRedirect = () => {
     if (hasRedirected.current || loading) return;
     hasRedirected.current = true;
 
+    const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
+
     // Logged-in users: let them stay wherever they are
     // Only redirect logged-out users on non-exempt deep links
-    if (!user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
+    if (!user && !pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
       navigate("/", { replace: true });
     }
 
     // Logged-out users already on "/" but refreshed — reset flags so animation replays
-    // BUT skip if this is an OAuth return (tokens in URL)
-    const hash = window.location.hash;
-    const search = window.location.search;
-    const isOAuthReturn = hash.includes("access_token") || search.includes("code=") || search.includes("access_token");
-    if (!user && location.pathname === "/" && !isOAuthReturn) {
+    // BUT skip if this is a pending auth handoff
+    if (!user && location.pathname === "/" && !pendingPostAuthHome) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
     }
   }, [loading, location.pathname, navigate, user]);
+
+  return null;
+};
+
+const PostAuthHomeRedirect = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (loading || !user) return;
+    if (sessionStorage.getItem(POST_AUTH_HOME_KEY) !== "1") return;
+
+    sessionStorage.removeItem(POST_AUTH_HOME_KEY);
+    sessionStorage.removeItem("vizura_auto_opened");
+    sessionStorage.removeItem("vizura_creator_dismissed");
+    sessionStorage.removeItem("vizura_guided_flow_state");
+    sessionStorage.removeItem("vizura_resume_after_auth");
+
+    navigate("/", { replace: true, state: {} });
+  }, [loading, user, navigate, location.key]);
 
   return null;
 };
@@ -148,6 +169,7 @@ const App = () => (
           <SubscriptionProvider>
             <BrowserRouter>
               <Sonner />
+              <PostAuthHomeRedirect />
               <FreshLoadRedirect />
               <ScrollToTop />
               <AppRoutes />

@@ -795,17 +795,21 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
+    sessionStorage.setItem("vizura_post_auth_home", "1");
+    sessionStorage.removeItem("vizura_resume_after_auth");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
         extraParams: { prompt: "select_account" },
       });
       if (result?.error) {
+        sessionStorage.removeItem("vizura_post_auth_home");
         toast.error("google sign in failed");
         setGoogleLoading(false);
         return;
       }
     } catch (err: any) {
+      sessionStorage.removeItem("vizura_post_auth_home");
       toast.error(err.message || "sign in failed");
       setGoogleLoading(false);
     }

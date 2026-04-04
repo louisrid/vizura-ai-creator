@@ -19,6 +19,11 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
+      sessionStorage.removeItem("vizura_resume_after_auth");
+      sessionStorage.removeItem("vizura_auto_opened");
+      sessionStorage.removeItem("vizura_creator_dismissed");
+      sessionStorage.removeItem("vizura_guided_flow_state");
+      sessionStorage.removeItem("vizura_post_auth_home");
       navigate(redirectTo, { replace: true });
     }
   }, [user, navigate, redirectTo]);
@@ -28,6 +33,7 @@ const Auth = () => {
     const search = window.location.search;
     const hasOAuthReturn = hash.includes("access_token") || search.includes("code=");
     if (hasOAuthReturn) {
+      sessionStorage.setItem("vizura_post_auth_home", "1");
       setSubmitting(true);
     }
   }, []);
@@ -61,6 +67,8 @@ const Auth = () => {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
+    sessionStorage.setItem("vizura_post_auth_home", "1");
+    sessionStorage.removeItem("vizura_resume_after_auth");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
@@ -69,6 +77,7 @@ const Auth = () => {
         },
       });
       if (result?.error) {
+        sessionStorage.removeItem("vizura_post_auth_home");
         toast.error("google sign in failed");
         setGoogleLoading(false);
         return;
@@ -77,6 +86,7 @@ const Auth = () => {
         navigate("/", { replace: true });
       }
     } catch (err: any) {
+      sessionStorage.removeItem("vizura_post_auth_home");
       toast.error(err.message || "google sign in failed");
       setGoogleLoading(false);
     }

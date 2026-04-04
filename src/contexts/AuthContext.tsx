@@ -88,14 +88,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const initializeAuth = async () => {
       const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-        if (event === "SIGNED_OUT" || !session?.user) {
+        const nextUser = session?.user ?? null;
+
+        if (event === "SIGNED_OUT" || !nextUser) {
           setUser(null);
           clearSpecialAccountCache();
           return;
         }
 
-        if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-          const nextUser = session?.user ?? null;
+        if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
           setUser(nextUser);
           syncSpecialAccountCache(nextUser);
           void hydrateUser(nextUser);
