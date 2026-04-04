@@ -324,17 +324,12 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate 3/4 angle + full-body anchor (BLOCKING with loading screen)
+    // Fire angle + body generation in background (non-blocking)
     if (faceUrl && cId) {
-      setAnchorLoading(true);
-      setAnchorApiDone(false);
-      setAnchorBarComplete(false);
-
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
       const angleUserId = currentUser.id;
 
-      // Get body type from session storage draft
       let bodyType = "regular";
       try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -343,7 +338,6 @@ const ChooseFace = () => {
           bodyType = draft.bodyType || "regular";
         }
       } catch {}
-      // Also check the character record we just saved
       try {
         const { data: charRecord } = await supabase
           .from("characters")
@@ -353,18 +347,17 @@ const ChooseFace = () => {
         if (charRecord?.body) bodyType = charRecord.body;
       } catch {}
 
-      try {
-        const { data: angleData } = await supabase.functions.invoke("generate", {
-          body: {
-            prompt: anglePrompt,
-            generate_angles: true,
-            selected_face_url: faceUrl,
-            body_type: bodyType,
-          },
-        });
-
+      // Don't await — let it run in background
+      supabase.functions.invoke("generate", {
+        body: {
+          prompt: anglePrompt,
+          generate_angles: true,
+          selected_face_url: faceUrl,
+          body_type: bodyType,
+        },
+      }).then(({ data: angleData }) => {
         if (angleData?.angle_url || angleData?.body_anchor_url) {
-          await supabase
+          supabase
             .from("characters")
             .update({
               face_angle_url: angleData.angle_url || null,
@@ -373,19 +366,8 @@ const ChooseFace = () => {
             .eq("id", angleCharacterId)
             .eq("user_id", angleUserId);
         }
-      } catch (e) {
+      }).catch((e) => {
         console.error("Angle + body generation failed:", e);
-      }
-
-      setAnchorApiDone(true);
-      // Wait for bar to complete
-      await new Promise<void>((resolve) => {
-        const check = () => {
-          // anchorBarComplete might not be set yet, use a polling approach
-          resolve();
-        };
-        // Give the bar a moment, then proceed
-        setTimeout(check, 1500);
       });
     }
 
