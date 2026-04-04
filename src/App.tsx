@@ -26,6 +26,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 
 /* Routes that should NOT redirect to / on fresh load */
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/choose-face", "/characters"];
+const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
   EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "?"));
