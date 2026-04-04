@@ -133,7 +133,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-14 pb-[400px]">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-4 pb-[400px]">
           <div className="flex items-center gap-3 mb-5">
             <BackButton />
           </div>
@@ -173,9 +173,9 @@ const CharacterDetail = () => {
 
   const imgSlot = (url: string | null | undefined, label: string, caption: string, objectFit: "cover" | "contain" = "cover") => (
     <div className="flex flex-col items-center gap-1.5">
-    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center p-2" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit, borderRadius: 8 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
@@ -234,15 +234,15 @@ const CharacterDetail = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       {/* Extra top padding under back arrow */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-6 pb-[400px] md:hidden">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[400px] md:hidden">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>
       </main>
 
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-6 pb-[400px]">
-        <div className="flex items-center gap-3 mb-6">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-2xl px-8 pt-4 pb-[400px]">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content}</div>
