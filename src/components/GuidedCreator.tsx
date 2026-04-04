@@ -643,10 +643,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Cooking ── */
   const renderCooking = () => {
     if (cookingPhase === "loading") return (
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center w-full" onClick={() => {}} onClickCapture={() => {}}>
         <ProgressBarLoader
           duration={25000} phrases={COOKING_PHRASES} phraseInterval={5200}
-          requireTapToContinue expandTapTarget
+          requireTapToContinue={false}
           onComplete={() => setCookingPhase("success")}
         />
       </div>
@@ -654,7 +654,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (cookingPhase === "success" || cookingPhase === "exiting") return (
       <motion.div
         key="cooking-success"
-        className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
+        className="fixed inset-0 z-[10000] flex flex-col items-center justify-center px-6"
         style={{ background: "hsl(140, 100%, 50%)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
