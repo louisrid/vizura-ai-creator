@@ -370,6 +370,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
+      window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();

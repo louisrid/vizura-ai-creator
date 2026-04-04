@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 /* ── config ─────────────────────────────────────────────── */
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
+const XAI_REQUEST_TIMEOUT_MS = 60_000;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,10 +27,10 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, happy pleasant smile or soft neutral expression, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, iPhone quality natural photo";
+  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, youthful 18 to 23 look, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism";
 
 const FACE_NEGATIVE =
-  "Do not generate ugly, overweight face, fat face, chubby face, aged appearance, wrinkles, frowning, moody expression, angry expression, sad expression, bare shoulders, no clothing, naked, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, AI generated look, DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin.";
+  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, revealing clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, DSLR look, bokeh, studio glamour lighting, airbrushed plastic skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, AI generated look.";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -95,9 +96,25 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 23) return "young fresh face, soft youthful bone structure, smooth skin, modern young vibe, very youthful baby face, soft round cheeks, small delicate chin, wide doe eyes, soft undefined jawline, smooth plump skin, teenage to early twenties look, gen-z youthful energy, looks like she just turned 18-19, no mature features";
-  if (num <= 28) return "youthful features, soft jawline, full cheeks, smooth skin, young-looking face, early twenties appearance, still baby-faced but slightly more defined";
+  if (isNaN(num) || num <= 23) return "fresh youthful 18 to 23 appearance, smooth skin, lively young energy, attractive young-adult features, no mature or aged traits, softly defined features, bright eyes, healthy youthful face";
+  if (num <= 28) return "young adult features, smooth skin, attractive youthful appearance, slightly more defined bone structure while still clearly young";
   return "young adult features, slightly more defined cheekbones, still youthful skin, mid twenties look, subtle maturity";
+}
+
+function extractXaiImageUrl(data: any): string | null {
+  const candidates = [
+    data?.data?.[0]?.url,
+    data?.images?.[0]?.url,
+    data?.output?.[0]?.url,
+  ];
+
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate.trim().length > 0) {
+      return candidate;
+    }
+  }
+
+  return null;
 }
 
 /* ── build character trait string from DB record ───────── */
@@ -216,6 +233,7 @@ async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | 
 
   const response = await fetch("https://api.x.ai/v1/images/generations", {
     method: "POST",
+    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
@@ -240,7 +258,7 @@ async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | 
 
   const data = await response.json();
   console.log("xAI response keys:", Object.keys(data));
-  return data?.data?.[0]?.url ?? null;
+  return extractXaiImageUrl(data);
 }
 
 /* ── xAI Grok: image edit with references ─────── */
@@ -273,6 +291,7 @@ async function xaiImageEdit(
 
   const response = await fetch("https://api.x.ai/v1/images/edits", {
     method: "POST",
+    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
@@ -293,7 +312,7 @@ async function xaiImageEdit(
 
   const data = await response.json();
   console.log("xAI edit response keys:", Object.keys(data));
-  return data?.data?.[0]?.url ?? null;
+  return extractXaiImageUrl(data);
 }
 
 /* ── generate face options (text-to-image, always 3:4) ── */
@@ -305,12 +324,12 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
   const variations = [
-    "diamond face shape, high cheekbones, pointed chin, full lips, small upturned nose, large almond eyes, thin arched eyebrows, hair flowing over shoulders clearly visible",
-    "oval face, defined cupid's bow lips, straight nose, sharp cheekbones, hooded eyes, angular jaw, hair swept to one side over shoulder clearly visible",
-    "heart-shaped face, plump bow lips, button nose, wide bright eyes, soft jawline, hair parted in middle falling on both sides clearly visible",
+    "diamond face shape, high cheekbones, softly pointed chin, elegant jawline, full lips, refined small nose, large almond eyes, softly arched brows, polished hair visible over shoulders",
+    "oval face, sculpted yet youthful jawline, defined cupid's bow lips, straight refined nose, bright hooded eyes, side-swept styled hair visible over one shoulder",
+    "heart-shaped face, delicate tapered chin, plush lips, petite nose, wide bright eyes, softly layered hair parted in the middle and falling on both sides",
   ];
 
-  const beautyCore = "extremely attractive gorgeous woman, instagram model beauty, stunningly beautiful, slim face, clear glowing skin, well-styled hair clearly visible and not hidden, modern youthful look, happy pleasant expression or soft gentle smile, wearing a plain white crew neck t-shirt";
+  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear glowing skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -612,15 +631,23 @@ serve(async (req) => {
 
       if (imageUrls.length === 0) throw new Error("No images generated");
 
-      await adminClient
+      const { error: profileUpdateError } = await adminClient
         .from("profiles")
         .update({ has_used_free_gen: true })
         .eq("user_id", userId);
 
+      if (profileUpdateError) {
+        console.warn("Failed to mark free generation usage:", profileUpdateError);
+      }
+
       if (clientIp !== "unknown") {
-        await adminClient
+        const { error: ipInsertError } = await adminClient
           .from("free_gen_ips")
-          .upsert({ ip_address: clientIp, user_id: userId }, { onConflict: "ip_address" });
+          .insert({ ip_address: clientIp, user_id: userId });
+
+        if (ipInsertError) {
+          console.warn("Failed to record free generation IP:", ipInsertError);
+        }
       }
 
       return new Response(
