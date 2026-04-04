@@ -189,6 +189,7 @@ function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
   characterTraits: string | null,
+  bodyType?: string,
 ): string {
   const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
   const parts: string[] = [];
@@ -197,6 +198,12 @@ function buildFinalPrompt(
   parts.push(scenePrompt);
   parts.push(perspective);
   parts.push(QUALITY_SUFFIX);
+  // Append body-type prompt modifier if available
+  if (bodyType) {
+    const bKey = bodyType.toLowerCase();
+    const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
+    if (modifier) parts.push(modifier);
+  }
   parts.push(NEGATIVE_INSTRUCTION);
 
   return parts.join(". ");
