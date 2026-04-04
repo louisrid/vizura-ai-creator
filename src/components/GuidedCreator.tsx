@@ -104,20 +104,20 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         disabled={disabled}
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
         style={{
-          width: 48, height: 48, borderRadius: 12,
-          backgroundColor: isForward ? "rgba(0,224,255,0.18)" : "rgba(0,224,255,0.06)",
-          border: isForward ? `2.5px solid rgba(0,224,255,0.45)` : `2px solid rgba(0,224,255,0.25)`,
+          width: 62, height: 62, borderRadius: 16,
+          backgroundColor: isForward ? CYAN : "rgba(0,224,255,0.08)",
+          border: isForward ? "none" : `2.5px solid rgba(0,224,255,0.3)`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#fff" : CYAN,
+          color: isForward ? "#000" : CYAN,
         }}
       >
         {direction === "left" ? (
-          <svg width="18" height="14" viewBox="0 0 20 16" fill="none">
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
             <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <svg width="18" height="14" viewBox="0 0 20 16" fill="none">
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
             <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
@@ -144,10 +144,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="flex w-full items-center justify-center"
     style={{
-      height: 40,
-      borderRadius: 10,
-      padding: "6px 12px",
-      fontSize: 14,
+      height: 50,
+      borderRadius: 12,
+      padding: "8px 14px",
+      fontSize: 16,
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -521,10 +521,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div className="flex w-full flex-col items-center">
           <span className="text-[64px] mb-5">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className={`mt-6 grid w-full gap-3 px-2 ${
-            trait.options.length === 4 ? "max-w-[20rem] grid-cols-2"
-              : trait.options.length === 2 ? "max-w-[16rem] grid-cols-2 mx-auto"
-              : "max-w-[22rem] grid-cols-3"
+          <div className={`mt-6 grid w-full gap-3.5 px-2 ${
+            trait.options.length === 4 ? "max-w-[21rem] grid-cols-2"
+              : trait.options.length === 2 ? "max-w-[17rem] grid-cols-2 mx-auto"
+              : "max-w-[23rem] grid-cols-3"
           }`}>
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
@@ -643,10 +643,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Cooking ── */
   const renderCooking = () => {
     if (cookingPhase === "loading") return (
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center w-full" onClick={() => {}} onClickCapture={() => {}}>
         <ProgressBarLoader
           duration={25000} phrases={COOKING_PHRASES} phraseInterval={5200}
-          requireTapToContinue expandTapTarget
+          requireTapToContinue={false}
           onComplete={() => setCookingPhase("success")}
         />
       </div>
@@ -654,7 +654,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (cookingPhase === "success" || cookingPhase === "exiting") return (
       <motion.div
         key="cooking-success"
-        className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6"
+        className="fixed inset-0 z-[10000] flex flex-col items-center justify-center px-6"
         style={{ background: "hsl(140, 100%, 50%)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
@@ -693,7 +693,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
         {canExitFlow && (
           <div className="absolute inset-x-0 z-20 flex justify-end px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
@@ -745,7 +744,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Arrow buttons — positioned below content */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ bottom: "8%" }}>
+          <div className="absolute inset-x-0 flex items-center justify-center gap-4" style={{ bottom: "10%" }}>
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
             </motion.div>
