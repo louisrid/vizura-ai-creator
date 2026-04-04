@@ -51,6 +51,7 @@ const ChooseFace = () => {
   const [loading, setLoading] = useState(true);
   const [apiDone, setApiDone] = useState(false);
   const [barComplete, setBarComplete] = useState(false);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
@@ -77,6 +78,8 @@ const ChooseFace = () => {
     if (hasInitRef.current) return;
     hasInitRef.current = true;
     if (faces.length > 0) {
+      setApiDone(true);
+      setBarComplete(true);
       setLoading(false);
       return;
     }
@@ -115,6 +118,7 @@ const ChooseFace = () => {
     setApiDone(false);
     setBarComplete(false);
     setCardsRevealed(false);
+    setGenerationError(null);
     try {
       if (!user) {
         setFaces([]);
@@ -161,7 +165,7 @@ const ChooseFace = () => {
 
       const imgs = result?.images || [];
       const nextFaces = imgs.slice(0, 3);
-      if (nextFaces.length === 0) throw new Error("No faces generated");
+      if (nextFaces.length < 3) throw new Error("generation incomplete");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
@@ -172,6 +176,7 @@ const ChooseFace = () => {
       if (msg.includes("Free generation") || msg.includes("IP_USED") || msg.includes("FREE_GEN_USED")) {
         setShowPaywall(true);
       } else {
+        setGenerationError("generation failed");
         toast.error("generation failed, please try again");
       }
       setLoading(false);
@@ -539,7 +544,17 @@ const ChooseFace = () => {
         {!loading && faces.length === 0 && !showSignIn && (
           <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
             <div className="mt-16 flex flex-col items-center gap-4">
-              <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no faces generated yet</p>
+              <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>{generationError || "no faces generated yet"}</p>
+              {generationError && (
+                <button
+                  type="button"
+                  onClick={() => void generateFaces()}
+                  className="h-10 px-4 text-[12px] font-[900] lowercase"
+                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 10 }}
+                >
+                  try again
+                </button>
+              )}
             </div>
           </main>
         )}
