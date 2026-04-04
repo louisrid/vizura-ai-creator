@@ -63,6 +63,27 @@ const FreshLoadRedirect = () => {
   return null;
 };
 
+const PostAuthHomeRedirect = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (loading || !user) return;
+    if (sessionStorage.getItem(POST_AUTH_HOME_KEY) !== "1") return;
+
+    sessionStorage.removeItem(POST_AUTH_HOME_KEY);
+    sessionStorage.removeItem("vizura_auto_opened");
+    sessionStorage.removeItem("vizura_creator_dismissed");
+    sessionStorage.removeItem("vizura_guided_flow_state");
+    sessionStorage.removeItem("vizura_resume_after_auth");
+
+    navigate("/", { replace: true, state: {} });
+  }, [loading, user, navigate, location.key]);
+
+  return null;
+};
+
 const ScrollToTop = () => {
   const location = useLocation();
   const isFirst = useRef(true);
