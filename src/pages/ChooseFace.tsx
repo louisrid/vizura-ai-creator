@@ -25,6 +25,13 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
+const ANCHOR_GEN_PHRASES = [
+  "building your character…",
+  "generating angles…",
+  "creating full body…",
+  "finalising…",
+];
+
 const SUCCESS_HOLD = 3500;
 
 const ChooseFace = () => {
