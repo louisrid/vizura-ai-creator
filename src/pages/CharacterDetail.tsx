@@ -86,7 +86,7 @@ const CharacterDetail = () => {
           <div className="flex items-center gap-3 mb-5">
             <BackButton />
           </div>
-          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "rgba(255,255,255,0.4)" }}>
             character not found
           </p>
         </main>
@@ -125,7 +125,7 @@ const CharacterDetail = () => {
       {isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>no photo</span>
+        <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
     </div>
   );
@@ -133,7 +133,7 @@ const CharacterDetail = () => {
   const content = (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(100,160,255,0.25)" }} className="p-5">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(100,170,255,0.25)" }} className="p-5">
         <h1 className="text-[30px] font-[900] lowercase tracking-tight text-white leading-none mb-5">
           {nameAge}
         </h1>
@@ -145,12 +145,12 @@ const CharacterDetail = () => {
       </div>
 
       {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #222" }} className="p-4">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(100,170,255,0.25)" }} className="p-4">
         <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
         <div className="flex flex-wrap gap-2">
           {traits.map((t) => (
             <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
-              <span className="block text-[9px] font-[800] uppercase leading-none mb-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>{t.label}</span>
+              <span className="block text-[9px] font-[800] uppercase leading-none mb-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
               <span className="block text-[13px] font-[800] lowercase text-white leading-none">{t.value}</span>
             </div>
           ))}
@@ -207,7 +207,7 @@ const CharacterDetail = () => {
               <h2 className="text-xl font-[900] lowercase text-white leading-[0.95] mb-2">
                 are you sure you want to<br />delete this character?
               </h2>
-              <p className="text-base font-[900] lowercase mb-10" style={{ color: "rgba(255,255,255,0.35)" }}>
+              <p className="text-base font-[900] lowercase mb-10" style={{ color: "rgba(255,255,255,0.4)" }}>
                 {character.name || "unnamed"}
               </p>
               <div className="flex gap-3 w-full max-w-xs">

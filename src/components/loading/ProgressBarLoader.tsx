@@ -218,7 +218,7 @@ const ProgressBarLoader = ({
             />
           </div>
           <div className="flex justify-end">
-            <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums text-white/60">{pct}%</span>
+            <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums" style={{ color: "rgba(255,255,255,0.4)" }}>{pct}%</span>
           </div>
         </motion.div>
 
@@ -232,7 +232,8 @@ const ProgressBarLoader = ({
             {isComplete && requireTapToContinue ? (
               <motion.p
                 key="tap-to-continue"
-                className="text-center text-[1.1rem] font-[900] lowercase text-white/60"
+                className="text-center text-[1.1rem] font-[900] lowercase"
+                style={{ color: "rgba(255,255,255,0.4)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}

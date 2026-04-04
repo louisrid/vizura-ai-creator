@@ -522,7 +522,11 @@ const ChooseFace = () => {
                 <span className="block">character</span>
                 <span className="block">created!</span>
               </p>
-              <p className="mt-4 text-sm font-[800] lowercase text-black/50">tap to continue</p>
+              <motion.p
+                className="mt-4 text-sm font-[800] lowercase text-black/50"
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              >tap to continue</motion.p>
             </motion.div>
           </motion.button>
         )}
@@ -638,7 +642,7 @@ const ChooseFace = () => {
       {!loading && faces.length === 0 && !showSignIn && (
         <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
           <div className="mt-16 flex flex-col items-center gap-4">
-            <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>no faces generated yet</p>
+            <p className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no faces generated yet</p>
           </div>
         </main>
       )}

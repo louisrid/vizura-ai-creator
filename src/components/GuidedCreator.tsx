@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Upload, Gem, Home } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { lovable } from "@/integrations/lovable/index";
@@ -42,7 +42,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[32px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[12px] font-[800] lowercase text-white/70";
+const HELPER_CLASS = "text-[12px] font-[800] lowercase" + " " + "text-white/40";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
@@ -394,7 +394,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
       setExitFade(true);
       window.setTimeout(() => {
         setExitFade(false);
@@ -479,7 +478,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center">
         <span className="text-[64px] mb-5">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
-        <p className="mt-5 text-[13px] font-[800] lowercase text-white/70">tap → to continue</p>
+        <motion.p
+          className="mt-5 text-[13px] font-[800] lowercase"
+          style={{ color: "rgba(255,255,255,0.4)" }}
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        >tap → to continue</motion.p>
       </div>
     );
 
@@ -629,10 +633,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">
               <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-[15px] font-[900] lowercase text-white/70">30 gems</span>
+              <span className="text-[15px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>30 gems</span>
             </div>
           )}
-          <p className="mt-6 text-[14px] font-[800] lowercase text-white/70">tap to continue</p>
+          <motion.p
+            className="mt-6 text-[14px] font-[800] lowercase"
+            style={{ color: "rgba(255,255,255,0.4)" }}
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          >tap to continue</motion.p>
         </button>
       );
     }
@@ -698,7 +707,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Skip button removed */}
 
         {/* Content area */}
-        <div className="absolute inset-0 flex items-center justify-center px-6">
+        <div className="absolute inset-0 flex items-center px-6" style={{ justifyContent: "center", paddingBottom: "22%" }}>
           <div className="w-full max-w-sm mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
@@ -746,7 +755,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               className="mt-10 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
               aria-label="go home"
             >
-              <Home size={38} strokeWidth={3} style={{ color: "rgba(255,255,255,0.85)" }} />
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+              </svg>
             </button>
           </div>
         )}
