@@ -486,8 +486,8 @@ serve(async (req) => {
         characterTraits = buildCharacterTraits(charData);
         // Collect all available face references
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
-        if (charData.face_side_url) faceImageUrls.push(charData.face_side_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
