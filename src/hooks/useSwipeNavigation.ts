@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MIN_SWIPE_DISTANCE = 50;
-const MAX_SWIPE_TIME = 400;
+const MIN_SWIPE_DISTANCE = 30;
+const MAX_SWIPE_TIME = 600;
 
 export function useSwipeNavigation() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export function useSwipeNavigation() {
     const onStart = (e: TouchEvent) => {
       const touch = e.touches[0];
       if (!touch) return;
-      const side = touch.clientX < window.innerWidth / 2 ? "left" : "right";
+      const side = touch.clientX < window.innerWidth * 0.6 ? "left" : "right";
       touchRef.current = { x: touch.clientX, y: touch.clientY, t: Date.now(), side };
     };
 

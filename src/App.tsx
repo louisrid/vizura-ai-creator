@@ -127,7 +127,7 @@ const AppRoutes = () => {
         className="pointer-events-none fixed inset-0 z-[2147483646] bg-black"
         initial={false}
         animate={{ opacity: blackoutActive ? 1 : 0 }}
-        transition={blackoutActive ? { duration: 0 } : { duration: 0.45, ease: "easeInOut" }}
+        transition={blackoutActive ? { duration: 0 } : { duration: 0.25, ease: "easeInOut" }}
       />
       <Header />
       <AnimatePresence mode="wait">
@@ -136,7 +136,7 @@ const AppRoutes = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <Routes location={location}>
             <Route path="/" element={<Home />} />

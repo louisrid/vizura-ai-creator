@@ -173,7 +173,7 @@ const Header = () => {
         className="sticky top-0"
         style={{
           zIndex: 9990,
-          background: "linear-gradient(to bottom, #000 0%, #000 40%, rgba(0,0,0,0.92) 55%, rgba(0,0,0,0.75) 68%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.25) 90%, transparent 100%)",
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.15) 80%, transparent 100%)",
           paddingBottom: 56,
         }}
       >
@@ -205,10 +205,11 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
+              className="flex items-center gap-1 px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "1.5px solid rgba(0,224,255,0.25)",
+                borderRadius: 10,
               }}
             >
               <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />

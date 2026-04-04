@@ -582,6 +582,16 @@ serve(async (req) => {
         } else {
           console.log("Saved generated references to character:", angleCharacterId);
         }
+
+        // Also save angle + body images to generations for storage/homepage visibility
+        const refUrls = [angleUrl, bodyAnchorUrl].filter(Boolean) as string[];
+        if (refUrls.length > 0) {
+          await adminClient.from("generations").insert({
+            user_id: userId,
+            prompt: "character references",
+            image_urls: refUrls,
+          });
+        }
       }
 
       return new Response(
