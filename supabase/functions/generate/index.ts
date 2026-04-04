@@ -26,10 +26,10 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "professional passport photo style, front-facing headshot, plain white background, centred in frame, head and top of shoulders only, neutral expression, even soft lighting from the front, looking directly at camera, no shadows on background, consistent framing and zoom level across all images, identical white background, identical zoom, identical positioning, same photo booth setup, photorealistic portrait, high resolution";
+  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, happy pleasant smile or soft neutral expression, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, iPhone quality natural photo";
 
 const FACE_NEGATIVE =
-  "Do not generate ugly, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, or AI generated look.";
+  "Do not generate ugly, overweight face, fat face, chubby face, aged appearance, wrinkles, frowning, moody expression, angry expression, sad expression, bare shoulders, no clothing, naked, deformed, blurry, low quality, cartoon, anime, painting, illustration, drawing, text, watermark, busy background, colored background, outdoor background, extra fingers, mutated, disfigured, bad anatomy, AI generated look, DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin.";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
