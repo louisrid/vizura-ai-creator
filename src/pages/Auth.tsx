@@ -12,6 +12,7 @@ const Auth = () => {
   const { user, loading: authLoading, signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  // Default redirect target is always homepage
   const redirectTo = searchParams.get("redirect") || "/";
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);

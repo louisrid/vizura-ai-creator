@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Archive } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Archive, User } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
 
 const Header = () => {
@@ -11,6 +12,7 @@ const Header = () => {
   const location = useLocation();
   const { user, loading, signOut } = useAuth();
   const { gems } = useGems();
+  const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -40,11 +42,6 @@ const Header = () => {
     navigate("/");
   };
 
-  const userInitial = useMemo(() => {
-    if (!user?.email) return "?";
-    return user.email[0].toUpperCase();
-  }, [user?.email]);
-
   const menuItems = [
     { label: "home", path: "/", icon: Home, auth: false },
     { label: "create character", path: "/", icon: UserPlus, state: { openCreator: true }, auth: false },
@@ -54,6 +51,9 @@ const Header = () => {
     { label: "gems", path: "/top-ups", icon: Gem, auth: true },
     { label: "account", path: "/account", icon: Settings, auth: false },
   ];
+
+  // User icon color: green if subscribed, white otherwise
+  const userIconColor = subscribed ? "#22c55e" : "#ffffff";
 
   return (
     <header
@@ -65,9 +65,28 @@ const Header = () => {
     >
       <TopGradientBar />
       <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-5 pb-2">
-        <button onClick={() => handleNav("/")} className="text-[19px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
-          vizura
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button onClick={() => handleNav("/")} className="text-[19px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+            vizura
+          </button>
+          {/* User status icon — right of logo */}
+          {!loading && !!user?.id && (
+            <button
+              onClick={() => navigate("/account")}
+              className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
+                border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
+              }}
+              aria-label="my account"
+            >
+              <User size={14} strokeWidth={2.5} style={{ color: userIconColor }} />
+            </button>
+          )}
+        </div>
 
         <div className="flex items-center gap-2.5" ref={menuRef}>
           <div className="flex items-center gap-1.5 rounded-xl px-3 py-1.5"
@@ -79,22 +98,6 @@ const Header = () => {
             <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
             <span className="text-[11px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
           </div>
-
-          {!loading && !!user?.id && (
-            <button
-              onClick={() => navigate("/account")}
-              className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: "50%",
-                backgroundColor: "#facc15",
-              }}
-              aria-label="my account"
-            >
-              <span className="text-[11px] font-[900] text-black">{userInitial}</span>
-            </button>
-          )}
 
           <button
             onClick={() => setOpen(!open)}
