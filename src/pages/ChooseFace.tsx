@@ -337,6 +337,7 @@ const ChooseFace = () => {
           generate_angles: true,
           selected_face_url: faceUrl,
           body_type: bodyType,
+          angle_character_id: angleCharacterId,
         },
       }).then(async ({ data: angleData }) => {
         if (angleData?.angle_url || angleData?.body_anchor_url) {
