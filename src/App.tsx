@@ -41,20 +41,19 @@ const FreshLoadRedirect = () => {
     if (hasRedirected.current || loading) return;
     hasRedirected.current = true;
 
+    const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
+
     // Logged-in users: let them stay wherever they are
     // Only redirect logged-out users on non-exempt deep links
-    if (!user && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
+    if (!user && !pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
       navigate("/", { replace: true });
     }
 
     // Logged-out users already on "/" but refreshed — reset flags so animation replays
-    // BUT skip if this is an OAuth return (tokens in URL)
-    const hash = window.location.hash;
-    const search = window.location.search;
-    const isOAuthReturn = hash.includes("access_token") || search.includes("code=") || search.includes("access_token");
-    if (!user && location.pathname === "/" && !isOAuthReturn) {
+    // BUT skip if this is a pending auth handoff
+    if (!user && location.pathname === "/" && !pendingPostAuthHome) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
     }
