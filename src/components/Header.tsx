@@ -125,12 +125,12 @@ const Header = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.15, ease: "easeOut" }}
-                className="absolute right-[14px] top-full -mt-2 overflow-hidden"
+                className="absolute right-[14px] top-full -mt-4 overflow-hidden"
                 style={{
-                  width: 220,
+                  width: 190,
                   backgroundColor: "#000000",
                   border: "2px solid #222",
-                  borderRadius: 16,
+                  borderRadius: 14,
                   zIndex: 50,
                 }}
               >

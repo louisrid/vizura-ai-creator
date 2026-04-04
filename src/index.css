@@ -107,7 +107,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: none;
+    overscroll-behavior-y: auto;
     scroll-behavior: smooth;
   }
 
