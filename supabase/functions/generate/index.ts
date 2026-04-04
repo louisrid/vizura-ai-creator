@@ -442,8 +442,10 @@ async function generateAngleAndBody(
 
   try {
     console.log("Generating full-body anchor...");
-    const bodyDesc = BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted casual top and fitted pants, ${bodyDesc}, both arms fully visible hanging naturally at sides, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${characterTraits}, natural lighting. ${BODY_NEGATIVE}`;
+    const bodyKey = (bodyType || "regular").toLowerCase();
+    const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
+    const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
+    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted casual top and fitted pants, ${bodyDesc}, both arms fully visible hanging naturally at sides, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${characterTraits}, ${bodyModifier}, natural lighting. ${BODY_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
