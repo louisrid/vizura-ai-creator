@@ -329,17 +329,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onComplete(final);
   }, [onComplete]);
 
-  useEffect(() => {
-    if (cookingPhase !== "success") return;
-    const t = window.setTimeout(() => setCookingPhase("exiting"), COOKING_SUCCESS_HOLD);
-    return () => window.clearTimeout(t);
-  }, [cookingPhase]);
-
-  useEffect(() => {
-    if (cookingPhase !== "exiting") return;
-    const t = window.setTimeout(() => completeCookingFlow(), COOKING_EXIT_DURATION);
-    return () => window.clearTimeout(t);
-  }, [cookingPhase, completeCookingFlow]);
+  // success/exiting phases removed — cooking goes directly to completeCookingFlow
 
   const internalStep = step + offset;
   const isHeroSlide = internalStep === 0 && !skipWelcome;
@@ -649,36 +639,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  /* ── Cooking ── */
+  /* ── Cooking — loading bar only, no green screen ── */
   const renderCooking = () => {
     if (cookingPhase === "loading") return (
       <div className="flex flex-col items-center w-full" onClick={() => {}} onClickCapture={() => {}}>
         <ProgressBarLoader
           duration={25000} phrases={COOKING_PHRASES} phraseInterval={5200}
-          requireTapToContinue={false}
-          onComplete={() => setCookingPhase("success")}
+          requireTapToContinue={true}
+          expandTapTarget={true}
+          onComplete={() => completeCookingFlow()}
         />
       </div>
-    );
-    if (cookingPhase === "success" || cookingPhase === "exiting") return (
-      <motion.div
-        key="cooking-success"
-        className="fixed inset-0 z-[10000] flex flex-col items-center justify-center px-6"
-        style={{ background: "hsl(140, 100%, 50%)" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: cookingPhase === "exiting" ? 0 : 1 }}
-        transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.85 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-        >
-          <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight text-black">
-            <span className="block">character</span><span className="block">created!</span>
-          </p>
-        </motion.div>
-      </motion.div>
     );
     return null;
   };
