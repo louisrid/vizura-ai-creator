@@ -633,7 +633,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           {!isFirstCharacter && (
             <div className="mt-6 flex items-center gap-1.5">
               <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-[15px] font-[900] lowercase text-white/70">30 gems</span>
+              <span className="text-[15px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>30 gems</span>
             </div>
           )}
           <motion.p
