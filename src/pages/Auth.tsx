@@ -68,6 +68,7 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
+      // Always redirect back to /auth with the redirect param so post-login navigation works
       const redirectUri = `${window.location.origin}/auth?redirect=${encodeURIComponent(redirectTo)}`;
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: redirectUri,
@@ -76,6 +77,7 @@ const Auth = () => {
         toast.error("google sign in failed");
         setGoogleLoading(false);
       }
+      // If result.redirected, the browser navigates away — nothing more to do
     } catch (err: any) {
       toast.error(err.message || "google sign in failed");
       setGoogleLoading(false);
