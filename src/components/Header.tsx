@@ -205,7 +205,12 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
+              className="flex items-center gap-1 px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
+              style={{
+                ...({} as any),
+                borderRadius: 10,
+              }}
+
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "1.5px solid rgba(0,224,255,0.25)",
