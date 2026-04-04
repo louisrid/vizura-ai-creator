@@ -748,15 +748,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </motion.div>
               <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
             </div>
-            {/* Home exit icon — no border, thick white, much larger, lower */}
+            {/* Home exit icon — white, matching arrow stroke weight */}
             <button
               type="button"
               onClick={handleClose}
               className="mt-10 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
               aria-label="go home"
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 10.5L12 3l9 7.5" />
+                <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1V9.5" />
               </svg>
             </button>
           </div>

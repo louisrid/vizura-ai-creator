@@ -205,14 +205,14 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-2 rounded-xl px-5 py-3 active:scale-95 transition-transform duration-150"
+              className="flex items-center gap-1.5 rounded-xl px-4 py-2.5 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "2px solid rgba(0,224,255,0.25)",
               }}
             >
-              <Gem size={20} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-              <span className="text-[17px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+              <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+              <span className="text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
             </button>
 
             <button
@@ -220,15 +220,15 @@ const Header = () => {
               onClick={() => setOpen(!open)}
               className="flex items-center justify-center active:scale-95 transition-transform duration-150"
               style={{
-                width: 48,
-                height: 48,
+                width: 42,
+                height: 42,
                 borderRadius: 12,
                 backgroundColor: "#1a1a1a",
                 border: "2px solid #1a1a1a",
               }}
               aria-label="open menu"
             >
-              <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+              <svg width="18" height="14" viewBox="0 0 22 16" fill="none">
                 <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
                 <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
                 <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
