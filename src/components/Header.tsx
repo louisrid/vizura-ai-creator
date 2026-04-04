@@ -94,7 +94,7 @@ const Header = () => {
             vizura
           </button>
           {/* User status icon — right of logo */}
-          {(resolvedUserId || (!loading && user?.id)) && authReady && (
+          {!!(resolvedUserId || user?.id) && (
             <button
               onClick={() => navigate("/account")}
               className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
