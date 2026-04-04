@@ -101,6 +101,14 @@ const Home = () => {
       setAutoOpenEvaluated(true);
       return;
     }
+    // Don't auto-open guided flow if we're in the middle of an OAuth callback
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const isOAuthReturn = hash.includes("access_token") || search.includes("code=") || search.includes("access_token");
+    if (isOAuthReturn) {
+      setAutoOpenEvaluated(true);
+      return;
+    }
     const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
     if (!alreadyOpened && !dismissed) {
