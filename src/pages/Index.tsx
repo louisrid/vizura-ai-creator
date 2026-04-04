@@ -396,8 +396,9 @@ const Index = () => {
               )}
             </div>
 
-            {/* Type + Ratio toggles */}
-            <div className="flex gap-6">
+            <div className="relative">
+              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
+              <div className="flex gap-6">
               <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
               <PillToggle
                 label="ratio"
