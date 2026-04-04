@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
@@ -162,11 +161,6 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
   </motion.button>
 );
 
-/* ── Loading phrases ── */
-const COOKING_PHRASES = ["mapping your features…", "building your look…", "training the AI…", "final touches…"];
-const COOKING_SUCCESS_HOLD = 4000;
-const COOKING_EXIT_DURATION = 750;
-
 /* ── Types ── */
 export interface GuidedSelections {
   skin: string; bodyType: string; hairStyle: string;
@@ -234,8 +228,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
 
-  const [cookingPhase, setCookingPhase] = useState<"none" | "loading" | "success" | "exiting">("none");
-  const hasCompletedCookingRef = useRef(false);
   const [exitFade, setExitFade] = useState(false);
 
   /* Ring animation timer — uses rAF for smooth 60fps */
@@ -270,9 +262,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   stepRef.current = step;
 
   const persistFlow = useCallback(() => {
-    if (!visible || cookingPhase !== "none") return;
+    if (!visible) return;
     sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step: stepRef.current, selections: selectionsRef.current, skipWelcome }));
-  }, [visible, cookingPhase, skipWelcome]);
+  }, [visible, skipWelcome]);
 
   useEffect(() => {
     if (open) {
@@ -284,8 +276,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setShaking(false);
       setInitialFadeIn(!restored);
       setVisible(true);
-      setCookingPhase("none");
-      hasCompletedCookingRef.current = false;
       animating.current = false;
       setNameToastShown(false);
       setExitFade(false);
@@ -321,15 +311,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [visible, persistFlow]);
 
   const completeCookingFlow = useCallback(() => {
-    if (hasCompletedCookingRef.current) return;
-    hasCompletedCookingRef.current = true;
     sessionStorage.removeItem(FLOW_STATE_KEY);
     const final = { ...selectionsRef.current };
     final.age = ageRangeToNumber(final.age);
     onComplete(final);
   }, [onComplete]);
-
-  // success/exiting phases removed — cooking goes directly to completeCookingFlow
 
   const internalStep = step + offset;
   const isHeroSlide = internalStep === 0 && !skipWelcome;
@@ -377,7 +363,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   const advance = useCallback(() => {
-    if (animating.current || cookingPhase !== "none") return;
+    if (animating.current) return;
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
       const key = TRAITS[currentTraitIndex].key;
@@ -386,8 +372,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isCreateSlide) {
       setExitFade(true);
       window.setTimeout(() => {
-        setExitFade(false);
-        setCookingPhase("loading");
+        completeCookingFlow();
       }, 900);
       return;
     }
@@ -397,16 +382,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (nextStep >= TOTAL) return;
     setStep(nextStep);
     setTimeout(() => { animating.current = false; }, 200);
-  }, [step, isNameSlide, isCreateSlide, cookingPhase, currentTraitIndex, TOTAL, completeCookingFlow]);
+  }, [step, isNameSlide, isCreateSlide, currentTraitIndex, TOTAL, completeCookingFlow]);
 
   const goBack = useCallback(() => {
-    if (animating.current || cookingPhase !== "none") return;
+    if (animating.current) return;
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
     animating.current = true;
     setSlideDirection(-1);
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, 200);
-  }, [step, cookingPhase]);
+  }, [step]);
 
   const handleClose = () => {
     persistFlow();
@@ -639,24 +624,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  /* ── Cooking — loading bar only, no green screen ── */
-  const renderCooking = () => {
-    if (cookingPhase === "loading") return (
-      <div className="flex flex-col items-center w-full" onClick={() => {}} onClickCapture={() => {}}>
-        <ProgressBarLoader
-          duration={25000} phrases={COOKING_PHRASES} phraseInterval={5200}
-          requireTapToContinue={true}
-          expandTapTarget={true}
-          onComplete={() => completeCookingFlow()}
-        />
-      </div>
-    );
-    return null;
-  };
-
-  const isCooking = cookingPhase !== "none";
-  const showNavigation = !isCooking && !isHeroSlide;
-  const canExitFlow = skipWelcome && isLoggedIn && !isCooking;
+  const showNavigation = !isHeroSlide;
+  const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#000" }}>
@@ -682,14 +651,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="w-full max-w-sm mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
-                key={isCooking ? "cooking" : step}
+                key={step}
                 className="w-full"
                 custom={slideDirection}
                 variants={slideVariants}
                 initial="enter" animate="center" exit="exit"
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                {isCooking ? renderCooking() : renderSlide()}
+                {renderSlide()}
               </motion.div>
             </AnimatePresence>
           </div>
