@@ -26,7 +26,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
 /* Routes that should NOT redirect to / on fresh load */
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/choose-face", "/characters"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>

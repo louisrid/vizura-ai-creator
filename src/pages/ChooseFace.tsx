@@ -4,6 +4,8 @@ import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
+import Header from "@/components/Header";
+import DotDecal from "@/components/DotDecal";
 import { SignInOverlay } from "@/components/GuidedCreator";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,7 +57,7 @@ const ChooseFace = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
-  const [rerolling, setRerolling] = useState(false);
+  
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
@@ -223,25 +225,47 @@ const ChooseFace = () => {
     }
     if (!user) return;
 
-    setRerolling(true);
+    // Go back to loading bar, regenerate from scratch
+    setFaces([]);
+    setSelectedIndex(null);
+    setLoading(true);
+    setApiDone(false);
+    setBarComplete(false);
     setCardsRevealed(false);
+    setGenerationError(null);
+
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt, face_regen: true },
-      });
-      if (fnError) throw fnError;
-      if (data?.error) throw new Error(data.error);
-      const nextFaces = (data.images || []).slice(0, 3);
+      const invokeAndParse = async (body: Record<string, unknown>): Promise<any> => {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        if (!token) throw new Error("Unauthorized");
+        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify(body),
+        });
+        return response.json();
+      };
+
+      const result = await invokeAndParse({ prompt, face_regen: true });
+      if (result?.error) throw new Error(result.error);
+      const nextFaces = (result.images || []).slice(0, 3);
+      if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
+      setApiDone(true);
       await refetchGems();
       toast("1 gem used");
     } catch (err: any) {
       toast.error("generation failed, please try again");
-    } finally {
-      setRerolling(false);
-      setTimeout(() => setCardsRevealed(true), 100);
+      setLoading(false);
     }
   };
 
@@ -442,7 +466,7 @@ const ChooseFace = () => {
       {/* Persistent black backdrop — always present, never unmounts */}
       <div className="fixed inset-0 z-[9998] bg-black" />
 
-      <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden bg-background w-full" style={{ position: "relative", zIndex: 9999 }}>
+      <div className="relative min-h-screen overflow-hidden bg-background w-full" style={{ position: "relative", zIndex: 9999 }}>
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
         {/* Full-screen loading bar while faces generate */}
@@ -450,7 +474,7 @@ const ChooseFace = () => {
           {loading && (
             <motion.div
               key="face-loader"
-              className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
+              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black"
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -477,72 +501,82 @@ const ChooseFace = () => {
 
         {/* Face picker — shown after loading completes */}
         {!loading && faces.length > 0 && (
-          <main className="mx-auto flex min-h-[calc(100dvh-57px)] w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-4 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-8">
-            <div className="flex items-center gap-3 mb-5">
-              <BackButton />
-              <PageTitle className="mb-0">pick your face</PageTitle>
+          <>
+            {/* Site header */}
+            <div className="relative z-[10000]">
+              <Header />
             </div>
+            <DotDecal />
 
-            <div className="flex items-center gap-2 mb-6">
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-sm font-[900] lowercase text-foreground">{gems} gems</span>
-            </div>
-
-            <div className="mx-auto mt-4 flex w-full max-w-[22rem] flex-col gap-4 md:max-w-xl">
-              <div className="grid grid-cols-3 gap-3 md:gap-5" style={{ perspective: "800px" }}>
-                {faces.map((url, i) => (
-                  <div key={i} className="flex flex-col items-center gap-2">
-                    <motion.button
-                      type="button"
-                      onClick={() => handleFaceClick(i)}
-                      initial={{ rotateY: 90, opacity: 0 }}
-                      animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
-                      whileTap={{ scale: 1.02 }}
-                      transition={{
-                        rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                        opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                      }}
-                      className={`relative aspect-[3/4] w-full overflow-hidden rounded-2xl border-2 transition-all duration-300 ease-out ${selectedIndex === i ? "border-accent" : "border-border"}`}
-                    >
-                      <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
-                    </motion.button>
-
-                    <AnimatePresence>
-                      {selectedIndex === i && (
-                        <motion.button
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.15 }}
-                          onClick={() => handleSelectFace(i)}
-                          className="flex h-9 w-full items-center justify-center rounded-full bg-accent text-[12px] font-[900] lowercase text-accent-foreground transition-transform duration-150 active:scale-[0.96]"
-                        >
-                          use this face →
-                        </motion.button>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-2 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-8">
+              <div className="flex items-center gap-3 mb-5">
+                <BackButton />
+                <PageTitle className="mb-0">pick your face</PageTitle>
               </div>
 
-              <button
-                onClick={handleRegenerate}
-                disabled={rerolling || isFreeUser}
-                className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-accent text-sm font-[900] lowercase text-accent-foreground transition-transform duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
-              >
-                {rerolling ? (
-                  <Loader2 className="animate-spin" size={16} />
-                ) : (
-                  <>
+              <div className="flex items-center gap-2 mb-6">
+                <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                <span className="text-sm font-[900] lowercase text-foreground">{gems} gems</span>
+              </div>
+
+              <div className="mx-auto mt-2 flex w-full max-w-[22rem] flex-col gap-4 md:max-w-xl">
+                <div className="grid grid-cols-3 gap-3 md:gap-5" style={{ perspective: "800px" }}>
+                  {faces.map((url, i) => (
+                    <div key={i} className="flex flex-col items-center gap-2">
+                      <motion.button
+                        type="button"
+                        onClick={() => handleFaceClick(i)}
+                        initial={{ rotateY: 90, opacity: 0 }}
+                        animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                        whileTap={{ scale: 1.02 }}
+                        transition={{
+                          rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                          opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                        }}
+                        className={`relative aspect-[3/4] w-full overflow-hidden border-2 transition-all duration-300 ease-out ${selectedIndex === i ? "border-accent" : "border-border"}`}
+                        style={{ borderRadius: 12 }}
+                      >
+                        <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
+                      </motion.button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Two full-width buttons below faces */}
+                <div className="flex flex-col gap-2.5 mt-2">
+                  <button
+                    onClick={() => { if (selectedIndex !== null) handleSelectFace(selectedIndex); }}
+                    disabled={selectedIndex === null}
+                    className="flex h-14 w-full items-center justify-center gap-2 text-sm font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
+                    style={{
+                      borderRadius: 12,
+                      backgroundColor: selectedIndex !== null ? "#facc15" : "#222",
+                      color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.3)",
+                    }}
+                  >
+                    use this face →
+                  </button>
+
+                  <button
+                    onClick={handleRegenerate}
+                    disabled={isFreeUser}
+                    className="flex h-14 w-full items-center justify-center gap-2 text-sm font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
+                    style={{
+                      borderRadius: 12,
+                      backgroundColor: "rgba(0,224,255,0.08)",
+                      border: "2px solid rgba(0,224,255,0.25)",
+                      color: "#00e0ff",
+                    }}
+                  >
                     <RefreshCw size={16} strokeWidth={2.5} />
                     regenerate
-                    <Gem size={12} strokeWidth={2.5} className="text-accent-foreground" />
+                    <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                     <span className="text-[11px]">1</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </main>
+                  </button>
+                </div>
+              </div>
+            </main>
+          </>
         )}
 
         {!loading && faces.length === 0 && !showSignIn && (
@@ -554,7 +588,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 10 }}
+                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
                 >
                   try again
                 </button>
