@@ -492,11 +492,16 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
-        // Collect all available face references
+        // Collect all 3 reference images: front face, 3/4 angle, full-body anchor
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
+    }
+
+    // Add vibe reference as additional reference image if provided
+    if (vibeReferenceUrl) {
+      faceImageUrls.push(vibeReferenceUrl);
     }
 
     /* ── FREE GENERATION FLOW (face creation — no gem cost) ── */
