@@ -329,17 +329,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onComplete(final);
   }, [onComplete]);
 
-  useEffect(() => {
-    if (cookingPhase !== "success") return;
-    const t = window.setTimeout(() => setCookingPhase("exiting"), COOKING_SUCCESS_HOLD);
-    return () => window.clearTimeout(t);
-  }, [cookingPhase]);
-
-  useEffect(() => {
-    if (cookingPhase !== "exiting") return;
-    const t = window.setTimeout(() => completeCookingFlow(), COOKING_EXIT_DURATION);
-    return () => window.clearTimeout(t);
-  }, [cookingPhase, completeCookingFlow]);
+  // success/exiting phases removed — cooking goes directly to completeCookingFlow
 
   const internalStep = step + offset;
   const isHeroSlide = internalStep === 0 && !skipWelcome;
