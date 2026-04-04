@@ -29,6 +29,30 @@ const Header = () => {
 
   useEffect(() => { setOpen(false); }, [location.pathname]);
 
+  useEffect(() => {
+    setResolvedUserId(user?.id ?? null);
+  }, [user?.id]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    void supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      setResolvedUserId(data.session?.user?.id ?? null);
+      setAuthReady(true);
+    });
+
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setResolvedUserId(session?.user?.id ?? null);
+      setAuthReady(true);
+    });
+
+    return () => {
+      mounted = false;
+      data.subscription.unsubscribe();
+    };
+  }, []);
+
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
     if (requiresAuth && !user) {
