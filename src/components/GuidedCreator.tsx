@@ -797,7 +797,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   const handleGoogle = async () => {
     setGoogleLoading(true);
     try {
-      // After OAuth, return to current page (not /choose-face) so flow state is preserved
+      // Redirect to homepage after OAuth — don't restart flows
       const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
       if (result?.error) { toast.error("google sign in failed"); setGoogleLoading(false); }
     } catch (err: any) { toast.error(err.message || "sign in failed"); setGoogleLoading(false); }
