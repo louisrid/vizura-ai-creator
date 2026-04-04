@@ -428,12 +428,13 @@ const Index = () => {
               </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
               {referenceImage ? (
-                <div className="relative w-full h-28 overflow-hidden" style={{ borderRadius: 16, border: "2px solid #222" }}>
-                  <img src={referenceImage} alt="Reference" className="h-full w-full object-cover" />
+                <div className="flex items-center gap-3 px-4 py-2.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+                  <img src={referenceImage} alt="Reference" className="h-10 w-10 rounded-lg object-cover shrink-0" />
+                  <span className="text-xs font-[900] lowercase text-foreground/60 truncate flex-1">reference.jpg</span>
                   <button
                     type="button"
                     onClick={() => setReferenceImage(null)}
-                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
+                    className="text-foreground/40 hover:text-foreground text-sm font-bold shrink-0"
                   >
                     ×
                   </button>

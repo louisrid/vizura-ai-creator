@@ -53,8 +53,8 @@ const TopUps = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-6 pb-[80px]">
-        <div className="flex items-center gap-3 mb-5">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-8 pt-4 pb-[80px]">
+        <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">top-ups</PageTitle>
         </div>
