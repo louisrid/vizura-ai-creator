@@ -286,7 +286,6 @@ const Index = () => {
       setResultImage(generatedUrl);
 
       await refetchCredits();
-      toast("1 gem used");
     } catch (e: any) {
       setPhotoOverlayPhase("hidden");
       if (e.message?.includes("No gems") || e.message?.includes("402")) {
