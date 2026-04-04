@@ -64,7 +64,7 @@ const Header = () => {
       }}
     >
       <TopGradientBar />
-      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-4 pb-2">
+      <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-6 pb-2">
         <div className="flex items-center gap-2.5">
           <button onClick={() => handleNav("/")} className="text-[22px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
             vizura
