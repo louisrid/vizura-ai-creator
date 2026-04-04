@@ -449,9 +449,9 @@ const Index = () => {
                   <span className="text-xs font-[900] lowercase text-foreground/30">upload image</span>
                 </button>
               )}
-              <div className="mt-3 flex items-center justify-between">
-                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>strength</span>
-                <span className="text-[10px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.55)" }}>{referenceStrength}%</span>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-[10px] font-[900] lowercase text-white">strength</span>
+                <span className="text-[10px] font-[900] lowercase text-white">{referenceStrength}%</span>
               </div>
               <input
                 type="range"
