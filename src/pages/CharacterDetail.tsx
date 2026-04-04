@@ -125,7 +125,7 @@ const CharacterDetail = () => {
       {isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>no photo</span>
+        <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
     </div>
   );
