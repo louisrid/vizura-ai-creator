@@ -147,11 +147,11 @@ const CharacterDetail = () => {
 
   const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
 
-  const imgSlot = (url: string | null | undefined, label: string, caption: string) => (
+  const imgSlot = (url: string | null | undefined, label: string, caption: string, objectFit: "cover" | "contain" = "cover") => (
     <div className="flex flex-col items-center gap-1.5">
     <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
