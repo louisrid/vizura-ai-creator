@@ -27,10 +27,10 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, youthful 18 to 23 look, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism";
+  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism, natural matte skin, no glossy or oily skin, realistic skin texture";
 
 const FACE_NEGATIVE =
-  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, revealing clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, DSLR look, bokeh, studio glamour lighting, airbrushed plastic skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, AI generated look.";
+  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, revealing clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, DSLR look, bokeh, studio glamour lighting, airbrushed plastic skin, glossy shiny skin, oily skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, AI generated look.";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
