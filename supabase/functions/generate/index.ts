@@ -316,9 +316,10 @@ async function generateFaceImages(
         const permanentUrl = await storeImagePermanently(url, userId, adminClient, "face");
         imageUrls.push(permanentUrl);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(`Face gen ${i + 1} failed:`, e);
-      throw e;
+      // Don't throw — continue generating remaining faces
+      if (e?.contentPolicy) throw e; // Only rethrow content policy errors
     }
   }
 

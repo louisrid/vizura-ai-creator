@@ -25,12 +25,6 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
-const ANCHOR_GEN_PHRASES = [
-  "building your character…",
-  "generating angles…",
-  "creating full body…",
-  "finalising…",
-];
 
 const SUCCESS_HOLD = 3500;
 
@@ -66,9 +60,6 @@ const ChooseFace = () => {
   const [rerolling, setRerolling] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
-  const [anchorLoading, setAnchorLoading] = useState(false);
-  const [anchorApiDone, setAnchorApiDone] = useState(false);
-  const [anchorBarComplete, setAnchorBarComplete] = useState(false);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Green success screen phase
@@ -141,58 +132,54 @@ const ChooseFace = () => {
         return;
       }
       setShowSignIn(false);
-      const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: { prompt, free_gen: true },
-      });
-      if (fnError) {
-        // supabase.functions.invoke puts non-2xx responses in error
-        // Try to parse the response body for structured error info
-        const parsed = typeof fnError === "object" && fnError?.context ? await fnError.context?.json?.().catch(() => null) : null;
-        if (parsed?.code === "FREE_GEN_USED" || parsed?.code === "IP_USED") {
-          // Fall through to retry path below
-        } else {
+
+      // Helper to extract data from supabase.functions.invoke response
+      const invokeAndParse = async (body: Record<string, unknown>) => {
+        const { data, error: fnError } = await supabase.functions.invoke("generate", { body });
+        if (fnError) {
+          // Try to parse the error response body for structured codes
+          let parsed: any = null;
+          try {
+            if (typeof fnError === "object" && (fnError as any)?.context) {
+              parsed = await (fnError as any).context.json().catch(() => null);
+            }
+          } catch {}
+          if (parsed) return parsed; // Return the parsed body so caller can check .code
           throw fnError;
         }
+        return data;
+      };
+
+      let result = await invokeAndParse({ prompt, free_gen: true });
+
+      // Handle free gen already used — retry with gem-based face regen
+      if (result?.error && (result.code === "FREE_GEN_USED" || result.code === "IP_USED")) {
+        result = await invokeAndParse({ prompt, face_regen: true });
       }
-      if (data?.error) {
-        if (data.code === "FREE_GEN_USED" || data.code === "IP_USED") {
-          const { data: retryData, error: retryError } = await supabase.functions.invoke("generate", {
-            body: { prompt, face_regen: true },
-          });
-          if (retryError) {
-            console.error("Face regen error:", retryError);
-            throw retryError;
-          }
-          if (retryData?.error) {
-            if (retryData.code === "NO_GEMS") {
-              setShowPaywall(true);
-              setLoading(false);
-              return;
-            }
-            throw new Error(retryData.error);
-          }
-          const retryImgs = retryData.images || [];
-          const retryFaces = retryImgs.slice(0, 3);
-          setFaces(retryFaces);
-          sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(retryFaces));
-          setSelectedIndex(null);
-          setApiDone(true);
+
+      if (result?.error) {
+        if (result.code === "NO_GEMS") {
+          setShowPaywall(true);
+          setLoading(false);
           return;
         }
-        if (data.code === "CONTENT_POLICY") {
+        if (result.code === "CONTENT_POLICY") {
           toast.error("please adjust your description and try again");
           setLoading(false);
           return;
         }
-        throw new Error(data.error);
+        throw new Error(result.error);
       }
-      const imgs = data.images || [];
+
+      const imgs = result?.images || [];
       const nextFaces = imgs.slice(0, 3);
+      if (nextFaces.length === 0) throw new Error("No faces generated");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       setApiDone(true);
     } catch (err: any) {
+      console.error("generateFaces error:", err);
       const msg = err?.message || "generation failed";
       if (msg.includes("Free generation") || msg.includes("IP_USED") || msg.includes("FREE_GEN_USED")) {
         setShowPaywall(true);
@@ -327,17 +314,12 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate 3/4 angle + full-body anchor (BLOCKING with loading screen)
+    // Fire angle + body generation in background (non-blocking)
     if (faceUrl && cId) {
-      setAnchorLoading(true);
-      setAnchorApiDone(false);
-      setAnchorBarComplete(false);
-
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
       const angleUserId = currentUser.id;
 
-      // Get body type from session storage draft
       let bodyType = "regular";
       try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -346,7 +328,6 @@ const ChooseFace = () => {
           bodyType = draft.bodyType || "regular";
         }
       } catch {}
-      // Also check the character record we just saved
       try {
         const { data: charRecord } = await supabase
           .from("characters")
@@ -356,18 +337,17 @@ const ChooseFace = () => {
         if (charRecord?.body) bodyType = charRecord.body;
       } catch {}
 
-      try {
-        const { data: angleData } = await supabase.functions.invoke("generate", {
-          body: {
-            prompt: anglePrompt,
-            generate_angles: true,
-            selected_face_url: faceUrl,
-            body_type: bodyType,
-          },
-        });
-
+      // Don't await — let it run in background
+      supabase.functions.invoke("generate", {
+        body: {
+          prompt: anglePrompt,
+          generate_angles: true,
+          selected_face_url: faceUrl,
+          body_type: bodyType,
+        },
+      }).then(({ data: angleData }) => {
         if (angleData?.angle_url || angleData?.body_anchor_url) {
-          await supabase
+          supabase
             .from("characters")
             .update({
               face_angle_url: angleData.angle_url || null,
@@ -376,19 +356,8 @@ const ChooseFace = () => {
             .eq("id", angleCharacterId)
             .eq("user_id", angleUserId);
         }
-      } catch (e) {
+      }).catch((e) => {
         console.error("Angle + body generation failed:", e);
-      }
-
-      setAnchorApiDone(true);
-      // Wait for bar to complete
-      await new Promise<void>((resolve) => {
-        const check = () => {
-          // anchorBarComplete might not be set yet, use a polling approach
-          resolve();
-        };
-        // Give the bar a moment, then proceed
-        setTimeout(check, 1500);
       });
     }
 
@@ -405,7 +374,6 @@ const ChooseFace = () => {
 
     setPendingAuthSave(false);
     setShowSignIn(false);
-    setAnchorLoading(false);
 
     toast.success("character added!");
     navigate("/characters", { replace: true });
@@ -473,30 +441,7 @@ const ChooseFace = () => {
         </motion.div>
       )}
 
-      {/* Full-screen loading bar while generating 3/4 angle + full body */}
-      {anchorLoading && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.3, ease: "easeInOut" }}
-          >
-            <ProgressBarLoader
-              duration={90000}
-              phrases={ANCHOR_GEN_PHRASES}
-              phraseInterval={5000}
-              requireTapToContinue={false}
-              completeNow={anchorApiDone}
-              onComplete={() => setAnchorBarComplete(true)}
-            />
-          </motion.div>
-        </motion.div>
-      )}
+
 
       {/* Green "character created!" success screen */}
       <AnimatePresence>
@@ -512,18 +457,19 @@ const ChooseFace = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.65, ease: "easeInOut" }}
           >
-            <motion.div
+             <motion.div
               className="flex flex-col items-center"
               initial={{ opacity: 0, y: 15, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+              style={{ marginTop: "-15vh" }}
             >
-              <p className="text-center text-[2.8rem] font-[900] lowercase leading-[1.05] text-black">
+              <p className="text-center text-[3.5rem] font-[900] lowercase leading-[1.0] text-black">
                 <span className="block">character</span>
                 <span className="block">created!</span>
               </p>
               <motion.p
-                className="mt-4 text-sm font-[800] lowercase text-black/50"
+                className="mt-6 text-sm font-[800] lowercase text-black/50"
                 animate={{ y: [0, -4, 0] }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
               >tap to continue</motion.p>
