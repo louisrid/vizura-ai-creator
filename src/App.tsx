@@ -125,7 +125,7 @@ const AppRoutes = () => {
         className="pointer-events-none fixed inset-0 z-[2147483646] bg-black"
         initial={false}
         animate={{ opacity: blackoutActive ? 1 : 0 }}
-        transition={{ duration: 0.9, ease: "easeInOut" }}
+        transition={blackoutActive ? { duration: 0 } : { duration: 0.45, ease: "easeInOut" }}
       />
       <Header />
       <AnimatePresence mode="wait">

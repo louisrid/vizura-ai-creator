@@ -560,6 +560,24 @@ serve(async (req) => {
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
 
+      if (angleCharacterId && (angleUrl || bodyAnchorUrl)) {
+        const updates: Record<string, string | null> = {};
+        if (angleUrl) updates.face_angle_url = angleUrl;
+        if (bodyAnchorUrl) updates.body_anchor_url = bodyAnchorUrl;
+
+        const { error: persistError } = await adminClient
+          .from("characters")
+          .update(updates)
+          .eq("id", angleCharacterId)
+          .eq("user_id", userId);
+
+        if (persistError) {
+          console.error("Failed to persist generated references:", persistError);
+        } else {
+          console.log("Saved generated references to character:", angleCharacterId);
+        }
+      }
+
       return new Response(
         JSON.stringify({ angle_url: angleUrl, body_anchor_url: bodyAnchorUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
