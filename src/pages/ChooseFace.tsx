@@ -327,36 +327,69 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate extra angles in background without blocking
+    // Generate 3/4 angle + full-body anchor (BLOCKING with loading screen)
     if (faceUrl && cId) {
+      setAnchorLoading(true);
+      setAnchorApiDone(false);
+      setAnchorBarComplete(false);
+
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
       const angleUserId = currentUser.id;
 
-      void (async () => {
-        try {
-          const { data: angleData } = await supabase.functions.invoke("generate", {
-            body: {
-              prompt: anglePrompt,
-              generate_angles: true,
-              selected_face_url: faceUrl,
-            },
-          });
-
-          if (angleData?.side_url || angleData?.angle_url) {
-            await supabase
-              .from("characters")
-              .update({
-                face_side_url: angleData.side_url || null,
-                face_angle_url: angleData.angle_url || null,
-              })
-              .eq("id", angleCharacterId)
-              .eq("user_id", angleUserId);
-          }
-        } catch (e) {
-          console.error("Extra angle generation failed:", e);
+      // Get body type from session storage draft
+      let bodyType = "regular";
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const draft = JSON.parse(raw);
+          bodyType = draft.bodyType || "regular";
         }
-      })();
+      } catch {}
+      // Also check the character record we just saved
+      try {
+        const { data: charRecord } = await supabase
+          .from("characters")
+          .select("body")
+          .eq("id", angleCharacterId)
+          .single();
+        if (charRecord?.body) bodyType = charRecord.body;
+      } catch {}
+
+      try {
+        const { data: angleData } = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: anglePrompt,
+            generate_angles: true,
+            selected_face_url: faceUrl,
+            body_type: bodyType,
+          },
+        });
+
+        if (angleData?.angle_url || angleData?.body_anchor_url) {
+          await supabase
+            .from("characters")
+            .update({
+              face_angle_url: angleData.angle_url || null,
+              body_anchor_url: angleData.body_anchor_url || null,
+            })
+            .eq("id", angleCharacterId)
+            .eq("user_id", angleUserId);
+        }
+      } catch (e) {
+        console.error("Angle + body generation failed:", e);
+      }
+
+      setAnchorApiDone(true);
+      // Wait for bar to complete
+      await new Promise<void>((resolve) => {
+        const check = () => {
+          // anchorBarComplete might not be set yet, use a polling approach
+          resolve();
+        };
+        // Give the bar a moment, then proceed
+        setTimeout(check, 1500);
+      });
     }
 
     if (cId) {
@@ -372,8 +405,8 @@ const ChooseFace = () => {
 
     setPendingAuthSave(false);
     setShowSignIn(false);
+    setAnchorLoading(false);
 
-    // Navigate directly — no second loading bar
     toast.success("character added!");
     navigate("/characters", { replace: true });
     return true;
