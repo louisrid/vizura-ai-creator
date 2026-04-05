@@ -525,7 +525,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 w-full max-w-[18rem]">
+        <div className="mt-5 w-full max-w-[18rem] md:max-w-[24rem]">
           <textarea
             value={selections.description}
             onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
