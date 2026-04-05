@@ -68,7 +68,7 @@ const TopUps = () => {
           {plans.map((plan) => (
             <div
               key={plan.label}
-              className="rounded-2xl p-4 border-2 border-[#1a1a1a]"
+              className="rounded-2xl p-4 md:p-5 border-2 border-[#1a1a1a]"
               style={{ backgroundColor: "#111111" }}
             >
               <div className="flex items-center justify-between mb-3">
