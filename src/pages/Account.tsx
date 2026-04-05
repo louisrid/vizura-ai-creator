@@ -68,7 +68,7 @@ const Account = () => {
 
         <div className="space-y-3">
           {subscribed ? (
-            <div className="w-full h-12 rounded-2xl bg-neon-green text-neon-green-foreground text-sm font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
+            <div className="w-full h-12 md:h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-sm md:text-base font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
               subscribed
             </div>
           ) : (
