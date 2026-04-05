@@ -186,7 +186,7 @@ const CharacterDetail = () => {
   const content = (isMobile: boolean) => (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className={isMobile ? "p-5" : "p-6"}>
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(250,204,21,0.25)" }} className={isMobile ? "p-5" : "p-6"}>
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
