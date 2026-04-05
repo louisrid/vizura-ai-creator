@@ -408,15 +408,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => (
     <div className="flex w-full flex-col items-center" style={{ marginTop: 0 }}>
       <AnimatedRings t={ringT} />
-      <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
-      <div style={{ width: 40, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
-      <div className="flex flex-col items-center" style={{ marginTop: 20, gap: 8 }}>
+      <div className="text-[60px] md:text-[80px]" style={{ fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div className="w-[40px] md:w-[56px] h-[4px] md:h-[5px]" style={{ background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
+      <div className="flex flex-col items-center mt-5 md:mt-7 gap-2 md:gap-3">
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+          className="w-[168px] md:w-[220px] py-[10px] md:py-[14px] text-[18px] md:text-[22px]"
           style={{
-            width: 168, padding: "10px", background: Y, border: "none", borderRadius: 12,
-            fontSize: 18, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            background: Y, border: "none", borderRadius: 12,
+            fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
@@ -426,9 +427,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <button
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
+            className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[18px] md:text-[22px]"
             style={{
-              width: 168, padding: "8px", background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontSize: 18, fontWeight: 900, color: "#fff",
+              background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
