@@ -14,7 +14,7 @@ const corsHeaders = {
 
 /* ── prompt constants ──────────────────────────────────── */
 const QUALITY_SUFFIX =
-  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain, detailed realistic skin with subtle veins and freckles, natural skin colour variation, no airbrushed look, no plastic appearance, real human skin"";
+  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain, detailed realistic skin with subtle veins and freckles, natural skin colour variation, no airbrushed look, no plastic appearance, real human skin";
 
 const NEGATIVE_INSTRUCTION =
   "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, glossy shiny skin, oily skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
