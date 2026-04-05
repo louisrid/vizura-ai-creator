@@ -60,9 +60,46 @@ const Storage = () => {
 
   if (!authLoading && !user) return null;
 
-  const handleDelete = (img: StorageImage) => {
+  const handleDelete = async (img: StorageImage) => {
     setImages((prev) => prev.filter((i) => i.id !== img.id));
     if (expanded?.id === img.id) setExpanded(null);
+
+    if (!user) return;
+
+    // Remove image URL from the generation record in DB
+    try {
+      const { data: gen } = await supabase
+        .from("generations")
+        .select("id, image_urls")
+        .eq("id", img.genId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (gen) {
+        const updatedUrls = (gen.image_urls || []).filter((u: string) => u !== img.url);
+        if (updatedUrls.length === 0) {
+          await supabase.from("generations").delete().eq("id", gen.id).eq("user_id", user.id);
+        } else {
+          await supabase.from("generations").update({ image_urls: updatedUrls }).eq("id", gen.id).eq("user_id", user.id);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to delete from DB:", e);
+    }
+
+    // Delete from storage bucket
+    try {
+      const url = new URL(img.url);
+      const pathMatch = url.pathname.match(/\/storage\/v1\/object\/public\/images\/(.+)/);
+      if (pathMatch) {
+        await supabase.storage.from("images").remove([decodeURIComponent(pathMatch[1])]);
+      }
+    } catch (e) {
+      console.error("Failed to delete from storage:", e);
+    }
+
+    // Clear homepage cache so deleted images don't reappear
+    try { sessionStorage.removeItem("vizura_latest_photos"); } catch {}
   };
 
   return (
