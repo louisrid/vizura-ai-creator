@@ -57,36 +57,32 @@ const TopLine = () => (
 
 /* ── Animated rings (hero only) ── */
 const AnimatedRings = ({ t }: { t: number }) => (
-  <div className="relative flex items-center justify-center" style={{ width: 280, height: 280, marginBottom: 18 }}>
+  <div className="relative flex items-center justify-center w-[280px] h-[280px] md:w-[380px] md:h-[380px] mb-[18px] md:mb-[24px]">
     {/* Inner ring */}
-    <div className="absolute" style={{
-      width: 150, height: 150, borderRadius: "50%",
+    <div className="absolute w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-full" style={{
       border: `2px solid ${Y}`, borderLeftColor: "transparent",
       transform: `rotate(${t * 1.2}deg)`,
-      top: "50%", left: "50%", marginTop: -75, marginLeft: -75,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
     {/* Mid ring */}
-    <div className="absolute" style={{
-      width: 200, height: 200, borderRadius: "50%",
+    <div className="absolute w-[200px] h-[200px] md:w-[270px] md:h-[270px] rounded-full" style={{
       border: `8px solid ${Y}`, borderTopColor: "transparent", borderRightColor: "transparent",
       transform: `rotate(${t * -0.8}deg)`,
-      top: "50%", left: "50%", marginTop: -100, marginLeft: -100,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
     {/* Outer ring */}
-    <div className="absolute" style={{
-      width: 245, height: 245, borderRadius: "50%",
+    <div className="absolute w-[245px] h-[245px] md:w-[330px] md:h-[330px] rounded-full" style={{
       border: `3px solid ${Y}`, borderBottomColor: "transparent", borderLeftColor: "transparent",
       transform: `rotate(${t * 0.6}deg)`,
-      top: "50%", left: "50%", marginTop: -122.5, marginLeft: -122.5,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
     {/* Dashed ring */}
-    <div className="absolute" style={{
-      width: 278, height: 278, borderRadius: "50%",
+    <div className="absolute w-[278px] h-[278px] md:w-[375px] md:h-[375px] rounded-full" style={{
       border: `2px dashed ${Y}`,
       transform: `rotate(${t * -0.4}deg)`,
-      top: "50%", left: "50%", marginTop: -139, marginLeft: -139,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
-    <span style={{ fontSize: 82, position: "relative", zIndex: 1 }}>👩‍🎤</span>
+    <span className="text-[82px] md:text-[110px] relative z-[1]">👩‍🎤</span>
   </div>
 );
 
