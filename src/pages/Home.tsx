@@ -297,18 +297,15 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                backgroundColor: "#000",
                 padding: "16px 14px",
                 borderRadius: 12,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
+                color: "#facc15",
+                backgroundColor: "rgba(250,204,21,0.06)",
+                border: "1.5px solid rgba(250,204,21,0.2)",
               }}
             >
-              <div className="absolute inset-0" style={{
-                backgroundColor: "rgba(250,204,21,0.06)",
-                border: "2px solid rgba(250,204,21,0.15)",
-                borderRadius: 12,
-              }} />
-              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-white text-left">create<br />photo</span>
+              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#facc15" }}>create<br />photo</span>
               <svg className="relative z-[1]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
