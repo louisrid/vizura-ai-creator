@@ -197,11 +197,12 @@ const Index = () => {
       setTimeout(() => {
         setPhotoOverlayPhase("hidden");
         setFadingBack(false);
+        navigate("/storage");
       }, 100);
     };
     window.addEventListener("photo-overlay-dismiss", handler);
     return () => window.removeEventListener("photo-overlay-dismiss", handler);
-  }, []);
+  }, [navigate]);
 
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
 

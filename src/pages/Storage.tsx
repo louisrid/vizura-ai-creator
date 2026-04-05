@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Trash2, X, Wand2 } from "lucide-react";
@@ -25,6 +25,7 @@ const Storage = () => {
   const [images, setImages] = useState<StorageImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
+  const [newImageIds, setNewImageIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -52,6 +53,15 @@ const Storage = () => {
           });
         });
       });
+      // Mark the newest image as "new" for animate-in if arriving from photo creation
+      if (allImages.length > 0) {
+        const newest = allImages[0];
+        const createdMs = new Date(newest.created_at).getTime();
+        if (Date.now() - createdMs < 30000) {
+          setNewImageIds(new Set([newest.id]));
+          setTimeout(() => setNewImageIds(new Set()), 1500);
+        }
+      }
       setImages(allImages);
       setLoading(false);
     };
@@ -60,9 +70,46 @@ const Storage = () => {
 
   if (!authLoading && !user) return null;
 
-  const handleDelete = (img: StorageImage) => {
+  const handleDelete = async (img: StorageImage) => {
     setImages((prev) => prev.filter((i) => i.id !== img.id));
     if (expanded?.id === img.id) setExpanded(null);
+
+    if (!user) return;
+
+    // Remove image URL from the generation record in DB
+    try {
+      const { data: gen } = await supabase
+        .from("generations")
+        .select("id, image_urls")
+        .eq("id", img.genId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (gen) {
+        const updatedUrls = (gen.image_urls || []).filter((u: string) => u !== img.url);
+        if (updatedUrls.length === 0) {
+          await supabase.from("generations").delete().eq("id", gen.id).eq("user_id", user.id);
+        } else {
+          await supabase.from("generations").update({ image_urls: updatedUrls }).eq("id", gen.id).eq("user_id", user.id);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to delete from DB:", e);
+    }
+
+    // Delete from storage bucket
+    try {
+      const url = new URL(img.url);
+      const pathMatch = url.pathname.match(/\/storage\/v1\/object\/public\/images\/(.+)/);
+      if (pathMatch) {
+        await supabase.storage.from("images").remove([decodeURIComponent(pathMatch[1])]);
+      }
+    } catch (e) {
+      console.error("Failed to delete from storage:", e);
+    }
+
+    // Clear homepage cache so deleted images don't reappear
+    try { sessionStorage.removeItem("vizura_latest_photos"); } catch {}
   };
 
   return (
@@ -91,8 +138,19 @@ const Storage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-            {images.map((img) => (
-              <div key={img.id} className="flex flex-col">
+            <AnimatePresence>
+            {images.map((img, idx) => {
+              const isNew = newImageIds.has(img.id);
+              return (
+              <motion.div
+                key={img.id}
+                layout
+                initial={isNew ? { opacity: 0, scale: 0.7 } : { opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3 }}
+                className="flex flex-col"
+              >
                 <button
                   onClick={() => setExpanded(img)}
                   className="group relative rounded-t-2xl border-[5px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
@@ -111,8 +169,10 @@ const Storage = () => {
                   <Download size={12} strokeWidth={2.5} />
                   download
                 </a>
-              </div>
-            ))}
+              </motion.div>
+              );
+            })}
+            </AnimatePresence>
           </div>
         )}
       </main>
