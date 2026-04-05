@@ -27,6 +27,13 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
+const ANGLE_GEN_PHRASES = [
+  "creating character views…",
+  "building 3/4 angle…",
+  "generating full body…",
+  "finalising your character…",
+];
+
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
@@ -61,6 +68,12 @@ const ChooseFace = () => {
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
+
+  // Second loading phase: angle + body generation
+  const [angleLoading, setAngleLoading] = useState(false);
+  const [angleApiDone, setAngleApiDone] = useState(false);
+  const [angleBarComplete, setAngleBarComplete] = useState(false);
+  const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
 
   const hasInitRef = useRef(false);
 
@@ -418,7 +431,7 @@ const ChooseFace = () => {
       });
     }
 
-    // Fire angle + body generation in background (non-blocking)
+    // Generate angle + body with a second loading bar
     if (faceUrl && cId) {
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
@@ -439,49 +452,69 @@ const ChooseFace = () => {
         if (charRecord?.body) bodyType = charRecord.body;
       } catch {}
 
-      // Don't await — let it run in background; backend persists the returned URLs directly
-      supabase.functions.invoke("generate", {
-        body: {
-          prompt: anglePrompt,
-          generate_angles: true,
-          selected_face_url: faceUrl,
-          body_type: bodyType,
-          angle_character_id: angleCharacterId,
-        },
-      }).then(({ data, error }) => {
-        if (error) {
-          console.error("Angle + body generation invoke failed:", error);
-          return;
-        }
-        console.log("Angle + body generation completed:", {
-          characterId: angleCharacterId,
-          angle: data?.angle_url,
-          body: data?.body_anchor_url,
+      // Show second loading bar
+      setAngleLoading(true);
+      setAngleApiDone(false);
+      setAngleBarComplete(false);
+      setPendingNavCharId(angleCharacterId);
+
+      try {
+        const { data, error } = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: anglePrompt,
+            generate_angles: true,
+            selected_face_url: faceUrl,
+            body_type: bodyType,
+            angle_character_id: angleCharacterId,
+          },
         });
-      }).catch((e) => {
+        if (error) console.error("Angle + body generation failed:", error);
+        else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url });
+      } catch (e) {
         console.error("Angle + body generation failed:", e);
-      });
+      }
+
+      setAngleApiDone(true);
+      // Don't navigate yet — wait for bar to complete via tap
+      return true;
     }
 
-    if (cId) {
-      sessionStorage.setItem("vizura_new_char_highlight", cId);
-    }
-
+    // No angle gen needed — navigate immediately
+    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
     sessionStorage.removeItem("vizura_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
-
     setPendingAuthSave(false);
     setShowSignIn(false);
-
     toast.success("character added!");
     navigate("/characters", { replace: true });
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
+
+  // Handle second loading bar completion — navigate to character page
+  const handleAngleBarComplete = useCallback(() => {
+    setAngleBarComplete(true);
+  }, []);
+
+  const handleAngleTapContinue = useCallback(() => {
+    const cId = pendingNavCharId;
+    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
+    sessionStorage.removeItem("vizura_selected_face");
+    sessionStorage.removeItem("vizura_guided_prompt");
+    sessionStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem("vizura_pending_char_id");
+    sessionStorage.removeItem(FACE_STORAGE_KEY);
+    sessionStorage.removeItem(AUTH_RESUME_KEY);
+    setPendingAuthSave(false);
+    setShowSignIn(false);
+    setAngleLoading(false);
+    toast.success("character added!");
+    navigate("/characters", { replace: true });
+  }, [pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
@@ -544,6 +577,36 @@ const ChooseFace = () => {
                   expandTapTarget={true}
                   completeNow={apiDone}
                   onComplete={() => setBarComplete(true)}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Second loading bar: angle + body generation */}
+        <AnimatePresence>
+          {angleLoading && (
+            <motion.div
+              key="angle-loader"
+              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+            >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
+              >
+                <ProgressBarLoader
+                  duration={60000}
+                  phrases={ANGLE_GEN_PHRASES}
+                  phraseInterval={5000}
+                  requireTapToContinue={true}
+                  expandTapTarget={true}
+                  completeNow={angleApiDone}
+                  onComplete={handleAngleTapContinue}
                 />
               </motion.div>
             </motion.div>
