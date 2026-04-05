@@ -133,7 +133,7 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="relative w-full max-w-[280px] overflow-hidden"
+              className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
               style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >
