@@ -644,8 +644,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Skip button removed */}
 
         {/* Content area */}
-        <div className="absolute inset-0 flex items-center px-6" style={{ justifyContent: "center", paddingBottom: isHeroSlide ? "0%" : "22%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
-          <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+        <div className="absolute inset-0 flex items-center px-6 md:px-12" style={{ justifyContent: "center", paddingBottom: isHeroSlide ? "0%" : "22%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
+          <div className="w-full max-w-sm md:max-w-xl mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
                 key={step}
