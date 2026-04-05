@@ -170,16 +170,13 @@ const CharacterDetail = () => {
 
   const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
 
-  const imgSlot = (url: string | null | undefined, label: string, caption: string, objectFit: "cover" | "contain" = "cover") => (
-    <div className="flex flex-col items-center gap-1.5">
-    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "5px solid #222", backgroundColor: "#111111" }}>
+  const imgSlot = (url: string | null | undefined, label: string, objectFit: "cover" | "contain" = "cover") => (
+    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit, borderRadius: 7 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit, borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
-    </div>
-    <span className="text-[9px] font-[800] lowercase text-center" style={{ color: "rgba(255,255,255,0.45)" }}>{caption}</span>
     </div>
   );
 
