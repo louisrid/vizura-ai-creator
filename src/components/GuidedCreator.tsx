@@ -412,7 +412,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── HERO SLIDE (new first screen) ── */
   const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: 60 }}>
+    <div className="flex w-full flex-col items-center" style={{ marginTop: 0 }}>
       <AnimatedRings t={ringT} />
       <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
       <div style={{ width: 40, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
@@ -648,7 +648,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Skip button removed */}
 
         {/* Content area */}
-        <div className="absolute inset-0 flex items-center px-6" style={{ justifyContent: "center", paddingBottom: "22%" }}>
+        <div className="absolute inset-0 flex items-center px-6" style={{ justifyContent: "center", paddingBottom: isHeroSlide ? "8%" : "22%" }}>
           <div className="w-full max-w-sm mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
