@@ -20,7 +20,7 @@ const NEGATIVE_INSTRUCTION =
   "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, glossy shiny skin, oily skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
 
 const SELFIE_PREFIX =
-  "front camera perspective, slight wide angle distortion, casual angle, arm extended, iPhone selfie";
+  "front camera perspective, slight wide angle distortion, casual angle, one arm extended holding the phone camera, other arm visible in frame doing something natural, only one arm holding camera never both arms visible holding phone, iPhone selfie";
 
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
