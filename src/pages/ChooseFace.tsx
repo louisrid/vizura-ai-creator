@@ -643,8 +643,12 @@ const ChooseFace = () => {
                           rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                           opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                         }}
-                        className={`relative aspect-[3/4] w-full overflow-hidden border-[5px] transition-all duration-300 ease-out ${selectedIndex === i ? "border-accent" : "border-border"}`}
-                        style={{ borderRadius: 12 }}
+                        className="relative aspect-[3/4] w-full overflow-hidden transition-all duration-300 ease-out"
+                        style={{
+                          borderRadius: 12,
+                          border: selectedIndex === i ? "3px solid #facc15" : "none",
+                          padding: selectedIndex === i ? 0 : 3,
+                        }}
                       >
                         <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
                       </motion.button>

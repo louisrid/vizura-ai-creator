@@ -194,35 +194,45 @@ const CharacterDetail = () => {
         </div>
       </div>
 
-      {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(250,204,21,0.25)" }} className={isMobile ? "p-4" : "p-5"}>
-        <span className={`block font-[900] lowercase text-white ${isMobile ? "text-sm mb-3" : "text-base mb-4"}`}>details:</span>
-        <div className={`flex flex-wrap ${isMobile ? "gap-2" : "gap-3"}`}>
+      {/* Details — compact */}
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(250,204,21,0.25)" }} className={isMobile ? "px-4 py-3" : "p-4"}>
+        <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
-              <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[9px]" : "text-[11px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-              <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[13px]" : "text-[15px]"}`}>{t.value}</span>
+            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
+              <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[8px]" : "text-[10px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+              <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[12px]" : "text-[14px]"}`}>{t.value}</span>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Create Photo button */}
+      <button
+        onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
+        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
+        style={{
+          color: "#000",
+          borderRadius: 12,
+          backgroundColor: "#facc15",
+        }}
+      >
+        create photo
+      </button>
+
       {/* Delete button */}
-      <div className="pt-2">
-        <button
-          onClick={() => setShowDelete(true)}
-          className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
-          style={{
-            color: "#ff4444",
-            borderRadius: 14,
-            backgroundColor: "rgba(255,68,68,0.06)",
-            border: "2px solid rgba(255,68,68,0.25)",
-          }}
-        >
-          <Trash2 size={14} strokeWidth={2.5} />
-          delete character
-        </button>
-      </div>
+      <button
+        onClick={() => setShowDelete(true)}
+        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] ${isMobile ? "h-10 text-xs" : "h-12 text-sm"}`}
+        style={{
+          color: "#ff4444",
+          borderRadius: 12,
+          backgroundColor: "rgba(255,68,68,0.06)",
+          border: "2px solid rgba(255,68,68,0.25)",
+        }}
+      >
+        <Trash2 size={14} strokeWidth={2.5} />
+        delete character
+      </button>
     </>
   );
 

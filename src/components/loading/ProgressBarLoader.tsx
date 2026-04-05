@@ -60,7 +60,8 @@ const ProgressBarLoader = ({
   const contentStyle = useMemo(() => ({ width: FIXED_CONTENT_WIDTH, maxWidth: "100%" }), []);
 
   const setPct = useCallback((next: number) => {
-    const safeNext = Math.max(next, pctRef.current);
+    const capped = Math.min(next, 100);
+    const safeNext = Math.max(capped, pctRef.current);
     if (safeNext === pctRef.current) return;
     pctRef.current = safeNext;
     setPctState(safeNext);

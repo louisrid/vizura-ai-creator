@@ -363,24 +363,6 @@ const CharacterCreator = () => {
           </button>
         </section>
 
-        {/* Reference strength slider */}
-        <section className="mt-4 flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold lowercase text-foreground">reference strength</span>
-            <span className="text-xs font-extrabold lowercase text-foreground">{referenceStrength}%</span>
-          </div>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={referenceStrength}
-            onChange={(e) => setReferenceStrength(Number(e.target.value))}
-            className="w-full accent-neon-yellow h-2 rounded-full appearance-none cursor-pointer"
-            style={{
-              background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(0 0% 20%) ${referenceStrength}%)`,
-            }}
-          />
-        </section>
 
         {/* Description */}
         <section className="mt-10 flex flex-col gap-1.5">
