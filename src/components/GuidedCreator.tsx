@@ -448,10 +448,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* Intro */
     if (isIntroSlide) return (
       <div className="flex w-full flex-col items-center">
-        <span className="text-[64px] mb-5">💫</span>
+        <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <motion.p
-          className="mt-5 text-[13px] font-[800] lowercase"
+          className="mt-5 text-[13px] md:text-[15px] font-[800] lowercase"
           style={{ color: "rgba(255,255,255,0.4)" }}
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
