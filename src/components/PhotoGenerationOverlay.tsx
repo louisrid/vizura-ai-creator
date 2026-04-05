@@ -43,16 +43,16 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
     };
   }, [open]);
 
-  if (!open) return null;
-
-  const showSuccess = phase === "success" && loadingDone && !dismissing;
-
   // As soon as phase=success, mark loading done immediately so tap works right away
   useEffect(() => {
     if (phase === "success" && !loadingDone) {
       setLoadingDone(true);
     }
   }, [phase, loadingDone]);
+
+  if (!open) return null;
+
+  const showSuccess = phase === "success" && loadingDone && !dismissing;
 
   const dismissOverlay = () => {
     setDismissing(true);
