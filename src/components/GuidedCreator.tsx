@@ -609,7 +609,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           )}
           <motion.p
-            className="mt-6 text-[14px] font-[800] lowercase"
+            className="mt-6 text-[14px] md:text-[16px] font-[800] lowercase"
             style={{ color: "rgba(255,255,255,0.4)" }}
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
