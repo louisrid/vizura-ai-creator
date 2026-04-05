@@ -120,7 +120,7 @@ const Account = () => {
             )}
           </div>
 
-          <Button variant="outline" className="w-full h-12 text-sm mt-4" onClick={handleSignOut}>
+          <Button variant="outline" className="w-full h-12 md:h-14 text-sm md:text-base mt-4" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
             sign out
           </Button>
