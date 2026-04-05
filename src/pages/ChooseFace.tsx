@@ -431,7 +431,7 @@ const ChooseFace = () => {
       });
     }
 
-    // Fire angle + body generation in background (non-blocking)
+    // Generate angle + body with a second loading bar
     if (faceUrl && cId) {
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
@@ -452,44 +452,43 @@ const ChooseFace = () => {
         if (charRecord?.body) bodyType = charRecord.body;
       } catch {}
 
-      // Don't await — let it run in background; backend persists the returned URLs directly
-      supabase.functions.invoke("generate", {
-        body: {
-          prompt: anglePrompt,
-          generate_angles: true,
-          selected_face_url: faceUrl,
-          body_type: bodyType,
-          angle_character_id: angleCharacterId,
-        },
-      }).then(({ data, error }) => {
-        if (error) {
-          console.error("Angle + body generation invoke failed:", error);
-          return;
-        }
-        console.log("Angle + body generation completed:", {
-          characterId: angleCharacterId,
-          angle: data?.angle_url,
-          body: data?.body_anchor_url,
+      // Show second loading bar
+      setAngleLoading(true);
+      setAngleApiDone(false);
+      setAngleBarComplete(false);
+      setPendingNavCharId(angleCharacterId);
+
+      try {
+        const { data, error } = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: anglePrompt,
+            generate_angles: true,
+            selected_face_url: faceUrl,
+            body_type: bodyType,
+            angle_character_id: angleCharacterId,
+          },
         });
-      }).catch((e) => {
+        if (error) console.error("Angle + body generation failed:", error);
+        else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url });
+      } catch (e) {
         console.error("Angle + body generation failed:", e);
-      });
+      }
+
+      setAngleApiDone(true);
+      // Don't navigate yet — wait for bar to complete via tap
+      return true;
     }
 
-    if (cId) {
-      sessionStorage.setItem("vizura_new_char_highlight", cId);
-    }
-
+    // No angle gen needed — navigate immediately
+    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
     sessionStorage.removeItem("vizura_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
-
     setPendingAuthSave(false);
     setShowSignIn(false);
-
     toast.success("character added!");
     navigate("/characters", { replace: true });
     return true;
