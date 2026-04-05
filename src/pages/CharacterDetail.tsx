@@ -187,10 +187,10 @@ const CharacterDetail = () => {
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
-        <div className={`grid grid-cols-3 ${isMobile ? "gap-2.5" : "gap-4"}`}>
-          {imgSlot(character.face_image_url, "front", "front")}
-          {imgSlot(character.face_angle_url, "3/4 angle", "3/4 angle")}
-          {imgSlot(character.body_anchor_url, "full body", "full body", "contain")}
+        <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`}>
+          {imgSlot(character.face_image_url, "front")}
+          {imgSlot(character.face_angle_url, "3/4 angle")}
+          {imgSlot(character.body_anchor_url, "full body", "contain")}
         </div>
       </div>
 
