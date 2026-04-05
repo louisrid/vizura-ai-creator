@@ -199,7 +199,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(0,224,255,0.25)" }} className="p-4">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className="p-4">
         <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
         <div className="flex flex-wrap gap-2">
           {traits.map((t) => (
