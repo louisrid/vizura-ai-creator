@@ -69,6 +69,12 @@ const ChooseFace = () => {
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
 
+  // Second loading phase: angle + body generation
+  const [angleLoading, setAngleLoading] = useState(false);
+  const [angleApiDone, setAngleApiDone] = useState(false);
+  const [angleBarComplete, setAngleBarComplete] = useState(false);
+  const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
+
   const hasInitRef = useRef(false);
 
   useEffect(() => {
