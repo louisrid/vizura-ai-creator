@@ -111,7 +111,7 @@ const History = () => {
             </button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">
             {items.map((item) => (
               <button
                 key={item.id}

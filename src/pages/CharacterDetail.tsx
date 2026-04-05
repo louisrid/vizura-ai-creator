@@ -183,14 +183,14 @@ const CharacterDetail = () => {
     </div>
   );
 
-  const content = (
+  const content = (isMobile: boolean) => (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className="p-5">
-        <h1 className="text-[30px] font-[900] lowercase tracking-tight text-white leading-none mb-5">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className={isMobile ? "p-5" : "p-6"}>
+        <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className={`grid grid-cols-3 ${isMobile ? "gap-2.5" : "gap-4"}`}>
           {imgSlot(character.face_image_url, "front", "front")}
           {imgSlot(character.face_angle_url, "3/4 angle", "3/4 angle")}
           {imgSlot(character.body_anchor_url, "full body", "full body", "contain")}
@@ -198,23 +198,23 @@ const CharacterDetail = () => {
       </div>
 
       {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className="p-4">
-        <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
-        <div className="flex flex-wrap gap-2">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className={isMobile ? "p-4" : "p-5"}>
+        <span className={`block font-[900] lowercase text-white ${isMobile ? "text-sm mb-3" : "text-base mb-4"}`}>details:</span>
+        <div className={`flex flex-wrap ${isMobile ? "gap-2" : "gap-3"}`}>
           {traits.map((t) => (
             <div key={t.label} className="rounded-[10px] px-3.5 py-2 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
-              <span className="block text-[9px] font-[800] uppercase leading-none mb-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-              <span className="block text-[13px] font-[800] lowercase text-white leading-none">{t.value}</span>
+              <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[9px]" : "text-[11px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+              <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[13px]" : "text-[15px]"}`}>{t.value}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Delete button — pill style with red border */}
+      {/* Delete button */}
       <div className="pt-2">
         <button
           onClick={() => setShowDelete(true)}
-          className="flex items-center justify-center gap-2 h-12 w-full text-sm font-[900] lowercase transition-colors active:scale-[0.98]"
+          className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
           style={{
             color: "#ff4444",
             borderRadius: 14,
@@ -232,19 +232,18 @@ const CharacterDetail = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      {/* Extra top padding under back arrow */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[400px] md:hidden">
         <div className="flex items-center gap-3 mb-4">
           <BackButton />
         </div>
-        <div className="flex flex-col gap-3">{content}</div>
+        <div className="flex flex-col gap-3">{content(true)}</div>
       </main>
 
       <main className="hidden md:block relative z-[1] mx-auto w-full max-w-3xl px-10 pt-4 pb-[400px]">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
         </div>
-        <div className="flex flex-col gap-3">{content}</div>
+        <div className="flex flex-col gap-4">{content(false)}</div>
       </main>
 
       <AnimatePresence>

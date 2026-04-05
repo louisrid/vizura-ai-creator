@@ -64,27 +64,27 @@ const TopUps = () => {
           <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           {plans.map((plan) => (
             <div
               key={plan.label}
-              className="rounded-2xl p-4 border-2 border-[#1a1a1a]"
+              className="rounded-2xl p-4 md:p-5 border-2 border-[#1a1a1a]"
               style={{ backgroundColor: "#111111" }}
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-                  <span className="text-lg font-extrabold lowercase text-foreground">
+                  <span className="text-lg md:text-xl font-extrabold lowercase text-foreground">
                     {plan.gems} gems
                   </span>
                 </div>
-                <span className="text-xl font-extrabold lowercase text-foreground">
+                <span className="text-xl md:text-2xl font-extrabold lowercase text-foreground">
                   ${plan.price}
                 </span>
               </div>
 
               <button
-                className="w-full h-11 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
+                className="w-full h-11 md:h-12 rounded-2xl text-sm md:text-base font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
                 onClick={() => handleBuy(plan)}
                 disabled={buying !== null}
               >
