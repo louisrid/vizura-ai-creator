@@ -178,58 +178,54 @@ const Header = () => {
         }}
       >
         <TopGradientBar />
-        <div className="max-w-lg md:max-w-6xl mx-auto flex items-center justify-between px-[14px] md:px-8 pt-6 pb-2">
-          <div className="flex items-center gap-2.5">
-            <button onClick={() => handleNav("/")} className="text-[26px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+        <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-2">
+          <div className="flex items-center gap-2.5 md:gap-3.5">
+            <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
               vizura
             </button>
             {/* User status icon — right of logo */}
             {isLoggedIn && (
               <button
                 onClick={() => navigate("/account")}
-                className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150"
+                className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[38px] md:h-[38px]"
                 style={{
-                  width: 32,
-                  height: 32,
                   borderRadius: "50%",
                   backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
                   border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
                 }}
                 aria-label="my account"
               >
-                <User size={16} strokeWidth={2.5} style={{ color: subscribed ? "#22c55e" : "#ffffff" }} />
+                <User size={16} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: subscribed ? "#22c55e" : "#ffffff" }} />
               </button>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 md:gap-4">
             <button
               onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-1 px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
+              className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 md:py-2 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "rgba(0,224,255,0.08)",
                 border: "1.5px solid rgba(0,224,255,0.25)",
                 borderRadius: 10,
               }}
             >
-              <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-              <span className="text-[13px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+              <Gem size={13} strokeWidth={2.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
+              <span className="text-[13px] md:text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
             </button>
 
             <button
               ref={menuBtnRef}
               onClick={() => setOpen(!open)}
-              className="flex items-center justify-center active:scale-95 transition-transform duration-150"
+              className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[50px] md:h-[50px]"
               style={{
-                width: 42,
-                height: 42,
                 borderRadius: 12,
                 backgroundColor: "#1a1a1a",
                 border: "2px solid #1a1a1a",
               }}
               aria-label="open menu"
             >
-              <svg width="18" height="14" viewBox="0 0 22 16" fill="none">
+              <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
                 <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
                 <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
                 <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
