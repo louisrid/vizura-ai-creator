@@ -192,7 +192,18 @@ const Index = () => {
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
 
+  // Close dropdown on outside click
   useEffect(() => {
+    if (!charDropdownOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setCharDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [charDropdownOpen]);
+
     const handler = () => {
       setFadingBack(true);
       setTimeout(() => {
