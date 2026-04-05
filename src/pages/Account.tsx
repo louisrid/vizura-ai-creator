@@ -101,7 +101,7 @@ const Account = () => {
               </div>
             </div>
 
-            <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+            <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
               <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
               <div className="flex-1">
                 <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
