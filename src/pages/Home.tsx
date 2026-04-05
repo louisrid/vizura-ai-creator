@@ -421,34 +421,39 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-8 pt-10 pb-[400px]">
-          <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
+        <main className="hidden md:block relative z-[1] w-full max-w-5xl mx-auto px-10 pt-10 pb-[400px]">
+          <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-3 mb-8" style={{ width: 60, height: 6, borderRadius: 3, backgroundColor: "#facc15" }} />
-          <div className="grid grid-cols-12 gap-5">
+          <div className="mt-4 mb-10" style={{ width: 70, height: 7, borderRadius: 3, backgroundColor: "#facc15" }} />
+          <div className="grid grid-cols-12 gap-6">
             <div className="col-span-4 flex flex-col gap-4">
               <button
                 type="button"
                 onClick={handleOpenCreator}
-                className="flex h-20 items-center justify-center gap-3 text-base font-[900] lowercase text-black transition-transform active:scale-[0.98]"
-                style={{ backgroundColor: "#facc15", borderRadius: 12 }}
+                className="flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-black transition-transform active:scale-[0.98]"
+                style={{ backgroundColor: "#facc15", borderRadius: 14 }}
               >
                 create character
               </button>
               <button
                 type="button"
                 onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
-                className="relative flex h-20 items-center justify-center gap-3 text-base font-[900] lowercase text-white transition-transform active:scale-[0.98] overflow-hidden"
-                style={{ backgroundColor: "#0b0b0b", borderRadius: 12 }}
+                className="relative flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-white transition-transform active:scale-[0.98] overflow-hidden"
+                style={{ backgroundColor: "#0b0b0b", borderRadius: 14 }}
               >
-                <div className="absolute inset-0" style={{ backgroundColor: "rgba(250,204,21,0.06)", border: "2px solid rgba(250,204,21,0.15)", borderRadius: 12 }} />
+                <div className="absolute inset-0" style={{ backgroundColor: "rgba(250,204,21,0.06)", border: "2px solid rgba(250,204,21,0.15)", borderRadius: 14 }} />
                 <span className="relative z-[1]">create photo</span>
               </button>
             </div>
-            <section className="col-span-8 flex flex-col p-4" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 16 }}>
-              <h2 className="mb-3 text-base font-[900] lowercase text-white">latest photos</h2>
-              <div className="grid grid-cols-4 gap-3 flex-1">
+            <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-[900] lowercase text-white">latest photos</h2>
+                <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
+                  see all →
+                </button>
+              </div>
+              <div className="grid grid-cols-4 gap-4 flex-1">
                 {photoSlots.map((photo) => {
                   const isPlaceholder = !photo.url;
                   return (
@@ -461,7 +466,7 @@ const Home = () => {
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-white/20">+</div>
+                          <div className="flex h-full w-full items-center justify-center text-white/20 text-xl">+</div>
                         ) : (
                           <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
@@ -472,6 +477,61 @@ const Home = () => {
               </div>
             </section>
           </div>
+          {/* Desktop characters section */}
+          <section className="mt-6 p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-[900] lowercase text-white flex items-center gap-2">🧑 my characters</h2>
+              <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
+                manage →
+              </button>
+            </div>
+            <div className="grid grid-cols-6 gap-4">
+              {[...charSlots, null, null].slice(0, 6).map((char, i) => {
+                if (!char) {
+                  return (
+                    <button
+                      key={`empty-${i}`}
+                      type="button"
+                      onClick={handleOpenCreator}
+                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#111111" }}
+                    >
+                      <AspectRatio ratio={3 / 4}>
+                        <div className="flex h-full w-full items-center justify-center text-white/20 text-xl font-[300]">+</div>
+                      </AspectRatio>
+                    </button>
+                  );
+                }
+                const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
+                return (
+                  <button
+                    key={char.id}
+                    type="button"
+                    onClick={() => navigate(`/characters/${char.id}`)}
+                    className="relative overflow-hidden active:scale-[0.98] transition-transform"
+                    style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111" }}
+                  >
+                    <AspectRatio ratio={3 / 4}>
+                      {hasFace ? (
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
+                            <circle cx="12" cy="8" r="5" />
+                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
+                          </svg>
+                        </div>
+                      )}
+                    </AspectRatio>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2.5 pt-5">
+                      <span className="block text-[12px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
+                      <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
         </main>
       </div>}
     </div>

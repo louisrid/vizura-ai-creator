@@ -6,7 +6,7 @@ const PHRASE_FADE_IN_DURATION = 0.95;
 const PHRASE_FADE_OUT_DURATION = 0.65;
 const PHRASE_GAP_MS = 650;
 const ACCEL_DURATION_MS = 1200;
-const FIXED_CONTENT_WIDTH = "min(20rem, calc(100vw - 5rem))";
+const FIXED_CONTENT_WIDTH = "min(24rem, calc(100vw - 5rem))";
 
 interface ProgressBarLoaderProps {
   duration?: number;

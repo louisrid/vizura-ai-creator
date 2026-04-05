@@ -508,19 +508,19 @@ const ChooseFace = () => {
             </div>
             <DotDecal />
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-2 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-8">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-2 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
                 <BackButton />
                 <PageTitle className="mb-0">pick your face</PageTitle>
               </div>
 
               <div className="flex items-center gap-2 mb-6">
-                <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                <span className="text-sm font-[900] lowercase text-foreground">{gems} gems</span>
+                <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} className="md:!w-[20px] md:!h-[20px]" />
+                <span className="text-sm md:text-base font-[900] lowercase text-foreground">{gems} gems</span>
               </div>
 
-              <div className="mx-auto mt-2 flex w-full max-w-[22rem] flex-col gap-4 md:max-w-xl">
-                <div className="grid grid-cols-3 gap-3 md:gap-5" style={{ perspective: "800px" }}>
+              <div className="mx-auto mt-2 flex w-full max-w-[22rem] md:max-w-[36rem] flex-col gap-4 md:gap-6">
+                <div className="grid grid-cols-3 gap-3 md:gap-6" style={{ perspective: "800px" }}>
                   {faces.map((url, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
                       <motion.button
@@ -543,11 +543,11 @@ const ChooseFace = () => {
                 </div>
 
                 {/* Two full-width buttons below faces */}
-                <div className="flex flex-col gap-2.5 mt-2">
+                <div className="flex flex-col gap-2.5 md:gap-3 mt-2">
                   <button
                     onClick={() => { if (selectedIndex !== null) handleSelectFace(selectedIndex); }}
                     disabled={selectedIndex === null}
-                    className="flex h-14 w-full items-center justify-center gap-2 text-sm font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 12,
                       backgroundColor: selectedIndex !== null ? "#facc15" : "#222",
@@ -560,7 +560,7 @@ const ChooseFace = () => {
                   <button
                     onClick={handleRegenerate}
                     disabled={isFreeUser}
-                    className="flex h-14 w-full items-center justify-center gap-2 text-sm font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
                       borderRadius: 12,
                       backgroundColor: "rgba(0,224,255,0.08)",

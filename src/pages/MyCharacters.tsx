@@ -85,7 +85,7 @@ const MyCharacters = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-8 pt-4 pb-[400px]">
+        <main className="relative z-[1] w-full max-w-lg md:max-w-5xl mx-auto px-[14px] md:px-10 pt-4 pb-[400px]">
         <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -96,7 +96,7 @@ const MyCharacters = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="overflow-hidden active:scale-[0.97] transition-transform"
@@ -163,12 +163,12 @@ const MyCharacters = () => {
       </main>
 
       <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1rem)] pt-2 bg-gradient-to-t from-background via-background/95 to-transparent">
-        <div className="mx-auto max-w-lg md:max-w-6xl">
+        <div className="mx-auto max-w-lg md:max-w-5xl">
           <motion.button
             onClick={handleBottomButton}
             animate={bounceActive ? { y: [0, -6, 0] } : {}}
             transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-            className="flex h-14 w-full items-center justify-center gap-2 text-base font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+            className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-base md:text-lg font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
             style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
           >
             {hasCharacters ? (

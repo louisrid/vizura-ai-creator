@@ -68,7 +68,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-8 pt-4 pb-[400px]">
+      <main className="w-full max-w-lg md:max-w-5xl mx-auto px-4 md:px-10 pt-4 pb-[400px]">
         <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
@@ -90,7 +90,7 @@ const Storage = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
             {images.map((img) => (
               <div key={img.id} className="flex flex-col">
                 <button
@@ -133,7 +133,7 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="relative w-full max-w-[280px] overflow-hidden"
+              className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
               style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >

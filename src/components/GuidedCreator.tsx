@@ -40,8 +40,8 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[32px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[12px] font-[800] lowercase" + " " + "text-white/40";
+const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const HELPER_CLASS = "text-[12px] md:text-[14px] font-[800] lowercase" + " " + "text-white/40";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
@@ -57,36 +57,32 @@ const TopLine = () => (
 
 /* ── Animated rings (hero only) ── */
 const AnimatedRings = ({ t }: { t: number }) => (
-  <div className="relative flex items-center justify-center" style={{ width: 280, height: 280, marginBottom: 18 }}>
+  <div className="relative flex items-center justify-center w-[280px] h-[280px] md:w-[380px] md:h-[380px] mb-[18px] md:mb-[24px]">
     {/* Inner ring */}
-    <div className="absolute" style={{
-      width: 150, height: 150, borderRadius: "50%",
+    <div className="absolute w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-full" style={{
       border: `2px solid ${Y}`, borderLeftColor: "transparent",
       transform: `rotate(${t * 1.2}deg)`,
-      top: "50%", left: "50%", marginTop: -75, marginLeft: -75,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
     {/* Mid ring */}
-    <div className="absolute" style={{
-      width: 200, height: 200, borderRadius: "50%",
+    <div className="absolute w-[200px] h-[200px] md:w-[270px] md:h-[270px] rounded-full" style={{
       border: `8px solid ${Y}`, borderTopColor: "transparent", borderRightColor: "transparent",
       transform: `rotate(${t * -0.8}deg)`,
-      top: "50%", left: "50%", marginTop: -100, marginLeft: -100,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
     {/* Outer ring */}
-    <div className="absolute" style={{
-      width: 245, height: 245, borderRadius: "50%",
+    <div className="absolute w-[245px] h-[245px] md:w-[330px] md:h-[330px] rounded-full" style={{
       border: `3px solid ${Y}`, borderBottomColor: "transparent", borderLeftColor: "transparent",
       transform: `rotate(${t * 0.6}deg)`,
-      top: "50%", left: "50%", marginTop: -122.5, marginLeft: -122.5,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
     {/* Dashed ring */}
-    <div className="absolute" style={{
-      width: 278, height: 278, borderRadius: "50%",
+    <div className="absolute w-[278px] h-[278px] md:w-[375px] md:h-[375px] rounded-full" style={{
       border: `2px dashed ${Y}`,
       transform: `rotate(${t * -0.4}deg)`,
-      top: "50%", left: "50%", marginTop: -139, marginLeft: -139,
+      top: "50%", left: "50%", translate: "-50% -50%",
     }} />
-    <span style={{ fontSize: 82, position: "relative", zIndex: 1 }}>👩‍🎤</span>
+    <span className="text-[82px] md:text-[110px] relative z-[1]">👩‍🎤</span>
   </div>
 );
 
@@ -101,9 +97,9 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
         disabled={disabled}
-        className="flex items-center justify-center active:opacity-70 transition-opacity duration-150"
+        className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
         style={{
-          width: 62, height: 62, borderRadius: 16,
+          borderRadius: 16,
           backgroundColor: isForward ? CYAN : "rgba(0,224,255,0.08)",
           border: isForward ? "none" : `2.5px solid rgba(0,224,255,0.3)`,
           outline: "none", padding: 0, cursor: "pointer",
@@ -111,12 +107,12 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         }}
       >
         {direction === "left" ? (
-          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none" className="md:w-[28px] md:h-[22px]">
             <path d="M8 1L1.5 8L8 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="2" y1="8" x2="18.5" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <svg width="22" height="18" viewBox="0 0 20 16" fill="none">
+          <svg width="22" height="18" viewBox="0 0 20 16" fill="none" className="md:w-[28px] md:h-[22px]">
             <path d="M12 1L18.5 8L12 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             <line x1="1.5" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
@@ -141,12 +137,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="flex w-full items-center justify-center"
+    className="flex w-full items-center justify-center h-[56px] md:h-[66px] text-[17px] md:text-[20px]"
     style={{
-      height: 56,
       borderRadius: 14,
       padding: "10px 16px",
-      fontSize: 17,
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -414,15 +408,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => (
     <div className="flex w-full flex-col items-center" style={{ marginTop: 0 }}>
       <AnimatedRings t={ringT} />
-      <div style={{ fontSize: 60, fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
-      <div style={{ width: 40, height: 4, background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
-      <div className="flex flex-col items-center" style={{ marginTop: 20, gap: 8 }}>
+      <div className="text-[60px] md:text-[80px]" style={{ fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div className="w-[40px] md:w-[56px] h-[4px] md:h-[5px]" style={{ background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
+      <div className="flex flex-col items-center mt-5 md:mt-7 gap-2 md:gap-3">
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+          className="w-[168px] md:w-[220px] py-[10px] md:py-[14px] text-[18px] md:text-[22px]"
           style={{
-            width: 168, padding: "10px", background: Y, border: "none", borderRadius: 12,
-            fontSize: 18, fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
+            background: Y, border: "none", borderRadius: 12,
+            fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
             cursor: "pointer",
           }}
         >
@@ -432,9 +427,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <button
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
+            className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[18px] md:text-[22px]"
             style={{
-              width: 168, padding: "8px", background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontSize: 18, fontWeight: 900, color: "#fff",
+              background: "#111", border: "2px solid #222",
+              borderRadius: 12, fontWeight: 900, color: "#fff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
@@ -452,10 +448,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* Intro */
     if (isIntroSlide) return (
       <div className="flex w-full flex-col items-center">
-        <span className="text-[64px] mb-5">💫</span>
+        <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">💫</span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <motion.p
-          className="mt-5 text-[13px] font-[800] lowercase"
+          className="mt-5 text-[13px] md:text-[15px] font-[800] lowercase"
           style={{ color: "rgba(255,255,255,0.4)" }}
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
@@ -466,9 +462,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[64px] mb-5">✨</span>
+        <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-6 flex items-center gap-2.5 w-full max-w-[17rem]">
+        <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -477,14 +473,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[56px] flex-1 min-w-0 px-4 text-[17px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
           <motion.button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
             whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[56px] w-[56px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
             style={{ borderRadius: 14, backgroundColor: Y }}
           >
             <RefreshCw size={20} strokeWidth={2.5} />
@@ -499,12 +495,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[64px] mb-5">{trait.emoji}</span>
+          <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className={`mt-6 grid w-full gap-3.5 px-2 ${
-            trait.options.length === 4 ? "max-w-[21rem] grid-cols-2"
-              : trait.options.length === 2 ? "max-w-[17rem] grid-cols-2 mx-auto"
-              : "max-w-[23rem] grid-cols-3"
+          <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 ${
+            trait.options.length === 4 ? "max-w-[21rem] md:max-w-[28rem] grid-cols-2"
+              : trait.options.length === 2 ? "max-w-[17rem] md:max-w-[22rem] grid-cols-2 mx-auto"
+              : "max-w-[23rem] md:max-w-[30rem] grid-cols-3"
           }`}>
             {trait.options.map((opt) => (
               <div key={opt} className="flex flex-col items-center gap-1">
@@ -529,14 +525,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 w-full max-w-[18rem]">
+        <div className="mt-5 w-full max-w-[18rem] md:max-w-[24rem]">
           <textarea
             value={selections.description}
             onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
             placeholder="add any details you want…"
             rows={6}
             onClick={(e) => e.stopPropagation()}
-            className="min-h-[160px] w-full resize-none px-4 py-3 text-[16px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="min-h-[160px] md:min-h-[180px] w-full resize-none px-4 py-3 text-[16px] md:text-[18px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
           <p className={`mt-3 text-center ${HELPER_CLASS}`}>i.e. chubby cheeks, freckles, thick mascara</p>
@@ -549,7 +545,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 flex w-full max-w-[11rem] flex-col items-center gap-4">
+        <div className="mt-5 flex w-full max-w-[11rem] md:max-w-[14rem] flex-col items-center gap-4">
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
           {selections.referenceImage ? (
             <div className="w-full">
@@ -602,7 +598,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
         >
-          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
+          <h2 className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
@@ -613,7 +609,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           )}
           <motion.p
-            className="mt-6 text-[14px] font-[800] lowercase"
+            className="mt-6 text-[14px] md:text-[16px] font-[800] lowercase"
             style={{ color: "rgba(255,255,255,0.4)" }}
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
@@ -648,8 +644,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Skip button removed */}
 
         {/* Content area */}
-        <div className="absolute inset-0 flex items-center px-6" style={{ justifyContent: "center", paddingBottom: isHeroSlide ? "0%" : "22%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
-          <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+        <div className="absolute inset-0 flex items-center px-6 md:px-12" style={{ justifyContent: "center", paddingBottom: isHeroSlide ? "0%" : "22%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
+          <div className="w-full max-w-sm md:max-w-xl mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
                 key={step}
@@ -669,10 +665,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
             {/* Progress dots at TOP */}
-            <div className="flex items-center justify-center gap-[3px]" style={{ padding: "0 50px", width: "100%", marginBottom: 0 }}>
+            <div className="flex items-center justify-center gap-[3px] md:gap-[5px] max-w-lg md:max-w-2xl mx-auto" style={{ padding: "0 50px", width: "100%", marginBottom: 0 }}>
               {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="transition-all duration-300" style={{
-                  flex: 1, height: 4, borderRadius: 2,
+                <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
+                  flex: 1, borderRadius: 2,
                   background: i <= Math.round(((step) / TOTAL) * 11) ? Y : "rgba(250,204,21,0.1)",
                 }} />
               ))}
@@ -683,7 +679,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Arrow buttons + home icon — positioned below content */}
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "6%" }}>
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-4 md:gap-6">
               <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
                 <NavArrow direction="left" onClick={goBack} />
               </motion.div>
@@ -792,7 +788,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
-        <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
+        <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
           <span className="text-[64px] mb-5">🔐</span>
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
