@@ -232,11 +232,12 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        if (data.length === 1) {
-          setSelectedCharId(data[0].id);
-        } else if (preselectedCharacterId) {
+        if (preselectedCharacterId) {
           const char = data.find((c: any) => c.id === preselectedCharacterId);
           if (char) setSelectedCharId(preselectedCharacterId);
+        } else if (data.length > 0) {
+          // Auto-select most recently created character
+          setSelectedCharId(data[0].id);
         }
       }
     };
