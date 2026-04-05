@@ -4,7 +4,7 @@ import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import Header from "@/components/Header";
+
 import DotDecal from "@/components/DotDecal";
 import { SignInOverlay } from "@/components/GuidedCreator";
 import { toast } from "@/components/ui/sonner";
