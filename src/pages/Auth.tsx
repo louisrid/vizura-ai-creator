@@ -119,7 +119,7 @@ const Auth = () => {
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
-        <div className="rounded-2xl border-[5px] border-border bg-card p-5 space-y-3">
+        <div className="rounded-2xl border-[2px] border-border bg-card p-5 space-y-3">
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}

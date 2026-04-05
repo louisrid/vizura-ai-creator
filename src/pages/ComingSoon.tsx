@@ -9,7 +9,7 @@ const ComingSoon = ({ title }: { title: string }) => (
         <BackButton />
         <PageTitle className="mb-0">{title}</PageTitle>
       </div>
-      <div className="border-[5px] border-neon-yellow rounded-2xl p-8 text-center bg-card">
+      <div className="border-[2px] border-neon-yellow rounded-2xl p-8 text-center bg-card">
         <Sparkles size={20} className="mx-auto mb-3 text-neon-yellow" />
         <p className="text-sm font-extrabold lowercase text-foreground">coming soon</p>
         <p className="text-xs font-bold lowercase text-foreground/50 mt-2">this feature is on the way</p>
