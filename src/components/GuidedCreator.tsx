@@ -545,7 +545,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
         <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 flex w-full max-w-[11rem] flex-col items-center gap-4">
+        <div className="mt-5 flex w-full max-w-[11rem] md:max-w-[14rem] flex-col items-center gap-4">
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
           {selections.referenceImage ? (
             <div className="w-full">
