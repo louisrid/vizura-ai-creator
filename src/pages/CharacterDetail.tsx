@@ -198,7 +198,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className={isMobile ? "p-4" : "p-5"}>
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(250,204,21,0.25)" }} className={isMobile ? "p-4" : "p-5"}>
         <span className={`block font-[900] lowercase text-white ${isMobile ? "text-sm mb-3" : "text-base mb-4"}`}>details:</span>
         <div className={`flex flex-wrap ${isMobile ? "gap-2" : "gap-3"}`}>
           {traits.map((t) => (
