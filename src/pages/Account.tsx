@@ -73,7 +73,7 @@ const Account = () => {
             </div>
           ) : (
             <button
-              className="w-full h-12 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all"
+              className="w-full h-12 md:h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm md:text-base font-extrabold lowercase hover:opacity-90 transition-all"
               onClick={() => setOverlayOpen(true)}
             >
               subscribe
