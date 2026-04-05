@@ -14,7 +14,7 @@ const corsHeaders = {
 
 /* ── prompt constants ──────────────────────────────────── */
 const QUALITY_SUFFIX =
-  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain";
+  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain, detailed realistic skin with subtle veins and freckles, natural skin colour variation, no airbrushed look, no plastic appearance, real human skin"";
 
 const NEGATIVE_INSTRUCTION =
   "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, glossy shiny skin, oily skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
@@ -88,10 +88,8 @@ const BODY_MAP: Record<string, string> = {
 };
 
 const MAKEUP_MAP: Record<string, string> = {
-  natural: "natural minimal makeup fresh-faced",
-  classic: "classic polished makeup defined features",
-  glam: "classic polished makeup defined features",
-  model: "classic polished makeup defined features",
+  natural: "natural minimal makeup with visible lip gloss and subtle mascara",
+  classic: "classic polished makeup with defined eyeliner, mascara, subtle contour, lip colour",
 };
 
 function ageToDescription(ageStr: string): string {
@@ -354,7 +352,7 @@ async function generateFaceImages(
     "square strong face shape, flat wide cheekbones, broad flat chin, strong angular jaw, medium naturally asymmetric lips, small upturned nose, large round doe eyes set wide apart, arched dramatic brows, prominent bone structure, EXACT SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear matte skin, natural skin texture, no glossy or oily skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
+  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear matte skin, natural skin texture, no glossy or oily skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background, visibly younger looking for youngest age range, strikingly attractive, magazine cover beauty";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -452,7 +450,7 @@ async function generateAngleAndBody(
     const bodyKey = (bodyType || "regular").toLowerCase();
     const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted low-cut top and tight black legging, ${bodyDesc}, both arms fully visible hanging naturally at sides, standing upright with feet shoulder width apart, confident natural pose, slightly zoomed in framing, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${characterTraits}, ${bodyModifier}, natural lighting. ${BODY_NEGATIVE}`;
+    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted low-cut top and tight black legging, ${bodyDesc}, both arms fully visible hanging naturally at sides, standing upright with feet shoulder width apart, confident natural pose, slightly zoomed in framing, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${bodyModifier}, natural realistic proportions, arms proportional to body, feminine soft build not muscular, face must blend naturally with body as one cohesive person, natural lighting. ${BODY_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
