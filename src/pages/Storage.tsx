@@ -90,7 +90,7 @@ const Storage = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
             {images.map((img) => (
               <div key={img.id} className="flex flex-col">
                 <button
