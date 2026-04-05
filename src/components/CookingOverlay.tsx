@@ -10,7 +10,7 @@ const PHRASES = [
   "final touches…",
 ];
 
-const OVERLAY_FADE_DURATION = 0.75;
+const OVERLAY_FADE_DURATION = 0.35;
 const SUCCESS_HOLD = 4000;
 
 interface CookingOverlayProps {

@@ -368,7 +368,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();
-      }, 350);
+      }, 120);
       return;
     }
     animating.current = true;
@@ -632,7 +632,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 0.9, ease: "easeInOut" }}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
