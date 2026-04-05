@@ -788,7 +788,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
-        <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs">
+        <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
           <span className="text-[64px] mb-5">🔐</span>
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
