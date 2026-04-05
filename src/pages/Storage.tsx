@@ -53,6 +53,15 @@ const Storage = () => {
           });
         });
       });
+      // Mark the newest image as "new" for animate-in if arriving from photo creation
+      if (allImages.length > 0) {
+        const newest = allImages[0];
+        const createdMs = new Date(newest.created_at).getTime();
+        if (Date.now() - createdMs < 30000) {
+          setNewImageIds(new Set([newest.id]));
+          setTimeout(() => setNewImageIds(new Set()), 1500);
+        }
+      }
       setImages(allImages);
       setLoading(false);
     };
