@@ -343,36 +343,42 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-4xl mx-auto px-[14px] md:px-10 pt-1 pb-[400px]">
-        <div className="flex items-center gap-3 mb-3">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-4xl mx-auto px-[14px] md:px-10 pt-1 pb-40">
+        <div className="flex items-center gap-3 mb-5">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        {/* Character selector — custom dropdown with face avatars */}
+        {/* Type & Ratio toggles — above preview */}
+        <div className="flex gap-6 mb-4">
+          <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
+          <PillToggle label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+        </div>
+
+        {/* Character selector — yellow background */}
         <div className="relative mb-4" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setCharDropdownOpen((v) => !v)}
-            className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
+            className="flex w-full items-center gap-3 h-12 px-4 transition-colors active:scale-[0.99]"
+            style={{ borderRadius: 12, backgroundColor: "#facc15" }}
           >
             {selectedChar?.face_image_url ? (
-              <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/10">
+              <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
                 <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
-                <span className="text-white/30 text-xs">👤</span>
+              <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
+                <span className="text-black/40 text-xs">👤</span>
               </div>
             )}
-            <span className="flex-1 text-left text-sm font-[900] lowercase text-white truncate">
+            <span className="flex-1 text-left text-sm font-[900] lowercase text-black truncate">
               {selectedChar?.name || "select character"}
             </span>
             <ChevronDown
               size={16}
               strokeWidth={2.5}
-              className={`text-white/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`}
+              className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`}
             />
           </button>
 
@@ -384,18 +390,8 @@ const Index = () => {
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.15 }}
                 className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-                style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
+                style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
               >
-                <button
-                  type="button"
-                  onClick={() => { handleCharacterSelect(""); setCharDropdownOpen(false); }}
-                  className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${!selectedCharId ? "bg-white/5" : "hover:bg-white/5"}`}
-                >
-                  <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
-                    <span className="text-white/30 text-[10px]">—</span>
-                  </div>
-                  <span className="text-sm font-[900] lowercase text-white/60">none</span>
-                </button>
                 {characters.map((c) => (
                   <button
                     key={c.id}
@@ -442,14 +438,14 @@ const Index = () => {
 
         {/* Desktop: two-column layout */}
         <div className="md:grid md:grid-cols-5 md:gap-8">
-          {/* Left: preview — 25% smaller */}
+          {/* Left: preview */}
           <div className="md:col-span-2">
-            <div className="relative flex justify-center" style={{ maxWidth: "75%" , margin: "0 auto" }}>
+            <div className="relative flex justify-center" style={{ maxWidth: "65%", margin: "0 auto" }}>
               <motion.section
                 layout
-                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
+                className="mb-5 md:mb-0 flex items-center justify-center overflow-hidden w-full"
                 style={{
-                  borderRadius: 16,
+                  borderRadius: 14,
                   border: "2px solid rgba(255,255,255,0.08)",
                   backgroundColor: "#111111",
                 }}
@@ -463,13 +459,13 @@ const Index = () => {
                       <div
                         className="flex items-center justify-center rounded-full"
                         style={{
-                          width: 56,
-                          height: 56,
+                          width: 48,
+                          height: 48,
                           backgroundColor: "rgba(250,204,21,0.08)",
                           border: "2px solid #facc15",
                         }}
                       >
-                        <span className="text-2xl">🪄</span>
+                        <span className="text-xl">🪄</span>
                       </div>
                     </div>
                   )}
@@ -478,19 +474,7 @@ const Index = () => {
             </div>
           </div>
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-6">
-            <div className="relative">
-              <div className="flex gap-6">
-              <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-              <PillToggle
-                label="ratio"
-                options={["3:4", "9:16"]}
-                value={photoRatio}
-                onChange={setPhotoRatio}
-              />
-              </div>
-            </div>
-
+          <div className="md:col-span-3 space-y-4">
             {/* Prompt */}
             <div className="relative">
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">describe your photo</span>
@@ -550,7 +534,7 @@ const Index = () => {
             </div>
 
             {/* Create button */}
-            <div className="pt-2">
+            <div className="pt-1">
               <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
             </div>
           </div>
