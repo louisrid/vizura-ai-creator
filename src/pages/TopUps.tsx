@@ -84,7 +84,7 @@ const TopUps = () => {
               </div>
 
               <button
-                className="w-full h-11 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
+                className="w-full h-11 md:h-12 rounded-2xl text-sm md:text-base font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
                 onClick={() => handleBuy(plan)}
                 disabled={buying !== null}
               >
