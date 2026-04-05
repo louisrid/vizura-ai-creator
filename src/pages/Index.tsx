@@ -343,17 +343,13 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-4xl mx-auto px-[14px] md:px-10 pt-1 pb-40">
-        <div className="flex items-center gap-3 mb-5">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-40">
+        <div className="flex items-center gap-3 mb-6">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        {/* Type & Ratio toggles — above preview */}
-        <div className="flex gap-6 mb-4">
-          <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-          <PillToggle label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
-        </div>
+        <div className="w-[75%] mx-auto flex flex-col gap-4">
 
         {/* Character selector — yellow background */}
         <div className="relative mb-4" ref={dropdownRef}>
