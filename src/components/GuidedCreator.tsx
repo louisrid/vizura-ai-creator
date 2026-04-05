@@ -598,7 +598,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
           disabled={exitFade}
         >
-          <h2 className="mx-auto text-center text-[3rem] font-[900] lowercase leading-[1.05] tracking-tight">
+          <h2 className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight">
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
