@@ -463,10 +463,7 @@ const ChooseFace = () => {
 
   return (
     <>
-      {/* Persistent black backdrop — always present, never unmounts */}
-      <div className="fixed inset-0 z-[9998] bg-black" />
-
-      <div className="relative min-h-screen overflow-hidden bg-background w-full" style={{ position: "relative", zIndex: 9999 }}>
+      <div className="relative min-h-screen overflow-hidden bg-background w-full">
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
         {/* Full-screen loading bar while faces generate */}
