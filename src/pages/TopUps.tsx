@@ -74,7 +74,7 @@ const TopUps = () => {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-                  <span className="text-lg font-extrabold lowercase text-foreground">
+                  <span className="text-lg md:text-xl font-extrabold lowercase text-foreground">
                     {plan.gems} gems
                   </span>
                 </div>
