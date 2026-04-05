@@ -60,7 +60,7 @@ const Account = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-4 pb-[400px]">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[400px]">
         <div className="flex items-center gap-3 mb-4">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
