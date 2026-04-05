@@ -25,6 +25,7 @@ const Storage = () => {
   const [images, setImages] = useState<StorageImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
+  const [newImageIds, setNewImageIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
