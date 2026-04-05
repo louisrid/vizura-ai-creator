@@ -501,7 +501,7 @@ const ChooseFace = () => {
           <>
             <DotDecal />
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-2 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-10">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-1 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
                 <BackButton />
                 <PageTitle className="mb-0">pick your face</PageTitle>
