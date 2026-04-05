@@ -303,7 +303,7 @@ const CharacterCreator = () => {
         </div>
 
         {/* Hero image box */}
-        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[2px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
             <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
           </div>
@@ -319,7 +319,7 @@ const CharacterCreator = () => {
             value={characterName}
             onChange={(e) => setCharacterName(e.target.value)}
             placeholder="give your character a name..."
-            className="h-12 w-full rounded-2xl border-[5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="h-12 w-full rounded-2xl border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -363,24 +363,6 @@ const CharacterCreator = () => {
           </button>
         </section>
 
-        {/* Reference strength slider */}
-        <section className="mt-4 flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold lowercase text-foreground">reference strength</span>
-            <span className="text-xs font-extrabold lowercase text-foreground">{referenceStrength}%</span>
-          </div>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={referenceStrength}
-            onChange={(e) => setReferenceStrength(Number(e.target.value))}
-            className="w-full accent-neon-yellow h-2 rounded-full appearance-none cursor-pointer"
-            style={{
-              background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(0 0% 20%) ${referenceStrength}%)`,
-            }}
-          />
-        </section>
 
         {/* Description */}
         <section className="mt-10 flex flex-col gap-1.5">
@@ -390,12 +372,12 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
             rows={8}
-            className="min-h-52 w-full resize-none rounded-2xl border-[5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-52 w-full resize-none rounded-2xl border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
         {error && (
-          <div className="mt-5 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-5 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}

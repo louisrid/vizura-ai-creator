@@ -569,21 +569,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
             </button>
           )}
-          <div className="w-full space-y-2 mb-4">
-            <div className="flex items-center justify-between">
-              <span className={HELPER_CLASS}>strength</span>
-              <span className={HELPER_CLASS}>{selections.referenceStrength}%</span>
-            </div>
-            <input
-              type="range" min={0} max={100}
-              value={selections.referenceStrength}
-              onChange={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceStrength: Number(e.target.value) })); }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full cursor-pointer appearance-none rounded-full"
-              style={{ background: `linear-gradient(to right, ${Y} ${selections.referenceStrength}%, #222 ${selections.referenceStrength}%)` }}
-            />
-            <p className={HELPER_CLASS}>(recommended: 50%)</p>
-          </div>
         </div>
       </div>
     );

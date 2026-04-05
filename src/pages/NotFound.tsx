@@ -17,7 +17,7 @@ const NotFound = () => {
           <BackButton />
           <PageTitle className="mb-0">not found</PageTitle>
         </div>
-        <div className="border-[5px] border-border rounded-2xl p-6 text-center">
+        <div className="border-[2px] border-border rounded-2xl p-6 text-center">
           <p className="text-xs font-extrabold lowercase mb-3 text-foreground">page not found</p>
           <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">
             back to home

@@ -485,19 +485,6 @@ const Index = () => {
                   <span className="text-xs font-[900] lowercase text-foreground/30">upload image</span>
                 </button>
               )}
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-[10px] font-[900] lowercase text-white">strength</span>
-                <span className="text-[10px] font-[900] lowercase text-white">{referenceStrength}%</span>
-              </div>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={referenceStrength}
-                onChange={(e) => setReferenceStrength(Number(e.target.value))}
-                className="mt-1.5 w-full cursor-pointer appearance-none rounded-full h-2"
-                style={{ background: `linear-gradient(to right, hsl(var(--neon-yellow)) ${referenceStrength}%, hsl(var(--secondary)) ${referenceStrength}%)` }}
-              />
             </div>
 
             {/* Create button */}
@@ -508,7 +495,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-2xl border-[5px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
