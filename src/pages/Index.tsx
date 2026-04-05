@@ -203,7 +203,7 @@ const Index = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [charDropdownOpen]);
-
+  useEffect(() => {
     const handler = () => {
       setFadingBack(true);
       setTimeout(() => {
