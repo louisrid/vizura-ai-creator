@@ -57,32 +57,31 @@ const CharacterDetail = () => {
     if (user) fetch();
   }, [user, id]);
 
-  // Poll for angle/body images if they're missing (background generation)
+  // Realtime subscription for character updates (angle/body images)
   useEffect(() => {
-    if (!character || !user || !id) return;
-    const needsAngle = !character.face_angle_url;
-    const needsBody = !character.body_anchor_url;
-    if (!needsAngle && !needsBody) return;
+    if (!user || !id) return;
 
-    const interval = setInterval(async () => {
-      const { data } = await supabase
-        .from("characters")
-        .select("face_angle_url, body_anchor_url")
-        .eq("id", id)
-        .eq("user_id", user.id)
-        .single();
-      if (!data) return;
-      let changed = false;
-      if (data.face_angle_url && !character.face_angle_url) changed = true;
-      if (data.body_anchor_url && !character.body_anchor_url) changed = true;
-      if (changed) {
-        setCharacter((prev) => prev ? { ...prev, ...data } : prev);
-      }
-      if (data.face_angle_url && data.body_anchor_url) clearInterval(interval);
-    }, 5000);
+    const channel = supabase
+      .channel(`character-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'characters',
+          filter: `id=eq.${id}`,
+        },
+        (payload) => {
+          const updated = payload.new as any;
+          setCharacter((prev) => prev ? { ...prev, ...updated } : prev);
+        }
+      )
+      .subscribe();
 
-    return () => clearInterval(interval);
-  }, [character, user, id]);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, id]);
 
   const handleDelete = async () => {
     if (!character) return;
@@ -173,9 +172,9 @@ const CharacterDetail = () => {
 
   const imgSlot = (url: string | null | undefined, label: string, caption: string, objectFit: "cover" | "contain" = "cover") => (
     <div className="flex flex-col items-center gap-1.5">
-    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center p-2" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, border: "5px solid #222", backgroundColor: "#111111" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit, borderRadius: 8 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit, borderRadius: 7 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
@@ -187,7 +186,7 @@ const CharacterDetail = () => {
   const content = (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(0,224,255,0.25)" }} className="p-5">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className="p-5">
         <h1 className="text-[30px] font-[900] lowercase tracking-tight text-white leading-none mb-5">
           {nameAge}
         </h1>
@@ -199,7 +198,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Box 2: Details */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(0,224,255,0.25)" }} className="p-4">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className="p-4">
         <span className="block text-sm font-[900] lowercase text-white mb-3">details:</span>
         <div className="flex flex-wrap gap-2">
           {traits.map((t) => (

@@ -296,7 +296,7 @@ const CharacterCreator = () => {
       />
 
       {!pageHidden && (
-      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-14 pb-10">
+      <main className="mx-auto flex w-full max-w-lg flex-col px-4 pt-2 pb-10">
         <div className="flex items-center justify-between mb-8">
           <PageTitle className="mb-0">create character</PageTitle>
 

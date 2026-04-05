@@ -4,7 +4,7 @@ import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import Header from "@/components/Header";
+
 import DotDecal from "@/components/DotDecal";
 import { SignInOverlay } from "@/components/GuidedCreator";
 import { toast } from "@/components/ui/sonner";
@@ -463,10 +463,7 @@ const ChooseFace = () => {
 
   return (
     <>
-      {/* Persistent black backdrop — always present, never unmounts */}
-      <div className="fixed inset-0 z-[9998] bg-black" />
-
-      <div className="relative min-h-screen overflow-hidden bg-background w-full" style={{ position: "relative", zIndex: 9999 }}>
+      <div className="relative min-h-screen overflow-hidden bg-background w-full">
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
         {/* Full-screen loading bar while faces generate */}
@@ -499,13 +496,9 @@ const ChooseFace = () => {
           )}
         </AnimatePresence>
 
-        {/* Face picker — shown after loading completes */}
+      {/* Face picker — shown after loading completes */}
         {!loading && faces.length > 0 && (
           <>
-            {/* Site header */}
-            <div className="relative z-[10000]">
-              <Header />
-            </div>
             <DotDecal />
 
             <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-2 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-10">
@@ -533,7 +526,7 @@ const ChooseFace = () => {
                           rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                           opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                         }}
-                        className={`relative aspect-[3/4] w-full overflow-hidden border-2 transition-all duration-300 ease-out ${selectedIndex === i ? "border-accent" : "border-border"}`}
+                        className={`relative aspect-[3/4] w-full overflow-hidden border-[5px] transition-all duration-300 ease-out ${selectedIndex === i ? "border-accent" : "border-border"}`}
                         style={{ borderRadius: 12 }}
                       >
                         <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
