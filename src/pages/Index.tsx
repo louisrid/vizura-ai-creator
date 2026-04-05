@@ -185,12 +185,24 @@ const Index = () => {
   const [photoRatio, setPhotoRatio] = useState("3:4");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
-  const [referenceStrength, setReferenceStrength] = useState(50);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [charDropdownOpen, setCharDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!charDropdownOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setCharDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [charDropdownOpen]);
   useEffect(() => {
     const handler = () => {
       setFadingBack(true);
@@ -331,22 +343,111 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="relative z-[1] w-full max-w-lg md:max-w-4xl mx-auto px-[14px] md:px-10 pt-1 pb-[400px]">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-3">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
+        {/* Character selector — custom dropdown with face avatars */}
+        <div className="relative mb-4" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setCharDropdownOpen((v) => !v)}
+            className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
+            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
+          >
+            {selectedChar?.face_image_url ? (
+              <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/10">
+                <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
+                <span className="text-white/30 text-xs">👤</span>
+              </div>
+            )}
+            <span className="flex-1 text-left text-sm font-[900] lowercase text-white truncate">
+              {selectedChar?.name || "select character"}
+            </span>
+            <ChevronDown
+              size={16}
+              strokeWidth={2.5}
+              className={`text-white/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          <AnimatePresence>
+            {charDropdownOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.15 }}
+                className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
+                style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
+              >
+                <button
+                  type="button"
+                  onClick={() => { handleCharacterSelect(""); setCharDropdownOpen(false); }}
+                  className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${!selectedCharId ? "bg-white/5" : "hover:bg-white/5"}`}
+                >
+                  <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
+                    <span className="text-white/30 text-[10px]">—</span>
+                  </div>
+                  <span className="text-sm font-[900] lowercase text-white/60">none</span>
+                </button>
+                {characters.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
+                    className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${selectedCharId === c.id ? "bg-white/5" : "hover:bg-white/5"}`}
+                  >
+                    {c.face_image_url ? (
+                      <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 border border-white/10">
+                        <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
+                        <span className="text-white/30 text-xs">👤</span>
+                      </div>
+                    )}
+                    <span className="text-sm font-[900] lowercase text-white truncate">{c.name || "unnamed"}</span>
+                    {selectedCharId === c.id && (
+                      <div className="ml-auto w-2 h-2 rounded-full" style={{ backgroundColor: "#facc15" }} />
+                    )}
+                  </button>
+                ))}
+                {characters.length === 0 && user && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCharDropdownOpen(false);
+                      sessionStorage.removeItem("vizura_creator_dismissed");
+                      sessionStorage.removeItem("vizura_guided_flow_state");
+                      navigate("/", { state: { openCreator: true } });
+                    }}
+                    className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
+                  >
+                    <div className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "1px solid rgba(250,204,21,0.3)" }}>
+                      <span className="text-[10px]">+</span>
+                    </div>
+                    <span className="text-sm font-[900] lowercase" style={{ color: "#facc15" }}>create character</span>
+                  </button>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
         {/* Desktop: two-column layout */}
         <div className="md:grid md:grid-cols-5 md:gap-8">
-          {/* Left: preview */}
+          {/* Left: preview — 25% smaller */}
           <div className="md:col-span-2">
-            <div className="relative flex justify-center">
-                <motion.section
+            <div className="relative flex justify-center" style={{ maxWidth: "75%" , margin: "0 auto" }}>
+              <motion.section
                 layout
-                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden"
+                className="mb-4 md:mb-0 flex items-center justify-center overflow-hidden w-full"
                 style={{
-                  width: "100%",
-                  maxWidth: "100%",
                   borderRadius: 16,
                   border: "2px solid rgba(255,255,255,0.08)",
                   backgroundColor: "#111111",
@@ -361,13 +462,13 @@ const Index = () => {
                       <div
                         className="flex items-center justify-center rounded-full"
                         style={{
-                          width: 72,
-                          height: 72,
+                          width: 56,
+                          height: 56,
                           backgroundColor: "rgba(250,204,21,0.08)",
-                          border: "2.5px solid #facc15",
+                          border: "2px solid #facc15",
                         }}
                       >
-                        <span className="text-3xl">🪄</span>
+                        <span className="text-2xl">🪄</span>
                       </div>
                     </div>
                   )}
@@ -376,47 +477,8 @@ const Index = () => {
             </div>
           </div>
           {/* Right: controls */}
-          <div className="md:col-span-3 space-y-8">
-            {/* Character select — always visible */}
+          <div className="md:col-span-3 space-y-6">
             <div className="relative">
-              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
-              <span className="block text-xs font-[900] lowercase mb-1.5 text-white">select character</span>
-              <label className="relative block">
-                <select
-                  value={selectedCharId}
-                  onChange={(e) => handleCharacterSelect(e.target.value)}
-                  className="h-12 w-full appearance-none px-4 pr-10 text-sm font-[900] lowercase text-foreground outline-none transition-colors"
-                  style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111" }}
-                >
-                  <option value="">none</option>
-                  {characters.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name || `${c.hair} hair, ${c.eye} eyes, ${c.age}y`}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={16}
-                  strokeWidth={2.5}
-                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground"
-                />
-              </label>
-              {characters.length === 0 && user && (
-                <button
-                  onClick={() => {
-                    sessionStorage.removeItem("vizura_creator_dismissed");
-                    sessionStorage.removeItem("vizura_guided_flow_state");
-                    navigate("/", { state: { openCreator: true } });
-                  }}
-                  className="mt-1.5 text-[10px] font-extrabold lowercase text-neon-yellow hover:opacity-80 transition-colors"
-                >
-                  create your first character →
-                </button>
-              )}
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
               <div className="flex gap-6">
               <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
               <PillToggle
@@ -430,7 +492,6 @@ const Index = () => {
 
             {/* Prompt */}
             <div className="relative">
-              <div className="absolute inset-0 -m-2 rounded-2xl" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", zIndex: -1 }} />
               <span className="block text-xs font-[900] lowercase mb-1.5 text-white">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
