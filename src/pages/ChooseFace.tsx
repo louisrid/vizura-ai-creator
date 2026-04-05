@@ -583,6 +583,36 @@ const ChooseFace = () => {
           )}
         </AnimatePresence>
 
+        {/* Second loading bar: angle + body generation */}
+        <AnimatePresence>
+          {angleLoading && (
+            <motion.div
+              key="angle-loader"
+              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+            >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
+              >
+                <ProgressBarLoader
+                  duration={60000}
+                  phrases={ANGLE_GEN_PHRASES}
+                  phraseInterval={5000}
+                  requireTapToContinue={true}
+                  expandTapTarget={true}
+                  completeNow={angleApiDone}
+                  onComplete={handleAngleTapContinue}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
       {/* Face picker — shown after loading completes */}
         {!loading && faces.length > 0 && (
           <>
