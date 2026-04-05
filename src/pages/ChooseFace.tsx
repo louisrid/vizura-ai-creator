@@ -499,13 +499,9 @@ const ChooseFace = () => {
           )}
         </AnimatePresence>
 
-        {/* Face picker — shown after loading completes */}
+      {/* Face picker — shown after loading completes */}
         {!loading && faces.length > 0 && (
           <>
-            {/* Site header */}
-            <div className="relative z-[10000]">
-              <Header />
-            </div>
             <DotDecal />
 
             <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-2 pb-[max(env(safe-area-inset-bottom),1.5rem)] md:max-w-3xl md:px-10">
