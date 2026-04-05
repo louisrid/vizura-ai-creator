@@ -122,11 +122,10 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
             )}
 
             <motion.p
-              className="text-center text-[15px] font-[900] lowercase"
-              style={{ color: "rgba(255,255,255,0.4)" }}
+              className="text-center text-[1.1rem] font-[900] lowercase text-white"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, y: [0, -4, 0] }}
-              transition={{ opacity: { duration: 0.3, delay: 0.7 }, y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}
+              transition={{ opacity: { duration: 0.95, delay: 0.7 }, y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}
             >
               tap to continue
             </motion.p>

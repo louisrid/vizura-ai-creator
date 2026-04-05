@@ -349,9 +349,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
   const variations = [
-    "diamond face shape, high cheekbones, softly pointed chin, elegant jawline, full lips, refined small nose, large almond eyes, softly arched brows, EXACT SAME hair style and colour as described",
-    "oval face, sculpted yet youthful jawline, defined cupid's bow lips, straight refined nose, bright hooded eyes, EXACT SAME hair style and colour as described",
-    "heart-shaped face, delicate tapered chin, plush lips, petite nose, wide bright eyes, EXACT SAME hair style and colour as described",
+    "diamond face shape, high angular cheekbones, narrow pointed chin, sharp elegant jawline, full plush lips, refined narrow nose with high bridge, large wide-set almond-shaped eyes, thin softly arched brows, delicate bone structure, EXACT SAME hair style and colour as described",
+    "round soft face shape, low wide cheekbones, rounded chin, gentle curved jawline, thin defined lips with strong cupid's bow, straight button nose, deep-set hooded eyes set close together, thick straight brows, robust bone structure, EXACT SAME hair style and colour as described",
+    "square strong face shape, flat wide cheekbones, broad flat chin, strong angular jaw, medium naturally asymmetric lips, small upturned nose, large round doe eyes set wide apart, arched dramatic brows, prominent bone structure, EXACT SAME hair style and colour as described",
   ];
 
   const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear matte skin, natural skin texture, no glossy or oily skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
