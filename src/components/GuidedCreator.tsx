@@ -532,7 +532,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             placeholder="add any details you want…"
             rows={6}
             onClick={(e) => e.stopPropagation()}
-            className="min-h-[160px] w-full resize-none px-4 py-3 text-[16px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="min-h-[160px] md:min-h-[180px] w-full resize-none px-4 py-3 text-[16px] md:text-[18px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
           <p className={`mt-3 text-center ${HELPER_CLASS}`}>i.e. chubby cheeks, freckles, thick mascara</p>
