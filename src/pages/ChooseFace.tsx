@@ -27,6 +27,13 @@ const FACE_GEN_PHRASES = [
   "almost ready…",
 ];
 
+const ANGLE_GEN_PHRASES = [
+  "creating character views…",
+  "building 3/4 angle…",
+  "generating full body…",
+  "finalising your character…",
+];
+
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
