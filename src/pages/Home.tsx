@@ -286,7 +286,7 @@ const Home = () => {
               </svg>
             </button>
 
-            {/* Create Photo - opaque secondary */}
+            {/* Create Photo - matches see all / manage style */}
             <button
               type="button"
               onClick={() => {
@@ -301,7 +301,7 @@ const Home = () => {
                 borderRadius: 12,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#facc15",
-                backgroundColor: "#111111",
+                backgroundColor: "rgba(250,204,21,0.06)",
                 border: "1.5px solid rgba(250,204,21,0.2)",
               }}
             >
