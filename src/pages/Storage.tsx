@@ -129,8 +129,19 @@ const Storage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-            {images.map((img) => (
-              <div key={img.id} className="flex flex-col">
+            <AnimatePresence>
+            {images.map((img, idx) => {
+              const isNew = newImageIds.has(img.id);
+              return (
+              <motion.div
+                key={img.id}
+                layout
+                initial={isNew ? { opacity: 0, scale: 0.7 } : { opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3 }}
+                className="flex flex-col"
+              >
                 <button
                   onClick={() => setExpanded(img)}
                   className="group relative rounded-t-2xl border-[5px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
@@ -149,8 +160,10 @@ const Storage = () => {
                   <Download size={12} strokeWidth={2.5} />
                   download
                 </a>
-              </div>
-            ))}
+              </motion.div>
+              );
+            })}
+            </AnimatePresence>
           </div>
         )}
       </main>
