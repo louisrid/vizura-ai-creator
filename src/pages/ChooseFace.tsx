@@ -495,6 +495,27 @@ const ChooseFace = () => {
   };
   doFinalSaveRef.current = doFinalSave;
 
+  // Handle second loading bar completion — navigate to character page
+  const handleAngleBarComplete = useCallback(() => {
+    setAngleBarComplete(true);
+  }, []);
+
+  const handleAngleTapContinue = useCallback(() => {
+    const cId = pendingNavCharId;
+    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
+    sessionStorage.removeItem("vizura_selected_face");
+    sessionStorage.removeItem("vizura_guided_prompt");
+    sessionStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem("vizura_pending_char_id");
+    sessionStorage.removeItem(FACE_STORAGE_KEY);
+    sessionStorage.removeItem(AUTH_RESUME_KEY);
+    setPendingAuthSave(false);
+    setShowSignIn(false);
+    setAngleLoading(false);
+    toast.success("character added!");
+    navigate("/characters", { replace: true });
+  }, [pendingNavCharId, navigate]);
+
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
       setShowSignIn(false);
