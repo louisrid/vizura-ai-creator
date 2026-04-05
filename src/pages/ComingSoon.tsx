@@ -4,7 +4,7 @@ import PageTitle from "@/components/PageTitle";
 
 const ComingSoon = ({ title }: { title: string }) => (
   <div className="min-h-screen bg-background">
-    <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+    <main className="w-full max-w-lg mx-auto px-4 pt-1 pb-12">
       <div className="flex items-center gap-3 mb-8">
         <BackButton />
         <PageTitle className="mb-0">{title}</PageTitle>
