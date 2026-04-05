@@ -163,7 +163,7 @@ const MyCharacters = () => {
       </main>
 
       <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1rem)] pt-2 bg-gradient-to-t from-background via-background/95 to-transparent">
-        <div className="mx-auto max-w-lg md:max-w-6xl">
+        <div className="mx-auto max-w-lg md:max-w-5xl">
           <motion.button
             onClick={handleBottomButton}
             animate={bounceActive ? { y: [0, -6, 0] } : {}}
