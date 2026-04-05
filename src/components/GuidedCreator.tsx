@@ -462,9 +462,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[64px] mb-5">✨</span>
+        <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-6 flex items-center gap-2.5 w-full max-w-[17rem]">
+        <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -473,14 +473,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[56px] flex-1 min-w-0 px-4 text-[17px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
           />
           <motion.button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
             whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[56px] w-[56px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
             style={{ borderRadius: 14, backgroundColor: Y }}
           >
             <RefreshCw size={20} strokeWidth={2.5} />
