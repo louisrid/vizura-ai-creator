@@ -187,7 +187,7 @@ const CharacterDetail = () => {
   const content = (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(0,224,255,0.25)" }} className="p-5">
+      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "5px solid rgba(0,224,255,0.25)" }} className="p-5">
         <h1 className="text-[30px] font-[900] lowercase tracking-tight text-white leading-none mb-5">
           {nameAge}
         </h1>
