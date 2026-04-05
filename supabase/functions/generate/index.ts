@@ -445,14 +445,14 @@ async function generateAngleAndBody(
     console.error("3/4 angle generation failed:", e);
   }
 
-  const BODY_NEGATIVE = "Do not generate missing limbs, missing arms, missing hands, extra fingers, extra limbs, deformed arms, glitchy artifacts, warped body parts, artificial-looking skin, glossy skin, mannequin look, cropped limbs at edges, plastic skin, oily skin, watermark, text, AI generated look.";
+  const BODY_NEGATIVE = "Do not generate missing limbs, missing arms, missing hands, extra fingers, extra limbs, deformed arms, glitchy artifacts, warped body parts, artificial-looking skin, glossy skin, mannequin look, cropped limbs at edges, plastic skin, oily skin, watermark, text, AI generated look, crossed legs, legs crossing, sitting pose, kneeling.";
 
   try {
     console.log("Generating full-body anchor...");
     const bodyKey = (bodyType || "regular").toLowerCase();
     const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted casual top and fitted pants, ${bodyDesc}, both arms fully visible hanging naturally at sides, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${characterTraits}, ${bodyModifier}, natural lighting. ${BODY_NEGATIVE}`;
+    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted low-cut top and tight black legging, ${bodyDesc}, both arms fully visible hanging naturally at sides, standing upright with feet shoulder width apart, confident natural pose, slightly zoomed in framing, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${characterTraits}, ${bodyModifier}, natural lighting. ${BODY_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
