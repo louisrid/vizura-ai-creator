@@ -78,7 +78,7 @@ const TopUps = () => {
                     {plan.gems} gems
                   </span>
                 </div>
-                <span className="text-xl font-extrabold lowercase text-foreground">
+                <span className="text-xl md:text-2xl font-extrabold lowercase text-foreground">
                   ${plan.price}
                 </span>
               </div>
