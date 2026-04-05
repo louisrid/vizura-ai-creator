@@ -185,8 +185,9 @@ const Index = () => {
   const [photoRatio, setPhotoRatio] = useState("3:4");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
-  const [referenceStrength, setReferenceStrength] = useState(50);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [charDropdownOpen, setCharDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
