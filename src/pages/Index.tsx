@@ -43,8 +43,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-base font-[900] lowercase text-white">{label}</span>
     <div
-      className="flex items-center p-1.5"
-      style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
+      className="flex items-center rounded-2xl border-2 border-input bg-card p-1.5"
     >
       {options.map((opt, i) => {
         const isSelected = value === opt;
@@ -55,35 +54,24 @@ const ToggleBox = ({ label, options, value, onChange }: {
               type="button"
               aria-pressed={isSelected}
               onClick={() => onChange(opt)}
-              className="flex-1 flex items-center justify-center transition-all"
-              style={{
-                borderRadius: 10,
-                padding: "10px 0",
-                fontSize: 15,
-                fontWeight: 800,
-                textTransform: "lowercase" as const,
-                ...(isSelected
-                  ? {
-                      backgroundColor: "hsl(var(--primary))",
-                      color: "hsl(var(--primary-foreground))",
-                      boxShadow: "0 0 0 2px hsl(var(--primary) / 0.24) inset",
-                    }
-                  : {
-                      backgroundColor: "transparent",
-                      color: "hsl(var(--foreground) / 0.48)",
-                    }),
-              }}
+              className="flex-1 flex items-center justify-center rounded-2xl px-0 py-[10px] text-[15px] font-extrabold lowercase transition-all"
+              style={isSelected
+                ? {
+                    backgroundColor: "hsl(var(--neon-yellow))",
+                    color: "hsl(var(--neon-yellow-foreground))",
+                    boxShadow: "0 0 0 2px hsl(var(--neon-yellow) / 0.22) inset",
+                  }
+                : {
+                    backgroundColor: "transparent",
+                    color: "hsl(var(--foreground) / 0.48)",
+                  }}
             >
               {opt}
             </button>
             {i < options.length - 1 && (
               <div
                 aria-hidden
-                className="mx-1.5 w-px shrink-0 self-center"
-                style={{
-                  height: 34,
-                  backgroundColor: "hsl(var(--foreground) / 0.3)",
-                }}
+                className="mx-1.5 h-[34px] w-px shrink-0 self-center bg-foreground/30"
               />
             )}
           </Fragment>
@@ -141,12 +129,11 @@ const HighlightedPromptArea = ({
   const highlightedHtml = useMemo(() => {
     if (!value) return "";
 
-    const safeValue = escapeHtml(value);
-    if (!charName.trim()) return safeValue;
+    if (!charName.trim()) return escapeHtml(value);
 
     const escapedName = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escapedName})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
-    let html = "";
+    const parts: string[] = [];
     let lastIndex = 0;
     let match: RegExpExecArray | null;
 
@@ -158,34 +145,30 @@ const HighlightedPromptArea = ({
       const highlightEnd = highlightStart + name.length;
 
       if (lastIndex < matchStart) {
-        html += escapeHtml(value.slice(lastIndex, matchStart));
+        parts.push(escapeHtml(value.slice(lastIndex, matchStart)));
       }
 
       if (boundary) {
-        html += escapeHtml(boundary);
+        parts.push(escapeHtml(boundary));
       }
 
-      html += `<span style="color:hsl(var(--primary))">${escapeHtml(name)}</span>`;
+      parts.push(`<span style="color:hsl(var(--neon-yellow));">${escapeHtml(name)}</span>`);
       lastIndex = highlightEnd;
     }
 
     if (lastIndex < value.length) {
-      html += escapeHtml(value.slice(lastIndex));
+      parts.push(escapeHtml(value.slice(lastIndex)));
     }
 
-    return html;
+    return parts.join("");
   }, [value, charName]);
 
   return (
-    <div
-      className="relative overflow-hidden"
-      style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111" }}
-    >
+    <div className="relative overflow-hidden rounded-2xl border-2 border-input bg-card">
       <div
         ref={overlayRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words"
-        style={{ color: "hsl(var(--foreground))" }}
+        className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase text-foreground"
         dangerouslySetInnerHTML={{ __html: highlightedHtml || "&nbsp;" }}
       />
       <textarea
@@ -199,10 +182,9 @@ const HighlightedPromptArea = ({
         }}
         spellCheck={false}
         autoCorrect="off"
-        className="relative z-[1] w-full min-h-[176px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words focus:outline-none"
+        className="relative z-[1] w-full min-h-[176px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
         style={{
           caretColor: "hsl(var(--foreground))",
-          color: "transparent",
           WebkitTextFillColor: "transparent",
         }}
       />

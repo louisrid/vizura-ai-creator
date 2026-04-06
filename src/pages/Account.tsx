@@ -76,9 +76,9 @@ const Account = () => {
           )}
 
           {subscribed && (
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-2">
               <button
-                className="mx-auto h-10 md:h-11 rounded-2xl px-5 text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
+                className="mx-auto h-9 rounded-2xl px-4 text-[11px] md:h-10 md:px-4.5 md:text-xs font-extrabold lowercase transition-all hover:opacity-90"
                 style={{ backgroundColor: "hsl(var(--destructive-surface))", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
                 onClick={handleCancel}
               >
@@ -87,8 +87,8 @@ const Account = () => {
             </div>
           )}
 
-          <div className={subscribed ? "mt-14" : "mt-6"}>
-            <div className="md:grid md:grid-cols-2 md:gap-5 space-y-5 md:space-y-0">
+          <div className={subscribed ? "mt-20" : "mt-6"}>
+            <div className="md:grid md:grid-cols-2 md:gap-3 space-y-3 md:space-y-0">
               <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
                 <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -129,7 +129,7 @@ const Account = () => {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full h-12 md:h-14 text-sm md:text-base mt-6" onClick={handleSignOut}>
+          <Button variant="outline" className="mt-5 w-full h-12 md:h-14 rounded-2xl text-sm md:text-base" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
             sign out
           </Button>
