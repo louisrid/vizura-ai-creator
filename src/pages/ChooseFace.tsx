@@ -388,7 +388,7 @@ const ChooseFace = () => {
             user_id: currentUser.id,
             name: sanitiseText(draft.characterName || "", 100) || "new character",
             country: sanitiseText(draft.skin || "", 50),
-            age: draft.age || "25",
+            age: draft.age === "18-24" ? "18" : draft.age === "24+" ? "24" : draft.age || "18",
             hair: sanitiseText(draft.hairColour || "", 50),
             eye: sanitiseText(draft.eye || "", 50),
             body: sanitiseText(draft.bodyType || "", 50),
