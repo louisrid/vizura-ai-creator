@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 const MIN_SWIPE_DISTANCE = 30;
 const MAX_SWIPE_TIME = 600;
+const SWIPE_COOLDOWN = 120;
 
 export function useSwipeNavigation() {
   const navigate = useNavigate();
   const touchRef = useRef<{ x: number; y: number; t: number; side: "left" | "right" } | null>(null);
+  const lastSwipeRef = useRef(0);
 
   useEffect(() => {
     const onStart = (e: TouchEvent) => {
@@ -31,11 +33,14 @@ export function useSwipeNavigation() {
       if (dt > MAX_SWIPE_TIME || Math.abs(dy) > Math.abs(dx) * 0.8) return;
       if (Math.abs(dx) < MIN_SWIPE_DISTANCE) return;
 
+      const now = Date.now();
+      if (now - lastSwipeRef.current < SWIPE_COOLDOWN) return;
+
       if (start.side === "left" && dx > 0) {
-        // Left-side swipe right → go back
+        lastSwipeRef.current = now;
         navigate(-1);
       } else if (start.side === "right" && dx < 0) {
-        // Right-side swipe left → go forward
+        lastSwipeRef.current = now;
         navigate(1);
       }
     };

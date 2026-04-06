@@ -9,6 +9,7 @@ interface SubscriptionContextType {
   loading: boolean;
   refetch: () => Promise<void>;
   optimisticSubscribe: () => void;
+  optimisticUnsubscribe: () => void;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -156,8 +157,14 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     setOptimistic(true);
   }, []);
 
+  const optimisticUnsubscribe = useCallback(() => {
+    setStatus(null);
+    setOptimistic(false);
+    if (user) writeCachedStatus(user.id, null);
+  }, [user, writeCachedStatus]);
+
   return (
-    <SubscriptionContext.Provider value={{ status: resolvedStatus, subscribed, loading: resolvedLoading, refetch: fetchSubscription, optimisticSubscribe }}>
+    <SubscriptionContext.Provider value={{ status: resolvedStatus, subscribed, loading: resolvedLoading, refetch: fetchSubscription, optimisticSubscribe, optimisticUnsubscribe }}>
       {children}
     </SubscriptionContext.Provider>
   );
