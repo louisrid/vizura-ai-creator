@@ -30,7 +30,7 @@ const PillGroup = ({
 }) => (
   <div className="flex flex-col gap-1.5">
     <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap gap-1.5 justify-center">
       {options.map((opt) => (
         <button
           key={opt}
