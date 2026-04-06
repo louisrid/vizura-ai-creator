@@ -246,7 +246,7 @@ const Index = () => {
       setTimeout(() => {
         setPhotoOverlayPhase("hidden");
         setFadingBack(false);
-        navigate("/storage");
+        navigate("/storage", { replace: true });
       }, 100);
     };
     window.addEventListener("photo-overlay-dismiss", handler);
