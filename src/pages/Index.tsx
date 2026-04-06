@@ -69,10 +69,10 @@ const ToggleBox = ({ label, options, value, onChange }: {
           {i < options.length - 1 && (
             <div
               aria-hidden
-              className="mx-1 w-px shrink-0 self-center"
+              className="mx-1.5 w-px shrink-0 self-center"
               style={{
-                height: 28,
-                backgroundColor: "hsl(var(--foreground) / 0.22)",
+                height: 34,
+                backgroundColor: "hsl(var(--foreground) / 0.3)",
               }}
             />
           )}
@@ -158,6 +158,7 @@ const HighlightedPromptArea = ({
   const getCaretOffset = useCallback((element: HTMLElement) => {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return 0;
+    if (!selection.anchorNode || !element.contains(selection.anchorNode)) return element.innerText.length;
 
     const range = selection.getRangeAt(0);
     const preCaretRange = range.cloneRange();
@@ -232,6 +233,12 @@ const HighlightedPromptArea = ({
           caretOffsetRef.current = getCaretOffset(e.currentTarget);
           onChange(readEditableText(e.currentTarget));
         }}
+        onKeyUp={(e) => {
+          caretOffsetRef.current = getCaretOffset(e.currentTarget);
+        }}
+        onMouseUp={(e) => {
+          caretOffsetRef.current = getCaretOffset(e.currentTarget);
+        }}
       >
         {value
           ? segments.map((seg, i) => (
@@ -276,13 +283,15 @@ const Index = () => {
     }
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
+  const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
+  const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
-  const [selectedCharId, setSelectedCharId] = useState("");
+  const [selectedCharId, setSelectedCharId] = useState(preselectedCharacterId || persistedCharacterId || "");
   const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">("hidden");
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
   const [fadingBack, setFadingBack] = useState(false);
@@ -322,8 +331,6 @@ const Index = () => {
     return () => window.removeEventListener("photo-overlay-dismiss", handler);
   }, [navigate]);
 
-  const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
-
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") setShowPaywall(true);
   }, [searchParams]);
@@ -338,19 +345,20 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        if (preselectedCharacterId) {
-          const char = data.find((c: any) => c.id === preselectedCharacterId);
-          if (char) setSelectedCharId(preselectedCharacterId);
-        } else if (data.length > 0) {
-          setSelectedCharId(data[0].id);
+        const preferredId = preselectedCharacterId || persistedCharacterId;
+        const resolvedId = preferredId && data.some((c: any) => c.id === preferredId) ? preferredId : data[0]?.id;
+        if (resolvedId) {
+          setSelectedCharId(resolvedId);
+          sessionStorage.setItem("vizura_last_selected_character_id", resolvedId);
         }
       }
     };
     fetchCharacters();
-  }, [user, preselectedCharacterId]);
+  }, [user, preselectedCharacterId, persistedCharacterId]);
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
+    sessionStorage.setItem("vizura_last_selected_character_id", charId);
     setPrompt("");
   };
 
@@ -447,7 +455,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-[200px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -640,7 +648,7 @@ const Index = () => {
           </div>
 
           {/* Create button */}
-          <div className="pt-2.5">
+          <div className="pt-3">
             <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
           </div>
         </div>

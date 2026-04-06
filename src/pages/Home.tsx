@@ -89,13 +89,6 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    if (openCreatorRequested) {
-      navigate(location.pathname, { replace: true, state: {} });
-      handleOpenCreator();
-    }
-  }, [handleOpenCreator, location.pathname, navigate, openCreatorRequested]);
-
-  useEffect(() => {
     if (authLoading) return;
 
     const pendingPostAuthHome = sessionStorage.getItem("vizura_post_auth_home") === "1";
@@ -133,11 +126,18 @@ const Home = () => {
     };
   }, [fetchLatestPhotos, fetchCharacters]);
 
-  const handleOpenCreator = () => {
+  function handleOpenCreator() {
     sessionStorage.removeItem(DISMISSED_KEY);
     setSkipWelcome(!!user);
     setShowGuided(true);
-  };
+  }
+
+  useEffect(() => {
+    if (openCreatorRequested) {
+      navigate(location.pathname, { replace: true, state: {} });
+      handleOpenCreator();
+    }
+  }, [location.pathname, navigate, openCreatorRequested, user]);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
