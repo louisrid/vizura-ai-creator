@@ -219,7 +219,7 @@ const Index = () => {
 
   const [photoType, setPhotoType] = useState("selfie");
   const [photoRatio, setPhotoRatio] = useState("3:4");
-  const [expression, setExpression] = useState("happy");
+  const [expression, setExpression] = useState("casual smile");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
