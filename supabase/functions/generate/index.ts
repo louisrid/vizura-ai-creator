@@ -83,8 +83,8 @@ const SKIN_MAP: Record<string, string> = {
   pale: "pale fair skin",
   tan: "tanned warm skin",
   asian: "asian skin tone",
-  black: "dark skin",
-  dark: "dark skin",
+  black: "rich dark skin with natural healthy glow",
+  dark: "rich dark skin with natural healthy glow",
 };
 
 const BODY_MAP: Record<string, string> = {
@@ -102,8 +102,8 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features close together, average width face, normal proportioned forehead";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face, normal proportioned forehead";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks covering cheekbones, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face, short round head shape";
+  return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -165,7 +165,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   } else if (hairStyle.toLowerCase() === "straight") {
     parts.push(`long straight ${hairColour} hair, hair parted naturally, IMPORTANT: must be straight hair in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly") {
-    parts.push(`${hairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
+    parts.push(`${hairColour} soft wavy hair with loose natural waves, IMPORTANT: must have wavy hair in every image`.trim());
   } else if (hairStyle.toLowerCase() === "short") {
     parts.push(`short ${hairColour} hair, IMPORTANT: must have short hair in every image`.trim());
   } else if (hairStyle || hairColour) {
@@ -173,7 +173,8 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   }
   
   if (char.eye) {
-    parts.push(`bright ${char.eye} eyes`);
+    const eyeColour = char.eye.toLowerCase() === "green" ? "natural dark green" : char.eye;
+    parts.push(`bright ${eyeColour} eyes`);
   }
 
   const makeupKey = (char.style || "").toLowerCase();
@@ -509,7 +510,7 @@ async function generateFaceImages(
     "subtle smoky eyeshadow, thick mascara, defined eyeliner, contoured blush",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, subtle confident closed-mouth smile barely smiling";
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, short feminine neck, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, subtle confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -567,11 +568,11 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  slim: "slim toned body, B cup bust in fitted top, narrow waist, lean figure, slender arms",
-  regular: "soft feminine body, C-D cup bust in fitted low-cut top, defined waist, feminine hips",
-  average: "soft feminine body, C-D cup bust in fitted low-cut top, defined waist, feminine hips",
-  curvy: "curvy feminine figure, D-DD cup bust in fitted low-cut top, defined waist, wider hips, soft thighs, hourglass shape",
-  thick: "curvy feminine figure, D-DD cup bust in fitted low-cut top, defined waist, wider hips, soft thighs, hourglass shape",
+  slim: "slim toned body, natural soft B cup breasts with realistic shape, narrow waist, lean figure, slender arms, matte textured skin across chest",
+  regular: "soft feminine body, natural soft C cup breasts with realistic weight and shape, defined waist, feminine hips, matte textured skin across chest",
+  average: "soft feminine body, natural soft C cup breasts with realistic weight and shape, defined waist, feminine hips, matte textured skin across chest",
+  curvy: "curvy feminine figure, natural soft D cup breasts with realistic weight and shape, defined waist, wider hips, soft thighs, hourglass shape, matte textured skin across chest",
+  thick: "curvy feminine figure, natural soft D cup breasts with realistic weight and shape, defined waist, wider hips, soft thighs, hourglass shape, matte textured skin across chest",
 };
 
 
@@ -617,7 +618,7 @@ async function generateAngleAndBody(
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
     const bodyPrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, front-facing confident pose, slight natural hip tilt, framed from head to just below hips, wearing same fitted plain white crew neck t-shirt, ${bodyDesc}, standing upright feet shoulder width apart, same plain white background, same soft even lighting as face reference, matte skin with visible pores, normal proportional arms ending at mid-thigh, naturally feminine build, body and face are one cohesive person`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, head to mid-thigh. Fitted low-cut white top with natural cleavage pushed together, tight black leggings. Same white background, same lighting. ${bodyDesc}. Skin with visible pores and colour variation. Short feminine arms resting at sides, hands at mid-thigh, smooth inner elbows. Subtle closed-mouth smile with lips together.`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, framed from head to just above knees. Fitted low-cut white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores across chest, neck and arms. Short feminine arms resting at sides, hands at upper thigh, smooth inner elbows. Subtle closed-mouth smile with lips together.`;
     const bodyResult = await routerImageEdit(bodyPrompt, ACTIVE_MODEL === "flux" ? "" : BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
