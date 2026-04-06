@@ -57,6 +57,26 @@ const CharacterDetail = () => {
     if (user) fetch();
   }, [user, id]);
 
+  // Poll for character updates (angle/body images arriving after creation)
+  useEffect(() => {
+    if (!user || !id || !character) return;
+    const needsUpdate = !character.face_angle_url || !character.body_anchor_url;
+    if (!needsUpdate) return;
+
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("id", id)
+        .eq("user_id", user.id)
+        .single();
+      if (data) setCharacter(data as unknown as Character);
+      if (data?.face_angle_url && data?.body_anchor_url) clearInterval(interval);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [user, id, character?.face_angle_url, character?.body_anchor_url]);
+
   const handleDelete = async () => {
     if (!character) return;
     setDeleting(true);
