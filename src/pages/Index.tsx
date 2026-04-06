@@ -327,6 +327,7 @@ const Index = () => {
           character_id: selectedCharId || undefined,
           photo_type: photoType,
           aspect_ratio: photoRatio,
+          expression: expression || undefined,
           ...(vibeRefUrl ? { vibe_reference_url: vibeRefUrl } : {}),
         },
       });
