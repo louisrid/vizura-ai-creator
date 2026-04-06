@@ -498,7 +498,7 @@ const ChooseFace = () => {
     setPendingAuthSave(false);
     setShowSignIn(false);
     toast.success("character added!");
-    navigate("/characters", { replace: true });
+    navigate(`/characters/${cId}`, { replace: true });
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
@@ -521,7 +521,7 @@ const ChooseFace = () => {
     setShowSignIn(false);
     setAngleLoading(false);
     toast.success("character added!");
-    navigate("/characters", { replace: true });
+    navigate(`/characters/${cId}`, { replace: true });
   }, [pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
