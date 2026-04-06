@@ -16,20 +16,20 @@ const corsHeaders = {
 
 /* ── prompt constants ──────────────────────────────────── */
 const QUALITY_SUFFIX =
-  "everything sharply in focus including background, sharp background, no portrait mode, matte skin with visible pores and fine texture, uneven natural skin tone, natural ambient lighting with variation, slight camera grain, authentic candid phone photo energy";
+  "";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate blurred background, bokeh, depth of field, shallow focus, out of focus background, portrait mode, glossy skin, shiny skin, waxy skin, plastic skin, smooth airbrushed skin, overly smooth skin, professional studio photography, dslr, 4k, hdr, long arms, elongated arms, arms longer than torso, both arms holding phone, two hands on phone, extra limbs, missing limbs, bad anatomy, deformed, out of frame, cropped, watermark, text, nipples, areola, exposed genitals, fake looking breasts, overly round breasts, implant look.";
+  "";
 
 const SELFIE_PREFIX =
-  "iPhone front camera selfie, phone held in one hand at arms length, other hand away from phone touching hair or resting at side, casual angle, slight wide angle distortion, everything in focus including background, sharp background, no portrait mode";
+  "iPhone selfie taken with front camera, one hand holding the phone at arms length, casual angle, everything in focus";
 
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism, natural matte skin, no glossy or oily skin, realistic skin texture";
+  "passport style photo, plain white background, head and shoulders centred in frame with space above the head, wearing a plain white t-shirt, soft even front lighting, looking straight at camera, sharp focus, realistic skin with visible pores and texture";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -38,7 +38,7 @@ const FLUX_FACE_QUALITY =
   "close-up headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a fitted plain white crew neck t-shirt, soft natural smile, even soft lighting from the front, looking directly at camera, photorealistic, matte skin with visible pores and natural texture, realistic human skin with subtle imperfections";
 
 const FACE_NEGATIVE =
-  "Do not generate glossy skin, shiny skin, waxy skin, plastic skin, smooth airbrushed skin, overly smooth skin, old face, mature face, wrinkles, fat face, chubby cheeks, moody expression, angry, sad, frown, masculine features, studio lighting, dslr, bokeh, blurred background, depth of field, colored background, outdoor background, cartoon, anime, illustration, text, watermark.";
+  "";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -102,9 +102,9 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 23) return "baby face, very young looking 18 to 20 years old, soft rounded youthful features, no mature bone structure, no defined cheekbones, smooth flawless skin with zero fine lines, bright wide innocent eyes, small soft nose, full soft lips, round soft jawline, no angular features, teenager energy, looks like she just turned 18, plump youthful cheeks, no hollowness in face";
-  if (num <= 28) return "young adult 24 to 28, slightly more defined bone structure than a teenager, still youthful smooth skin, attractive young woman, subtle cheekbone definition, bright eyes";
-  return "young adult features, more defined cheekbones, still youthful skin, mid to late twenties look, subtle maturity while still attractive";
+  if (isNaN(num) || num <= 23) return "looks 18 years old, baby face, round soft face, big bright eyes, small nose, full lips, smooth clear youthful skin, plump cheeks";
+  if (num <= 28) return "looks early twenties, youthful skin, bright eyes, attractive young woman";
+  return "looks mid twenties, defined cheekbones, youthful skin, attractive";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -233,8 +233,7 @@ function buildFinalPrompt(
     parts.push("slight space above the head, natural framing, authentic influencer style instagram photo");
     parts.push(FLUX_QUALITY_SUFFIX);
   } else {
-    parts.push("slight space above the head, natural framing, authentic influencer style instagram photo, natural lighting, realistic skin");
-    parts.push(QUALITY_SUFFIX);
+    parts.push("natural framing with space above the head, authentic influencer style instagram photo, everything in focus including background, realistic matte skin with texture");
   }
   parts.push(perspective);
 
@@ -499,13 +498,13 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-  const variations = [
-    "diamond face shape, high angular cheekbones, narrow pointed chin, sharp elegant jawline, full plush lips, refined narrow nose with high bridge, large wide-set almond-shaped eyes, thin softly arched brows, delicate bone structure, EXACT SAME hair style and colour as described",
-    "round soft face shape, low wide cheekbones, rounded chin, gentle curved jawline, thin defined lips with strong cupid's bow, straight button nose, deep-set hooded eyes set close together, thick straight brows, robust bone structure, EXACT SAME hair style and colour as described",
-    "square strong face shape, flat wide cheekbones, broad flat chin, strong angular jaw, medium naturally asymmetric lips, small upturned nose, large round doe eyes set wide apart, arched dramatic brows, prominent bone structure, EXACT SAME hair style and colour as described",
+    const variations = [
+    "slightly larger eyes, smaller nose, fuller lips, delicate features, SAME hair style and colour as described",
+    "slightly narrower eyes, defined nose, thinner lips, sharper features, SAME hair style and colour as described",
+    "round eyes, button nose, natural lips, balanced soft features, SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive young instagram model, youthful 18 to 21, slim defined face, matte skin with visible pores, long hair past shoulders, subtle pink tinted lips, light mascara, friendly expression, white crew neck t-shirt, white background";
+  const beautyCore = "very attractive young woman, slim face, matte natural skin with visible texture, long styled hair past her shoulders, subtle pink lips, light mascara, warm friendly smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -516,7 +515,7 @@ async function generateFaceImages(
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}`;
+    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -525,7 +524,7 @@ async function generateFaceImages(
       try {
         const url = ACTIVE_MODEL === "flux"
           ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
-          : await routerTextToImage(positivePrompt, FACE_NEGATIVE, apiKey);
+          : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
           if (retries < maxRetries) { retries++; continue; }
@@ -592,7 +591,7 @@ async function generateAngleAndBody(
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `Same person exactly as in the reference image, side profile view, head turned approximately 60-70 degrees to the right showing the side of the face, ear visible, nose in profile, jawline visible from the side, genuine side-profile angle NOT a slight head turn, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}`;
+      : `Same person as the reference photo, same white t-shirt, same white background, same lighting. Head turned 45 degrees to the right showing 3/4 profile view. Head and shoulders only, centred in frame with space above head. Realistic skin with visible pores and texture. ${characterTraits}`;
     const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -602,7 +601,7 @@ async function generateAngleAndBody(
     console.error("3/4 angle generation failed:", e);
   }
 
-  const BODY_NEGATIVE = "Do not generate long arms, elongated arms, arms extending past hips, arms longer than torso, muscular arms, veiny arms, glossy skin, shiny skin, waxy skin, plastic skin, smooth airbrushed skin, bokeh, blurred background, depth of field, studio lighting, dslr, crossed legs, sitting, kneeling, extra limbs, missing limbs, extra fingers, bad anatomy, deformed, mannequin, cropped limbs, masculine, old skin, wrinkles, face pasted on body, mismatched skin tone between face and body, fake breasts, implant look.";
+  const BODY_NEGATIVE = "";
 
   try {
     console.log("Generating full-body anchor...");
@@ -611,7 +610,7 @@ async function generateAngleAndBody(
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
     const bodyPrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, front-facing confident pose, slight natural hip tilt, framed from head to just below hips, wearing same fitted plain white crew neck t-shirt, ${bodyDesc}, standing upright feet shoulder width apart, same plain white background, same soft even lighting as face reference, matte skin with visible pores, normal proportional arms ending at mid-thigh, naturally feminine build, body and face are one cohesive person`
-      : `Same face as reference image, natural photo, front-facing, slight hip tilt, head to just below hips, fitted low-cut top, tight black leggings, ${bodyDesc}, standing upright, white background, matte skin with pores, normal length arms ending at mid-thigh, feminine soft build. ${BODY_NEGATIVE}`;
+      : `Same person as the reference photo taken in the same session. Front facing, slight hip tilt, framed from head to mid-thigh with space above head. Same white t-shirt, same white background, same soft lighting. ${bodyDesc}. Realistic matte skin with visible pores and texture on face, neck, chest and arms. Arms hanging naturally at sides, proportional to body, ending at mid-thigh. Feminine soft build.`;
     const bodyResult = await routerImageEdit(bodyPrompt, ACTIVE_MODEL === "flux" ? "" : BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
