@@ -512,7 +512,8 @@ async function generateFaceImages(
     const maxRetries = 2;
     while (retries <= maxRetries) {
       try {
-        const url = await routerTextToImage(positivePrompt, FACE_NEGATIVE, apiKey);
+        const fullFacePrompt = `${positivePrompt}. ${FACE_NEGATIVE}`;
+        const url = await xaiTextToImage(fullFacePrompt, apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
           if (retries < maxRetries) { retries++; continue; }
@@ -578,7 +579,8 @@ async function generateAngleAndBody(
   try {
     console.log("Generating 3/4 angle...");
     const anglePositive = `Same person exactly as in the reference image, side profile view, head turned approximately 60-70 degrees to the right showing the side of the face, ear visible, nose in profile, jawline visible from the side, genuine side-profile angle NOT a slight head turn, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}`;
-    const angleResult = await routerImageEdit(anglePositive, FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
+    const angleFullPrompt = `${anglePositive}. ${FACE_NEGATIVE}`;
+    const angleResult = await xaiImageEdit(angleFullPrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
       console.log("Angle generated:", angleUrl?.slice(0, 80));
@@ -595,7 +597,8 @@ async function generateAngleAndBody(
     const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
     const bodyPositive = `Same face as reference image, natural photo, front-facing, slight hip tilt, head to just below hips, fitted low-cut top, tight black leggings, ${bodyDesc}, standing upright, white background, matte skin with pores, normal length arms ending at mid-thigh, feminine soft build`;
-    const bodyResult = await routerImageEdit(bodyPositive, BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
+    const bodyFullPrompt = `${bodyPositive}. ${BODY_NEGATIVE}`;
+    const bodyResult = await xaiImageEdit(bodyFullPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
       console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
