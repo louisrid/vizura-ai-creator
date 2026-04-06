@@ -358,6 +358,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const advance = useCallback(() => {
     if (animating.current) return;
+    toast.dismiss();
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
       const key = TRAITS[currentTraitIndex].key;
