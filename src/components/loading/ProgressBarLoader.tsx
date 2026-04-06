@@ -263,7 +263,7 @@ const ProgressBarLoader = ({
             ) : phraseVisible ? (
               <motion.p
                 key={safePhrases[phraseIndex]}
-                className="text-center text-[1.1rem] font-[900] lowercase text-white"
+                className="text-center text-[1.3rem] font-[900] lowercase text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}

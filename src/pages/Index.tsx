@@ -518,22 +518,7 @@ const Index = () => {
           </div>
 
           {/* Expression dropdown */}
-          <div>
-            <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
-            <div className="relative">
-              <select
-                value={expression}
-                onChange={(e) => setExpression(e.target.value)}
-                className="w-full h-14 appearance-none px-4 text-base font-[900] lowercase text-foreground focus:outline-none cursor-pointer"
-                style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222" }}
-              >
-                {EXPRESSIONS.map((expr) => (
-                  <option key={expr} value={expr}>{expr}</option>
-                ))}
-              </select>
-              <ChevronDown size={18} strokeWidth={2.5} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground/40" />
-            </div>
-          </div>
+          <ExpressionDropdown value={expression} onChange={setExpression} />
 
           {/* Prompt */}
           <div className="relative">
