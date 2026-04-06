@@ -240,7 +240,7 @@ const CharacterDetail = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[400px] md:hidden">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content(true)}</div>
