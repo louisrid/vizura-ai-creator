@@ -115,9 +115,9 @@ function extractXaiImageUrl(data: any): string | null {
   return null;
 }
 
-function stripFacePromptLanguage(prompt: string): string {
+function stripFacePromptBodyLanguage(prompt: string): string {
   return prompt
-    .replace(/\b(?:slim|average|regular|curvy|thick)\s+\s+type\b/gi, "")
+    .replace(/\b(?:slim|average|regular|curvy|thick)\s+body\s+type\b/gi, "")
     .replace(/\b(?:small|medium|large)\s+chest\b/gi, "")
     .replace(/\b(?:large\s+bust(?:\s+[a-z-]+)?|smaller\s+chest|wide\s+hips|defined\s+waist|narrow\s+waist|g-h\s+cup|dd)\b/gi, "")
     .replace(/\s+,/g, ",")
