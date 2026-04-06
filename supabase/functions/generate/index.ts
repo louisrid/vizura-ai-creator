@@ -324,6 +324,7 @@ async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | 
 
   const data = await response.json();
   console.log("xAI response keys:", Object.keys(data));
+  console.log("Revised prompt:", data?.data?.[0]?.revised_prompt || "none");
   return extractXaiImageUrl(data);
 }
 
