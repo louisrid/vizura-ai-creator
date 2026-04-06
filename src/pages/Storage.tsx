@@ -115,7 +115,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="w-full max-w-lg md:max-w-5xl mx-auto px-4 md:px-10 pt-1 pb-[200px]">
+      <main className="w-full max-w-lg md:max-w-5xl mx-auto px-4 md:px-10 pt-1 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
@@ -137,7 +137,7 @@ const Storage = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3.5">
             <AnimatePresence>
             {images.map((img, idx) => {
               const isNew = newImageIds.has(img.id);
@@ -207,13 +207,13 @@ const Storage = () => {
               <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh]" />
               <div className="p-3 flex gap-2">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-10 text-xs rounded-xl">
+                  <Button variant="outline" className="w-full h-10 rounded-xl border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
                     <Download size={12} strokeWidth={2.5} /> download
                   </Button>
                 </a>
                 <Button
                   variant="outline"
-                  className="h-10 px-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground rounded-xl"
+                  className="h-10 px-3 rounded-xl border-[2px] border-destructive/30 bg-[hsl(var(--destructive-surface))] text-destructive hover:bg-destructive hover:text-destructive-foreground"
                   onClick={() => handleDelete(expanded)}
                 >
                   <Trash2 size={12} strokeWidth={2.5} />

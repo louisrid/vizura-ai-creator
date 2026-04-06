@@ -94,11 +94,11 @@ const ScrollToTop = () => {
       isFirst.current = false;
     }
     incrementNavDepth();
-    window.scrollTo({ top: 0, left: 0 });
+    const root = document.getElementById("root");
+    if (root) root.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    const root = document.getElementById("root");
-    if (root) root.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location.pathname, location.key]);
   return null;
 };
