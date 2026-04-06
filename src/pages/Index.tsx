@@ -520,53 +520,52 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={placeholder.text}
-                      className="text-2xl font-extrabold lowercase text-foreground/30"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: placeholder.visible ? 1 : 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {placeholder.text}
-                    </motion.span>
-                  </AnimatePresence>
+                  <span className="text-2xl font-extrabold lowercase text-foreground/30">
+                    {placeholderText}
+                  </span>
                 </div>
               }
             />
           </div>
 
-          {/* Reference section */}
+          {/* Expression toggle */}
+          <div>
+            <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
+            <div className="grid grid-cols-3 gap-2">
+              {EXPRESSIONS.map((expr) => {
+                const isSelected = expression === expr;
+                return (
+                  <button
+                    key={expr}
+                    type="button"
+                    onClick={() => setExpression(expr)}
+                    className="flex items-center justify-center rounded-2xl py-[10px] text-[14px] font-extrabold lowercase transition-all"
+                    style={isSelected
+                      ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))" }
+                      : { backgroundColor: "#111", border: "2px solid #222", color: "rgba(255,255,255,0.48)" }}
+                  >
+                    {expr}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Reference section — disabled */}
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm font-[900] lowercase text-white">add a reference image</span>
               <span className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
             </div>
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-            {referenceImage ? (
-              <div className="flex items-center gap-3 px-4 py-4" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
-                <img src={referenceImage} alt="Reference" className="h-12 w-12 rounded-lg object-cover shrink-0" />
-                <span className="text-xs font-[900] lowercase text-foreground/60 truncate flex-1">reference.jpg</span>
-                <button
-                  type="button"
-                  onClick={() => setReferenceImage(null)}
-                  className="text-foreground/40 hover:text-foreground text-sm font-bold shrink-0"
-                >
-                  ×
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex w-full items-center justify-center gap-3 px-4 py-6 hover:border-foreground/30 transition-colors"
-                style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
-              >
-                <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
-                <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => toast("coming soon!")}
+              className="flex w-full items-center justify-center gap-3 px-4 py-6 opacity-50"
+              style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
+            >
+              <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
+              <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
+            </button>
           </div>
 
           {/* Create button */}
