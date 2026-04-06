@@ -154,7 +154,10 @@ const Auth = () => {
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            spellCheck={false}
+            autoCorrect="off"
+            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -163,7 +166,10 @@ const Auth = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            spellCheck={false}
+            autoCorrect="off"
+            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
 
