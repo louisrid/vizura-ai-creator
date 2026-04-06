@@ -218,7 +218,7 @@ function buildFinalPrompt(
   parts.push("slight space above the head, natural framing, authentic influencer style instagram photo, natural lighting, realistic skin");
   parts.push(perspective);
 
-  if (Type) {
+  if (bodyType) {
     const bKey = bodyType.toLowerCase();
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
