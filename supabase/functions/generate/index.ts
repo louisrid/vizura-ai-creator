@@ -379,6 +379,7 @@ async function xaiImageEdit(
 
   const data = await response.json();
   console.log("xAI edit response keys:", Object.keys(data));
+  console.log("Revised prompt:", data?.data?.[0]?.revised_prompt || "none");
   return extractXaiImageUrl(data);
 }
 
