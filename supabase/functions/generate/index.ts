@@ -17,7 +17,7 @@ const QUALITY_SUFFIX =
   "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain, detailed realistic skin with subtle veins and freckles, natural skin colour variation, no airbrushed look, no plastic appearance, real human skin";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate DSLR, bokeh, studio lighting, airbrushed skin, smooth plastic skin, glossy shiny skin, oily skin, watermark, text, deformed hands, extra fingers, or AI generated look. Always clothed unless prompt explicitly specifies otherwise.";
+  "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, 4k, hdr, studio lighting, artificial lighting, heavy blur, depth of field, bokeh, blurry, soft focus, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, ugly, old, aged skin, wrinkles, bony, overly muscular, masculine, out of frame, bad framing, cropped, cut off limbs, nipples, areola, exposed genitals.";
 
 const SELFIE_PREFIX =
   "front camera perspective, slight wide angle distortion, casual angle, one arm extended holding the phone camera, other arm visible in frame doing something natural, only one arm holding camera never both arms visible holding phone, iPhone selfie";
@@ -30,7 +30,7 @@ const FACE_QUALITY =
   "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism, natural matte skin, no glossy or oily skin, realistic skin texture";
 
 const FACE_NEGATIVE =
-  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, revealing clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, DSLR look, bokeh, studio glamour lighting, airbrushed plastic skin, glossy shiny skin, oily skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, AI generated look.";
+  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, dslr, studio glamour lighting, plastic skin, waxy skin, overly smooth skin, glossy shiny skin, oily skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, ai artifacts, masculine features.";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -115,9 +115,9 @@ function extractXaiImageUrl(data: any): string | null {
   return null;
 }
 
-function stripFacePromptBodyLanguage(prompt: string): string {
+function stripFacePromptLanguage(prompt: string): string {
   return prompt
-    .replace(/\b(?:slim|average|regular|curvy|thick)\s+body\s+type\b/gi, "")
+    .replace(/\b(?:slim|average|regular|curvy|thick)\s+\s+type\b/gi, "")
     .replace(/\b(?:small|medium|large)\s+chest\b/gi, "")
     .replace(/\b(?:large\s+bust(?:\s+[a-z-]+)?|smaller\s+chest|wide\s+hips|defined\s+waist|narrow\s+waist|g-h\s+cup|dd)\b/gi, "")
     .replace(/\s+,/g, ",")
@@ -141,12 +141,12 @@ function buildCharacterTraits(char: any): string {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
   }
 
-  const bodyKey = (char.body || "regular").toLowerCase();
-  parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
+  const Key = (char. || "regular").toLowerCase();
+  parts.push(_MAP[Key] || _MAP.regular);
 
-  if (bodyKey === "slim") {
+  if (Key === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
-  } else if (bodyKey === "regular" || bodyKey === "average") {
+  } else if (Key === "regular" || Key === "average") {
     parts.push("soft face but not fat, no round chubby face");
   }
 
@@ -187,7 +187,7 @@ function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
   characterTraits: string | null,
-  bodyType?: string,
+  Type?: string,
   expression?: string,
 ): string {
   const typeLabel = photoType === "selfie" ? "SELFIE" : "PHOTO";
@@ -217,9 +217,8 @@ function buildFinalPrompt(
 
   parts.push("slight space above the head, natural framing, authentic influencer style instagram photo, natural lighting, realistic skin");
   parts.push(perspective);
-  parts.push(QUALITY_SUFFIX);
 
-  if (bodyType) {
+  if (Type) {
     const bKey = bodyType.toLowerCase();
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
@@ -466,7 +465,7 @@ async function generateAngleAndBody(
     console.error("3/4 angle generation failed:", e);
   }
 
-  const BODY_NEGATIVE = "Do not generate missing limbs, missing arms, missing hands, extra fingers, extra limbs, deformed arms, glitchy artifacts, warped body parts, artificial-looking skin, glossy skin, mannequin look, cropped limbs at edges, plastic skin, oily skin, watermark, text, AI generated look, crossed legs, legs crossing, sitting pose, kneeling.";
+  const BODY_NEGATIVE = "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, studio lighting, artificial lighting, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, missing arms, missing hands, extra fingers, crossed legs, legs crossing, sitting pose, kneeling, glitchy artifacts, warped body parts, mannequin look, cropped limbs at edges, ugly, old, aged skin, wrinkles, overly muscular, masculine.";
 
   try {
     console.log("Generating full-body anchor...");
