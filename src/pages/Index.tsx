@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, useMemo, useLayoutEffect, Fragment } from "react";
+import { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Zap, Sparkles, ChevronDown, Gem, ArrowUpFromLine } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
