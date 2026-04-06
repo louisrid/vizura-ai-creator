@@ -788,7 +788,7 @@ serve(async (req) => {
       if (isFaceRegen) {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } else {
-        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType);
+        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
         console.log("Final prompt:", finalPrompt.slice(0, 200));
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);

@@ -514,7 +514,7 @@ const Index = () => {
 
           {/* Prompt */}
           <div className="relative">
-            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe your photo</span>
+            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe the scene</span>
             <HighlightedPromptArea
               value={prompt}
               onChange={setPrompt}
