@@ -705,7 +705,13 @@ const ChooseFace = () => {
                   </button>
 
                   <button
-                    onClick={handleRegenerate}
+                    onClick={() => {
+                      if (isFreeUser) {
+                        toast("please add gems");
+                        return;
+                      }
+                      setShowRegenConfirm(true);
+                    }}
                     disabled={isFreeUser}
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
