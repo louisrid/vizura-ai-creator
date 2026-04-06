@@ -512,7 +512,8 @@ async function generateFaceImages(
     const maxRetries = 2;
     while (retries <= maxRetries) {
       try {
-        const url = await routerTextToImage(positivePrompt, FACE_NEGATIVE, apiKey);
+        const fullFacePrompt = `${positivePrompt}. ${FACE_NEGATIVE}`;
+        const url = await xaiTextToImage(fullFacePrompt, apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
           if (retries < maxRetries) { retries++; continue; }
