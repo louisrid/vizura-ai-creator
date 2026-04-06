@@ -88,7 +88,7 @@ const Account = () => {
             </div>
           )}
 
-          <div className="mt-40">
+          <div className="mt-12">
             <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
               <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
                 <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
