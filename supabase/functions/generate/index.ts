@@ -366,13 +366,6 @@ async function xaiImageEdit(
   return extractXaiImageUrl(data);
 }
 
-/* ── helper: strip "Do not generate" prefix from negative strings ── */
-function extractNegativeKeywords(negativeText: string): string {
-  return negativeText
-    .replace(/^Do not generate\s*/i, "")
-    .replace(/\.\s*$/, "")
-    .trim();
-}
 
 /* ── fal.ai FLUX: text-to-image ────────────────────────── */
 async function falTextToImage(prompt: string, apiKey: string): Promise<string | null> {
