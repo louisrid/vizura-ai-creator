@@ -521,7 +521,7 @@ const ChooseFace = () => {
     setShowSignIn(false);
     setAngleLoading(false);
     toast.success("character added!");
-    navigate("/characters", { replace: true });
+    navigate(`/characters/${cId}`, { replace: true });
   }, [pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
