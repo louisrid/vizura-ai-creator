@@ -185,9 +185,9 @@ const Home = () => {
       if (inserted) {
         sessionStorage.setItem("vizura_pending_char_id", inserted.id);
       }
-      navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
+      navigate("/choose-face", { state: { prompt, characterId: inserted?.id, freshCreation: true } });
     } else {
-      navigate("/choose-face", { state: { prompt } });
+      navigate("/choose-face", { state: { prompt, freshCreation: true } });
     }
 
     sessionStorage.removeItem(FLOW_STATE_KEY);
