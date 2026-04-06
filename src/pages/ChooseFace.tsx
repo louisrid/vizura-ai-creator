@@ -14,6 +14,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
+import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
@@ -95,6 +96,7 @@ const ChooseFace = () => {
   
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
+  const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Second loading phase: angle + body generation
@@ -703,7 +705,13 @@ const ChooseFace = () => {
                   </button>
 
                   <button
-                    onClick={handleRegenerate}
+                    onClick={() => {
+                      if (isFreeUser) {
+                        toast("please add gems");
+                        return;
+                      }
+                      setShowRegenConfirm(true);
+                    }}
                     disabled={isFreeUser}
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
@@ -741,6 +749,15 @@ const ChooseFace = () => {
             </div>
           </main>
         )}
+
+        <RegenerateConfirmDialog
+          open={showRegenConfirm}
+          onConfirm={() => {
+            setShowRegenConfirm(false);
+            handleRegenerate();
+          }}
+          onCancel={() => setShowRegenConfirm(false)}
+        />
       </div>
     </>
   );
