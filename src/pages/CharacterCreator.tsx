@@ -18,7 +18,7 @@ const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as cons
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
 const makeupOptions = ["natural", "classic"] as const;
-const ageOptions = ["18-23", "24-28", "29+"] as const;
+const ageOptions = ["18-24", "24+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
@@ -30,7 +30,7 @@ const PillGroup = ({
 }) => (
   <div className="flex flex-col gap-1.5">
     <span className="text-xs font-extrabold lowercase text-foreground">{label}</span>
-    <div className="flex flex-wrap gap-1.5">
+    <div className={`flex flex-wrap gap-1.5 ${options.length <= 2 ? "justify-center" : ""}`}>
       {options.map((opt) => (
         <button
           key={opt}
