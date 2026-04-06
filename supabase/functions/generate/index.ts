@@ -102,7 +102,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks, big bright eyes, small compact nose, plump lips, smooth even skin, soft jawline blending into neck, small rounded chin, compact features, short rounded skull shape";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small rounded chin, compact features close together, average width face";
   return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
@@ -497,13 +497,13 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-    const variations = [
-    "large doe eyes, small upturned nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
-    "almond-shaped eyes, straight refined nose, thin defined lips, oval face, SAME hair style and colour as described",
-    "round bright eyes, soft button nose, medium natural lips, round face with soft cheeks, SAME hair style and colour as described",
+   const variations = [
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "almond-shaped eyes, small refined nose, thin defined lips, oval face, SAME hair style and colour as described",
+    "round bright eyes, soft petite button nose, medium natural lips, round face with soft cheeks, SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft rounded jawline blending into neck, small chin, slim face, small nose, skin with visible pores and subtle colour variation, long styled hair past shoulders, soft pink-tinted lips, thick mascara, thin eyeliner, subtle blush, confident closed-mouth smile like a relaxed model";
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with pink-red tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -591,7 +591,7 @@ async function generateAngleAndBody(
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders only, cropped below collarbone. Skin with visible pores and colour variation. Confident closed-mouth smile. ${characterTraits}`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders only, cropped below collarbone. Fitted low-cut white top. Skin with visible pores and colour variation. Confident closed-mouth smile with lips together. ${characterTraits}`;
     const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -610,7 +610,7 @@ async function generateAngleAndBody(
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
     const bodyPrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, front-facing confident pose, slight natural hip tilt, framed from head to just below hips, wearing same fitted plain white crew neck t-shirt, ${bodyDesc}, standing upright feet shoulder width apart, same plain white background, same soft even lighting as face reference, matte skin with visible pores, normal proportional arms ending at mid-thigh, naturally feminine build, body and face are one cohesive person`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, head to mid-thigh. Fitted low-cut white top with matte skin texture across chest area, tight black leggings. Same white background, same lighting. ${bodyDesc}. Skin with visible pores and colour variation across chest, neck and arms. Short feminine arms resting at sides, hands at mid-thigh, soft smooth inner elbows. Confident closed-mouth smile.`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, head to mid-thigh. Fitted low-cut white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. Skin with visible pores and colour variation. Short feminine arms resting at sides, hands at mid-thigh, smooth inner elbows. Confident closed-mouth smile with lips together.`;
     const bodyResult = await routerImageEdit(bodyPrompt, ACTIVE_MODEL === "flux" ? "" : BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
