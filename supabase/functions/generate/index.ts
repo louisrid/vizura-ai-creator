@@ -102,8 +102,8 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face with uniform fullness, full chubby cheeks, big bright eyes, small nose, plump lips, smooth even skin, soft jawline blending into neck, compact features close together";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured but feminine";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks, big bright eyes, small compact nose, plump lips, smooth even skin, soft jawline, compact features";
+  return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -160,26 +160,18 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const hairToneVariants: Record<string, string[]> = {
-    blonde: ["warm honey blonde", "icy platinum blonde", "golden blonde", "sandy ash blonde", "strawberry blonde"],
-    brown: ["warm chestnut brown", "cool ash brown", "rich chocolate brown", "light caramel brown", "dark espresso brown"],
-    black: ["jet black", "soft black", "blue-black", "warm black"],
-    red: ["auburn red", "copper red", "strawberry red", "deep ginger red"],
-  };
-  const toneOptions = hairToneVariants[hairColour.toLowerCase()];
-  const variedHairColour = toneOptions ? toneOptions[Math.floor(Math.random() * toneOptions.length)] : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${variedHairColour} hair with straight-across bangs fringe, long flowing hair clearly visible past the shoulders and down the back, full straight fringe across the forehead, hair must be long and flowing not tucked behind shoulders, IMPORTANT: must show long hair with bangs fringe in every image`.trim());
+    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair clearly visible past the shoulders and down the back, full straight fringe across the forehead, hair must be long and flowing not tucked behind shoulders, IMPORTANT: must show long hair with bangs fringe in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${variedHairColour} hair, hair parted naturally, IMPORTANT: must be straight hair in every image`.trim());
+    parts.push(`long straight ${hairColour} hair, hair parted naturally, IMPORTANT: must be straight hair in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly") {
-    parts.push(`${variedHairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
+    parts.push(`${hairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
   } else if (hairStyle.toLowerCase() === "short") {
-    parts.push(`short ${variedHairColour} hair, IMPORTANT: must have short hair in every image`.trim());
-  } else if (hairStyle || variedHairColour) {
-    parts.push(`${hairStyle} ${variedHairColour} hair`.trim());
+    parts.push(`short ${hairColour} hair, IMPORTANT: must have short hair in every image`.trim());
+  } else if (hairStyle || hairColour) {
+    parts.push(`${hairStyle} ${hairColour} hair`.trim());
   }
-
+  
   if (char.eye) {
     parts.push(`bright ${char.eye} eyes`);
   }
@@ -506,9 +498,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
     const variations = [
-    "large round doe eyes, small button nose, full pouty lips, heart-shaped face, Eastern European features, MUST KEEP exact same hairstyle and hair colour as described",
-    "narrow hooded eyes, petite straight nose, thin defined lips with cupids bow, long oval face, Scandinavian features, MUST KEEP exact same hairstyle and hair colour as described",
-    "wide bright almond eyes, soft small rounded nose, medium natural lips, round face with high cheekbones, Southern European features, MUST KEEP exact same hairstyle and hair colour as described",
+    "large doe eyes, small upturned nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "almond-shaped eyes, straight refined nose, thin defined lips, oval face, SAME hair style and colour as described",
+    "round bright eyes, soft button nose, medium natural lips, round face with soft cheeks, SAME hair style and colour as described",
   ];
 
   const beautyCore = "extremely attractive young woman, soft feminine jawline, slim face, small nose, skin with visible pores and subtle colour variation, long styled hair past shoulders, soft pink-tinted lips, thick mascara, thin eyeliner, subtle blush, confident closed-mouth smile";
