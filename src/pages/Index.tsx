@@ -83,8 +83,8 @@ const ToggleBox = ({ label, options, value, onChange }: {
 
 /* ── Static placeholder — tells user what to type ── */
 const useStaticPlaceholder = (charName: string) => {
-  const name = charName || "luna";
-  return `describe scene, outfit & extras — e.g. "${name} in a café, wearing a white sundress"`;
+  const name = charName || "sara";
+  return `e.g. ${name} standing in her bedroom wearing a pink hoodie`;
 };
 
 const escapeHtml = (text: string) =>
