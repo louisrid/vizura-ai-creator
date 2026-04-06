@@ -147,6 +147,16 @@ const ChooseFace = () => {
     }
   }, [loading, cardsRevealed, faces.length]);
 
+  // Intercept swipe-back gesture and show confirmation dialog instead
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setShowBackConfirm(true);
+    };
+    window.addEventListener("vizura:swipe-back", handler);
+    return () => window.removeEventListener("vizura:swipe-back", handler);
+  }, []);
+
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
   const doFinalSaveRef = useRef<(forcedFaceIdx?: number) => Promise<boolean>>(async () => false);
 
