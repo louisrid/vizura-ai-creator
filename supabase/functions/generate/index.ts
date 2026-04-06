@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport style photo, plain white background, head and shoulders centred in frame with space above the head, wearing a plain white t-shirt, soft even front lighting, looking straight at camera, sharp focus, realistic skin with visible pores and texture";
+  "passport photo, plain white background, face and upper shoulders only cropped just below collarbone, centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -102,7 +102,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 23) return "looks 18 years old, baby face, round soft face, big bright eyes, small nose, full lips, smooth clear youthful skin, plump cheeks";
+  if (isNaN(num) || num <= 23) return "looks 17 to 18, baby face, round soft face, big bright eyes, small nose, full lips, smooth clear skin, plump cheeks, soft jawline";
   if (num <= 28) return "looks early twenties, youthful skin, bright eyes, attractive young woman";
   return "looks mid twenties, defined cheekbones, youthful skin, attractive";
 }
@@ -499,12 +499,12 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
     const variations = [
-    "slightly larger eyes, smaller nose, fuller lips, delicate features, SAME hair style and colour as described",
-    "slightly narrower eyes, defined nose, thinner lips, sharper features, SAME hair style and colour as described",
-    "round eyes, button nose, natural lips, balanced soft features, SAME hair style and colour as described",
+    "large doe eyes, small upturned nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "almond-shaped eyes, straight refined nose, thin defined lips, oval face, SAME hair style and colour as described",
+    "round bright eyes, soft button nose, medium natural lips, round face with soft cheeks, SAME hair style and colour as described",
   ];
 
-  const beautyCore = "very attractive young woman, slim face, matte natural skin with visible texture, long styled hair past her shoulders, subtle pink lips, light mascara, warm friendly smile";
+  const beautyCore = "very attractive young woman, soft feminine jawline, slim face, skin with visible pores, long styled hair past shoulders, pink lips, mascara, blush, closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -561,18 +561,18 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  slim: "slim toned body, smaller chest, narrow waist, lean athletic figure, visible collarbones, slender arms and legs",
-  regular: "soft feminine body, shapely figure, large DD bust, defined waist, feminine hips, balanced proportions",
-  average: "soft feminine body, shapely figure, large DD bust, defined waist, feminine hips, balanced proportions",
-  curvy: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
-  thick: "very curvy full figure, very large bust, wide hips, thick thighs, hourglass shape, voluptuous proportions",
+  slim: "slim toned body, C cup bust visible in fitted top, narrow waist, lean figure, slender arms",
+  regular: "soft feminine body, large DD bust visible in fitted low-cut top, defined waist, feminine hips",
+  average: "soft feminine body, large DD bust visible in fitted low-cut top, defined waist, feminine hips",
+  curvy: "very curvy figure, large E-G cup bust visible in fitted low-cut top, wide hips, thick thighs, hourglass shape",
+  thick: "very curvy figure, large E-G cup bust visible in fitted low-cut top, wide hips, thick thighs, hourglass shape",
 };
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  slim: "petite slender frame, narrow hips, small A-B cup chest, toned flat stomach, delicate build, slim thighs",
-  regular: "hourglass figure, feminine curves, large D-DD cup bust, defined waist, wider hips, soft feminine shape",
-  curvy: "very voluptuous, extremely large G-H cup bust, very wide hips, thick thighs, maximum curves, exaggerated hourglass",
+  slim: "petite frame, narrow hips, C cup chest, toned stomach, slim thighs",
+  regular: "hourglass figure, large DD bust, defined waist, wider hips, soft feminine shape",
+  curvy: "very voluptuous, large E-G cup bust, very wide hips, thick thighs, maximum curves",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -591,7 +591,7 @@ async function generateAngleAndBody(
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `Same person as the reference photo, same white t-shirt, same white background, same lighting. Head turned 45 degrees to the right showing 3/4 profile view. Head and shoulders only, centred in frame with space above head. Realistic skin with visible pores and texture. ${characterTraits}`;
+      : `A woman who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees right, 3/4 profile. Head and shoulders only, cropped below collarbone. Skin with visible pores. Closed-mouth smile. ${characterTraits}`;
     const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -610,7 +610,7 @@ async function generateAngleAndBody(
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
     const bodyPrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, front-facing confident pose, slight natural hip tilt, framed from head to just below hips, wearing same fitted plain white crew neck t-shirt, ${bodyDesc}, standing upright feet shoulder width apart, same plain white background, same soft even lighting as face reference, matte skin with visible pores, normal proportional arms ending at mid-thigh, naturally feminine build, body and face are one cohesive person`
-      : `Same person as the reference photo taken in the same session. Front facing, slight hip tilt, framed from head to mid-thigh with space above head. Same white t-shirt, same white background, same soft lighting. ${bodyDesc}. Realistic matte skin with visible pores and texture on face, neck, chest and arms. Arms hanging naturally at sides, proportional to body, ending at mid-thigh. Feminine soft build.`;
+      : `A woman who naturally resembles the person in the reference photo. Front facing, slight hip tilt, head to mid-thigh. Wearing fitted low-cut white top and tight black leggings. Same white background, same lighting. ${bodyDesc}. Skin with visible pores and texture. Arms at sides, proportional, ending at mid-thigh. Closed-mouth smile.`;
     const bodyResult = await routerImageEdit(bodyPrompt, ACTIVE_MODEL === "flux" ? "" : BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
