@@ -81,10 +81,10 @@ const ToggleBox = ({ label, options, value, onChange }: {
   </div>
 );
 
-/* ── Static placeholder using selected character name ── */
+/* ── Static placeholder — tells user what to type ── */
 const useStaticPlaceholder = (charName: string) => {
   const name = charName || "luna";
-  return `${name} standing in her bedroom, wearing pink gym gear and making a peace sign`;
+  return `describe scene, outfit & extras — e.g. "${name} in a café, wearing a white sundress"`;
 };
 
 const escapeHtml = (text: string) =>
@@ -514,7 +514,7 @@ const Index = () => {
 
           {/* Prompt */}
           <div className="relative">
-            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe your photo</span>
+            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe the scene</span>
             <HighlightedPromptArea
               value={prompt}
               onChange={setPrompt}
@@ -540,10 +540,10 @@ const Index = () => {
                     key={expr}
                     type="button"
                     onClick={() => setExpression(expr)}
-                    className="flex items-center justify-center rounded-2xl py-[10px] text-[14px] font-extrabold lowercase transition-all"
+                    className="flex items-center justify-center rounded-2xl py-[10px] text-[14px] font-extrabold lowercase transition-all border-2"
                     style={isSelected
-                      ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))" }
-                      : { backgroundColor: "#111", border: "2px solid #222", color: "rgba(255,255,255,0.48)" }}
+                      ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))", borderColor: "hsl(var(--neon-yellow))" }
+                      : { backgroundColor: "#111", borderColor: "#222", color: "rgba(255,255,255,0.48)" }}
                   >
                     {expr}
                   </button>

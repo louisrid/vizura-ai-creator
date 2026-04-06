@@ -249,9 +249,9 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
-          <Button className="h-14 w-full text-sm" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
+          <button className="h-14 w-full rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
-          </Button>
+          </button>
           <button
             type="button"
             onClick={() => setIsSignUpMode((v) => !v)}

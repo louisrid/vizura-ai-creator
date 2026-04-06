@@ -182,26 +182,49 @@ function buildCharacterTraits(char: any): string {
   return parts.join(", ");
 }
 
-/* ── build final prompt with all modifiers ─────────────── */
+/* ── build final prompt with structured format ─────────── */
 function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
   characterTraits: string | null,
   bodyType?: string,
+  expression?: string,
 ): string {
+  const typeLabel = photoType === "selfie" ? "SELFIE" : "PHOTO";
   const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
+
+  // Extract character name from traits (first part before comma)
+  const charName = characterTraits?.match(/^(\d+\s+year\s+old\s+woman)/)?.[0] || "the woman";
+
+  // Expression
+  const exprStr = expression ? `, ${expression} expression` : "";
+
+  // The user's scene prompt contains outfit, environment, pose, extras
+  // We explicitly instruct the model to use the outfit from the user prompt
   const parts: string[] = [];
 
-  if (characterTraits) parts.push(`Generate a photo of the woman shown in the reference images. She has: ${characterTraits}`);
-  parts.push(scenePrompt);
+  if (characterTraits) {
+    parts.push(`a realistic casual iPhone-style ${typeLabel} of ${charName} shown in the reference images`);
+    parts.push(`very attractive${exprStr}`);
+    parts.push(scenePrompt);
+    parts.push(`IMPORTANT: the outfit described in the scene description MUST override any clothing from reference images. She must wear exactly what is described above, NOT the clothing from reference photos`);
+    parts.push(`She has: ${characterTraits}`);
+  } else {
+    parts.push(`a realistic casual iPhone-style ${typeLabel} of a woman`);
+    parts.push(`very attractive${exprStr}`);
+    parts.push(scenePrompt);
+  }
+
+  parts.push("slight space above the head, natural framing, authentic influencer style instagram photo, natural lighting, realistic skin");
   parts.push(perspective);
   parts.push(QUALITY_SUFFIX);
-  // Append body-type prompt modifier if available
+
   if (bodyType) {
     const bKey = bodyType.toLowerCase();
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
   }
+
   parts.push(NEGATIVE_INSTRUCTION);
 
   return parts.join(". ");
@@ -530,6 +553,7 @@ serve(async (req) => {
     const characterId = body?.character_id || null;
     const photoType = body?.photo_type || "selfie";
     const aspectRatio = body?.aspect_ratio || "3:4";
+    const expression = body?.expression || null;
     const generateAngles = body?.generate_angles === true;
     const selectedFaceUrl = body?.selected_face_url || null;
     const angleCharacterId = body?.angle_character_id || null;
@@ -764,7 +788,7 @@ serve(async (req) => {
       if (isFaceRegen) {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } else {
-        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType);
+        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
         console.log("Final prompt:", finalPrompt.slice(0, 200));
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
