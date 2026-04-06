@@ -451,10 +451,11 @@ async function routerTextToImage(
   negativeText: string,
   apiKey: string
 ): Promise<string | null> {
-  if (ACTIVE_MODEL === "seedream") {
+  if (ACTIVE_MODEL === "flux") {
     const falKey = Deno.env.get("FAL_API_KEY");
     if (!falKey) throw new Error("FAL_API_KEY is not configured");
-    return falTextToImage(positivePrompt, extractNegativeKeywords(negativeText), falKey);
+    // FLUX does not use negative prompts — send only the positive prompt
+    return falTextToImage(positivePrompt, falKey);
   }
   // grok: bake negative into prompt
   const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
@@ -469,10 +470,11 @@ async function routerImageEdit(
   apiKey: string,
   aspectRatio = "3:4"
 ): Promise<string | null> {
-  if (ACTIVE_MODEL === "seedream") {
+  if (ACTIVE_MODEL === "flux") {
     const falKey = Deno.env.get("FAL_API_KEY");
     if (!falKey) throw new Error("FAL_API_KEY is not configured");
-    return falImageEdit(positivePrompt, imageUrls, extractNegativeKeywords(negativeText), falKey);
+    // FLUX does not use negative prompts — send only the positive prompt
+    return falImageEdit(positivePrompt, imageUrls, falKey);
   }
   // grok: bake negative into prompt
   const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
