@@ -181,10 +181,9 @@ const TOTAL_SKIP = 9;
 
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
-    case "18-23": return "20";
-    case "24-28": return "26";
-    case "29+": return "32";
-    default: return "25";
+    case "18-24": return "18";
+    case "24+": return "24";
+    default: return "18";
   }
 };
 
