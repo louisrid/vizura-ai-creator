@@ -36,34 +36,35 @@ const PHOTO_LOADING_PHRASES = [
   "final touches…",
 ];
 
-
-/* ── Pill toggle ── */
-const PillToggle = ({ label, options, value, onChange, renderOption }: {
+/* ── Toggle box (new design — contained in a rounded box) ── */
+const ToggleBox = ({ label, options, value, onChange }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
-  renderOption?: (opt: string) => React.ReactNode;
 }) => (
-  <div className="flex flex-col gap-1.5">
-    <span className="text-xs font-[900] lowercase text-white">{label}</span>
-    <div className="flex flex-wrap gap-1.5">
+  <div className="flex-1 flex flex-col gap-2">
+    <span className="text-sm font-[900] lowercase text-white">{label}</span>
+    <div
+      className="flex gap-1.5 p-1.5"
+      style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
+    >
       {options.map((opt) => (
         <button
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
-          className="flex items-center gap-1.5 transition-all"
+          className="flex-1 flex items-center justify-center transition-all"
           style={{
-            borderRadius: 11,
-            padding: "10px 18px",
-            fontSize: 16,
+            borderRadius: 10,
+            padding: "10px 0",
+            fontSize: 15,
             fontWeight: 800,
             textTransform: "lowercase" as const,
             ...(value === opt
-               ? { backgroundColor: "#facc15", color: "#000", border: "2px solid #facc15" }
-              : { backgroundColor: "#111111", color: "rgba(255,255,255,0.55)", border: "2px solid #222" }
+              ? { backgroundColor: "#facc15", color: "#000" }
+              : { backgroundColor: "transparent", color: "rgba(255,255,255,0.45)" }
             ),
           }}
         >
-          {renderOption ? renderOption(opt) : opt}
+          {opt}
         </button>
       ))}
     </div>
@@ -131,7 +132,7 @@ const HighlightedPromptArea = ({
         ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        rows={4}
+        rows={6}
         className="w-full resize-none px-4 py-3 text-sm font-[900] lowercase text-foreground focus:outline-none transition-colors"
         style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111", caretColor: "hsl(var(--foreground))" }}
       />
@@ -140,7 +141,7 @@ const HighlightedPromptArea = ({
   );
 };
 
-/* ── Create button component (reusable for top + bottom) ── */
+/* ── Create button component ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
@@ -192,7 +193,6 @@ const Index = () => {
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
 
-  // Close dropdown on outside click
   useEffect(() => {
     if (!charDropdownOpen) return;
     const handler = (e: MouseEvent) => {
@@ -203,6 +203,7 @@ const Index = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [charDropdownOpen]);
+
   useEffect(() => {
     const handler = () => {
       setFadingBack(true);
@@ -236,7 +237,6 @@ const Index = () => {
           const char = data.find((c: any) => c.id === preselectedCharacterId);
           if (char) setSelectedCharId(preselectedCharacterId);
         } else if (data.length > 0) {
-          // Auto-select most recently created character
           setSelectedCharId(data[0].id);
         }
       }
@@ -270,7 +270,6 @@ const Index = () => {
     toast("1 gem used");
     const cleanPrompt = sanitiseText(prompt.trim());
 
-    // Upload vibe reference image to storage if present
     let vibeRefUrl: string | null = null;
     if (referenceImage && fileInputRef.current?.files?.[0]) {
       try {
@@ -344,135 +343,142 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-40">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        <div className="w-[75%] mx-auto flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
 
-          {/* Character selector — yellow background */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              type="button"
-              onClick={() => setCharDropdownOpen((v) => !v)}
-              className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-              style={{ borderRadius: 12, backgroundColor: "#facc15" }}
+          {/* Character selector + Photo box — narrower (75%) */}
+          <div className="w-[75%] mx-auto flex flex-col gap-5">
+            {/* Character selector — yellow background */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setCharDropdownOpen((v) => !v)}
+                className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
+                style={{ borderRadius: 12, backgroundColor: "#facc15" }}
+              >
+                {selectedChar?.face_image_url ? (
+                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
+                    <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
+                    <span className="text-black/40 text-sm">👤</span>
+                  </div>
+                )}
+                <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
+                  {selectedChar?.name || "select character"}
+                </span>
+                <ChevronDown
+                  size={18}
+                  strokeWidth={2.5}
+                  className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {charDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
+                    style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
+                  >
+                    {characters.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
+                        className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${selectedCharId === c.id ? "bg-white/5" : "hover:bg-white/5"}`}
+                      >
+                        {c.face_image_url ? (
+                          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/10">
+                            <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
+                            <span className="text-white/30 text-sm">👤</span>
+                          </div>
+                        )}
+                        <span
+                          className="text-lg font-[900] lowercase truncate"
+                          style={{ color: selectedCharId === c.id ? "#facc15" : "#fff" }}
+                        >
+                          {c.name || "unnamed"}
+                        </span>
+                      </button>
+                    ))}
+                    {characters.length === 0 && user && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCharDropdownOpen(false);
+                          sessionStorage.removeItem("vizura_creator_dismissed");
+                          sessionStorage.removeItem("vizura_guided_flow_state");
+                          navigate("/", { state: { openCreator: true } });
+                        }}
+                        className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
+                      >
+                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "1px solid rgba(250,204,21,0.3)" }}>
+                          <span className="text-xs">+</span>
+                        </div>
+                        <span className="text-lg font-[900] lowercase" style={{ color: "#facc15" }}>create character</span>
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Photo preview */}
+            <motion.section
+              layout
+              className="flex items-center justify-center overflow-hidden w-full"
+              style={{
+                borderRadius: 14,
+                border: "2px solid rgba(255,255,255,0.08)",
+                backgroundColor: "#111111",
+              }}
+              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
-              {selectedChar?.face_image_url ? (
-                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
-                  <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
-                </div>
-              ) : (
-                <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
-                  <span className="text-black/40 text-sm">👤</span>
-                </div>
-              )}
-              <span className="flex-1 text-left text-lg font-[900] lowercase text-black truncate">
-                {selectedChar?.name || "select character"}
-              </span>
-              <ChevronDown
-                size={18}
-                strokeWidth={2.5}
-                className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-
-            <AnimatePresence>
-              {charDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-                  style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
-                >
-                  {characters.map((c) => (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
-                      className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${selectedCharId === c.id ? "bg-white/5" : "hover:bg-white/5"}`}
-                    >
-                      {c.face_image_url ? (
-                        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/10">
-                          <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
-                          <span className="text-white/30 text-sm">👤</span>
-                        </div>
-                      )}
-                      <span className="text-base font-[900] lowercase text-white truncate">{c.name || "unnamed"}</span>
-                      {selectedCharId === c.id && (
-                        <div className="ml-auto w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#facc15" }} />
-                      )}
-                    </button>
-                  ))}
-                  {characters.length === 0 && user && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCharDropdownOpen(false);
-                        sessionStorage.removeItem("vizura_creator_dismissed");
-                        sessionStorage.removeItem("vizura_guided_flow_state");
-                        navigate("/", { state: { openCreator: true } });
+              <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                {resultImage ? (
+                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <div
+                      className="flex items-center justify-center rounded-full"
+                      style={{
+                        width: 48,
+                        height: 48,
+                        backgroundColor: "rgba(250,204,21,0.08)",
+                        border: "2px solid #facc15",
                       }}
-                      className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
                     >
-                      <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "1px solid rgba(250,204,21,0.3)" }}>
-                        <span className="text-xs">+</span>
-                      </div>
-                      <span className="text-base font-[900] lowercase" style={{ color: "#facc15" }}>create character</span>
-                    </button>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                      <span className="text-xl">🪄</span>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </motion.section>
           </div>
 
-          {/* Photo preview */}
-          <motion.section
-            layout
-            className="flex items-center justify-center overflow-hidden w-full"
-            style={{
-              borderRadius: 14,
-              border: "2px solid rgba(255,255,255,0.08)",
-              backgroundColor: "#111111",
-            }}
-            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
-              {resultImage ? (
-                <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <div
-                    className="flex items-center justify-center rounded-full"
-                    style={{
-                      width: 48,
-                      height: 48,
-                      backgroundColor: "rgba(250,204,21,0.08)",
-                      border: "2px solid #facc15",
-                    }}
-                  >
-                    <span className="text-xl">🪄</span>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          </motion.section>
+          {/* Full-width controls below */}
 
-          {/* Type & Ratio toggles — below preview */}
-          <div className="flex gap-6">
-            <PillToggle label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-            <PillToggle label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+          {/* Type & Ratio toggles — two separate boxes */}
+          <div className="flex gap-3">
+            <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
+            <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
           </div>
 
           {/* Prompt */}
           <div className="relative">
-            <span className="block text-xs font-[900] lowercase mb-1.5 text-white">describe your photo</span>
+            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
               value={prompt}
               onChange={setPrompt}
@@ -498,14 +504,14 @@ const Index = () => {
 
           {/* Reference section */}
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs font-[900] lowercase text-white">add a reference image</span>
-              <span className="text-xs font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-sm font-[900] lowercase text-white">add a reference image</span>
+              <span className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
             </div>
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             {referenceImage ? (
-              <div className="flex items-center gap-3 px-4 py-2.5" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
-                <img src={referenceImage} alt="Reference" className="h-10 w-10 rounded-lg object-cover shrink-0" />
+              <div className="flex items-center gap-3 px-4 py-4" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
+                <img src={referenceImage} alt="Reference" className="h-12 w-12 rounded-lg object-cover shrink-0" />
                 <span className="text-xs font-[900] lowercase text-foreground/60 truncate flex-1">reference.jpg</span>
                 <button
                   type="button"
@@ -519,11 +525,11 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex w-full items-center gap-3 px-4 py-3 hover:border-foreground/30 transition-colors"
+                className="flex w-full items-center justify-center gap-3 px-4 py-6 hover:border-foreground/30 transition-colors"
                 style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
               >
-                <Upload size={16} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
-                <span className="text-xs font-[900] lowercase text-foreground/30">upload image</span>
+                <Upload size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
+                <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
               </button>
             )}
           </div>
