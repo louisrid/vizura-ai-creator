@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders only cropped just below collarbone, centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores";
+  "passport photo, plain white background, face and upper shoulders only cropped just below collarbone, centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores and subtle colour variation";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -102,7 +102,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks, big bright eyes, small compact nose, plump lips, smooth even skin, soft jawline, compact features";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks, big bright eyes, small compact nose, plump lips, smooth even skin, soft jawline blending into neck, small rounded chin, compact features, short rounded skull shape";
   return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
@@ -503,7 +503,7 @@ async function generateFaceImages(
     "round bright eyes, soft button nose, medium natural lips, round face with soft cheeks, SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive young woman, soft feminine jawline, slim face, small nose, skin with visible pores and subtle colour variation, long styled hair past shoulders, soft pink-tinted lips, thick mascara, thin eyeliner, subtle blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft rounded jawline blending into neck, small chin, slim face, small nose, skin with visible pores and subtle colour variation, long styled hair past shoulders, soft pink-tinted lips, thick mascara, thin eyeliner, subtle blush, confident closed-mouth smile like a relaxed model";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
