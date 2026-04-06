@@ -220,7 +220,7 @@ const CharacterDetail = () => {
         style={{
           color: "#ff4444",
           borderRadius: 12,
-          backgroundColor: "rgba(255,68,68,0.06)",
+          backgroundColor: "#1a0808",
           border: "2px solid rgba(255,68,68,0.25)",
         }}
       >

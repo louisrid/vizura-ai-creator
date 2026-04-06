@@ -214,7 +214,7 @@ const Storage = () => {
                 </a>
                 <Button
                   variant="outline"
-                  className="h-10 px-3 rounded-xl border-[2px] border-destructive/30 bg-[hsl(var(--destructive-surface))] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-10 px-3 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
                   onClick={() => handleDelete(expanded)}
                 >
                   <Trash2 size={12} strokeWidth={2.5} />

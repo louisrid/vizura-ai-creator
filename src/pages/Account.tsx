@@ -58,17 +58,18 @@ const Account = () => {
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
 
-        <div className="space-y-0">
+        <div className="flex flex-col">
           {subscribed ? (
             <div
-              className="w-full h-14 md:h-16 rounded-2xl text-base md:text-lg font-extrabold lowercase flex items-center justify-center pointer-events-none"
-              style={{ backgroundColor: "hsl(var(--member-green) / 0.65)", color: "hsl(var(--neon-green-foreground))" }}
+              className="w-full h-14 md:h-16 text-base md:text-lg font-extrabold lowercase flex items-center justify-center pointer-events-none"
+              style={{ borderRadius: 12, backgroundColor: "hsl(var(--member-green) / 0.65)", color: "hsl(var(--neon-green-foreground))" }}
             >
               subscribed
             </div>
           ) : (
             <button
-              className="w-full h-16 md:h-[72px] rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-lg md:text-xl font-extrabold lowercase hover:opacity-90 transition-all"
+              className="w-full h-16 md:h-[72px] bg-neon-yellow text-neon-yellow-foreground text-lg md:text-xl font-extrabold lowercase hover:opacity-90 transition-all"
+              style={{ borderRadius: 12 }}
               onClick={handleSubscribe}
             >
               subscribe
@@ -79,7 +80,7 @@ const Account = () => {
             <div className="flex justify-center pt-3">
               <button
                 className="mx-auto h-9 px-5 text-[11px] md:h-10 md:text-[12px] font-extrabold lowercase leading-none transition-all hover:opacity-90"
-                style={{ borderRadius: 12, backgroundColor: "#111111", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
+                style={{ borderRadius: 12, backgroundColor: "#1a0808", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
                 onClick={handleCancel}
               >
                 cancel
@@ -87,9 +88,9 @@ const Account = () => {
             </div>
           )}
 
-          <div className="mt-24">
+          <div className="mt-40">
             <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
-              <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
                 <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1 min-w-0">
                   <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
@@ -99,7 +100,7 @@ const Account = () => {
                 </div>
               </div>
 
-              <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
                 <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1">
                   <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
@@ -109,7 +110,7 @@ const Account = () => {
                 </div>
               </div>
 
-              <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
                 <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
                 <div className="flex-1">
                   <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
@@ -118,7 +119,7 @@ const Account = () => {
               </div>
 
               {subscribed && (
-                <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+                <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
                   <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
                   <div className="flex-1">
                     <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
@@ -129,11 +130,15 @@ const Account = () => {
             </div>
           </div>
 
-          <div className="pt-4">
-            <Button variant="outline" className="w-full h-12 md:h-14 rounded-2xl text-sm md:text-base" onClick={handleSignOut}>
+          <div className="pt-6">
+            <button
+              className="w-full h-12 md:h-14 text-sm md:text-base font-extrabold lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
+              style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222", color: "hsl(var(--foreground))" }}
+              onClick={handleSignOut}
+            >
               <LogOut size={16} strokeWidth={2.5} />
               sign out
-            </Button>
+            </button>
           </div>
         </div>
       </main>
