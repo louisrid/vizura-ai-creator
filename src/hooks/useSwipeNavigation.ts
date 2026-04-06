@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const MIN_SWIPE_DISTANCE = 30;
 const MAX_SWIPE_TIME = 600;
+const SWIPE_COOLDOWN = 120;
 
 export function useSwipeNavigation() {
   const navigate = useNavigate();
