@@ -529,7 +529,7 @@ async function generateFaceImages(
     while (retries <= maxRetries) {
       try {
         const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
+          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
           : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
