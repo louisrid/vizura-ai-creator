@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo, useLayoutEffect, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, Zap, Sparkles, ChevronDown, Gem, ArrowUpFromLine } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
@@ -43,14 +43,11 @@ const ToggleBox = ({ label, options, value, onChange }: {
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-base font-[900] lowercase text-white">{label}</span>
     <div
-      className="flex items-stretch p-1.5"
+      className="flex items-center p-1.5"
       style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
     >
       {options.map((opt, i) => (
-        <div key={opt} className="flex-1 flex items-stretch">
-          {i > 0 && (
-            <div className="w-[1px] self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.12)", margin: "6px 0" }} />
-          )}
+        <Fragment key={opt}>
           <button
             type="button"
             onClick={() => onChange(opt)}
@@ -62,14 +59,24 @@ const ToggleBox = ({ label, options, value, onChange }: {
               fontWeight: 800,
               textTransform: "lowercase" as const,
               ...(value === opt
-                ? { backgroundColor: "#facc15", color: "#000" }
-                : { backgroundColor: "transparent", color: "rgba(255,255,255,0.45)" }
+                ? { backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))" }
+                : { backgroundColor: "transparent", color: "hsl(var(--foreground) / 0.48)" }
               ),
             }}
           >
             {opt}
           </button>
-        </div>
+          {i < options.length - 1 && (
+            <div
+              aria-hidden
+              className="mx-1 w-px shrink-0 self-center"
+              style={{
+                height: 28,
+                backgroundColor: "hsl(var(--foreground) / 0.22)",
+              }}
+            />
+          )}
+        </Fragment>
       ))}
     </div>
   </div>
@@ -110,56 +117,130 @@ const HighlightedPromptArea = ({
   value: string; onChange: (v: string) => void; charName: string;
   placeholder: React.ReactNode;
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const editableRef = useRef<HTMLDivElement>(null);
+  const caretOffsetRef = useRef(0);
 
   const segments = useMemo(() => {
-    if (!charName || !value) return null;
-    const escaped = charName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(${escaped})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
+    if (!value) return [{ text: "", highlight: false }];
+    if (!charName.trim()) return [{ text: value, highlight: false }];
+
+    const escaped = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escaped})(?=\\s)`, "gi");
     const parts: { text: string; highlight: boolean }[] = [];
     let lastIndex = 0;
     let match: RegExpExecArray | null;
+
     while ((match = regex.exec(value)) !== null) {
-      if (match.index > lastIndex) parts.push({ text: value.slice(lastIndex, match.index), highlight: false });
-      parts.push({ text: match[1], highlight: true });
-      lastIndex = regex.lastIndex;
+      const boundary = match[1] ?? "";
+      const fullMatch = match[2] ?? "";
+      const highlightStart = match.index + boundary.length;
+      const highlightEnd = highlightStart + fullMatch.length;
+
+      if (lastIndex < match.index) {
+        parts.push({ text: value.slice(lastIndex, match.index), highlight: false });
+      }
+
+      if (boundary) {
+        parts.push({ text: boundary, highlight: false });
+      }
+
+      parts.push({ text: value.slice(highlightStart, highlightEnd), highlight: true });
+      lastIndex = highlightEnd;
     }
-    if (lastIndex < value.length) parts.push({ text: value.slice(lastIndex), highlight: false });
-    if (!parts.some(p => p.highlight)) return null;
-    return parts;
+
+    if (lastIndex < value.length) {
+      parts.push({ text: value.slice(lastIndex), highlight: false });
+    }
+
+    return parts.length > 0 ? parts : [{ text: value, highlight: false }];
   }, [value, charName]);
 
-  const hasHighlight = !!segments;
+  const getCaretOffset = useCallback((element: HTMLElement) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return 0;
+
+    const range = selection.getRangeAt(0);
+    const preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(element);
+    preCaretRange.setEnd(range.endContainer, range.endOffset);
+
+    return preCaretRange.toString().length;
+  }, []);
+
+  const setCaretOffset = useCallback((element: HTMLElement, targetOffset: number) => {
+    const selection = window.getSelection();
+    if (!selection) return;
+
+    const range = document.createRange();
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    let currentOffset = 0;
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode as Text;
+      const nextOffset = currentOffset + node.data.length;
+
+      if (targetOffset <= nextOffset) {
+        range.setStart(node, Math.max(0, targetOffset - currentOffset));
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return;
+      }
+
+      currentOffset = nextOffset;
+    }
+
+    range.selectNodeContents(element);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }, []);
+
+  const readEditableText = useCallback((element: HTMLDivElement) => {
+    if (!(element.textContent ?? "").length) return "";
+
+    const nextValue = element.innerText.replace(/\u00a0/g, " ").replace(/\r/g, "");
+    return nextValue === "\n" ? "" : nextValue;
+  }, []);
+
+  useLayoutEffect(() => {
+    if (document.activeElement === editableRef.current && editableRef.current) {
+      setCaretOffset(editableRef.current, Math.min(caretOffsetRef.current, value.length));
+    }
+  }, [segments, setCaretOffset, value]);
 
   return (
     <div className="relative">
-      {hasHighlight && (
-        <div
-          className="pointer-events-none absolute inset-0 px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words overflow-hidden"
-          style={{ wordBreak: "break-word" }}
-          aria-hidden
-        >
-          {segments!.map((seg, i) => (
-            <span key={i} style={{ color: seg.highlight ? "#facc15" : "hsl(var(--foreground))" }}>{seg.text}</span>
-          ))}
-        </div>
-      )}
-      <textarea
-        ref={textareaRef}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={6}
+      <div
+        ref={editableRef}
+        contentEditable
+        suppressContentEditableWarning
+        role="textbox"
+        aria-multiline="true"
         spellCheck={false}
         autoCorrect="off"
-        className="w-full resize-none px-4 py-3 text-2xl font-[900] lowercase focus:outline-none transition-colors"
+        className="w-full min-h-[176px] whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase focus:outline-none transition-colors"
         style={{
           borderRadius: 16,
           border: "2px solid #222",
           backgroundColor: "#111111",
           caretColor: "hsl(var(--foreground))",
-          color: hasHighlight ? "transparent" : "hsl(var(--foreground))",
+          color: "hsl(var(--foreground))",
+          wordBreak: "break-word",
         }}
-      />
+        onInput={(e) => {
+          caretOffsetRef.current = getCaretOffset(e.currentTarget);
+          onChange(readEditableText(e.currentTarget));
+        }}
+      >
+        {value
+          ? segments.map((seg, i) => (
+              <span key={`${seg.text}-${i}`} style={{ color: seg.highlight ? "hsl(var(--primary))" : "hsl(var(--foreground))" }}>
+                {seg.text}
+              </span>
+            ))
+          : null}
+      </div>
       {!value && placeholder}
     </div>
   );
@@ -170,8 +251,8 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
-    className="w-full h-14 text-sm font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
+    className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+    style={{ backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -559,7 +640,7 @@ const Index = () => {
           </div>
 
           {/* Create button */}
-          <div className="pt-2">
+          <div className="pt-2.5">
             <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
           </div>
         </div>
