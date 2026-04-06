@@ -553,6 +553,7 @@ serve(async (req) => {
     const characterId = body?.character_id || null;
     const photoType = body?.photo_type || "selfie";
     const aspectRatio = body?.aspect_ratio || "3:4";
+    const expression = body?.expression || null;
     const generateAngles = body?.generate_angles === true;
     const selectedFaceUrl = body?.selected_face_url || null;
     const angleCharacterId = body?.angle_character_id || null;
