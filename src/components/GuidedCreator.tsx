@@ -632,7 +632,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               {Array.from({ length: 11 }).map((_, i) => (
                 <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                   flex: 1, borderRadius: 2,
-                  background: i <= Math.round(((step) / TOTAL) * 11) ? Y : "rgba(250,204,21,0.1)",
+                  background: i <= Math.round(((step) / TOTAL) * 10) ? Y : "rgba(250,204,21,0.1)",
                 }} />
               ))}
             </div>
