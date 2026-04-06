@@ -651,7 +651,18 @@ const ChooseFace = () => {
 
             <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-1 pb-[250px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
-                <BackButton />
+                <button
+                  type="button"
+                  onClick={() => setShowBackConfirm(true)}
+                  className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
+                  style={{ borderRadius: 12, backgroundColor: "#facc15" }}
+                  aria-label="go back"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+                    <line x1="12" y1="7" x2="2" y2="7" />
+                    <polyline points="7,2 2,7 7,12" />
+                  </svg>
+                </button>
                 <PageTitle className="mb-0">pick your face</PageTitle>
               </div>
 
