@@ -314,9 +314,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isHeroSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
   const isNameSlide = internalStep === 2;
-  const isDescriptionSlide = internalStep === 10;
-  const isReferenceSlide = internalStep === 11;
-  const isCreateSlide = internalStep === 12;
+  const isReferenceSlide = internalStep === 10;
+  const isCreateSlide = internalStep === 11;
 
   const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
 
