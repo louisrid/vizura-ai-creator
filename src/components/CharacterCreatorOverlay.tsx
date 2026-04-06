@@ -121,7 +121,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
         user_id: user.id,
         name: `${values.hairColour || "brunette"} ${values.eyes || "brown"} ${values.makeup || "natural"}`,
         country: sanitiseText(values.skin || "tan", 50),
-        age: "25",
+        age: "18",
         hair: sanitiseText(values.hairColour || "brunette", 50),
         eye: sanitiseText(values.eyes || "brown", 50),
         body: sanitiseText(values.bodyType || "regular", 50),
