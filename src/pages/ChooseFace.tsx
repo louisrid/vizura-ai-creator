@@ -650,7 +650,7 @@ const ChooseFace = () => {
                           padding: selectedIndex === i ? 0 : 3,
                         }}
                       >
-                        <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" />
+                        <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" style={{ borderRadius: 10 }} />
                       </motion.button>
                     </div>
                   ))}
