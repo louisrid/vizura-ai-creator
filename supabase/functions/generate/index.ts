@@ -579,7 +579,8 @@ async function generateAngleAndBody(
   try {
     console.log("Generating 3/4 angle...");
     const anglePositive = `Same person exactly as in the reference image, side profile view, head turned approximately 60-70 degrees to the right showing the side of the face, ear visible, nose in profile, jawline visible from the side, genuine side-profile angle NOT a slight head turn, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}`;
-    const angleResult = await routerImageEdit(anglePositive, FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
+    const angleFullPrompt = `${anglePositive}. ${FACE_NEGATIVE}`;
+    const angleResult = await xaiImageEdit(angleFullPrompt, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
       console.log("Angle generated:", angleUrl?.slice(0, 80));
