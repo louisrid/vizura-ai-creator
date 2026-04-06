@@ -749,6 +749,15 @@ const ChooseFace = () => {
             </div>
           </main>
         )}
+
+        <RegenerateConfirmDialog
+          open={showRegenConfirm}
+          onConfirm={() => {
+            setShowRegenConfirm(false);
+            handleRegenerate();
+          }}
+          onCancel={() => setShowRegenConfirm(false)}
+        />
       </div>
     </>
   );
