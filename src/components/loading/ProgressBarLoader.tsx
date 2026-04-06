@@ -248,7 +248,7 @@ const ProgressBarLoader = ({
             {isComplete && requireTapToContinue ? (
               <motion.p
                 key="tap-to-continue"
-                className="text-center text-[1.1rem] font-[900] lowercase"
+                className="text-center text-[1.3rem] font-[900] lowercase"
                 style={{ color: "#ffffff" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
