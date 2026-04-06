@@ -260,11 +260,11 @@ const CharacterCreator = () => {
       }
       // Clear stale face options so ChooseFace always generates fresh faces
       sessionStorage.removeItem("vizura_face_options");
-      navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
+      navigate("/choose-face", { state: { prompt, characterId: inserted?.id, freshCreation: true } });
     } else {
       // Not logged in - navigate to choose-face, sign-in will happen there
       sessionStorage.removeItem("vizura_face_options");
-      navigate("/choose-face", { state: { prompt } });
+      navigate("/choose-face", { state: { prompt, freshCreation: true } });
     }
 
     // Close guided overlay after navigation is queued

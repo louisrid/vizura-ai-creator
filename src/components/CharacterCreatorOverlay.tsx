@@ -131,7 +131,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       const { data: inserted, error: insertError } = await supabase.from("characters").insert(charData).select("id").single();
       if (insertError) throw insertError;
       onClose();
-      navigate("/choose-face", { state: { prompt: buildPrompt(), characterId: inserted.id } });
+      navigate("/choose-face", { state: { prompt: buildPrompt(), characterId: inserted.id, freshCreation: true } });
     } catch (err: any) {
       toast.error(err.message || "failed to save character");
     } finally {

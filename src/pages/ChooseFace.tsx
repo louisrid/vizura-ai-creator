@@ -41,15 +41,23 @@ const ChooseFace = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { prompt: statePrompt, characterId: stateCharId } = (location.state as {
+  const { prompt: statePrompt, characterId: stateCharId, freshCreation: stateFresh } = (location.state as {
     prompt?: string;
     characterId?: string;
+    freshCreation?: boolean;
   }) || {};
+
+  // When arriving from a fresh character creation, always nuke cached faces
+  const isFreshCreation = !!stateFresh;
+  if (isFreshCreation) {
+    sessionStorage.removeItem(FACE_STORAGE_KEY);
+  }
 
   const prompt = statePrompt || sessionStorage.getItem("vizura_guided_prompt") || undefined;
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("vizura_pending_char_id") || undefined);
 
   const [faces, setFaces] = useState<string[]>(() => {
+    if (isFreshCreation) return [];
     try {
       const raw = sessionStorage.getItem(FACE_STORAGE_KEY);
       return raw ? JSON.parse(raw) as string[] : [];
