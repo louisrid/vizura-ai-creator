@@ -47,21 +47,28 @@ const ChooseFace = () => {
     freshCreation?: boolean;
   }) || {};
 
-  // When arriving from a fresh character creation, nuke cached faces — but only
-  // on the very first mount.  After processing, replace the history state so a
-  // browser refresh does NOT re-trigger the wipe.
-  const freshProcessedRef = useRef(false);
-  const isFreshCreation = !!stateFresh && !freshProcessedRef.current;
+  // Fresh creation should only wipe faces when there are genuinely no cached
+  // results yet.  On a browser refresh location.state persists, so we must NOT
+  // re-clear faces that were already generated and stored in sessionStorage.
+  const cachedFacesExist = (() => {
+    try {
+      const raw = sessionStorage.getItem(FACE_STORAGE_KEY);
+      if (!raw) return false;
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) && arr.length > 0;
+    } catch { return false; }
+  })();
+
+  const isFreshCreation = !!stateFresh && !cachedFacesExist;
   if (isFreshCreation) {
-    freshProcessedRef.current = true;
     sessionStorage.removeItem(FACE_STORAGE_KEY);
   }
 
-  // Strip freshCreation from history state so a refresh keeps cached faces
+  // Strip freshCreation from history so future refreshes never re-evaluate it
   useEffect(() => {
-    if (stateFresh) {
-      const { freshCreation: _drop, ...rest } = (location.state || {}) as Record<string, unknown>;
-      window.history.replaceState({ ...window.history.state, usr: rest }, "");
+    if (stateFresh && location.state) {
+      const { freshCreation: _drop, ...rest } = location.state as Record<string, unknown>;
+      navigate(location.pathname, { replace: true, state: Object.keys(rest).length ? rest : undefined });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
