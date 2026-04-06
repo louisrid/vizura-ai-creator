@@ -315,7 +315,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isReferenceSlide = internalStep === 9;
   const isCreateSlide = internalStep === 10;
 
-  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
+  const currentTraitIndex = internalStep >= 3 && internalStep <= 8 ? internalStep - 3 : -1;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
