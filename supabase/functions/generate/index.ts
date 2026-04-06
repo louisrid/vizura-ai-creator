@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
-const ACTIVE_MODEL: "grok" | "flux" = "flux";
+const ACTIVE_MODEL: "grok" | "flux" = "grok";
 
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -324,6 +324,7 @@ async function xaiTextToImage(prompt: string, apiKey: string): Promise<string | 
 
   const data = await response.json();
   console.log("xAI response keys:", Object.keys(data));
+  console.log("Revised prompt:", data?.data?.[0]?.revised_prompt || "none");
   return extractXaiImageUrl(data);
 }
 
@@ -378,6 +379,7 @@ async function xaiImageEdit(
 
   const data = await response.json();
   console.log("xAI edit response keys:", Object.keys(data));
+  console.log("Revised prompt:", data?.data?.[0]?.revised_prompt || "none");
   return extractXaiImageUrl(data);
 }
 
