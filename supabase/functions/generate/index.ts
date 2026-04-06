@@ -115,9 +115,9 @@ function extractXaiImageUrl(data: any): string | null {
   return null;
 }
 
-function stripFacePromptLanguage(prompt: string): string {
+function stripFacePromptBodyLanguage(prompt: string): string {
   return prompt
-    .replace(/\b(?:slim|average|regular|curvy|thick)\s+\s+type\b/gi, "")
+    .replace(/\b(?:slim|average|regular|curvy|thick)\s+body\s+type\b/gi, "")
     .replace(/\b(?:small|medium|large)\s+chest\b/gi, "")
     .replace(/\b(?:large\s+bust(?:\s+[a-z-]+)?|smaller\s+chest|wide\s+hips|defined\s+waist|narrow\s+waist|g-h\s+cup|dd)\b/gi, "")
     .replace(/\s+,/g, ",")
@@ -141,12 +141,12 @@ function buildCharacterTraits(char: any): string {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
   }
 
-  const Key = (char. || "regular").toLowerCase();
-  parts.push(_MAP[Key] || _MAP.regular);
+  const bodyKey = (char.body || "regular").toLowerCase();
+  parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
-  if (Key === "slim") {
+  if (bodyKey === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
-  } else if (Key === "regular" || Key === "average") {
+  } else if (bodyKey === "regular" || bodyKey === "average") {
     parts.push("soft face but not fat, no round chubby face");
   }
 
@@ -187,7 +187,7 @@ function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
   characterTraits: string | null,
-  Type?: string,
+  bodyType?: string,
   expression?: string,
 ): string {
   const typeLabel = photoType === "selfie" ? "SELFIE" : "PHOTO";
@@ -218,7 +218,7 @@ function buildFinalPrompt(
   parts.push("slight space above the head, natural framing, authentic influencer style instagram photo, natural lighting, realistic skin");
   parts.push(perspective);
 
-  if (Type) {
+  if (bodyType) {
     const bKey = bodyType.toLowerCase();
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
