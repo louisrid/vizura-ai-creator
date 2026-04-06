@@ -96,7 +96,7 @@
     font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
     overflow-x: hidden;
-    overscroll-behavior-y: auto;
+    overscroll-behavior-y: none;
     -webkit-overflow-scrolling: touch;
     position: fixed;
     width: 100%;
