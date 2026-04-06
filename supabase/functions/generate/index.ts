@@ -14,13 +14,13 @@ const corsHeaders = {
 
 /* ── prompt constants ──────────────────────────────────── */
 const QUALITY_SUFFIX =
-  "casual iPhone photo, matte skin, visible pores, natural skin texture, slight grain, candid authentic energy, natural ambient lighting, real human skin tone variation";
+  "casual iPhone photo, matte skin with visible pores and fine texture, individual skin imperfections visible, natural uneven skin tone, slight grain, candid authentic energy, natural ambient lighting, real human skin with subtle detail";
 
 const NEGATIVE_INSTRUCTION =
   "Do not generate glossy skin, shiny skin, waxy skin, plastic skin, airbrushed skin, long arms, elongated arms, both arms holding phone, two arms extended, studio lighting, dslr, 4k, hdr, bokeh, depth of field, extra limbs, missing limbs, bad anatomy, deformed, out of frame, cropped, watermark, text, nipples, areola, exposed genitals.";
 
 const SELFIE_PREFIX =
-  "iPhone selfie, front camera, one arm extended holding phone, casual angle, slight wide angle distortion";
+  "iPhone selfie, front camera, single arm extended holding phone, casual angle, slight wide angle distortion, phone visible in one hand";
 
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
