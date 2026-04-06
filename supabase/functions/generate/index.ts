@@ -519,8 +519,9 @@ async function generateFaceImages(
   // Generate faces sequentially to avoid rate limits and timeouts
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
+    const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}. ${FACE_QUALITY}`;
+    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
