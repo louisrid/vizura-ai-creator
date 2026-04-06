@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
-const ACTIVE_MODEL: "grok" | "seedream" = "seedream";
+const ACTIVE_MODEL: "grok" | "seedream" = "grok";
 
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
