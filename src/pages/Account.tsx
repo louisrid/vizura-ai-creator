@@ -61,7 +61,7 @@ const Account = () => {
       <DotDecal />
       <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
       <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[400px]">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
