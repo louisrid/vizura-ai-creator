@@ -137,7 +137,9 @@ const HighlightedPromptArea = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={6}
-        className="w-full resize-none px-4 py-3 text-sm font-[900] lowercase text-foreground focus:outline-none transition-colors"
+        spellCheck={false}
+        autoCorrect="off"
+        className="w-full resize-none px-4 py-3 text-lg font-[900] lowercase text-foreground focus:outline-none transition-colors"
         style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111", caretColor: "hsl(var(--foreground))" }}
       />
       {!value && placeholder}
