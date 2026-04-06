@@ -30,7 +30,7 @@ const getRandomNameToast = () => "great choice!";
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"], defaultOption: "average" },
-  { key: "age", label: "choose her age", emoji: "🎂", options: ["18-23", "24-28", "29+"] },
+  { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["pink", "black", "brunette", "blonde"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },

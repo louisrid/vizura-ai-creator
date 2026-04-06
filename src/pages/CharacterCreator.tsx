@@ -18,7 +18,7 @@ const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as cons
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
 const makeupOptions = ["natural", "classic"] as const;
-const ageOptions = ["18-23", "24-28", "29+"] as const;
+const ageOptions = ["18-24", "24+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
