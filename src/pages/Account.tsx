@@ -76,9 +76,9 @@ const Account = () => {
           )}
 
           {subscribed && (
-            <div className="flex justify-center pt-3 mb-0">
+            <div className="flex justify-center pt-4">
               <button
-                className="h-10 md:h-11 rounded-2xl px-5 text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
+                className="mx-auto h-10 md:h-11 rounded-2xl px-5 text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
                 style={{ backgroundColor: "hsl(var(--destructive-surface))", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
                 onClick={handleCancel}
               >
@@ -87,49 +87,49 @@ const Account = () => {
             </div>
           )}
 
-          <div className={`${subscribed ? "mt-10" : "mt-5"}`}>
-          <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0">
-            <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
-              <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-              <div className="flex-1 min-w-0">
-                <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
-                <span className="block text-sm font-extrabold lowercase text-foreground truncate">
-                  {user?.email || "..."}
-                </span>
-              </div>
-            </div>
-
-            <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
-              <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-              <div className="flex-1">
-                <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
-                <span className="block text-sm font-extrabold lowercase text-foreground">
-                  {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }).toLowerCase() : "..."}
-                </span>
-              </div>
-            </div>
-
-            <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
-              <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
-              <div className="flex-1">
-                <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
-                <span className="block text-sm font-extrabold lowercase text-foreground">{gems}</span>
-              </div>
-            </div>
-
-            {subscribed && (
+          <div className={subscribed ? "mt-14" : "mt-6"}>
+            <div className="md:grid md:grid-cols-2 md:gap-5 space-y-5 md:space-y-0">
               <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
-                <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
-                <div className="flex-1">
-                  <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
-                  <span className="block text-sm font-extrabold lowercase text-foreground">50 gems on renewal</span>
+                <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
+                  <span className="block text-sm font-extrabold lowercase text-foreground truncate">
+                    {user?.email || "..."}
+                  </span>
                 </div>
               </div>
-            )}
-          </div>
+
+              <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+                <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
+                <div className="flex-1">
+                  <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
+                  <span className="block text-sm font-extrabold lowercase text-foreground">
+                    {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }).toLowerCase() : "..."}
+                  </span>
+                </div>
+              </div>
+
+              <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+                <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
+                <div className="flex-1">
+                  <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
+                  <span className="block text-sm font-extrabold lowercase text-foreground">{gems}</span>
+                </div>
+              </div>
+
+              {subscribed && (
+                <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
+                  <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
+                  <div className="flex-1">
+                    <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
+                    <span className="block text-sm font-extrabold lowercase text-foreground">50 gems on renewal</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          <Button variant="outline" className="w-full h-12 md:h-14 text-sm md:text-base mt-5" onClick={handleSignOut}>
+          <Button variant="outline" className="w-full h-12 md:h-14 text-sm md:text-base mt-6" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
             sign out
           </Button>
