@@ -354,7 +354,7 @@ const Index = () => {
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-7">
 
           {/* Character selector + Photo box — narrower (75%) */}
           <div className="w-[75%] mx-auto flex flex-col gap-5">
