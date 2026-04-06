@@ -368,6 +368,122 @@ async function xaiImageEdit(
   return extractXaiImageUrl(data);
 }
 
+/* ── helper: strip "Do not generate" prefix from negative strings ── */
+function extractNegativeKeywords(negativeText: string): string {
+  return negativeText
+    .replace(/^Do not generate\s*/i, "")
+    .replace(/\.\s*$/, "")
+    .trim();
+}
+
+/* ── fal.ai Seedream: text-to-image ───────────────────── */
+async function falTextToImage(prompt: string, negativePrompt: string, apiKey: string): Promise<string | null> {
+  console.log("falTextToImage calling:", prompt.slice(0, 120));
+
+  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/text-to-image", {
+    method: "POST",
+    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
+    headers: {
+      Authorization: `Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt,
+      negative_prompt: negativePrompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error("fal text-to-image error:", response.status, errText);
+    if (response.status === 429) throw { status: 429 };
+    if (response.status === 402) throw { status: 402 };
+    if (isContentPolicyError(response.status, errText)) {
+      throw { status: 400, contentPolicy: true };
+    }
+    throw new Error(`fal generation failed: ${response.status} - ${errText}`);
+  }
+
+  const data = await response.json();
+  console.log("fal response keys:", Object.keys(data));
+  const url = data?.images?.[0]?.url;
+  return typeof url === "string" && url.trim().length > 0 ? url : null;
+}
+
+/* ── fal.ai Seedream: image edit ──────────────────────── */
+async function falImageEdit(
+  prompt: string,
+  imageUrls: string[],
+  negativePrompt: string,
+  apiKey: string
+): Promise<string | null> {
+  console.log("falImageEdit calling with", imageUrls.length, "reference images");
+
+  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/edit", {
+    method: "POST",
+    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
+    headers: {
+      Authorization: `Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt,
+      image_urls: imageUrls,
+      negative_prompt: negativePrompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error("fal image-edit error:", response.status, errText);
+    if (response.status === 429) throw { status: 429 };
+    if (response.status === 402) throw { status: 402 };
+    if (isContentPolicyError(response.status, errText)) {
+      throw { status: 400, contentPolicy: true };
+    }
+    throw new Error(`fal image edit failed: ${response.status} - ${errText}`);
+  }
+
+  const data = await response.json();
+  console.log("fal edit response keys:", Object.keys(data));
+  const url = data?.images?.[0]?.url;
+  return typeof url === "string" && url.trim().length > 0 ? url : null;
+}
+
+/* ── router: text-to-image ────────────────────────────── */
+async function routerTextToImage(
+  positivePrompt: string,
+  negativeText: string,
+  apiKey: string
+): Promise<string | null> {
+  if (ACTIVE_MODEL === "seedream") {
+    const falKey = Deno.env.get("FAL_API_KEY");
+    if (!falKey) throw new Error("FAL_API_KEY is not configured");
+    return falTextToImage(positivePrompt, extractNegativeKeywords(negativeText), falKey);
+  }
+  // grok: bake negative into prompt
+  const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
+  return xaiTextToImage(fullPrompt, apiKey);
+}
+
+/* ── router: image edit ───────────────────────────────── */
+async function routerImageEdit(
+  positivePrompt: string,
+  negativeText: string,
+  imageUrls: string[],
+  apiKey: string,
+  aspectRatio = "3:4"
+): Promise<string | null> {
+  if (ACTIVE_MODEL === "seedream") {
+    const falKey = Deno.env.get("FAL_API_KEY");
+    if (!falKey) throw new Error("FAL_API_KEY is not configured");
+    return falImageEdit(positivePrompt, imageUrls, extractNegativeKeywords(negativeText), falKey);
+  }
+  // grok: bake negative into prompt
+  const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
+  return xaiImageEdit(fullPrompt, imageUrls, apiKey, aspectRatio);
+}
+
 /* ── generate face options (text-to-image, always 3:4) ── */
 async function generateFaceImages(
   prompt: string,
