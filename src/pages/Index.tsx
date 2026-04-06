@@ -172,7 +172,7 @@ const HighlightedPromptArea = ({
 };
 
 /* ── Expression options ── */
-const EXPRESSIONS = ["happy", "serious", "flirty", "surprised", "playful", "confident"] as const;
+const EXPRESSIONS = ["casual smile", "straight face", "big smile", "pout"] as const;
 
 /* ── Create button component ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
