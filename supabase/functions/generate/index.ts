@@ -507,14 +507,14 @@ async function generateFaceImages(
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const fullPrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
     const maxRetries = 2;
     while (retries <= maxRetries) {
       try {
-        const url = await xaiTextToImage(fullPrompt, apiKey);
+        const url = await routerTextToImage(positivePrompt, FACE_NEGATIVE, apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
           if (retries < maxRetries) { retries++; continue; }
