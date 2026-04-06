@@ -173,7 +173,7 @@ const Header = () => {
         className="sticky top-0"
         style={{
           zIndex: 9990,
-          background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 20%, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.12) 88%, transparent 100%)",
+          background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background)) 28%, hsl(var(--background) / 0.985) 46%, hsl(var(--background) / 0.95) 63%, hsl(var(--background) / 0.84) 78%, hsl(var(--background) / 0.56) 90%, transparent 100%)",
           paddingBottom: 36,
         }}
       >
@@ -190,8 +190,8 @@ const Header = () => {
                 className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[38px] md:h-[38px]"
                 style={{
                   borderRadius: "50%",
-                  backgroundColor: subscribed ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.08)",
-                  border: `1.5px solid ${subscribed ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.15)"}`,
+                  backgroundColor: "hsl(var(--card))",
+                  border: `1.5px solid ${subscribed ? "hsl(var(--member-green) / 0.4)" : "hsl(var(--foreground) / 0.16)"}`,
                 }}
                 aria-label="my account"
               >
@@ -205,8 +205,8 @@ const Header = () => {
               onClick={() => navigate("/top-ups")}
               className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 md:py-2 active:scale-95 transition-transform duration-150"
               style={{
-                backgroundColor: "rgba(0,224,255,0.08)",
-                border: "1.5px solid rgba(0,224,255,0.25)",
+                backgroundColor: "hsl(var(--card))",
+                border: "1.5px solid hsl(var(--gem-green) / 0.28)",
                 borderRadius: 10,
               }}
             >
