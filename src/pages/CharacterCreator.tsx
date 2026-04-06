@@ -263,6 +263,7 @@ const CharacterCreator = () => {
       navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
     } else {
       // Not logged in - navigate to choose-face, sign-in will happen there
+      sessionStorage.removeItem("vizura_face_options");
       navigate("/choose-face", { state: { prompt } });
     }
 
