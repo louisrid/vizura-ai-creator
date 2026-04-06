@@ -46,38 +46,49 @@ const ToggleBox = ({ label, options, value, onChange }: {
       className="flex items-center p-1.5"
       style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
     >
-      {options.map((opt, i) => (
-        <Fragment key={opt}>
-          <button
-            type="button"
-            onClick={() => onChange(opt)}
-            className="flex-1 flex items-center justify-center transition-all"
-            style={{
-              borderRadius: 10,
-              padding: "10px 0",
-              fontSize: 15,
-              fontWeight: 800,
-              textTransform: "lowercase" as const,
-              ...(value === opt
-                ? { backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))" }
-                : { backgroundColor: "transparent", color: "hsl(var(--foreground) / 0.48)" }
-              ),
-            }}
-          >
-            {opt}
-          </button>
-          {i < options.length - 1 && (
-            <div
-              aria-hidden
-              className="mx-1.5 w-px shrink-0 self-center"
+      {options.map((opt, i) => {
+        const isSelected = value === opt;
+
+        return (
+          <Fragment key={opt}>
+            <button
+              type="button"
+              aria-pressed={isSelected}
+              onClick={() => onChange(opt)}
+              className="flex-1 flex items-center justify-center transition-all"
               style={{
-                height: 34,
-                backgroundColor: "hsl(var(--foreground) / 0.3)",
+                borderRadius: 10,
+                padding: "10px 0",
+                fontSize: 15,
+                fontWeight: 800,
+                textTransform: "lowercase" as const,
+                ...(isSelected
+                  ? {
+                      backgroundColor: "hsl(var(--primary))",
+                      color: "hsl(var(--primary-foreground))",
+                      boxShadow: "0 0 0 2px hsl(var(--primary) / 0.24) inset",
+                    }
+                  : {
+                      backgroundColor: "transparent",
+                      color: "hsl(var(--foreground) / 0.48)",
+                    }),
               }}
-            />
-          )}
-        </Fragment>
-      ))}
+            >
+              {opt}
+            </button>
+            {i < options.length - 1 && (
+              <div
+                aria-hidden
+                className="mx-1.5 w-px shrink-0 self-center"
+                style={{
+                  height: 34,
+                  backgroundColor: "hsl(var(--foreground) / 0.3)",
+                }}
+              />
+            )}
+          </Fragment>
+        );
+      })}
     </div>
   </div>
 );
@@ -110,53 +121,88 @@ const useCyclingPlaceholder = (charName: string, interval = 3500) => {
   return { text: templates[index], visible };
 };
 
-/* ── Highlighted text input — textarea with overlay ── */
+const escapeHtml = (text: string) =>
+  text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+/* ── Highlighted text input — normal textarea, mirrored overlay ── */
 const HighlightedPromptArea = ({
   value, onChange, charName, placeholder
 }: {
   value: string; onChange: (v: string) => void; charName: string;
   placeholder: React.ReactNode;
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const highlightedHtml = useMemo(() => {
     if (!value) return "";
-    if (!charName.trim()) return value;
 
-    const escaped = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(${escaped})(?=\\s|$)`, "gi");
-    return value.replace(regex, `<span style="color:hsl(var(--primary))">$1</span>`);
+    const safeValue = escapeHtml(value);
+    if (!charName.trim()) return safeValue;
+
+    const escapedName = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escapedName})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
+    let html = "";
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(value)) !== null) {
+      const boundary = match[1] ?? "";
+      const name = match[2] ?? "";
+      const matchStart = match.index;
+      const highlightStart = matchStart + boundary.length;
+      const highlightEnd = highlightStart + name.length;
+
+      if (lastIndex < matchStart) {
+        html += escapeHtml(value.slice(lastIndex, matchStart));
+      }
+
+      if (boundary) {
+        html += escapeHtml(boundary);
+      }
+
+      html += `<span style="color:hsl(var(--primary))">${escapeHtml(name)}</span>`;
+      lastIndex = highlightEnd;
+    }
+
+    if (lastIndex < value.length) {
+      html += escapeHtml(value.slice(lastIndex));
+    }
+
+    return html;
   }, [value, charName]);
 
   return (
-    <div className="relative">
-      {/* Highlight overlay — renders coloured text behind textarea */}
+    <div
+      className="relative overflow-hidden"
+      style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111" }}
+    >
       <div
+        ref={overlayRef}
         aria-hidden
-        className="absolute inset-0 whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase pointer-events-none overflow-hidden"
-        style={{
-          borderRadius: 16,
-          border: "2px solid transparent",
-          color: "hsl(var(--foreground))",
-          wordBreak: "break-word",
-        }}
+        className="pointer-events-none absolute inset-0 overflow-hidden px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words"
+        style={{ color: "hsl(var(--foreground))" }}
         dangerouslySetInnerHTML={{ __html: highlightedHtml || "&nbsp;" }}
       />
-      {/* Actual textarea — transparent text so caret shows, user types normally */}
       <textarea
-        ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onScroll={(e) => {
+          if (overlayRef.current) {
+            overlayRef.current.scrollTop = e.currentTarget.scrollTop;
+            overlayRef.current.scrollLeft = e.currentTarget.scrollLeft;
+          }
+        }}
         spellCheck={false}
         autoCorrect="off"
-        className="relative w-full min-h-[176px] whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase focus:outline-none transition-colors resize-none"
+        className="relative z-[1] w-full min-h-[176px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words focus:outline-none"
         style={{
-          borderRadius: 16,
-          border: "2px solid #222",
-          backgroundColor: "#111111",
           caretColor: "hsl(var(--foreground))",
           color: "transparent",
-          wordBreak: "break-word",
           WebkitTextFillColor: "transparent",
         }}
       />
