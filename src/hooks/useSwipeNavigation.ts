@@ -37,6 +37,10 @@ export function useSwipeNavigation() {
       if (now - lastSwipeRef.current < SWIPE_COOLDOWN) return;
 
       if (start.side === "left" && dx > 0) {
+        // Swipe-back: dispatch a cancelable custom event so pages can intercept
+        const evt = new CustomEvent("vizura:swipe-back", { cancelable: true });
+        const allowed = window.dispatchEvent(evt);
+        if (!allowed) return; // a listener called preventDefault()
         lastSwipeRef.current = now;
         navigate(-1);
       } else if (start.side === "right" && dx < 0) {
