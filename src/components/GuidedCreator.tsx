@@ -22,9 +22,8 @@ const getRandomNameToast = () => "great choice!";
  *  1: Intro
  *  2: Name input
  *  3-9: Traits
- * 10: Description
- * 11: Reference
- * 12: Create
+ * 10: Reference
+ * 11: Create
  */
 
 const TRAITS = [
