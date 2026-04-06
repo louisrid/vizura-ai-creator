@@ -17,13 +17,13 @@ const OVERLAY_FADE_DURATION = 0.75;
 const getRandomNameToast = () => "great choice!";
 
 /*
- * SCREEN ORDER (13 screens, internalStep 0-12):
+ * SCREEN ORDER (12 screens, internalStep 0-11):
  *  0: Hero (new first screen with rings)
  *  1: Intro
  *  2: Name input
- *  3-9: Traits
- * 10: Reference
- * 11: Create
+ *  3-8: Traits (skin, body, age, hair, hair colour, eyes — no makeup screen)
+ *  9: Reference
+ * 10: Create
  */
 
 const TRAITS = [
