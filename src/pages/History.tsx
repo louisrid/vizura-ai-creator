@@ -105,7 +105,8 @@ const History = () => {
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
-              className="h-12 w-full max-w-[12rem] mx-auto rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+              className="h-12 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+              style={{ borderRadius: 12 }}
             >
               create photo
             </button>
