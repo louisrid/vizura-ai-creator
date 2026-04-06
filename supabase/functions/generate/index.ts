@@ -187,7 +187,7 @@ function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
   characterTraits: string | null,
-  Type?: string,
+  bodyType?: string,
   expression?: string,
 ): string {
   const typeLabel = photoType === "selfie" ? "SELFIE" : "PHOTO";
