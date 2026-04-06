@@ -26,7 +26,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
 /* Routes that should NOT redirect to / on fresh load */
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
@@ -73,6 +73,14 @@ const PostAuthHomeRedirect = () => {
     if (sessionStorage.getItem(POST_AUTH_HOME_KEY) !== "1") return;
 
     sessionStorage.removeItem(POST_AUTH_HOME_KEY);
+
+    const resumeUrl = sessionStorage.getItem("vizura_resume_url");
+    if (resumeUrl) {
+      sessionStorage.removeItem("vizura_resume_url");
+      navigate(resumeUrl, { replace: true });
+      return;
+    }
+
     sessionStorage.removeItem("vizura_auto_opened");
     sessionStorage.removeItem("vizura_creator_dismissed");
     sessionStorage.removeItem("vizura_guided_flow_state");

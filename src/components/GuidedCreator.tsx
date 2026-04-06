@@ -358,6 +358,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const advance = useCallback(() => {
     if (animating.current) return;
+    toast.dismiss();
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
       const key = TRAITS[currentTraitIndex].key;
@@ -730,7 +731,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   const handleGoogle = async () => {
     setGoogleLoading(true);
     sessionStorage.setItem("vizura_post_auth_home", "1");
-    sessionStorage.removeItem("vizura_resume_after_auth");
+    sessionStorage.setItem("vizura_resume_url", window.location.pathname);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,

@@ -81,32 +81,10 @@ const ToggleBox = ({ label, options, value, onChange }: {
   </div>
 );
 
-/* ── Cycling placeholder text with character name ── */
-const useCyclingPlaceholder = (charName: string, interval = 3500) => {
-  const templates = useMemo(() => {
-    const name = charName || "luna";
-    return [
-      `${name} at the beach, white bikini, sunset`,
-      `${name} mirror selfie, pink hoodie`,
-      `${name} at the gym, sports bra, leggings`,
-    ];
-  }, [charName]);
-
-  const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setIndex((i) => (i + 1) % templates.length);
-        setVisible(true);
-      }, 400);
-    }, interval);
-    return () => clearInterval(timer);
-  }, [templates.length, interval]);
-
-  return { text: templates[index], visible };
+/* ── Static placeholder using selected character name ── */
+const useStaticPlaceholder = (charName: string) => {
+  const name = charName || "luna";
+  return `${name} standing in her bedroom, wearing pink gym gear and making a peace sign`;
 };
 
 const escapeHtml = (text: string) =>
@@ -193,20 +171,23 @@ const HighlightedPromptArea = ({
   );
 };
 
+/* ── Expression options ── */
+const EXPRESSIONS = ["happy", "serious", "flirty", "surprised", "playful", "confident"] as const;
+
 /* ── Create button component ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
     className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))", borderRadius: 12 }}
+    style={{ backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create · 1 💎</>
+      <>create · 1 <Gem size={14} strokeWidth={2.5} className="text-gem-green" /></>
     )}
   </button>
 );
@@ -238,6 +219,7 @@ const Index = () => {
 
   const [photoType, setPhotoType] = useState("selfie");
   const [photoRatio, setPhotoRatio] = useState("3:4");
+  const [expression, setExpression] = useState("happy");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -245,7 +227,7 @@ const Index = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
-  const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
+  const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
 
   useEffect(() => {
     if (!charDropdownOpen) return;
@@ -345,6 +327,7 @@ const Index = () => {
           character_id: selectedCharId || undefined,
           photo_type: photoType,
           aspect_ratio: photoRatio,
+          expression: expression || undefined,
           ...(vibeRefUrl ? { vibe_reference_url: vibeRefUrl } : {}),
         },
       });
@@ -538,53 +521,52 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={placeholder.text}
-                      className="text-2xl font-extrabold lowercase text-foreground/30"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: placeholder.visible ? 1 : 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {placeholder.text}
-                    </motion.span>
-                  </AnimatePresence>
+                  <span className="text-2xl font-extrabold lowercase text-foreground/30">
+                    {placeholderText}
+                  </span>
                 </div>
               }
             />
           </div>
 
-          {/* Reference section */}
+          {/* Expression toggle */}
+          <div>
+            <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
+            <div className="grid grid-cols-3 gap-2">
+              {EXPRESSIONS.map((expr) => {
+                const isSelected = expression === expr;
+                return (
+                  <button
+                    key={expr}
+                    type="button"
+                    onClick={() => setExpression(expr)}
+                    className="flex items-center justify-center rounded-2xl py-[10px] text-[14px] font-extrabold lowercase transition-all"
+                    style={isSelected
+                      ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))" }
+                      : { backgroundColor: "#111", border: "2px solid #222", color: "rgba(255,255,255,0.48)" }}
+                  >
+                    {expr}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Reference section — disabled */}
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm font-[900] lowercase text-white">add a reference image</span>
               <span className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
             </div>
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-            {referenceImage ? (
-              <div className="flex items-center gap-3 px-4 py-4" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111111" }}>
-                <img src={referenceImage} alt="Reference" className="h-12 w-12 rounded-lg object-cover shrink-0" />
-                <span className="text-xs font-[900] lowercase text-foreground/60 truncate flex-1">reference.jpg</span>
-                <button
-                  type="button"
-                  onClick={() => setReferenceImage(null)}
-                  className="text-foreground/40 hover:text-foreground text-sm font-bold shrink-0"
-                >
-                  ×
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex w-full items-center justify-center gap-3 px-4 py-6 hover:border-foreground/30 transition-colors"
-                style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
-              >
-                <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
-                <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => toast("coming soon!")}
+              className="flex w-full items-center justify-center gap-3 px-4 py-6 opacity-50"
+              style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
+            >
+              <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
+              <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
+            </button>
           </div>
 
           {/* Create button */}
