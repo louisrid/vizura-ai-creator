@@ -131,7 +131,8 @@ const Storage = () => {
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
-              className="h-12 w-full max-w-[12rem] mx-auto rounded-2xl bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+              className="h-12 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+              style={{ borderRadius: 12 }}
             >
               create a photo
             </button>
@@ -207,13 +208,13 @@ const Storage = () => {
               <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh]" />
               <div className="p-3 flex gap-2">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-10 rounded-xl border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
+                  <Button variant="outline" className="w-full h-10 border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
                     <Download size={12} strokeWidth={2.5} /> download
                   </Button>
                 </a>
                 <Button
                   variant="outline"
-                  className="h-10 px-3 rounded-xl border-[2px] border-destructive/30 bg-[hsl(var(--destructive-surface))] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-10 px-3 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
                   onClick={() => handleDelete(expanded)}
                 >
                   <Trash2 size={12} strokeWidth={2.5} />
