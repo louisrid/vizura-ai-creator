@@ -14,13 +14,13 @@ const corsHeaders = {
 
 /* ── prompt constants ──────────────────────────────────── */
 const QUALITY_SUFFIX =
-  "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain, detailed realistic skin with subtle veins and freckles, natural skin colour variation, no airbrushed look, no plastic appearance, real human skin";
+  "casual iPhone photo, matte skin, visible pores, natural skin texture, slight grain, candid authentic energy, natural ambient lighting, real human skin tone variation";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, 4k, hdr, studio lighting, artificial lighting, heavy blur, depth of field, bokeh, blurry, soft focus, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, ugly, old, aged skin, wrinkles, bony, overly muscular, masculine, out of frame, bad framing, cropped, cut off limbs, nipples, areola, exposed genitals, both arms holding phone, both hands holding phone, two arms extended.";
+  "Do not generate glossy skin, shiny skin, waxy skin, plastic skin, airbrushed skin, long arms, elongated arms, both arms holding phone, two arms extended, studio lighting, dslr, 4k, hdr, bokeh, depth of field, extra limbs, missing limbs, bad anatomy, deformed, out of frame, cropped, watermark, text, nipples, areola, exposed genitals.";
 
 const SELFIE_PREFIX =
-  "front camera perspective, slight wide angle distortion, casual angle, RIGHT arm extended forward holding phone camera visible in frame, left arm relaxed at side or touching hair, CRITICAL: only the right arm holds the camera and is extended toward camera, the other arm must NOT be holding the phone, authentic iPhone selfie angle";
+  "iPhone selfie, front camera, one arm extended holding phone, casual angle, slight wide angle distortion";
 
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
@@ -30,7 +30,7 @@ const FACE_QUALITY =
   "professional passport photo, front-facing headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a plain white crew neck t-shirt, pleasant expression, soft smile or calm friendly neutral face, even soft lighting, looking directly at camera, no shadows on background, consistent framing, photorealistic portrait, high resolution, natural iPhone photo realism, natural matte skin, no glossy or oily skin, realistic skin texture";
 
 const FACE_NEGATIVE =
-  "Do not generate old-looking features, mature middle-aged face, wrinkles, tired eyes, heavy face fat, overweight face, chubby cheeks, puffy jawline, moody expression, angry expression, sad expression, frown, bare shoulders, dark clothing, colored shirt, busy background, colored background, outdoor background, harsh shadows, dslr, studio glamour lighting, plastic skin, waxy skin, overly smooth skin, glossy shiny skin, oily skin, cartoon, anime, painting, illustration, text, watermark, blur, low quality, distorted anatomy, ai artifacts, masculine features.";
+  "Do not generate glossy skin, shiny skin, waxy skin, plastic skin, old face, mature face, wrinkles, fat face, chubby cheeks, moody expression, angry, sad, frown, masculine features, studio lighting, dslr, colored background, outdoor background, cartoon, anime, illustration, text, watermark, blur.";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -380,7 +380,7 @@ async function generateFaceImages(
     "square strong face shape, flat wide cheekbones, broad flat chin, strong angular jaw, medium naturally asymmetric lips, small upturned nose, large round doe eyes set wide apart, arched dramatic brows, prominent bone structure, EXACT SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive gorgeous young woman, magazine cover beauty, youthful 18 to 23 energy, slim defined face with zero facial fat, no round cheeks, no puffiness, matte skin with natural texture like a real passport photo, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
+  const beautyCore = "extremely attractive young instagram model, youthful 18 to 21, slim defined face, matte skin with visible pores, long hair past shoulders, subtle pink tinted lips, light mascara, friendly expression, white crew neck t-shirt, white background";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -471,14 +471,14 @@ async function generateAngleAndBody(
     console.error("3/4 angle generation failed:", e);
   }
 
-  const BODY_NEGATIVE = "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, studio lighting, artificial lighting, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, missing arms, missing hands, extra fingers, crossed legs, legs crossing, sitting pose, kneeling, glitchy artifacts, warped body parts, mannequin look, cropped limbs at edges, ugly, old, aged skin, wrinkles, overly muscular, masculine.";
+  const BODY_NEGATIVE = "Do not generate long arms, elongated arms, arms past hips, muscular arms, veiny arms, glossy skin, shiny skin, waxy skin, plastic skin, crossed legs, sitting, kneeling, extra limbs, missing limbs, extra fingers, bad anatomy, deformed, mannequin, cropped limbs, masculine, old skin, wrinkles.";
 
   try {
     console.log("Generating full-body anchor...");
     const bodyKey = (bodyType || "regular").toLowerCase();
     const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
-    const bodyPrompt = `A woman with the same face as the reference image, natural full photo not a composite, front-facing confident pose, slight hip tilt, framed from head to just below hips, wearing fitted low-cut top and tight black leggings, ${bodyDesc}, ${bodyModifier}, standing upright feet shoulder width apart, white background, photorealistic, natural matte skin, short proportional arms, feminine soft build. ${BODY_NEGATIVE}`;
+    const bodyPrompt = `Same face as reference image, natural photo, front-facing, slight hip tilt, head to just below hips, fitted low-cut top, tight black leggings, ${bodyDesc}, standing upright, white background, matte skin with pores, normal length arms ending at mid-thigh, feminine soft build. ${BODY_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
