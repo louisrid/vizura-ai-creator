@@ -171,20 +171,23 @@ const HighlightedPromptArea = ({
   );
 };
 
+/* ── Expression options ── */
+const EXPRESSIONS = ["happy", "serious", "flirty", "surprised", "playful", "confident"] as const;
+
 /* ── Create button component ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
     className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))", borderRadius: 12 }}
+    style={{ backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create · 1 💎</>
+      <>create · 1 <Gem size={14} strokeWidth={2.5} className="text-gem-green" /></>
     )}
   </button>
 );
