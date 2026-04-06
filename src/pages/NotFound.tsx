@@ -12,7 +12,7 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-12">
+      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-[250px]">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">not found</PageTitle>

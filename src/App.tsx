@@ -25,7 +25,6 @@ import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
-/* Routes that should NOT redirect to / on fresh load */
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
@@ -44,16 +43,12 @@ const FreshLoadRedirect = () => {
 
     const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
 
-    // Logged-in users: let them stay wherever they are
-    // Only redirect logged-out users on non-exempt deep links
     if (!user && !pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
       navigate("/", { replace: true });
     }
 
-    // Logged-out users already on "/" but refreshed — reset flags so animation replays
-    // BUT skip if this is a pending auth handoff
     if (!user && location.pathname === "/" && !pendingPostAuthHome) {
       sessionStorage.removeItem("vizura_auto_opened");
       sessionStorage.removeItem("vizura_creator_dismissed");
@@ -108,6 +103,55 @@ const ScrollToTop = () => {
     document.body.scrollTop = 0;
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location.pathname, location.key]);
+
+  return null;
+};
+
+const TopOverscrollGuard = () => {
+  useEffect(() => {
+    const root = document.getElementById("root");
+    if (!root) return;
+
+    let startY = 0;
+
+    const getScrollContainer = (target: EventTarget | null) => {
+      let element = target instanceof HTMLElement ? target : target instanceof Element ? target as HTMLElement : null;
+
+      while (element && element !== root) {
+        const style = window.getComputedStyle(element);
+        const canScrollY = /(auto|scroll)/.test(style.overflowY) && element.scrollHeight > element.clientHeight;
+
+        if (canScrollY) return element;
+        element = element.parentElement;
+      }
+
+      return root;
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      startY = event.touches[0]?.clientY ?? 0;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      const currentY = event.touches[0]?.clientY ?? startY;
+      const isPullingDown = currentY > startY;
+      if (!isPullingDown) return;
+
+      const scrollContainer = getScrollContainer(event.target);
+      if (scrollContainer.scrollTop <= 0) {
+        event.preventDefault();
+      }
+    };
+
+    root.addEventListener("touchstart", onTouchStart, { passive: true });
+    root.addEventListener("touchmove", onTouchMove, { passive: false });
+
+    return () => {
+      root.removeEventListener("touchstart", onTouchStart);
+      root.removeEventListener("touchmove", onTouchMove);
+    };
+  }, []);
+
   return null;
 };
 
@@ -182,6 +226,7 @@ const App = () => (
               <PostAuthHomeRedirect />
               <FreshLoadRedirect />
               <ScrollToTop />
+              <TopOverscrollGuard />
               <AppRoutes />
             </BrowserRouter>
           </SubscriptionProvider>
