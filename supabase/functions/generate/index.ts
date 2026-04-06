@@ -102,8 +102,8 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "looks 18, soft round face, fuller cheeks, smooth even skin, soft jawline, eyes appear larger, naturally plump lips, youthful gentle features";
-  return "looks 24, defined cheekbones and jawline, slightly sharper face, skin still youthful, features more distinct";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face with uniform fullness, full chubby cheeks, big bright eyes, small nose, plump lips, smooth even skin, soft jawline blending into neck, compact features close together";
+  return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured but feminine";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -156,20 +156,28 @@ function buildCharacterTraits(char: any): string {
   } else if (bodyKey === "regular" || bodyKey === "average") {
     parts.push("soft face but not fat, no round chubby face");
   }
-
-  const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
+  
+const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
+  const hairToneVariants: Record<string, string[]> = {
+    blonde: ["warm honey blonde", "icy platinum blonde", "golden blonde", "sandy ash blonde", "strawberry blonde"],
+    brown: ["warm chestnut brown", "cool ash brown", "rich chocolate brown", "light caramel brown", "dark espresso brown"],
+    black: ["jet black", "soft black", "blue-black", "warm black"],
+    red: ["auburn red", "copper red", "strawberry red", "deep ginger red"],
+  };
+  const toneOptions = hairToneVariants[hairColour.toLowerCase()];
+  const variedHairColour = toneOptions ? toneOptions[Math.floor(Math.random() * toneOptions.length)] : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair clearly visible past the shoulders and down the back, full straight fringe across the forehead, hair must be long and flowing not tucked behind shoulders, IMPORTANT: must show long hair with bangs fringe in every image`.trim());
+    parts.push(`long ${variedHairColour} hair with straight-across bangs fringe, long flowing hair clearly visible past the shoulders and down the back, full straight fringe across the forehead, hair must be long and flowing not tucked behind shoulders, IMPORTANT: must show long hair with bangs fringe in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${hairColour} hair, no bangs, no fringe, hair parted naturally, IMPORTANT: must be straight hair with no curls or waves in every image`.trim());
+    parts.push(`long straight ${variedHairColour} hair, hair parted naturally, IMPORTANT: must be straight hair in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly") {
-    parts.push(`${hairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
+    parts.push(`${variedHairColour} curly hair, natural curls, IMPORTANT: must have curly hair in every image`.trim());
   } else if (hairStyle.toLowerCase() === "short") {
-    parts.push(`short ${hairColour} hair, IMPORTANT: must have short hair in every image`.trim());
-  } else if (hairStyle || hairColour) {
-    parts.push(`${hairStyle} ${hairColour} hair`.trim());
+    parts.push(`short ${variedHairColour} hair, IMPORTANT: must have short hair in every image`.trim());
+  } else if (hairStyle || variedHairColour) {
+    parts.push(`${hairStyle} ${variedHairColour} hair`.trim());
   }
 
   if (char.eye) {
@@ -591,7 +599,7 @@ async function generateAngleAndBody(
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `A woman who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees right, 3/4 profile. Head and shoulders only, cropped below collarbone. Skin with visible pores and subtle colour variation. Confident closed-mouth smile. ${characterTraits}`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders only, cropped below collarbone. Skin with visible pores and colour variation. Confident closed-mouth smile. ${characterTraits}`;
     const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -610,7 +618,7 @@ async function generateAngleAndBody(
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
     const bodyPrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, front-facing confident pose, slight natural hip tilt, framed from head to just below hips, wearing same fitted plain white crew neck t-shirt, ${bodyDesc}, standing upright feet shoulder width apart, same plain white background, same soft even lighting as face reference, matte skin with visible pores, normal proportional arms ending at mid-thigh, naturally feminine build, body and face are one cohesive person`
-      : `A woman who naturally resembles the person in the reference photo. Front facing, slight hip tilt, head to mid-thigh. Fitted low-cut white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. Skin with visible pores and subtle colour variation across chest, neck and arms. Short feminine arms resting at sides, hands at mid-thigh, soft smooth inner elbows. Confident closed-mouth smile.`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, head to mid-thigh. Fitted low-cut white top with matte skin texture across chest area, tight black leggings. Same white background, same lighting. ${bodyDesc}. Skin with visible pores and colour variation across chest, neck and arms. Short feminine arms resting at sides, hands at mid-thigh, soft smooth inner elbows. Confident closed-mouth smile.`;
     const bodyResult = await routerImageEdit(bodyPrompt, ACTIVE_MODEL === "flux" ? "" : BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
