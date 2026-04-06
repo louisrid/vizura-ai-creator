@@ -96,6 +96,7 @@ const ChooseFace = () => {
   
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
+  const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Second loading phase: angle + body generation
