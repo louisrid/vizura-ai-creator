@@ -112,32 +112,37 @@ const HighlightedPromptArea = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  /* Build highlighted HTML: character name turns yellow only when
-     it appears as a complete word (followed by space, punctuation, or EOL) */
-  const highlightedHtml = useMemo(() => {
-    if (!charName || !value) return "";
+  const segments = useMemo(() => {
+    if (!charName || !value) return null;
     const escaped = charName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    // Match name only when followed by a word boundary (space, comma, period, end of string)
     const regex = new RegExp(`(${escaped})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
-    return value
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(regex, '<span style="color:#facc15">$1</span>');
+    const parts: { text: string; highlight: boolean }[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(value)) !== null) {
+      if (match.index > lastIndex) parts.push({ text: value.slice(lastIndex, match.index), highlight: false });
+      parts.push({ text: match[1], highlight: true });
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < value.length) parts.push({ text: value.slice(lastIndex), highlight: false });
+    if (!parts.some(p => p.highlight)) return null;
+    return parts;
   }, [value, charName]);
 
-  const hasHighlight = !!(charName && value && highlightedHtml.includes('style="color:#facc15"'));
+  const hasHighlight = !!segments;
 
   return (
     <div className="relative">
-      {/* Overlay that renders colored text — visible when highlighting */}
       {hasHighlight && (
         <div
-          className="pointer-events-none absolute inset-0 px-4 py-3 text-lg font-[900] lowercase whitespace-pre-wrap break-words overflow-hidden"
-          style={{ wordBreak: "break-word", color: "hsl(var(--foreground))" }}
+          className="pointer-events-none absolute inset-0 px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words overflow-hidden"
+          style={{ wordBreak: "break-word" }}
           aria-hidden
-          dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-        />
+        >
+          {segments!.map((seg, i) => (
+            <span key={i} style={{ color: seg.highlight ? "#facc15" : "hsl(var(--foreground))" }}>{seg.text}</span>
+          ))}
+        </div>
       )}
       <textarea
         ref={textareaRef}
@@ -146,7 +151,7 @@ const HighlightedPromptArea = ({
         rows={6}
         spellCheck={false}
         autoCorrect="off"
-        className="w-full resize-none px-4 py-3 text-lg font-[900] lowercase focus:outline-none transition-colors"
+        className="w-full resize-none px-4 py-3 text-2xl font-[900] lowercase focus:outline-none transition-colors"
         style={{
           borderRadius: 16,
           border: "2px solid #222",
