@@ -133,7 +133,7 @@ const CharacterDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-1 pb-[400px]">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
           <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "rgba(255,255,255,0.4)" }}>
