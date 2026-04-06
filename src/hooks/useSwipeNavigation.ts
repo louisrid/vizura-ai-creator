@@ -8,6 +8,7 @@ const SWIPE_COOLDOWN = 120;
 export function useSwipeNavigation() {
   const navigate = useNavigate();
   const touchRef = useRef<{ x: number; y: number; t: number; side: "left" | "right" } | null>(null);
+  const lastSwipeRef = useRef(0);
 
   useEffect(() => {
     const onStart = (e: TouchEvent) => {
