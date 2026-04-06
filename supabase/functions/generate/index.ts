@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
+const ACTIVE_MODEL: "grok" | "seedream" = "grok";
+
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const XAI_REQUEST_TIMEOUT_MS = 120_000;
@@ -230,8 +232,6 @@ function buildFinalPrompt(
     if (modifier) parts.push(modifier);
   }
 
-  parts.push(NEGATIVE_INSTRUCTION);
-
   return parts.join(". ");
 }
 
@@ -366,6 +366,122 @@ async function xaiImageEdit(
   return extractXaiImageUrl(data);
 }
 
+/* ── helper: strip "Do not generate" prefix from negative strings ── */
+function extractNegativeKeywords(negativeText: string): string {
+  return negativeText
+    .replace(/^Do not generate\s*/i, "")
+    .replace(/\.\s*$/, "")
+    .trim();
+}
+
+/* ── fal.ai Seedream: text-to-image ───────────────────── */
+async function falTextToImage(prompt: string, negativePrompt: string, apiKey: string): Promise<string | null> {
+  console.log("falTextToImage calling:", prompt.slice(0, 120));
+
+  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/text-to-image", {
+    method: "POST",
+    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
+    headers: {
+      Authorization: `Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt,
+      negative_prompt: negativePrompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error("fal text-to-image error:", response.status, errText);
+    if (response.status === 429) throw { status: 429 };
+    if (response.status === 402) throw { status: 402 };
+    if (isContentPolicyError(response.status, errText)) {
+      throw { status: 400, contentPolicy: true };
+    }
+    throw new Error(`fal generation failed: ${response.status} - ${errText}`);
+  }
+
+  const data = await response.json();
+  console.log("fal response keys:", Object.keys(data));
+  const url = data?.images?.[0]?.url;
+  return typeof url === "string" && url.trim().length > 0 ? url : null;
+}
+
+/* ── fal.ai Seedream: image edit ──────────────────────── */
+async function falImageEdit(
+  prompt: string,
+  imageUrls: string[],
+  negativePrompt: string,
+  apiKey: string
+): Promise<string | null> {
+  console.log("falImageEdit calling with", imageUrls.length, "reference images");
+
+  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/edit", {
+    method: "POST",
+    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
+    headers: {
+      Authorization: `Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt,
+      image_urls: imageUrls,
+      negative_prompt: negativePrompt,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error("fal image-edit error:", response.status, errText);
+    if (response.status === 429) throw { status: 429 };
+    if (response.status === 402) throw { status: 402 };
+    if (isContentPolicyError(response.status, errText)) {
+      throw { status: 400, contentPolicy: true };
+    }
+    throw new Error(`fal image edit failed: ${response.status} - ${errText}`);
+  }
+
+  const data = await response.json();
+  console.log("fal edit response keys:", Object.keys(data));
+  const url = data?.images?.[0]?.url;
+  return typeof url === "string" && url.trim().length > 0 ? url : null;
+}
+
+/* ── router: text-to-image ────────────────────────────── */
+async function routerTextToImage(
+  positivePrompt: string,
+  negativeText: string,
+  apiKey: string
+): Promise<string | null> {
+  if (ACTIVE_MODEL === "seedream") {
+    const falKey = Deno.env.get("FAL_API_KEY");
+    if (!falKey) throw new Error("FAL_API_KEY is not configured");
+    return falTextToImage(positivePrompt, extractNegativeKeywords(negativeText), falKey);
+  }
+  // grok: bake negative into prompt
+  const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
+  return xaiTextToImage(fullPrompt, apiKey);
+}
+
+/* ── router: image edit ───────────────────────────────── */
+async function routerImageEdit(
+  positivePrompt: string,
+  negativeText: string,
+  imageUrls: string[],
+  apiKey: string,
+  aspectRatio = "3:4"
+): Promise<string | null> {
+  if (ACTIVE_MODEL === "seedream") {
+    const falKey = Deno.env.get("FAL_API_KEY");
+    if (!falKey) throw new Error("FAL_API_KEY is not configured");
+    return falImageEdit(positivePrompt, imageUrls, extractNegativeKeywords(negativeText), falKey);
+  }
+  // grok: bake negative into prompt
+  const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
+  return xaiImageEdit(fullPrompt, imageUrls, apiKey, aspectRatio);
+}
+
 /* ── generate face options (text-to-image, always 3:4) ── */
 async function generateFaceImages(
   prompt: string,
@@ -389,14 +505,14 @@ async function generateFaceImages(
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const fullPrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
+    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}, ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
     const maxRetries = 2;
     while (retries <= maxRetries) {
       try {
-        const url = await xaiTextToImage(fullPrompt, apiKey);
+        const url = await routerTextToImage(positivePrompt, FACE_NEGATIVE, apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
           if (retries < maxRetries) { retries++; continue; }
@@ -461,8 +577,8 @@ async function generateAngleAndBody(
 
   try {
     console.log("Generating 3/4 angle...");
-    const anglePrompt = `Same person exactly as in the reference image, side profile view, head turned approximately 60-70 degrees to the right showing the side of the face, ear visible, nose in profile, jawline visible from the side, genuine side-profile angle NOT a slight head turn, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}. ${FACE_NEGATIVE}`;
-    const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
+    const anglePositive = `Same person exactly as in the reference image, side profile view, head turned approximately 60-70 degrees to the right showing the side of the face, ear visible, nose in profile, jawline visible from the side, genuine side-profile angle NOT a slight head turn, wearing white crew neck t-shirt, plain white background, passport photo style, head and top of shoulders only, natural matte skin, no glossy or oily skin, ${characterTraits}. ${FACE_QUALITY}`;
+    const angleResult = await routerImageEdit(anglePositive, FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
       console.log("Angle generated:", angleUrl?.slice(0, 80));
@@ -478,8 +594,8 @@ async function generateAngleAndBody(
     const bodyKey = (bodyType || "regular").toLowerCase();
     const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
-    const bodyPrompt = `Same face as reference image, natural photo, front-facing, slight hip tilt, head to just below hips, fitted low-cut top, tight black leggings, ${bodyDesc}, standing upright, white background, matte skin with pores, normal length arms ending at mid-thigh, feminine soft build. ${BODY_NEGATIVE}`;
-    const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+    const bodyPositive = `Same face as reference image, natural photo, front-facing, slight hip tilt, head to just below hips, fitted low-cut top, tight black leggings, ${bodyDesc}, standing upright, white background, matte skin with pores, normal length arms ending at mid-thigh, feminine soft build`;
+    const bodyResult = await routerImageEdit(bodyPositive, BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
       console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
@@ -511,9 +627,9 @@ async function generatePhoto(
 ): Promise<string | null> {
   const safeRatio = mapAspectRatio(aspectRatio);
   if (faceImageUrls.length > 0) {
-    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, safeRatio);
+    return await routerImageEdit(finalPrompt, NEGATIVE_INSTRUCTION, faceImageUrls, apiKey, safeRatio);
   }
-  return await xaiTextToImage(finalPrompt, apiKey);
+  return await routerTextToImage(finalPrompt, NEGATIVE_INSTRUCTION, apiKey);
 }
 
 /* ── handler ───────────────────────────────────────────── */
