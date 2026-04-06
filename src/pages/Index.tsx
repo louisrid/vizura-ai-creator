@@ -445,7 +445,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-10">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>

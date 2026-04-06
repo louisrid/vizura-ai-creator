@@ -126,7 +126,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-1 pb-[280px]">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-1 pb-10">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -233,14 +233,14 @@ const CharacterDetail = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[280px] md:hidden">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-10 md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">{content(true)}</div>
       </main>
 
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-[280px]">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-10">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
