@@ -17,10 +17,10 @@ const QUALITY_SUFFIX =
   "photorealistic, iPhone photo quality, natural lighting, real skin texture with visible pores, natural matte skin, no glossy or oily skin, realistic skin texture, natural skin imperfections, everything in focus, casual unposed energy, slight sensor noise grain, detailed realistic skin with subtle veins and freckles, natural skin colour variation, no airbrushed look, no plastic appearance, real human skin";
 
 const NEGATIVE_INSTRUCTION =
-  "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, 4k, hdr, studio lighting, artificial lighting, heavy blur, depth of field, bokeh, blurry, soft focus, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, ugly, old, aged skin, wrinkles, bony, overly muscular, masculine, out of frame, bad framing, cropped, cut off limbs, nipples, areola, exposed genitals.";
+  "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, 4k, hdr, studio lighting, artificial lighting, heavy blur, depth of field, bokeh, blurry, soft focus, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, ugly, old, aged skin, wrinkles, bony, overly muscular, masculine, out of frame, bad framing, cropped, cut off limbs, nipples, areola, exposed genitals, both arms holding phone, both hands holding phone, two arms extended.";
 
 const SELFIE_PREFIX =
-  "front camera perspective, slight wide angle distortion, casual angle, STRICTLY ONE ARM ONLY extended toward the camera holding the phone, the other arm must be down at her side or behind her or resting naturally NOT holding a phone, absolutely NO two arms reaching toward the camera, only one single arm is holding the camera phone, selfie perspective, iPhone selfie";
+  "front camera perspective, slight wide angle distortion, casual angle, RIGHT arm extended forward holding phone camera visible in frame, left arm relaxed at side or touching hair, CRITICAL: only the right arm holds the camera and is extended toward camera, the other arm must NOT be holding the phone, authentic iPhone selfie angle";
 
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
@@ -197,7 +197,13 @@ function buildFinalPrompt(
   const charName = characterTraits?.match(/^(\d+\s+year\s+old\s+woman)/)?.[0] || "the woman";
 
   // Expression
-  const exprStr = expression ? `, ${expression} expression` : "";
+  const EXPRESSION_MAP: Record<string, string> = {
+    "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
+    "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
+    "big smile": "big open-mouth smile showing teeth, happy joyful energy",
+    "pout": "duck face pout, lips pushed forward, playful pouty expression",
+  };
+  const exprStr = expression ? `, ${EXPRESSION_MAP[expression] || expression}` : "";
 
   // The user's scene prompt contains outfit, environment, pose, extras
   // We explicitly instruct the model to use the outfit from the user prompt
@@ -374,7 +380,7 @@ async function generateFaceImages(
     "square strong face shape, flat wide cheekbones, broad flat chin, strong angular jaw, medium naturally asymmetric lips, small upturned nose, large round doe eyes set wide apart, arched dramatic brows, prominent bone structure, EXACT SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive gorgeous young woman, striking but natural beauty, youthful 18 to 23 energy, clear matte skin, natural skin texture, no glossy or oily skin, lean face, refined facial harmony, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background, visibly younger looking for youngest age range, strikingly attractive, magazine cover beauty";
+  const beautyCore = "extremely attractive gorgeous young woman, magazine cover beauty, youthful 18 to 23 energy, slim defined face with zero facial fat, no round cheeks, no puffiness, matte skin with natural texture like a real passport photo, well-styled hair clearly visible, pleasant friendly expression, plain white crew neck t-shirt, plain white background";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -472,7 +478,7 @@ async function generateAngleAndBody(
     const bodyKey = (bodyType || "regular").toLowerCase();
     const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
     const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
-    const bodyPrompt = `Same person exactly as in the reference image, front-facing pose looking directly at camera, slight natural hip tilt to show body shape, framed from head to knees, clearly showing body proportions and figure shape including chest waist and hips, wearing a fitted low-cut top and tight black legging, ${bodyDesc}, both arms fully visible hanging naturally at sides, standing upright with feet shoulder width apart, confident natural pose, slightly zoomed in framing, white background, photorealistic, natural proportions, realistic body shape, natural matte skin, no glossy or oily skin, ${bodyModifier}, natural realistic proportions, arms proportional to body, feminine soft build not muscular, face must blend naturally with body as one cohesive person, natural lighting. ${BODY_NEGATIVE}`;
+    const bodyPrompt = `A woman with the same face as the reference image, natural full photo not a composite, front-facing confident pose, slight hip tilt, framed from head to just below hips, wearing fitted low-cut top and tight black leggings, ${bodyDesc}, ${bodyModifier}, standing upright feet shoulder width apart, white background, photorealistic, natural matte skin, short proportional arms, feminine soft build. ${BODY_NEGATIVE}`;
     const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
     if (bodyResult) {
       bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
