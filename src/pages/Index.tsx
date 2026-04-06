@@ -126,7 +126,7 @@ const HighlightedPromptArea = ({
     <div className="relative">
       {value && charName && (
         <div
-          className="pointer-events-none absolute inset-0 px-4 py-3 text-sm font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
+          className="pointer-events-none absolute inset-0 px-4 py-3 text-lg font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
           style={{ wordBreak: "break-word" }}
           aria-hidden
           dangerouslySetInnerHTML={{ __html: highlightedHtml }}
