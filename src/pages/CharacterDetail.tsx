@@ -57,32 +57,6 @@ const CharacterDetail = () => {
     if (user) fetch();
   }, [user, id]);
 
-  // Realtime subscription for character updates (angle/body images)
-  useEffect(() => {
-    if (!user || !id) return;
-
-    const channel = supabase
-      .channel(`character-${id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'characters',
-          filter: `id=eq.${id}`,
-        },
-        (payload) => {
-          const updated = payload.new as any;
-          setCharacter((prev) => prev ? { ...prev, ...updated } : prev);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, id]);
-
   const handleDelete = async () => {
     if (!character) return;
     setDeleting(true);
