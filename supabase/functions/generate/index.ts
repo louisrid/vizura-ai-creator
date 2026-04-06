@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
-const ACTIVE_MODEL: "grok" | "seedream" = "grok";
+const ACTIVE_MODEL: "grok" | "flux" = "flux";
 
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -366,19 +366,12 @@ async function xaiImageEdit(
   return extractXaiImageUrl(data);
 }
 
-/* ── helper: strip "Do not generate" prefix from negative strings ── */
-function extractNegativeKeywords(negativeText: string): string {
-  return negativeText
-    .replace(/^Do not generate\s*/i, "")
-    .replace(/\.\s*$/, "")
-    .trim();
-}
 
-/* ── fal.ai Seedream: text-to-image ───────────────────── */
-async function falTextToImage(prompt: string, negativePrompt: string, apiKey: string): Promise<string | null> {
+/* ── fal.ai FLUX: text-to-image ────────────────────────── */
+async function falTextToImage(prompt: string, apiKey: string): Promise<string | null> {
   console.log("falTextToImage calling:", prompt.slice(0, 120));
 
-  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/text-to-image", {
+  const response = await fetch("https://fal.run/fal-ai/flux-2-pro", {
     method: "POST",
     signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
     headers: {
@@ -387,7 +380,6 @@ async function falTextToImage(prompt: string, negativePrompt: string, apiKey: st
     },
     body: JSON.stringify({
       prompt,
-      negative_prompt: negativePrompt,
     }),
   });
 
@@ -408,16 +400,15 @@ async function falTextToImage(prompt: string, negativePrompt: string, apiKey: st
   return typeof url === "string" && url.trim().length > 0 ? url : null;
 }
 
-/* ── fal.ai Seedream: image edit ──────────────────────── */
+/* ── fal.ai FLUX: image edit ──────────────────────────── */
 async function falImageEdit(
   prompt: string,
   imageUrls: string[],
-  negativePrompt: string,
   apiKey: string
 ): Promise<string | null> {
   console.log("falImageEdit calling with", imageUrls.length, "reference images");
 
-  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/edit", {
+  const response = await fetch("https://fal.run/fal-ai/flux-2-pro", {
     method: "POST",
     signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
     headers: {
@@ -427,7 +418,6 @@ async function falImageEdit(
     body: JSON.stringify({
       prompt,
       image_urls: imageUrls,
-      negative_prompt: negativePrompt,
     }),
   });
 
@@ -454,10 +444,11 @@ async function routerTextToImage(
   negativeText: string,
   apiKey: string
 ): Promise<string | null> {
-  if (ACTIVE_MODEL === "seedream") {
+  if (ACTIVE_MODEL === "flux") {
     const falKey = Deno.env.get("FAL_API_KEY");
     if (!falKey) throw new Error("FAL_API_KEY is not configured");
-    return falTextToImage(positivePrompt, extractNegativeKeywords(negativeText), falKey);
+    // FLUX does not use negative prompts — send only the positive prompt
+    return falTextToImage(positivePrompt, falKey);
   }
   // grok: bake negative into prompt
   const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
@@ -472,10 +463,11 @@ async function routerImageEdit(
   apiKey: string,
   aspectRatio = "3:4"
 ): Promise<string | null> {
-  if (ACTIVE_MODEL === "seedream") {
+  if (ACTIVE_MODEL === "flux") {
     const falKey = Deno.env.get("FAL_API_KEY");
     if (!falKey) throw new Error("FAL_API_KEY is not configured");
-    return falImageEdit(positivePrompt, imageUrls, extractNegativeKeywords(negativeText), falKey);
+    // FLUX does not use negative prompts — send only the positive prompt
+    return falImageEdit(positivePrompt, imageUrls, falKey);
   }
   // grok: bake negative into prompt
   const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
