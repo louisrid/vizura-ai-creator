@@ -258,9 +258,12 @@ const CharacterCreator = () => {
       if (!insertError && inserted) {
         sessionStorage.setItem("vizura_pending_char_id", inserted.id);
       }
+      // Clear stale face options so ChooseFace always generates fresh faces
+      sessionStorage.removeItem("vizura_face_options");
       navigate("/choose-face", { state: { prompt, characterId: inserted?.id } });
     } else {
       // Not logged in - navigate to choose-face, sign-in will happen there
+      sessionStorage.removeItem("vizura_face_options");
       navigate("/choose-face", { state: { prompt } });
     }
 
