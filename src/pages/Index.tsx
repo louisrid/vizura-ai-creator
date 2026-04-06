@@ -552,7 +552,7 @@ const Index = () => {
                 className="flex w-full items-center justify-center gap-3 px-4 py-6 hover:border-foreground/30 transition-colors"
                 style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
               >
-                <Upload size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
+                <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
                 <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
               </button>
             )}
