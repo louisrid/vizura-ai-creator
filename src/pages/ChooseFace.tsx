@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import BackButton from "@/components/BackButton";
+
 import PageTitle from "@/components/PageTitle";
 
 import DotDecal from "@/components/DotDecal";
