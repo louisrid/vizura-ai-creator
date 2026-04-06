@@ -110,144 +110,56 @@ const useCyclingPlaceholder = (charName: string, interval = 3500) => {
   return { text: templates[index], visible };
 };
 
-/* ── Highlighted text input component ── */
+/* ── Highlighted text input — textarea with overlay ── */
 const HighlightedPromptArea = ({
   value, onChange, charName, placeholder
 }: {
   value: string; onChange: (v: string) => void; charName: string;
   placeholder: React.ReactNode;
 }) => {
-  const editableRef = useRef<HTMLDivElement>(null);
-  const caretOffsetRef = useRef(0);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const segments = useMemo(() => {
-    if (!value) return [{ text: "", highlight: false }];
-    if (!charName.trim()) return [{ text: value, highlight: false }];
+  const highlightedHtml = useMemo(() => {
+    if (!value) return "";
+    if (!charName.trim()) return value;
 
     const escaped = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escaped})(?=\\s)`, "gi");
-    const parts: { text: string; highlight: boolean }[] = [];
-    let lastIndex = 0;
-    let match: RegExpExecArray | null;
-
-    while ((match = regex.exec(value)) !== null) {
-      const boundary = match[1] ?? "";
-      const fullMatch = match[2] ?? "";
-      const highlightStart = match.index + boundary.length;
-      const highlightEnd = highlightStart + fullMatch.length;
-
-      if (lastIndex < match.index) {
-        parts.push({ text: value.slice(lastIndex, match.index), highlight: false });
-      }
-
-      if (boundary) {
-        parts.push({ text: boundary, highlight: false });
-      }
-
-      parts.push({ text: value.slice(highlightStart, highlightEnd), highlight: true });
-      lastIndex = highlightEnd;
-    }
-
-    if (lastIndex < value.length) {
-      parts.push({ text: value.slice(lastIndex), highlight: false });
-    }
-
-    return parts.length > 0 ? parts : [{ text: value, highlight: false }];
+    const regex = new RegExp(`(${escaped})(?=\\s|$)`, "gi");
+    return value.replace(regex, `<span style="color:hsl(var(--primary))">$1</span>`);
   }, [value, charName]);
-
-  const getCaretOffset = useCallback((element: HTMLElement) => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return 0;
-    if (!selection.anchorNode || !element.contains(selection.anchorNode)) return element.innerText.length;
-
-    const range = selection.getRangeAt(0);
-    const preCaretRange = range.cloneRange();
-    preCaretRange.selectNodeContents(element);
-    preCaretRange.setEnd(range.endContainer, range.endOffset);
-
-    return preCaretRange.toString().length;
-  }, []);
-
-  const setCaretOffset = useCallback((element: HTMLElement, targetOffset: number) => {
-    const selection = window.getSelection();
-    if (!selection) return;
-
-    const range = document.createRange();
-    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
-    let currentOffset = 0;
-
-    while (walker.nextNode()) {
-      const node = walker.currentNode as Text;
-      const nextOffset = currentOffset + node.data.length;
-
-      if (targetOffset <= nextOffset) {
-        range.setStart(node, Math.max(0, targetOffset - currentOffset));
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        return;
-      }
-
-      currentOffset = nextOffset;
-    }
-
-    range.selectNodeContents(element);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }, []);
-
-  const readEditableText = useCallback((element: HTMLDivElement) => {
-    if (!(element.textContent ?? "").length) return "";
-
-    const nextValue = element.innerText.replace(/\u00a0/g, " ").replace(/\r/g, "");
-    return nextValue === "\n" ? "" : nextValue;
-  }, []);
-
-  useLayoutEffect(() => {
-    if (document.activeElement === editableRef.current && editableRef.current) {
-      setCaretOffset(editableRef.current, Math.min(caretOffsetRef.current, value.length));
-    }
-  }, [segments, setCaretOffset, value]);
 
   return (
     <div className="relative">
+      {/* Highlight overlay — renders coloured text behind textarea */}
       <div
-        ref={editableRef}
-        contentEditable
-        suppressContentEditableWarning
-        role="textbox"
-        aria-multiline="true"
+        aria-hidden
+        className="absolute inset-0 whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase pointer-events-none overflow-hidden"
+        style={{
+          borderRadius: 16,
+          border: "2px solid transparent",
+          color: "hsl(var(--foreground))",
+          wordBreak: "break-word",
+        }}
+        dangerouslySetInnerHTML={{ __html: highlightedHtml || "&nbsp;" }}
+      />
+      {/* Actual textarea — transparent text so caret shows, user types normally */}
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         spellCheck={false}
         autoCorrect="off"
-        className="w-full min-h-[176px] whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase focus:outline-none transition-colors"
+        className="relative w-full min-h-[176px] whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase focus:outline-none transition-colors resize-none"
         style={{
           borderRadius: 16,
           border: "2px solid #222",
           backgroundColor: "#111111",
           caretColor: "hsl(var(--foreground))",
-          color: "hsl(var(--foreground))",
+          color: "transparent",
           wordBreak: "break-word",
+          WebkitTextFillColor: "transparent",
         }}
-        onInput={(e) => {
-          caretOffsetRef.current = getCaretOffset(e.currentTarget);
-          onChange(readEditableText(e.currentTarget));
-        }}
-        onKeyUp={(e) => {
-          caretOffsetRef.current = getCaretOffset(e.currentTarget);
-        }}
-        onMouseUp={(e) => {
-          caretOffsetRef.current = getCaretOffset(e.currentTarget);
-        }}
-      >
-        {value
-          ? segments.map((seg, i) => (
-              <span key={`${seg.text}-${i}`} style={{ color: seg.highlight ? "hsl(var(--primary))" : "hsl(var(--foreground))" }}>
-                {seg.text}
-              </span>
-            ))
-          : null}
-      </div>
+      />
       {!value && placeholder}
     </div>
   );
