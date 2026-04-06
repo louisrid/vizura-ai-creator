@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2, RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import BackButton from "@/components/BackButton";
+
 import PageTitle from "@/components/PageTitle";
 
 import DotDecal from "@/components/DotDecal";
@@ -97,6 +97,7 @@ const ChooseFace = () => {
   const [cardsRevealed, setCardsRevealed] = useState(false);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const [showRegenConfirm, setShowRegenConfirm] = useState(false);
+  const [showBackConfirm, setShowBackConfirm] = useState(false);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Second loading phase: angle + body generation
@@ -650,7 +651,18 @@ const ChooseFace = () => {
 
             <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-1 pb-[250px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
-                <BackButton />
+                <button
+                  type="button"
+                  onClick={() => setShowBackConfirm(true)}
+                  className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
+                  style={{ borderRadius: 12, backgroundColor: "#facc15" }}
+                  aria-label="go back"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+                    <line x1="12" y1="7" x2="2" y2="7" />
+                    <polyline points="7,2 2,7 7,12" />
+                  </svg>
+                </button>
                 <PageTitle className="mb-0">pick your face</PageTitle>
               </div>
 
@@ -757,6 +769,30 @@ const ChooseFace = () => {
             handleRegenerate();
           }}
           onCancel={() => setShowRegenConfirm(false)}
+        />
+
+        <RegenerateConfirmDialog
+          open={showBackConfirm}
+          message={"are you sure?\nyou will lose your progress"}
+          onConfirm={async () => {
+            setShowBackConfirm(false);
+            // Delete the in-progress character
+            if (characterId && user) {
+              try {
+                await supabase.from("characters").delete().eq("id", characterId).eq("user_id", user.id);
+              } catch {}
+            }
+            // Clear all cached state
+            sessionStorage.removeItem(FACE_STORAGE_KEY);
+            sessionStorage.removeItem(STORAGE_KEY);
+            sessionStorage.removeItem("vizura_selected_face");
+            sessionStorage.removeItem("vizura_guided_prompt");
+            sessionStorage.removeItem("vizura_pending_char_id");
+            sessionStorage.removeItem(AUTH_RESUME_KEY);
+            sessionStorage.removeItem("vizura_guided_flow_state");
+            navigate("/", { replace: true });
+          }}
+          onCancel={() => setShowBackConfirm(false)}
         />
       </div>
     </>

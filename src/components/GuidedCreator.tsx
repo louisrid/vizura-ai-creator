@@ -22,9 +22,8 @@ const getRandomNameToast = () => "great choice!";
  *  1: Intro
  *  2: Name input
  *  3-9: Traits
- * 10: Description
- * 11: Reference
- * 12: Create
+ * 10: Reference
+ * 11: Create
  */
 
 const TRAITS = [
@@ -178,8 +177,8 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 13;
-const TOTAL_SKIP = 11;
+const TOTAL_FULL = 12;
+const TOTAL_SKIP = 10;
 
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
@@ -315,9 +314,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isHeroSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
   const isNameSlide = internalStep === 2;
-  const isDescriptionSlide = internalStep === 10;
-  const isReferenceSlide = internalStep === 11;
-  const isCreateSlide = internalStep === 12;
+  const isReferenceSlide = internalStep === 10;
+  const isCreateSlide = internalStep === 11;
 
   const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
 
@@ -395,7 +393,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isDescriptionSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   if (!mounted || !visible) return null;
 
@@ -521,25 +519,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-    /* Description */
-    if (isDescriptionSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <h2 className={SLIDE_TITLE_CLASS}>describe her</h2>
-        <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 w-full max-w-[18rem] md:max-w-[24rem]">
-          <textarea
-            value={selections.description}
-            onChange={(e) => setSelections((p) => ({ ...p, description: e.target.value }))}
-            placeholder="add any details you want…"
-            rows={6}
-            onClick={(e) => e.stopPropagation()}
-            className="min-h-[160px] md:min-h-[180px] w-full resize-none px-4 py-3 text-[16px] md:text-[18px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
-          />
-          <p className={`mt-3 text-center ${HELPER_CLASS}`}>i.e. chubby cheeks, freckles, thick mascara</p>
-        </div>
-      </div>
-    );
 
     /* Reference */
     if (isReferenceSlide) return (

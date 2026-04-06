@@ -503,7 +503,13 @@ async function generateFaceImages(
     "round bright eyes, soft petite button nose, medium natural lips, round face with soft cheeks, SAME hair style and colour as described",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, subtle confident closed-mouth smile barely smiling";
+  const makeupVariations = [
+    "light eyeshadow, subtle mascara, minimal eyeliner, natural blush",
+    "moderate eyeshadow with warm tones, defined mascara, soft eyeliner, blush",
+    "subtle smoky eyeshadow, thick mascara, defined eyeliner, contoured blush",
+  ];
+
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, subtle confident closed-mouth smile barely smiling";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -513,8 +519,9 @@ async function generateFaceImages(
   // Generate faces sequentially to avoid rate limits and timeouts
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
+    const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${variation}. ${FACE_QUALITY}`;
+    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -522,7 +529,7 @@ async function generateFaceImages(
     while (retries <= maxRetries) {
       try {
         const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
+          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
           : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
