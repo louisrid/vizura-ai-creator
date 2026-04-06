@@ -24,8 +24,8 @@ const DotDecal = () => {
 
   return (
     <svg
-      className="pointer-events-none w-full h-full"
-      style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}
+      className="pointer-events-none absolute inset-0 w-full h-full"
+      style={{ zIndex: 0 }}
       preserveAspectRatio="none"
     >
       {dots.map((d, i) => (
