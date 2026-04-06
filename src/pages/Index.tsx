@@ -36,36 +36,40 @@ const PHOTO_LOADING_PHRASES = [
   "final touches…",
 ];
 
-/* ── Toggle box (new design — contained in a rounded box) ── */
+/* ── Toggle box (new design — contained in a rounded box with dividers) ── */
 const ToggleBox = ({ label, options, value, onChange }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
 }) => (
   <div className="flex-1 flex flex-col gap-2">
-    <span className="text-sm font-[900] lowercase text-white">{label}</span>
+    <span className="text-base font-[900] lowercase text-white">{label}</span>
     <div
-      className="flex gap-1.5 p-1.5"
+      className="flex items-stretch p-1.5"
       style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
     >
-      {options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          onClick={() => onChange(opt)}
-          className="flex-1 flex items-center justify-center transition-all"
-          style={{
-            borderRadius: 10,
-            padding: "10px 0",
-            fontSize: 15,
-            fontWeight: 800,
-            textTransform: "lowercase" as const,
-            ...(value === opt
-              ? { backgroundColor: "#facc15", color: "#000" }
-              : { backgroundColor: "transparent", color: "rgba(255,255,255,0.45)" }
-            ),
-          }}
-        >
-          {opt}
-        </button>
+      {options.map((opt, i) => (
+        <div key={opt} className="flex-1 flex items-stretch">
+          {i > 0 && (
+            <div className="w-[1px] my-1.5" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+          )}
+          <button
+            type="button"
+            onClick={() => onChange(opt)}
+            className="flex-1 flex items-center justify-center transition-all"
+            style={{
+              borderRadius: 10,
+              padding: "10px 0",
+              fontSize: 15,
+              fontWeight: 800,
+              textTransform: "lowercase" as const,
+              ...(value === opt
+                ? { backgroundColor: "#facc15", color: "#000" }
+                : { backgroundColor: "transparent", color: "rgba(255,255,255,0.45)" }
+              ),
+            }}
+          >
+            {opt}
+          </button>
+        </div>
       ))}
     </div>
   </div>
