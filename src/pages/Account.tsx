@@ -7,7 +7,6 @@ import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
@@ -15,7 +14,7 @@ import DotDecal from "@/components/DotDecal";
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
-  const { subscribed, status, refetch: refetchSub, optimisticSubscribe, optimisticUnsubscribe } = useSubscription();
+  const { subscribed, refetch: refetchSub, optimisticSubscribe, optimisticUnsubscribe } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -53,20 +52,23 @@ const Account = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[200px]">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-0">
           {subscribed ? (
-            <div className="w-full h-12 md:h-14 rounded-2xl bg-neon-green text-neon-green-foreground text-sm md:text-base font-extrabold lowercase flex items-center justify-center opacity-50 pointer-events-none">
+            <div
+              className="w-full h-14 md:h-16 rounded-2xl text-base md:text-lg font-extrabold lowercase flex items-center justify-center pointer-events-none"
+              style={{ backgroundColor: "hsl(var(--member-green) / 0.82)", color: "hsl(var(--neon-green-foreground))" }}
+            >
               subscribed
             </div>
           ) : (
             <button
-              className="w-full h-12 md:h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm md:text-base font-extrabold lowercase hover:opacity-90 transition-all"
+              className="w-full h-14 md:h-16 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-base md:text-lg font-extrabold lowercase hover:opacity-90 transition-all"
               onClick={handleSubscribe}
             >
               subscribe
@@ -74,13 +76,15 @@ const Account = () => {
           )}
 
           {subscribed && (
-            <button
-              className="w-full h-10 md:h-12 rounded-2xl text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
-              style={{ backgroundColor: "rgba(255,68,68,0.12)", color: "#ff4444", border: "1.5px solid rgba(255,68,68,0.3)" }}
-              onClick={handleCancel}
-            >
-              cancel subscription
-            </button>
+            <div className="mb-10 pt-3">
+              <button
+                className="h-10 md:h-11 rounded-2xl px-5 text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
+                style={{ backgroundColor: "hsl(var(--destructive-surface))", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
+                onClick={handleCancel}
+              >
+                cancel
+              </button>
+            </div>
           )}
 
           <div className="md:grid md:grid-cols-2 md:gap-3 space-y-3 md:space-y-0">
@@ -188,7 +192,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-1 pb-[200px]">
+      <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-1 pb-[280px]">
         <div className="mb-4 flex items-center gap-3">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>

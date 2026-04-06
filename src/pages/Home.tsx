@@ -52,6 +52,7 @@ const Home = () => {
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
+  const openCreatorRequested = Boolean((location.state as any)?.openCreator);
 
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); return; }
@@ -88,19 +89,18 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
-    const state = (location.state as any);
-    if (state?.openCreator) {
+    if (openCreatorRequested) {
       navigate(location.pathname, { replace: true, state: {} });
       handleOpenCreator();
     }
-  }, [location.state]);
+  }, [handleOpenCreator, location.pathname, navigate, openCreatorRequested]);
 
   useEffect(() => {
     if (authLoading) return;
 
     const pendingPostAuthHome = sessionStorage.getItem("vizura_post_auth_home") === "1";
     if (user || pendingPostAuthHome) {
-      setShowGuided(false);
+      if (!openCreatorRequested) setShowGuided(false);
       setAutoOpenEvaluated(true);
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
       return;
@@ -116,7 +116,7 @@ const Home = () => {
     }
     setAutoOpenEvaluated(true);
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
-  }, [authLoading, user]);
+  }, [authLoading, openCreatorRequested, user]);
 
   useEffect(() => {
     void fetchLatestPhotos();
@@ -256,7 +256,7 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[200px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
@@ -418,7 +418,7 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-5xl mx-auto px-10 pt-4 pb-[200px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-5xl mx-auto px-10 pt-4 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
