@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import SubscribeOverlay from "@/components/SubscribeOverlay";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -17,10 +15,7 @@ import DotDecal from "@/components/DotDecal";
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
-  const { subscribed, status, refetch: refetchSub, optimisticSubscribe } = useSubscription();
-  const [overlayOpen, setOverlayOpen] = useState(false);
-  const [buying, setBuying] = useState(false);
-  const [justSubscribed, setJustSubscribed] = useState(false);
+  const { subscribed, status, refetch: refetchSub, optimisticSubscribe, optimisticUnsubscribe } = useSubscription();
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -47,19 +42,17 @@ const Account = () => {
 
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
-  const handleSubscribe = async () => {
-    setBuying(true);
+  const handleSubscribe = () => {
     optimisticSubscribe();
-    setBuying(false);
-    setOverlayOpen(false);
-    setJustSubscribed(true);
-    if (location.search) navigate("/account", { replace: true });
+  };
+
+  const handleCancel = () => {
+    optimisticUnsubscribe();
   };
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
       <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[200px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
@@ -74,9 +67,19 @@ const Account = () => {
           ) : (
             <button
               className="w-full h-12 md:h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm md:text-base font-extrabold lowercase hover:opacity-90 transition-all"
-              onClick={() => setOverlayOpen(true)}
+              onClick={handleSubscribe}
             >
               subscribe
+            </button>
+          )}
+
+          {subscribed && (
+            <button
+              className="w-full h-10 md:h-12 rounded-2xl text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
+              style={{ backgroundColor: "rgba(255,68,68,0.12)", color: "#ff4444", border: "1.5px solid rgba(255,68,68,0.3)" }}
+              onClick={handleCancel}
+            >
+              cancel subscription
             </button>
           )}
 
@@ -126,59 +129,7 @@ const Account = () => {
           </Button>
         </div>
       </main>
-
-      <SubscribeOverlay
-        open={overlayOpen}
-        onDismiss={() => setOverlayOpen(false)}
-        onSubscribe={handleSubscribe}
-        buying={buying}
-      />
     </div>
-  );
-};
-
-const CelebrationOverlay = ({ active, onDone }: { active: boolean; onDone: () => void }) => {
-  const [showing, setShowing] = useState(false);
-
-  useEffect(() => {
-    if (!active) { setShowing(false); return; }
-    setShowing(true);
-    const root = document.getElementById("root");
-    const prev = { body: document.body.style.overflow, html: document.documentElement.style.overflow, root: root?.style.overflow ?? "" };
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    if (root) root.style.overflow = "hidden";
-    const t = setTimeout(() => setShowing(false), 1400);
-    return () => {
-      clearTimeout(t);
-      document.body.style.overflow = prev.body;
-      document.documentElement.style.overflow = prev.html;
-      if (root) root.style.overflow = prev.root;
-    };
-  }, [active]);
-
-  return (
-    <AnimatePresence onExitComplete={onDone}>
-      {showing && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center"
-          style={{ backgroundColor: "hsl(var(--member-green))" }}
-          initial={{ opacity: 1, scale: 1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
-        >
-          <motion.h1
-            className="text-[3rem] font-extrabold lowercase tracking-tight text-black"
-            initial={{ opacity: 0, scale: 1.2 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.25, delay: 0.05, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            subscribed!
-          </motion.h1>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 };
 
