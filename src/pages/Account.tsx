@@ -210,7 +210,8 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
-            className="w-full h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full h-14 bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            style={{ borderRadius: 12 }}
           >
             {googleLoading ? (
               <><Loader2 className="animate-spin" size={18} />connecting...</>
