@@ -232,8 +232,6 @@ function buildFinalPrompt(
     if (modifier) parts.push(modifier);
   }
 
-  parts.push(NEGATIVE_INSTRUCTION);
-
   return parts.join(". ");
 }
 
