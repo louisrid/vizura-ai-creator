@@ -81,32 +81,10 @@ const ToggleBox = ({ label, options, value, onChange }: {
   </div>
 );
 
-/* ── Cycling placeholder text with character name ── */
-const useCyclingPlaceholder = (charName: string, interval = 3500) => {
-  const templates = useMemo(() => {
-    const name = charName || "luna";
-    return [
-      `${name} at the beach, white bikini, sunset`,
-      `${name} mirror selfie, pink hoodie`,
-      `${name} at the gym, sports bra, leggings`,
-    ];
-  }, [charName]);
-
-  const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setIndex((i) => (i + 1) % templates.length);
-        setVisible(true);
-      }, 400);
-    }, interval);
-    return () => clearInterval(timer);
-  }, [templates.length, interval]);
-
-  return { text: templates[index], visible };
+/* ── Static placeholder using selected character name ── */
+const useStaticPlaceholder = (charName: string) => {
+  const name = charName || "luna";
+  return `${name} standing in her bedroom, wearing pink gym gear and making a peace sign`;
 };
 
 const escapeHtml = (text: string) =>
