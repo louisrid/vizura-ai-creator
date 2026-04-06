@@ -164,7 +164,7 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", hairStyle: "", hairColour: "", eye: "", makeup: "",
+  skin: "", bodyType: "", hairStyle: "", hairColour: "", eye: "", makeup: "classic",
   characterName: "", age: "", description: "",
   referenceImage: null, referenceStrength: 50,
 };
