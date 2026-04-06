@@ -629,7 +629,7 @@ const ChooseFace = () => {
                 <span className="text-sm md:text-base font-[900] lowercase text-foreground">{gems} gems</span>
               </div>
 
-              <div className="mx-auto mt-2 flex w-full max-w-[22rem] md:max-w-[36rem] flex-col gap-4 md:gap-6">
+              <div className="mx-auto mt-2 flex w-full max-w-[26rem] md:max-w-[40rem] flex-col gap-4 md:gap-6">
                 <div className="grid grid-cols-3 gap-3 md:gap-6" style={{ perspective: "800px" }}>
                   {faces.map((url, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
@@ -643,14 +643,17 @@ const ChooseFace = () => {
                           rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                           opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
                         }}
-                        className="relative aspect-[3/4] w-full overflow-hidden transition-all duration-300 ease-out"
+                        className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
                           borderRadius: 12,
                           border: selectedIndex === i ? "3px solid #facc15" : "none",
                           padding: selectedIndex === i ? 0 : 3,
+                          overflow: "hidden",
                         }}
                       >
-                        <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover" style={{ borderRadius: 10 }} />
+                        <div className="w-full h-full overflow-hidden" style={{ borderRadius: 10 }}>
+                          <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover block" />
+                        </div>
                       </motion.button>
                     </div>
                   ))}

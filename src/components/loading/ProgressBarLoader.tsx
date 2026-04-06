@@ -195,7 +195,7 @@ const ProgressBarLoader = ({
         />
       )}
       <div
-        className={`relative z-10 flex flex-col items-center gap-5 px-2 pt-10 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
+        className={`relative z-10 flex flex-col items-center gap-5 px-2 pt-4 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
         style={contentStyle}
         onClick={handleContinue}
         onKeyDown={handleKeyDown}
@@ -248,7 +248,7 @@ const ProgressBarLoader = ({
             {isComplete && requireTapToContinue ? (
               <motion.p
                 key="tap-to-continue"
-                className="text-center text-[1.1rem] font-[900] lowercase"
+                className="text-center text-[1.3rem] font-[900] lowercase"
                 style={{ color: "#ffffff" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
@@ -263,7 +263,7 @@ const ProgressBarLoader = ({
             ) : phraseVisible ? (
               <motion.p
                 key={safePhrases[phraseIndex]}
-                className="text-center text-[1.1rem] font-[900] lowercase text-white"
+                className="text-center text-[1.3rem] font-[900] lowercase text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, -4, 0] }}
                 exit={{ opacity: 0 }}

@@ -172,7 +172,74 @@ const HighlightedPromptArea = ({
 };
 
 /* ── Expression options ── */
-const EXPRESSIONS = ["casual smile", "straight face", "big smile", "pout"] as const;
+const EXPRESSION_OPTIONS = [
+  { value: "casual smile", label: "casual smile 😊" },
+  { value: "straight face", label: "straight face 😐" },
+  { value: "big smile", label: "big smile 😁" },
+  { value: "pout", label: "pout 😘" },
+] as const;
+
+/* ── Expression dropdown (custom, matching character selector style) ── */
+const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = EXPRESSION_OPTIONS.find((o) => o.value === value) ?? EXPRESSION_OPTIONS[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div>
+      <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
+      <div className="relative" ref={ref}>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
+          style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222" }}
+        >
+          <span className="flex-1 text-left text-base font-[900] lowercase text-foreground">{selected.label}</span>
+          <ChevronDown
+            size={18}
+            strokeWidth={2.5}
+            className={`text-foreground/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.15 }}
+              className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
+              style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
+            >
+              {EXPRESSION_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => { onChange(opt.value); setOpen(false); }}
+                  className={`flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase ${value === opt.value ? "bg-white/5" : "hover:bg-white/5"}`}
+                  style={{ color: value === opt.value ? "#facc15" : "#fff" }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 
 /* ── Create button component ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
@@ -513,22 +580,7 @@ const Index = () => {
           </div>
 
           {/* Expression dropdown */}
-          <div>
-            <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
-            <div className="relative">
-              <select
-                value={expression}
-                onChange={(e) => setExpression(e.target.value)}
-                className="w-full h-14 appearance-none px-4 text-base font-[900] lowercase text-foreground focus:outline-none cursor-pointer"
-                style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222" }}
-              >
-                {EXPRESSIONS.map((expr) => (
-                  <option key={expr} value={expr}>{expr}</option>
-                ))}
-              </select>
-              <ChevronDown size={18} strokeWidth={2.5} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground/40" />
-            </div>
-          </div>
+          <ExpressionDropdown value={expression} onChange={setExpression} />
 
           {/* Prompt */}
           <div className="relative">
