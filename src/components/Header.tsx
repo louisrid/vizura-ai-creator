@@ -173,7 +173,7 @@ const Header = () => {
         className="sticky top-0"
         style={{
           zIndex: 9990,
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.7) 60%, transparent 100%)",
+          background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 20%, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.12) 88%, transparent 100%)",
           paddingBottom: 36,
         }}
       >

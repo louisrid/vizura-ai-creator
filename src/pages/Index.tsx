@@ -541,7 +541,9 @@ const Index = () => {
           </div>
 
           {/* Create button */}
-          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          <div className="pt-2">
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          </div>
         </div>
 
         {error && (
