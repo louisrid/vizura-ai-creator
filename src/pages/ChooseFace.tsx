@@ -677,7 +677,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: "rgba(0,224,255,0.08)",
+                      backgroundColor: "#111111",
                       border: "2px solid rgba(0,224,255,0.25)",
                       color: "#00e0ff",
                     }}
