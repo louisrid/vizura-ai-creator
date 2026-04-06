@@ -14,6 +14,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
+import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "vizura_character_draft";
