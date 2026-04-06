@@ -374,11 +374,11 @@ function extractNegativeKeywords(negativeText: string): string {
     .trim();
 }
 
-/* ── fal.ai Seedream: text-to-image ───────────────────── */
-async function falTextToImage(prompt: string, negativePrompt: string, apiKey: string): Promise<string | null> {
+/* ── fal.ai FLUX: text-to-image ────────────────────────── */
+async function falTextToImage(prompt: string, apiKey: string): Promise<string | null> {
   console.log("falTextToImage calling:", prompt.slice(0, 120));
 
-  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/text-to-image", {
+  const response = await fetch("https://fal.run/fal-ai/flux-2-pro", {
     method: "POST",
     signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
     headers: {
@@ -387,7 +387,6 @@ async function falTextToImage(prompt: string, negativePrompt: string, apiKey: st
     },
     body: JSON.stringify({
       prompt,
-      negative_prompt: negativePrompt,
     }),
   });
 
@@ -408,16 +407,15 @@ async function falTextToImage(prompt: string, negativePrompt: string, apiKey: st
   return typeof url === "string" && url.trim().length > 0 ? url : null;
 }
 
-/* ── fal.ai Seedream: image edit ──────────────────────── */
+/* ── fal.ai FLUX: image edit ──────────────────────────── */
 async function falImageEdit(
   prompt: string,
   imageUrls: string[],
-  negativePrompt: string,
   apiKey: string
 ): Promise<string | null> {
   console.log("falImageEdit calling with", imageUrls.length, "reference images");
 
-  const response = await fetch("https://fal.run/fal-ai/bytedance/seedream/v4.5/edit", {
+  const response = await fetch("https://fal.run/fal-ai/flux-2-pro", {
     method: "POST",
     signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
     headers: {
@@ -427,7 +425,6 @@ async function falImageEdit(
     body: JSON.stringify({
       prompt,
       image_urls: imageUrls,
-      negative_prompt: negativePrompt,
     }),
   });
 
