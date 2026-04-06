@@ -9,6 +9,7 @@ interface SubscriptionContextType {
   loading: boolean;
   refetch: () => Promise<void>;
   optimisticSubscribe: () => void;
+  optimisticUnsubscribe: () => void;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
