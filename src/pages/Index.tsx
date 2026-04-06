@@ -83,8 +83,8 @@ const ToggleBox = ({ label, options, value, onChange }: {
 
 /* ── Static placeholder — tells user what to type ── */
 const useStaticPlaceholder = (charName: string) => {
-  const name = charName || "luna";
-  return `describe scene, outfit & extras — e.g. "${name} in a café, wearing a white sundress"`;
+  const name = charName || "sara";
+  return `e.g. ${name} standing in her bedroom wearing a pink hoodie`;
 };
 
 const escapeHtml = (text: string) =>
@@ -172,7 +172,7 @@ const HighlightedPromptArea = ({
 };
 
 /* ── Expression options ── */
-const EXPRESSIONS = ["happy", "serious", "flirty", "surprised", "playful", "confident"] as const;
+const EXPRESSIONS = ["casual smile", "straight face", "big smile", "pout"] as const;
 
 /* ── Create button component ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
@@ -219,7 +219,7 @@ const Index = () => {
 
   const [photoType, setPhotoType] = useState("selfie");
   const [photoRatio, setPhotoRatio] = useState("3:4");
-  const [expression, setExpression] = useState("happy");
+  const [expression, setExpression] = useState("casual smile");
 
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -512,9 +512,27 @@ const Index = () => {
             <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
           </div>
 
+          {/* Expression dropdown */}
+          <div>
+            <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
+            <div className="relative">
+              <select
+                value={expression}
+                onChange={(e) => setExpression(e.target.value)}
+                className="w-full h-14 appearance-none px-4 text-base font-[900] lowercase text-foreground focus:outline-none cursor-pointer"
+                style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222" }}
+              >
+                {EXPRESSIONS.map((expr) => (
+                  <option key={expr} value={expr}>{expr}</option>
+                ))}
+              </select>
+              <ChevronDown size={18} strokeWidth={2.5} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground/40" />
+            </div>
+          </div>
+
           {/* Prompt */}
           <div className="relative">
-            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe the scene</span>
+            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
               value={prompt}
               onChange={setPrompt}
@@ -527,29 +545,6 @@ const Index = () => {
                 </div>
               }
             />
-          </div>
-
-          {/* Expression toggle */}
-          <div>
-            <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
-            <div className="grid grid-cols-3 gap-2">
-              {EXPRESSIONS.map((expr) => {
-                const isSelected = expression === expr;
-                return (
-                  <button
-                    key={expr}
-                    type="button"
-                    onClick={() => setExpression(expr)}
-                    className="flex items-center justify-center rounded-2xl py-[10px] text-[14px] font-extrabold lowercase transition-all border-2"
-                    style={isSelected
-                      ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))", borderColor: "hsl(var(--neon-yellow))" }
-                      : { backgroundColor: "#111", borderColor: "#222", color: "rgba(255,255,255,0.48)" }}
-                  >
-                    {expr}
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
           {/* Reference section — disabled */}
