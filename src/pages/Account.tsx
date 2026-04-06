@@ -62,13 +62,13 @@ const Account = () => {
           {subscribed ? (
             <div
               className="w-full h-14 md:h-16 rounded-2xl text-base md:text-lg font-extrabold lowercase flex items-center justify-center pointer-events-none"
-              style={{ backgroundColor: "hsl(var(--member-green) / 0.82)", color: "hsl(var(--neon-green-foreground))" }}
+              style={{ backgroundColor: "hsl(var(--member-green) / 0.65)", color: "hsl(var(--neon-green-foreground))" }}
             >
               subscribed
             </div>
           ) : (
             <button
-              className="w-full h-14 md:h-16 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-base md:text-lg font-extrabold lowercase hover:opacity-90 transition-all"
+              className="w-full h-16 md:h-[72px] rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-lg md:text-xl font-extrabold lowercase hover:opacity-90 transition-all"
               onClick={handleSubscribe}
             >
               subscribe
@@ -76,7 +76,7 @@ const Account = () => {
           )}
 
           {subscribed && (
-            <div className="mb-10 pt-3">
+            <div className="flex justify-center pt-3 mb-0">
               <button
                 className="h-10 md:h-11 rounded-2xl px-5 text-xs md:text-sm font-extrabold lowercase transition-all hover:opacity-90"
                 style={{ backgroundColor: "hsl(var(--destructive-surface))", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
@@ -87,7 +87,8 @@ const Account = () => {
             </div>
           )}
 
-          <div className="md:grid md:grid-cols-2 md:gap-3 space-y-3 md:space-y-0">
+          <div className={`${subscribed ? "mt-10" : "mt-5"}`}>
+          <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0">
             <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
               <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
               <div className="flex-1 min-w-0">
@@ -126,8 +127,9 @@ const Account = () => {
               </div>
             )}
           </div>
+          </div>
 
-          <Button variant="outline" className="w-full h-12 md:h-14 text-sm md:text-base mt-4" onClick={handleSignOut}>
+          <Button variant="outline" className="w-full h-12 md:h-14 text-sm md:text-base mt-5" onClick={handleSignOut}>
             <LogOut size={16} strokeWidth={2.5} />
             sign out
           </Button>
