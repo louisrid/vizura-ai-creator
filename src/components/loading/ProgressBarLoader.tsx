@@ -195,8 +195,9 @@ const ProgressBarLoader = ({
         />
       )}
       <div
-        className={`relative z-10 flex flex-col items-center gap-5 px-2 pt-4 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
-        style={contentStyle}
+        className={`relative z-10 flex flex-col items-center gap-5 px-2 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
+        style={{ ...contentStyle, marginTop: "-12px" }}
+        
         onClick={handleContinue}
         onKeyDown={handleKeyDown}
         role={isComplete && requireTapToContinue ? "button" : undefined}
