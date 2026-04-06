@@ -169,8 +169,10 @@ const Header = () => {
 
   return (
     <>
+      {/* Spacer that reserves header height in document flow */}
+      <div style={{ height: 80 }} aria-hidden="true" />
       <header
-        className="sticky top-0 left-0 right-0"
+        className="fixed top-0 left-0 right-0"
         style={{
           zIndex: 9990,
           background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background) / 0.98) 15%, hsl(var(--background) / 0.94) 30%, hsl(var(--background) / 0.85) 45%, hsl(var(--background) / 0.68) 60%, hsl(var(--background) / 0.42) 75%, hsl(var(--background) / 0.15) 90%, transparent 100%)",
@@ -183,7 +185,6 @@ const Header = () => {
             <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
               vizura
             </button>
-            {/* User status icon — right of logo */}
             {isLoggedIn && (
               <button
                 onClick={() => navigate("/account")}
