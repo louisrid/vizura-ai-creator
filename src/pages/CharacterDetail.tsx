@@ -57,31 +57,25 @@ const CharacterDetail = () => {
     if (user) fetch();
   }, [user, id]);
 
-  // Realtime subscription for character updates (angle/body images)
+  // Poll for character updates (angle/body images arriving after creation)
   useEffect(() => {
-    if (!user || !id) return;
+    if (!user || !id || !character) return;
+    const needsUpdate = !character.face_angle_url || !character.body_anchor_url;
+    if (!needsUpdate) return;
 
-    const channel = supabase
-      .channel(`character-${id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'characters',
-          filter: `id=eq.${id}`,
-        },
-        (payload) => {
-          const updated = payload.new as any;
-          setCharacter((prev) => prev ? { ...prev, ...updated } : prev);
-        }
-      )
-      .subscribe();
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("id", id)
+        .eq("user_id", user.id)
+        .single();
+      if (data) setCharacter(data as unknown as Character);
+      if (data?.face_angle_url && data?.body_anchor_url) clearInterval(interval);
+    }, 3000);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, id]);
+    return () => clearInterval(interval);
+  }, [user, id, character?.face_angle_url, character?.body_anchor_url]);
 
   const handleDelete = async () => {
     if (!character) return;
