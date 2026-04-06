@@ -47,11 +47,24 @@ const ChooseFace = () => {
     freshCreation?: boolean;
   }) || {};
 
-  // When arriving from a fresh character creation, always nuke cached faces
-  const isFreshCreation = !!stateFresh;
+  // When arriving from a fresh character creation, nuke cached faces — but only
+  // on the very first mount.  After processing, replace the history state so a
+  // browser refresh does NOT re-trigger the wipe.
+  const freshProcessedRef = useRef(false);
+  const isFreshCreation = !!stateFresh && !freshProcessedRef.current;
   if (isFreshCreation) {
+    freshProcessedRef.current = true;
     sessionStorage.removeItem(FACE_STORAGE_KEY);
   }
+
+  // Strip freshCreation from history state so a refresh keeps cached faces
+  useEffect(() => {
+    if (stateFresh) {
+      const { freshCreation: _drop, ...rest } = (location.state || {}) as Record<string, unknown>;
+      window.history.replaceState({ ...window.history.state, usr: rest }, "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const prompt = statePrompt || sessionStorage.getItem("vizura_guided_prompt") || undefined;
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("vizura_pending_char_id") || undefined);
