@@ -20,7 +20,7 @@ const NEGATIVE_INSTRUCTION =
   "Do not generate plastic skin, waxy skin, overly smooth skin, unrealistic skin texture, ai artifacts, dslr, 4k, hdr, studio lighting, artificial lighting, heavy blur, depth of field, bokeh, blurry, soft focus, bad anatomy, distorted proportions, deformed, extra limbs, missing limbs, ugly, old, aged skin, wrinkles, bony, overly muscular, masculine, out of frame, bad framing, cropped, cut off limbs, nipples, areola, exposed genitals.";
 
 const SELFIE_PREFIX =
-  "front camera perspective, slight wide angle distortion, casual angle, one arm extended holding the phone camera, other arm visible in frame doing something natural, only one arm holding camera never both arms visible holding phone, iPhone selfie";
+  "front camera perspective, slight wide angle distortion, casual angle, STRICTLY ONE ARM ONLY extended toward the camera holding the phone, the other arm must be down at her side or behind her or resting naturally NOT holding a phone, absolutely NO two arms reaching toward the camera, only one single arm is holding the camera phone, selfie perspective, iPhone selfie";
 
 const PHOTO_PREFIX =
   "third person framing, composed perspective, natural photography angle";
