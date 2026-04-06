@@ -256,7 +256,7 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[400px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[200px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
@@ -301,8 +301,8 @@ const Home = () => {
                 borderRadius: 12,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#facc15",
-                backgroundColor: "rgba(250,204,21,0.06)",
-                border: "1.5px solid rgba(250,204,21,0.2)",
+                backgroundColor: "#111111",
+                border: "1.5px solid rgba(250,204,21,0.25)",
               }}
             >
               <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#facc15" }}>create<br />photo</span>
@@ -317,7 +317,7 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase text-white flex items-center gap-1.5">🖼️ latest photos</h2>
-              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
+              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "1.5px solid rgba(250,204,21,0.25)", borderRadius: 10 }}>
                 see all →
               </button>
             </div>
@@ -356,7 +356,7 @@ const Home = () => {
           <section>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase text-white flex items-center gap-1.5">🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
+              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "1.5px solid rgba(250,204,21,0.25)", borderRadius: 10 }}>
                 manage →
               </button>
             </div>
@@ -418,7 +418,7 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-5xl mx-auto px-10 pt-4 pb-[400px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-5xl mx-auto px-10 pt-4 pb-[200px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
@@ -446,7 +446,7 @@ const Home = () => {
             <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-[900] lowercase text-white">latest photos</h2>
-                <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
+                <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "1.5px solid rgba(250,204,21,0.25)", borderRadius: 10 }}>
                   see all →
                 </button>
               </div>
@@ -478,7 +478,7 @@ const Home = () => {
           <section className="mt-6 p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-[900] lowercase text-white flex items-center gap-2">🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "rgba(250,204,21,0.06)", border: "1.5px solid rgba(250,204,21,0.2)", borderRadius: 10 }}>
+              <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "1.5px solid rgba(250,204,21,0.25)", borderRadius: 10 }}>
                 manage →
               </button>
             </div>

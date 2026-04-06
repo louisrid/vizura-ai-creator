@@ -36,36 +36,40 @@ const PHOTO_LOADING_PHRASES = [
   "final touches…",
 ];
 
-/* ── Toggle box (new design — contained in a rounded box) ── */
+/* ── Toggle box (new design — contained in a rounded box with dividers) ── */
 const ToggleBox = ({ label, options, value, onChange }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
 }) => (
   <div className="flex-1 flex flex-col gap-2">
-    <span className="text-sm font-[900] lowercase text-white">{label}</span>
+    <span className="text-base font-[900] lowercase text-white">{label}</span>
     <div
-      className="flex gap-1.5 p-1.5"
+      className="flex items-stretch p-1.5"
       style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111111" }}
     >
-      {options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          onClick={() => onChange(opt)}
-          className="flex-1 flex items-center justify-center transition-all"
-          style={{
-            borderRadius: 10,
-            padding: "10px 0",
-            fontSize: 15,
-            fontWeight: 800,
-            textTransform: "lowercase" as const,
-            ...(value === opt
-              ? { backgroundColor: "#facc15", color: "#000" }
-              : { backgroundColor: "transparent", color: "rgba(255,255,255,0.45)" }
-            ),
-          }}
-        >
-          {opt}
-        </button>
+      {options.map((opt, i) => (
+        <div key={opt} className="flex-1 flex items-stretch">
+          {i > 0 && (
+            <div className="w-[1px] my-1.5" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+          )}
+          <button
+            type="button"
+            onClick={() => onChange(opt)}
+            className="flex-1 flex items-center justify-center transition-all"
+            style={{
+              borderRadius: 10,
+              padding: "10px 0",
+              fontSize: 15,
+              fontWeight: 800,
+              textTransform: "lowercase" as const,
+              ...(value === opt
+                ? { backgroundColor: "#facc15", color: "#000" }
+                : { backgroundColor: "transparent", color: "rgba(255,255,255,0.45)" }
+              ),
+            }}
+          >
+            {opt}
+          </button>
+        </div>
       ))}
     </div>
   </div>
@@ -122,7 +126,7 @@ const HighlightedPromptArea = ({
     <div className="relative">
       {value && charName && (
         <div
-          className="pointer-events-none absolute inset-0 px-4 py-3 text-sm font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
+          className="pointer-events-none absolute inset-0 px-4 py-3 text-lg font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
           style={{ wordBreak: "break-word" }}
           aria-hidden
           dangerouslySetInnerHTML={{ __html: highlightedHtml }}
@@ -133,7 +137,9 @@ const HighlightedPromptArea = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={6}
-        className="w-full resize-none px-4 py-3 text-sm font-[900] lowercase text-foreground focus:outline-none transition-colors"
+        spellCheck={false}
+        autoCorrect="off"
+        className="w-full resize-none px-4 py-3 text-lg font-[900] lowercase text-foreground focus:outline-none transition-colors"
         style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111", caretColor: "hsl(var(--foreground))" }}
       />
       {!value && placeholder}
@@ -342,13 +348,13 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-40">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-[200px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-7">
 
           {/* Character selector + Photo box — narrower (75%) */}
           <div className="w-[75%] mx-auto flex flex-col gap-5">
@@ -488,7 +494,7 @@ const Index = () => {
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={placeholder.text}
-                      className="text-sm font-extrabold lowercase text-foreground/30"
+                      className="text-lg font-extrabold lowercase text-foreground/30"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: placeholder.visible ? 1 : 0 }}
                       exit={{ opacity: 0 }}
@@ -535,7 +541,9 @@ const Index = () => {
           </div>
 
           {/* Create button */}
-          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          <div className="pt-2">
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          </div>
         </div>
 
         {error && (

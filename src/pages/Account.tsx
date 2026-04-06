@@ -60,7 +60,7 @@ const Account = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       <CelebrationOverlay active={justSubscribed} onDone={() => setJustSubscribed(false)} />
-      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[400px]">
+      <main className="w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-1 pb-[200px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
@@ -237,7 +237,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-1 pb-[400px]">
+      <main className="mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-1 pb-[200px]">
         <div className="mb-4 flex items-center gap-3">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
@@ -272,7 +272,9 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            spellCheck={false}
+            autoCorrect="off"
+            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
@@ -282,7 +284,9 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            spellCheck={false}
+            autoCorrect="off"
+            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
