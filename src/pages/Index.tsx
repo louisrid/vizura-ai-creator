@@ -494,7 +494,7 @@ const Index = () => {
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={placeholder.text}
-                      className="text-sm font-extrabold lowercase text-foreground/30"
+                      className="text-lg font-extrabold lowercase text-foreground/30"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: placeholder.visible ? 1 : 0 }}
                       exit={{ opacity: 0 }}
