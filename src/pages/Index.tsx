@@ -112,22 +112,29 @@ const HighlightedPromptArea = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  /* Build highlighted HTML: character name turns yellow only when
+     it appears as a complete word (followed by space, punctuation, or EOL) */
   const highlightedHtml = useMemo(() => {
     if (!charName || !value) return "";
-    const regex = new RegExp(`(${charName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+    const escaped = charName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // Match name only when followed by a word boundary (space, comma, period, end of string)
+    const regex = new RegExp(`(${escaped})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
     return value
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(regex, '<mark class="text-neon-yellow bg-transparent font-extrabold">$1</mark>');
+      .replace(regex, '<span style="color:#facc15">$1</span>');
   }, [value, charName]);
+
+  const hasHighlight = !!(charName && value && highlightedHtml.includes('style="color:#facc15"'));
 
   return (
     <div className="relative">
-      {value && charName && (
+      {/* Overlay that renders colored text — visible when highlighting */}
+      {hasHighlight && (
         <div
-          className="pointer-events-none absolute inset-0 px-4 py-3 text-lg font-extrabold lowercase text-transparent whitespace-pre-wrap break-words overflow-hidden"
-          style={{ wordBreak: "break-word" }}
+          className="pointer-events-none absolute inset-0 px-4 py-3 text-lg font-[900] lowercase whitespace-pre-wrap break-words overflow-hidden"
+          style={{ wordBreak: "break-word", color: "hsl(var(--foreground))" }}
           aria-hidden
           dangerouslySetInnerHTML={{ __html: highlightedHtml }}
         />
@@ -139,8 +146,14 @@ const HighlightedPromptArea = ({
         rows={6}
         spellCheck={false}
         autoCorrect="off"
-        className="w-full resize-none px-4 py-3 text-lg font-[900] lowercase text-foreground focus:outline-none transition-colors"
-        style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#111111", caretColor: "hsl(var(--foreground))" }}
+        className="w-full resize-none px-4 py-3 text-lg font-[900] lowercase focus:outline-none transition-colors"
+        style={{
+          borderRadius: 16,
+          border: "2px solid #222",
+          backgroundColor: "#111111",
+          caretColor: "hsl(var(--foreground))",
+          color: hasHighlight ? "transparent" : "hsl(var(--foreground))",
+        }}
       />
       {!value && placeholder}
     </div>

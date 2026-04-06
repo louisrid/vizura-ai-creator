@@ -106,7 +106,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg px-4 pt-4 pb-[400px]">
+      <main className="mx-auto w-full max-w-lg px-4 pt-4 pb-[200px]">
         <div className="mb-8 flex items-center gap-3">
           <button
             type="button"
@@ -119,7 +119,7 @@ const Auth = () => {
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
-        <div className="rounded-2xl border-[2px] border-border bg-card p-5 space-y-3">
+        <div className="rounded-2xl border-2 border-[#1a1a1a] p-5 space-y-3" style={{ backgroundColor: "#111111" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -154,7 +154,10 @@ const Auth = () => {
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            spellCheck={false}
+            autoCorrect="off"
+            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -163,7 +166,10 @@ const Auth = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-            className="w-full h-12 rounded-2xl border-[3px] border-border bg-secondary px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            spellCheck={false}
+            autoCorrect="off"
+            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#111111" }}
             disabled={submitting || googleLoading}
           />
 
