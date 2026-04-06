@@ -223,7 +223,7 @@ const Index = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
-  const placeholder = useCyclingPlaceholder(selectedChar?.name || "luna");
+  const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
 
   useEffect(() => {
     if (!charDropdownOpen) return;
