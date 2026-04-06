@@ -141,12 +141,12 @@ function buildCharacterTraits(char: any): string {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
   }
 
-  const Key = (char. || "regular").toLowerCase();
-  parts.push(_MAP[Key] || _MAP.regular);
+  const bodyKey = (char.body || "regular").toLowerCase();
+  parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
-  if (Key === "slim") {
+  if (bodyKey === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
-  } else if (Key === "regular" || Key === "average") {
+  } else if (bodyKey === "regular" || bodyKey === "average") {
     parts.push("soft face but not fat, no round chubby face");
   }
 
