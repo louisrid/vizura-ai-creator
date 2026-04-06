@@ -76,10 +76,10 @@ const Account = () => {
           )}
 
           {subscribed && (
-            <div className="flex justify-center pt-2">
+            <div className="flex justify-center pt-3">
               <button
                 className="mx-auto h-9 px-5 text-[11px] md:h-10 md:text-[12px] font-extrabold lowercase leading-none transition-all hover:opacity-90"
-                style={{ borderRadius: 12, backgroundColor: "hsl(var(--destructive-surface))", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
+                style={{ borderRadius: 12, backgroundColor: "#111111", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
                 onClick={handleCancel}
               >
                 cancel
@@ -87,7 +87,7 @@ const Account = () => {
             </div>
           )}
 
-          <div className="mt-16">
+          <div className="mt-24">
             <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
               <div className="border-2 border-[#1a1a1a] rounded-2xl p-3 md:p-4 flex items-center gap-3" style={{ backgroundColor: "#111111" }}>
                 <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
