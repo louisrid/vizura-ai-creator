@@ -17,23 +17,22 @@ const OVERLAY_FADE_DURATION = 0.75;
 const getRandomNameToast = () => "great choice!";
 
 /*
- * SCREEN ORDER (13 screens, internalStep 0-12):
+ * SCREEN ORDER (12 screens, internalStep 0-11):
  *  0: Hero (new first screen with rings)
  *  1: Intro
  *  2: Name input
- *  3-9: Traits
- * 10: Reference
- * 11: Create
+ *  3-8: Traits (skin, body, age, hair, hair colour, eyes — no makeup screen)
+ *  9: Reference
+ * 10: Create
  */
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"], defaultOption: "average" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
-  { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["curly", "straight", "bangs"] },
+  { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["pink", "black", "brunette", "blonde"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
-  { key: "makeup", label: "choose her makeup", emoji: "💄", options: ["natural", "classic"], defaultOption: "classic" },
 ] as const;
 
 type TraitKey = (typeof TRAITS)[number]["key"];
@@ -165,7 +164,7 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", hairStyle: "", hairColour: "", eye: "", makeup: "",
+  skin: "", bodyType: "", hairStyle: "", hairColour: "", eye: "", makeup: "classic",
   characterName: "", age: "", description: "",
   referenceImage: null, referenceStrength: 50,
 };
@@ -177,15 +176,14 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 12;
-const TOTAL_SKIP = 10;
+const TOTAL_FULL = 11;
+const TOTAL_SKIP = 9;
 
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
-    case "18-23": return "20";
-    case "24-28": return "26";
-    case "29+": return "32";
-    default: return "25";
+    case "18-24": return "18";
+    case "24+": return "24";
+    default: return "18";
   }
 };
 
@@ -314,10 +312,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isHeroSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
   const isNameSlide = internalStep === 2;
-  const isReferenceSlide = internalStep === 10;
-  const isCreateSlide = internalStep === 11;
+  const isReferenceSlide = internalStep === 9;
+  const isCreateSlide = internalStep === 10;
 
-  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
+  const currentTraitIndex = internalStep >= 3 && internalStep <= 8 ? internalStep - 3 : -1;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
@@ -631,10 +629,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
             {/* Progress dots at TOP */}
             <div className="flex items-center justify-center gap-[3px] md:gap-[5px] max-w-lg md:max-w-2xl mx-auto" style={{ padding: "0 50px", width: "100%", marginBottom: 0 }}>
-              {Array.from({ length: 12 }).map((_, i) => (
+              {Array.from({ length: 11 }).map((_, i) => (
                 <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                   flex: 1, borderRadius: 2,
-                  background: i <= Math.round(((step) / TOTAL) * 11) ? Y : "rgba(250,204,21,0.1)",
+                  background: i <= Math.round(((step) / TOTAL) * 10) ? Y : "rgba(250,204,21,0.1)",
                 }} />
               ))}
             </div>

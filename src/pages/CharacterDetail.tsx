@@ -219,7 +219,7 @@ const CharacterDetail = () => {
         <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`}>
           {imgSlot(character.face_image_url, "front")}
           {imgSlot(character.face_angle_url, "3/4 angle", "cover", regenerating)}
-          {imgSlot(character.body_anchor_url, "full body", "contain", regenerating)}
+          {imgSlot(character.body_anchor_url, "full body", "cover", regenerating)}
         </div>
       </div>
 

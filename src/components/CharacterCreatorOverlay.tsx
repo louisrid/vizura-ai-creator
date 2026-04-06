@@ -14,7 +14,7 @@ const categories = [
   { key: "skin", label: "skin", options: ["white", "tan", "asian", "black"] },
   { key: "bodyType", label: "body type", options: ["slim", "regular", "curvy"] },
   { key: "chest", label: "chest", options: ["small", "medium", "large"] },
-  { key: "hairStyle", label: "hair", options: ["straight", "curly", "bangs", "short"] },
+  { key: "hairStyle", label: "hair", options: ["straight", "wavy", "bangs", "short"] },
   { key: "hairColour", label: "hair colour", options: ["blonde", "brunette", "black", "pink"] },
   { key: "eyes", label: "eyes", options: ["brown", "blue", "green", "hazel"] },
   { key: "makeup", label: "makeup", options: ["natural", "classic"] },
