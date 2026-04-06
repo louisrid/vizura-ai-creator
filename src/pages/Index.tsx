@@ -49,7 +49,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
       {options.map((opt, i) => (
         <div key={opt} className="flex-1 flex items-stretch">
           {i > 0 && (
-            <div className="w-[1px] my-1.5" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+            <div className="w-[1px] self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.12)", margin: "6px 0" }} />
           )}
           <button
             type="button"
