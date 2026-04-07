@@ -80,7 +80,8 @@ const ResetPassword = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-[2px] border-border bg-card text-foreground pl-10 pr-4 py-3.5 text-xs font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-foreground rounded-2xl transition-colors"
+                    className="w-full border-2 border-[#1a1a1a] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
+                    style={{ backgroundColor: "#111111", borderRadius: 12 }}
                     placeholder="••••••••"
                   />
                 </div>
