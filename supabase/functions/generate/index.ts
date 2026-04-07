@@ -504,9 +504,9 @@ async function generateFaceImages(
   ];
 
   const makeupVariations = [
-    "light eyeshadow, mascara, thin eyeliner, subtle blush",
-    "light eyeshadow, mascara, thin eyeliner, subtle blush",
-    "mascara, eyeliner, subtle blush",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
+    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
   const beautyCore = "extremely attractive young-woman, feminine-soft features, soft-rounded jaw, small-rounded chin, slim face, small-delicate nose, short-neck, low-set hairline, eyes in centre of face, matte skin with visible pores and colour-variation, long hair reaching chest visible on top of white t-shirt, plump full lips with soft-pink tint, mascara, eyeliner, eyeshadow, blush, confident closed-mouth smile";
