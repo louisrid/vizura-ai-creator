@@ -172,8 +172,8 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    const layerDetail = Math.random() < 0.5 ? " with soft face-framing layers falling beside cheeks," : ",";
-    parts.push(`long straight ${toneColour} hair${layerDetail} draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    const hairTexture = Math.random() < 0.5 ? " with natural lived-in texture and slight movement" : "";
+    parts.push(`long straight ${toneColour} hair${hairTexture}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
     parts.push(`long ${toneColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
