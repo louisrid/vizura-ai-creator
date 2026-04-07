@@ -529,7 +529,25 @@ async function generateFaceImages(
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+
+    const faceTones: Record<string, string[]> = {
+      blonde: ["warm-golden blonde", "cool-ash blonde", "honey blonde"],
+      brown: ["medium-chestnut brown", "deep-chocolate brown", "dark brown"],
+      black: ["jet black", "soft black", "warm black"],
+      red: ["auburn red", "copper red", "ginger red"],
+      pink: ["soft-rose pink", "warm pink", "cool pink"],
+    };
+
+    let tonedPrompt = faceOnlyPrompt;
+    for (const [base, tones] of Object.entries(faceTones)) {
+      if (tonedPrompt.toLowerCase().includes(base)) {
+        const tone = tones[Math.floor(Math.random() * tones.length)];
+        tonedPrompt = tonedPrompt.replace(new RegExp(base, 'i'), tone);
+        break;
+      }
+    }
+
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
