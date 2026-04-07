@@ -79,8 +79,8 @@ function getClientIp(req: Request): string {
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "fair skin with warm undertone",
-  pale: "very fair pale skin with cool undertone",
+  white: "light pale skin",
+  pale: "very pale porcelain skin",
   tan: "tanned warm skin",
   asian: "asian skin tone",
   black: "rich dark skin with natural healthy glow",
@@ -506,9 +506,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large doe eyes, small upturned nose, pouty lips, heart-shaped face, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall eyes sitting low on face, compact forehead, small upturned nose, tall narrow lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "large doe eyes, small upturned nose, pouty lips, heart-shaped face, natural hair with satin finish, SAME hair style and colour as described",
+    "large doe eyes, small button nose, full pouty lips, wide heart-shaped face, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall eyes sitting low on face, compact forehead, small button nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
+    "large doe eyes, small button nose, full pouty lips, heart-shaped face, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -517,7 +517,7 @@ async function generateFaceImages(
     "visible eyeshadow, thick mascara, defined eyeliner, blush, influencer makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, compact forehead, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
