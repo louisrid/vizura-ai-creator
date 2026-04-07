@@ -14,7 +14,7 @@ import { sanitiseText } from "@/lib/sanitise";
 
 const skinOptions = ["white", "tan", "asian", "black"] as const;
 const bodyOptions = ["slim", "average", "curvy"] as const;
-const hairStyleOptions = ["long straight", "long curly", "fringe/bangs"] as const;
+const hairStyleOptions = ["long straight", "long wavy", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
 const makeupOptions = ["natural", "classic"] as const;
