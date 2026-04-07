@@ -160,9 +160,9 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-blonde" : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "icy white-blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with straight-across bangs, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
     parts.push(`long straight ${mappedHairColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
@@ -500,7 +500,7 @@ async function generateFaceImages(
    const variations = [
     "large hooded eyes, arched eyebrows, small nose, full pouty lips, defined cheekbones, warm-toned skin, smooth chin, skin with visible pores, SAME hair style and colour as described",
     "very large round doe-eyes, small button-nose, full plump lips, soft-round baby-face, smooth chin, low-set hairline, bold lashes, skin with visible pores, SAME hair style and colour as described",
-    "big wide-set eyes, tiny upturned nose, full soft cheeks, plump glossy lips, round youthful face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "youthful big bright cat-eyes, tiny nose, full glossy lips, oval face, smooth chin, low-set hairline, bold defined lashes, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
