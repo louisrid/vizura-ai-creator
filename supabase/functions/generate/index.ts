@@ -166,6 +166,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
     black: ["jet-black", "soft-black", "warm-black"],
     red: ["auburn-red", "copper-red", "ginger-red"],
     pink: ["soft-rose pink", "warm-pink", "cool-pink"],
+    ginger: ["ginger"],
   };
   const tones = hairTones[hairColour.toLowerCase()];
   const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
