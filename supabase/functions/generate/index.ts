@@ -160,7 +160,7 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "ice-platinum blonde" : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-platinum blonde" : hairColour;
   const hairTones: Record<string, string[]> = {
     blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
     brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
