@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
+import DotDecal from "@/components/DotDecal";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
