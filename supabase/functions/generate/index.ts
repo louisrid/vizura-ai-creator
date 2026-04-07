@@ -160,25 +160,14 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-platinum-blonde" : hairColour;
-  const hairTones: Record<string, string[]> = {
-    blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
-    brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
-    black: ["jet-black", "soft-black", "warm-black"],
-    red: ["auburn-red", "copper-red", "ginger-red"],
-    ginger: ["ginger", "warm-ginger", "copper-ginger"],
-    pink: ["soft-rose pink", "warm-pink", "cool-pink"],
-  };
-  const tones = hairTones[hairColour.toLowerCase()];
-  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : mappedHairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${hairColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${hairColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${hairColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
+    parts.push(`long ${hairStyle} ${hairColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
