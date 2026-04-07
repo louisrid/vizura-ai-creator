@@ -499,7 +499,7 @@ async function generateFaceImages(
    const variations = [
     "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
     "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
-    "large bright eyes positioned in centre of face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "large round doe-eyes positioned low on face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
