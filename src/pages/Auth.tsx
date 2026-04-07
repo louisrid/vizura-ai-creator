@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
+import DotDecal from "@/components/DotDecal";
 
 const Auth = () => {
   const { user, loading: authLoading, signIn, signUp } = useAuth();
@@ -105,9 +106,10 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg px-4 pt-4 pb-[250px]">
-        <div className="mb-8 flex items-center gap-3">
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-1 pb-[250px]">
+        <div className="mb-7 flex items-center gap-3">
           <button
             type="button"
             onClick={handleBack}
@@ -123,7 +125,8 @@ const Auth = () => {
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
-            className="w-full h-14 rounded-2xl bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full h-14 bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            style={{ borderRadius: 12 }}
           >
             {googleLoading ? (
               <>
@@ -156,8 +159,8 @@ const Auth = () => {
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ backgroundColor: "#111111" }}
+            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#111111", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -168,8 +171,8 @@ const Auth = () => {
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 rounded-2xl border-2 border-[#1a1a1a] px-4 text-lg font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ backgroundColor: "#111111" }}
+            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#111111", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
 
