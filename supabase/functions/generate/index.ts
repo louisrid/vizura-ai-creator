@@ -166,6 +166,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
     brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
     black: ["jet-black", "soft-black", "warm-black"],
     red: ["auburn-red", "copper-red", "ginger-red"],
+    ginger: ["ginger", "warm-ginger", "copper-ginger"],
     pink: ["soft-rose pink", "warm-pink", "cool-pink"],
   };
   const tones = hairTones[hairColour.toLowerCase()];
