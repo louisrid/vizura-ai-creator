@@ -206,6 +206,13 @@ const Storage = () => {
                 <X size={14} strokeWidth={2.5} />
               </button>
               <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh]" />
+              {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
+                <div className="px-3 pt-2.5 pb-0">
+                  <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    {expanded.prompt}
+                  </p>
+                </div>
+              )}
               <div className="p-3 flex gap-2">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
                   <Button variant="outline" className="w-full h-10 border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
