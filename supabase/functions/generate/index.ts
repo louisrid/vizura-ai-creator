@@ -169,7 +169,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
     pink: ["soft-rose pink", "warm-pink", "cool-pink"],
   };
   const tones = hairTones[hairColour.toLowerCase()];
-  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
+  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : mappedHairColour;
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
