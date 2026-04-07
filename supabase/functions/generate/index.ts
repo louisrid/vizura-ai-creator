@@ -160,14 +160,23 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
+  const hairTones: Record<string, string[]> = {
+    blonde: ["warm golden blonde", "cool ash blonde", "honey blonde"],
+    brown: ["warm chestnut brown", "cool ash brown", "rich chocolate brown"],
+    black: ["jet black", "soft black", "warm black"],
+    red: ["auburn red", "copper red", "ginger red"],
+    pink: ["soft rose pink", "warm pink", "cool pink"],
+  };
+  const tones = hairTones[hairColour.toLowerCase()];
+  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${hairColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${hairColour} hair draped over shoulders onto chest, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest with a few natural loose strands framing the face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${hairColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${hairColour} hair draped over shoulders onto chest`.trim());
+    parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
@@ -497,9 +506,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
-    "almond-shaped eyes, petite rounded nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, natural hair with subtle sheen, SAME hair style and colour as described",
+    "big wide-set eyes sitting low on face, compact forehead, small wide button nose, tall narrow lips with soft pink-red tint, soft oval face, soft rounded chin, natural hair with matte finish, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
