@@ -784,9 +784,15 @@ const ChooseFace = () => {
         <RegenerateConfirmDialog
           open={showBackConfirm}
           message={"are you sure?\nyou will lose your progress"}
-          onConfirm={() => {
+          onConfirm={async () => {
             setShowBackConfirm(false);
-            // Clear all cached state immediately
+            // Delete the in-progress character
+            if (characterId && user) {
+              try {
+                await supabase.from("characters").delete().eq("id", characterId).eq("user_id", user.id);
+              } catch {}
+            }
+            // Clear all cached state
             sessionStorage.removeItem(FACE_STORAGE_KEY);
             sessionStorage.removeItem(STORAGE_KEY);
             sessionStorage.removeItem("vizura_selected_face");
@@ -794,11 +800,7 @@ const ChooseFace = () => {
             sessionStorage.removeItem("vizura_pending_char_id");
             sessionStorage.removeItem(AUTH_RESUME_KEY);
             sessionStorage.removeItem("vizura_guided_flow_state");
-            // Navigate immediately, delete character in background
             navigate("/", { replace: true });
-            if (characterId && user) {
-              supabase.from("characters").delete().eq("id", characterId).eq("user_id", user.id).then(() => {});
-            }
           }}
           onCancel={() => setShowBackConfirm(false)}
         />
