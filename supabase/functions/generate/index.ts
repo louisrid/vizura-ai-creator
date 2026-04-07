@@ -521,8 +521,9 @@ async function generateFaceImages(
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
+    const whiteBlondePrompt = faceOnlyPrompt.replace(/\bblonde\b/gi, "white blonde");
 
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+    const positivePrompt = `${whiteBlondePrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
