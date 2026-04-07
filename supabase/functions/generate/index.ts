@@ -162,7 +162,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   const hairColour = char.hair || "";
   const hairTones: Record<string, string[]> = {
     blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
-    brown: ["light-caramel brown", "medium-chestnut brown", "deep-chocolate brown"],
+    brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
     black: ["jet-black", "soft-black", "warm-black"],
     red: ["auburn-red", "copper-red", "ginger-red"],
     pink: ["soft-rose pink", "warm-pink", "cool-pink"],
