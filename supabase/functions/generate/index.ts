@@ -172,7 +172,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${toneColour} hair with face-framing pieces falling loosely around cheeks, draped over shoulders onto chest, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
     parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
@@ -506,15 +506,15 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
+    "large round doe-eyes positioned low on face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, low-set hairline, natural hair with matte finish, SAME hair style and colour as described",
+    "large bright almond-eyes positioned low on face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
+    "soft eyeshadow, mascara, eyeliner, blush, polished natural makeup",
   ];
 
   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
