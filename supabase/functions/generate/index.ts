@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper chest centred with space above head, white t-shirt visible, long hair visible on chest, soft diffused natural window-lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture and subtle colour-variation";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -498,18 +498,18 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "youthful large hooded eyes, arched eyebrows, small nose, full pouty lips, soft-round face, smooth chin, low-set hairline, matte skin with visible pores and fine texture, SAME hair style and colour as described",
-    "youthful very large round doe-eyes positioned low on face, small button-nose, full plump lips, soft-round baby-face, smooth chin, low-set hairline, bold lashes, matte skin with visible pores and fine texture, SAME hair style and colour as described",
-    "youthful big bright cat-eyes positioned low on face, tiny button-nose, full glossy lips, soft-round face, smooth chin, low-set hairline, defined lashes, matte skin with visible pores and fine texture, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
+    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
-    "light eyeshadow, mascara, thin eyeliner, subtle blush",
-    "light eyeshadow, mascara, thin eyeliner, subtle blush",
-    "mascara, eyeliner, subtle blush",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
+    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine-soft features, soft-rounded jaw, small-rounded chin, slim face, small-delicate nose, short-neck, low-set hairline, eyes in centre of face, matte skin with visible pores and colour-variation, long hair reaching chest visible on top of white t-shirt, plump full lips with soft-pink tint, mascara, eyeliner, eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -521,7 +521,7 @@ async function generateFaceImages(
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const whiteBlondePrompt = faceOnlyPrompt.replace(/\bblonde\b/gi, "white blonde");
+    const whiteBlondePrompt = faceOnlyPrompt.replace(/\bblonde\b/gi, "cool white-blonde");
 
     const positivePrompt = `${whiteBlondePrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
