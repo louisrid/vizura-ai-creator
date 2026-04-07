@@ -170,13 +170,13 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   const tones = hairTones[hairColour.toLowerCase()];
   const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long face-framed ${toneColour} hair draped over shoulders onto chest with straight-across bangs, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair with face-framing pieces falling loosely around cheeks, draped over shoulders onto chest, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight face-framed ${toneColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long face-framed ${toneColour} wavy hair draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
+    parts.push(`long face-framed ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
