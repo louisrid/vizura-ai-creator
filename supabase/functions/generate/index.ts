@@ -160,7 +160,7 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-platinum blonde" : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-platinum-blonde" : hairColour;
   const hairTones: Record<string, string[]> = {
     blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
     brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
@@ -508,15 +508,15 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "very large round doe-eyes positioned low on face, low-set hairline, small button-nose, full pouty lips with bare-pink tint, soft-round face, smooth chin, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small button-nose, full tall lips with bare-pink tint, soft-round face, smooth chin, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
-    "large bright almond-eyes positioned low on face, low-set hairline, small button-nose, full plump lips with bare-pink tint, soft-round face, smooth chin, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
+    "low-set hairline, very large round doe-eyes positioned low on face, small button-nose, soft-round face, smooth chin, full pouty lips, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
+    "low-set hairline, very large tall doe-eyes positioned low on face, small button-nose, soft-round face, smooth chin, medium natural lips, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
+    "low-set hairline, large bright almond-eyes positioned low on face, small button-nose, soft-round face, smooth chin, full plump lips with bare-pink tint, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
-    "mascara, thin eyeliner, subtle blush, teen-influencer natural look",
-    "mascara, thin eyeliner, subtle blush, teen-influencer natural look",
-    "mascara, thin eyeliner, blush, teen-influencer natural look",
+    "mascara, thin eyeliner, hint of blush, teen-influencer natural look",
+    "mascara, thin eyeliner, teen-influencer natural look",
+    "mascara, eyeliner, subtle blush, teen-influencer natural look",
   ];
 
   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small button-nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, light eyeshadow, subtle blush, confident closed-mouth smile";
