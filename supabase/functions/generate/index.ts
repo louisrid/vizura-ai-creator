@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders only cropped just below collarbone, centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores and subtle colour variation";
+  "passport photo, plain white background, face and upper chest centred with space above head, white t-shirt visible, long hair visible on chest, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -166,7 +166,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   } else if (hairStyle.toLowerCase() === "straight") {
     parts.push(`long straight ${mappedHairColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${mappedHairColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair with soft voluminous waves draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
     parts.push(`long ${hairStyle} ${mappedHairColour} hair draped over shoulders onto chest`.trim());
   }
@@ -509,7 +509,7 @@ async function generateFaceImages(
     "mascara, eyeliner, subtle blush",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine-soft features, soft-rounded jaw, small-rounded chin, slim face, small-delicate nose, short-neck, low-set hairline, eyes in centre of face, matte skin with visible pores and colour-variation, long styled hair past shoulders, plump full lips with soft-pink tint, mascara, eyeliner, eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, feminine-soft features, soft-rounded jaw, small-rounded chin, slim face, small-delicate nose, short-neck, low-set hairline, eyes in centre of face, matte skin with visible pores and colour-variation, long hair reaching chest visible on top of white t-shirt, plump full lips with soft-pink tint, mascara, eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
