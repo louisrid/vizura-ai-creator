@@ -160,25 +160,14 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-platinum-blonde" : hairColour;
-  const hairTones: Record<string, string[]> = {
-    blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
-    brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
-    black: ["jet-black", "soft-black", "warm-black"],
-    red: ["auburn-red", "copper-red", "ginger-red"],
-    ginger: ["ginger", "warm-ginger", "copper-ginger"],
-    pink: ["soft-rose pink", "warm-pink", "cool-pink"],
-  };
-  const tones = hairTones[hairColour.toLowerCase()];
-  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : mappedHairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${hairColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${hairColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${hairColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
+    parts.push(`long ${hairStyle} ${hairColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
@@ -508,18 +497,18 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "low-set hairline, very large round doe-eyes positioned low on face, small button-nose, soft-round face, smooth chin, full pouty lips, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
-    "low-set hairline, very large tall doe-eyes positioned low on face, small button-nose, soft-round face, smooth chin, medium natural lips, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
-    "low-set hairline, large bright almond-eyes positioned low on face, small button-nose, soft-round face, smooth chin, full plump lips with bare-pink tint, matte skin with visible pores and skin-texture, SAME hair style and colour as described",
+    "large doe eyes, small button nose, full pouty lips, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
+    "very large doe eyes, small button nose, natural lips, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
+    "large bright eyes, small button nose, full plump lips, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
-    "mascara, thin eyeliner, hint of blush, teen-influencer natural look",
-    "mascara, thin eyeliner, teen-influencer natural look",
-    "mascara, eyeliner, subtle blush, teen-influencer natural look",
+    "mascara, thin eyeliner, subtle blush",
+    "mascara, thin eyeliner",
+    "mascara, eyeliner, subtle blush",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small button-nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, light eyeshadow, subtle blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
