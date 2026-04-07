@@ -172,9 +172,9 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${toneColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
     parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
   }
@@ -506,18 +506,18 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "large round doe-eyes positioned low on face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, natural hair with satin finish, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
+    "visible eyeshadow, thick mascara, defined eyeliner, blush, influencer makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -529,7 +529,25 @@ async function generateFaceImages(
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+
+    const faceTones: Record<string, string[]> = {
+      blonde: ["warm-golden blonde", "cool-ash blonde", "honey blonde"],
+      brown: ["medium-chestnut brown", "deep-chocolate brown", "dark brown"],
+      black: ["jet black", "soft black", "warm black"],
+      red: ["auburn red", "copper red", "ginger red"],
+      pink: ["soft-rose pink", "warm pink", "cool pink"],
+    };
+
+    let tonedPrompt = faceOnlyPrompt;
+    for (const [base, tones] of Object.entries(faceTones)) {
+      if (tonedPrompt.toLowerCase().includes(base)) {
+        const tone = tones[Math.floor(Math.random() * tones.length)];
+        tonedPrompt = tonedPrompt.replace(new RegExp(base, 'i'), tone);
+        break;
+      }
+    }
+
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -537,7 +555,7 @@ async function generateFaceImages(
     while (retries <= maxRetries) {
       try {
         const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
+          ? await routerTextToImage(`${tonedPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
           : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
