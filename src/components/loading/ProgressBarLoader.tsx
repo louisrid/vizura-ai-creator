@@ -153,33 +153,7 @@ const ProgressBarLoader = ({
     if (!completeNow || completedRef.current || accelStartRef.current !== null) return;
     accelStartRef.current = window.performance.now();
     accelStartPctRef.current = pctRef.current;
-
-    // Ensure rAF loop is running (it may have stopped in a background tab)
-    if (animationFrameRef.current === null) {
-      animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
-    }
-
-    // Fallback: if tab is backgrounded and rAF doesn't fire, force completion
-    const fallbackTimer = window.setTimeout(() => {
-      if (!completedRef.current) finish();
-    }, ACCEL_DURATION_MS + 200);
-
-    // Also catch visibility returning while accelerating
-    const onVisible = () => {
-      if (document.visibilityState === "visible" && !completedRef.current) {
-        updateProgress(window.performance.now());
-        if (animationFrameRef.current === null) {
-          animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
-        }
-      }
-    };
-    document.addEventListener("visibilitychange", onVisible);
-
-    return () => {
-      window.clearTimeout(fallbackTimer);
-      document.removeEventListener("visibilitychange", onVisible);
-    };
-  }, [completeNow, finish, scheduleNextFrame, updateProgress]);
+  }, [completeNow]);
 
   useEffect(() => {
     if (isComplete || safePhrases.length <= 1) {

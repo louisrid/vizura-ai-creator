@@ -30,7 +30,7 @@ const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"], defaultOption: "average" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
-  { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["pink", "black", "brunette", "blonde", "ginger"] },
+  { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["pink", "black", "brunette", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
 ] as const;
