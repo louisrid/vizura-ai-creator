@@ -102,7 +102,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks covering cheekbones, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face, rounded head shape";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks covering cheekbones, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face";
   return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
@@ -516,10 +516,10 @@ async function generateFaceImages(
   const makeupVariations = [
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "mascara, eyeliner, subtle blush",
+    "mascara, thin eyeliner, subtle blush",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, light eyeshadow, subtle blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small button-nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, light eyeshadow, subtle blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
