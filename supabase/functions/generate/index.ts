@@ -174,7 +174,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   } else if (hairStyle.toLowerCase() === "straight") {
     parts.push(`long straight ${toneColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${toneColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
     parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
   }
