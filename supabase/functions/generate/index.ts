@@ -497,19 +497,27 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-   const variations = [
-    "large round doe-eyes, small button nose, full pouty lips, soft heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large round doe-eyes positioned low on face, tiny button-nose, full soft lips, soft round baby-face, smooth chin, low-set hairline, skin with visible pores, natural hair with matte finish, SAME hair style and colour as described",
-    "very large wide-set eyes positioned low on face, small button-nose, full plump glossy lips, soft round face, smooth chin, low-set hairline, bold lashes, skin with visible pores, natural hair with satin finish, SAME hair style and colour as described",
+   const allVariations = [
+    "large round doe-eyes, small button-nose, full pouty lips, soft heart-shaped face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
+    "large round doe-eyes, small button-nose, full pouty lips, soft heart-shaped face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
+    "very large round doe-eyes positioned low on face, tiny button-nose, full soft lips, soft round baby-face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
+    "very large round doe-eyes positioned low on face, tiny button-nose, full soft lips, soft round baby-face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
+    "large almond cat-eyes with bold lashes, tiny nose, full pouty lips, slim face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
+    "big bright wide-eyes, small button-nose, full plump glossy lips, soft round face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
+    "large hooded eyes, arched eyebrows, small nose, full pouty lips, soft round face, smooth chin, low-set hairline, matte skin with visible pores and fine detail, SAME hair style and colour as described",
   ];
+  const shuffled = [...allVariations].sort(() => Math.random() - 0.5);
+  const variations = shuffled.slice(0, 3);
 
-  const makeupVariations = [
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
+  const allMakeup = [
+    "mascara, thin eyeliner, subtle blush",
+    "mascara, thin eyeliner, subtle blush",
+    "mascara, eyeliner, subtle blush",
+    "bold lashes, thin eyeliner, hint of blush",
   ];
+  const makeupVariations = allMakeup.sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const beautyCore = "extremely attractive young-woman, youthful feminine soft features, soft rounded jaw, small rounded chin, slim face, small button nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident natural closed-mouth smile, attractive young influencer";
+   const beautyCore = "extremely attractive young-woman, youthful feminine soft features, soft rounded jaw, small rounded chin, slim face, small button nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident natural closed-mouth smile, attractive young influencer";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -523,7 +531,8 @@ async function generateFaceImages(
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
     const whiteBlondePrompt = faceOnlyPrompt.replace(/\bblonde\b/gi, "cool white-blonde");
 
-    const positivePrompt = `${whiteBlondePrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+    const freckleChance = Math.random() < 0.15 ? ", light subtle freckles across nose" : "";
+    const positivePrompt = `${whiteBlondePrompt}, ${beautyCore}, ${makeupVar}, ${variation}${freckleChance}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
