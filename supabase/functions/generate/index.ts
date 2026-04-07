@@ -161,15 +161,13 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${hairColour} hair with straight-across bangs fringe, long flowing hair clearly visible past the shoulders and down the back, full straight fringe across the forehead, hair must be long and flowing not tucked behind shoulders, IMPORTANT: must show long hair with bangs fringe in every image`.trim());
+    parts.push(`long ${hairColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${hairColour} hair, hair parted naturally, IMPORTANT: must be straight hair in every image`.trim());
-  } else if (hairStyle.toLowerCase() === "curly") {
-    parts.push(`${hairColour} soft wavy hair with loose natural waves, IMPORTANT: must have wavy hair in every image`.trim());
-  } else if (hairStyle.toLowerCase() === "short") {
-    parts.push(`short ${hairColour} hair, IMPORTANT: must have short hair in every image`.trim());
+    parts.push(`long straight ${hairColour} hair draped over shoulders onto chest, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+  } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
+    parts.push(`long ${hairColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`${hairStyle} ${hairColour} hair`.trim());
+    parts.push(`long ${hairStyle} ${hairColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
@@ -500,7 +498,7 @@ async function generateFaceImages(
 ): Promise<string[]> {
    const variations = [
     "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
-    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
+    "almond-shaped eyes, petite rounded nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
     "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
   ];
 
