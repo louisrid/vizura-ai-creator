@@ -41,9 +41,10 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="w-full max-w-lg mx-auto px-4 pt-14 pb-[250px]">
-        <div className="flex items-center gap-3 mb-8">
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-1 pb-[250px]">
+        <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">reset password</PageTitle>
         </div>
