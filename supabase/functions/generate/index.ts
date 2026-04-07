@@ -79,8 +79,8 @@ function getClientIp(req: Request): string {
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "pale white skin",
-  pale: "very pale porcelain-white skin",
+  white: "pale fair skin",
+  pale: "very pale fair skin with cool undertone",
   tan: "tanned warm skin",
   asian: "asian skin tone",
   black: "rich dark skin with natural healthy glow",
@@ -88,11 +88,11 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  slim: "slim toned body, narrow waist, lean figure",
-  regular: "soft feminine body, defined waist, feminine hips",
-  average: "soft feminine body, defined waist, feminine hips",
-  curvy: "curvy feminine figure, wide hips, hourglass shape",
-  thick: "curvy feminine figure, wide hips, hourglass shape",
+  slim: "slim toned body, smaller chest, narrow waist, lean face",
+  regular: "soft feminine body, large bust DD, defined waist, soft face",
+  average: "soft feminine body, large bust DD, defined waist, soft face",
+  curvy: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
+  thick: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
@@ -151,6 +151,11 @@ function buildCharacterTraits(char: any): string {
   const bodyKey = (char.body || "regular").toLowerCase();
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
+  if (bodyKey === "slim") {
+    parts.push("lean angular face, no roundness or puffiness in face");
+  } else if (bodyKey === "regular" || bodyKey === "average") {
+    parts.push("soft face but not fat, no round chubby face");
+  }
   
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
@@ -167,10 +172,9 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    const hairTexture = Math.random() < 0.5 ? " with natural lived-in texture and slight movement" : "";
-    parts.push(`long straight ${toneColour} hair${hairTexture}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest with a few loose strands framing face, hair parted naturally, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${toneColour} wavy hair draped over shoulders onto chest with loose natural waves, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
     parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
   }
@@ -502,15 +506,15 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "very large round wide-open eyes positioned low on face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
-    "narrow elegant model-eyes positioned low on face, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
+    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
-    "mascara, thin eyeliner, subtle blush, natural makeup",
-    "mascara, thin eyeliner, subtle blush, natural makeup",
-    "mascara, eyeliner, blush, polished makeup",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
+    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
