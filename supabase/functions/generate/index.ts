@@ -160,7 +160,7 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "icy white-blonde" : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
@@ -498,9 +498,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large hooded eyes, arched eyebrows, small nose, full pouty lips, defined cheekbones, warm-toned skin, smooth chin, skin with visible pores, SAME hair style and colour as described",
-    "very large round doe-eyes, small button-nose, full plump lips, soft-round baby-face, smooth chin, low-set hairline, bold lashes, skin with visible pores, SAME hair style and colour as described",
-    "youthful big bright cat-eyes, tiny nose, full glossy lips, oval face, smooth chin, low-set hairline, bold defined lashes, skin with visible pores, SAME hair style and colour as described",
+    "youthful large hooded eyes, arched eyebrows, small nose, full pouty lips, soft-round face, smooth chin, low-set hairline, matte skin with visible pores, SAME hair style and colour as described",
+    "youthful very large round doe-eyes positioned low on face, small button-nose, full plump lips, soft-round baby-face, smooth chin, low-set hairline, bold lashes, matte skin with visible pores, SAME hair style and colour as described",
+    "youthful big bright cat-eyes positioned low on face, tiny button-nose, full glossy lips, soft-round face, smooth chin, low-set hairline, defined lashes, matte skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
