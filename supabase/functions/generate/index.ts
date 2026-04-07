@@ -506,18 +506,18 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
-    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, skin with visible pores, SAME hair style and colour as described",
+    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, skin with visible pores, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "visible eyeshadow, thick mascara, defined eyeliner, blush, influencer makeup",
+    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, short-neck, skin with visible pores and subtle colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -531,11 +531,11 @@ async function generateFaceImages(
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
     const faceTones: Record<string, string[]> = {
-      blonde: ["warm-golden blonde", "cool-ash blonde", "honey blonde"],
-      brown: ["medium-chestnut brown", "deep-chocolate brown", "dark brown"],
-      black: ["jet black", "soft black", "warm black"],
-      red: ["auburn red", "copper red", "ginger red"],
-      pink: ["soft-rose pink", "warm pink", "cool pink"],
+      blonde: ["blonde", "strawberry-blonde", "pale-platinum blonde"],
+      brown: ["brown", "warm-brown", "cool-dark brown"],
+      black: ["black", "blue-black"],
+      red: ["red", "copper-red"],
+      pink: ["pink", "dusty-pink"],
     };
 
     let tonedPrompt = faceOnlyPrompt;
