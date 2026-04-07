@@ -79,8 +79,8 @@ function getClientIp(req: Request): string {
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "fair skin with warm undertone",
-  pale: "very fair pale skin with cool undertone",
+  white: "light pale skin",
+  pale: "very pale porcelain skin",
   tan: "tanned warm skin",
   asian: "asian skin tone",
   black: "rich dark skin with natural healthy glow",
