@@ -507,9 +507,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, skin with visible pores, SAME hair style and colour as described",
-    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, skin with visible pores, SAME hair style and colour as described",
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, skin with visible pores, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
+    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -518,7 +518,7 @@ async function generateFaceImages(
     "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, short-neck, skin with visible pores and subtle colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, short-neck, low-set hairline, eyes positioned in centre of face, skin with visible pores and subtle colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -531,24 +531,7 @@ async function generateFaceImages(
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
-    const faceTones: Record<string, string[]> = {
-      blonde: ["blonde", "strawberry-blonde", "pale-platinum blonde"],
-      brown: ["brown", "warm-brown", "cool-dark brown"],
-      black: ["black", "blue-black"],
-      red: ["red", "copper-red"],
-      pink: ["pink", "dusty-pink"],
-    };
-
-    let tonedPrompt = faceOnlyPrompt;
-    for (const [base, tones] of Object.entries(faceTones)) {
-      if (tonedPrompt.toLowerCase().includes(base)) {
-        const tone = tones[Math.floor(Math.random() * tones.length)];
-        tonedPrompt = tonedPrompt.replace(new RegExp(base, 'i'), tone);
-        break;
-      }
-    }
-
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -556,7 +539,7 @@ async function generateFaceImages(
     while (retries <= maxRetries) {
       try {
         const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${tonedPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
+          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
           : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
