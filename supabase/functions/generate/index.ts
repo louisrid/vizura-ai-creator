@@ -162,7 +162,7 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   const hairColour = char.hair || "";
   const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "icy white-blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with straight-across bangs, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
     parts.push(`long straight ${mappedHairColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
