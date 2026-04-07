@@ -505,11 +505,11 @@ async function generateFaceImages(
 
   const makeupVariations = [
     "mascara, thin eyeliner, subtle blush",
-    "mascara, thin eyeliner, subtle blush",
+    "bare natural skin, hint of lip gloss",
     "mascara, eyeliner, subtle blush",
   ];
 
-   const beautyCore = "extremely attractive youthful young-woman, slim face, small button nose, soft rounded jaw, small chin, low-set hairline, matte skin with visible pores, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident closed-mouth smile";
+   const beautyCore = "extremely attractive youthful young-woman, slim face, small button nose, soft rounded jaw, small chin, low-set hairline, matte skin with visible pores, long styled hair past shoulders, plump full lips with soft pink tint, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
