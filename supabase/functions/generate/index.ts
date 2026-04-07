@@ -79,8 +79,8 @@ function getClientIp(req: Request): string {
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "pale fair skin",
-  pale: "very pale fair skin with cool undertone",
+  white: "pale white skin",
+  pale: "very pale porcelain-white skin",
   tan: "tanned warm skin",
   asian: "asian skin tone",
   black: "rich dark skin with natural healthy glow",
@@ -88,11 +88,11 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  slim: "slim toned body, smaller chest, narrow waist, lean face",
-  regular: "soft feminine body, large bust DD, defined waist, soft face",
-  average: "soft feminine body, large bust DD, defined waist, soft face",
-  curvy: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
-  thick: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
+  slim: "slim toned body, narrow waist, lean figure",
+  regular: "soft feminine body, defined waist, feminine hips",
+  average: "soft feminine body, defined waist, feminine hips",
+  curvy: "curvy feminine figure, wide hips, hourglass shape",
+  thick: "curvy feminine figure, wide hips, hourglass shape",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
