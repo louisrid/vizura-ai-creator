@@ -506,9 +506,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe eyes, small button nose, full pouty lips, heart-shaped face, compact forehead, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall eyes sitting low on face, compact forehead, small button nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "almond-shaped bright eyes, small button nose, full pouty lips, heart-shaped face, compact forehead, natural hair with satin finish, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small button-nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small button-nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
+    "almond-shaped bright eyes positioned in centre of face, small button-nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -517,7 +517,7 @@ async function generateFaceImages(
     "visible eyeshadow, mascara, eyeliner, blush, influencer makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw blending into neck, small rounded chin, compact forehead, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small button-nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
