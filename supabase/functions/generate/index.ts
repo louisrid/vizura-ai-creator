@@ -498,9 +498,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, skin with visible pores, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
-    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "large round eyes, defined eyebrows, small nose, full pouty lips, soft-round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "very large bright eyes positioned low on face, small button-nose, full plump lips, soft-round face, smooth chin, low-set hairline, bold lashes, skin with visible pores, SAME hair style and colour as described",
+    "big round doe-eyes positioned low on face, tiny button-nose, full soft cheeks, plump natural lips, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
