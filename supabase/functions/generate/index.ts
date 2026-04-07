@@ -102,7 +102,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks covering cheekbones, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face, rounded head shape";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks covering cheekbones, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face";
   return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
@@ -160,24 +160,15 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const hairTones: Record<string, string[]> = {
-    blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
-    brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
-    black: ["jet-black", "soft-black", "warm-black"],
-    red: ["auburn-red", "copper-red", "ginger-red"],
-    pink: ["soft-rose pink", "warm-pink", "cool-pink"],
-    ginger: ["ginger"],
-  };
-  const tones = hairTones[hairColour.toLowerCase()];
-  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "platinum blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${mappedHairColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
+    parts.push(`long ${hairStyle} ${mappedHairColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
@@ -513,12 +504,12 @@ async function generateFaceImages(
   ];
 
   const makeupVariations = [
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush",
+    "light eyeshadow, mascara, thin eyeliner, subtle blush",
+    "mascara, eyeliner, subtle blush",
   ];
 
-  const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, short-neck, low-set hairline, eyes positioned in centre of face, skin with visible pores and subtle colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, feminine-soft features, soft-rounded jaw, small-rounded chin, slim face, small-delicate nose, short-neck, low-set hairline, eyes in centre of face, matte skin with visible pores and colour-variation, long styled hair past shoulders, plump full lips with soft-pink tint, mascara, eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
