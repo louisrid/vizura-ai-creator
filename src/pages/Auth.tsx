@@ -106,8 +106,9 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="mx-auto w-full max-w-lg px-4 pt-4 pb-[250px]">
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      <DotDecal />
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-1 pb-[250px]">
         <div className="mb-8 flex items-center gap-3">
           <button
             type="button"
