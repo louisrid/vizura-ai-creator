@@ -160,24 +160,15 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const hairTones: Record<string, string[]> = {
-    blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
-    brown: ["medium-chestnut brown", "deep-chocolate brown", "dark-brown"],
-    black: ["jet-black", "soft-black", "warm-black"],
-    red: ["auburn-red", "copper-red", "ginger-red"],
-    pink: ["soft-rose pink", "warm-pink", "cool-pink"],
-    ginger: ["ginger"],
-  };
-  const tones = hairTones[hairColour.toLowerCase()];
-  const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "platinum blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${toneColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with straight-across bangs fringe, full straight fringe across forehead, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${toneColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long straight ${mappedHairColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${toneColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair with soft voluminous waves and bouncy body, draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${toneColour} hair draped over shoulders onto chest`.trim());
+    parts.push(`long ${hairStyle} ${mappedHairColour} hair draped over shoulders onto chest`.trim());
   }
   
   if (char.eye) {
