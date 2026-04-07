@@ -7,6 +7,7 @@ import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import DotDecal from "@/components/DotDecal";
 
 interface HistoryItem {
   id: string;
