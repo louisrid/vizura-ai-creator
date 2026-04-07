@@ -79,7 +79,7 @@ function getClientIp(req: Request): string {
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "fair warm skin",
+  white: "fair skin with warm undertone",
   pale: "pale fair skin",
   tan: "tanned warm skin",
   asian: "asian skin tone",
@@ -160,7 +160,7 @@ function buildCharacterTraits(char: any): string {
 const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "platinum blonde" : hairColour;
+  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white-blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with straight-across bangs, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
@@ -498,9 +498,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round eyes, defined eyebrows, small nose, full pouty lips, soft-round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
-    "very large bright eyes positioned low on face, small button-nose, full plump lips, soft-round face, smooth chin, low-set hairline, bold lashes, skin with visible pores, SAME hair style and colour as described",
-    "big round doe-eyes positioned low on face, tiny button-nose, full soft cheeks, plump natural lips, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "large round eyes, defined eyebrows, small nose, full pouty lips, warm-toned skin, soft-round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "very large bright eyes positioned low on face, small button-nose, full plump lips, soft-round face, smooth chin, low-set hairline, bold lashes, fair skin, skin with visible pores, SAME hair style and colour as described",
+    "big round doe-eyes positioned low on face, tiny button-nose, full soft cheeks, plump natural lips, rosy-toned skin, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
