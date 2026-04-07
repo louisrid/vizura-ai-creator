@@ -161,11 +161,11 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
   const hairTones: Record<string, string[]> = {
-    blonde: ["warm golden blonde", "cool ash blonde", "honey blonde"],
-    brown: ["warm chestnut brown", "cool ash brown", "rich chocolate brown"],
-    black: ["jet black", "soft black", "warm black"],
-    red: ["auburn red", "copper red", "ginger red"],
-    pink: ["soft rose pink", "warm pink", "cool pink"],
+    blonde: ["warm-golden blonde", "cool-ash blonde", "honey-blonde"],
+    brown: ["light-caramel brown", "medium-chestnut brown", "deep-chocolate brown"],
+    black: ["jet-black", "soft-black", "warm-black"],
+    red: ["auburn-red", "copper-red", "ginger-red"],
+    pink: ["soft-rose pink", "warm-pink", "cool-pink"],
   };
   const tones = hairTones[hairColour.toLowerCase()];
   const toneColour = tones ? tones[Math.floor(Math.random() * tones.length)] : hairColour;
