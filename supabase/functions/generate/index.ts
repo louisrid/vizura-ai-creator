@@ -521,8 +521,9 @@ async function generateFaceImages(
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
+    const whiteBlondePrompt = faceOnlyPrompt.replace(/\bblonde\b/gi, "white blonde");
 
-    const positivePrompt = `${faceOnlyPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+    const positivePrompt = `${whiteBlondePrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -530,7 +531,7 @@ async function generateFaceImages(
     while (retries <= maxRetries) {
       try {
         const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${faceOnlyPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
+          ? await routerTextToImage(`${whiteBlondePrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
           : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
