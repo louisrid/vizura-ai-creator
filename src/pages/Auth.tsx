@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
+import DotDecal from "@/components/DotDecal";
 
 const Auth = () => {
   const { user, loading: authLoading, signIn, signUp } = useAuth();
