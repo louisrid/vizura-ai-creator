@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper chest centred with space above head, white t-shirt visible, long hair visible on chest, natural soft lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+  "passport photo, plain white background, face and upper chest centred with space above head, white t-shirt visible, long hair visible on chest, natural soft lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture and subtle colour-variation";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
