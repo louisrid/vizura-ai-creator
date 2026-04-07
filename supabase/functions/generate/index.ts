@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders only cropped just below collarbone, centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -508,15 +508,15 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes, small delicate nose, full pouty lips, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare-pink tint, soft round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
-    "big bright wide-eyes, small button nose, full plump lips, soft round face, smooth chin, low-set hairline, skin with visible pores, SAME hair style and colour as described",
+    "very large round doe-eyes positioned low on face, low-set hairline, small button-nose, full pouty lips with bare-pink tint, soft-round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small button-nose, full tall lips with bare-pink tint, soft-round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small button-nose, full tall lips with bare-pink tint, soft-round face, smooth chin, skin with visible pores, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
     "mascara, thin eyeliner, subtle blush",
+    "mascara, thin eyeliner, subtle blush",
+    "mascara, eyeliner, subtle blush",
   ];
 
   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small button-nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, light eyeshadow, subtle blush, confident closed-mouth smile";
