@@ -792,7 +792,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             className="mt-4 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
+            style={{ borderRadius: 14, border: "1.5px solid #222", backgroundColor: "#111" }}
             disabled={emailLoading || googleLoading}
           />
           <input
