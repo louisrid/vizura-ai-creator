@@ -212,7 +212,7 @@ const Header = () => {
               }}
             >
               <Gem size={13} strokeWidth={2.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
-              <span className="text-[13px] md:text-[15px] font-[900] lowercase" style={{ color: "#00e0ff" }}>{gems}</span>
+              <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white">{gems}</span>
             </button>
 
             <button
