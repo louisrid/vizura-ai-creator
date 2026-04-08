@@ -554,31 +554,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Create slide */
     if (isCreateSlide) {
-      const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
-          className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
-          disabled={exitFade}
-        >
-          <h2 className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight">
+        <div className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
+          <h2 className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight mt-12">
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
-          {!isFirstCharacter && (
-            <div className="mt-6 flex items-center gap-1.5">
-              <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-[15px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>30 gems</span>
-            </div>
-          )}
-          <motion.p
-            className="mt-6 text-[14px] md:text-[16px] font-[800] lowercase"
-            style={{ color: "rgba(255,255,255,0.4)" }}
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          >tap to continue</motion.p>
-        </button>
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
+            disabled={exitFade}
+            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            style={{ backgroundColor: "#00e0ff", color: "#000", borderRadius: 12 }}
+          >
+            create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#000" }} />
+          </button>
+        </div>
       );
     }
 
