@@ -133,7 +133,7 @@ const Account = () => {
           <div className="pt-6">
             <button
               className="w-full h-12 md:h-14 text-sm md:text-base font-extrabold lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
-              style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222", color: "hsl(var(--foreground))" }}
+              style={{ borderRadius: 12, backgroundColor: "#100808", border: "2px solid #ff4444", color: "#ff4444" }}
               onClick={handleSignOut}
             >
               <LogOut size={16} strokeWidth={2.5} />

@@ -728,6 +728,115 @@ serve(async (req) => {
     const angleCharacterId = body?.angle_character_id || null;
     const vibeReferenceUrl = body?.vibe_reference_url || null;
     const regenerateTarget = body?.regenerate_target || "both"; // "angle" | "body" | "both"
+    const regenerateSingle = body?.regenerate_single || null; // "angle" | "body" | null
+
+    /* ── SINGLE PHOTO REGENERATION FLOW (1 gem) ── */
+    if (regenerateSingle && (regenerateSingle === "angle" || regenerateSingle === "body")) {
+      const singleCharId = body?.character_id;
+      const singleFaceUrl = body?.selected_face_url;
+
+      if (!singleCharId || !singleFaceUrl) {
+        return new Response(JSON.stringify({ error: "Missing character_id or selected_face_url" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const adminClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+
+      // Check gems
+      const { data: creditData } = await adminClient
+        .from("credits")
+        .select("balance")
+        .eq("user_id", userId)
+        .single();
+
+      if (!creditData || creditData.balance <= 0) {
+        return new Response(
+          JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Deduct 1 gem
+      await adminClient
+        .from("credits")
+        .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
+        .eq("user_id", userId);
+
+      // Look up character
+      const { data: charData } = await adminClient
+        .from("characters")
+        .select("*")
+        .eq("id", singleCharId)
+        .eq("user_id", userId)
+        .single();
+
+      if (!charData) {
+        // Refund gem
+        await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+        return new Response(JSON.stringify({ error: "Character not found" }), {
+          status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
+      if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
+
+      const traits = buildCharacterTraits(charData);
+      const dbBodyType = (charData.body || "regular").toLowerCase();
+
+      console.log(`=== SINGLE REGENERATION: ${regenerateSingle} ===`);
+
+      try {
+        const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
+          singleFaceUrl, traits, dbBodyType, XAI_API_KEY, adminClient, userId, regenerateSingle
+        );
+
+        const updates: Record<string, string | null> = {};
+        if (regenerateSingle === "angle" && angleUrl) updates.face_angle_url = angleUrl;
+        if (regenerateSingle === "body" && bodyAnchorUrl) updates.body_anchor_url = bodyAnchorUrl;
+
+        if (Object.keys(updates).length > 0) {
+          await adminClient.from("characters").update(updates).eq("id", singleCharId).eq("user_id", userId);
+        }
+
+        // Save to generations
+        const resultUrl = regenerateSingle === "angle" ? angleUrl : bodyAnchorUrl;
+        if (resultUrl) {
+          await adminClient.from("generations").insert({
+            user_id: userId,
+            prompt: "character references",
+            image_urls: [resultUrl],
+          });
+        }
+
+        return new Response(
+          JSON.stringify({
+            angle_url: angleUrl,
+            body_anchor_url: bodyAnchorUrl,
+            gems_remaining: creditData.balance - 1,
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      } catch (e: any) {
+        // Refund gem on failure
+        await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+        console.error("Single regeneration error:", e);
+        if (e?.contentPolicy) {
+          return new Response(
+            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        return new Response(
+          JSON.stringify({ error: "regeneration failed, please try again" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
