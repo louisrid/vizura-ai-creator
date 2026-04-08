@@ -439,7 +439,7 @@ const Home = () => {
                 className="relative flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-white transition-transform active:scale-[0.98] overflow-hidden"
                 style={{ backgroundColor: "#111111", borderRadius: 14 }}
               >
-                <div className="absolute inset-0" style={{ backgroundColor: "#111111", border: "2px solid rgba(250,204,21,0.25)", borderRadius: 14 }} />
+                <div className="absolute inset-0" style={{ backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 14 }} />
                 <span className="relative z-[1]">create photo</span>
               </button>
             </div>
