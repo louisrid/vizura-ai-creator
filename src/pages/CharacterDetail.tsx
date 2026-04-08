@@ -210,7 +210,7 @@ const CharacterDetail = () => {
     showSpinner = false,
     onRegenClick?: () => void,
   ) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
