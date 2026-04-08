@@ -432,7 +432,7 @@ const Index = () => {
     }
   };
 
-  const createDisabled = isGenerating || (!!user && !prompt.trim());
+  const createDisabled = isGenerating;
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
