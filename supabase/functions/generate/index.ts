@@ -2,8 +2,6 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
-const ACTIVE_MODEL: "grok" | "flux" = "grok";
-
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const XAI_REQUEST_TIMEOUT_MS = 120_000;
@@ -15,12 +13,6 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const QUALITY_SUFFIX =
-  "";
-
-const NEGATIVE_INSTRUCTION =
-  "";
-
 const SELFIE_PREFIX =
   "iPhone selfie taken with front camera, one hand holding the phone at arms length, casual angle, everything in focus";
 
@@ -30,15 +22,6 @@ const PHOTO_PREFIX =
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
   "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores, small-forehead";
-
-const FLUX_QUALITY_SUFFIX =
-  "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
-
-const FLUX_FACE_QUALITY =
-  "close-up headshot, plain white background, centred in frame, head and top of shoulders visible, wearing a fitted plain white crew neck t-shirt, soft natural smile, even soft lighting from the front, looking directly at camera, photorealistic, matte skin with visible pores and natural texture, realistic human skin with subtle imperfections";
-
-const FACE_NEGATIVE =
-  "";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -157,7 +140,7 @@ function buildCharacterTraits(char: any): string {
     parts.push("soft face but not fat, no round chubby face");
   }
   
-const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
+  const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   let hairStyle = hairStyleMatch?.[1]?.trim() || "";
   const hairColour = char.hair || "";
   const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "white blonde" : hairColour;
@@ -201,10 +184,8 @@ function buildFinalPrompt(
   const typeLabel = photoType === "selfie" ? "SELFIE" : "PHOTO";
   const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
 
-  // Extract character name from traits (first part before comma)
   const charName = characterTraits?.match(/^(\d+\s+year\s+old\s+woman)/)?.[0] || "the woman";
 
-  // Expression
   const EXPRESSION_MAP: Record<string, string> = {
     "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
     "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
@@ -213,8 +194,6 @@ function buildFinalPrompt(
   };
   const exprStr = expression ? `, ${EXPRESSION_MAP[expression] || expression}` : "";
 
-  // The user's scene prompt contains outfit, environment, pose, extras
-  // We explicitly instruct the model to use the outfit from the user prompt
   const parts: string[] = [];
 
   if (characterTraits) {
@@ -229,12 +208,7 @@ function buildFinalPrompt(
     parts.push(scenePrompt);
   }
 
-  if (ACTIVE_MODEL === "flux") {
-    parts.push("slight space above the head, natural framing, authentic influencer style instagram photo");
-    parts.push(FLUX_QUALITY_SUFFIX);
-  } else {
-    parts.push("natural framing with space above the head, authentic influencer style instagram photo, everything in focus including background, realistic matte skin with texture");
-  }
+  parts.push("natural framing with space above the head, authentic influencer style instagram photo, everything in focus including background, realistic matte skin with texture");
   parts.push(perspective);
 
   if (bodyType) {
@@ -243,9 +217,6 @@ function buildFinalPrompt(
     if (modifier) parts.push(modifier);
   }
 
-  if (ACTIVE_MODEL !== "flux") {
-    parts.push(NEGATIVE_INSTRUCTION);
-  }
   return parts.join(". ");
 }
 
@@ -336,7 +307,6 @@ async function xaiImageEdit(
 ): Promise<string | null> {
   console.log("xaiImageEdit calling with", imageUrls.length, "reference images");
 
-  // xAI API: use `image` for single, `images` for multiple — each is { url: "..." }
   const body: Record<string, unknown> = {
     model: XAI_IMAGE_MODEL,
     prompt,
@@ -349,7 +319,6 @@ async function xaiImageEdit(
     body.images = imageUrls.map((url) => ({ url }));
   }
 
-  // Only set aspect_ratio for supported values
   const SUPPORTED_RATIOS = new Set([
     "1:1","3:4","4:3","9:16","16:9","2:3","3:2","9:19.5","19.5:9","9:20","20:9","1:2","2:1","auto"
   ]);
@@ -382,114 +351,6 @@ async function xaiImageEdit(
   return extractXaiImageUrl(data);
 }
 
-
-/* ── fal.ai FLUX: text-to-image ────────────────────────── */
-async function falTextToImage(prompt: string, apiKey: string): Promise<string | null> {
-  console.log("falTextToImage calling:", prompt.slice(0, 120));
-
-  const response = await fetch("https://fal.run/fal-ai/flux-2-pro", {
-    method: "POST",
-    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
-    headers: {
-      Authorization: `Key ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      prompt,
-    }),
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    console.error("fal text-to-image error:", response.status, errText);
-    if (response.status === 429) throw { status: 429 };
-    if (response.status === 402) throw { status: 402 };
-    if (isContentPolicyError(response.status, errText)) {
-      throw { status: 400, contentPolicy: true };
-    }
-    throw new Error(`fal generation failed: ${response.status} - ${errText}`);
-  }
-
-  const data = await response.json();
-  console.log("fal response keys:", Object.keys(data));
-  const url = data?.images?.[0]?.url;
-  return typeof url === "string" && url.trim().length > 0 ? url : null;
-}
-
-/* ── fal.ai FLUX: image edit ──────────────────────────── */
-async function falImageEdit(
-  prompt: string,
-  imageUrls: string[],
-  apiKey: string
-): Promise<string | null> {
-  console.log("falImageEdit calling with", imageUrls.length, "reference images");
-
-  const response = await fetch("https://fal.run/fal-ai/flux-2-pro", {
-    method: "POST",
-    signal: AbortSignal.timeout(XAI_REQUEST_TIMEOUT_MS),
-    headers: {
-      Authorization: `Key ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      prompt,
-      image_urls: imageUrls,
-    }),
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    console.error("fal image-edit error:", response.status, errText);
-    if (response.status === 429) throw { status: 429 };
-    if (response.status === 402) throw { status: 402 };
-    if (isContentPolicyError(response.status, errText)) {
-      throw { status: 400, contentPolicy: true };
-    }
-    throw new Error(`fal image edit failed: ${response.status} - ${errText}`);
-  }
-
-  const data = await response.json();
-  console.log("fal edit response keys:", Object.keys(data));
-  const url = data?.images?.[0]?.url;
-  return typeof url === "string" && url.trim().length > 0 ? url : null;
-}
-
-/* ── router: text-to-image ────────────────────────────── */
-async function routerTextToImage(
-  positivePrompt: string,
-  negativeText: string,
-  apiKey: string
-): Promise<string | null> {
-  if (ACTIVE_MODEL === "flux") {
-    const falKey = Deno.env.get("FAL_API_KEY");
-    if (!falKey) throw new Error("FAL_API_KEY is not configured");
-    // FLUX does not use negative prompts — send only the positive prompt
-    return falTextToImage(positivePrompt, falKey);
-  }
-  // grok: bake negative into prompt
-  const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
-  return xaiTextToImage(fullPrompt, apiKey);
-}
-
-/* ── router: image edit ───────────────────────────────── */
-async function routerImageEdit(
-  positivePrompt: string,
-  negativeText: string,
-  imageUrls: string[],
-  apiKey: string,
-  aspectRatio = "3:4"
-): Promise<string | null> {
-  if (ACTIVE_MODEL === "flux") {
-    const falKey = Deno.env.get("FAL_API_KEY");
-    if (!falKey) throw new Error("FAL_API_KEY is not configured");
-    // FLUX does not use negative prompts — send only the positive prompt
-    return falImageEdit(positivePrompt, imageUrls, falKey);
-  }
-  // grok: bake negative into prompt
-  const fullPrompt = negativeText ? `${positivePrompt}. ${negativeText}` : positivePrompt;
-  return xaiImageEdit(fullPrompt, imageUrls, apiKey, aspectRatio);
-}
-
 /* ── generate face options (text-to-image, always 3:4) ── */
 async function generateFaceImages(
   prompt: string,
@@ -512,12 +373,9 @@ async function generateFaceImages(
 
    const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, small-forehead, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
-  const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
-
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
 
-  // Generate faces sequentially to avoid rate limits and timeouts
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
@@ -548,9 +406,7 @@ async function generateFaceImages(
     const maxRetries = 2;
     while (retries <= maxRetries) {
       try {
-        const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${tonedPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
-          : await routerTextToImage(positivePrompt, "", apiKey);
+        const url = await xaiTextToImage(positivePrompt, apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
           if (retries < maxRetries) { retries++; continue; }
@@ -564,7 +420,6 @@ async function generateFaceImages(
         console.error(`Face ${i + 1} attempt ${retries + 1} failed:`, e?.message || e);
         if (e?.contentPolicy) throw e;
         if (e?.status === 429) {
-          // Rate limited — wait a bit and retry
           console.log("Rate limited, waiting 3s...");
           await new Promise(r => setTimeout(r, 3000));
           retries++;
@@ -616,40 +471,33 @@ async function generateAngleAndBody(
   let bodyAnchorUrl: string | null = null;
 
   if (target === "angle" || target === "both") {
-  try {
-    console.log("Generating 3/4 angle...");
-    const anglePrompt = ACTIVE_MODEL === "flux"
-      ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders and upper chest visible. Fitted low-cut white top, ${BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular}. Skin with visible pores and colour variation. Confident closed-mouth smile with lips together. ${characterTraits}`;
-    const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
-    if (angleResult) {
-      angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
-      console.log("Angle generated:", angleUrl?.slice(0, 80));
+    try {
+      console.log("Generating 3/4 angle...");
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders and upper chest visible. Fitted low-cut white top, ${BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular}. Skin with visible pores and colour variation. Confident closed-mouth smile with lips together. ${characterTraits}`;
+      const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
+      if (angleResult) {
+        angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
+        console.log("Angle generated:", angleUrl?.slice(0, 80));
+      }
+    } catch (e) {
+      console.error("3/4 angle generation failed:", e);
     }
-  } catch (e) {
-    console.error("3/4 angle generation failed:", e);
-  }
   }
 
   if (target === "body" || target === "both") {
-  const BODY_NEGATIVE = "";
-
-  try {
-    console.log("Generating full-body anchor...");
-    const bodyKey = (bodyType || "regular").toLowerCase();
-    const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-    const bodyModifier = BODY_PROMPT_MODIFIER[bodyKey] || BODY_PROMPT_MODIFIER.regular;
-    const bodyPrompt = ACTIVE_MODEL === "flux"
-      ? `Same person from the reference image photographed in the same session, front-facing confident pose, slight natural hip tilt, framed from head to just below hips, wearing same fitted plain white crew neck t-shirt, ${bodyDesc}, standing upright feet shoulder width apart, same plain white background, same soft even lighting as face reference, matte skin with visible pores, normal proportional arms ending at mid-thigh, naturally feminine build, body and face are one cohesive person`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, framed from head to just above knees. Fitted low-cut white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores across chest, neck and arms. Short feminine arms resting at sides, hands at upper thigh, smooth inner elbows. Subtle closed-mouth smile with lips together.`;
-    const bodyResult = await routerImageEdit(bodyPrompt, ACTIVE_MODEL === "flux" ? "" : BODY_NEGATIVE, [faceUrl], apiKey, "2:3");
-    if (bodyResult) {
-      bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
-      console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
+    try {
+      console.log("Generating full-body anchor...");
+      const bodyKey = (bodyType || "regular").toLowerCase();
+      const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Front facing, slight hip tilt, framed from head to just above knees. Fitted low-cut white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores across chest, neck and arms. Short feminine arms resting at sides, hands at upper thigh, smooth inner elbows. Subtle closed-mouth smile with lips together.`;
+      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+      if (bodyResult) {
+        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
+        console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
+      }
+    } catch (e) {
+      console.error("Full-body anchor generation failed:", e);
     }
-  } catch (e) {
-    console.error("Full-body anchor generation failed:", e);
-  }
   }
 
   return { angleUrl, bodyAnchorUrl };
@@ -675,9 +523,10 @@ async function generatePhoto(
 ): Promise<string | null> {
   const safeRatio = mapAspectRatio(aspectRatio);
   if (faceImageUrls.length > 0) {
-    return await routerImageEdit(finalPrompt, NEGATIVE_INSTRUCTION, faceImageUrls, apiKey, safeRatio);
+    const fullPrompt = finalPrompt;
+    return await xaiImageEdit(fullPrompt, faceImageUrls, apiKey, safeRatio);
   }
-  return await routerTextToImage(finalPrompt, NEGATIVE_INSTRUCTION, apiKey);
+  return await xaiTextToImage(finalPrompt, apiKey);
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -727,8 +576,8 @@ serve(async (req) => {
     const selectedFaceUrl = body?.selected_face_url || null;
     const angleCharacterId = body?.angle_character_id || null;
     const vibeReferenceUrl = body?.vibe_reference_url || null;
-    const regenerateTarget = body?.regenerate_target || "both"; // "angle" | "body" | "both"
-    const regenerateSingle = body?.regenerate_single || null; // "angle" | "body" | null
+    const regenerateTarget = body?.regenerate_target || "both";
+    const regenerateSingle = body?.regenerate_single || null;
 
     /* ── SINGLE PHOTO REGENERATION FLOW (1 gem) ── */
     if (regenerateSingle && (regenerateSingle === "angle" || regenerateSingle === "body")) {
@@ -746,7 +595,6 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
 
-      // Check gems
       const { data: creditData } = await adminClient
         .from("credits")
         .select("balance")
@@ -760,13 +608,11 @@ serve(async (req) => {
         );
       }
 
-      // Deduct 1 gem
       await adminClient
         .from("credits")
         .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
         .eq("user_id", userId);
 
-      // Look up character
       const { data: charData } = await adminClient
         .from("characters")
         .select("*")
@@ -775,7 +621,6 @@ serve(async (req) => {
         .single();
 
       if (!charData) {
-        // Refund gem
         await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         return new Response(JSON.stringify({ error: "Character not found" }), {
           status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -803,7 +648,6 @@ serve(async (req) => {
           await adminClient.from("characters").update(updates).eq("id", singleCharId).eq("user_id", userId);
         }
 
-        // Save to generations
         const resultUrl = regenerateSingle === "angle" ? angleUrl : bodyAnchorUrl;
         if (resultUrl) {
           await adminClient.from("generations").insert({
@@ -822,7 +666,6 @@ serve(async (req) => {
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       } catch (e: any) {
-        // Refund gem on failure
         await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         console.error("Single regeneration error:", e);
         if (e?.contentPolicy) {
@@ -862,7 +705,6 @@ serve(async (req) => {
       console.log("=== ANGLE + BODY GENERATION ===");
       console.log("Face URL:", selectedFaceUrl.slice(0, 80));
 
-      // Always read body type from DB — never trust frontend
       let dbBodyType = "regular";
       let traits = prompt;
       if (angleCharacterId) {
@@ -903,7 +745,6 @@ serve(async (req) => {
           console.log("Saved generated references to character:", angleCharacterId);
         }
 
-        // Also save angle + body images to generations for storage/homepage visibility
         const refUrls = [angleUrl, bodyAnchorUrl].filter(Boolean) as string[];
         if (refUrls.length > 0) {
           await adminClient.from("generations").insert({
