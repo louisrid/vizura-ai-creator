@@ -230,9 +230,8 @@ const CharacterDetail = () => {
         className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${isMobile ? "h-10 text-xs" : "h-12 text-sm"}`}
         style={{
           borderRadius: 12,
-          backgroundColor: "#111111",
-          border: "2px solid rgba(0,224,255,0.25)",
-          color: "#00e0ff",
+          backgroundColor: "#00e0ff",
+          color: "#000",
         }}
       >
         {regenerating ? (
