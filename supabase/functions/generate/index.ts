@@ -164,7 +164,8 @@ const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    parts.push(`long straight ${mappedHairColour} hair draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    const frameChance = Math.random() < 0.33 ? " with thick face-framing layers falling beside cheeks" : "";
+    parts.push(`long straight ${mappedHairColour} hair${frameChance}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
     parts.push(`long ${mappedHairColour} hair with soft voluminous waves draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
@@ -498,9 +499,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, natural hair with subtle sheen, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, matte skin with visible pores, natural hair with subtle sheen, SAME hair style and colour as described",
     "very large tall doe-eyes positioned low on face, small-forehead, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, natural hair with satin finish, SAME hair style and colour as described",
+    "large almond cat-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -608,16 +609,18 @@ async function generateAngleAndBody(
   bodyType: string,
   apiKey: string,
   adminClient: any,
-  userId: string
+  userId: string,
+  target: "angle" | "body" | "both" = "both"
 ): Promise<{ angleUrl: string | null; bodyAnchorUrl: string | null }> {
   let angleUrl: string | null = null;
   let bodyAnchorUrl: string | null = null;
 
+  if (target === "angle" || target === "both") {
   try {
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera, eyes looking directly at camera. Head and shoulders only, cropped below collarbone. Fitted low-cut white top. Skin with visible pores and colour variation. Subtle closed-mouth smile with lips together. ${characterTraits}`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders and upper chest visible. Fitted low-cut white top, ${BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular}. Skin with visible pores and colour variation. Confident closed-mouth smile with lips together. ${characterTraits}`;
     const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -626,7 +629,9 @@ async function generateAngleAndBody(
   } catch (e) {
     console.error("3/4 angle generation failed:", e);
   }
+  }
 
+  if (target === "body" || target === "both") {
   const BODY_NEGATIVE = "";
 
   try {
@@ -644,6 +649,7 @@ async function generateAngleAndBody(
     }
   } catch (e) {
     console.error("Full-body anchor generation failed:", e);
+  }
   }
 
   return { angleUrl, bodyAnchorUrl };
@@ -721,6 +727,7 @@ serve(async (req) => {
     const selectedFaceUrl = body?.selected_face_url || null;
     const angleCharacterId = body?.angle_character_id || null;
     const vibeReferenceUrl = body?.vibe_reference_url || null;
+    const regenerateTarget = body?.regenerate_target || "both"; // "angle" | "body" | "both"
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
@@ -765,7 +772,7 @@ serve(async (req) => {
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, traits, dbBodyType, Deno.env.get("XAI_API_KEY")!, adminClient, userId
+        selectedFaceUrl, traits, dbBodyType, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
       );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
