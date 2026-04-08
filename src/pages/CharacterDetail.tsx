@@ -171,7 +171,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-1 pb-[250px]">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-3 pb-[250px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
