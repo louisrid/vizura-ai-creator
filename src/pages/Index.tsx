@@ -202,7 +202,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 12, backgroundColor: "#111111", border: "2px solid #222" }}
+          style={{ borderRadius: 12, backgroundColor: "#111111", border: "1.5px solid #222" }}
         >
           <span className="flex-1 text-left text-base font-[900] lowercase text-foreground">{selected.label}</span>
           <ChevronDown
