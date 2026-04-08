@@ -254,10 +254,10 @@ const CharacterDetail = () => {
       </div>
 
       {/* Details — compact */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
+      <div style={{ backgroundColor: "rgba(250,204,21,0.08)", borderRadius: 16, border: "1.5px solid #facc15" }} className={isMobile ? "px-4 py-3" : "p-4"}>
         <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
+            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "rgba(250,204,21,0.04)", border: "1.5px solid #222" }}>
               <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[8px]" : "text-[10px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
               <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[12px]" : "text-[14px]"}`}>{t.value}</span>
             </div>
