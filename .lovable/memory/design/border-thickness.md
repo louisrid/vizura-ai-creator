@@ -7,6 +7,6 @@ All borders standardised to 2px across all components and pages. Selection highl
 
 Character detail content boxes (name+photos, traits) have NO border — just #111111 fill with 16px radius.
 
-Confirmation popups use: 96% opacity black overlay (rgba(0,0,0,0.96)), black bordered box (#000000 border, #111111 fill, 16px radius, generous padding), smooth scale+fade animation (0.2s).
+Confirmation popups use: 94% opacity black overlay (rgba(0,0,0,0.94)), pure black popup box (#000000 bg, #000000 border, 16px radius, generous padding 36px 28px 28px). Cancel/back buttons use dark grey fill (#333) with white text. X dismiss circle (28px, grey #333 fill, no border, thick white X icon) positioned top-right at (-10, -10). Tapping overlay outside popup dismisses it. Smooth 0.18s fade+scale animation. Popup width max-w-sm (wider than before).
 
 Gem-cost buttons use the "gem box" style: dark fill (#0a0a0a), 2px solid #00e0ff border, #00e0ff text, with gem icon inline. Format: "action • N 💎". Only buttons that actually spend gems show gem costs. Navigation buttons (e.g. "create photo" on character detail) do NOT show gems.
