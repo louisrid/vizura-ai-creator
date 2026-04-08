@@ -351,12 +351,6 @@ const Index = () => {
 
   const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setReferenceImage(URL.createObjectURL(file));
-  };
-
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
