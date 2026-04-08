@@ -582,7 +582,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
             disabled={exitFade}
             className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            style={{ backgroundColor: "#00e0ff", color: "#000", borderRadius: 12 }}
+            style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
           >
             create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#000" }} />
           </button>
