@@ -719,7 +719,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: selectedIndex !== null ? "#00e0ff" : "#222",
+                      backgroundColor: selectedIndex !== null ? "#facc15" : "#222",
                       color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.3)",
                     }}
                   >
@@ -738,13 +738,13 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: "#00e0ff",
+                      backgroundColor: "#facc15",
                       color: "#000",
                     }}
                   >
                     <RefreshCw size={16} strokeWidth={2.5} />
                     regenerate
-                    <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    <Gem size={12} strokeWidth={2.5} style={{ color: "#000" }} />
                     <span className="text-[11px]">1</span>
                   </button>
                 </div>
@@ -762,7 +762,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#00e0ff", color: "#000", borderRadius: 12 }}
+                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
                 >
                   try again
                 </button>
