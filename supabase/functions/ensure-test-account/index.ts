@@ -57,8 +57,7 @@ serve(async (req) => {
       });
       if (error) throw error;
     } else {
-      const { error } = await admin.auth.admin.createUser({
-        email: SPECIAL_EMAIL,
+      const { data, error } = await admin.auth.admin.createUser({
         email: normalisedEmail,
         password,
         email_confirm: true,
