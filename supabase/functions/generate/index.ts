@@ -609,7 +609,8 @@ async function generateAngleAndBody(
   bodyType: string,
   apiKey: string,
   adminClient: any,
-  userId: string
+  userId: string,
+  target: "angle" | "body" | "both" = "both"
 ): Promise<{ angleUrl: string | null; bodyAnchorUrl: string | null }> {
   let angleUrl: string | null = null;
   let bodyAnchorUrl: string | null = null;
