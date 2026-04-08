@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, RefreshCw, Gem } from "lucide-react";
+import { Loader2, Trash2, Lock, RefreshCw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
@@ -39,8 +39,9 @@ const CharacterDetail = () => {
   const [loading, setLoading] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [regenerating, setRegenerating] = useState(false);
-  const [showRegenConfirm, setShowRegenConfirm] = useState(false);
+  const [regeneratingAngle, setRegeneratingAngle] = useState(false);
+  const [regeneratingBody, setRegeneratingBody] = useState(false);
+  const [regenTarget, setRegenTarget] = useState<"angle" | "body" | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -84,9 +85,12 @@ const CharacterDetail = () => {
   }, [user, id, character?.face_angle_url, character?.body_anchor_url]);
 
   const handleRegenerate = async () => {
-    if (!character || !character.face_image_url || !user) return;
-    setShowRegenConfirm(false);
-    setRegenerating(true);
+    if (!character || !character.face_image_url || !user || !regenTarget) return;
+    setRegenTarget(null);
+
+    const isAngle = regenTarget === "angle";
+    if (isAngle) setRegeneratingAngle(true);
+    else setRegeneratingBody(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("generate", {
@@ -96,6 +100,7 @@ const CharacterDetail = () => {
           selected_face_url: character.face_image_url,
           body_type: character.body || "regular",
           angle_character_id: character.id,
+          regenerate_target: regenTarget,
         },
       });
 
@@ -113,10 +118,11 @@ const CharacterDetail = () => {
       await refetchGems();
       toast("1 gem used");
     } catch (err) {
-      console.error("Regenerate angle+body error:", err);
+      console.error("Regenerate error:", err);
       toast.error("regeneration failed, please try again");
     } finally {
-      setRegenerating(false);
+      setRegeneratingAngle(false);
+      setRegeneratingBody(false);
     }
   };
 
@@ -197,14 +203,38 @@ const CharacterDetail = () => {
 
   const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
 
-  const imgSlot = (url: string | null | undefined, label: string, objectFit: "cover" | "contain" = "cover", showSpinner = false) => (
-    <div className="aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
+  const imgSlot = (
+    url: string | null | undefined,
+    label: string,
+    overlay: "lock" | "regenerate" | null,
+    showSpinner = false,
+    onRegenClick?: () => void,
+  ) => (
+    <div className="relative aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit, borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
+      )}
+      {/* Overlay icon */}
+      {overlay === "lock" && (
+        <div
+          className="absolute top-2 right-2 flex items-center justify-center"
+          style={{ width: 24, height: 24, borderRadius: "50%", backgroundColor: "#facc15" }}
+        >
+          <Lock size={12} strokeWidth={2.5} color="#000" />
+        </div>
+      )}
+      {overlay === "regenerate" && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
+          className="absolute top-2 right-2 flex items-center justify-center transition-transform active:scale-90"
+          style={{ width: 26, height: 26, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "1.5px solid rgba(255,255,255,0.2)" }}
+        >
+          <RefreshCw size={12} strokeWidth={2.5} color="rgba(255,255,255,0.7)" />
+        </button>
       )}
     </div>
   );
@@ -217,32 +247,11 @@ const CharacterDetail = () => {
           {nameAge}
         </h1>
         <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`}>
-          {imgSlot(character.face_image_url, "front")}
-          {imgSlot(character.face_angle_url, "3/4 angle", "cover", regenerating)}
-          {imgSlot(character.body_anchor_url, "full body", "cover", regenerating)}
+          {imgSlot(character.face_image_url, "front", "lock")}
+          {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
+          {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
         </div>
       </div>
-
-      {/* Regenerate photos 2 & 3 button */}
-      <button
-        onClick={() => setShowRegenConfirm(true)}
-        disabled={regenerating || !character.face_image_url}
-        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${isMobile ? "h-10 text-xs" : "h-12 text-sm"}`}
-        style={{
-          borderRadius: 12,
-          backgroundColor: "#00e0ff",
-          color: "#000",
-        }}
-      >
-        {regenerating ? (
-          <Loader2 className="animate-spin" size={14} />
-        ) : (
-          <RefreshCw size={14} strokeWidth={2.5} />
-        )}
-        {regenerating ? "regenerating…" : "regenerate photos 2 & 3"}
-        <Gem size={11} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-        <span className="text-[10px]">1</span>
-      </button>
 
       {/* Details — compact */}
       <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid rgba(250,204,21,0.25)" }} className={isMobile ? "px-4 py-3" : "p-4"}>
@@ -305,9 +314,10 @@ const CharacterDetail = () => {
 
       {/* Regenerate confirmation */}
       <RegenerateConfirmDialog
-        open={showRegenConfirm}
+        open={regenTarget !== null}
         onConfirm={handleRegenerate}
-        onCancel={() => setShowRegenConfirm(false)}
+        onCancel={() => setRegenTarget(null)}
+        message={`regenerate this photo?\n1 gem`}
       />
 
       <AnimatePresence>
