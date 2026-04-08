@@ -246,7 +246,7 @@ const CharacterDetail = () => {
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
-        <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`}>
+        <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`} style={{ overflow: "visible" }}>
           {imgSlot(character.face_image_url, "front", "lock")}
           {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
           {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
