@@ -294,8 +294,8 @@ const CharacterDetail = () => {
           border: "2px solid #ff4444",
         }}
       >
-        <Trash2 size={14} strokeWidth={2.5} />
         delete character
+        <Trash2 size={14} strokeWidth={2.5} />
       </button>
     </>
   );

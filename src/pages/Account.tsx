@@ -136,8 +136,8 @@ const Account = () => {
               style={{ borderRadius: 12, backgroundColor: "#100808", border: "2px solid #ff4444", color: "#ff4444" }}
               onClick={handleSignOut}
             >
-              <LogOut size={16} strokeWidth={2.5} />
               sign out
+              <LogOut size={16} strokeWidth={2.5} />
             </button>
           </div>
         </div>

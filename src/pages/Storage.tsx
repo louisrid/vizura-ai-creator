@@ -216,7 +216,7 @@ const Storage = () => {
               <div className="p-3 flex gap-2">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
                   <Button variant="outline" className="w-full h-10 border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
-                    <Download size={12} strokeWidth={2.5} /> download
+                    download <Download size={12} strokeWidth={2.5} />
                   </Button>
                 </a>
                 <Button

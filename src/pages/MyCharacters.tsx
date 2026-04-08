@@ -172,9 +172,9 @@ const MyCharacters = () => {
             style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
           >
             {hasCharacters ? (
-              <><Camera size={20} strokeWidth={2.5} />create photo</>
+              <>create photo<Camera size={20} strokeWidth={2.5} /></>
             ) : (
-              <><Sparkles size={20} strokeWidth={2.5} />create character</>
+              <>create character<Sparkles size={20} strokeWidth={2.5} /></>
             )}
           </motion.button>
         </div>
