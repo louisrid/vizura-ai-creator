@@ -287,7 +287,7 @@ const CharacterDetail = () => {
           color: "#ff4444",
           borderRadius: 12,
           backgroundColor: "#1a0808",
-          border: "2px solid rgba(255,68,68,0.25)",
+          border: "2px solid #ff4444",
         }}
       >
         <Trash2 size={14} strokeWidth={2.5} />
