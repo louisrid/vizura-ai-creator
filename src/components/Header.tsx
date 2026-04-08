@@ -192,7 +192,7 @@ const Header = () => {
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "hsl(var(--card))",
-                  border: `1.5px solid ${subscribed ? "hsl(var(--member-green) / 0.4)" : "hsl(var(--foreground) / 0.16)"}`,
+                  border: `2px solid ${subscribed ? "hsl(var(--member-green) / 0.4)" : "hsl(var(--foreground) / 0.16)"}`,
                 }}
                 aria-label="my account"
               >
@@ -207,7 +207,7 @@ const Header = () => {
               className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 md:py-2 active:scale-95 transition-transform duration-150"
               style={{
                 backgroundColor: "hsl(var(--card))",
-                border: "1.5px solid hsl(var(--gem-green) / 0.28)",
+                border: "2px solid #00e0ff",
                 borderRadius: 10,
               }}
             >
