@@ -2,12 +2,14 @@ import { createContext, useContext, useState, useEffect, useRef, ReactNode, useC
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { clearSpecialAccountCache, syncSpecialAccountCache } from "@/lib/specialAccount";
+import { getPreviewAccountCredentials } from "@/lib/previewAuth";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
+  signInPreview: () => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
 }
@@ -138,6 +140,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (error) throw error;
   };
 
+  const signInPreview = async () => {
+    const { email, password } = getPreviewAccountCredentials();
+
+    const { data, error } = await supabase.functions.invoke("ensure-test-account", {
+      body: { email, password },
+    });
+
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInError) throw signInError;
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
@@ -151,7 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signInPreview, signOut, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );
