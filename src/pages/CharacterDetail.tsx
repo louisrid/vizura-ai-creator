@@ -286,7 +286,7 @@ const CharacterDetail = () => {
         style={{
           color: "#ff4444",
           borderRadius: 12,
-          backgroundColor: "#1a0808",
+          backgroundColor: "#100505",
           border: "2px solid #ff4444",
         }}
       >
