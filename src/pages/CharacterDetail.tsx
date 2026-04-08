@@ -214,7 +214,7 @@ const CharacterDetail = () => {
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
