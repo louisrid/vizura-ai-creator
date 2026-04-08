@@ -119,7 +119,7 @@ const History = () => {
               <button
                 key={item.id}
                 onClick={() => setExpanded(item)}
-                className="w-full text-left rounded-2xl border-[2px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99]"
+                className="w-full text-left rounded-2xl border-[1.5px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99]"
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" />
                 <div className="p-4 space-y-2">
