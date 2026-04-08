@@ -611,7 +611,7 @@ const ChooseFace = () => {
               transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
               >
                 <ProgressBarLoader
-                  duration={120000}
+                  duration={45000}
                   phrases={FACE_GEN_PHRASES}
                   phraseInterval={5000}
                   requireTapToContinue={true}
@@ -641,7 +641,7 @@ const ChooseFace = () => {
                 transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
               >
                 <ProgressBarLoader
-                  duration={60000}
+                  duration={30000}
                   phrases={ANGLE_GEN_PHRASES}
                   phraseInterval={5000}
                   requireTapToContinue={true}

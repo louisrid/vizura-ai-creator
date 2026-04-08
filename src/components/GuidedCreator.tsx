@@ -30,7 +30,7 @@ const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"], defaultOption: "average" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
-  { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["pink", "black", "brunette", "blonde", "ginger"] },
+  { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
 ] as const;
@@ -135,10 +135,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="flex w-full items-center justify-center h-[56px] md:h-[66px] text-[17px] md:text-[20px]"
+    className="flex w-full items-center justify-center h-[62px] md:h-[73px] text-[19px] md:text-[22px]"
     style={{
-      borderRadius: 14,
-      padding: "10px 16px",
+      borderRadius: 15,
+      padding: "11px 18px",
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -494,26 +494,43 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div className="flex w-full flex-col items-center">
           <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 mx-auto ${
-            trait.options.length === 5 ? "max-w-[23rem] md:max-w-[30rem] grid-cols-3"
-              : trait.options.length === 4 ? "max-w-[21rem] md:max-w-[28rem] grid-cols-2"
-              : trait.options.length === 2 ? "max-w-[17rem] md:max-w-[22rem] grid-cols-2"
-              : "max-w-[21rem] md:max-w-[28rem] grid-cols-3"
-          }`}>
-            {trait.options.map((opt) => (
-              <div key={opt} className="flex flex-col items-center gap-1">
-                <InteractivePill
-                  label={opt}
-                  selected={selectedVal === opt}
-                  shaking={shaking && selectedVal !== opt}
-                  onClick={() => setTrait(trait.key, opt)}
-                />
-                {"defaultOption" in trait && trait.defaultOption === opt && (
-                  <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
-                )}
-              </div>
-            ))}
-          </div>
+          {trait.options.length === 5 ? (
+            <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3.5 md:gap-4 px-2 mx-auto max-w-[23rem] md:max-w-[30rem]">
+              {trait.options.map((opt) => (
+                <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
+                  <InteractivePill
+                    label={opt}
+                    selected={selectedVal === opt}
+                    shaking={shaking && selectedVal !== opt}
+                    onClick={() => setTrait(trait.key, opt)}
+                  />
+                  {"defaultOption" in trait && (trait as any).defaultOption === opt && (
+                    <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 mx-auto ${
+              trait.options.length === 4 ? "max-w-[21rem] md:max-w-[28rem] grid-cols-2"
+                : trait.options.length === 2 ? "max-w-[17rem] md:max-w-[22rem] grid-cols-2"
+                : "max-w-[21rem] md:max-w-[28rem] grid-cols-3"
+            }`}>
+              {trait.options.map((opt) => (
+                <div key={opt} className="flex flex-col items-center gap-1">
+                  <InteractivePill
+                    label={opt}
+                    selected={selectedVal === opt}
+                    shaking={shaking && selectedVal !== opt}
+                    onClick={() => setTrait(trait.key, opt)}
+                  />
+                  {"defaultOption" in trait && trait.defaultOption === opt && (
+                    <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       );
     }
@@ -554,31 +571,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Create slide */
     if (isCreateSlide) {
-      const isFirstCharacter = !isLoggedIn || !skipWelcome;
       return (
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
-          className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center cursor-pointer"
-          disabled={exitFade}
-        >
-          <h2 className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight">
+        <div className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
+          <h2 className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight mt-12">
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
           </h2>
-          {!isFirstCharacter && (
-            <div className="mt-6 flex items-center gap-1.5">
-              <Gem size={18} strokeWidth={2.5} className="text-gem-green" />
-              <span className="text-[15px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>30 gems</span>
-            </div>
-          )}
-          <motion.p
-            className="mt-6 text-[14px] md:text-[16px] font-[800] lowercase"
-            style={{ color: "rgba(255,255,255,0.4)" }}
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          >tap to continue</motion.p>
-        </button>
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
+            disabled={exitFade}
+            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            style={{ backgroundColor: "#00e0ff", color: "#000", borderRadius: 12 }}
+          >
+            create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#000" }} />
+          </button>
+        </div>
       );
     }
 
