@@ -375,7 +375,7 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
             rows={8}
-            className="min-h-52 w-full resize-none rounded-2xl border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-52 w-full resize-none rounded-2xl border-[1.5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
