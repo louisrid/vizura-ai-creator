@@ -176,7 +176,7 @@ const Header = () => {
         style={{
           zIndex: 9990,
           background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background) / 0.98) 15%, hsl(var(--background) / 0.94) 30%, hsl(var(--background) / 0.85) 45%, hsl(var(--background) / 0.68) 60%, hsl(var(--background) / 0.42) 75%, hsl(var(--background) / 0.15) 90%, transparent 100%)",
-          paddingBottom: 36,
+          paddingBottom: 24,
         }}
       >
         <TopGradientBar />
