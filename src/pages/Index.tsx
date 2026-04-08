@@ -334,16 +334,16 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        const preferredId = preselectedCharacterId || persistedCharacterId;
-        const resolvedId = preferredId && data.some((c: any) => c.id === preferredId) ? preferredId : data[0]?.id;
-        if (resolvedId) {
-          setSelectedCharId(resolvedId);
-          sessionStorage.setItem("vizura_last_selected_character_id", resolvedId);
+        // Always select the most recently created character (first in list)
+        const latestId = data[0]?.id;
+        if (latestId) {
+          setSelectedCharId(latestId);
+          sessionStorage.setItem("vizura_last_selected_character_id", latestId);
         }
       }
     };
     fetchCharacters();
-  }, [user, preselectedCharacterId, persistedCharacterId]);
+  }, [user]);
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
