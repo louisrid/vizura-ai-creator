@@ -774,7 +774,6 @@ serve(async (req) => {
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
         selectedFaceUrl, traits, dbBodyType, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
       );
-      );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
 
