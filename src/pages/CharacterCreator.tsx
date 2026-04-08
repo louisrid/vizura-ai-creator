@@ -306,7 +306,7 @@ const CharacterCreator = () => {
         </div>
 
         {/* Hero image box */}
-        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[2px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[1.5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
             <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
           </div>
