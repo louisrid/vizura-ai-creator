@@ -411,7 +411,7 @@ const Index = () => {
   const createDisabled = isGenerating;
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen bg-background overflow-x-hidden">
       <DotDecal />
       <PhotoGenerationOverlay
         open={photoOverlayPhase !== "hidden"}
