@@ -719,7 +719,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: selectedIndex !== null ? "#facc15" : "#222",
+                      backgroundColor: selectedIndex !== null ? "#00e0ff" : "#222",
                       color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.3)",
                     }}
                   >
@@ -738,9 +738,8 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: "#111111",
-                      border: "2px solid rgba(0,224,255,0.25)",
-                      color: "#00e0ff",
+                      backgroundColor: "#00e0ff",
+                      color: "#000",
                     }}
                   >
                     <RefreshCw size={16} strokeWidth={2.5} />
@@ -763,7 +762,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
+                  style={{ backgroundColor: "#00e0ff", color: "#000", borderRadius: 12 }}
                 >
                   try again
                 </button>
