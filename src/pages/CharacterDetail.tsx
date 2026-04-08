@@ -263,7 +263,7 @@ const CharacterDetail = () => {
         style={{
           color: "#000",
           borderRadius: 12,
-          backgroundColor: "#facc15",
+          backgroundColor: "#00e0ff",
         }}
       >
         create photo

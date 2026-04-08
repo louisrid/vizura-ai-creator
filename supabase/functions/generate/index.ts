@@ -523,12 +523,12 @@ async function generateFaceImages(
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
     const colourVariants: Record<string, string[]> = {
-      blonde: ["cool white-blonde", "warm golden-blonde"],
-      brown: ["warm brown", "cool dark-brown"],
-      black: ["soft black", "deep black"],
-      red: ["warm red", "copper-red"],
-      ginger: ["warm ginger", "golden-ginger"],
-      pink: ["soft pink", "dusty-pink"],
+      blonde: ["cool white-blonde", "light blonde"],
+      brown: ["brown", "rich brown"],
+      black: ["black", "dark black"],
+      red: ["red", "warm red"],
+      ginger: ["ginger", "light ginger"],
+      pink: ["pink", "soft pink"],
     };
 
     let tonedPrompt = faceOnlyPrompt;
