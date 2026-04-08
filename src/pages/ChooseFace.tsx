@@ -778,6 +778,8 @@ const ChooseFace = () => {
             handleRegenerate();
           }}
           onCancel={() => setShowRegenConfirm(false)}
+          message="regenerate all faces?"
+          confirmLabel="regenerate · 1 gem"
         />
 
         <RegenerateConfirmDialog
