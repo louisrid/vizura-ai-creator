@@ -305,7 +305,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[250px] md:hidden flex flex-col min-h-screen">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-6 md:hidden flex flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
@@ -313,22 +313,22 @@ const CharacterDetail = () => {
           {contentTop(true)}
         </div>
         {/* Breathing room — dot decal visible */}
-        <div className="flex-1 min-h-[120px]" />
-        <div className="flex flex-col gap-3 mb-10">
+        <div className="flex-1 min-h-[60px]" />
+        <div className="flex flex-col gap-3 mb-0">
           {contentBottom(true)}
         </div>
       </main>
 
       {/* Desktop layout */}
-      <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-[250px] flex-col min-h-screen">
+      <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-10 flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
         <div className="flex flex-col gap-4">
           {contentTop(false)}
         </div>
-        <div className="flex-1 min-h-[160px]" />
-        <div className="flex flex-col gap-4 mb-10">
+        <div className="flex-1 min-h-[80px]" />
+        <div className="flex flex-col gap-4 mb-0">
           {contentBottom(false)}
         </div>
       </main>
