@@ -362,7 +362,7 @@ const Index = () => {
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
-    if (!prompt.trim()) { toast.error("describe your photo first"); return; }
+    if (!selectedCharId || !prompt.trim()) { toast.error("finish info!"); return; }
 
     setIsGenerating(true);
     setError("");
