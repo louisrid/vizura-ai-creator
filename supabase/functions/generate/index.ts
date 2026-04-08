@@ -615,6 +615,7 @@ async function generateAngleAndBody(
   let angleUrl: string | null = null;
   let bodyAnchorUrl: string | null = null;
 
+  if (target === "angle" || target === "both") {
   try {
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
