@@ -102,7 +102,7 @@ const History = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : items.length === 0 ? (
-          <div className="border-[2px] border-border rounded-2xl p-8 text-center">
+          <div className="border-[1.5px] border-border rounded-2xl p-8 text-center">
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
