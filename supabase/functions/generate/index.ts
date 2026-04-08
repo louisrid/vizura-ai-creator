@@ -618,7 +618,7 @@ async function generateAngleAndBody(
     console.log("Generating 3/4 angle...");
     const anglePrompt = ACTIVE_MODEL === "flux"
       ? `Same person from the reference image photographed in the same session, 3/4 profile view with head turned 45 degrees to the right, same fitted plain white crew neck t-shirt, same plain white background, same soft even lighting, head and top of shoulders only, matte skin with visible pores, natural skin texture matching reference, ${characterTraits}`
-      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera, eyes looking directly at camera. Head and shoulders only, cropped below collarbone. Fitted low-cut white top. Skin with visible pores and colour variation. Subtle closed-mouth smile with lips together. ${characterTraits}`;
+      : `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white background, same lighting. Head turned 30 degrees right, mostly facing camera. Head and shoulders and upper chest visible. Fitted low-cut white top, ${BODY_ANCHOR_MAP[(bodyType || "regular").toLowerCase()] || BODY_ANCHOR_MAP.regular}. Skin with visible pores and colour variation. Confident closed-mouth smile with lips together. ${characterTraits}`;
     const angleResult = await routerImageEdit(anglePrompt, ACTIVE_MODEL === "flux" ? "" : FACE_NEGATIVE, [faceUrl], apiKey, "3:4");
     if (angleResult) {
       angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
