@@ -544,7 +544,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
           {selections.referenceImage ? (
             <div className="w-full">
-              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "2px solid #222", aspectRatio: "3/4" }}>
+              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "1.5px solid #222", aspectRatio: "3/4" }}>
                 <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                 <button
                   type="button"
