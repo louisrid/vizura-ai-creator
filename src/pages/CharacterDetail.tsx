@@ -375,7 +375,7 @@ const CharacterDetail = () => {
                   onClick={handleDelete}
                   disabled={deleting}
                   className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: "hsl(var(--destructive))", borderRadius: 12 }}
+                  style={{ backgroundColor: "#1a0505", borderRadius: 12, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
                 </button>
