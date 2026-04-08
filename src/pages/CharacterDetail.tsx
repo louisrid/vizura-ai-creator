@@ -210,11 +210,11 @@ const CharacterDetail = () => {
     showSpinner = false,
     onRegenClick?: () => void,
   ) => (
-    <div className="relative aspect-[3/4] w-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
@@ -246,7 +246,7 @@ const CharacterDetail = () => {
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
-        <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`}>
+        <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`} style={{ overflow: "visible" }}>
           {imgSlot(character.face_image_url, "front", "lock")}
           {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
           {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
