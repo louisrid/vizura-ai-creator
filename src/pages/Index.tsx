@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Sparkles, ChevronDown, Gem, ArrowUpFromLine } from "lucide-react";
+import { Loader2, Zap, Sparkles, ChevronDown, Gem } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
@@ -247,14 +247,14 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 }) => (
   <button
     className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
+    style={{ backgroundColor: "#050a10", color: "#00e0ff", border: "2px solid #00e0ff", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#000" }} /></>
+      <>create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
     )}
   </button>
 );
@@ -288,8 +288,6 @@ const Index = () => {
   const [photoRatio, setPhotoRatio] = useState("3:4");
   const [expression, setExpression] = useState("casual smile");
 
-  const [referenceImage, setReferenceImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [charDropdownOpen, setCharDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -334,16 +332,16 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        const preferredId = preselectedCharacterId || persistedCharacterId;
-        const resolvedId = preferredId && data.some((c: any) => c.id === preferredId) ? preferredId : data[0]?.id;
-        if (resolvedId) {
-          setSelectedCharId(resolvedId);
-          sessionStorage.setItem("vizura_last_selected_character_id", resolvedId);
+        // Always select the most recently created character (first in list)
+        const latestId = data[0]?.id;
+        if (latestId) {
+          setSelectedCharId(latestId);
+          sessionStorage.setItem("vizura_last_selected_character_id", latestId);
         }
       }
     };
     fetchCharacters();
-  }, [user, preselectedCharacterId, persistedCharacterId]);
+  }, [user]);
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
@@ -353,16 +351,10 @@ const Index = () => {
 
   const previewAspect = photoRatio === "9:16" ? "9/16" : "3/4";
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setReferenceImage(URL.createObjectURL(file));
-  };
-
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
-    if (!prompt.trim()) { toast.error("describe your photo first"); return; }
+    if (!selectedCharId || !prompt.trim()) { toast.error("finish info!"); return; }
 
     setIsGenerating(true);
     setError("");
@@ -372,21 +364,6 @@ const Index = () => {
     toast("1 gem used");
     const cleanPrompt = sanitiseText(prompt.trim());
 
-    let vibeRefUrl: string | null = null;
-    if (referenceImage && fileInputRef.current?.files?.[0]) {
-      try {
-        const file = fileInputRef.current.files[0];
-        const filename = `${user.id}/vibe_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${file.name.split('.').pop() || 'png'}`;
-        const { error: uploadErr } = await supabase.storage.from("images").upload(filename, file, { contentType: file.type, upsert: false });
-        if (!uploadErr) {
-          const { data: pubData } = supabase.storage.from("images").getPublicUrl(filename);
-          vibeRefUrl = pubData.publicUrl;
-        }
-      } catch (e) {
-        console.error("Vibe reference upload failed:", e);
-      }
-    }
-
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: {
@@ -395,7 +372,6 @@ const Index = () => {
           photo_type: photoType,
           aspect_ratio: photoRatio,
           expression: expression || undefined,
-          ...(vibeRefUrl ? { vibe_reference_url: vibeRefUrl } : {}),
         },
       });
       if (fnError) throw fnError;
@@ -432,7 +408,7 @@ const Index = () => {
     }
   };
 
-  const createDisabled = isGenerating || (!!user && !prompt.trim());
+  const createDisabled = isGenerating;
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
@@ -445,7 +421,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-1 pb-[250px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-6 pb-[250px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -597,23 +573,6 @@ const Index = () => {
                 </div>
               }
             />
-          </div>
-
-          {/* Reference section — disabled */}
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm font-[900] lowercase text-white">add a reference image</span>
-              <span className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => toast("coming soon!")}
-              className="flex w-full items-center justify-center gap-3 px-4 py-6 opacity-50"
-              style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
-            >
-              <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
-              <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
-            </button>
           </div>
 
           {/* Create button */}

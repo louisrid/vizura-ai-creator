@@ -316,7 +316,7 @@ const Home = () => {
           {/* Latest Photos Section */}
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.7)" }}>latest photos 🖼️</h2>
+              <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.45)" }}>latest photos 🖼️</h2>
               <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                 see all →
               </button>
@@ -355,7 +355,7 @@ const Home = () => {
           {/* My Characters Section */}
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.7)" }}>my characters 🧑</h2>
+              <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.45)" }}>my characters 🧑</h2>
               <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                 manage →
               </button>
@@ -445,7 +445,7 @@ const Home = () => {
             </div>
             <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-[900] lowercase" style={{ color: "rgba(255,255,255,0.7)" }}>latest photos 🖼️</h2>
+                <h2 className="text-lg font-[900] lowercase" style={{ color: "rgba(255,255,255,0.45)" }}>latest photos 🖼️</h2>
                 <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                   see all →
                 </button>
@@ -477,7 +477,7 @@ const Home = () => {
           {/* Desktop characters section */}
           <section className="mt-6 p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "rgba(255,255,255,0.7)" }}>my characters 🧑</h2>
+              <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "rgba(255,255,255,0.45)" }}>my characters 🧑</h2>
               <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                 manage →
               </button>
