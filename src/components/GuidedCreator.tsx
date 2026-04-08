@@ -144,7 +144,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#111", color: "#fff", border: "2px solid #222" }
+        : { backgroundColor: "#111", color: "#fff", border: "1.5px solid #222" }
       ),
     }}
   >
