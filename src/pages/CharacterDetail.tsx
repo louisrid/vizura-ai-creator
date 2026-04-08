@@ -343,8 +343,8 @@ const CharacterDetail = () => {
               style={{
                 backgroundColor: "#000000",
                 borderRadius: 16,
-                border: "2px solid #000000",
-                padding: "36px 28px 28px",
+                border: "2px solid #333",
+                padding: "28px 24px 24px",
               }}
             >
               {/* X dismiss */}
