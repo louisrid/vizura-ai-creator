@@ -322,7 +322,7 @@ const CharacterCreator = () => {
             value={characterName}
             onChange={(e) => setCharacterName(e.target.value)}
             placeholder="give your character a name..."
-            className="h-12 w-full rounded-2xl border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="h-12 w-full rounded-2xl border-[1.5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
