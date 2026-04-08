@@ -161,7 +161,7 @@ const History = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              className="bg-card border-[1.5px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
