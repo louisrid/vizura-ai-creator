@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Sparkles, ChevronDown, Gem, ArrowUpFromLine } from "lucide-react";
+import { Loader2, Zap, Sparkles, ChevronDown, Gem } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
