@@ -272,9 +272,10 @@ const CharacterDetail = () => {
         style={{
           color: "#000",
           borderRadius: 12,
-          backgroundColor: "#00e0ff",
+          backgroundColor: "#facc15",
         }}
       >
+        <Camera size={16} strokeWidth={2.5} />
         create photo
       </button>
 
