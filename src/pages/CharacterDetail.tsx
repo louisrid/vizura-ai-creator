@@ -221,19 +221,19 @@ const CharacterDetail = () => {
       {/* Overlay icon */}
       {overlay === "lock" && (
         <div
-          className="absolute top-2 right-2 flex items-center justify-center"
-          style={{ width: 24, height: 24, borderRadius: "50%", backgroundColor: "#facc15" }}
+          className="absolute flex items-center justify-center"
+          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#facc15", top: -6, right: -6 }}
         >
-          <Lock size={12} strokeWidth={2.5} color="#000" />
+          <Lock size={14} strokeWidth={3} color="#000" fill="none" />
         </div>
       )}
       {overlay === "regenerate" && (
         <button
           onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
-          className="absolute top-2 right-2 flex items-center justify-center transition-transform active:scale-90"
-          style={{ width: 26, height: 26, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "1.5px solid rgba(255,255,255,0.2)" }}
+          className="absolute flex items-center justify-center transition-transform active:scale-90"
+          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#0a0a0a", border: "2px solid #00e0ff", top: -6, right: -6 }}
         >
-          <RefreshCw size={12} strokeWidth={2.5} color="rgba(255,255,255,0.7)" />
+          <RefreshCw size={13} strokeWidth={3} color="#fff" />
         </button>
       )}
     </div>

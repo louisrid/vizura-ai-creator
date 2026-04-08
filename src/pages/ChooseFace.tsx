@@ -762,7 +762,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#00e0ff", color: "#000", borderRadius: 12 }}
+                  style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
                 >
                   try again
                 </button>

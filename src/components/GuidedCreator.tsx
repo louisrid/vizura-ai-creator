@@ -85,7 +85,6 @@ const AnimatedRings = ({ t }: { t: number }) => (
 );
 
 /* ── Nav arrow (cyan/blue style) ── */
-const CYAN = "#00e0ff";
 const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(
   ({ direction, onClick, disabled }, ref) => {
     const isForward = direction === "right";
@@ -98,10 +97,10 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
         style={{
           borderRadius: 16,
-          backgroundColor: isForward ? CYAN : "rgba(0,224,255,0.08)",
-          border: isForward ? "none" : `2.5px solid rgba(0,224,255,0.3)`,
+          backgroundColor: isForward ? "#facc15" : "rgba(250,204,21,0.08)",
+          border: isForward ? "none" : `2.5px solid rgba(250,204,21,0.3)`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#000" : CYAN,
+          color: isForward ? "#000" : "#facc15",
         }}
       >
         {direction === "left" ? (
