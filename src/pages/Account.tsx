@@ -90,7 +90,7 @@ const Account = () => {
 
           <div className="mt-7">
             <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
+              <div className="border-[1.5px] border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
                 <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1 min-w-0">
                   <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
