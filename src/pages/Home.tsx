@@ -445,7 +445,7 @@ const Home = () => {
             </div>
             <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-[900] lowercase text-white">latest photos</h2>
+                <h2 className="text-lg font-[900] lowercase" style={{ color: "rgba(255,255,255,0.7)" }}>latest photos 🖼️</h2>
                 <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                   see all →
                 </button>
