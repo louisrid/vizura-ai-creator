@@ -265,7 +265,7 @@ const CharacterDetail = () => {
         </div>
       </div>
 
-      {/* Create Photo button */}
+      {/* Create Photo button — navigates only, no gem cost */}
       <button
         onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
         className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
