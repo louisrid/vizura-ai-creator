@@ -305,19 +305,22 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-4 md:hidden flex flex-col" style={{ minHeight: "100dvh" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[132px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
         <div className="flex flex-col gap-3">
           {contentTop(true)}
         </div>
-        {/* Breathing room — dot decal visible */}
-        <div className="flex-1 min-h-[24px]" />
-        <div className="flex flex-col gap-3">
-          {contentBottom(true)}
-        </div>
       </main>
+
+      <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
+        <div className="mx-auto w-full max-w-lg bg-gradient-to-t from-background via-background to-transparent px-[14px] pb-[calc(env(safe-area-inset-bottom)+10px)] pt-3">
+          <div className="flex flex-col gap-3">
+          {contentBottom(true)}
+          </div>
+        </div>
+      </div>
 
       {/* Desktop layout */}
       <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-10 flex-col min-h-screen">

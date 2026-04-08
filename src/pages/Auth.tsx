@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,9 +9,10 @@ import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 
 const Auth = () => {
-  const { user, loading: authLoading, signIn, signUp } = useAuth();
+  const { user, loading: authLoading, signIn, signUp, signInPreview } = useAuth();
   const navigate = useNavigate();
-  const redirectTo = "/";
+  const location = useLocation();
+  const redirectTo = useMemo(() => new URLSearchParams(location.search).get("redirect") || "/", [location.search]);
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -40,12 +41,21 @@ const Auth = () => {
   }, []);
 
   const handleEmailAuth = async () => {
-    if (!email.trim() || !password.trim()) {
-      toast.error("please enter email and password");
-      return;
-    }
     setSubmitting(true);
     try {
+      if (!isSignUp && !email.trim() && !password.trim()) {
+        sessionStorage.setItem("vizura_post_auth_home", "1");
+        await signInPreview();
+        toast.success("signed into preview account");
+        return;
+      }
+
+      if (!email.trim() || !password.trim()) {
+        toast.error("please enter email and password");
+        setSubmitting(false);
+        return;
+      }
+
       if (isSignUp) {
         try {
           await signUp(email.trim(), password);
@@ -159,7 +169,7 @@ const Auth = () => {
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ backgroundColor: "#111111", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
@@ -171,7 +181,7 @@ const Auth = () => {
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ backgroundColor: "#111111", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
@@ -184,7 +194,7 @@ const Auth = () => {
               </>
             ) : (
               <>
-                {isSignUp ? "sign up" : "sign in"}
+                {isSignUp ? "sign up" : email.trim() || password.trim() ? "sign in" : "preview login"}
                 <ArrowRight size={14} />
               </>
             )}
