@@ -722,6 +722,7 @@ serve(async (req) => {
     const selectedFaceUrl = body?.selected_face_url || null;
     const angleCharacterId = body?.angle_character_id || null;
     const vibeReferenceUrl = body?.vibe_reference_url || null;
+    const regenerateTarget = body?.regenerate_target || "both"; // "angle" | "body" | "both"
 
     if (!rawPrompt || typeof rawPrompt !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt" }), {
