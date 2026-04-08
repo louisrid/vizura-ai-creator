@@ -369,7 +369,7 @@ const CharacterDetail = () => {
                   className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
                   style={{ backgroundColor: "#333", borderRadius: 12 }}
                 >
-                  go back
+                  no
                 </button>
                 <button
                   onClick={handleDelete}
