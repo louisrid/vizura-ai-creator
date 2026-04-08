@@ -599,23 +599,6 @@ const Index = () => {
             />
           </div>
 
-          {/* Reference section — disabled */}
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm font-[900] lowercase text-white">add a reference image</span>
-              <span className="text-sm font-[900] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>(optional)</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => toast("coming soon!")}
-              className="flex w-full items-center justify-center gap-3 px-4 py-6 opacity-50"
-              style={{ borderRadius: 12, border: "2px dashed rgba(255,255,255,0.15)", backgroundColor: "#111111" }}
-            >
-              <ArrowUpFromLine size={18} strokeWidth={2.5} className="text-foreground/30 shrink-0" />
-              <span className="text-sm font-[900] lowercase text-foreground/30">upload image</span>
-            </button>
-          </div>
-
           {/* Create button */}
           <div className="pt-3">
             <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
