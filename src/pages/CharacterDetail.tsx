@@ -210,7 +210,7 @@ const CharacterDetail = () => {
     showSpinner = false,
     onRegenClick?: () => void,
   ) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#111111" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
@@ -231,7 +231,7 @@ const CharacterDetail = () => {
         <button
           onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
           className="absolute flex items-center justify-center transition-transform active:scale-90"
-          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#0a0a0a", border: "2px solid #00e0ff", top: -6, right: -6 }}
+          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
         >
           <RefreshCw size={13} strokeWidth={3} color="#fff" />
         </button>
@@ -286,7 +286,7 @@ const CharacterDetail = () => {
         style={{
           color: "#ff4444",
           borderRadius: 12,
-          backgroundColor: "#1a0808",
+          backgroundColor: "#100505",
           border: "2px solid #ff4444",
         }}
       >
@@ -331,7 +331,7 @@ const CharacterDetail = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             className="fixed inset-0 z-[9998] flex items-center justify-center px-5"
-            style={{ backgroundColor: "rgba(0,0,0,0.94)" }}
+            style={{ backgroundColor: "rgba(0,0,0,0.83)" }}
             onClick={(e) => { if (e.target === e.currentTarget) setShowDelete(false); }}
           >
             <motion.div
@@ -343,8 +343,8 @@ const CharacterDetail = () => {
               style={{
                 backgroundColor: "#000000",
                 borderRadius: 16,
-                border: "2px solid #000000",
-                padding: "36px 28px 28px",
+                border: "2px solid #333",
+                padding: "28px 24px 24px",
               }}
             >
               {/* X dismiss */}
@@ -369,13 +369,13 @@ const CharacterDetail = () => {
                   className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
                   style={{ backgroundColor: "#333", borderRadius: 12 }}
                 >
-                  go back
+                  no
                 </button>
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
                   className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: "hsl(var(--destructive))", borderRadius: 12 }}
+                  style={{ backgroundColor: "#1a0505", borderRadius: 12, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
                 </button>
