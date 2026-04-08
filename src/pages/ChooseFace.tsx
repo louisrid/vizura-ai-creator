@@ -779,7 +779,8 @@ const ChooseFace = () => {
           }}
           onCancel={() => setShowRegenConfirm(false)}
           message="regenerate all faces?"
-          confirmLabel="regenerate · 1 gem"
+          confirmLabel="yes • 1"
+          gemCost
         />
 
         <RegenerateConfirmDialog
