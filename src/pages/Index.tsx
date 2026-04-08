@@ -288,8 +288,6 @@ const Index = () => {
   const [photoRatio, setPhotoRatio] = useState("3:4");
   const [expression, setExpression] = useState("casual smile");
 
-  const [referenceImage, setReferenceImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [charDropdownOpen, setCharDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
