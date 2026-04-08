@@ -1,0 +1,8 @@
+---
+name: visual-identity
+description: Visual identity and button styling conventions
+type: design
+---
+Face Selection UI: Generates 3 passport-style headshots featuring distinct facial profiles. Face image containers utilize rounded corners (borderRadius: 10) and an increased width (max-w-[26rem]). Images are wrapped in containers with 'overflow: hidden' and explicit 'borderRadius: 10' to prevent edge artifacts. All action buttons sitewide use solid yellow (#facc15) fill with black text. This includes create photo, create character, regenerate, use this face, create · 1 gem, try again, start now, and all primary CTAs. Success screens for images use a solid black background with large 3:4 or 9:16 previews and a white 'tap anywhere to continue' prompt with a subtle vertical bounce animation. All buttons use a 12px squircle radius. All action buttons include a relevant icon after the text (Camera for create photo, RefreshCw for regenerate, Trash2 for delete, Sparkles for create character, etc.). GuidedCreator nav arrows are yellow themed. Gem counter indicators remain cyan (#00e0ff) — this is for informational display only, not action buttons.
+
+Character Detail photo overlay circles: Lock circle is 28px, yellow (#facc15) fill, thick solid black Lock icon (strokeWidth 3). Regenerate circles are 28px, dark (#0a0a0a) fill, cyan (#00e0ff) 2px border, solid white RefreshCw icon (strokeWidth 3). All circles positioned at top: -6, right: -6 so centres sit on the top-right corner of each photo. Parent container uses no overflow-hidden to prevent clipping.
