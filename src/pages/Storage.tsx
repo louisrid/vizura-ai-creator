@@ -167,8 +167,8 @@ const Storage = () => {
                   className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
                   style={{ backgroundColor: "#ffffff", color: "#000000", border: "2px solid #222", borderTop: "none" }}
                 >
-                  <Download size={12} strokeWidth={2.5} />
-                  download
+                   download
+                   <Download size={12} strokeWidth={2.5} />
                 </a>
               </motion.div>
               );
@@ -216,7 +216,7 @@ const Storage = () => {
               <div className="p-3 flex gap-2">
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
                   <Button variant="outline" className="w-full h-10 border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
-                    <Download size={12} strokeWidth={2.5} /> download
+                    download <Download size={12} strokeWidth={2.5} />
                   </Button>
                 </a>
                 <Button

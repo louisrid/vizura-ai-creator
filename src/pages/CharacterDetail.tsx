@@ -279,8 +279,8 @@ const CharacterDetail = () => {
           backgroundColor: "#facc15",
         }}
       >
-        <Camera size={16} strokeWidth={2.5} />
         create photo
+        <Camera size={16} strokeWidth={2.5} />
       </button>
 
       {/* Delete button */}
@@ -294,8 +294,8 @@ const CharacterDetail = () => {
           border: "2px solid #ff4444",
         }}
       >
-        <Trash2 size={14} strokeWidth={2.5} />
         delete character
+        <Trash2 size={14} strokeWidth={2.5} />
       </button>
     </>
   );
