@@ -342,7 +342,7 @@ const CharacterDetail = () => {
               style={{
                 backgroundColor: "#111111",
                 borderRadius: 16,
-                border: "2px solid #333",
+                border: "2px solid #000000",
                 padding: "28px 24px 24px",
               }}
             >
