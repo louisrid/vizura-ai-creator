@@ -121,7 +121,7 @@ const Auth = () => {
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
-        <div className="rounded-2xl border-2 border-[#1a1a1a] p-5 space-y-3" style={{ backgroundColor: "#111111" }}>
+        <div className="rounded-2xl border-[1.5px] border-[#1a1a1a] p-5 space-y-3" style={{ backgroundColor: "#111111" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
