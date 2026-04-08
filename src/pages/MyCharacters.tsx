@@ -100,7 +100,7 @@ const MyCharacters = () => {
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="overflow-hidden active:scale-[0.97] transition-transform"
-              style={{ borderRadius: 16, border: "1.5px dashed #222", backgroundColor: "#111111" }}
+              style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#111111" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
@@ -125,7 +125,7 @@ const MyCharacters = () => {
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200"
                     style={{
                       borderRadius: 16,
-                      border: isNew ? "3px solid #facc15" : "1.5px solid #222",
+                      border: isNew ? "3px solid #facc15" : "2px solid #222",
                       backgroundColor: "#111111",
                     }}
                   >

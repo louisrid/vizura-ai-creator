@@ -332,7 +332,7 @@ const Home = () => {
                     className="overflow-hidden active:scale-[0.98] transition-transform"
                     style={{
                       borderRadius: 16,
-                      border: isPlaceholder ? "1.5px dashed #222" : "1.5px solid #222",
+                      border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
                       backgroundColor: "#111111",
                     }}
                   >
@@ -371,7 +371,7 @@ const Home = () => {
                       className="overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: "1.5px dashed #222",
+                        border: "2px dashed #222",
                         backgroundColor: "#111111",
                       }}
                     >
@@ -390,7 +390,7 @@ const Home = () => {
                     className="relative overflow-hidden active:scale-[0.98] transition-transform"
                     style={{
                       borderRadius: 16,
-                      border: "1.5px solid #222",
+                      border: "2px solid #222",
                       backgroundColor: "#111111",
                     }}
                   >
