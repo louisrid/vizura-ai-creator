@@ -86,34 +86,35 @@ const CharacterDetail = () => {
 
   const handleRegenerate = async () => {
     if (!character || !character.face_image_url || !user || !regenTarget) return;
+    const target = regenTarget;
     setRegenTarget(null);
 
-    const isAngle = regenTarget === "angle";
-    if (isAngle) setRegeneratingAngle(true);
+    if (target === "angle") setRegeneratingAngle(true);
     else setRegeneratingBody(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("generate", {
         body: {
-          prompt: character.generation_prompt || character.description || "character",
-          generate_angles: true,
+          regenerate_single: target,
+          character_id: character.id,
           selected_face_url: character.face_image_url,
-          body_type: character.body || "regular",
-          angle_character_id: character.id,
-          regenerate_target: regenTarget,
         },
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
-      // Refresh character data
-      const { data: updated } = await supabase
-        .from("characters")
-        .select("*")
-        .eq("id", character.id)
-        .eq("user_id", user.id)
-        .single();
-      if (updated) setCharacter(updated as unknown as Character);
+      // Update only the regenerated photo
+      setCharacter((prev) => {
+        if (!prev) return prev;
+        if (target === "angle" && data?.angle_url) {
+          return { ...prev, face_angle_url: data.angle_url };
+        }
+        if (target === "body" && data?.body_anchor_url) {
+          return { ...prev, body_anchor_url: data.body_anchor_url };
+        }
+        return prev;
+      });
 
       await refetchGems();
       toast("1 gem used");
@@ -218,7 +219,6 @@ const CharacterDetail = () => {
       ) : (
         <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
-      {/* Overlay icon */}
       {overlay === "lock" && (
         <div
           className="absolute flex items-center justify-center"
@@ -239,7 +239,7 @@ const CharacterDetail = () => {
     </div>
   );
 
-  const content = (isMobile: boolean) => (
+  const contentTop = (isMobile: boolean) => (
     <>
       {/* Box 1: Name + Photos */}
       <div style={{ backgroundColor: "#111111", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
@@ -264,8 +264,12 @@ const CharacterDetail = () => {
           ))}
         </div>
       </div>
+    </>
+  );
 
-      {/* Create Photo button — navigates only, no gem cost */}
+  const contentBottom = (isMobile: boolean) => (
+    <>
+      {/* Create Photo button */}
       <button
         onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
         className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
@@ -299,18 +303,34 @@ const CharacterDetail = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[250px] md:hidden">
+
+      {/* Mobile layout */}
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[250px] md:hidden flex flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
-        <div className="flex flex-col gap-3">{content(true)}</div>
+        <div className="flex flex-col gap-3">
+          {contentTop(true)}
+        </div>
+        {/* Breathing room — dot decal visible */}
+        <div className="flex-1 min-h-[120px]" />
+        <div className="flex flex-col gap-3 mb-10">
+          {contentBottom(true)}
+        </div>
       </main>
 
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-[250px]">
+      {/* Desktop layout */}
+      <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-1 pb-[250px] flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
-        <div className="flex flex-col gap-4">{content(false)}</div>
+        <div className="flex flex-col gap-4">
+          {contentTop(false)}
+        </div>
+        <div className="flex-1 min-h-[160px]" />
+        <div className="flex flex-col gap-4 mb-10">
+          {contentBottom(false)}
+        </div>
       </main>
 
       {/* Regenerate confirmation */}
@@ -347,7 +367,6 @@ const CharacterDetail = () => {
                 padding: "28px 24px 24px",
               }}
             >
-              {/* X dismiss */}
               <button
                 onClick={() => setShowDelete(false)}
                 className="absolute flex items-center justify-center"
@@ -374,7 +393,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
-                  className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors disabled:opacity-50"
+                  className="flex-1 h-12 text-sm font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
                   style={{ backgroundColor: "#1a0505", borderRadius: 12, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
