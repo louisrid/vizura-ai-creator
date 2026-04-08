@@ -80,7 +80,7 @@ const Account = () => {
             <div className="flex justify-center pt-3">
               <button
                 className="mx-auto h-9 px-5 text-[11px] md:h-10 md:text-[12px] font-extrabold lowercase leading-none transition-all hover:opacity-90"
-                style={{ borderRadius: 12, backgroundColor: "#1a0808", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive) / 0.3)" }}
+                style={{ borderRadius: 12, backgroundColor: "#1a0808", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive))" }}
                 onClick={handleCancel}
               >
                 cancel
