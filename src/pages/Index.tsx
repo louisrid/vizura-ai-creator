@@ -364,21 +364,6 @@ const Index = () => {
     toast("1 gem used");
     const cleanPrompt = sanitiseText(prompt.trim());
 
-    let vibeRefUrl: string | null = null;
-    if (referenceImage && fileInputRef.current?.files?.[0]) {
-      try {
-        const file = fileInputRef.current.files[0];
-        const filename = `${user.id}/vibe_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${file.name.split('.').pop() || 'png'}`;
-        const { error: uploadErr } = await supabase.storage.from("images").upload(filename, file, { contentType: file.type, upsert: false });
-        if (!uploadErr) {
-          const { data: pubData } = supabase.storage.from("images").getPublicUrl(filename);
-          vibeRefUrl = pubData.publicUrl;
-        }
-      } catch (e) {
-        console.error("Vibe reference upload failed:", e);
-      }
-    }
-
     try {
       const { data, error: fnError } = await supabase.functions.invoke("generate", {
         body: {
@@ -387,7 +372,6 @@ const Index = () => {
           photo_type: photoType,
           aspect_ratio: photoRatio,
           expression: expression || undefined,
-          ...(vibeRefUrl ? { vibe_reference_url: vibeRefUrl } : {}),
         },
       });
       if (fnError) throw fnError;
