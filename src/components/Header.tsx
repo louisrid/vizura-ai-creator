@@ -192,11 +192,11 @@ const Header = () => {
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "hsl(var(--card))",
-                  border: `2px solid ${subscribed ? "hsl(var(--member-green) / 0.4)" : "hsl(var(--foreground) / 0.16)"}`,
+                  border: `2px solid ${subscribed ? "#34d399" : "rgba(255,255,255,0.25)"}`,
                 }}
                 aria-label="my account"
               >
-                <User size={16} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: subscribed ? "#22c55e" : "#ffffff" }} />
+                <User size={16} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: subscribed ? "#34d399" : "#ffffff" }} />
               </button>
             )}
           </div>
