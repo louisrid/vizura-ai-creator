@@ -735,17 +735,17 @@ const ChooseFace = () => {
                       setShowRegenConfirm(true);
                     }}
                     disabled={isFreeUser}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: "#facc15",
-                      color: "#000",
+                      backgroundColor: "#0a0a0a",
+                      border: "2px solid #00e0ff",
+                      color: "#00e0ff",
                     }}
                   >
                     <RefreshCw size={16} strokeWidth={2.5} />
-                    regenerate
-                    <Gem size={12} strokeWidth={2.5} style={{ color: "#000" }} />
-                    <span className="text-[11px]">1</span>
+                    regenerate • 1
+                    <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                   </button>
                 </div>
               </div>
@@ -779,13 +779,15 @@ const ChooseFace = () => {
           }}
           onCancel={() => setShowRegenConfirm(false)}
           message="regenerate all faces?"
-          confirmLabel="regenerate · 1 gem"
+          confirmLabel="yes • 1"
+          gemCost
         />
 
         <RegenerateConfirmDialog
           open={showBackConfirm}
-          message="are you sure?\nyou will lose your progress"
+          message={"are you sure?\nyou will lose your progress"}
           confirmLabel="yes, go back"
+          gemCost={false}
           onConfirm={() => {
             setShowBackConfirm(false);
             sessionStorage.removeItem(FACE_STORAGE_KEY);

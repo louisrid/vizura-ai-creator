@@ -242,7 +242,7 @@ const CharacterDetail = () => {
   const content = (isMobile: boolean) => (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #facc15" }} className={isMobile ? "p-5" : "p-6"}>
+      <div style={{ backgroundColor: "#111111", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
@@ -254,7 +254,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Details — compact */}
-      <div style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #facc15" }} className={isMobile ? "px-4 py-3" : "p-4"}>
+      <div style={{ backgroundColor: "#111111", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
         <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
           {traits.map((t) => (
             <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#111111", border: "2px solid #222" }}>
@@ -265,7 +265,7 @@ const CharacterDetail = () => {
         </div>
       </div>
 
-      {/* Create Photo button */}
+      {/* Create Photo button — navigates only, no gem cost */}
       <button
         onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
         className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
@@ -319,7 +319,8 @@ const CharacterDetail = () => {
         onConfirm={handleRegenerate}
         onCancel={() => setRegenTarget(null)}
         message="regenerate this photo?"
-        confirmLabel="regenerate · 1 gem"
+        confirmLabel="yes • 1"
+        gemCost
       />
 
       <AnimatePresence>
@@ -330,7 +331,7 @@ const CharacterDetail = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[9998] flex items-center justify-center px-6"
-            style={{ backgroundColor: "rgba(0,0,0,0.90)" }}
+            style={{ backgroundColor: "rgba(0,0,0,0.96)" }}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 8 }}
@@ -341,7 +342,7 @@ const CharacterDetail = () => {
               style={{
                 backgroundColor: "#111111",
                 borderRadius: 16,
-                border: "2px solid #333",
+                border: "2px solid #000000",
                 padding: "28px 24px 24px",
               }}
             >

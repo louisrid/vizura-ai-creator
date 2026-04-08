@@ -388,7 +388,8 @@ const CharacterCreator = () => {
         {/* Create button */}
         <div className="mt-8 mb-6">
           <button
-            className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl text-sm font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90 disabled:opacity-50"
+            className="flex h-16 w-full items-center justify-center gap-1.5 rounded-2xl text-sm font-extrabold lowercase transition-all hover:opacity-90 disabled:opacity-50"
+            style={{ backgroundColor: "#0a0a0a", color: "#00e0ff", border: "2px solid #00e0ff" }}
             onClick={handleCreate}
             disabled={isSaving}
           >
@@ -400,9 +401,8 @@ const CharacterCreator = () => {
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                {isEditing ? "update" : "create"}
-                <Gem size={14} strokeWidth={2.5} className="text-neon-yellow-foreground/60 ml-1" />
-                <span className="text-[11px] ml-0.5">30</span>
+                {isEditing ? "update" : "create • 30"}
+                <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
               </>
             )}
           </button>
