@@ -331,7 +331,7 @@ const CharacterDetail = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[9998] flex items-center justify-center px-6"
-            style={{ backgroundColor: "rgba(0,0,0,0.90)" }}
+            style={{ backgroundColor: "rgba(0,0,0,0.96)" }}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 8 }}
