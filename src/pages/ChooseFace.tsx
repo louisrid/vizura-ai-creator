@@ -785,8 +785,9 @@ const ChooseFace = () => {
 
         <RegenerateConfirmDialog
           open={showBackConfirm}
-          message="are you sure?\nyou will lose your progress"
+          message={"are you sure?\nyou will lose your progress"}
           confirmLabel="yes, go back"
+          gemCost={false}
           onConfirm={() => {
             setShowBackConfirm(false);
             sessionStorage.removeItem(FACE_STORAGE_KEY);
