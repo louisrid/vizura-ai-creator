@@ -302,7 +302,7 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#facc15",
                 backgroundColor: "#111111",
-                border: "1.5px solid rgba(250,204,21,0.25)",
+                border: "2px solid #facc15",
               }}
             >
               <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#facc15" }}>create<br />photo</span>
