@@ -222,7 +222,7 @@ const Header = () => {
               style={{
                 borderRadius: 12,
                 backgroundColor: "#1a1a1a",
-                border: "2px solid #1a1a1a",
+                border: "1.5px solid #1a1a1a",
               }}
               aria-label="open menu"
             >

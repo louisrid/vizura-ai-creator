@@ -390,7 +390,7 @@ const Home = () => {
                     className="relative overflow-hidden active:scale-[0.98] transition-transform"
                     style={{
                       borderRadius: 16,
-                      border: "2px solid #222",
+                      border: "1.5px solid #222",
                       backgroundColor: "#111111",
                     }}
                   >

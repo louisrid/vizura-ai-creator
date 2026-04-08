@@ -544,7 +544,7 @@ const Index = () => {
               className="flex items-center justify-center overflow-hidden w-full"
               style={{
                 borderRadius: 14,
-                border: "2px solid rgba(255,255,255,0.08)",
+                border: "1.5px solid rgba(255,255,255,0.08)",
                 backgroundColor: "#111111",
               }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
