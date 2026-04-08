@@ -629,7 +629,9 @@ async function generateAngleAndBody(
   } catch (e) {
     console.error("3/4 angle generation failed:", e);
   }
+  }
 
+  if (target === "body" || target === "both") {
   const BODY_NEGATIVE = "";
 
   try {
@@ -647,6 +649,7 @@ async function generateAngleAndBody(
     }
   } catch (e) {
     console.error("Full-body anchor generation failed:", e);
+  }
   }
 
   return { angleUrl, bodyAnchorUrl };
