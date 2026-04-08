@@ -425,8 +425,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[18px] md:text-[22px]"
             style={{
-              background: "#111", border: "2px solid #222",
-              borderRadius: 12, fontWeight: 900, color: "#fff",
+              background: "rgba(250,204,21,0.08)", border: "2px solid #facc15",
+              borderRadius: 12, fontWeight: 900, color: "#facc15",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
