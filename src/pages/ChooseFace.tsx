@@ -778,14 +778,16 @@ const ChooseFace = () => {
             handleRegenerate();
           }}
           onCancel={() => setShowRegenConfirm(false)}
+          message="regenerate all faces?"
+          confirmLabel="regenerate · 1 gem"
         />
 
         <RegenerateConfirmDialog
           open={showBackConfirm}
-          message={"are you sure?\nyou will lose your progress"}
+          message="are you sure?\nyou will lose your progress"
+          confirmLabel="yes, go back"
           onConfirm={() => {
             setShowBackConfirm(false);
-            // Clear all cached state immediately
             sessionStorage.removeItem(FACE_STORAGE_KEY);
             sessionStorage.removeItem(STORAGE_KEY);
             sessionStorage.removeItem("vizura_selected_face");
@@ -793,7 +795,6 @@ const ChooseFace = () => {
             sessionStorage.removeItem("vizura_pending_char_id");
             sessionStorage.removeItem(AUTH_RESUME_KEY);
             sessionStorage.removeItem("vizura_guided_flow_state");
-            // Navigate immediately, delete character in background
             navigate("/", { replace: true });
             if (characterId && user) {
               supabase.from("characters").delete().eq("id", characterId).eq("user_id", user.id).then(() => {});
