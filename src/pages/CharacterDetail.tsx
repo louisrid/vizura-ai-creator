@@ -231,7 +231,7 @@ const CharacterDetail = () => {
         <button
           onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
           className="absolute flex items-center justify-center transition-transform active:scale-90"
-          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#0a0a0a", border: "2px solid #00e0ff", top: -6, right: -6 }}
+          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
         >
           <RefreshCw size={13} strokeWidth={3} color="#fff" />
         </button>
