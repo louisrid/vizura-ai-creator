@@ -356,7 +356,7 @@ const Home = () => {
           <section>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.7)" }}>my characters 🧑</h2>
-              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-2.5 py-1 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
+              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                 manage →
               </button>
             </div>
