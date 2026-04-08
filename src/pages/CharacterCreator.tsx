@@ -306,7 +306,7 @@ const CharacterCreator = () => {
         </div>
 
         {/* Hero image box */}
-        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[2px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[1.5px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
             <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
           </div>
@@ -322,7 +322,7 @@ const CharacterCreator = () => {
             value={characterName}
             onChange={(e) => setCharacterName(e.target.value)}
             placeholder="give your character a name..."
-            className="h-12 w-full rounded-2xl border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="h-12 w-full rounded-2xl border-[1.5px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -375,7 +375,7 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
             rows={8}
-            className="min-h-52 w-full resize-none rounded-2xl border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-52 w-full resize-none rounded-2xl border-[1.5px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 

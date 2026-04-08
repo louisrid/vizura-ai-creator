@@ -126,7 +126,7 @@ const Storage = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#111111" }}>
+          <div className="border-[1.5px] border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#111111" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -154,7 +154,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => setExpanded(img)}
-                  className="group relative rounded-t-2xl border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+                  className="group relative rounded-t-2xl border-[1.5px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -165,7 +165,7 @@ const Storage = () => {
                   download={`vizura-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#ffffff", color: "#000000", border: "2px solid #222", borderTop: "none" }}
+                  style={{ backgroundColor: "#ffffff", color: "#000000", border: "1.5px solid #222", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
@@ -195,7 +195,7 @@ const Storage = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
               className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
-              style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #1a1a1a" }}
+              style={{ backgroundColor: "#111111", borderRadius: 16, border: "1.5px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >
               <button

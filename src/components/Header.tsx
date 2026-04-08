@@ -97,7 +97,7 @@ const Header = () => {
             right: dropdownPos.right,
             width: 190,
             backgroundColor: "#000000",
-            border: "2px solid #1a1a1a",
+            border: "1.5px solid #1a1a1a",
             borderRadius: 16,
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
@@ -222,7 +222,7 @@ const Header = () => {
               style={{
                 borderRadius: 12,
                 backgroundColor: "#1a1a1a",
-                border: "2px solid #1a1a1a",
+                border: "1.5px solid #1a1a1a",
               }}
               aria-label="open menu"
             >
