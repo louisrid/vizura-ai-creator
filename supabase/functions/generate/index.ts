@@ -29,7 +29,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores, small-forehead";
 
 const FLUX_QUALITY_SUFFIX =
   "everything sharply in focus including background, sharp detailed background, matte skin with visible pores and subtle natural imperfections, natural uneven skin tone, natural ambient lighting with variation, slight camera sensor grain, casual candid real iPhone photo, authentic real-life energy";
@@ -498,9 +498,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, small-forehead, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
+    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -509,7 +509,7 @@ async function generateFaceImages(
     "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
-   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
+   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, small-forehead, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const fluxBeautyCore = "stunningly attractive young woman, instagram model energy, youthful 18 to 21, slim defined face, matte skin with visible pores and subtle imperfections, long flowing well-styled hair clearly past shoulders, naturally pink tinted lips, light mascara and subtle natural makeup, warm friendly expression, fitted plain white crew neck t-shirt, plain white background, photorealistic human skin";
 
@@ -521,9 +521,26 @@ async function generateFaceImages(
     const variation = variations[i] || variations[0];
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-    const whiteBlondePrompt = faceOnlyPrompt.replace(/\bblonde\b/gi, "cool white-blonde");
 
-    const positivePrompt = `${whiteBlondePrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+    const colourVariants: Record<string, string[]> = {
+      blonde: ["cool white-blonde", "warm golden-blonde"],
+      brown: ["warm brown", "cool dark-brown"],
+      black: ["soft black", "deep black"],
+      red: ["warm red", "copper-red"],
+      ginger: ["warm ginger", "golden-ginger"],
+      pink: ["soft pink", "dusty-pink"],
+    };
+
+    let tonedPrompt = faceOnlyPrompt;
+    for (const [base, variants] of Object.entries(colourVariants)) {
+      if (tonedPrompt.toLowerCase().includes(base)) {
+        const pick = variants[Math.floor(Math.random() * variants.length)];
+        tonedPrompt = tonedPrompt.replace(new RegExp(base, 'i'), pick);
+        break;
+      }
+    }
+
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -531,7 +548,7 @@ async function generateFaceImages(
     while (retries <= maxRetries) {
       try {
         const url = ACTIVE_MODEL === "flux"
-          ? await routerTextToImage(`${whiteBlondePrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
+          ? await routerTextToImage(`${tonedPrompt}, ${fluxBeautyCore}, ${makeupVar}, ${variation}, ${FLUX_FACE_QUALITY}`, "", apiKey)
           : await routerTextToImage(positivePrompt, "", apiKey);
         if (!url) {
           console.error(`Face ${i + 1}: no URL returned`);
