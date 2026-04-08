@@ -220,7 +220,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15 }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#0a0a0a" }}
+              style={{ borderRadius: 12, border: "1.5px solid #222", backgroundColor: "#0a0a0a" }}
             >
               {EXPRESSION_OPTIONS.map((opt) => (
                 <button
