@@ -110,7 +110,7 @@ const History = () => {
               className="h-12 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
               style={{ borderRadius: 12 }}
             >
-              <Camera size={16} strokeWidth={2.5} /> create photo
+              create photo <Camera size={16} strokeWidth={2.5} />
             </button>
           </div>
         ) : (
