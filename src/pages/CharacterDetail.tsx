@@ -329,23 +329,33 @@ const CharacterDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[9998] flex items-center justify-center px-6"
-            style={{ backgroundColor: "rgba(0,0,0,0.96)" }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-[9998] flex items-center justify-center px-5"
+            style={{ backgroundColor: "rgba(0,0,0,0.94)" }}
+            onClick={(e) => { if (e.target === e.currentTarget) setShowDelete(false); }}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="w-full max-w-xs"
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="relative w-full max-w-sm"
               style={{
-                backgroundColor: "#111111",
+                backgroundColor: "#000000",
                 borderRadius: 16,
                 border: "2px solid #000000",
-                padding: "28px 24px 24px",
+                padding: "36px 28px 28px",
               }}
             >
+              {/* X dismiss */}
+              <button
+                onClick={() => setShowDelete(false)}
+                className="absolute flex items-center justify-center"
+                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#333" }}
+              >
+                <X size={14} strokeWidth={3} color="#fff" />
+              </button>
+
               <h2 className="text-lg font-[900] lowercase text-white leading-[1.1] mb-2 text-center">
                 delete this character?
               </h2>
@@ -356,8 +366,8 @@ const CharacterDetail = () => {
                 <button
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
-                  className="flex-1 h-12 text-sm font-[900] lowercase text-black transition-colors active:bg-white/70 disabled:opacity-50"
-                  style={{ backgroundColor: "#fff", borderRadius: 12 }}
+                  className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
+                  style={{ backgroundColor: "#333", borderRadius: 12 }}
                 >
                   go back
                 </button>
