@@ -504,7 +504,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     shaking={shaking && selectedVal !== opt}
                     onClick={() => setTrait(trait.key, opt)}
                   />
-                  {"defaultOption" in trait && trait.defaultOption === opt && (
+                  {"defaultOption" in trait && (trait as any).defaultOption === opt && (
                     <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                   )}
                 </div>
