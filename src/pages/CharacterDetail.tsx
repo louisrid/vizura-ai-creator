@@ -318,7 +318,8 @@ const CharacterDetail = () => {
         open={regenTarget !== null}
         onConfirm={handleRegenerate}
         onCancel={() => setRegenTarget(null)}
-        message={`regenerate this photo?\n1 gem`}
+        message="regenerate this photo?"
+        confirmLabel="regenerate · 1 gem"
       />
 
       <AnimatePresence>
