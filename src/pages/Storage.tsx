@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
@@ -122,8 +123,14 @@ const Storage = () => {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="animate-spin text-foreground" size={24} />
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                <AspectRatio ratio={3 / 4}>
+                  <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                </AspectRatio>
+              </div>
+            ))}
           </div>
         ) : images.length === 0 ? (
           <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#1a1a1a" }}>
