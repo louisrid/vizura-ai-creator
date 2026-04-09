@@ -171,15 +171,22 @@ const Header = () => {
     <>
       {/* Spacer that reserves header height in document flow */}
       <div style={{ height: 80 }} aria-hidden="true" />
-      <header
-        className="fixed top-0 left-0 right-0"
+      {/* Gradient backdrop */}
+      <div
+        className="fixed top-0 left-0 right-0 pointer-events-none"
         style={{
-          zIndex: 9990,
+          zIndex: 9989,
+          height: 104,
           background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background) / 0.98) 15%, hsl(var(--background) / 0.94) 30%, hsl(var(--background) / 0.85) 45%, hsl(var(--background) / 0.68) 60%, hsl(var(--background) / 0.42) 75%, hsl(var(--background) / 0.15) 90%, transparent 100%)",
-          paddingBottom: 24,
         }}
       >
         <TopGradientBar />
+      </div>
+      {/* Controls layer — above gradient */}
+      <header
+        className="fixed top-0 left-0 right-0"
+        style={{ zIndex: 9990 }}
+      >
         <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-2">
           <div className="flex items-center gap-2.5 md:gap-3.5">
             <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
