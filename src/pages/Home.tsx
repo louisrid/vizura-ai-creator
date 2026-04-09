@@ -49,6 +49,8 @@ const Home = () => {
     return [];
   });
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
+  const [photosLoaded, setPhotosLoaded] = useState(false);
+  const [charsLoaded, setCharsLoaded] = useState(false);
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
