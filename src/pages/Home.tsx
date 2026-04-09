@@ -346,7 +346,7 @@ const Home = () => {
                       className="overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: isPlaceholder ? "2px solid #222" : "2px solid #222",
+                        border: isPlaceholder ? "none" : "2px solid #222",
                         backgroundColor: "#1e1e1e",
                       }}
                     >
@@ -392,7 +392,6 @@ const Home = () => {
                         className="overflow-hidden active:scale-[0.98] transition-transform"
                         style={{
                           borderRadius: 16,
-                          border: "2px solid #222",
                           backgroundColor: "#1e1e1e",
                         }}
                       >
@@ -478,7 +477,7 @@ const Home = () => {
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
                       className="overflow-hidden transition-transform active:scale-[0.98]"
-                      style={{ borderRadius: 16, border: isPlaceholder ? "2px solid #222" : "2px solid #222", backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #222", backgroundColor: "#1e1e1e" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
@@ -510,7 +509,7 @@ const Home = () => {
                       type="button"
                       onClick={handleOpenCreator}
                       className="overflow-hidden active:scale-[0.98] transition-transform"
-                      style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, backgroundColor: "#1e1e1e" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
