@@ -110,11 +110,12 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  slim: "slim toned body, smaller chest, narrow waist, lean face",
-  regular: "soft feminine body, large bust DD, defined waist, soft face",
-  average: "soft feminine body, large bust DD, defined waist, soft face",
-  curvy: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
-  thick: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
+  thin: "slim toned body, narrow waist, lean face",
+  slim: "slim toned body, narrow waist, lean face",
+  regular: "soft feminine body, defined waist, soft face",
+  average: "soft feminine body, defined waist, soft face",
+  curvy: "curvy full figure, wide hips, fuller face but still attractive",
+  thick: "curvy full figure, wide hips, fuller face but still attractive",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
@@ -481,19 +482,29 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  slim: "slim toned body, natural soft B cup breasts with realistic shape, narrow waist, lean figure, slender arms, matte textured skin across chest",
-  regular: "soft feminine body, natural soft C cup breasts with realistic weight and shape, defined waist, feminine hips, matte textured skin across chest",
-  average: "soft feminine body, natural soft C cup breasts with realistic weight and shape, defined waist, feminine hips, matte textured skin across chest",
-  curvy: "curvy feminine figure, natural soft D cup breasts with realistic weight and shape, defined waist, wider hips, soft thighs, hourglass shape, matte textured skin across chest",
-  thick: "curvy feminine figure, natural soft D cup breasts with realistic weight and shape, defined waist, wider hips, soft thighs, hourglass shape, matte textured skin across chest",
+  thin: "slim petite frame, narrow waist, lean toned figure, small hips",
+  slim: "slim petite frame, narrow waist, lean toned figure, small hips",
+  regular: "soft feminine body, defined waist, feminine hips, balanced proportions",
+  average: "soft feminine body, defined waist, feminine hips, balanced proportions",
+  curvy: "wide hips, defined waist, soft thighs, hourglass shape, full figure",
+  thick: "wide hips, defined waist, soft thighs, hourglass shape, full figure",
 };
 
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  slim: "petite frame, narrow hips, B cup chest, toned stomach, slim thighs",
-  regular: "hourglass figure, C-D cup bust, defined waist, wider hips, soft feminine shape",
-  curvy: "voluptuous, D-DD cup bust, wider hips, soft thighs, natural curves, defined waist",
+  thin: "petite slim frame, toned flat stomach, narrow hips, lean build",
+  slim: "petite slim frame, toned flat stomach, narrow hips, lean build",
+  regular: "hourglass figure, defined waist, feminine hips, soft stomach",
+  average: "hourglass figure, defined waist, feminine hips, soft stomach",
+  curvy: "voluptuous figure, wider hips, natural curves, soft full thighs, hourglass shape",
+  thick: "voluptuous figure, wider hips, natural curves, soft full thighs, hourglass shape",
+};
+
+/* ── bust size descriptor ── */
+const BUST_SIZE_MAP: Record<string, string> = {
+  regular: "B-C cup bust, natural proportions",
+  large: "DD-E cup full prominent bust, large chest, matte textured skin across chest",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
