@@ -61,14 +61,14 @@ const Account = () => {
         <div className="flex flex-col w-full max-w-lg">
           {subscribed ? (
             <div
-              className="w-full h-14 md:h-16 text-base md:text-lg font-extrabold lowercase flex items-center justify-center pointer-events-none"
+              className="w-full h-14 md:h-16 text-base md:text-xl font-extrabold lowercase flex items-center justify-center pointer-events-none"
               style={{ borderRadius: 12, backgroundColor: "hsl(var(--member-green) / 0.65)", color: "hsl(var(--neon-green-foreground))" }}
             >
               subscribed
             </div>
           ) : (
             <button
-              className="w-full h-16 md:h-[72px] bg-neon-yellow text-neon-yellow-foreground text-lg md:text-xl font-extrabold lowercase hover:opacity-90 transition-all"
+              className="w-full h-16 md:h-[72px] bg-neon-yellow text-neon-yellow-foreground text-lg md:text-2xl font-extrabold lowercase hover:opacity-90 transition-all"
               style={{ borderRadius: 12 }}
               onClick={handleSubscribe}
             >
