@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, Camera, Sparkles, Gem } from "lucide-react";
+import { Plus, Loader2, Camera, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -191,7 +191,7 @@ const MyCharacters = () => {
               }}
             >
               {hasCharacters ? (
-                <>create <span style={{ color: "rgba(0,0,0,0.3)" }}>·</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#000" }} /></>
+                <>create photo<Camera size={18} strokeWidth={2.5} /></>
               ) : (
                 <>create character<Sparkles size={20} strokeWidth={2.5} /></>
               )}
