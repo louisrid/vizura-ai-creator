@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -17,13 +17,12 @@ const OVERLAY_FADE_DURATION = 0.75;
 const getRandomNameToast = () => "great choice!";
 
 /*
- * SCREEN ORDER (12 screens, internalStep 0-11):
+ * SCREEN ORDER (10 screens, internalStep 0-9):
  *  0: Hero (new first screen with rings)
  *  1: Intro
  *  2: Name input
  *  3-8: Traits (skin, body, age, hair, hair colour, eyes — no makeup screen)
- *  9: Reference
- * 10: Create
+ *  9: Create
  */
 
 const TRAITS = [
@@ -175,8 +174,8 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 11;
-const TOTAL_SKIP = 9;
+const TOTAL_FULL = 10;
+const TOTAL_SKIP = 8;
 
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
@@ -214,7 +213,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [backArrowShaking, setBackArrowShaking] = useState(false);
   const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
 
@@ -311,8 +310,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isHeroSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
   const isNameSlide = internalStep === 2;
-  const isReferenceSlide = internalStep === 9;
-  const isCreateSlide = internalStep === 10;
+  const isCreateSlide = internalStep === 9;
 
   const currentTraitIndex = internalStep >= 3 && internalStep <= 8 ? internalStep - 3 : -1;
 
@@ -345,11 +343,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     updateCharacterName(RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)]);
   }, [updateCharacterName]);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setSelections((p) => ({ ...p, referenceImage: URL.createObjectURL(file) }));
-  };
 
   const advance = useCallback(() => {
     if (animating.current) return;
@@ -390,7 +383,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   if (!mounted || !visible) return null;
 
@@ -534,39 +527,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-
-    /* Reference */
-    if (isReferenceSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
-        <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 flex w-full max-w-[11rem] md:max-w-[14rem] flex-col items-center gap-4">
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-          {selections.referenceImage ? (
-            <div className="w-full">
-              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "2px solid #2a2a2a", aspectRatio: "3/4" }}>
-                <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
-                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
-                >×</button>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-              className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
-              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
-            >
-              <Upload size={16} strokeWidth={2.5} className="text-white/30" />
-              <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
-            </button>
-          )}
-        </div>
-      </div>
-    );
 
     /* Create slide */
     if (isCreateSlide) {
