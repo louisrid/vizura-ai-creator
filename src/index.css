@@ -36,9 +36,9 @@
     --neon-yellow: 48 97% 53%;
     --neon-yellow-foreground: 0 0% 0%;
 
-    /* loader bar — light blue */
-    --loader-bar-from: 195 100% 55%;
-    --loader-bar-to: 210 100% 50%;
+    /* loader bar — yellow */
+    --loader-bar-from: 48 97% 53%;
+    --loader-bar-to: 45 95% 48%;
 
     /* neon green — subscription status */
     --neon-green: 130 85% 49%;

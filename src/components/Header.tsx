@@ -41,9 +41,10 @@ const Header = () => {
   const updateDropdownPos = useCallback(() => {
     if (!menuBtnRef.current) return;
     const rect = menuBtnRef.current.getBoundingClientRect();
+    const isWide = window.innerWidth >= 768;
     const docWidth = document.documentElement.clientWidth;
     setDropdownPos({
-      top: rect.bottom + 14,
+      top: rect.bottom + (isWide ? 24 : 14),
       right: docWidth - rect.right,
     });
   }, []);
@@ -100,7 +101,9 @@ const Header = () => {
 
   const isLoggedIn = !loading && !!user?.id;
 
-  const menuWidth = 190;
+  // Detect desktop
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+  const menuWidth = isDesktop ? 340 : 190;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = open && dropdownPos ? createPortal(
@@ -119,7 +122,7 @@ const Header = () => {
             width: menuWidth,
             backgroundColor: "#000000",
             border: "2px solid #1a1a1a",
-            borderRadius: 16,
+            borderRadius: isDesktop ? 20 : 16,
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
           }}
@@ -127,11 +130,11 @@ const Header = () => {
           <div className="relative">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 transition-colors duration-150 hover:opacity-80"
+              className="absolute top-3 right-3 md:top-4 md:right-4 transition-colors duration-150 hover:opacity-80"
               style={{ color: "rgba(255,255,255,0.35)" }}
               aria-label="close menu"
             >
-              <X size={14} strokeWidth={2.5} />
+              <X size={14} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" />
             </button>
             <div className="py-0">
               {menuItems.map((item, idx) => {
@@ -139,9 +142,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? "14px 14px 0 0"
+                  ? (isDesktop ? "18px 18px 0 0" : "14px 14px 0 0")
                   : isLast
-                    ? "0 0 14px 14px"
+                    ? (isDesktop ? "0 0 18px 18px" : "0 0 14px 14px")
                     : "0";
                 return (
                   <div key={item.label}>
@@ -159,10 +162,10 @@ const Header = () => {
                           handleNav(item.path);
                         }
                       }}
-                      className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
+                      className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
                       style={{
-                        padding: "10px 14px",
-                        fontSize: 13,
+                        padding: isDesktop ? "16px 24px" : "10px 14px",
+                        fontSize: isDesktop ? 17 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
                         color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
@@ -172,7 +175,7 @@ const Header = () => {
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                      <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
+                      <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
                       {item.label}
                     </button>
                   </div>
@@ -183,19 +186,19 @@ const Header = () => {
                   <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
+                    className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
                     style={{
                       color: "#ff4444",
-                      padding: "10px 14px",
-                      fontSize: 13,
+                      padding: isDesktop ? "16px 24px" : "10px 14px",
+                      fontSize: isDesktop ? 17 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
-                      borderRadius: "0 0 14px 14px",
+                      borderRadius: isDesktop ? "0 0 18px 18px" : "0 0 14px 14px",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                   >
-                    <LogOut size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
+                    <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                     log out
                   </button>
                 </>
@@ -211,7 +214,7 @@ const Header = () => {
   return (
     <>
       {/* Spacer that reserves header height in document flow */}
-      <div className="h-[80px]" aria-hidden="true" />
+      <div className="h-[80px] md:h-[90px]" aria-hidden="true" />
       <header
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
@@ -228,15 +231,15 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between px-[14px] pt-6 pb-3">
-            <div className="flex items-center gap-1.5">
+          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-6 md:pt-8 pb-3">
+            <div className="flex items-center gap-1.5 md:gap-2">
               <button onClick={() => handleNav("/")} className="flex items-center active:opacity-80 transition-opacity duration-150">
-                <span className="text-[26px] font-[900] lowercase text-white tracking-tight">facefox</span>
+                <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
               </button>
               {isLoggedIn && (
                 <button
                   onClick={() => navigate("/account")}
-                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px]"
+                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "hsl(var(--card))",
@@ -244,36 +247,36 @@ const Header = () => {
                   }}
                   aria-label="my account"
                 >
-                  <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
+                  <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => navigate("/top-ups")}
-                className="flex items-center gap-1 px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
+                className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
                 style={{
                   backgroundColor: "hsl(var(--card))",
                   border: "2px solid #00e0ff",
                   borderRadius: 10,
                 }}
               >
-                <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                <span className="text-[13px] font-[900] lowercase text-white">{gems}</span>
+                <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
               </button>
 
               <button
                 ref={menuBtnRef}
                 onClick={() => setOpen(!open)}
-                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px]"
+                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                 style={{
                   borderRadius: 12,
                   backgroundColor: "#1a1a1a",
                 }}
                 aria-label="open menu"
               >
-                <svg width="18" height="14" viewBox="0 0 22 16" fill="none">
+                <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
                   <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
                   <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
                   <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />

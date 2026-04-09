@@ -90,14 +90,14 @@ const MyCharacters = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-        <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[280px]">
+        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
 
         {loading ? (
-            <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             {Array.from({ length: 12 }).map((_, i) => (
               <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
@@ -109,7 +109,7 @@ const MyCharacters = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             <button
               onClick={handleCreateCharacter}
               className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
@@ -176,13 +176,13 @@ const MyCharacters = () => {
       </main>
 
       {!loading && (
-        <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
-          <div className="mx-auto max-w-lg">
+        <div className="fixed left-0 right-0 bottom-0 z-10 px-6 md:px-10" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
+          <div className="mx-auto max-w-lg md:max-w-6xl">
             <motion.button
               onClick={handleBottomButton}
               animate={bounceActive ? { y: [0, -6, 0] } : {}}
               transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-              className="flex h-14 w-full items-center justify-center gap-2 text-xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+              className="flex h-14 md:h-16 w-full md:max-w-md md:mx-auto items-center justify-center gap-2 text-xl md:text-2xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
               style={{
                 backgroundColor: "#facc15",
                 color: "#000",
