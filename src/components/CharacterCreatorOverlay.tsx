@@ -28,8 +28,8 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
     className="flex h-[52px] w-full items-center justify-center text-sm font-[900] lowercase tracking-tight transition-colors"
     style={{
       borderRadius: 12,
-      border: active ? `2px solid ${Y}` : "2px solid #2a2a2a",
-      backgroundColor: active ? "#000000" : "#2a2a2a",
+      border: active ? `2px solid ${Y}` : "2px solid #242424",
+      backgroundColor: active ? "#000000" : "#242424",
       color: active ? "#fff" : "rgba(255,255,255,0.7)",
     }}
   >
@@ -52,8 +52,8 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
         className="px-4 py-2 text-xs font-[900] lowercase transition-all"
         style={{
           borderRadius: 12,
-          border: value === opt ? `2px solid ${Y}` : "2px solid #2a2a2a",
-          backgroundColor: value === opt ? Y : "#2a2a2a",
+          border: value === opt ? `2px solid ${Y}` : "2px solid #242424",
+          backgroundColor: value === opt ? Y : "#242424",
           color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
         }}
       >
@@ -149,7 +149,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       {open && (
         <motion.div className="fixed inset-0 z-[9998] flex flex-col" style={{ background: "#000" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: "easeOut" }}>
           <div className="flex items-center px-5 pt-5 pb-2">
-            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center transition-colors hover:opacity-70" style={{ borderRadius: 12, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }} aria-label="close">
+            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center transition-colors hover:opacity-70" style={{ borderRadius: 12, border: "2px solid #242424", backgroundColor: "#242424" }} aria-label="close">
               <X size={16} strokeWidth={2.5} className="text-white" />
             </button>
           </div>
@@ -174,7 +174,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
                   className="min-h-[100px] w-full resize-none px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors"
-                  style={{ borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+                  style={{ borderRadius: 14, border: "2px solid #242424", backgroundColor: "#242424" }}
                 />
               </div>
             </div>

@@ -7,8 +7,8 @@ interface EmojiPreviewBoxProps {
 const EmojiPreviewBox = ({ emoji, className = "", emojiClassName = "" }: EmojiPreviewBoxProps) => {
   return (
     <div
-      className={`flex aspect-square items-center justify-center rounded-2xl border-2 border-[#2a2a2a] ${className}`.trim()}
-      style={{ backgroundColor: "#2a2a2a" }}
+      className={`flex aspect-square items-center justify-center rounded-2xl border-2 border-[#242424] ${className}`.trim()}
+      style={{ backgroundColor: "#242424" }}
     >
       <span className={`select-none leading-none ${emojiClassName}`.trim()} aria-hidden="true">
         {emoji}

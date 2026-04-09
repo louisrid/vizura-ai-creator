@@ -243,7 +243,7 @@ const CharacterDetail = () => {
   const contentTop = (isMobile: boolean) => (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#2a2a2a", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
+      <div style={{ backgroundColor: "#242424", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
@@ -255,10 +255,10 @@ const CharacterDetail = () => {
       </div>
 
       {/* Details — compact */}
-      <div style={{ backgroundColor: "#2a2a2a", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
+      <div style={{ backgroundColor: "#242424", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
         <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#2a2a2a", border: "2px solid #2a2a2a" }}>
+            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#242424", border: "2px solid #242424" }}>
               <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[8px]" : "text-[10px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
               <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[12px]" : "text-[14px]"}`}>{t.value}</span>
             </div>
@@ -369,14 +369,14 @@ const CharacterDetail = () => {
               style={{
                 backgroundColor: "#000000",
                 borderRadius: 16,
-                border: "2px solid #2a2a2a",
+                border: "2px solid #242424",
                 padding: "28px 24px 24px",
               }}
             >
               <button
                 onClick={() => setShowDelete(false)}
                 className="absolute flex items-center justify-center"
-                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#2a2a2a" }}
+                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#242424" }}
               >
                 <X size={14} strokeWidth={3} color="#fff" />
               </button>
@@ -392,7 +392,7 @@ const CharacterDetail = () => {
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
                   className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
-                  style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+                  style={{ backgroundColor: "#242424", borderRadius: 12 }}
                 >
                   no
                 </button>
