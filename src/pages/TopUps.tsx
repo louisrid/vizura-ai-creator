@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem, Loader2, Sparkles, Zap, Crown } from "lucide-react";
+import { Gem, Loader2 } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -10,9 +10,9 @@ import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 
 const plans = [
-  { label: "15 gems", gems: 15, price: 9, icon: Gem, accent: null },
-  { label: "35 gems", gems: 35, price: 20, icon: Zap, accent: "popular" },
-  { label: "80 gems", gems: 80, price: 40, icon: Crown, accent: "best value" },
+  { label: "15 gems", gems: 15, price: 9 },
+  { label: "35 gems", gems: 35, price: 20 },
+  { label: "80 gems", gems: 80, price: 40 },
 ];
 
 const TopUps = () => {
@@ -59,93 +59,45 @@ const TopUps = () => {
           <PageTitle className="mb-0">top-ups</PageTitle>
         </div>
 
-        {/* Current balance */}
-        <div
-          className="flex items-center justify-between mb-8 px-5 py-4"
-          style={{ backgroundColor: "#111111", borderRadius: 16, border: "2px solid #1a1a1a" }}
-        >
-          <span className="text-sm font-[900] lowercase text-foreground/50">your balance</span>
-          <div className="flex items-center gap-2">
-            <Gem size={18} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-            <span className="text-2xl font-[900] lowercase text-white">{gems}</span>
-          </div>
+        <div className="flex items-center gap-2 mb-6">
+          <Gem size={20} strokeWidth={2.5} className="text-gem-green" />
+          <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
         </div>
 
-        {/* Plans */}
-        <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-4">
-          {plans.map((plan) => {
-            const Icon = plan.icon;
-            const isPopular = plan.accent === "popular";
-            const isBest = plan.accent === "best value";
-            const highlight = isPopular || isBest;
-
-            return (
-              <div
-                key={plan.label}
-                className="relative overflow-hidden"
-                style={{
-                  borderRadius: 16,
-                  border: highlight ? "2px solid #facc15" : "2px solid #1a1a1a",
-                  backgroundColor: "#111111",
-                }}
-              >
-                {plan.accent && (
-                  <div
-                    className="flex items-center justify-center py-1.5 text-[10px] font-[900] lowercase tracking-wide"
-                    style={{ backgroundColor: "#facc15", color: "#000" }}
-                  >
-                    {plan.accent}
-                  </div>
-                )}
-
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2.5">
-                      <div
-                        className="w-10 h-10 flex items-center justify-center"
-                        style={{
-                          borderRadius: 12,
-                          backgroundColor: highlight ? "rgba(250,204,21,0.1)" : "rgba(255,255,255,0.05)",
-                          border: highlight ? "2px solid rgba(250,204,21,0.3)" : "2px solid #222",
-                        }}
-                      >
-                        <Icon size={18} strokeWidth={2.5} style={{ color: highlight ? "#facc15" : "rgba(255,255,255,0.4)" }} />
-                      </div>
-                      <div>
-                        <span className="block text-xl font-[900] lowercase text-white">{plan.gems}</span>
-                        <span className="block text-[10px] font-[800] lowercase text-foreground/30">gems</span>
-                      </div>
-                    </div>
-                    <span className="text-2xl font-[900] lowercase text-white">${plan.price}</span>
-                  </div>
-
-                  <button
-                    className="w-full h-12 text-sm font-[900] lowercase transition-all active:scale-[0.97]"
-                    style={{
-                      borderRadius: 12,
-                      backgroundColor: highlight ? "#facc15" : "rgba(250,204,21,0.08)",
-                      color: highlight ? "#000" : "#facc15",
-                      border: highlight ? "none" : "2px solid #facc15",
-                    }}
-                    onClick={() => handleBuy(plan)}
-                    disabled={buying !== null}
-                  >
-                    {buying === plan.label ? (
-                      <Loader2 className="animate-spin inline" size={18} />
-                    ) : (
-                      "buy gems"
-                    )}
-                  </button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          {plans.map((plan) => (
+            <div
+              key={plan.label}
+              className="rounded-2xl p-4 md:p-5"
+              style={{ backgroundColor: "#111111" }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
+                  <span className="text-lg md:text-xl font-extrabold lowercase text-foreground">
+                    {plan.gems} gems
+                  </span>
                 </div>
+                <span className="text-xl md:text-2xl font-extrabold lowercase text-foreground">
+                  ${plan.price}
+                </span>
               </div>
-            );
-          })}
-        </div>
 
-        {/* Info note */}
-        <p className="text-[10px] font-[800] lowercase text-foreground/20 text-center mt-6">
-          gems never expire · use for photos & characters
-        </p>
+              <button
+                className="w-full h-11 md:h-12 text-sm md:text-base font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
+                style={{ borderRadius: 12 }}
+                onClick={() => handleBuy(plan)}
+                disabled={buying !== null}
+              >
+                {buying === plan.label ? (
+                  <Loader2 className="animate-spin inline" size={18} />
+                ) : (
+                  "buy gems"
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
       </main>
     </div>
   );
