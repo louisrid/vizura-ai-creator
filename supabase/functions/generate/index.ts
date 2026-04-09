@@ -181,8 +181,8 @@ function buildCharacterTraits(char: any): string {
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
   const bustKey = (char.bust_size || "regular").toLowerCase();
-  const bustDesc = BUST_SIZE_MAP[bustKey] || BUST_SIZE_MAP.regular;
-  parts.push(bustDesc);
+  const bustDesc = BUST_SIZE_MAP[bustKey] || "";
+  if (bustDesc) parts.push(bustDesc);
 
   if (bodyKey === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
@@ -421,7 +421,7 @@ async function generateFaceImages(
     "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
-   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, small-forehead, eyes positioned in centre of face, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
+   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, small-forehead, eyes positioned in centre of face, matte skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -492,12 +492,12 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  thin: "slim petite frame, narrow waist, lean toned figure, small hips",
-  slim: "slim petite frame, narrow waist, lean toned figure, small hips",
-  regular: "soft feminine body, defined waist, feminine hips, balanced proportions",
-  average: "soft feminine body, defined waist, feminine hips, balanced proportions",
-  curvy: "wide hips, defined waist, soft thighs, hourglass shape, full figure",
-  thick: "wide hips, defined waist, soft thighs, hourglass shape, full figure",
+  thin: "slim toned body, B cup bust, narrow waist, lean figure",
+  slim: "slim toned body, B cup bust, narrow waist, lean figure",
+  regular: "soft feminine body, C cup bust, defined waist, feminine hips",
+  average: "soft feminine body, C cup bust, defined waist, feminine hips",
+  curvy: "curvy feminine figure, D cup bust, defined waist, wider hips, soft thighs, hourglass shape",
+  thick: "curvy feminine figure, D cup bust, defined waist, wider hips, soft thighs, hourglass shape",
 };
 
 
@@ -513,8 +513,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "B-C cup breasts, proportional to frame",
-  large: "very-large DD-E cup breasts, full heavy-chest, visible cleavage in fitted top, matte textured skin across chest",
+  regular: "",
+  large: "much larger bust, prominent cleavage",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -534,7 +534,7 @@ async function generateAngleAndBody(
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and shoulders only, cropped below collarbone. Skin with visible pores and colour variation. Relaxed neutral expression, lips together. ${characterTraits}`;
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and shoulders only, cropped below collarbone. Matte skin with visible pores and colour variation. Relaxed neutral expression, lips together. ${characterTraits}`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -551,8 +551,8 @@ async function generateAngleAndBody(
       const bodyKey = (bodyType || "regular").toLowerCase();
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
-      const bustDesc = BUST_SIZE_MAP[bustKey] || BUST_SIZE_MAP.regular;
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}, ${bustDesc}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
+      const bustDesc = BUST_SIZE_MAP[bustKey] || "";
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc : ''}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
