@@ -85,7 +85,7 @@ const MyCharacters = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-        <main className="relative z-[1] w-full max-w-lg md:max-w-5xl mx-auto px-[14px] md:px-10 pt-14 pb-[250px]">
+        <main className="relative z-[1] w-full max-w-lg md:max-w-5xl mx-auto px-[14px] md:px-10 pt-8 pb-[250px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
