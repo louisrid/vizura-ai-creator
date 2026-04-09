@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
+const BETA_MODE = true; // When true, whitelisted emails get free unlimited access
+const BETA_WHITELIST = ["louisjridland@gmail.com"];
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const XAI_REQUEST_TIMEOUT_MS = 120_000;
@@ -595,6 +597,9 @@ serve(async (req) => {
     }
     const userId = userData.user.id;
 
+    const userEmail = (userData.user.email || "").trim().toLowerCase();
+    const isBetaUser = BETA_MODE && BETA_WHITELIST.includes(userEmail);
+
     if (isRateLimited(userId)) {
       return new Response(
         JSON.stringify({ error: "Rate limit exceeded — max 10 per minute" }),
@@ -631,23 +636,27 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
 
-      const { data: creditData } = await adminClient
-        .from("credits")
-        .select("balance")
-        .eq("user_id", userId)
-        .single();
+      let creditData: { balance: number } | null = null;
+      if (!isBetaUser) {
+        const { data: cd } = await adminClient
+          .from("credits")
+          .select("balance")
+          .eq("user_id", userId)
+          .single();
+        creditData = cd;
 
-      if (!creditData || creditData.balance <= 0) {
-        return new Response(
-          JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
-          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        if (!creditData || creditData.balance <= 0) {
+          return new Response(
+            JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        await adminClient
+          .from("credits")
+          .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
+          .eq("user_id", userId);
       }
-
-      await adminClient
-        .from("credits")
-        .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
-        .eq("user_id", userId);
 
       // Always fetch fresh character data from DB
       const { data: charData } = await adminClient
@@ -658,7 +667,7 @@ serve(async (req) => {
         .single();
 
       if (!charData || !charData.face_image_url) {
-        await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+        if (creditData) await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         return new Response(JSON.stringify({ error: "Character not found or missing face image" }), {
           status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -725,7 +734,7 @@ serve(async (req) => {
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       } catch (e: any) {
-        await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+        if (creditData) await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         console.error("Single regeneration error:", e);
         if (e?.contentPolicy) {
           await logRejectedPrompt(adminClient, userId, "character references");
@@ -934,36 +943,40 @@ serve(async (req) => {
     }
 
     /* ── STANDARD GEM-BASED FLOW ── */
-    const { data: creditData } = await adminClient
-      .from("credits")
-      .select("balance")
-      .eq("user_id", userId)
-      .single();
-
-    if (!creditData || creditData.balance <= 0) {
-      const { data: subData } = await adminClient
-        .from("subscriptions")
-        .select("status")
+    let creditData: { balance: number } | null = null;
+    if (!isBetaUser) {
+      const { data: cd } = await adminClient
+        .from("credits")
+        .select("balance")
         .eq("user_id", userId)
         .single();
+      creditData = cd;
 
-      return new Response(
-        JSON.stringify({
-          error: "No gems remaining",
-          code: "NO_GEMS",
-          has_subscription: subData?.status === "active",
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      if (!creditData || creditData.balance <= 0) {
+        const { data: subData } = await adminClient
+          .from("subscriptions")
+          .select("status")
+          .eq("user_id", userId)
+          .single();
+
+        return new Response(
+          JSON.stringify({
+            error: "No gems remaining",
+            code: "NO_GEMS",
+            has_subscription: subData?.status === "active",
+          }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      await adminClient
+        .from("credits")
+        .update({
+          balance: creditData.balance - 1,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId);
     }
-
-    await adminClient
-      .from("credits")
-      .update({
-        balance: creditData.balance - 1,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", userId);
 
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
@@ -989,7 +1002,7 @@ serve(async (req) => {
         }
       }
     } catch (e: any) {
-      await adminClient
+      if (creditData) await adminClient
         .from("credits")
         .update({
           balance: creditData.balance,
@@ -1022,7 +1035,7 @@ serve(async (req) => {
     }
 
     if (imageUrls.length === 0) {
-      await adminClient
+      if (creditData) await adminClient
         .from("credits")
         .update({
           balance: creditData.balance,

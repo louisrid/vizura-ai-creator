@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem, Loader2 } from "lucide-react";
+import { Gem } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 
@@ -20,7 +19,7 @@ const TopUps = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [buying, setBuying] = useState<string | null>(null);
+  
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -34,20 +33,7 @@ const TopUps = () => {
   if (!loading && !user) return null;
 
   const handleBuy = async (plan: typeof plans[number]) => {
-    setBuying(plan.label);
-    try {
-      const { data, error } = await supabase.functions.invoke("add-credits", {
-        body: { amount: plan.gems },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      await refetch();
-      toast.success(`${plan.gems} gems added!`);
-    } catch (e: any) {
-      toast.error(e.message || "failed to add gems");
-    } finally {
-      setBuying(null);
-    }
+    toast("coming soon");
   };
 
   return (
@@ -87,13 +73,8 @@ const TopUps = () => {
                 className="w-full h-11 md:h-12 text-sm md:text-base font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
                 style={{ borderRadius: 12 }}
                 onClick={() => handleBuy(plan)}
-                disabled={buying !== null}
               >
-                {buying === plan.label ? (
-                  <Loader2 className="animate-spin inline" size={18} />
-                ) : (
-                  "buy gems"
-                )}
+                buy gems
               </button>
             </div>
           ))}
