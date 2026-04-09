@@ -420,7 +420,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[18px] md:text-[22px]"
             style={{
               background: "#000000", border: "2px solid #facc15",
-              borderRadius: 12, fontWeight: 900, color: "#facc15",
+              borderRadius: 12, fontWeight: 900, color: "#ffffff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
           >
