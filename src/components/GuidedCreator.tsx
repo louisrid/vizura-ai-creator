@@ -404,7 +404,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <button
           type="button"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-          className="w-[168px] md:w-[220px] py-[10px] md:py-[14px] text-[18px] md:text-[22px]"
+          className="w-[168px] md:w-[220px] py-[10px] md:py-[14px] text-[22px] md:text-[26px]"
           style={{
             background: Y, border: "none", borderRadius: 12,
             fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
@@ -417,7 +417,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <button
             type="button"
             onClick={() => navigateTo(`/auth${window.location.search}`)}
-            className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[18px] md:text-[22px]"
+            className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[22px] md:text-[26px]"
             style={{
               background: "#000000", border: "2px solid #facc15",
               borderRadius: 12, fontWeight: 900, color: "#ffffff",
