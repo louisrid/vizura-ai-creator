@@ -30,7 +30,7 @@ const FACE_GEN_PHRASES = [
 
 const ANGLE_GEN_PHRASES = [
   "creating character views…",
-  "building 3/4 angle…",
+  "generating side profile…",
   "generating full body…",
   "finalising your character…",
 ];
