@@ -213,7 +213,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [backArrowShaking, setBackArrowShaking] = useState(false);
   const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
 
