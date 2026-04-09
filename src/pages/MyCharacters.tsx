@@ -100,11 +100,11 @@ const MyCharacters = () => {
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="overflow-hidden active:scale-[0.97] transition-transform"
-              style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#1e1e1e" }}
+              style={{ borderRadius: 16, backgroundColor: "#1e1e1e" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
-                  <Plus size={28} strokeWidth={3} className="text-white/30" />
+                  <Plus size={28} strokeWidth={2.5} className="text-white" />
                 </div>
               </AspectRatio>
             </button>
