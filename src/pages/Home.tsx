@@ -352,7 +352,7 @@ const Home = () => {
                           navigate("/create");
                         }
                       }}
-                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      className="overflow-hidden"
                       style={{
                         borderRadius: 16,
                         border: isPlaceholder ? "none" : "2px solid #1a1a1a",
@@ -404,7 +404,7 @@ const Home = () => {
                         key={`empty-${i}`}
                         type="button"
                         onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
-                        className="overflow-hidden active:scale-[0.98] transition-transform"
+                        className="overflow-hidden"
                         style={{
                           borderRadius: 16,
                           backgroundColor: "#1a1a1a",
@@ -427,7 +427,7 @@ const Home = () => {
                       key={char.id}
                       type="button"
                       onClick={() => navigate(`/characters/${char.id}`)}
-                      className="relative overflow-hidden active:scale-[0.98] transition-transform"
+                      className="relative overflow-hidden"
                       style={{
                         borderRadius: 16,
                         border: "2px solid #1a1a1a",
@@ -496,7 +496,7 @@ const Home = () => {
                       key={photo.id}
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                      className="overflow-hidden transition-transform active:scale-[0.98]"
+                      className="overflow-hidden"
                       style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -528,7 +528,7 @@ const Home = () => {
                       key={`empty-${i}`}
                       type="button"
                       onClick={handleOpenCreator}
-                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      className="overflow-hidden"
                       style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -543,7 +543,7 @@ const Home = () => {
                     key={char.id}
                     type="button"
                     onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden active:scale-[0.98] transition-transform"
+                    className="relative overflow-hidden"
                     style={{ borderRadius: 16, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                   >
                     <AspectRatio ratio={3 / 4}>
