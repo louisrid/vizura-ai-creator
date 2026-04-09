@@ -126,7 +126,7 @@ const Storage = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#161616" }}>
+          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#1a1a1a" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -195,7 +195,7 @@ const Storage = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
               className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
-              style={{ backgroundColor: "#161616", borderRadius: 16, border: "2px solid #1a1a1a" }}
+              style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
