@@ -29,7 +29,7 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
     style={{
       borderRadius: 12,
       border: active ? `2px solid ${Y}` : "2px solid #222",
-      backgroundColor: active ? "rgba(250,204,21,0.08)" : "#111",
+      backgroundColor: active ? "#000000" : "#1a1a1a",
       color: active ? "#fff" : "rgba(255,255,255,0.7)",
     }}
   >
@@ -53,7 +53,7 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
         style={{
           borderRadius: 12,
           border: value === opt ? `2px solid ${Y}` : "2px solid #222",
-          backgroundColor: value === opt ? Y : "#111",
+          backgroundColor: value === opt ? Y : "#1a1a1a",
           color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
         }}
       >
@@ -149,7 +149,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       {open && (
         <motion.div className="fixed inset-0 z-[9998] flex flex-col" style={{ background: "#000" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
           <div className="flex items-center px-5 pt-5 pb-2">
-            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center transition-colors hover:opacity-70" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#111" }} aria-label="close">
+            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center transition-colors hover:opacity-70" style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#1a1a1a" }} aria-label="close">
               <X size={16} strokeWidth={2.5} className="text-white" />
             </button>
           </div>
@@ -174,7 +174,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
                   className="min-h-[100px] w-full resize-none px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors"
-                  style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#111" }}
+                  style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#1a1a1a" }}
                 />
               </div>
             </div>
