@@ -95,7 +95,7 @@ const MyCharacters = () => {
           <div className="flex items-center justify-center py-16">
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
-        ) : (
+        ) : characters.length === 0 ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}

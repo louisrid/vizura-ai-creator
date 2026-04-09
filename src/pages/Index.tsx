@@ -575,10 +575,7 @@ const Index = () => {
             />
           </div>
 
-          {/* Create button */}
-          <div className="pt-3">
-            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
-          </div>
+          {/* Create button — sticky bottom bar */}
         </div>
 
         {error && (
@@ -587,6 +584,12 @@ const Index = () => {
           </div>
         )}
       </main>
+
+      <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1rem)] pt-2 bg-gradient-to-t from-background via-background/95 to-transparent">
+        <div className="mx-auto max-w-lg">
+          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+        </div>
+      </div>
     </div>
   );
 };
