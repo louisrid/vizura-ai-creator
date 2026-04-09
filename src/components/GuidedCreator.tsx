@@ -558,7 +558,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               type="button"
               onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
               className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
-              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px dashed #333", backgroundColor: "#1e1e1e" }}
+              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
             >
               <Upload size={16} strokeWidth={2.5} className="text-white/30" />
               <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
