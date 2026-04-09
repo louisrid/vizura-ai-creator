@@ -364,9 +364,6 @@ const Home = () => {
             </div>
           </section>
 
-          {/* Divider */}
-          <div style={{ height: 2, backgroundColor: "#222", margin: "4px 0 16px", borderRadius: 1 }} />
-
           {/* My Characters Section */}
           <section>
             <div className="flex items-center justify-between mb-3">
