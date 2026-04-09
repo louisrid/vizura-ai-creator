@@ -183,7 +183,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
             <button onClick={handleCreate} disabled={isSaving}
               className="flex h-[52px] w-full items-center justify-center gap-1.5 text-base font-[900] lowercase tracking-tight transition-transform active:scale-[0.97] disabled:opacity-60"
               style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 12, border: "2px solid #00e0ff" }}>
-              {isSaving ? (<><Loader2 size={18} className="animate-spin" />saving...</>) : (<><Zap size={18} strokeWidth={2.5} style={{ color: "#00e0ff" }} />create <span style={{ color: "#00e0ff" }}>•</span> 30 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
+              {isSaving ? (<><Loader2 size={18} className="animate-spin" />saving...</>) : (<><Zap size={18} strokeWidth={2.5} style={{ color: "#00e0ff" }} />create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
             </button>
           </div>
         </motion.div>

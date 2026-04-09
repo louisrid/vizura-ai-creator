@@ -49,7 +49,7 @@ const Scene0 = () => (
   <IntroStyleShell
     emoji={<Crown size={64} strokeWidth={2} style={{ color: "hsl(55 90% 58%)" }} />}
     title="unlock vizura"
-    subtitle="$7 first month · 50 gems monthly · 30 gems = 1 character"
+    subtitle="$7 first month · 50 gems monthly · 1 gem = 1 action"
   />
 );
 

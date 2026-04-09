@@ -153,7 +153,8 @@ const History = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 backdrop-blur-sm px-4"
+            className="fixed inset-0 z-50 flex items-center justify-center px-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
             onClick={() => setExpanded(null)}
           >
             <motion.div
@@ -161,17 +162,18 @@ const History = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
+              className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden relative"
               onClick={(e) => e.stopPropagation()}
             >
+              <button
+                onClick={() => setExpanded(null)}
+                className="absolute flex items-center justify-center z-10"
+                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
+              >
+                <X size={14} strokeWidth={3} color="#fff" />
+              </button>
               <div className="relative">
                 <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
-                <button
-                  onClick={() => setExpanded(null)}
-                  className="absolute top-3 right-3 w-9 h-9 rounded-2xl bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
-                >
-                  <X size={14} strokeWidth={2.5} />
-                </button>
               </div>
               <div className="p-4 space-y-3">
                 <p className="text-[10px] font-extrabold lowercase text-foreground/60 leading-relaxed">

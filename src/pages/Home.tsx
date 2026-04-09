@@ -239,7 +239,8 @@ const Home = () => {
         {selectedImage && (
           <motion.button
             type="button"
-            className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/90 p-4"
+            className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -248,10 +249,11 @@ const Home = () => {
           >
             <button
               type="button"
-              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-card text-foreground"
+              className="absolute flex items-center justify-center"
+              style={{ top: 16, right: 16, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
               onClick={(e) => { e.stopPropagation(); setSelectedImage(null); }}
             >
-              <X size={18} strokeWidth={2.5} />
+              <X size={14} strokeWidth={3} color="#fff" />
             </button>
             <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
           </motion.button>
