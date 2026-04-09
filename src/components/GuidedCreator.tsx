@@ -175,8 +175,8 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 11;
-const TOTAL_SKIP = 9;
+const TOTAL_FULL = 10;
+const TOTAL_SKIP = 8;
 
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
