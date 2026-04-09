@@ -192,7 +192,7 @@ const Header = () => {
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "hsl(var(--card))",
-                  border: `2px solid ${subscribed ? "#00e0ff" : "rgba(255,255,255,0.25)"}`,
+                  border: `2px solid ${subscribed ? "#22c55e" : "rgba(255,255,255,0.25)"}`,,
                 }}
                 aria-label="my account"
               >
