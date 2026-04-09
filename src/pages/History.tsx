@@ -160,7 +160,7 @@ const History = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.15 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
