@@ -101,41 +101,7 @@ serve(async (req) => {
       if (error) throw error;
     }
 
-    const { data: characterRows, error: characterError } = await admin
-      .from("characters")
-      .select("id")
-      .eq("user_id", userId)
-      .limit(1);
-    if (characterError) throw characterError;
-
-    let previewCharacterId = characterRows?.[0]?.id ?? null;
-
-    if (!previewCharacterId) {
-      const { data: characterData, error } = await admin
-        .from("characters")
-        .insert({
-          user_id: userId,
-          name: "preview muse",
-          age: "26",
-          country: "tan",
-          hair: "brown",
-          eye: "brown",
-          body: "regular",
-          style: "natural",
-          description: "soft waves hair. warm skin and balanced features.",
-          generation_prompt: "preview character",
-          face_image_url: PLACEHOLDER_IMAGE_URL,
-          face_angle_url: PLACEHOLDER_IMAGE_URL,
-          body_anchor_url: PLACEHOLDER_IMAGE_URL,
-        })
-        .select("id")
-        .single();
-
-      if (error) throw error;
-      previewCharacterId = characterData.id;
-    }
-
-    return new Response(JSON.stringify({ ok: true, characterId: previewCharacterId }), {
+    return new Response(JSON.stringify({ ok: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
