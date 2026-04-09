@@ -43,80 +43,82 @@ const ResetPassword = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px]">
-        <div className="flex items-center gap-3 mb-7">
-          <BackButton />
-          <PageTitle className="mb-0">reset password</PageTitle>
-        </div>
-
-        {success ? (
-          <div className="border-[2px] border-border rounded-2xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-1 text-foreground">password updated</p>
-            <p className="text-[10px] font-bold lowercase text-foreground/50">redirecting...</p>
+      <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-4 md:px-10 pt-10 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
+        <div className="w-full md:max-w-md">
+          <div className="flex items-center gap-3 mb-7">
+            <BackButton />
+            <PageTitle className="mb-0">reset password</PageTitle>
           </div>
-        ) : !isRecovery ? (
-          <div className="border-[2px] border-border rounded-2xl p-6 text-center">
-            <p className="text-xs font-extrabold lowercase mb-3 text-foreground">invalid link</p>
-            <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px]">
-              back to log in
-            </button>
-          </div>
-        ) : (
-          <div className="border-[2px] border-border rounded-2xl p-4">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-2xl text-xs">
-                  {error}
-                </div>
-              )}
 
-              <div>
-                <span className="block text-xs font-extrabold lowercase text-foreground mb-2">new password</span>
-                <div className="relative">
-                  <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="w-full border-2 border-[#2a2a2a] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
-                    style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <span className="block text-xs font-extrabold lowercase text-foreground mb-2">confirm password</span>
-                <div className="relative">
-                  <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="w-full border-2 border-[#2a2a2a] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
-                    style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full h-14 text-sm" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="animate-spin" size={18} />
-                    updating...
-                  </>
-                ) : (
-                  "update password"
+          {success ? (
+            <div className="border-[2px] border-border rounded-2xl p-6 md:p-8 text-center">
+              <p className="text-xs md:text-sm font-extrabold lowercase mb-1 text-foreground">password updated</p>
+              <p className="text-[10px] md:text-[12px] font-bold lowercase text-foreground/50">redirecting...</p>
+            </div>
+          ) : !isRecovery ? (
+            <div className="border-[2px] border-border rounded-2xl p-6 md:p-8 text-center">
+              <p className="text-xs md:text-sm font-extrabold lowercase mb-3 text-foreground">invalid link</p>
+              <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px] md:text-[12px]">
+                back to log in
+              </button>
+            </div>
+          ) : (
+            <div className="border-[2px] border-border rounded-2xl p-4 md:p-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-2xl text-xs md:text-sm">
+                    {error}
+                  </div>
                 )}
-              </Button>
-            </form>
-          </div>
-        )}
+
+                <div>
+                  <span className="block text-xs md:text-sm font-extrabold lowercase text-foreground mb-2">new password</span>
+                  <div className="relative">
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className="w-full border-2 border-[#2a2a2a] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
+                      style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <span className="block text-xs md:text-sm font-extrabold lowercase text-foreground mb-2">confirm password</span>
+                  <div className="relative">
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className="w-full border-2 border-[#2a2a2a] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
+                      style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" className="w-full h-14 md:h-16 text-sm md:text-base" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin" size={18} />
+                      updating...
+                    </>
+                  ) : (
+                    "update password"
+                  )}
+                </Button>
+              </form>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

@@ -36,6 +36,7 @@ const DotDecal = () => {
           r={1.4}
           fill="#d4be3f"
           opacity={d.opacity}
+          className="md:opacity-[0.3]"
         />
       ))}
     </svg>

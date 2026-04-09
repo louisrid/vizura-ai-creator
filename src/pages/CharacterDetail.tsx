@@ -65,7 +65,6 @@ const CharacterDetail = () => {
     if (user) fetch();
   }, [user, id]);
 
-  // Poll for character updates (angle/body images arriving after creation)
   useEffect(() => {
     if (!user || !id || !character) return;
     const needsUpdate = !character.face_angle_url || !character.body_anchor_url;
@@ -95,10 +94,7 @@ const CharacterDetail = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke("generate", {
-        body: {
-          regenerate_single: target,
-          character_id: character.id,
-        },
+        body: { regenerate_single: target, character_id: character.id },
       });
 
       if (error) throw error;
@@ -109,15 +105,10 @@ const CharacterDetail = () => {
       }
       if (data?.error) throw new Error(data.error);
 
-      // Update only the regenerated photo
       setCharacter((prev) => {
         if (!prev) return prev;
-        if (target === "angle" && data?.angle_url) {
-          return { ...prev, face_angle_url: data.angle_url };
-        }
-        if (target === "body" && data?.body_anchor_url) {
-          return { ...prev, body_anchor_url: data.body_anchor_url };
-        }
+        if (target === "angle" && data?.angle_url) return { ...prev, face_angle_url: data.angle_url };
+        if (target === "body" && data?.body_anchor_url) return { ...prev, body_anchor_url: data.body_anchor_url };
         return prev;
       });
 
@@ -216,19 +207,16 @@ const CharacterDetail = () => {
     showSpinner = false,
     onRegenClick?: () => void,
   ) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
       {overlay === "lock" && (
-        <div
-          className="absolute flex items-center justify-center"
-          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#facc15", top: -6, right: -6 }}
-        >
+        <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#facc15", top: -6, right: -6 }}>
           <Lock size={14} strokeWidth={3} color="#000" fill="none" />
         </div>
       )}
@@ -244,67 +232,6 @@ const CharacterDetail = () => {
     </div>
   );
 
-  const contentTop = (isMobile: boolean) => (
-    <>
-      {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
-        <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
-          {nameAge}
-        </h1>
-        <div className={`grid grid-cols-3 ${isMobile ? "gap-2" : "gap-3"}`} style={{ overflow: "visible" }}>
-          {imgSlot(character.face_image_url, "front", "lock")}
-          {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
-          {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
-        </div>
-      </div>
-
-      {/* Details — compact */}
-      <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
-        <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
-          {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}>
-              <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[8px]" : "text-[10px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-              <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[12px]" : "text-[14px]"}`}>{t.value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-
-  const contentBottom = (isMobile: boolean) => (
-    <>
-      {/* Create Photo button */}
-      <button
-        onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-14 text-xl" : "h-14 text-xl"}`}
-        style={{
-          color: "#000",
-          borderRadius: 12,
-          backgroundColor: "#facc15",
-        }}
-      >
-        create photo
-        <Camera size={16} strokeWidth={2.5} />
-      </button>
-
-      {/* Delete button */}
-      <button
-        onClick={() => setShowDelete(true)}
-        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] ${isMobile ? "h-10 text-xs" : "h-12 text-sm"}`}
-        style={{
-          color: "#ff4444",
-          borderRadius: 12,
-          backgroundColor: "#100505",
-          border: "2px solid #ff4444",
-        }}
-      >
-        delete character
-        <Trash2 size={14} strokeWidth={2.5} />
-      </button>
-    </>
-  );
-
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
@@ -316,34 +243,98 @@ const CharacterDetail = () => {
           <PageTitle className="mb-0">details</PageTitle>
         </div>
         <div className="flex flex-col gap-3">
-          {contentTop(true)}
+          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
+            <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">{nameAge}</h1>
+            <div className="grid grid-cols-3 gap-2" style={{ overflow: "visible" }}>
+              {imgSlot(character.face_image_url, "front", "lock")}
+              {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
+              {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
+            </div>
+          </div>
+          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="px-4 py-3">
+            <div className="flex flex-wrap gap-1.5">
+              {traits.map((t) => (
+                <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}>
+                  <span className="block font-[800] uppercase leading-none mb-0.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                  <span className="block font-[800] lowercase text-white leading-none text-[12px]">{t.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
         <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <div className="flex flex-col gap-3">
-          {contentBottom(true)}
+            <button
+              onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-xl"
+              style={{ color: "#000", borderRadius: 12, backgroundColor: "#facc15" }}
+            >
+              create photo <Camera size={16} strokeWidth={2.5} />
+            </button>
+            <button
+              onClick={() => setShowDelete(true)}
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-10 text-xs"
+              style={{ color: "#ff4444", borderRadius: 12, backgroundColor: "#100505", border: "2px solid #ff4444" }}
+            >
+              delete character <Trash2 size={14} strokeWidth={2.5} />
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Desktop layout */}
-      <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-10 pb-10 flex-col min-h-screen">
-        <div className="flex items-center gap-3 mb-7">
+      {/* Desktop layout — two-column side by side */}
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-10 pb-10 min-h-screen">
+        <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">details</PageTitle>
         </div>
-        <div className="flex flex-col gap-4">
-          {contentTop(false)}
-        </div>
-        <div className="flex-1 min-h-[80px]" />
-        <div className="flex flex-col gap-4 mb-0">
-          {contentBottom(false)}
+        <div className="grid grid-cols-12 gap-8">
+          {/* Left: photos */}
+          <div className="col-span-7">
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-6">
+              <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px] mb-6">{nameAge}</h1>
+              <div className="grid grid-cols-3 gap-4" style={{ overflow: "visible" }}>
+                {imgSlot(character.face_image_url, "front", "lock")}
+                {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
+                {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
+              </div>
+            </div>
+          </div>
+          {/* Right: details + actions */}
+          <div className="col-span-5 flex flex-col gap-5">
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
+              <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">traits</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {traits.map((t) => (
+                  <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid #1a1a1a" }}>
+                    <span className="block font-[800] uppercase leading-none mb-0.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                    <span className="block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1" />
+            <button
+              onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-16 text-xl"
+              style={{ color: "#000", borderRadius: 12, backgroundColor: "#facc15" }}
+            >
+              create photo <Camera size={18} strokeWidth={2.5} />
+            </button>
+            <button
+              onClick={() => setShowDelete(true)}
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-12 text-sm"
+              style={{ color: "#ff4444", borderRadius: 12, backgroundColor: "#100505", border: "2px solid #ff4444" }}
+            >
+              delete character <Trash2 size={14} strokeWidth={2.5} />
+            </button>
+          </div>
         </div>
       </main>
 
-      {/* Regenerate confirmation */}
       <RegenerateConfirmDialog
         open={regenTarget !== null}
         onConfirm={handleRegenerate}
@@ -369,13 +360,8 @@ const CharacterDetail = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-sm"
-              style={{
-                backgroundColor: "#000000",
-                borderRadius: 16,
-                border: "2px solid #1a1a1a",
-                padding: "28px 24px 24px",
-              }}
+              className="relative w-full max-w-sm md:max-w-md"
+              style={{ backgroundColor: "#000000", borderRadius: 16, border: "2px solid #1a1a1a", padding: "28px 24px 24px" }}
             >
               <button
                 onClick={() => setShowDelete(false)}
@@ -385,17 +371,17 @@ const CharacterDetail = () => {
                 <X size={14} strokeWidth={3} color="#fff" />
               </button>
 
-              <h2 className="text-lg font-[900] lowercase text-white leading-[1.1] mb-2 text-center">
+              <h2 className="text-lg md:text-xl font-[900] lowercase text-white leading-[1.1] mb-2 text-center">
                 delete this character?
               </h2>
-              <p className="text-sm font-[900] lowercase mb-6 text-center" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p className="text-sm md:text-base font-[900] lowercase mb-6 text-center" style={{ color: "rgba(255,255,255,0.4)" }}>
                 {character.name || "unnamed"}
               </p>
               <div className="flex gap-3 w-full">
                 <button
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
-                  className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
+                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
                   style={{ backgroundColor: "#1a1a1a", borderRadius: 12 }}
                 >
                   no
@@ -403,7 +389,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
-                  className="flex-1 h-12 text-sm font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
+                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
                   style={{ backgroundColor: "#1a0505", borderRadius: 12, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
