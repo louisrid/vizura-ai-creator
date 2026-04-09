@@ -137,7 +137,7 @@ const Auth = () => {
             <button
               onClick={handleGoogleSignIn}
               disabled={googleLoading || submitting}
-              className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-lg font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               style={{ borderRadius: 12 }}
             >
               {googleLoading ? (
@@ -188,7 +188,7 @@ const Auth = () => {
               disabled={submitting || googleLoading}
             />
 
-            <Button className="h-14 md:h-16 w-full text-sm md:text-lg" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
+            <Button className="h-14 md:h-16 w-full text-sm md:text-xl" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
               {submitting ? (
                 <>
                   <Loader2 className="animate-spin" size={18} />
