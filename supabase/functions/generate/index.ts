@@ -60,6 +60,43 @@ function getClientIp(req: Request): string {
   );
 }
 
+/* ── logging helpers ───────────────────────────────────── */
+async function logGeneration(
+  adminClient: any,
+  userId: string,
+  characterId: string | null,
+  promptText: string,
+  generationType: string,
+  gemsCost: number,
+  success: boolean,
+  errorMessage: string | null = null,
+) {
+  try {
+    await adminClient.from("generation_logs").insert({
+      user_id: userId,
+      character_id: characterId || null,
+      prompt_text: (promptText || "").slice(0, 2000),
+      generation_type: generationType,
+      gems_cost: gemsCost,
+      success,
+      error_message: errorMessage ? errorMessage.slice(0, 1000) : null,
+    });
+  } catch (e) {
+    console.warn("Failed to log generation:", e);
+  }
+}
+
+async function logRejectedPrompt(adminClient: any, userId: string, promptText: string) {
+  try {
+    await adminClient.from("rejected_prompts").insert({
+      user_id: userId,
+      prompt_text: (promptText || "").slice(0, 2000),
+    });
+  } catch (e) {
+    console.warn("Failed to log rejected prompt:", e);
+  }
+}
+
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
   white: "fair skin with warm undertone",
