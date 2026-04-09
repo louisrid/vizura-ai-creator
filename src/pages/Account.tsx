@@ -240,8 +240,8 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}
+            className="w-full h-12 border-2 border-[#2a2a2a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ borderRadius: 12, backgroundColor: "#2a2a2a" }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -252,8 +252,8 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}
+            className="w-full h-12 border-2 border-[#2a2a2a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ borderRadius: 12, backgroundColor: "#2a2a2a" }}
             disabled={submitting || googleLoading}
           />
           <button className="h-14 w-full bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2" style={{ borderRadius: 12 }} onClick={handleEmailAuth} disabled={submitting || googleLoading}>

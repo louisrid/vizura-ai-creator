@@ -205,7 +205,7 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-3">
+          <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-8 pb-3">
             <div className="flex items-center gap-2.5 md:gap-3.5">
               <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
                 vizura
