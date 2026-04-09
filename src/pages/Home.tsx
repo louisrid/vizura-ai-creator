@@ -346,7 +346,7 @@ const Home = () => {
                       className="overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: isPlaceholder ? "2px solid #222" : "2px solid #222",
+                        border: isPlaceholder ? "none" : "2px solid #222",
                         backgroundColor: "#1e1e1e",
                       }}
                     >
@@ -478,7 +478,7 @@ const Home = () => {
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
                       className="overflow-hidden transition-transform active:scale-[0.98]"
-                      style={{ borderRadius: 16, border: isPlaceholder ? "2px solid #222" : "2px solid #222", backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #222", backgroundColor: "#1e1e1e" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
