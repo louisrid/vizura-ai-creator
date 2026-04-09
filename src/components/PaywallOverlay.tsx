@@ -64,7 +64,7 @@ const PaywallOverlay = ({ open, onClose, hasSubscription = false }: PaywallOverl
           <ParticleBurst active={burst} />
           <IconPop delay={0.15} size={96}><span className="text-[5rem]">✨</span></IconPop>
           <BigTitle delay={0.25}>$7 first month</BigTitle>
-          <Subtitle delay={0.4}>then $20/month · 50 gems per month · 30 gems = 1 character · 1 gem = 1 photo</Subtitle>
+          <Subtitle delay={0.4}>then $20/month · 50 gems per month · 1 gem = 1 action</Subtitle>
           <GoldButton onClick={handleSubscribe} disabled={loading} delay={0.2}>
             {loading ? <><Loader2 className="animate-spin" size={20} /> loading...</> : "subscribe & create"}
           </GoldButton>
