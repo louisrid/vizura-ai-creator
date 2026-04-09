@@ -255,6 +255,9 @@ const Index = () => {
 
   const [charDropdownOpen, setCharDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef2 = useRef<HTMLDivElement>(null);
+  const charToggleRef = useRef<HTMLButtonElement>(null);
+  const charToggleRef2 = useRef<HTMLButtonElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
@@ -262,12 +265,18 @@ const Index = () => {
   useEffect(() => {
     if (!charDropdownOpen) return;
     const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      // Check both mobile and desktop refs
+      const inDropdown1 = dropdownRef.current?.contains(target);
+      const inDropdown2 = dropdownRef2.current?.contains(target);
+      if (!inDropdown1 && !inDropdown2) {
         setCharDropdownOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    // Use pointerdown with a slight delay to avoid race with the toggle onClick
+    const wrappedHandler = (e: PointerEvent) => handler(e as unknown as MouseEvent);
+    document.addEventListener("pointerdown", wrappedHandler, true);
+    return () => document.removeEventListener("pointerdown", wrappedHandler, true);
   }, [charDropdownOpen]);
 
   useEffect(() => {
