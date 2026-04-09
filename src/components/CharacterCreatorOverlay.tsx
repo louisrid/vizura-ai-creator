@@ -29,7 +29,7 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
     style={{
       borderRadius: 12,
       border: active ? `2px solid ${Y}` : "2px solid #222",
-      backgroundColor: active ? "rgba(250,204,21,0.08)" : "#111",
+      backgroundColor: active ? "#000000" : "#1a1a1a",
       color: active ? "#fff" : "rgba(255,255,255,0.7)",
     }}
   >
