@@ -636,23 +636,27 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
 
-      const { data: creditData } = await adminClient
-        .from("credits")
-        .select("balance")
-        .eq("user_id", userId)
-        .single();
+      let creditData: { balance: number } | null = null;
+      if (!isBetaUser) {
+        const { data: cd } = await adminClient
+          .from("credits")
+          .select("balance")
+          .eq("user_id", userId)
+          .single();
+        creditData = cd;
 
-      if (!creditData || creditData.balance <= 0) {
-        return new Response(
-          JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
-          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        if (!creditData || creditData.balance <= 0) {
+          return new Response(
+            JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        await adminClient
+          .from("credits")
+          .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
+          .eq("user_id", userId);
       }
-
-      await adminClient
-        .from("credits")
-        .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
-        .eq("user_id", userId);
 
       // Always fetch fresh character data from DB
       const { data: charData } = await adminClient
