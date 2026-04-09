@@ -119,7 +119,7 @@ const Storage = () => {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
+            <div className="grid grid-cols-3 gap-2.5">
             {Array.from({ length: 12 }).map((_, i) => (
               <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
