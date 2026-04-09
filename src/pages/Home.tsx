@@ -365,7 +365,7 @@ const Home = () => {
           </section>
 
           {/* Divider */}
-          <div style={{ height: 1, backgroundColor: "#222", margin: "4px 0 16px" }} />
+          <div style={{ height: 2, backgroundColor: "#222", margin: "4px 0 16px", borderRadius: 1 }} />
 
           {/* My Characters Section */}
           <section>

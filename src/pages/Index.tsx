@@ -481,7 +481,7 @@ const Index = () => {
                           </div>
                         ) : (
                           <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
-                            <span className="text-white/30 text-sm">👤</span>
+                            <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
                           </div>
                         )}
                         <span
