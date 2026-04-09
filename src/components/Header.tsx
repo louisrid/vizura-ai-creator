@@ -215,9 +215,10 @@ const Header = () => {
         {/* Controls on top of gradient */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-10 md:pt-8 pb-3">
-            <div className="flex items-center gap-2.5 md:gap-4">
-              <button onClick={() => handleNav("/")} className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
-                facefox
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <button onClick={() => handleNav("/")} className="flex items-center gap-1 md:gap-1.5 active:opacity-80 transition-opacity duration-150">
+                <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
+                <span className="text-[22px] md:text-[28px] leading-none">🦊</span>
               </button>
               {isLoggedIn && (
                 <button
