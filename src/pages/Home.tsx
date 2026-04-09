@@ -496,7 +496,7 @@ const Home = () => {
           {/* Desktop characters section */}
           <section className="mt-6 p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>my characters 🧑</h2>
+              <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#111111", border: "2px solid #facc15", borderRadius: 12 }}>
                 manage →
               </button>
