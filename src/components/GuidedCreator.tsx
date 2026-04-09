@@ -97,7 +97,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
         style={{
           borderRadius: 16,
-          backgroundColor: isForward ? "#facc15" : "rgba(250,204,21,0.08)",
+          backgroundColor: isForward ? "#facc15" : "#000000",
           border: isForward ? "none" : `2px solid #facc15`,
           outline: "none", padding: 0, cursor: "pointer",
           color: isForward ? "#000" : "#facc15",
@@ -425,7 +425,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[18px] md:text-[22px]"
             style={{
-              background: "rgba(250,204,21,0.08)", border: "2px solid #facc15",
+              background: "#000000", border: "2px solid #facc15",
               borderRadius: 12, fontWeight: 900, color: "#facc15",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}
