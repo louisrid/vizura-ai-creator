@@ -97,7 +97,7 @@ const Header = () => {
             right: dropdownPos.right,
             width: 190,
             backgroundColor: "#000000",
-            border: "2px solid #1e1e1e",
+            border: "2px solid #2a2a2a",
             borderRadius: 16,
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
@@ -227,7 +227,7 @@ const Header = () => {
                 className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[50px] md:h-[50px]"
                 style={{
                   borderRadius: 12,
-                  backgroundColor: "#1e1e1e",
+                  backgroundColor: "#2a2a2a",
                 }}
                 aria-label="open menu"
               >

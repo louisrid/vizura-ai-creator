@@ -56,7 +56,7 @@ const RegenerateConfirmDialog = ({
             style={{
               backgroundColor: "#000000",
               borderRadius: 16,
-              border: "2px solid #1e1e1e",
+              border: "2px solid #2a2a2a",
               padding: "28px 24px 24px",
             }}
           >
@@ -70,7 +70,7 @@ const RegenerateConfirmDialog = ({
                 width: 28,
                 height: 28,
                 borderRadius: "50%",
-                backgroundColor: "#1e1e1e",
+                backgroundColor: "#2a2a2a",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -86,7 +86,7 @@ const RegenerateConfirmDialog = ({
                 onClick={onCancel}
                 disabled={loading}
                 className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
-                style={{ backgroundColor: "#1e1e1e", borderRadius: 12 }}
+                style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
               >
                 no
               </button>
