@@ -327,30 +327,40 @@ const Home = () => {
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {photoSlots.map((photo) => {
-                const isPlaceholder = !photo.url;
-                return (
-                  <button
-                    key={photo.id}
-                    type="button"
-                    onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                    className="overflow-hidden active:scale-[0.98] transition-transform"
-                    style={{
-                      borderRadius: 16,
-                      border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
-                      backgroundColor: "#111111",
-                    }}
-                  >
+              {!photosLoaded && images.length === 0 ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
                     <AspectRatio ratio={3 / 4}>
-                      {isPlaceholder ? (
-                        <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
-                      ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      )}
+                      <Skeleton className="h-full w-full" style={{ borderRadius: 16 }} />
                     </AspectRatio>
-                  </button>
-                );
-              })}
+                  </div>
+                ))
+              ) : (
+                photoSlots.map((photo) => {
+                  const isPlaceholder = !photo.url;
+                  return (
+                    <button
+                      key={photo.id}
+                      type="button"
+                      onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
+                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      style={{
+                        borderRadius: 16,
+                        border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
+                        backgroundColor: "#111111",
+                      }}
+                    >
+                      <AspectRatio ratio={3 / 4}>
+                        {isPlaceholder ? (
+                          <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                        ) : (
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        )}
+                      </AspectRatio>
+                    </button>
+                  );
+                })
+              )}
             </div>
           </section>
 
