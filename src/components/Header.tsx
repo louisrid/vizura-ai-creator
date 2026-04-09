@@ -154,8 +154,8 @@ const Header = () => {
                     }}
                     className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
                     style={{
-                      padding: isDesktop ? "14px 20px" : "10px 14px",
-                      fontSize: isDesktop ? 15 : 13,
+                      padding: isDesktop ? "16px 24px" : "10px 14px",
+                      fontSize: isDesktop ? 17 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
                       color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
@@ -164,7 +164,7 @@ const Header = () => {
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                    <item.icon size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
+                    <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
                     {item.label}
                   </button>
                 );
@@ -173,7 +173,7 @@ const Header = () => {
                 <button
                   onClick={handleLogout}
                   className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
-                  style={{ color: "#ff4444", padding: isDesktop ? "14px 20px" : "10px 14px", fontSize: isDesktop ? 15 : 13, fontWeight: 700, textTransform: "lowercase" }}
+                  style={{ color: "#ff4444", padding: isDesktop ? "16px 24px" : "10px 14px", fontSize: isDesktop ? 17 : 13, fontWeight: 700, textTransform: "lowercase" }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
