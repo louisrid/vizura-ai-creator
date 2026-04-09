@@ -2,11 +2,18 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const ADMIN_EMAIL = "louisjridland@gmail.com";
+const EXCLUDED_PATTERNS = ["preview.", "@preview.vizura.app", "@vizura.app"];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
+};
+
+const isExcluded = (email: string | null) => {
+  if (!email) return true;
+  const e = email.toLowerCase();
+  return EXCLUDED_PATTERNS.some((p) => e.includes(p));
 };
 
 serve(async (req) => {
@@ -36,114 +43,104 @@ serve(async (req) => {
     const { searchParams } = new URL(req.url);
     const section = searchParams.get("section") || "overview";
 
+    // Get all profiles for filtering
+    const { data: allProfiles } = await admin.from("profiles").select("user_id, email");
+    const realProfiles = (allProfiles || []).filter((p: any) => !isExcluded(p.email));
+    const realUserIds = new Set(realProfiles.map((p: any) => p.user_id));
+    const emailMap: Record<string, string> = {};
+    for (const p of realProfiles) emailMap[p.user_id] = p.email || "unknown";
+
     if (section === "overview") {
-      const [users, chars, photos, gemsSpent] = await Promise.all([
-        admin.from("profiles").select("id", { count: "exact", head: true }),
-        admin.from("characters").select("id", { count: "exact", head: true }),
-        admin.from("generations").select("id", { count: "exact", head: true }),
-        admin.from("generation_logs").select("gems_cost"),
+      const [charsRes, photosRes] = await Promise.all([
+        admin.from("characters").select("user_id"),
+        admin.from("generations").select("user_id"),
       ]);
-      const totalGems = (gemsSpent.data || []).reduce((s: number, r: any) => s + (r.gems_cost || 0), 0);
+      const realChars = (charsRes.data || []).filter((c: any) => realUserIds.has(c.user_id)).length;
+      const realPhotos = (photosRes.data || []).filter((g: any) => realUserIds.has(g.user_id)).length;
+
       return new Response(JSON.stringify({
-        users: users.count ?? 0,
-        characters: chars.count ?? 0,
-        photos: photos.count ?? 0,
-        gemsSpent: totalGems,
+        users: realProfiles.length,
+        characters: realChars,
+        photos: realPhotos,
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    if (section === "activity") {
-      // last 30 days generation counts
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
-      const { data } = await admin
-        .from("generation_logs")
-        .select("created_at")
-        .gte("created_at", thirtyDaysAgo)
-        .order("created_at", { ascending: true });
-      // group by day
-      const dayCounts: Record<string, number> = {};
-      for (const row of data || []) {
-        const day = row.created_at.slice(0, 10);
-        dayCounts[day] = (dayCounts[day] || 0) + 1;
-      }
-      // fill gaps
-      const result: { date: string; count: number }[] = [];
-      for (let i = 29; i >= 0; i--) {
-        const d = new Date(Date.now() - i * 86400000);
-        const key = d.toISOString().slice(0, 10);
-        result.push({ date: key, count: dayCounts[key] || 0 });
-      }
-      return new Response(JSON.stringify(result), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    if (section === "recent-generations") {
-      const { data } = await admin
-        .from("generation_logs")
+    if (section === "latest-photos") {
+      // Get 30 most recent generations, then filter to real users and take 6
+      const { data: gens } = await admin
+        .from("generations")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(50);
-      // enrich with user emails and character names
-      const userIds = [...new Set((data || []).map((r: any) => r.user_id))];
-      const charIds = [...new Set((data || []).filter((r: any) => r.character_id).map((r: any) => r.character_id))];
-      const [profilesRes, charsRes, gensRes] = await Promise.all([
-        userIds.length ? admin.from("profiles").select("user_id, email").in("user_id", userIds) : { data: [] },
-        charIds.length ? admin.from("characters").select("id, name").in("id", charIds) : { data: [] },
-        admin.from("generations").select("*").order("created_at", { ascending: false }).limit(50),
-      ]);
-      const emailMap: Record<string, string> = {};
-      for (const p of profilesRes.data || []) emailMap[p.user_id] = p.email || "unknown";
-      const charMap: Record<string, string> = {};
-      for (const c of charsRes.data || []) charMap[c.id] = c.name || "unnamed";
+        .limit(30);
 
-      const enriched = (data || []).map((r: any) => ({
-        ...r,
-        user_email: emailMap[r.user_id] || "unknown",
-        character_name: r.character_id ? (charMap[r.character_id] || "unknown") : null,
-      }));
-      // attach image URLs from generations table
-      const genImages: Record<string, string[]> = {};
-      for (const g of gensRes.data || []) {
-        genImages[g.user_id + "|" + g.created_at] = g.image_urls;
-      }
-      return new Response(JSON.stringify({ logs: enriched, generations: gensRes.data || [] }), {
+      const realGens = (gens || []).filter((g: any) => realUserIds.has(g.user_id));
+
+      // Get matching character info from generation_logs
+      const logUserIds = realGens.map((g: any) => g.user_id);
+      const { data: logs } = logUserIds.length
+        ? await admin.from("generation_logs").select("user_id, character_id, prompt_text, created_at").in("user_id", [...new Set(logUserIds)]).order("created_at", { ascending: false }).limit(100)
+        : { data: [] };
+
+      const charIds = [...new Set((logs || []).filter((l: any) => l.character_id).map((l: any) => l.character_id))];
+      const { data: chars } = charIds.length
+        ? await admin.from("characters").select("id, name").in("id", charIds)
+        : { data: [] };
+      const charMap: Record<string, string> = {};
+      for (const c of chars || []) charMap[c.id] = c.name || "unnamed";
+
+      const photos = realGens.slice(0, 6).map((g: any) => {
+        // Find closest log by time
+        const matchLog = (logs || []).find((l: any) =>
+          l.user_id === g.user_id &&
+          Math.abs(new Date(l.created_at).getTime() - new Date(g.created_at).getTime()) < 60000
+        );
+        return {
+          image_url: g.image_urls?.[0] || null,
+          all_urls: g.image_urls || [],
+          prompt: matchLog?.prompt_text || g.prompt || "",
+          user_email: emailMap[g.user_id] || "unknown",
+          character_name: matchLog?.character_id ? (charMap[matchLog.character_id] || "unknown") : null,
+          created_at: g.created_at,
+        };
+      }).filter((p: any) => p.image_url);
+
+      return new Response(JSON.stringify(photos), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    if (section === "users") {
-      const [profilesRes, creditsRes, charsRes, gensRes, subsRes] = await Promise.all([
-        admin.from("profiles").select("*").order("created_at", { ascending: false }),
-        admin.from("credits").select("user_id, balance"),
-        admin.from("characters").select("user_id"),
-        admin.from("generation_logs").select("user_id, gems_cost"),
-        admin.from("subscriptions").select("user_id, status"),
-      ]);
-      const balanceMap: Record<string, number> = {};
-      for (const c of creditsRes.data || []) balanceMap[c.user_id] = c.balance;
-      const charCountMap: Record<string, number> = {};
-      for (const c of charsRes.data || []) charCountMap[c.user_id] = (charCountMap[c.user_id] || 0) + 1;
-      const genCountMap: Record<string, number> = {};
-      const gemsSpentMap: Record<string, number> = {};
-      for (const g of gensRes.data || []) {
-        genCountMap[g.user_id] = (genCountMap[g.user_id] || 0) + 1;
-        gemsSpentMap[g.user_id] = (gemsSpentMap[g.user_id] || 0) + (g.gems_cost || 0);
-      }
-      const subMap: Record<string, string> = {};
-      for (const s of subsRes.data || []) subMap[s.user_id] = s.status;
+    if (section === "active-users") {
+      const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString();
+      const { data: recentLogs } = await admin
+        .from("generation_logs")
+        .select("user_id, gems_cost")
+        .gte("created_at", sevenDaysAgo);
 
-      const users = (profilesRes.data || []).map((p: any) => ({
-        email: p.email || "unknown",
-        user_id: p.user_id,
-        created_at: p.created_at,
-        characters: charCountMap[p.user_id] || 0,
-        photos: genCountMap[p.user_id] || 0,
-        gems_spent: gemsSpentMap[p.user_id] || 0,
-        balance: balanceMap[p.user_id] ?? 0,
-        subscription: subMap[p.user_id] || "none",
-      }));
-      return new Response(JSON.stringify(users), {
+      // Count per real user
+      const countMap: Record<string, number> = {};
+      for (const l of recentLogs || []) {
+        if (!realUserIds.has(l.user_id)) continue;
+        countMap[l.user_id] = (countMap[l.user_id] || 0) + 1;
+      }
+
+      // Get balances
+      const activeIds = Object.keys(countMap);
+      const { data: creditsData } = activeIds.length
+        ? await admin.from("credits").select("user_id, balance").in("user_id", activeIds)
+        : { data: [] };
+      const balMap: Record<string, number> = {};
+      for (const c of creditsData || []) balMap[c.user_id] = c.balance;
+
+      const activeUsers = activeIds
+        .map((uid) => ({
+          email: emailMap[uid] || "unknown",
+          photos_this_week: countMap[uid],
+          gems_remaining: balMap[uid] ?? 0,
+        }))
+        .sort((a, b) => b.photos_this_week - a.photos_this_week)
+        .slice(0, 10);
+
+      return new Response(JSON.stringify(activeUsers), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -153,43 +150,15 @@ serve(async (req) => {
         .from("rejected_prompts")
         .select("*")
         .order("rejected_at", { ascending: false })
-        .limit(100);
-      const userIds = [...new Set((data || []).map((r: any) => r.user_id))];
-      const profilesRes = userIds.length
-        ? await admin.from("profiles").select("user_id, email").in("user_id", userIds)
-        : { data: [] };
-      const emailMap: Record<string, string> = {};
-      for (const p of profilesRes.data || []) emailMap[p.user_id] = p.email || "unknown";
-      const enriched = (data || []).map((r: any) => ({
-        ...r,
-        user_email: emailMap[r.user_id] || "unknown",
-      }));
-      return new Response(JSON.stringify(enriched), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+        .limit(50);
 
-    if (section === "generation-logs") {
-      const filter = searchParams.get("filter") || "all";
-      let query = admin
-        .from("generation_logs")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(100);
-      if (filter === "faces") query = query.in("generation_type", ["face", "angle", "body"]);
-      if (filter === "photos") query = query.eq("generation_type", "photo");
-      if (filter === "failed") query = query.eq("success", false);
-      const { data } = await query;
-      const userIds = [...new Set((data || []).map((r: any) => r.user_id))];
-      const profilesRes = userIds.length
-        ? await admin.from("profiles").select("user_id, email").in("user_id", userIds)
-        : { data: [] };
-      const emailMap: Record<string, string> = {};
-      for (const p of profilesRes.data || []) emailMap[p.user_id] = p.email || "unknown";
-      const enriched = (data || []).map((r: any) => ({
-        ...r,
-        user_email: emailMap[r.user_id] || "unknown",
-      }));
+      const enriched = (data || [])
+        .filter((r: any) => realUserIds.has(r.user_id))
+        .map((r: any) => ({
+          ...r,
+          user_email: emailMap[r.user_id] || "unknown",
+        }));
+
       return new Response(JSON.stringify(enriched), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
