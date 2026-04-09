@@ -498,20 +498,39 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
-            <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3.5 md:gap-4 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
-              {trait.options.map((opt) => (
-                <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
-                  <InteractivePill
-                    label={opt}
-                    selected={selectedVal === opt}
-                    shaking={shaking && selectedVal !== opt}
-                    onClick={() => setTrait(trait.key, opt)}
-                  />
-                  {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                    <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
-                  )}
-                </div>
-              ))}
+            <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
+              {/* Row 1: first 3 items centred */}
+              <div className="flex justify-center gap-3.5 md:gap-4 mb-3.5 md:mb-4">
+                {trait.options.slice(0, 3).map((opt) => (
+                  <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
+                    <InteractivePill
+                      label={opt}
+                      selected={selectedVal === opt}
+                      shaking={shaking && selectedVal !== opt}
+                      onClick={() => setTrait(trait.key, opt)}
+                    />
+                    {"defaultOption" in trait && (trait as any).defaultOption === opt && (
+                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {/* Row 2: last 2 items centred */}
+              <div className="flex justify-center gap-3.5 md:gap-4">
+                {trait.options.slice(3).map((opt) => (
+                  <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
+                    <InteractivePill
+                      label={opt}
+                      selected={selectedVal === opt}
+                      shaking={shaking && selectedVal !== opt}
+                      onClick={() => setTrait(trait.key, opt)}
+                    />
+                    {"defaultOption" in trait && (trait as any).defaultOption === opt && (
+                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 mx-auto ${
