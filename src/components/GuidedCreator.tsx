@@ -43,14 +43,24 @@ const HELPER_CLASS = "text-[12px] md:text-[14px] font-[800] lowercase" + " " + "
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
-  <div
-    className="pointer-events-none absolute top-0 left-0 right-0"
-    style={{
-      height: 5,
-      zIndex: 2,
-      background: `linear-gradient(90deg, ${Y} 0%, ${Y} 20%, rgba(250,204,21,0.3) 50%, transparent 80%)`,
-    }}
-  />
+  <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[5px] overflow-hidden">
+    <svg
+      aria-hidden="true"
+      className="block h-full w-full"
+      preserveAspectRatio="none"
+      viewBox="0 0 100 5"
+    >
+      <defs>
+        <linearGradient id="guided-top-line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 1 }} />
+          <stop offset="20%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 1 }} />
+          <stop offset="50%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 0.3 }} />
+          <stop offset="80%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 0 }} />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100" height="5" fill="url(#guided-top-line-gradient)" />
+    </svg>
+  </div>
 );
 
 /* ── Animated rings (hero only) ── */
