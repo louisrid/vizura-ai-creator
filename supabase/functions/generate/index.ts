@@ -997,19 +997,24 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
 
+      const genType = isFaceRegen ? "face" : "photo";
       if (e?.contentPolicy) {
+        await logRejectedPrompt(adminClient, userId, prompt);
+        await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, "content_policy");
         return new Response(
-          JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+          JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (e?.status === 429 || e?.status === 402) {
+        await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, `status_${e.status}`);
         return new Response(
           JSON.stringify({ error: "generation failed, please try again" }),
           { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       console.error("Generation error:", e);
+      await logGeneration(adminClient, userId, characterId, prompt, genType, 1, false, e?.message || "unknown");
       return new Response(
         JSON.stringify({ error: "generation failed, please try again" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
