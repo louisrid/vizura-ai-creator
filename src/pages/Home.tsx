@@ -392,7 +392,7 @@ const Home = () => {
                         className="overflow-hidden active:scale-[0.98] transition-transform"
                         style={{
                           borderRadius: 16,
-                          border: "2px solid #222",
+                          backgroundColor: "#1e1e1e",
                           backgroundColor: "#1e1e1e",
                         }}
                       >
