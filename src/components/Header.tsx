@@ -43,7 +43,7 @@ const Header = () => {
     const rect = menuBtnRef.current.getBoundingClientRect();
     const isWide = window.innerWidth >= 768;
     setDropdownPos({
-      top: rect.bottom + (isWide ? 18 : 14),
+      top: rect.bottom + (isWide ? 24 : 14),
       right: window.innerWidth - rect.right,
     });
   }, []);
