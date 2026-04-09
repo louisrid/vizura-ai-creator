@@ -676,10 +676,6 @@ const ChooseFace = () => {
                 <PageTitle className="mb-0">pick your face</PageTitle>
               </div>
 
-              <div className="flex items-center gap-2 mb-6">
-                <Gem size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} className="md:!w-[20px] md:!h-[20px]" />
-                <span className="text-sm md:text-base font-[900] lowercase text-foreground">{gems} gems</span>
-              </div>
 
               <div className="mx-auto mt-2 flex w-full max-w-[26rem] md:max-w-[40rem] flex-col gap-4 md:gap-6">
                 <div className="grid grid-cols-3 gap-3 md:gap-6" style={{ perspective: "800px" }}>
@@ -744,7 +740,7 @@ const ChooseFace = () => {
                     }}
                   >
                     <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                    regenerate <span style={{ color: "#00e0ff" }}>•</span> 1
+                    regenerate all <span style={{ color: "#00e0ff" }}>•</span> 1
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                   </button>
                 </div>
