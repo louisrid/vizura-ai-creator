@@ -277,7 +277,6 @@ const CharacterDetail = () => {
           color: "#000",
           borderRadius: 12,
           backgroundColor: "#facc15",
-          borderRadius: 12,
         }}
       >
         create photo
