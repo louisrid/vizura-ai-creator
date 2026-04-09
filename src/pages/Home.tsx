@@ -481,12 +481,12 @@ const Home = () => {
             what are we making today? ✨
           </h1>
           <div className="mt-4 mb-10" style={{ width: 70, height: 7, borderRadius: 3, backgroundColor: "#facc15" }} />
-          <div className="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-12 gap-8">
             <div className="col-span-4 flex flex-col gap-4">
               <button
                 type="button"
                 onClick={handleOpenCreator}
-                className="flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-black transition-transform active:scale-[0.98]"
+                className="flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-black transition-all active:scale-[0.98] hover-lift"
                 style={{ backgroundColor: "#facc15", borderRadius: 14 }}
               >
                 create character
@@ -494,21 +494,21 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
-                className="relative flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-white transition-transform active:scale-[0.98] overflow-hidden"
+                className="relative flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-white transition-all active:scale-[0.98] overflow-hidden hover-glow"
                 style={{ backgroundColor: "#000000", borderRadius: 14 }}
               >
                 <div className="absolute inset-0" style={{ backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 14 }} />
                 <span className="relative z-[1]">create photo</span>
               </button>
             </div>
-            <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: 18 }}>
+            <section className="col-span-8 flex flex-col p-6" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-[900] lowercase" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
                 <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
                   see all →
                 </button>
               </div>
-              <div className="grid grid-cols-4 gap-4 flex-1">
+              <div className="grid grid-cols-4 gap-5 flex-1">
                 {photoSlots.map((photo) => {
                   const isPlaceholder = !photo.url;
                   return (
@@ -516,7 +516,7 @@ const Home = () => {
                       key={photo.id}
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                      className="overflow-hidden"
+                      className="overflow-hidden hover-lift"
                       style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -540,7 +540,7 @@ const Home = () => {
                 manage →
               </button>
             </div>
-            <div className="grid grid-cols-6 gap-4">
+            <div className="grid grid-cols-6 gap-5">
               {[...charSlots, null, null].slice(0, 6).map((char, i) => {
                 if (!char) {
                   return (
@@ -563,7 +563,7 @@ const Home = () => {
                     key={char.id}
                     type="button"
                     onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden"
+                    className="relative overflow-hidden hover-lift"
                     style={{ borderRadius: 16, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                   >
                     <AspectRatio ratio={3 / 4}>
