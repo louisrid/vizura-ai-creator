@@ -143,7 +143,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#2a2a2a", color: "#fff", border: "2px solid #2a2a2a" }
+        : { backgroundColor: "#242424", color: "#fff", border: "2px solid #242424" }
       ),
     }}
   >
@@ -463,7 +463,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
             className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+            style={{ borderRadius: 14, border: "2px solid #242424", backgroundColor: "#242424" }}
           />
           <motion.button
             type="button"
@@ -752,7 +752,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             className="mt-4 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+            style={{ borderRadius: 14, border: "2px solid #242424", backgroundColor: "#242424" }}
             disabled={emailLoading || googleLoading}
           />
           <input
@@ -761,14 +761,14 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             className="mt-2.5 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+            style={{ borderRadius: 14, border: "2px solid #242424", backgroundColor: "#242424" }}
             disabled={emailLoading || googleLoading}
           />
           <button
             onClick={handleEmailAuth}
             disabled={emailLoading || googleLoading}
             className="mt-3 w-full h-[56px] text-[15px] font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
-            style={{ borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+            style={{ borderRadius: 14, border: "2px solid #242424", backgroundColor: "#242424" }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>}
           </button>

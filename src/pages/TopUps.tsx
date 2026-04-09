@@ -69,7 +69,7 @@ const TopUps = () => {
             <div
               key={plan.label}
               className="rounded-2xl p-4 md:p-5"
-              style={{ backgroundColor: "#2a2a2a" }}
+              style={{ backgroundColor: "#242424" }}
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
