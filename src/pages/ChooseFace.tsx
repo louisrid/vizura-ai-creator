@@ -720,10 +720,10 @@ const ChooseFace = () => {
                     style={{
                       borderRadius: 12,
                       backgroundColor: selectedIndex !== null ? "#facc15" : "#2a2a2a",
-                      color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.3)",
+                      color: selectedIndex !== null ? "#000" : "transparent",
                     }}
                   >
-                    use this face →
+                    {selectedIndex !== null ? "use this face →" : "\u00A0"}
                   </button>
 
                   <button
