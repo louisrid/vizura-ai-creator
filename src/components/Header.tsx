@@ -135,51 +135,56 @@ const Header = () => {
               <X size={14} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" />
             </button>
             <div className="py-1 md:py-2">
-              {menuItems.map((item) => {
+              {menuItems.map((item, idx) => {
                 const isActive = location.pathname === item.path && !item.state;
                 return (
-                  <button
-                    key={item.label}
-                    onClick={() => {
-                      setOpen(false);
-                      if (item.auth && !user) {
-                        navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
-                        return;
-                      }
-                      if (item.state) {
-                        navigate(item.path, { state: item.state });
-                      } else {
-                        handleNav(item.path);
-                      }
-                    }}
-                    className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
-                    style={{
-                      padding: isDesktop ? "16px 24px" : "10px 14px",
-                      fontSize: isDesktop ? 17 : 13,
-                      fontWeight: 700,
-                      textTransform: "lowercase",
-                      color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
-                      backgroundColor: "transparent",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                  <div key={item.label}>
+                    {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        if (item.auth && !user) {
+                          navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+                          return;
+                        }
+                        if (item.state) {
+                          navigate(item.path, { state: item.state });
+                        } else {
+                          handleNav(item.path);
+                        }
+                      }}
+                      className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
+                      style={{
+                        padding: isDesktop ? "16px 24px" : "10px 14px",
+                        fontSize: isDesktop ? 17 : 13,
+                        fontWeight: 700,
+                        textTransform: "lowercase",
+                        color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
+                        backgroundColor: "transparent",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                    <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
-                    {item.label}
-                  </button>
+                      <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
+                      {item.label}
+                    </button>
+                  </div>
                 );
               })}
               {user && (
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
-                  style={{ color: "#ff4444", padding: isDesktop ? "16px 24px" : "10px 14px", fontSize: isDesktop ? 17 : 13, fontWeight: 700, textTransform: "lowercase" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                >
-                  <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
-                  log out
-                </button>
+                <>
+                  <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
+                    style={{ color: "#ff4444", padding: isDesktop ? "16px 24px" : "10px 14px", fontSize: isDesktop ? 17 : 13, fontWeight: 700, textTransform: "lowercase" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                  >
+                    <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
+                    log out
+                  </button>
+                </>
               )}
             </div>
           </div>
