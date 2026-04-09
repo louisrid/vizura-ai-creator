@@ -338,23 +338,35 @@ const Home = () => {
                   </div>
                 ))
               ) : (
-                photoSlots.map((photo) => {
+                photoSlots.map((photo, i) => {
                   const isPlaceholder = !photo.url;
+                  const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
                   return (
                     <button
                       key={photo.id}
                       type="button"
-                      onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
+                      onClick={() => {
+                        if (!isPlaceholder) setSelectedImage(photo);
+                        else if (isFirstPlaceholder) {
+                          if (!user) { navigate("/auth?redirect=/create"); return; }
+                          navigate("/create");
+                        }
+                      }}
                       className="overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
                         border: isPlaceholder ? "none" : "2px solid #1a1a1a",
                         backgroundColor: "#1a1a1a",
+                        cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          isFirstPlaceholder ? (
+                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          ) : (
+                            <div className="h-full w-full" />
+                          )
                         ) : (
                           <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
@@ -386,19 +398,25 @@ const Home = () => {
               ) : (
                 charSlots.map((char, i) => {
                   if (!char) {
+                    const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
                     return (
                       <button
                         key={`empty-${i}`}
                         type="button"
-                        onClick={handleOpenCreator}
+                        onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
                         className="overflow-hidden active:scale-[0.98] transition-transform"
                         style={{
                           borderRadius: 16,
                           backgroundColor: "#1a1a1a",
+                          cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
                         <AspectRatio ratio={3 / 4}>
-                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          {isFirstEmpty ? (
+                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          ) : (
+                            <div className="h-full w-full" />
+                          )}
                         </AspectRatio>
                       </button>
                     );
