@@ -596,11 +596,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
             {/* Progress dots at TOP */}
-            <div className="flex items-center justify-center gap-[3px] md:gap-[5px] max-w-lg md:max-w-2xl mx-auto" style={{ padding: "0 50px", width: "100%", marginBottom: 0 }}>
-              {Array.from({ length: 11 }).map((_, i) => (
+            <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-md mx-auto">
+              {Array.from({ length: TOTAL }).map((_, i) => (
                 <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                   flex: 1, borderRadius: 2,
-                  background: i <= Math.round(((step) / TOTAL) * 10) ? Y : "rgba(250,204,21,0.1)",
+                  background: i <= step ? Y : "rgba(250,204,21,0.1)",
                 }} />
               ))}
             </div>
