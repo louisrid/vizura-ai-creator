@@ -90,7 +90,7 @@ const MyCharacters = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-        <main className="relative z-[1] w-full max-w-lg md:max-w-5xl mx-auto px-[14px] md:px-10 pt-10 pb-[280px]">
+        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -98,8 +98,8 @@ const MyCharacters = () => {
 
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
                   <div className="flex h-full w-full items-center justify-center">
                     <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -112,12 +112,12 @@ const MyCharacters = () => {
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             <button
               onClick={handleCreateCharacter}
-              className="overflow-hidden active:scale-[0.97] transition-transform"
+              className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
               style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
-                  <Plus size={28} strokeWidth={2.5} className="text-white" />
+                  <Plus size={28} strokeWidth={2.5} className="text-white md:w-8 md:h-8" />
                 </div>
               </AspectRatio>
             </button>
@@ -135,7 +135,7 @@ const MyCharacters = () => {
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3, ease: "easeOut" }}
                     onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden active:scale-[0.97] transition-all duration-200"
+                    className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{
                       borderRadius: 16,
                       border: isNew ? "3px solid #facc15" : "2px solid #1a1a1a",
@@ -160,10 +160,10 @@ const MyCharacters = () => {
                       )}
                     </AspectRatio>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-5">
-                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">
+                      <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-tight truncate">
                         {char.name || "unnamed"}
                       </span>
-                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>
+                      <span className="block text-[9px] md:text-[11px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>
                         age {char.age}
                       </span>
                     </div>
@@ -176,15 +176,15 @@ const MyCharacters = () => {
       </main>
 
       {!loading && (
-        <div className="fixed left-0 right-0 bottom-0 z-10 px-6" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
-          <div className="mx-auto max-w-lg md:max-w-5xl">
+        <div className="fixed left-0 right-0 bottom-0 z-10 px-6 md:px-10" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
+          <div className="mx-auto max-w-lg md:max-w-6xl">
             <motion.button
               onClick={handleBottomButton}
               animate={bounceActive ? { y: [0, -6, 0] } : {}}
               transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-              className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+              className="flex h-14 md:h-16 w-full md:max-w-md md:mx-auto items-center justify-center gap-2 text-xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
               style={{
-                backgroundColor: hasCharacters ? "#facc15" : "#facc15",
+                backgroundColor: "#facc15",
                 color: "#000",
                 borderRadius: 12,
               }}

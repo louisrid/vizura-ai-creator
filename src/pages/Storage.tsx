@@ -54,7 +54,6 @@ const Storage = () => {
           });
         });
       });
-      // Mark the newest image as "new" for animate-in if arriving from photo creation
       if (allImages.length > 0) {
         const newest = allImages[0];
         const createdMs = new Date(newest.created_at).getTime();
@@ -77,7 +76,6 @@ const Storage = () => {
 
     if (!user) return;
 
-    // Remove image URL from the generation record in DB
     try {
       const { data: gen } = await supabase
         .from("generations")
@@ -98,7 +96,6 @@ const Storage = () => {
       console.error("Failed to delete from DB:", e);
     }
 
-    // Delete from storage bucket
     try {
       const url = new URL(img.url);
       const pathMatch = url.pathname.match(/\/storage\/v1\/object\/public\/images\/(.+)/);
@@ -109,23 +106,22 @@ const Storage = () => {
       console.error("Failed to delete from storage:", e);
     }
 
-    // Clear homepage cache so deleted images don't reappear
     try { sessionStorage.removeItem("vizura_latest_photos"); } catch {}
   };
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-5xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
                   <div className="flex h-full w-full items-center justify-center">
                     <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -135,21 +131,21 @@ const Storage = () => {
             ))}
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#1a1a1a" }}>
-            <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
-            <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
+          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
+            <Wand2 size={32} className="text-foreground/30 mx-auto mb-4 md:w-10 md:h-10" />
+            <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
-              className="h-12 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+              className="h-12 md:h-14 w-full max-w-[12rem] md:max-w-[16rem] mx-auto bg-neon-yellow text-sm md:text-base font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
               style={{ borderRadius: 12 }}
             >
               create a photo
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-3.5">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             <AnimatePresence>
-            {images.map((img, idx) => {
+            {images.map((img) => {
               const isNew = newImageIds.has(img.id);
               return (
               <motion.div
@@ -159,7 +155,7 @@ const Storage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3 }}
-                className="flex flex-col"
+                className="flex flex-col hover-lift"
               >
                 <button
                   onClick={() => setExpanded(img)}
@@ -173,7 +169,7 @@ const Storage = () => {
                   href={img.url}
                   download={`vizura-${img.id}.png`}
                   target="_blank"
-                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
                   style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid #1a1a1a", borderTop: "none" }}
                 >
                    download
@@ -204,11 +200,10 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
+              className="relative w-full max-w-[280px] md:max-w-[480px] overflow-hidden"
               style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* X dismiss — popup style */}
               <button
                 onClick={() => setExpanded(null)}
                 className="absolute flex items-center justify-center z-10"
@@ -217,23 +212,23 @@ const Storage = () => {
                 <X size={14} strokeWidth={3} color="#fff" />
               </button>
 
-              <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh]" />
+              <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
               {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                <div className="px-3 pt-2.5 pb-0">
-                  <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <div className="px-3 md:px-4 pt-2.5 pb-0">
+                  <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
                     {expanded.prompt}
                   </p>
                 </div>
               )}
-              <div className="p-3 flex gap-2" style={{ backgroundColor: "#facc15", borderRadius: "0 0 14px 14px" }}>
+              <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#facc15", borderRadius: "0 0 14px 14px" }}>
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-10 border-[2px] border-[#1a1a1a] text-xs font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#1a1a1a", color: "#ffffff" }}>
+                  <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[#1a1a1a] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#1a1a1a", color: "#ffffff" }}>
                     download <Download size={12} strokeWidth={2.5} />
                   </Button>
                 </a>
                 <Button
                   variant="outline"
-                  className="h-10 px-3 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
                   onClick={() => handleDelete(expanded)}
                 >
                   <Trash2 size={12} strokeWidth={2.5} />

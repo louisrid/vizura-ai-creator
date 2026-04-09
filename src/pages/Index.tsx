@@ -36,43 +36,30 @@ const PHOTO_LOADING_PHRASES = [
   "final touches…",
 ];
 
-/* ── Toggle box (new design — contained in a rounded box with dividers) ── */
+/* ── Toggle box ── */
 const ToggleBox = ({ label, options, value, onChange }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
 }) => (
   <div className="flex-1 flex flex-col gap-2">
-    <span className="text-base font-[900] lowercase text-white">{label}</span>
-    <div
-      className="flex items-center rounded-2xl border-2 border-input bg-card p-1.5"
-    >
+    <span className="text-base md:text-lg font-[900] lowercase text-white">{label}</span>
+    <div className="flex items-center rounded-2xl border-2 border-input bg-card p-1.5">
       {options.map((opt, i) => {
         const isSelected = value === opt;
-
         return (
           <Fragment key={opt}>
             <button
               type="button"
               aria-pressed={isSelected}
               onClick={() => onChange(opt)}
-              className="flex-1 flex items-center justify-center rounded-2xl px-0 py-[10px] text-[15px] font-extrabold lowercase transition-all"
+              className="flex-1 flex items-center justify-center rounded-2xl px-0 py-[10px] md:py-[12px] text-[15px] md:text-[16px] font-extrabold lowercase transition-all"
               style={isSelected
-                ? {
-                    backgroundColor: "hsl(var(--neon-yellow))",
-                    color: "hsl(var(--neon-yellow-foreground))",
-                    boxShadow: "0 0 0 2px hsl(var(--neon-yellow) / 0.22) inset",
-                  }
-                : {
-                    backgroundColor: "transparent",
-                    color: "hsl(var(--foreground) / 0.48)",
-                  }}
+                ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))", boxShadow: "0 0 0 2px hsl(var(--neon-yellow) / 0.22) inset" }
+                : { backgroundColor: "transparent", color: "hsl(var(--foreground) / 0.48)" }}
             >
               {opt}
             </button>
             {i < options.length - 1 && (
-              <div
-                aria-hidden
-                className="mx-1.5 h-[34px] w-px shrink-0 self-center bg-foreground/30"
-              />
+              <div aria-hidden className="mx-1.5 h-[34px] w-px shrink-0 self-center bg-foreground/30" />
             )}
           </Fragment>
         );
@@ -81,21 +68,16 @@ const ToggleBox = ({ label, options, value, onChange }: {
   </div>
 );
 
-/* ── Static placeholder — tells user what to type ── */
+/* ── Static placeholder ── */
 const useStaticPlaceholder = (charName: string) => {
   const name = charName || "sara";
   return `e.g. ${name} standing in her bedroom wearing a pink hoodie`;
 };
 
 const escapeHtml = (text: string) =>
-  text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+  text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
 
-/* ── Highlighted text input — normal textarea, mirrored overlay ── */
+/* ── Highlighted text input ── */
 const HighlightedPromptArea = ({
   value, onChange, charName, placeholder
 }: {
@@ -106,38 +88,24 @@ const HighlightedPromptArea = ({
 
   const highlightedHtml = useMemo(() => {
     if (!value) return "";
-
     if (!charName.trim()) return escapeHtml(value);
-
     const escapedName = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escapedName})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
     const parts: string[] = [];
     let lastIndex = 0;
     let match: RegExpExecArray | null;
-
     while ((match = regex.exec(value)) !== null) {
       const boundary = match[1] ?? "";
       const name = match[2] ?? "";
       const matchStart = match.index;
       const highlightStart = matchStart + boundary.length;
       const highlightEnd = highlightStart + name.length;
-
-      if (lastIndex < matchStart) {
-        parts.push(escapeHtml(value.slice(lastIndex, matchStart)));
-      }
-
-      if (boundary) {
-        parts.push(escapeHtml(boundary));
-      }
-
+      if (lastIndex < matchStart) parts.push(escapeHtml(value.slice(lastIndex, matchStart)));
+      if (boundary) parts.push(escapeHtml(boundary));
       parts.push(`<span style="color:hsl(var(--neon-yellow));">${escapeHtml(name)}</span>`);
       lastIndex = highlightEnd;
     }
-
-    if (lastIndex < value.length) {
-      parts.push(escapeHtml(value.slice(lastIndex)));
-    }
-
+    if (lastIndex < value.length) parts.push(escapeHtml(value.slice(lastIndex)));
     return parts.join("");
   }, [value, charName]);
 
@@ -160,11 +128,8 @@ const HighlightedPromptArea = ({
         }}
         spellCheck={false}
         autoCorrect="off"
-        className="relative z-[1] w-full min-h-[176px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
-        style={{
-          caretColor: "hsl(var(--foreground))",
-          WebkitTextFillColor: "transparent",
-        }}
+        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
+        style={{ caretColor: "hsl(var(--foreground))", WebkitTextFillColor: "transparent" }}
       />
       {!value && placeholder}
     </div>
@@ -179,7 +144,7 @@ const EXPRESSION_OPTIONS = [
   { value: "pout", label: "pout 😘" },
 ] as const;
 
-/* ── Expression dropdown (custom, matching character selector style) ── */
+/* ── Expression dropdown ── */
 const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -196,15 +161,15 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
 
   return (
     <div>
-      <span className="block text-base font-[900] lowercase mb-2 text-white">expression</span>
+      <span className="block text-base md:text-lg font-[900] lowercase mb-2 text-white">expression</span>
       <div className="relative" ref={ref}>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
+          className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
           style={{ borderRadius: 12, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}
         >
-          <span className="flex-1 text-left text-base font-[900] lowercase text-foreground">{selected.label}</span>
+          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-foreground">{selected.label}</span>
           <ChevronDown
             size={18}
             strokeWidth={2.5}
@@ -241,12 +206,12 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
   );
 };
 
-/* ── Create button component ── */
+/* ── Create button ── */
 const CreateButton = ({ onClick, disabled, isGenerating }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean;
 }) => (
   <button
-    className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+    className="w-full h-14 md:h-16 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
     style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
@@ -332,7 +297,6 @@ const Index = () => {
         .order("created_at", { ascending: false });
       if (data) {
         setCharacters(data as Character[]);
-        // Always select the most recently created character (first in list)
         const latestId = data[0]?.id;
         if (latestId) {
           setSelectedCharId(latestId);
@@ -411,6 +375,64 @@ const Index = () => {
 
   const createDisabled = isGenerating;
 
+  /* ── Character dropdown content (shared between mobile/desktop) ── */
+  const charDropdownContent = (
+    <AnimatePresence>
+      {charDropdownOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
+          style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
+        >
+          {characters.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
+              className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${selectedCharId === c.id ? "bg-white/5" : "hover:bg-white/5"}`}
+            >
+              {c.face_image_url ? (
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/10">
+                  <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
+                  <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
+                </div>
+              )}
+              <span
+                className="text-lg font-[900] lowercase truncate"
+                style={{ color: selectedCharId === c.id ? "#facc15" : "#fff" }}
+              >
+                {c.name || "unnamed"}
+              </span>
+            </button>
+          ))}
+          {characters.length === 0 && user && (
+            <button
+              type="button"
+              onClick={() => {
+                setCharDropdownOpen(false);
+                sessionStorage.removeItem("vizura_creator_dismissed");
+                sessionStorage.removeItem("vizura_guided_flow_state");
+                navigate("/", { state: { openCreator: true } });
+              }}
+              className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
+            >
+              <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
+                <span className="text-xs">+</span>
+              </div>
+              <span className="text-lg font-[900] lowercase" style={{ color: "#facc15" }}>create character</span>
+            </button>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
       <DotDecal />
@@ -422,17 +444,15 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[80px]">
+      {/* Mobile layout */}
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[80px] md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
         <div className="flex flex-col gap-7">
-
-          {/* Character selector + Photo box — narrower (75%) */}
           <div className="w-[75%] mx-auto flex flex-col gap-5">
-            {/* Character selector — yellow background */}
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
@@ -452,78 +472,15 @@ const Index = () => {
                 <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
                   {selectedChar?.name || "select character"}
                 </span>
-                <ChevronDown
-                  size={18}
-                  strokeWidth={2.5}
-                  className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`}
-                />
+                <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
-
-              <AnimatePresence>
-                {charDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-                    style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
-                  >
-                    {characters.map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
-                        className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${selectedCharId === c.id ? "bg-white/5" : "hover:bg-white/5"}`}
-                      >
-                        {c.face_image_url ? (
-                          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/10">
-                            <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
-                          </div>
-                        ) : (
-                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
-                            <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
-                          </div>
-                        )}
-                        <span
-                          className="text-lg font-[900] lowercase truncate"
-                          style={{ color: selectedCharId === c.id ? "#facc15" : "#fff" }}
-                        >
-                          {c.name || "unnamed"}
-                        </span>
-                      </button>
-                    ))}
-                    {characters.length === 0 && user && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setCharDropdownOpen(false);
-                          sessionStorage.removeItem("vizura_creator_dismissed");
-                          sessionStorage.removeItem("vizura_guided_flow_state");
-                          navigate("/", { state: { openCreator: true } });
-                        }}
-                        className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
-                      >
-                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
-                          <span className="text-xs">+</span>
-                        </div>
-                        <span className="text-lg font-[900] lowercase" style={{ color: "#facc15" }}>create character</span>
-                      </button>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {charDropdownContent}
             </div>
 
-            {/* Photo preview */}
             <motion.section
               layout
               className="flex items-center justify-center overflow-hidden w-full"
-              style={{
-                borderRadius: 14,
-                border: "2px solid rgba(255,255,255,0.08)",
-                backgroundColor: "#1a1a1a",
-              }}
+              style={{ borderRadius: 14, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -531,15 +488,7 @@ const Index = () => {
                   <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div
-                      className="flex items-center justify-center rounded-full"
-                      style={{
-                        width: 48,
-                        height: 48,
-                        backgroundColor: "rgba(250,204,21,0.08)",
-                        border: "2px solid #facc15",
-                      }}
-                    >
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #facc15" }}>
                       <span className="text-xl">🪄</span>
                     </div>
                   </div>
@@ -548,18 +497,13 @@ const Index = () => {
             </motion.section>
           </div>
 
-          {/* Full-width controls below */}
-
-          {/* Type & Ratio toggles — two separate boxes */}
           <div className="flex gap-3">
             <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
             <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
           </div>
 
-          {/* Expression dropdown */}
           <ExpressionDropdown value={expression} onChange={setExpression} />
 
-          {/* Prompt */}
           <div className="relative">
             <span className="block text-sm font-[900] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
@@ -568,15 +512,11 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <span className="text-2xl font-extrabold lowercase text-foreground/30">
-                    {placeholderText}
-                  </span>
+                  <span className="text-2xl font-extrabold lowercase text-foreground/30">{placeholderText}</span>
                 </div>
               }
             />
           </div>
-
-          {/* Create button — sticky bottom bar */}
         </div>
 
         {error && (
@@ -586,7 +526,96 @@ const Index = () => {
         )}
       </main>
 
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
+      {/* Desktop layout — two-column */}
+      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-10 pt-10 pb-[120px]">
+        <div className="flex items-center gap-3 mb-8">
+          <BackButton />
+          <PageTitle className="mb-0">create photo</PageTitle>
+        </div>
+
+        <div className="grid grid-cols-12 gap-8">
+          {/* Left: preview + character selector */}
+          <div className="col-span-5 flex flex-col gap-5">
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setCharDropdownOpen((v) => !v)}
+                className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
+                style={{ borderRadius: 14, backgroundColor: "#facc15" }}
+              >
+                {selectedChar?.face_image_url ? (
+                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
+                    <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
+                    <User size={20} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
+                  </div>
+                )}
+                <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
+                  {selectedChar?.name || "select character"}
+                </span>
+                <ChevronDown size={20} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+              {charDropdownContent}
+            </div>
+
+            <motion.section
+              layout
+              className="flex items-center justify-center overflow-hidden w-full"
+              style={{ borderRadius: 16, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
+              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            >
+              <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                {resultImage ? (
+                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #facc15" }}>
+                      <span className="text-2xl">🪄</span>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </motion.section>
+          </div>
+
+          {/* Right: controls */}
+          <div className="col-span-7 flex flex-col gap-6">
+            <div className="flex gap-4">
+              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
+              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+            </div>
+
+            <ExpressionDropdown value={expression} onChange={setExpression} />
+
+            <div className="relative">
+              <span className="block text-base font-[900] lowercase mb-2 text-white">describe your photo</span>
+              <HighlightedPromptArea
+                value={prompt}
+                onChange={setPrompt}
+                charName={selectedChar?.name || ""}
+                placeholder={
+                  <div className="pointer-events-none absolute left-4 top-3 right-4">
+                    <span className="text-2xl font-extrabold lowercase text-foreground/30">{placeholderText}</span>
+                  </div>
+                }
+              />
+            </div>
+
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          </div>
+        </div>
+
+        {error && (
+          <div className="mt-4 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+            {error}
+          </div>
+        )}
+      </main>
+
+      {/* Mobile sticky create button */}
+      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
         <div className="mx-auto max-w-lg">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
         </div>
