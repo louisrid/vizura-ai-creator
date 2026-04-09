@@ -167,7 +167,7 @@ const Storage = () => {
                 </button>
                 <a
                   href={img.url}
-                  download={`vizura-${img.id}.png`}
+                  download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
                   style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid #1a1a1a", borderTop: "none" }}

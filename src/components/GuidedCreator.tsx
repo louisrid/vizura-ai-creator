@@ -80,7 +80,7 @@ const AnimatedRings = ({ t }: { t: number }) => (
       transform: `rotate(${t * -0.4}deg)`,
       top: "50%", left: "50%", translate: "-50% -50%",
     }} />
-    <span className="text-[82px] md:text-[110px] relative z-[1]">👩‍🎤</span>
+    <span className="text-[82px] md:text-[110px] relative z-[1]">🦊</span>
   </div>
 );
 
@@ -398,7 +398,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => (
     <div className="flex w-full flex-col items-center" style={{ marginTop: 0 }}>
       <AnimatedRings t={ringT} />
-      <div className="text-[60px] md:text-[80px]" style={{ fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>vizura</div>
+      <div className="text-[60px] md:text-[80px]" style={{ fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>facefox</div>
       <div className="w-[40px] md:w-[56px] h-[4px] md:h-[5px]" style={{ background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
       <div className="flex flex-col items-center mt-5 md:mt-7 gap-2 md:gap-3">
         <button

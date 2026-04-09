@@ -185,7 +185,7 @@ const History = () => {
                     {formatDate(expanded.created_at)}
                   </div>
                 </div>
-                <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="block">
+                <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
                   <Button variant="outline" className="w-full h-12 md:h-14 bg-[#1a1a1a]">
                     download <Download size={14} strokeWidth={2.5} />
                   </Button>
