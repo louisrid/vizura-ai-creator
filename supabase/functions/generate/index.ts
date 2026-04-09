@@ -1002,7 +1002,7 @@ serve(async (req) => {
         }
       }
     } catch (e: any) {
-      await adminClient
+      if (creditData) await adminClient
         .from("credits")
         .update({
           balance: creditData.balance,
@@ -1035,7 +1035,7 @@ serve(async (req) => {
     }
 
     if (imageUrls.length === 0) {
-      await adminClient
+      if (creditData) await adminClient
         .from("credits")
         .update({
           balance: creditData.balance,
