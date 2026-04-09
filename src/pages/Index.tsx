@@ -247,14 +247,14 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 }) => (
   <button
     className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#00e0ff", border: "2px solid #00e0ff", borderRadius: 12 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
+      <>create <span style={{ color: "#00e0ff" }}>·</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
     )}
   </button>
 );
@@ -421,7 +421,7 @@ const Index = () => {
       />
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[250px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[120px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>

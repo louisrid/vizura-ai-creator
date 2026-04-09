@@ -95,7 +95,7 @@ const RegenerateConfirmDialog = ({
                   onClick={onConfirm}
                   disabled={loading}
                   className="flex-1 h-12 text-sm font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
-                  style={{ backgroundColor: "#050a10", borderRadius: 12, border: "2px solid #00e0ff", color: "#00e0ff" }}
+                  style={{ backgroundColor: "#050a10", borderRadius: 12, border: "2px solid #00e0ff", color: "#ffffff" }}
                 >
                   {loading ? (
                     <Loader2 className="animate-spin mx-auto" size={18} />
