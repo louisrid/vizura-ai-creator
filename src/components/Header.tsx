@@ -8,6 +8,23 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
 
+/** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
+function useScrollGradientOpacity() {
+  const [opacity, setOpacity] = useState(0);
+  useEffect(() => {
+    const root = document.getElementById("root");
+    if (!root) return;
+    const onScroll = () => {
+      const y = root.scrollTop;
+      setOpacity(Math.min(y / 60, 1));
+    };
+    onScroll();
+    root.addEventListener("scroll", onScroll, { passive: true });
+    return () => root.removeEventListener("scroll", onScroll);
+  }, []);
+  return opacity;
+}
+
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();

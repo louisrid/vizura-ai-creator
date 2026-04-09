@@ -489,7 +489,7 @@ async function generateAngleAndBody(
       console.log("Generating full-body anchor...");
       const bodyKey = (bodyType || "regular").toLowerCase();
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted very low-cut white top showing upper chest and cleavage, tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
