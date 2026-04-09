@@ -597,6 +597,9 @@ serve(async (req) => {
     }
     const userId = userData.user.id;
 
+    const userEmail = (userData.user.email || "").trim().toLowerCase();
+    const isBetaUser = BETA_MODE && BETA_WHITELIST.includes(userEmail);
+
     if (isRateLimited(userId)) {
       return new Response(
         JSON.stringify({ error: "Rate limit exceeded — max 10 per minute" }),
