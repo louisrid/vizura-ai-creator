@@ -714,6 +714,8 @@ serve(async (req) => {
           });
         }
 
+        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, true);
+
         return new Response(
           JSON.stringify({
             angle_url: angleUrl,
@@ -726,11 +728,14 @@ serve(async (req) => {
         await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         console.error("Single regeneration error:", e);
         if (e?.contentPolicy) {
+          await logRejectedPrompt(adminClient, userId, "character references");
+          await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 0, false, "content_policy");
           return new Response(
-            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
+        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, false, e?.message || "unknown");
         return new Response(
           JSON.stringify({ error: "regeneration failed, please try again" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
