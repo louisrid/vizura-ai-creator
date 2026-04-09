@@ -456,7 +456,7 @@ const Home = () => {
                 type="button"
                 onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
                 className="relative flex h-24 items-center justify-center gap-3 text-lg font-[900] lowercase text-white transition-transform active:scale-[0.98] overflow-hidden"
-                style={{ backgroundColor: "#1a1a1a", borderRadius: 14 }}
+                style={{ backgroundColor: "#000000", borderRadius: 14 }}
               >
                 <div className="absolute inset-0" style={{ backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 14 }} />
                 <span className="relative z-[1]">create photo</span>
