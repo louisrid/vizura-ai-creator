@@ -347,9 +347,11 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Loader2 size={14} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                      </div>
                     </AspectRatio>
                   </div>
                 ))
@@ -405,9 +407,11 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Loader2 size={14} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                      </div>
                     </AspectRatio>
                   </div>
                 ))
