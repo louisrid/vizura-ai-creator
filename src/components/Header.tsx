@@ -136,9 +136,16 @@ const Header = () => {
             >
               <X size={14} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" />
             </button>
-            <div className="py-1 md:py-2">
+            <div className="py-0">
               {menuItems.map((item, idx) => {
                 const isActive = location.pathname === item.path && !item.state;
+                const isFirst = idx === 0;
+                const isLast = !user && idx === menuItems.length - 1;
+                const borderRadius = isFirst
+                  ? (isDesktop ? "18px 18px 0 0" : "14px 14px 0 0")
+                  : isLast
+                    ? (isDesktop ? "0 0 18px 18px" : "0 0 14px 14px")
+                    : "0";
                 return (
                   <div key={item.label}>
                     {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
@@ -163,8 +170,9 @@ const Header = () => {
                         textTransform: "lowercase",
                         color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
                         backgroundColor: "transparent",
+                        borderRadius,
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
                       <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
@@ -179,8 +187,15 @@ const Header = () => {
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
-                    style={{ color: "#ff4444", padding: isDesktop ? "16px 24px" : "10px 14px", fontSize: isDesktop ? 17 : 13, fontWeight: 700, textTransform: "lowercase" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                    style={{
+                      color: "#ff4444",
+                      padding: isDesktop ? "16px 24px" : "10px 14px",
+                      fontSize: isDesktop ? 17 : 13,
+                      fontWeight: 700,
+                      textTransform: "lowercase",
+                      borderRadius: isDesktop ? "0 0 18px 18px" : "0 0 14px 14px",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                   >
                     <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
