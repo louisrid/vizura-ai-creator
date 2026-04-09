@@ -352,7 +352,7 @@ const Home = () => {
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
@@ -397,7 +397,7 @@ const Home = () => {
                         }}
                       >
                         <AspectRatio ratio={3 / 4}>
-                          <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         </AspectRatio>
                       </button>
                     );
@@ -482,7 +482,7 @@ const Home = () => {
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-white/20 text-xl">+</div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
@@ -513,7 +513,7 @@ const Home = () => {
                       style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        <div className="flex h-full w-full items-center justify-center text-white/20 text-xl font-[300]">+</div>
+                        <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                       </AspectRatio>
                     </button>
                   );
