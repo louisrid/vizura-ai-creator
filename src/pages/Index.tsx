@@ -549,6 +549,7 @@ const Index = () => {
             <div className="relative" ref={dropdownRef2}>
               <button
                 type="button"
+                onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
                 style={{ borderRadius: 14, backgroundColor: "#facc15" }}
