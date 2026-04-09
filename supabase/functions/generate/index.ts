@@ -1083,7 +1083,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         images: imageUrls,
-        gems_remaining: creditData.balance - 1,
+        gems_remaining: creditData ? creditData.balance - 1 : undefined,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
