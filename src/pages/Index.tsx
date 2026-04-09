@@ -247,14 +247,14 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 }) => (
   <button
     className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#00e0ff", border: "2px solid #00e0ff", borderRadius: 12 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 12 }}
     onClick={onClick}
     disabled={disabled}
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create · 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
+      <>create <span style={{ color: "#00e0ff" }}>·</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
     )}
   </button>
 );
