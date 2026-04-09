@@ -1035,6 +1035,7 @@ serve(async (req) => {
       );
     }
 
+    const genType = isFaceRegen ? "face" : "photo";
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,
@@ -1042,6 +1043,8 @@ serve(async (req) => {
         image_urls: imageUrls,
       });
     }
+
+    await logGeneration(adminClient, userId, characterId, prompt, genType, 1, true);
 
     return new Response(
       JSON.stringify({
