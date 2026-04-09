@@ -274,7 +274,7 @@ const ChooseFace = () => {
           return;
         }
         if (result.code === "CONTENT_POLICY") {
-          toast.error("please adjust your description and try again");
+          toast("prompt not allowed");
           setLoading(false);
           return;
         }

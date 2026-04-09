@@ -102,6 +102,11 @@ const CharacterDetail = () => {
       });
 
       if (error) throw error;
+      if (data?.code === "CONTENT_POLICY") {
+        toast("prompt not allowed");
+        await refetchGems();
+        return;
+      }
       if (data?.error) throw new Error(data.error);
 
       // Update only the regenerated photo
