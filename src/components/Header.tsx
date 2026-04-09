@@ -212,7 +212,7 @@ const Header = () => {
           <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-8 md:pt-6 pb-3">
             <div className="flex items-center gap-2.5 md:gap-4">
               <button onClick={() => handleNav("/")} className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
-                vizura
+                facefox
               </button>
               {isLoggedIn && (
                 <button
