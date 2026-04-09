@@ -163,7 +163,7 @@ const MyCharacters = () => {
       </main>
 
       {!loading && (
-        <div className="fixed left-0 right-0 z-10 px-6 pt-2 bg-gradient-to-t from-background via-background/95 to-transparent bottom-[calc((100vh-100dvh)/2+4px)]">
+        <div className="fixed left-0 right-0 z-10 px-6 pt-2 bg-gradient-to-t from-background via-background/95 to-transparent" style={{ bottom: "clamp(8px, calc((100vh - 100dvh) / 3 + 6px), 24px)" }}>
           <div className="mx-auto max-w-lg md:max-w-5xl">
             <motion.button
               onClick={handleBottomButton}
