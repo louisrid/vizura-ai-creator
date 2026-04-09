@@ -232,14 +232,14 @@ const Header = () => {
         {/* Controls on top of gradient */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between px-[14px] pt-6 pb-3">
-            <div className="flex items-center gap-1.5 md:gap-2">
+            <div className="flex items-center gap-1.5">
               <button onClick={() => handleNav("/")} className="flex items-center active:opacity-80 transition-opacity duration-150">
-                <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
+                <span className="text-[26px] font-[900] lowercase text-white tracking-tight">facefox</span>
               </button>
               {isLoggedIn && (
                 <button
                   onClick={() => navigate("/account")}
-                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
+                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "hsl(var(--card))",
@@ -247,36 +247,36 @@ const Header = () => {
                   }}
                   aria-label="my account"
                 >
-                  <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
+                  <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-3 md:gap-5">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
+                className="flex items-center gap-1 px-2.5 py-1.5 active:scale-95 transition-transform duration-150"
                 style={{
                   backgroundColor: "hsl(var(--card))",
                   border: "2px solid #00e0ff",
                   borderRadius: 10,
                 }}
               >
-                <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
+                <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                <span className="text-[13px] font-[900] lowercase text-white">{gems}</span>
               </button>
 
               <button
                 ref={menuBtnRef}
                 onClick={() => setOpen(!open)}
-                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px]"
                 style={{
                   borderRadius: 12,
                   backgroundColor: "#1a1a1a",
                 }}
                 aria-label="open menu"
               >
-                <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
+                <svg width="18" height="14" viewBox="0 0 22 16" fill="none">
                   <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
                   <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
                   <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
