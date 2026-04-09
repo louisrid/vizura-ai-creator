@@ -42,9 +42,10 @@ const Header = () => {
     if (!menuBtnRef.current) return;
     const rect = menuBtnRef.current.getBoundingClientRect();
     const isWide = window.innerWidth >= 768;
+    const docWidth = document.documentElement.clientWidth;
     setDropdownPos({
       top: rect.bottom + (isWide ? 24 : 14),
-      right: window.innerWidth - rect.right,
+      right: docWidth - rect.right,
     });
   }, []);
 
