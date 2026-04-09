@@ -943,36 +943,40 @@ serve(async (req) => {
     }
 
     /* ── STANDARD GEM-BASED FLOW ── */
-    const { data: creditData } = await adminClient
-      .from("credits")
-      .select("balance")
-      .eq("user_id", userId)
-      .single();
-
-    if (!creditData || creditData.balance <= 0) {
-      const { data: subData } = await adminClient
-        .from("subscriptions")
-        .select("status")
+    let creditData: { balance: number } | null = null;
+    if (!isBetaUser) {
+      const { data: cd } = await adminClient
+        .from("credits")
+        .select("balance")
         .eq("user_id", userId)
         .single();
+      creditData = cd;
 
-      return new Response(
-        JSON.stringify({
-          error: "No gems remaining",
-          code: "NO_GEMS",
-          has_subscription: subData?.status === "active",
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      if (!creditData || creditData.balance <= 0) {
+        const { data: subData } = await adminClient
+          .from("subscriptions")
+          .select("status")
+          .eq("user_id", userId)
+          .single();
+
+        return new Response(
+          JSON.stringify({
+            error: "No gems remaining",
+            code: "NO_GEMS",
+            has_subscription: subData?.status === "active",
+          }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      await adminClient
+        .from("credits")
+        .update({
+          balance: creditData.balance - 1,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId);
     }
-
-    await adminClient
-      .from("credits")
-      .update({
-        balance: creditData.balance - 1,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", userId);
 
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
