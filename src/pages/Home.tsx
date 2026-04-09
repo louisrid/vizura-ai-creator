@@ -346,7 +346,7 @@ const Home = () => {
                       className="overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
+                        border: isPlaceholder ? "2px solid #222" : "2px solid #222",
                         backgroundColor: "#1e1e1e",
                       }}
                     >
@@ -392,7 +392,7 @@ const Home = () => {
                         className="overflow-hidden active:scale-[0.98] transition-transform"
                         style={{
                           borderRadius: 16,
-                          border: "2px dashed #222",
+                          border: "2px solid #222",
                           backgroundColor: "#1e1e1e",
                         }}
                       >
@@ -478,7 +478,7 @@ const Home = () => {
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
                       className="overflow-hidden transition-transform active:scale-[0.98]"
-                      style={{ borderRadius: 16, border: isPlaceholder ? "2px dashed #222" : "2px solid #222", backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, border: isPlaceholder ? "2px solid #222" : "2px solid #222", backgroundColor: "#1e1e1e" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
@@ -510,7 +510,7 @@ const Home = () => {
                       type="button"
                       onClick={handleOpenCreator}
                       className="overflow-hidden active:scale-[0.98] transition-transform"
-                      style={{ borderRadius: 16, border: "2px dashed #222", backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         <div className="flex h-full w-full items-center justify-center text-white/20 text-xl font-[300]">+</div>
