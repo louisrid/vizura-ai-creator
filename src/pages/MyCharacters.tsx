@@ -162,23 +162,25 @@ const MyCharacters = () => {
         )}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1rem)] pt-2 bg-gradient-to-t from-background via-background/95 to-transparent">
-        <div className="mx-auto max-w-lg md:max-w-5xl">
-          <motion.button
-            onClick={handleBottomButton}
-            animate={bounceActive ? { y: [0, -6, 0] } : {}}
-            transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-            className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-base md:text-lg font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
-            style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
-          >
-            {hasCharacters ? (
-              <>create photo<Camera size={20} strokeWidth={2.5} /></>
-            ) : (
-              <>create character<Sparkles size={20} strokeWidth={2.5} /></>
-            )}
-          </motion.button>
+      {!loading && (
+        <div className="fixed bottom-0 left-0 right-0 z-10 px-6 pb-[max(env(safe-area-inset-bottom),1rem)] pt-2 bg-gradient-to-t from-background via-background/95 to-transparent">
+          <div className="mx-auto max-w-lg md:max-w-5xl">
+            <motion.button
+              onClick={handleBottomButton}
+              animate={bounceActive ? { y: [0, -6, 0] } : {}}
+              transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
+              className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-base md:text-lg font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+              style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
+            >
+              {hasCharacters ? (
+                <>create photo<Camera size={20} strokeWidth={2.5} /></>
+              ) : (
+                <>create character<Sparkles size={20} strokeWidth={2.5} /></>
+              )}
+            </motion.button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
