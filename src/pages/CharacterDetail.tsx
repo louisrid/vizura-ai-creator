@@ -98,7 +98,6 @@ const CharacterDetail = () => {
         body: {
           regenerate_single: target,
           character_id: character.id,
-          selected_face_url: character.face_image_url,
         },
       });
 
