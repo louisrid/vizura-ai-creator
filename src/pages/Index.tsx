@@ -202,7 +202,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 12, backgroundColor: "#242424", border: "2px solid #242424" }}
+          style={{ borderRadius: 12, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}
         >
           <span className="flex-1 text-left text-base font-[900] lowercase text-foreground">{selected.label}</span>
           <ChevronDown
@@ -220,7 +220,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 12, border: "2px solid #242424", backgroundColor: "#242424" }}
+              style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
             >
               {EXPRESSION_OPTIONS.map((opt) => (
                 <button
@@ -466,7 +466,7 @@ const Index = () => {
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.15, ease: "easeOut" }}
                     className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-                    style={{ borderRadius: 12, border: "2px solid #242424", backgroundColor: "#242424" }}
+                    style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                   >
                     {characters.map((c) => (
                       <button
@@ -480,7 +480,7 @@ const Index = () => {
                             <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#242424" }}>
+                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
                             <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
                           </div>
                         )}
@@ -521,7 +521,7 @@ const Index = () => {
               style={{
                 borderRadius: 14,
                 border: "2px solid rgba(255,255,255,0.08)",
-                backgroundColor: "#242424",
+                backgroundColor: "#1a1a1a",
               }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >

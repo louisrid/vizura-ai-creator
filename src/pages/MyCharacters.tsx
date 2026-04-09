@@ -100,7 +100,7 @@ const MyCharacters = () => {
             <button
               onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
               className="overflow-hidden active:scale-[0.97] transition-transform"
-              style={{ borderRadius: 16, backgroundColor: "#242424" }}
+              style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
@@ -125,8 +125,8 @@ const MyCharacters = () => {
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200"
                     style={{
                       borderRadius: 16,
-                      border: isNew ? "3px solid #facc15" : "2px solid #242424",
-                      backgroundColor: "#242424",
+                      border: isNew ? "3px solid #facc15" : "2px solid #1a1a1a",
+                      backgroundColor: "#1a1a1a",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
@@ -138,7 +138,7 @@ const MyCharacters = () => {
                           onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "#242424" }}>
+                        <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
                           <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
                             <circle cx="12" cy="8" r="5" />
                             <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />

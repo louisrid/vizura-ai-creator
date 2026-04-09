@@ -131,7 +131,7 @@ const Auth = () => {
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
-        <div className="rounded-2xl border-2 border-[#242424] p-5 space-y-3" style={{ backgroundColor: "#242424" }}>
+        <div className="rounded-2xl border-2 border-[#1a1a1a] p-5 space-y-3" style={{ backgroundColor: "#1a1a1a" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -169,8 +169,8 @@ const Auth = () => {
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#242424] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ backgroundColor: "#242424", borderRadius: 12 }}
+            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#1a1a1a", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -181,8 +181,8 @@ const Auth = () => {
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#242424] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ backgroundColor: "#242424", borderRadius: 12 }}
+            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            style={{ backgroundColor: "#1a1a1a", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
 
