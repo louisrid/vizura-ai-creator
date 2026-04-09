@@ -659,7 +659,7 @@ const ChooseFace = () => {
           <>
             <DotDecal />
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-1 pb-[280px] md:max-w-3xl md:px-10">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-4 pb-[280px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
                 <button
                   type="button"
