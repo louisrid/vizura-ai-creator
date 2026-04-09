@@ -152,11 +152,11 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
+    const handler = (e: PointerEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("pointerdown", handler, true);
+    return () => document.removeEventListener("pointerdown", handler, true);
   }, [open]);
 
   return (
@@ -255,6 +255,9 @@ const Index = () => {
 
   const [charDropdownOpen, setCharDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef2 = useRef<HTMLDivElement>(null);
+  const charToggleRef = useRef<HTMLButtonElement>(null);
+  const charToggleRef2 = useRef<HTMLButtonElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
@@ -262,12 +265,18 @@ const Index = () => {
   useEffect(() => {
     if (!charDropdownOpen) return;
     const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      // Check both mobile and desktop refs
+      const inDropdown1 = dropdownRef.current?.contains(target);
+      const inDropdown2 = dropdownRef2.current?.contains(target);
+      if (!inDropdown1 && !inDropdown2) {
         setCharDropdownOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    // Use pointerdown with a slight delay to avoid race with the toggle onClick
+    const wrappedHandler = (e: PointerEvent) => handler(e as unknown as MouseEvent);
+    document.addEventListener("pointerdown", wrappedHandler, true);
+    return () => document.removeEventListener("pointerdown", wrappedHandler, true);
   }, [charDropdownOpen]);
 
   useEffect(() => {
@@ -456,6 +465,7 @@ const Index = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
+                onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
                 style={{ borderRadius: 12, backgroundColor: "#facc15" }}
@@ -536,9 +546,10 @@ const Index = () => {
         <div className="grid grid-cols-12 gap-8">
           {/* Left: preview + character selector */}
           <div className="col-span-5 flex flex-col gap-5">
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative" ref={dropdownRef2}>
               <button
                 type="button"
+                onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
                 style={{ borderRadius: 14, backgroundColor: "#facc15" }}
