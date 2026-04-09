@@ -716,7 +716,7 @@ const ChooseFace = () => {
                   <button
                     onClick={() => { if (selectedIndex !== null) handleSelectFace(selectedIndex); }}
                     disabled={selectedIndex === null}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-lg font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 12,
                       backgroundColor: selectedIndex !== null ? "#facc15" : "#1a1a1a",
@@ -735,7 +735,7 @@ const ChooseFace = () => {
                       setShowRegenConfirm(true);
                     }}
                     disabled={isFreeUser}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-base font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-lg font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
                       borderRadius: 12,
                       backgroundColor: "#050a10",
