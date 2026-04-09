@@ -585,7 +585,7 @@ const Index = () => {
         )}
       </main>
 
-      <div className="fixed left-0 right-0 z-10 px-6 pt-2 bg-gradient-to-t from-background via-background/95 to-transparent bottom-[calc(100vh-100dvh+8px)]">
+      <div className="fixed left-0 right-0 z-10 px-6 pt-2 bg-gradient-to-t from-background via-background/95 to-transparent bottom-[calc((100vh-100dvh)/2+8px)]">
         <div className="mx-auto max-w-lg">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
         </div>
