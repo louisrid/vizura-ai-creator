@@ -377,8 +377,9 @@ const Index = () => {
       if (fnError) throw fnError;
       if (data?.error) {
         if (data?.code === "CONTENT_POLICY") {
-          toast.error("please adjust your description and try again");
+          toast("prompt not allowed");
           setPhotoOverlayPhase("hidden");
+          await refetchCredits();
           return;
         }
         if (data?.code === "NO_GEMS") {
