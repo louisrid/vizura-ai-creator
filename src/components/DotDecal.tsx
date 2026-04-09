@@ -34,7 +34,7 @@ const DotDecal = () => {
           cx={`${(d.x / 430) * 100}%`}
           cy={d.y}
           r={1.4}
-          fill="#fde047"
+          fill="#c5af37"
           opacity={d.opacity}
         />
       ))}
