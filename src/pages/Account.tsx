@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2 } from "lucide-react";
+import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2, Eye } from "lucide-react";
 
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
@@ -129,6 +129,19 @@ const Account = () => {
               )}
             </div>
           </div>
+
+          {user?.email === "louisjridland@gmail.com" && (
+            <div className="pt-3">
+              <button
+                className="w-full h-12 md:h-14 text-sm md:text-base font-extrabold lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
+                style={{ borderRadius: 12, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", color: "rgba(255,255,255,0.9)" }}
+                onClick={() => navigate("/admin")}
+              >
+                admin
+                <Eye size={16} strokeWidth={2.5} />
+              </button>
+            </div>
+          )}
 
           <div className="pt-6">
             <button

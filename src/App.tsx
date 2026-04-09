@@ -22,6 +22,7 @@ import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
 import History from "./pages/History";
 import Info from "./pages/Info";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
@@ -207,6 +208,7 @@ const AppRoutes = () => {
             <Route path="/history" element={<History />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/info" element={<Info />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </motion.div>
