@@ -719,7 +719,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-base font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: selectedIndex !== null ? "#facc15" : "#242424",
+                      backgroundColor: selectedIndex !== null ? "#facc15" : "#1a1a1a",
                       color: selectedIndex !== null ? "#000" : "transparent",
                     }}
                   >
