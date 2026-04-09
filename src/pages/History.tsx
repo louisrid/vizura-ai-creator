@@ -32,15 +32,12 @@ const History = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       if (!user) return;
-
-      // Fetch generations
       const { data: generations } = await supabase
         .from("generations")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      // Fetch characters for name lookup
       const { data: characters } = await supabase
         .from("characters")
         .select("id, name, hair, eye, age")
@@ -53,9 +50,7 @@ const History = () => {
 
       const allItems: HistoryItem[] = [];
       (generations || []).forEach((gen: any) => {
-        // Try to match character from prompt heuristics
         let charName: string | null = null;
-        // Simple matching: check if prompt contains character traits
         for (const [, name] of charMap) {
           if (gen.prompt?.toLowerCase().includes(name.toLowerCase())) {
             charName = name;
@@ -91,7 +86,7 @@ const History = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-4xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">history</PageTitle>
@@ -102,33 +97,33 @@ const History = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : items.length === 0 ? (
-          <div className="border-[2px] border-border rounded-2xl p-8 text-center">
+          <div className="border-[2px] border-border rounded-2xl p-8 md:p-12 text-center md:max-w-md md:mx-auto">
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
-            <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
+            <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
-              className="h-12 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
+              className="h-12 md:h-14 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
               style={{ borderRadius: 12 }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
           </div>
         ) : (
-          <div className="space-y-4 md:grid md:grid-cols-2 md:gap-5 md:space-y-0">
+          <div className="space-y-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:space-y-0">
             {items.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setExpanded(item)}
-                className="w-full text-left rounded-2xl border-[2px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99]"
+                className="w-full text-left rounded-2xl border-[2px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" />
                 <div className="p-4 space-y-2">
-                  <p className="text-[11px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed">
+                  <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed">
                     {item.prompt || "no prompt"}
                   </p>
                   <div className="flex items-center justify-between">
                     {item.characterName && (
-                      <div className="flex items-center gap-1.5 text-[10px] font-extrabold lowercase text-neon-yellow">
+                      <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] font-extrabold lowercase text-neon-yellow">
                         <User size={10} strokeWidth={2.5} />
                         {item.characterName}
                       </div>
@@ -145,7 +140,6 @@ const History = () => {
         )}
       </main>
 
-      {/* Expanded view */}
       <AnimatePresence>
         {expanded && (
           <motion.div
@@ -162,7 +156,7 @@ const History = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm overflow-hidden relative"
+              className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm md:max-w-lg overflow-hidden relative"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -175,24 +169,24 @@ const History = () => {
               <div className="relative">
                 <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
               </div>
-              <div className="p-4 space-y-3">
-                <p className="text-[10px] font-extrabold lowercase text-foreground/60 leading-relaxed">
+              <div className="p-4 md:p-5 space-y-3">
+                <p className="text-[10px] md:text-[12px] font-extrabold lowercase text-foreground/60 leading-relaxed">
                   {expanded.prompt || "no prompt"}
                 </p>
                 <div className="flex items-center gap-3">
                   {expanded.characterName && (
-                    <div className="flex items-center gap-1.5 text-[10px] font-extrabold lowercase text-neon-yellow">
+                    <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] font-extrabold lowercase text-neon-yellow">
                       <User size={10} strokeWidth={2.5} />
                       {expanded.characterName}
                     </div>
                   )}
-                  <div className="flex items-center gap-1 text-[9px] font-extrabold lowercase text-foreground/30">
+                  <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-extrabold lowercase text-foreground/30">
                     <Calendar size={10} strokeWidth={2.5} />
                     {formatDate(expanded.created_at)}
                   </div>
                 </div>
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="block">
-                  <Button variant="outline" className="w-full h-12 bg-[#1a1a1a]">
+                  <Button variant="outline" className="w-full h-12 md:h-14 bg-[#1a1a1a]">
                     download <Download size={14} strokeWidth={2.5} />
                   </Button>
                 </a>
