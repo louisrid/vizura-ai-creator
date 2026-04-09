@@ -5,11 +5,10 @@ const TopGradientBar = () => (
     style={{ height: 5 }}
   >
     <div
+      className="h-full w-full"
       style={{
-        width: "100%",
-        height: "100%",
         background:
-          "linear-gradient(90deg, #facc15 0%, #facc15 20%, rgba(250,204,21,0.3) 50%, transparent 80%)",
+          "linear-gradient(90deg, #facc15 0%, #facc15 25%, rgba(250,204,21,0.3) 55%, transparent 75%)",
       }}
     />
   </div>
