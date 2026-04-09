@@ -1,0 +1,1 @@
+ALTER TABLE public.characters ADD COLUMN bust_size text NOT NULL DEFAULT 'regular';
