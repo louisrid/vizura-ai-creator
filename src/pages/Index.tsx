@@ -586,7 +586,7 @@ const Index = () => {
         )}
       </main>
 
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px]" style={{ paddingBottom: "clamp(14px, calc((100vh - 100dvh) / 3 + 12px), 28px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.7) 55%, rgba(0,0,0,0.3) 75%, transparent 100%)", paddingTop: 32 }}>
+      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px]" style={{ paddingBottom: "clamp(18px, calc((100vh - 100dvh) / 3 + 16px), 32px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
         <div className="mx-auto max-w-lg">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
         </div>
