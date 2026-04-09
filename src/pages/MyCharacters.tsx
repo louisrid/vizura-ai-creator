@@ -9,13 +9,6 @@ import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/contexts/AuthContext";
-import BackButton from "@/components/BackButton";
-import PageTitle from "@/components/PageTitle";
-import { supabase } from "@/integrations/supabase/client";
-import DotDecal from "@/components/DotDecal";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Character {
   id: string;
