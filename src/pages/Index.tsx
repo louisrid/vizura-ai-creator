@@ -218,7 +218,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.15 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
               style={{ borderRadius: 12, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
             >
@@ -464,7 +464,7 @@ const Index = () => {
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.15 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
                     className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
                     style={{ borderRadius: 12, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
                   >
