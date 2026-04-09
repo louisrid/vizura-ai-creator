@@ -321,7 +321,7 @@ const CharacterDetail = () => {
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
-        <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 28px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
+        <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <div className="flex flex-col gap-3">
           {contentBottom(true)}
           </div>
