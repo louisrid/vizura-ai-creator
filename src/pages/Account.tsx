@@ -90,7 +90,7 @@ const Account = () => {
 
           <div className="mt-7">
             <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+              <div className="border-2 border-[#222] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
                 <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1 min-w-0">
                   <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
@@ -100,7 +100,7 @@ const Account = () => {
                 </div>
               </div>
 
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+              <div className="border-2 border-[#222] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
                 <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
                 <div className="flex-1">
                   <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
@@ -110,7 +110,7 @@ const Account = () => {
                 </div>
               </div>
 
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+              <div className="border-2 border-[#222] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
                 <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
                 <div className="flex-1">
                   <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
@@ -119,7 +119,7 @@ const Account = () => {
               </div>
 
               {subscribed && (
-                <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+                <div className="border-2 border-[#222] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
                   <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
                   <div className="flex-1">
                     <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
@@ -207,7 +207,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="border-2 border-[#1a1a1a] p-5 space-y-3 max-w-md md:max-w-lg" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+        <div className="border-2 border-[#222] p-5 space-y-3 max-w-md md:max-w-lg" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -240,7 +240,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[#222] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}
             disabled={submitting || googleLoading}
           />
@@ -252,7 +252,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[#1a1a1a] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[#222] px-4 text-2xl font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}
             disabled={submitting || googleLoading}
           />
