@@ -26,6 +26,7 @@ function useScrollGradientOpacity() {
 }
 
 const Header = () => {
+  const gradientOpacity = useScrollGradientOpacity();
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading, signOut } = useAuth();
