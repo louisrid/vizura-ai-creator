@@ -740,7 +740,7 @@ const ChooseFace = () => {
                       borderRadius: 12,
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
-                      color: "#00e0ff",
+                      color: "#ffffff",
                     }}
                   >
                     <RefreshCw size={16} strokeWidth={2.5} />
