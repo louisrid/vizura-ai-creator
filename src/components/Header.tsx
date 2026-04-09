@@ -170,21 +170,17 @@ const Header = () => {
   return (
     <>
       {/* Spacer that reserves header height in document flow */}
-      <div style={{ height: 100 }} aria-hidden="true" />
+      <div style={{ height: 80 }} aria-hidden="true" />
       <header
         className="fixed top-0 left-0 right-0"
         style={{
           zIndex: 9990,
           background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background) / 0.98) 15%, hsl(var(--background) / 0.94) 30%, hsl(var(--background) / 0.85) 45%, hsl(var(--background) / 0.68) 60%, hsl(var(--background) / 0.42) 75%, hsl(var(--background) / 0.15) 90%, transparent 100%)",
-          paddingBottom: 28,
+          paddingBottom: 24,
         }}
       >
-        {/* Top yellow bar — left-anchored gradient */}
-        <div className="pointer-events-none inset-x-0 top-0" style={{ height: 5 }}>
-          <div style={{ width: "100%", height: "100%", background: "linear-gradient(90deg, #facc15 0%, #facc15 20%, rgba(250,204,21,0.3) 50%, transparent 80%)" }} />
-        </div>
-
-        <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 py-4">
+        <TopGradientBar />
+        <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-2">
           <div className="flex items-center gap-2.5 md:gap-3.5">
             <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
               vizura
@@ -237,11 +233,6 @@ const Header = () => {
               </svg>
             </button>
           </div>
-        </div>
-
-        {/* Bottom yellow bar — flipped horizontally (right-anchored solid) */}
-        <div className="pointer-events-none inset-x-0" style={{ height: 5 }}>
-          <div style={{ width: "100%", height: "100%", background: "linear-gradient(270deg, #facc15 0%, #facc15 20%, rgba(250,204,21,0.3) 50%, transparent 80%)" }} />
         </div>
       </header>
       {menuDropdown}

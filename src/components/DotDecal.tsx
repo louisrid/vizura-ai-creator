@@ -39,8 +39,8 @@ const DotDecal = () => {
           />
         ))}
       </svg>
-      {/* 22% darkness overlay */}
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.22)" }} />
+      {/* 15% darkness overlay */}
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.15)" }} />
     </div>
   );
 };
