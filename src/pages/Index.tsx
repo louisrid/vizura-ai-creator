@@ -454,7 +454,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[100px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[100px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -536,97 +536,9 @@ const Index = () => {
         )}
       </main>
 
-      {/* Desktop layout — two-column */}
-      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-10 pt-10 pb-[120px]">
-        <div className="flex items-center gap-3 mb-8">
-          <BackButton />
-          <PageTitle className="mb-0">create photo</PageTitle>
-        </div>
-
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left: preview + character selector */}
-          <div className="col-span-5 flex flex-col gap-5">
-            <div className="relative" ref={dropdownRef2}>
-              <button
-                type="button"
-                onPointerDown={(e) => e.stopPropagation()}
-                onClick={() => setCharDropdownOpen((v) => !v)}
-                className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 14, backgroundColor: "#facc15" }}
-              >
-                {selectedChar?.face_image_url ? (
-                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
-                    <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
-                    <User size={20} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
-                  </div>
-                )}
-                <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
-                  {selectedChar?.name || "select character"}
-                </span>
-                <ChevronDown size={20} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
-              </button>
-              {charDropdownContent}
-            </div>
-
-            <motion.section
-              layout
-              className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 16, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
-              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-            >
-              <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
-                {resultImage ? (
-                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #facc15" }}>
-                      <span className="text-2xl">🪄</span>
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            </motion.section>
-          </div>
-
-          {/* Right: controls */}
-          <div className="col-span-7 flex flex-col gap-6">
-            <div className="flex gap-4">
-              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
-            </div>
-
-            <ExpressionDropdown value={expression} onChange={setExpression} />
-
-            <div className="relative">
-              <span className="block text-base font-[900] lowercase mb-2 text-white">describe your photo</span>
-              <HighlightedPromptArea
-                value={prompt}
-                onChange={setPrompt}
-                charName={selectedChar?.name || ""}
-                placeholder={
-                  <div className="pointer-events-none absolute left-4 top-3 right-4">
-                    <span className="text-2xl font-extrabold lowercase text-foreground/30">{placeholderText}</span>
-                  </div>
-                }
-              />
-            </div>
-
-            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
-          </div>
-        </div>
-
-        {error && (
-          <div className="mt-4 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
-            {error}
-          </div>
-        )}
-      </main>
 
       {/* Mobile sticky create button */}
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
+      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
         <div className="mx-auto max-w-lg">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
         </div>
