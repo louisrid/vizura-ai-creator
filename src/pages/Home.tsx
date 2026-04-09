@@ -58,7 +58,7 @@ const Home = () => {
   const openCreatorRequested = Boolean((location.state as any)?.openCreator);
 
   const fetchLatestPhotos = useCallback(async () => {
-    if (!user) { setImages([]); return; }
+    if (!user) { setImages([]); setPhotosLoaded(true); return; }
     const { data } = await supabase
       .from("generations")
       .select("id, image_urls, prompt, created_at")
@@ -77,6 +77,7 @@ const Home = () => {
       )
       .slice(0, 8);
     setImages(latest);
+    setPhotosLoaded(true);
     try { sessionStorage.setItem("vizura_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
