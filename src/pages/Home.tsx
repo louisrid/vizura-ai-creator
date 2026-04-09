@@ -537,7 +537,6 @@ const Home = () => {
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={32} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
                         </div>
-                        </div>
                       )}
                     </AspectRatio>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2.5 pt-5">
