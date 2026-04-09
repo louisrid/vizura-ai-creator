@@ -614,7 +614,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   {Array.from({ length: dashCount }).map((_, i) => (
                     <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                       flex: 1, borderRadius: 2,
-                      background: i < activeIndex ? Y : "rgba(250,204,21,0.1)",
+                      background: i < activeIndex ? "#00c8ff" : "rgba(0,200,255,0.1)",
                     }} />
                   ))}
                 </div>
