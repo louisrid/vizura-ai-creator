@@ -473,7 +473,7 @@ async function generateAngleAndBody(
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees right, 3/4 profile view. Head and shoulders only, cropped below collarbone. Skin with visible pores and colour variation. Confident closed-mouth smile. ${characterTraits}`;
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and shoulders only, cropped below collarbone. Skin with visible pores and colour variation. Relaxed neutral expression, lips together. ${characterTraits}`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
