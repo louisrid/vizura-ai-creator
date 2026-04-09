@@ -17,17 +17,18 @@ const OVERLAY_FADE_DURATION = 0.75;
 const getRandomNameToast = () => "great choice!";
 
 /*
- * SCREEN ORDER (10 screens, internalStep 0-9):
+ * SCREEN ORDER (11 screens, internalStep 0-10):
  *  0: Hero (new first screen with rings)
  *  1: Intro
  *  2: Name input
- *  3-8: Traits (skin, body, age, hair, hair colour, eyes — no makeup screen)
- *  9: Create
+ *  3-9: Traits (skin, body type, bust size, age, hair colour, hairstyle, eyes)
+ *  10: Create
  */
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
-  { key: "bodyType", label: "choose body shape", emoji: "👙", options: ["slim", "average", "curvy"], defaultOption: "average" },
+  { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["thin", "regular", "curvy"], defaultOption: "regular" },
+  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "large"], defaultOption: "regular" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
@@ -153,7 +154,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
 
 /* ── Types ── */
 export interface GuidedSelections {
-  skin: string; bodyType: string; hairStyle: string;
+  skin: string; bodyType: string; bustSize: string; hairStyle: string;
   hairColour: string; eye: string; makeup: string;
   characterName: string; age: string;
   description: string;
@@ -162,7 +163,7 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", hairStyle: "", hairColour: "", eye: "", makeup: "classic",
+  skin: "", bodyType: "", bustSize: "", hairStyle: "", hairColour: "", eye: "", makeup: "classic",
   characterName: "", age: "", description: "",
   referenceImage: null, referenceStrength: 50,
 };
@@ -174,8 +175,8 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 10;
-const TOTAL_SKIP = 8;
+const TOTAL_FULL = 11;
+const TOTAL_SKIP = 9;
 
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
@@ -310,9 +311,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isHeroSlide = internalStep === 0 && !skipWelcome;
   const isIntroSlide = internalStep === 1 && !skipWelcome;
   const isNameSlide = internalStep === 2;
-  const isCreateSlide = internalStep === 9;
+  const isCreateSlide = internalStep === 10;
 
-  const currentTraitIndex = internalStep >= 3 && internalStep <= 8 ? internalStep - 3 : -1;
+  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
