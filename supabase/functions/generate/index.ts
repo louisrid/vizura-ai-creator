@@ -887,12 +887,15 @@ serve(async (req) => {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } catch (e: any) {
         if (e?.contentPolicy) {
+          await logRejectedPrompt(adminClient, userId, prompt);
+          await logGeneration(adminClient, userId, null, prompt, "face", 0, false, "content_policy");
           return new Response(
-            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         if (e?.status === 429 || e?.status === 402) {
+          await logGeneration(adminClient, userId, null, prompt, "face", 0, false, `status_${e.status}`);
           return new Response(
             JSON.stringify({ error: "generation failed, please try again" }),
             { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -921,6 +924,8 @@ serve(async (req) => {
           console.warn("Failed to record free generation IP:", ipInsertError);
         }
       }
+
+      await logGeneration(adminClient, userId, null, prompt, "face", 0, true);
 
       return new Response(
         JSON.stringify({ images: imageUrls, free_gen: true }),
