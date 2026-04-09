@@ -535,10 +535,8 @@ const Home = () => {
                         <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
-                          <svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
-                            <circle cx="12" cy="8" r="5" />
-                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-                          </svg>
+                          <User size={32} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                        </div>
                         </div>
                       )}
                     </AspectRatio>
