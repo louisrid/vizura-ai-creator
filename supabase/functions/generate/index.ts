@@ -667,7 +667,7 @@ serve(async (req) => {
         .single();
 
       if (!charData || !charData.face_image_url) {
-        await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+        if (creditData) await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         return new Response(JSON.stringify({ error: "Character not found or missing face image" }), {
           status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -734,7 +734,7 @@ serve(async (req) => {
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       } catch (e: any) {
-        await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+        if (creditData) await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         console.error("Single regeneration error:", e);
         if (e?.contentPolicy) {
           await logRejectedPrompt(adminClient, userId, "character references");
