@@ -168,15 +168,15 @@ const Storage = () => {
                   </AspectRatio>
                 </button>
                 <a
-                  href={img.url}
-                  download={`vizura-${img.id}.png`}
-                  target="_blank"
-                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#ffffff", color: "#000000", border: "2px solid #1a1a1a", borderTop: "none" }}
-                >
-                   download
-                   <Download size={12} strokeWidth={2.5} />
-                </a>
+171:                   href={img.url}
+172:                   download={`vizura-${img.id}.png`}
+173:                   target="_blank"
+174:                   className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
+175:                   style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid #1a1a1a", borderTop: "none" }}
+176:                 >
+177:                    download
+178:                    <Download size={12} strokeWidth={2.5} />
+179:                 </a>
               </motion.div>
               );
             })}
@@ -193,7 +193,8 @@ const Storage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-6 pt-20 pb-8"
+            className="fixed inset-0 z-50 flex items-center justify-center px-6 pt-20 pb-8"
+            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
             onClick={() => setExpanded(null)}
           >
             <motion.div
@@ -205,13 +206,15 @@ const Storage = () => {
               style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* X dismiss — popup style */}
               <button
                 onClick={() => setExpanded(null)}
-                className="absolute top-2.5 right-2.5 z-10 w-8 h-8 flex items-center justify-center text-white bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
-                style={{ borderRadius: 10 }}
+                className="absolute flex items-center justify-center z-10"
+                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
               >
-                <X size={14} strokeWidth={2.5} />
+                <X size={14} strokeWidth={3} color="#fff" />
               </button>
+
               <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh]" />
               {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                 <div className="px-3 pt-2.5 pb-0">
@@ -220,9 +223,9 @@ const Storage = () => {
                   </p>
                 </div>
               )}
-              <div className="p-3 flex gap-2">
+              <div className="p-3 flex gap-2" style={{ backgroundColor: "#facc15", borderRadius: "0 0 14px 14px" }}>
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-10 border-[2px] border-black bg-white text-xs text-black hover:bg-white/90 hover:text-black">
+                  <Button variant="outline" className="w-full h-10 border-[2px] border-[#1a1a1a] text-xs font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#1a1a1a", color: "#ffffff" }}>
                     download <Download size={12} strokeWidth={2.5} />
                   </Button>
                 </a>
