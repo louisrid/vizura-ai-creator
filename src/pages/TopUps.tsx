@@ -6,7 +6,6 @@ import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/sonner";
-import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 
 const plans = [
@@ -74,13 +73,8 @@ const TopUps = () => {
                 className="w-full h-11 md:h-12 text-sm md:text-base font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
                 style={{ borderRadius: 12 }}
                 onClick={() => handleBuy(plan)}
-                disabled={buying !== null}
               >
-                {buying === plan.label ? (
-                  <Loader2 className="animate-spin inline" size={18} />
-                ) : (
-                  "buy gems"
-                )}
+                buy gems
               </button>
             </div>
           ))}
