@@ -494,7 +494,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
-            <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3.5 md:gap-4 px-2 mx-auto max-w-[23rem] md:max-w-[30rem]">
+            <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3.5 md:gap-4 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
               {trait.options.map((opt) => (
                 <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
                   <InteractivePill
