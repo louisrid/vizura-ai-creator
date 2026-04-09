@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2 } from "lucide-react";
 
 import BackButton from "@/components/BackButton";
@@ -42,7 +42,7 @@ const Account = () => {
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
   const handleSubscribe = () => {
-    optimisticSubscribe();
+    toast("coming soon");
   };
 
   const handleCancel = () => {
@@ -139,6 +139,16 @@ const Account = () => {
               sign out
               <LogOut size={16} strokeWidth={2.5} />
             </button>
+          </div>
+
+          <div className="pt-6 flex justify-center">
+            <Link
+              to="/info"
+              className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-foreground/60"
+              style={{ color: "rgba(255,255,255,0.4)" }}
+            >
+              terms &amp; privacy
+            </Link>
           </div>
         </div>
       </main>
