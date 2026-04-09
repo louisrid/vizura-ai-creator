@@ -5,7 +5,7 @@ import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/sonner";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 
@@ -20,7 +20,7 @@ const TopUps = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [buying, setBuying] = useState<string | null>(null);
+  
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
