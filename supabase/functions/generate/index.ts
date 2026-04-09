@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ── config ─────────────────────────────────────────────── */
+const BETA_MODE = true; // When true, whitelisted emails get free unlimited access
+const BETA_WHITELIST = ["louisjridland@gmail.com"];
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const XAI_REQUEST_TIMEOUT_MS = 120_000;
