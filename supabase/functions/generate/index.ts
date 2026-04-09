@@ -110,11 +110,12 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  slim: "slim toned body, smaller chest, narrow waist, lean face",
-  regular: "soft feminine body, large bust DD, defined waist, soft face",
-  average: "soft feminine body, large bust DD, defined waist, soft face",
-  curvy: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
-  thick: "curvy full figure, very large bust G-H cup, wide hips, fuller face but still attractive",
+  thin: "slim toned body, narrow waist, lean face",
+  slim: "slim toned body, narrow waist, lean face",
+  regular: "soft feminine body, defined waist, soft face",
+  average: "soft feminine body, defined waist, soft face",
+  curvy: "curvy full figure, wide hips, fuller face but still attractive",
+  thick: "curvy full figure, wide hips, fuller face but still attractive",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
@@ -172,6 +173,10 @@ function buildCharacterTraits(char: any): string {
 
   const bodyKey = (char.body || "regular").toLowerCase();
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
+
+  const bustKey = (char.bust_size || "regular").toLowerCase();
+  const bustDesc = BUST_SIZE_MAP[bustKey] || BUST_SIZE_MAP.regular;
+  parts.push(bustDesc);
 
   if (bodyKey === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
@@ -481,19 +486,29 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  slim: "slim toned body, natural soft B cup breasts with realistic shape, narrow waist, lean figure, slender arms, matte textured skin across chest",
-  regular: "soft feminine body, natural soft C cup breasts with realistic weight and shape, defined waist, feminine hips, matte textured skin across chest",
-  average: "soft feminine body, natural soft C cup breasts with realistic weight and shape, defined waist, feminine hips, matte textured skin across chest",
-  curvy: "curvy feminine figure, natural soft D cup breasts with realistic weight and shape, defined waist, wider hips, soft thighs, hourglass shape, matte textured skin across chest",
-  thick: "curvy feminine figure, natural soft D cup breasts with realistic weight and shape, defined waist, wider hips, soft thighs, hourglass shape, matte textured skin across chest",
+  thin: "slim petite frame, narrow waist, lean toned figure, small hips",
+  slim: "slim petite frame, narrow waist, lean toned figure, small hips",
+  regular: "soft feminine body, defined waist, feminine hips, balanced proportions",
+  average: "soft feminine body, defined waist, feminine hips, balanced proportions",
+  curvy: "wide hips, defined waist, soft thighs, hourglass shape, full figure",
+  thick: "wide hips, defined waist, soft thighs, hourglass shape, full figure",
 };
 
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  slim: "petite frame, narrow hips, B cup chest, toned stomach, slim thighs",
-  regular: "hourglass figure, C-D cup bust, defined waist, wider hips, soft feminine shape",
-  curvy: "voluptuous, D-DD cup bust, wider hips, soft thighs, natural curves, defined waist",
+  thin: "petite slim frame, toned flat stomach, narrow hips, lean build",
+  slim: "petite slim frame, toned flat stomach, narrow hips, lean build",
+  regular: "hourglass figure, defined waist, feminine hips, soft stomach",
+  average: "hourglass figure, defined waist, feminine hips, soft stomach",
+  curvy: "voluptuous figure, wider hips, natural curves, soft full thighs, hourglass shape",
+  thick: "voluptuous figure, wider hips, natural curves, soft full thighs, hourglass shape",
+};
+
+/* ── bust size descriptor ── */
+const BUST_SIZE_MAP: Record<string, string> = {
+  regular: "B-C cup bust, natural proportions",
+  large: "DD-E cup full prominent bust, large chest, matte textured skin across chest",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -501,6 +516,7 @@ async function generateAngleAndBody(
   faceUrl: string,
   characterTraits: string,
   bodyType: string,
+  bustSize: string,
   apiKey: string,
   adminClient: any,
   userId: string,
@@ -528,7 +544,9 @@ async function generateAngleAndBody(
       console.log("Generating full-body anchor...");
       const bodyKey = (bodyType || "regular").toLowerCase();
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
+      const bustKey = (bustSize || "regular").toLowerCase();
+      const bustDesc = BUST_SIZE_MAP[bustKey] || BUST_SIZE_MAP.regular;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}, ${bustDesc}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
@@ -681,6 +699,7 @@ serve(async (req) => {
 
       const traits = buildCharacterTraits(charData);
       const dbBodyType = (charData.body || "regular").toLowerCase();
+      const dbBustSize = (charData.bust_size || "regular").toLowerCase();
 
       // Use the fresh face_image_url from DB, not the client-provided one
       const freshFaceUrl = charData.face_image_url;
@@ -688,7 +707,7 @@ serve(async (req) => {
 
       try {
         const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-          freshFaceUrl, traits, dbBodyType, XAI_API_KEY, adminClient, userId, regenerateSingle
+          freshFaceUrl, traits, dbBodyType, dbBustSize, XAI_API_KEY, adminClient, userId, regenerateSingle
         );
 
         const updates: Record<string, string | null> = {};
@@ -777,6 +796,7 @@ serve(async (req) => {
       console.log("Face URL:", selectedFaceUrl.slice(0, 80));
 
       let dbBodyType = "regular";
+      let dbBustSize = "regular";
       let traits = prompt;
       if (angleCharacterId) {
         const { data: charData } = await adminClient
@@ -788,13 +808,14 @@ serve(async (req) => {
         if (charData) {
           traits = buildCharacterTraits(charData);
           dbBodyType = (charData.body || "regular").toLowerCase();
+          dbBustSize = (charData.bust_size || "regular").toLowerCase();
           console.log("Built character traits from DB:", traits.slice(0, 120));
-          console.log("Body type from DB:", dbBodyType);
+          console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
         }
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, traits, dbBodyType, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
+        selectedFaceUrl, traits, dbBodyType, dbBustSize, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
       );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");

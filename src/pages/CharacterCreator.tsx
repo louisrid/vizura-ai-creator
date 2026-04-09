@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
 const skinOptions = ["white", "tan", "asian", "black"] as const;
-const bodyOptions = ["slim", "average", "curvy"] as const;
+const bodyOptions = ["thin", "regular", "curvy"] as const;
 const hairStyleOptions = ["long straight", "long wavy", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
@@ -104,7 +104,7 @@ const CharacterCreator = () => {
   }, []);
 
   const [skin, setSkin] = useState<string>(saved?.skin || "tan");
-  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "average");
+  const [bodyType, setBodyType] = useState<string>(saved?.bodyType || "regular");
   const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "long straight");
   const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
   const [eye, setEye] = useState<string>(saved?.eye || "brown");
@@ -215,7 +215,8 @@ const CharacterCreator = () => {
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
-      bodyType: selections.bodyType || "average",
+      bodyType: selections.bodyType || "regular",
+      bustSize: selections.bustSize || "regular",
       hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
@@ -226,7 +227,7 @@ const CharacterCreator = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
     const sk = selections.skin || "tan";
-    const bt = selections.bodyType || "average";
+    const bt = selections.bodyType || "regular";
     const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
@@ -248,6 +249,7 @@ const CharacterCreator = () => {
         hair: sanitiseText(hc, 50),
         eye: sanitiseText(ey, 50),
         body: sanitiseText(bt, 50),
+        bust_size: selections.bustSize || "regular",
         style: sanitiseText(mk, 50),
         description: sanitiseText(`${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,

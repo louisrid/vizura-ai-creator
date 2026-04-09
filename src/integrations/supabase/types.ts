@@ -19,6 +19,7 @@ export type Database = {
           age: string
           body: string
           body_anchor_url: string | null
+          bust_size: string
           country: string
           created_at: string
           description: string
@@ -37,6 +38,7 @@ export type Database = {
           age?: string
           body?: string
           body_anchor_url?: string | null
+          bust_size?: string
           country?: string
           created_at?: string
           description?: string
@@ -55,6 +57,7 @@ export type Database = {
           age?: string
           body?: string
           body_anchor_url?: string | null
+          bust_size?: string
           country?: string
           created_at?: string
           description?: string
