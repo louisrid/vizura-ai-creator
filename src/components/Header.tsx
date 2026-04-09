@@ -184,7 +184,7 @@ const Header = () => {
           <div style={{ width: "100%", height: "100%", background: "linear-gradient(90deg, #facc15 0%, #facc15 20%, rgba(250,204,21,0.3) 50%, transparent 80%)" }} />
         </div>
 
-        <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-8 pb-3">
+        <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 py-4">
           <div className="flex items-center gap-2.5 md:gap-3.5">
             <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
               vizura

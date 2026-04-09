@@ -23,7 +23,7 @@ const DotDecal = () => {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
+    <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
       <svg
         className="w-full h-full"
         preserveAspectRatio="none"
