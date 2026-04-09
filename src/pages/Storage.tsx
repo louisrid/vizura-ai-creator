@@ -126,7 +126,7 @@ const Storage = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[#1e1e1e] rounded-2xl p-8 text-center" style={{ backgroundColor: "#1e1e1e" }}>
+          <div className="border-2 border-[#2a2a2a] rounded-2xl p-8 text-center" style={{ backgroundColor: "#2a2a2a" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -165,7 +165,7 @@ const Storage = () => {
                   download={`vizura-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#ffffff", color: "#000000", border: "2px solid #1e1e1e", borderTop: "none" }}
+                  style={{ backgroundColor: "#ffffff", color: "#000000", border: "2px solid #2a2a2a", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
@@ -195,7 +195,7 @@ const Storage = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
-              style={{ backgroundColor: "#1e1e1e", borderRadius: 16, border: "2px solid #1e1e1e" }}
+              style={{ backgroundColor: "#2a2a2a", borderRadius: 16, border: "2px solid #2a2a2a" }}
               onClick={(e) => e.stopPropagation()}
             >
               <button

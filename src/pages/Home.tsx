@@ -346,8 +346,8 @@ const Home = () => {
                       className="overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: isPlaceholder ? "none" : "2px solid #1e1e1e",
-                        backgroundColor: "#1e1e1e",
+                        border: isPlaceholder ? "none" : "2px solid #2a2a2a",
+                        backgroundColor: "#2a2a2a",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -392,7 +392,7 @@ const Home = () => {
                         className="overflow-hidden active:scale-[0.98] transition-transform"
                         style={{
                           borderRadius: 16,
-                          backgroundColor: "#1e1e1e",
+                          backgroundColor: "#2a2a2a",
                         }}
                       >
                         <AspectRatio ratio={3 / 4}>
@@ -410,8 +410,8 @@ const Home = () => {
                       className="relative overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: "2px solid #1e1e1e",
-                        backgroundColor: "#1e1e1e",
+                        border: "2px solid #2a2a2a",
+                        backgroundColor: "#2a2a2a",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -461,7 +461,7 @@ const Home = () => {
                 <span className="relative z-[1]">create photo</span>
               </button>
             </div>
-            <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#1e1e1e", border: "2px solid #1e1e1e", borderRadius: 18 }}>
+            <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#2a2a2a", border: "2px solid #2a2a2a", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-[900] lowercase" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
                 <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
@@ -477,7 +477,7 @@ const Home = () => {
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
                       className="overflow-hidden transition-transform active:scale-[0.98]"
-                      style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
@@ -493,7 +493,7 @@ const Home = () => {
             </section>
           </div>
           {/* Desktop characters section */}
-          <section className="mt-6 p-5" style={{ backgroundColor: "#1e1e1e", border: "2px solid #1e1e1e", borderRadius: 18 }}>
+          <section className="mt-6 p-5" style={{ backgroundColor: "#2a2a2a", border: "2px solid #2a2a2a", borderRadius: 18 }}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
@@ -509,7 +509,7 @@ const Home = () => {
                       type="button"
                       onClick={handleOpenCreator}
                       className="overflow-hidden active:scale-[0.98] transition-transform"
-                      style={{ borderRadius: 16, backgroundColor: "#1e1e1e" }}
+                      style={{ borderRadius: 16, backgroundColor: "#2a2a2a" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
@@ -524,7 +524,7 @@ const Home = () => {
                     type="button"
                     onClick={() => navigate(`/characters/${char.id}`)}
                     className="relative overflow-hidden active:scale-[0.98] transition-transform"
-                    style={{ borderRadius: 16, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
+                    style={{ borderRadius: 16, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
