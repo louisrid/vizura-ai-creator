@@ -389,7 +389,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isReferenceSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   if (!mounted || !visible) return null;
 
