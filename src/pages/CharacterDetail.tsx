@@ -277,7 +277,7 @@ const CharacterDetail = () => {
           color: "#000",
           borderRadius: 12,
           backgroundColor: "#facc15",
-          boxShadow: "0 0 40px 16px rgba(0,0,0,0.35)",
+          borderRadius: 12,
         }}
       >
         create photo
@@ -317,7 +317,7 @@ const CharacterDetail = () => {
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
-        <div className="mx-auto w-full max-w-lg px-[14px] pb-[calc(env(safe-area-inset-bottom)+10px)] pt-3" style={{ background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent)" }}>
+        <div className="mx-auto w-full max-w-lg px-[14px] pb-[calc(env(safe-area-inset-bottom)+14px)] pt-8" style={{ background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.7) 55%, rgba(0,0,0,0.3) 75%, transparent 100%)" }}>
           <div className="flex flex-col gap-3">
           {contentBottom(true)}
           </div>

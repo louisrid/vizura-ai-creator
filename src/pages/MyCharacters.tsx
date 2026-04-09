@@ -176,7 +176,7 @@ const MyCharacters = () => {
       </main>
 
       {!loading && (
-        <div className="fixed left-0 right-0 z-10 px-6 pt-2 bg-gradient-to-t from-background via-background/95 to-transparent" style={{ bottom: "clamp(8px, calc((100vh - 100dvh) / 3 + 6px), 24px)" }}>
+        <div className="fixed left-0 right-0 bottom-0 z-10 px-6" style={{ paddingBottom: "clamp(14px, calc((100vh - 100dvh) / 3 + 12px), 28px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.7) 55%, rgba(0,0,0,0.3) 75%, transparent 100%)", paddingTop: 32 }}>
           <div className="mx-auto max-w-lg md:max-w-5xl">
             <motion.button
               onClick={handleBottomButton}
@@ -187,7 +187,7 @@ const MyCharacters = () => {
                 backgroundColor: hasCharacters ? "#facc15" : "#facc15",
                 color: "#000",
                 borderRadius: 12,
-                boxShadow: "0 0 40px 16px rgba(0,0,0,0.35)",
+              }}
               }}
             >
               {hasCharacters ? (
