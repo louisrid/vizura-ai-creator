@@ -27,7 +27,7 @@ import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/admin"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
