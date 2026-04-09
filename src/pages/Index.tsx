@@ -545,7 +545,7 @@ const Index = () => {
         <div className="grid grid-cols-12 gap-8">
           {/* Left: preview + character selector */}
           <div className="col-span-5 flex flex-col gap-5">
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative" ref={dropdownRef2}>
               <button
                 type="button"
                 onClick={() => setCharDropdownOpen((v) => !v)}
