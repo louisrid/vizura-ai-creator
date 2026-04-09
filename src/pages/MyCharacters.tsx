@@ -93,8 +93,14 @@ const MyCharacters = () => {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="animate-spin text-foreground" size={24} />
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                <AspectRatio ratio={3 / 4}>
+                  <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                </AspectRatio>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
