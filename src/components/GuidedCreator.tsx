@@ -596,15 +596,21 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Bottom nav — only on non-hero slides */}
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
-            {/* Progress dots at TOP */}
-            <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-md mx-auto">
-              {Array.from({ length: TOTAL }).map((_, i) => (
-                <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
-                  flex: 1, borderRadius: 2,
-                  background: i <= step ? Y : "rgba(250,204,21,0.1)",
-                }} />
-              ))}
-            </div>
+            {/* Progress dots at TOP — exclude hero slide from count */}
+            {(() => {
+              const dashCount = skipWelcome ? TOTAL : TOTAL - 1;
+              const activeIndex = skipWelcome ? step : step - 1;
+              return (
+                <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-md mx-auto">
+                  {Array.from({ length: dashCount }).map((_, i) => (
+                    <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
+                      flex: 1, borderRadius: 2,
+                      background: i <= activeIndex ? Y : "rgba(250,204,21,0.1)",
+                    }} />
+                  ))}
+                </div>
+              );
+            })()}
           </div>
         )}
 
