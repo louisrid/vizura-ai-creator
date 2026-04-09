@@ -221,7 +221,7 @@ const Header = () => {
               className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[50px] md:h-[50px]"
               style={{
                 borderRadius: 12,
-                backgroundColor: "#252525",
+                backgroundColor: "#1e1e1e",
               }}
               aria-label="open menu"
             >
