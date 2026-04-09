@@ -504,7 +504,7 @@ const Home = () => {
             <section className="col-span-8 flex flex-col p-6" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-[900] lowercase" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-                <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
+                <button onClick={() => navigate("/storage")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
                   see all →
                 </button>
               </div>
@@ -536,7 +536,7 @@ const Home = () => {
           <section className="mt-6 p-5" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: 18 }}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
+              <button onClick={() => navigate("/characters")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
                 manage →
               </button>
             </div>

@@ -182,7 +182,7 @@ const MyCharacters = () => {
               onClick={handleBottomButton}
               animate={bounceActive ? { y: [0, -6, 0] } : {}}
               transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-              className="flex h-14 md:h-16 w-full md:max-w-md md:mx-auto items-center justify-center gap-2 text-xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+              className="flex h-14 md:h-16 w-full md:max-w-md md:mx-auto items-center justify-center gap-2 text-xl md:text-2xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
               style={{
                 backgroundColor: "#facc15",
                 color: "#000",
