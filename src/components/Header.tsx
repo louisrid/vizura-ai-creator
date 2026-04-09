@@ -174,16 +174,17 @@ const Header = () => {
               {user && (
                 <>
                   <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
-                  style={{ color: "#ff4444", padding: isDesktop ? "16px 24px" : "10px 14px", fontSize: isDesktop ? 17 : 13, fontWeight: 700, textTransform: "lowercase" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                >
-                  <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
-                  log out
-                </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
+                    style={{ color: "#ff4444", padding: isDesktop ? "16px 24px" : "10px 14px", fontSize: isDesktop ? 17 : 13, fontWeight: 700, textTransform: "lowercase" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                  >
+                    <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
+                    log out
+                  </button>
+                </>
               )}
             </div>
           </div>
