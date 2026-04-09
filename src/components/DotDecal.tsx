@@ -23,7 +23,7 @@ const DotDecal = () => {
   }, []);
 
   return (
-    <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
+    <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
       <svg
         className="w-full h-full"
         preserveAspectRatio="none"
@@ -39,8 +39,8 @@ const DotDecal = () => {
           />
         ))}
       </svg>
-      {/* 15% darkness overlay */}
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.15)" }} />
+      {/* 22% darkness overlay */}
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.22)" }} />
     </div>
   );
 };
