@@ -98,7 +98,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         style={{
           borderRadius: 16,
           backgroundColor: isForward ? "#facc15" : "rgba(250,204,21,0.08)",
-          border: isForward ? "none" : `2.5px solid rgba(250,204,21,0.3)`,
+          border: isForward ? "none" : `2px solid #facc15`,
           outline: "none", padding: 0, cursor: "pointer",
           color: isForward ? "#000" : "#facc15",
         }}
