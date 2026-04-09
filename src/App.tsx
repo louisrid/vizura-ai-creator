@@ -22,11 +22,12 @@ import { Help } from "./pages/ComingSoon";
 import ResetPassword from "./pages/ResetPassword";
 import History from "./pages/History";
 import Info from "./pages/Info";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/admin"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
@@ -207,6 +208,7 @@ const AppRoutes = () => {
             <Route path="/history" element={<History />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/info" element={<Info />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </motion.div>
