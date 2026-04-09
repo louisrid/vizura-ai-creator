@@ -257,7 +257,7 @@ const CharacterDetail = () => {
       <div style={{ backgroundColor: "#1e1e1e", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
         <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1e1e1e", border: "2px solid #222" }}>
+            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1e1e1e", border: "2px solid #1e1e1e" }}>
               <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[8px]" : "text-[10px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
               <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[12px]" : "text-[14px]"}`}>{t.value}</span>
             </div>
@@ -366,14 +366,14 @@ const CharacterDetail = () => {
               style={{
                 backgroundColor: "#000000",
                 borderRadius: 16,
-                border: "2px solid #333",
+                border: "2px solid #1e1e1e",
                 padding: "28px 24px 24px",
               }}
             >
               <button
                 onClick={() => setShowDelete(false)}
                 className="absolute flex items-center justify-center"
-                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#333" }}
+                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1e1e1e" }}
               >
                 <X size={14} strokeWidth={3} color="#fff" />
               </button>
@@ -389,7 +389,7 @@ const CharacterDetail = () => {
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
                   className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
-                  style={{ backgroundColor: "#333", borderRadius: 12 }}
+                  style={{ backgroundColor: "#1e1e1e", borderRadius: 12 }}
                 >
                   no
                 </button>

@@ -144,7 +144,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#1e1e1e", color: "#fff", border: "2px solid #222" }
+        : { backgroundColor: "#1e1e1e", color: "#fff", border: "2px solid #1e1e1e" }
       ),
     }}
   >
@@ -470,7 +470,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
             className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+            style={{ borderRadius: 14, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
           />
           <motion.button
             type="button"
@@ -544,7 +544,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
           {selections.referenceImage ? (
             <div className="w-full">
-              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "2px solid #222", aspectRatio: "3/4" }}>
+              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "2px solid #1e1e1e", aspectRatio: "3/4" }}>
                 <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
                 <button
                   type="button"
@@ -558,7 +558,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               type="button"
               onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
               className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
-              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
             >
               <Upload size={16} strokeWidth={2.5} className="text-white/30" />
               <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
@@ -792,7 +792,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             className="mt-4 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+            style={{ borderRadius: 14, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
             disabled={emailLoading || googleLoading}
           />
           <input
@@ -801,14 +801,14 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             className="mt-2.5 w-full h-[52px] px-4 text-[15px] font-[800] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+            style={{ borderRadius: 14, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
             disabled={emailLoading || googleLoading}
           />
           <button
             onClick={handleEmailAuth}
             disabled={emailLoading || googleLoading}
             className="mt-3 w-full h-[56px] text-[15px] font-[900] lowercase text-white flex items-center justify-center gap-2 transition-colors duration-150 disabled:opacity-50"
-            style={{ borderRadius: 14, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+            style={{ borderRadius: 14, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={18} strokeWidth={2.5} /></>}
           </button>
