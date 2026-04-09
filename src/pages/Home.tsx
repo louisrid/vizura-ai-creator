@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { X } from "lucide-react";
+import { X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
