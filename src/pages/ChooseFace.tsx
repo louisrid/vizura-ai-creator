@@ -743,8 +743,8 @@ const ChooseFace = () => {
                       color: "#ffffff",
                     }}
                   >
-                    <RefreshCw size={16} strokeWidth={2.5} />
-                    regenerate • 1
+                    <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    regenerate <span style={{ color: "#00e0ff" }}>•</span> 1
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                   </button>
                 </div>

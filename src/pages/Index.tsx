@@ -503,7 +503,7 @@ const Index = () => {
                         }}
                         className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
                       >
-                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "1px solid rgba(250,204,21,0.3)" }}>
+                        <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                           <span className="text-xs">+</span>
                         </div>
                         <span className="text-lg font-[900] lowercase" style={{ color: "#facc15" }}>create character</span>
