@@ -236,7 +236,9 @@ const CharacterCreator = () => {
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
-    // If user is already logged in, save character to DB now
+    // Navigate immediately, save character to DB in background to avoid black screen delay
+    sessionStorage.removeItem("vizura_face_options");
+
     if (user) {
       const charData = {
         user_id: user.id,
@@ -250,20 +252,19 @@ const CharacterCreator = () => {
         description: sanitiseText(`${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,
       };
-      const { data: inserted, error: insertError } = await supabase
+      // Fire-and-forget DB insert — navigate first for smooth transition
+      supabase
         .from("characters")
         .insert(charData)
         .select("id")
-        .single();
-      if (!insertError && inserted) {
-        sessionStorage.setItem("vizura_pending_char_id", inserted.id);
-      }
-      // Clear stale face options so ChooseFace always generates fresh faces
-      sessionStorage.removeItem("vizura_face_options");
-      navigate("/choose-face", { state: { prompt, characterId: inserted?.id, freshCreation: true } });
+        .single()
+        .then(({ data: inserted, error: insertError }) => {
+          if (!insertError && inserted) {
+            sessionStorage.setItem("vizura_pending_char_id", inserted.id);
+          }
+        });
+      navigate("/choose-face", { state: { prompt, freshCreation: true } });
     } else {
-      // Not logged in - navigate to choose-face, sign-in will happen there
-      sessionStorage.removeItem("vizura_face_options");
       navigate("/choose-face", { state: { prompt, freshCreation: true } });
     }
 
