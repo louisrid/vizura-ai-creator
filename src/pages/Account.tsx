@@ -52,13 +52,13 @@ const Account = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
-        <div className="flex items-center gap-3 mb-7">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-10 pb-[280px] md:flex md:flex-col md:items-center">
+        <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full max-w-lg">
           {subscribed ? (
             <div
               className="w-full h-14 md:h-16 text-base md:text-lg font-extrabold lowercase flex items-center justify-center pointer-events-none"
@@ -225,12 +225,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-10 pb-[280px]">
-        <div className="mb-4 flex items-center gap-3">
+      <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-10 pb-[280px] md:flex md:flex-col md:items-center">
+        <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="border-2 border-[#1a1a1a] p-5 space-y-3 max-w-md md:max-w-lg" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+        <div className="border-2 border-[#1a1a1a] p-5 space-y-3 mx-auto max-w-md md:max-w-lg" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}

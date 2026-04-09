@@ -476,7 +476,7 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-5xl mx-auto px-10 pt-14 pb-[280px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-10 pt-14 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>

@@ -576,8 +576,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Skip button removed */}
 
         {/* Content area */}
-        <div className="absolute inset-0 flex items-center px-6 md:px-12" style={{ justifyContent: "center", paddingBottom: isHeroSlide ? "0%" : "22%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
-          <div className="w-full max-w-sm md:max-w-xl mx-auto flex flex-col items-center">
+        <div className="absolute inset-0 flex items-center justify-center px-6 md:px-12" style={{ paddingBottom: isHeroSlide ? "0%" : "18%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
+          <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
                 key={step}
@@ -596,12 +596,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Bottom nav — only on non-hero slides */}
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
-            {/* Progress dots at TOP — exclude hero slide from count */}
             {(() => {
               const dashCount = skipWelcome ? TOTAL : TOTAL - 1;
               const activeIndex = skipWelcome ? step : step - 1;
               return (
-                <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-md mx-auto">
+                <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
                   {Array.from({ length: dashCount }).map((_, i) => (
                     <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                       flex: 1, borderRadius: 2,
@@ -616,7 +615,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Arrow buttons + home icon — positioned below content */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "6%" }}>
+          <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}>
             <div className="flex items-center justify-center gap-4 md:gap-6">
               <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
                 <NavArrow direction="left" onClick={goBack} />
