@@ -328,6 +328,7 @@ const CharacterDetail = () => {
       <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-10 pb-10 flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
+          <PageTitle className="mb-0">details</PageTitle>
         </div>
         <div className="flex flex-col gap-4">
           {contentTop(false)}
