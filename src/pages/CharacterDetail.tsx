@@ -264,7 +264,7 @@ const CharacterDetail = () => {
         </div>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-[2]">
         <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <div className="flex flex-col gap-3">
             <button
@@ -285,55 +285,6 @@ const CharacterDetail = () => {
         </div>
       </div>
 
-      {/* Desktop layout — two-column side by side */}
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-10 pb-10 min-h-screen">
-        <div className="flex items-center gap-3 mb-8">
-          <BackButton />
-          <PageTitle className="mb-0">details</PageTitle>
-        </div>
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left: photos */}
-          <div className="col-span-7">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-6">
-              <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px] mb-6">{nameAge}</h1>
-              <div className="grid grid-cols-3 gap-4" style={{ overflow: "visible" }}>
-                {imgSlot(character.face_image_url, "front", "lock")}
-                {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
-                {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
-              </div>
-            </div>
-          </div>
-          {/* Right: details + actions */}
-          <div className="col-span-5 flex flex-col gap-5">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
-              <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">traits</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {traits.map((t) => (
-                  <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid #1a1a1a" }}>
-                    <span className="block font-[800] uppercase leading-none mb-0.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                    <span className="block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex-1" />
-            <button
-              onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-16 text-xl"
-              style={{ color: "#000", borderRadius: 12, backgroundColor: "#facc15" }}
-            >
-              create photo <Camera size={18} strokeWidth={2.5} />
-            </button>
-            <button
-              onClick={() => setShowDelete(true)}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-12 text-sm"
-              style={{ color: "#ff4444", borderRadius: 12, backgroundColor: "#100505", border: "2px solid #ff4444" }}
-            >
-              delete character <Trash2 size={14} strokeWidth={2.5} />
-            </button>
-          </div>
-        </div>
-      </main>
 
       <RegenerateConfirmDialog
         open={regenTarget !== null}
