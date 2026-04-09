@@ -50,7 +50,7 @@ const TopUps = () => {
           <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 gap-3">
           {plans.map((plan) => (
             <div
               key={plan.label}

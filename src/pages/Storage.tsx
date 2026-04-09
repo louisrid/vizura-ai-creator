@@ -143,7 +143,7 @@ const Storage = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
+          <div className="grid grid-cols-3 gap-2.5">
             <AnimatePresence>
             {images.map((img) => {
               const isNew = newImageIds.has(img.id);
