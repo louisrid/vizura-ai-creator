@@ -60,6 +60,43 @@ function getClientIp(req: Request): string {
   );
 }
 
+/* ── logging helpers ───────────────────────────────────── */
+async function logGeneration(
+  adminClient: any,
+  userId: string,
+  characterId: string | null,
+  promptText: string,
+  generationType: string,
+  gemsCost: number,
+  success: boolean,
+  errorMessage: string | null = null,
+) {
+  try {
+    await adminClient.from("generation_logs").insert({
+      user_id: userId,
+      character_id: characterId || null,
+      prompt_text: (promptText || "").slice(0, 2000),
+      generation_type: generationType,
+      gems_cost: gemsCost,
+      success,
+      error_message: errorMessage ? errorMessage.slice(0, 1000) : null,
+    });
+  } catch (e) {
+    console.warn("Failed to log generation:", e);
+  }
+}
+
+async function logRejectedPrompt(adminClient: any, userId: string, promptText: string) {
+  try {
+    await adminClient.from("rejected_prompts").insert({
+      user_id: userId,
+      prompt_text: (promptText || "").slice(0, 2000),
+    });
+  } catch (e) {
+    console.warn("Failed to log rejected prompt:", e);
+  }
+}
+
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
   white: "fair skin with warm undertone",
@@ -677,6 +714,8 @@ serve(async (req) => {
           });
         }
 
+        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, true);
+
         return new Response(
           JSON.stringify({
             angle_url: angleUrl,
@@ -689,11 +728,14 @@ serve(async (req) => {
         await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
         console.error("Single regeneration error:", e);
         if (e?.contentPolicy) {
+          await logRejectedPrompt(adminClient, userId, "character references");
+          await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 0, false, "content_policy");
           return new Response(
-            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
+        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, false, e?.message || "unknown");
         return new Response(
           JSON.stringify({ error: "regeneration failed, please try again" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -845,12 +887,15 @@ serve(async (req) => {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } catch (e: any) {
         if (e?.contentPolicy) {
+          await logRejectedPrompt(adminClient, userId, prompt);
+          await logGeneration(adminClient, userId, null, prompt, "face", 0, false, "content_policy");
           return new Response(
-            JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+            JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         if (e?.status === 429 || e?.status === 402) {
+          await logGeneration(adminClient, userId, null, prompt, "face", 0, false, `status_${e.status}`);
           return new Response(
             JSON.stringify({ error: "generation failed, please try again" }),
             { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -879,6 +924,8 @@ serve(async (req) => {
           console.warn("Failed to record free generation IP:", ipInsertError);
         }
       }
+
+      await logGeneration(adminClient, userId, null, prompt, "face", 0, true);
 
       return new Response(
         JSON.stringify({ images: imageUrls, free_gen: true }),
@@ -950,19 +997,24 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
 
+      const genType = isFaceRegen ? "face" : "photo";
       if (e?.contentPolicy) {
+        await logRejectedPrompt(adminClient, userId, prompt);
+        await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, "content_policy");
         return new Response(
-          JSON.stringify({ error: "please adjust your description and try again", code: "CONTENT_POLICY" }),
+          JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (e?.status === 429 || e?.status === 402) {
+        await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, `status_${e.status}`);
         return new Response(
           JSON.stringify({ error: "generation failed, please try again" }),
           { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       console.error("Generation error:", e);
+      await logGeneration(adminClient, userId, characterId, prompt, genType, 1, false, e?.message || "unknown");
       return new Response(
         JSON.stringify({ error: "generation failed, please try again" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -983,6 +1035,7 @@ serve(async (req) => {
       );
     }
 
+    const genType = isFaceRegen ? "face" : "photo";
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,
@@ -990,6 +1043,8 @@ serve(async (req) => {
         image_urls: imageUrls,
       });
     }
+
+    await logGeneration(adminClient, userId, characterId, prompt, genType, 1, true);
 
     return new Response(
       JSON.stringify({

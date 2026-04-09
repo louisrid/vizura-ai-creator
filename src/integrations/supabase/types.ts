@@ -116,6 +116,42 @@ export type Database = {
         }
         Relationships: []
       }
+      generation_logs: {
+        Row: {
+          character_id: string | null
+          created_at: string
+          error_message: string | null
+          gems_cost: number
+          generation_type: string
+          id: string
+          prompt_text: string
+          success: boolean
+          user_id: string
+        }
+        Insert: {
+          character_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          gems_cost?: number
+          generation_type?: string
+          id?: string
+          prompt_text?: string
+          success?: boolean
+          user_id: string
+        }
+        Update: {
+          character_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          gems_cost?: number
+          generation_type?: string
+          id?: string
+          prompt_text?: string
+          success?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
       generations: {
         Row: {
           created_at: string
@@ -169,6 +205,27 @@ export type Database = {
           has_used_free_gen?: boolean
           id?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      rejected_prompts: {
+        Row: {
+          id: string
+          prompt_text: string
+          rejected_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          prompt_text: string
+          rejected_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          prompt_text?: string
+          rejected_at?: string
           user_id?: string
         }
         Relationships: []
