@@ -7,6 +7,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import BackButton from "@/components/BackButton";
+import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 
