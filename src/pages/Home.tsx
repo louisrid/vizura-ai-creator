@@ -82,7 +82,7 @@ const Home = () => {
   }, [user]);
 
   const fetchCharacters = useCallback(async () => {
-    if (!user) { setCharacters([]); return; }
+    if (!user) { setCharacters([]); setCharsLoaded(true); return; }
     const { data } = await supabase
       .from("characters")
       .select("id, name, age, face_image_url")
@@ -90,6 +90,7 @@ const Home = () => {
       .order("created_at", { ascending: false })
       .limit(4);
     if (data) setCharacters(data as CharacterPreview[]);
+    setCharsLoaded(true);
   }, [user]);
 
   useEffect(() => {
