@@ -331,7 +331,7 @@ const Home = () => {
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <Skeleton className="h-full w-full" style={{ borderRadius: 16 }} />
+                      <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -377,7 +377,7 @@ const Home = () => {
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <Skeleton className="h-full w-full" style={{ borderRadius: 16 }} />
+                      <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
                     </AspectRatio>
                   </div>
                 ))
