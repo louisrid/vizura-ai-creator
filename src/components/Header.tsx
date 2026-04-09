@@ -176,8 +176,16 @@ const Header = () => {
         style={{ zIndex: 9990 }}
       >
         <TopGradientBar />
-        {/* Solid black bar behind controls */}
-        <div style={{ backgroundColor: "hsl(var(--background))" }}>
+        {/* Full header gradient — smooth multi-stop fade */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0"
+          style={{
+            height: 120,
+            background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 20%, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.12) 88%, transparent 100%)",
+          }}
+        />
+        {/* Controls on top of gradient */}
+        <div className="relative">
           <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-3">
             <div className="flex items-center gap-2.5 md:gap-3.5">
               <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
@@ -232,14 +240,6 @@ const Header = () => {
             </div>
           </div>
         </div>
-        {/* Gradient fade below controls */}
-        <div
-          className="pointer-events-none"
-          style={{
-            height: 28,
-            background: "linear-gradient(to bottom, hsl(var(--background)), transparent)",
-          }}
-        />
       </header>
       {menuDropdown}
     </>
