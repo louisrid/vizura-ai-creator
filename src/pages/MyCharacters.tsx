@@ -125,7 +125,7 @@ const MyCharacters = () => {
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200"
                     style={{
                       borderRadius: 16,
-                      border: isNew ? "3px solid #facc15" : "2px solid #222",
+                      border: isNew ? "3px solid #facc15" : "2px solid #1e1e1e",
                       backgroundColor: "#1e1e1e",
                     }}
                   >

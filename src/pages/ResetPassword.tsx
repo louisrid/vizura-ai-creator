@@ -80,7 +80,7 @@ const ResetPassword = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-2 border-[#222] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
+                    className="w-full border-2 border-[#1e1e1e] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
                     style={{ backgroundColor: "#1e1e1e", borderRadius: 12 }}
                     placeholder="••••••••"
                   />
@@ -97,7 +97,7 @@ const ResetPassword = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full border-2 border-[#222] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
+                    className="w-full border-2 border-[#1e1e1e] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
                     style={{ backgroundColor: "#1e1e1e", borderRadius: 12 }}
                     placeholder="••••••••"
                   />

@@ -202,7 +202,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 12, backgroundColor: "#1e1e1e", border: "2px solid #222" }}
+          style={{ borderRadius: 12, backgroundColor: "#1e1e1e", border: "2px solid #1e1e1e" }}
         >
           <span className="flex-1 text-left text-base font-[900] lowercase text-foreground">{selected.label}</span>
           <ChevronDown
@@ -220,7 +220,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15 }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+              style={{ borderRadius: 12, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
             >
               {EXPRESSION_OPTIONS.map((opt) => (
                 <button
@@ -466,7 +466,7 @@ const Index = () => {
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.15 }}
                     className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-                    style={{ borderRadius: 12, border: "2px solid #222", backgroundColor: "#1e1e1e" }}
+                    style={{ borderRadius: 12, border: "2px solid #1e1e1e", backgroundColor: "#1e1e1e" }}
                   >
                     {characters.map((c) => (
                       <button
@@ -480,7 +480,7 @@ const Index = () => {
                             <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
+                          <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1e1e1e" }}>
                             <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
                           </div>
                         )}
