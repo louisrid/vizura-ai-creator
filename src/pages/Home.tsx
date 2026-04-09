@@ -376,58 +376,65 @@ const Home = () => {
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {charSlots.map((char, i) => {
-                if (!char) {
+              {!charsLoaded && characters.length === 0 ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                    <AspectRatio ratio={3 / 4}>
+                      <Skeleton className="h-full w-full" style={{ borderRadius: 16 }} />
+                    </AspectRatio>
+                  </div>
+                ))
+              ) : (
+                charSlots.map((char, i) => {
+                  if (!char) {
+                    return (
+                      <button
+                        key={`empty-${i}`}
+                        type="button"
+                        onClick={handleOpenCreator}
+                        className="overflow-hidden active:scale-[0.98] transition-transform"
+                        style={{
+                          borderRadius: 16,
+                          border: "2px dashed #222",
+                          backgroundColor: "#111111",
+                        }}
+                      >
+                        <AspectRatio ratio={3 / 4}>
+                          <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                        </AspectRatio>
+                      </button>
+                    );
+                  }
+                  const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={`empty-${i}`}
+                      key={char.id}
                       type="button"
-                      onClick={handleOpenCreator}
-                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      onClick={() => navigate(`/characters/${char.id}`)}
+                      className="relative overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: "2px dashed #222",
+                        border: "2px solid #222",
                         backgroundColor: "#111111",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                        {hasFace ? (
+                          <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center">
+                            <User size={28} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                          </div>
+                        )}
                       </AspectRatio>
+                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
+                        <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
+                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
+                      </div>
                     </button>
                   );
-                }
-                const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
-                return (
-                  <button
-                    key={char.id}
-                    type="button"
-                    onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden active:scale-[0.98] transition-transform"
-                    style={{
-                      borderRadius: 16,
-                      border: "2px solid #222",
-                      backgroundColor: "#111111",
-                    }}
-                  >
-                    <AspectRatio ratio={3 / 4}>
-                      {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center">
-                          <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
-                            <circle cx="12" cy="8" r="5" />
-                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-                          </svg>
-                        </div>
-                      )}
-                    </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
-                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
-                    </div>
-                  </button>
-                );
-              })}
+                })
+              )}
             </div>
           </section>
         </main>
