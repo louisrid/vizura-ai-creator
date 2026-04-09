@@ -486,7 +486,7 @@ const Home = () => {
               <button
                 type="button"
                 onClick={handleOpenCreator}
-                className="flex h-20 items-center justify-center gap-3 text-[22px] font-[900] lowercase text-black transition-all active:scale-[0.98] hover-lift"
+                className="flex h-20 items-center justify-center gap-3 text-[26px] font-[900] lowercase text-black transition-all active:scale-[0.98] hover-lift"
                 style={{ backgroundColor: "#facc15", borderRadius: 14 }}
               >
                 create character
@@ -494,7 +494,7 @@ const Home = () => {
               <button
                 type="button"
                 onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
-                className="relative flex h-20 items-center justify-center gap-3 text-[22px] font-[900] lowercase text-white transition-all active:scale-[0.98] overflow-hidden hover-glow"
+                className="relative flex h-20 items-center justify-center gap-3 text-[26px] font-[900] lowercase text-white transition-all active:scale-[0.98] overflow-hidden hover-glow"
                 style={{ backgroundColor: "#000000", borderRadius: 14 }}
               >
                 <div className="absolute inset-0" style={{ backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 14 }} />
