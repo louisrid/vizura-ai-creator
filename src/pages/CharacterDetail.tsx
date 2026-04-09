@@ -272,7 +272,7 @@ const CharacterDetail = () => {
       {/* Create Photo button */}
       <button
         onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-12 text-sm" : "h-14 text-base"}`}
+        className={`flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] ${isMobile ? "h-14 text-xl" : "h-14 text-xl"}`}
         style={{
           color: "#000",
           borderRadius: 12,
