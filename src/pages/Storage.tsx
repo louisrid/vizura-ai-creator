@@ -168,15 +168,15 @@ const Storage = () => {
                   </AspectRatio>
                 </button>
                 <a
-171:                   href={img.url}
-172:                   download={`vizura-${img.id}.png`}
-173:                   target="_blank"
-174:                   className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
-175:                   style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid #1a1a1a", borderTop: "none" }}
-176:                 >
-177:                    download
-178:                    <Download size={12} strokeWidth={2.5} />
-179:                 </a>
+                  href={img.url}
+                  download={`vizura-${img.id}.png`}
+                  target="_blank"
+                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] font-extrabold lowercase transition-opacity hover:opacity-80"
+                  style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid #1a1a1a", borderTop: "none" }}
+                >
+                   download
+                   <Download size={12} strokeWidth={2.5} />
+                </a>
               </motion.div>
               );
             })}
