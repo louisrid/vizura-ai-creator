@@ -582,10 +582,9 @@ serve(async (req) => {
     /* ── SINGLE PHOTO REGENERATION FLOW (1 gem) ── */
     if (regenerateSingle && (regenerateSingle === "angle" || regenerateSingle === "body")) {
       const singleCharId = body?.character_id;
-      const singleFaceUrl = body?.selected_face_url;
 
-      if (!singleCharId || !singleFaceUrl) {
-        return new Response(JSON.stringify({ error: "Missing character_id or selected_face_url" }), {
+      if (!singleCharId) {
+        return new Response(JSON.stringify({ error: "Missing character_id" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
@@ -613,6 +612,7 @@ serve(async (req) => {
         .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
         .eq("user_id", userId);
 
+      // Always fetch fresh character data from DB
       const { data: charData } = await adminClient
         .from("characters")
         .select("*")
@@ -620,12 +620,15 @@ serve(async (req) => {
         .eq("user_id", userId)
         .single();
 
-      if (!charData) {
+      if (!charData || !charData.face_image_url) {
         await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
-        return new Response(JSON.stringify({ error: "Character not found" }), {
+        return new Response(JSON.stringify({ error: "Character not found or missing face image" }), {
           status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+
+      // Capture the old URL so we can delete the old file after success
+      const oldUrl = regenerateSingle === "angle" ? charData.face_angle_url : charData.body_anchor_url;
 
       const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
       if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
@@ -633,11 +636,13 @@ serve(async (req) => {
       const traits = buildCharacterTraits(charData);
       const dbBodyType = (charData.body || "regular").toLowerCase();
 
-      console.log(`=== SINGLE REGENERATION: ${regenerateSingle} ===`);
+      // Use the fresh face_image_url from DB, not the client-provided one
+      const freshFaceUrl = charData.face_image_url;
+      console.log(`=== SINGLE REGENERATION: ${regenerateSingle} (using fresh DB face URL) ===`);
 
       try {
         const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-          singleFaceUrl, traits, dbBodyType, XAI_API_KEY, adminClient, userId, regenerateSingle
+          freshFaceUrl, traits, dbBodyType, XAI_API_KEY, adminClient, userId, regenerateSingle
         );
 
         const updates: Record<string, string | null> = {};
@@ -646,6 +651,21 @@ serve(async (req) => {
 
         if (Object.keys(updates).length > 0) {
           await adminClient.from("characters").update(updates).eq("id", singleCharId).eq("user_id", userId);
+        }
+
+        // Delete old file from storage after successful update
+        if (oldUrl) {
+          try {
+            const bucketBase = `/storage/v1/object/public/images/`;
+            const idx = oldUrl.indexOf(bucketBase);
+            if (idx !== -1) {
+              const storagePath = oldUrl.slice(idx + bucketBase.length);
+              console.log("Deleting old storage file:", storagePath);
+              await adminClient.storage.from("images").remove([storagePath]);
+            }
+          } catch (delErr) {
+            console.warn("Failed to delete old image file (non-fatal):", delErr);
+          }
         }
 
         const resultUrl = regenerateSingle === "angle" ? angleUrl : bodyAnchorUrl;
