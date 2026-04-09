@@ -188,7 +188,6 @@ const MyCharacters = () => {
                 color: "#000",
                 borderRadius: 12,
               }}
-              }}
             >
               {hasCharacters ? (
                 <>create photo<Camera size={18} strokeWidth={2.5} /></>
