@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Sparkles, ChevronDown, Gem } from "lucide-react";
+import { Loader2, Zap, Sparkles, ChevronDown, Gem, User } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
@@ -445,7 +445,7 @@ const Index = () => {
                   </div>
                 ) : (
                   <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
-                    <span className="text-black/40 text-sm">👤</span>
+                    <User size={18} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
                   </div>
                 )}
                 <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
@@ -481,7 +481,7 @@ const Index = () => {
                           </div>
                         ) : (
                           <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#222" }}>
-                            <span className="text-white/30 text-sm">👤</span>
+                            <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
                           </div>
                         )}
                         <span

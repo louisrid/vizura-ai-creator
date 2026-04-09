@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { X } from "lucide-react";
+import { X, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,6 +49,8 @@ const Home = () => {
     return [];
   });
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
+  const [photosLoaded, setPhotosLoaded] = useState(false);
+  const [charsLoaded, setCharsLoaded] = useState(false);
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
@@ -55,7 +58,7 @@ const Home = () => {
   const openCreatorRequested = Boolean((location.state as any)?.openCreator);
 
   const fetchLatestPhotos = useCallback(async () => {
-    if (!user) { setImages([]); return; }
+    if (!user) { setImages([]); setPhotosLoaded(true); return; }
     const { data } = await supabase
       .from("generations")
       .select("id, image_urls, prompt, created_at")
@@ -74,11 +77,12 @@ const Home = () => {
       )
       .slice(0, 8);
     setImages(latest);
+    setPhotosLoaded(true);
     try { sessionStorage.setItem("vizura_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
   const fetchCharacters = useCallback(async () => {
-    if (!user) { setCharacters([]); return; }
+    if (!user) { setCharacters([]); setCharsLoaded(true); return; }
     const { data } = await supabase
       .from("characters")
       .select("id, name, age, face_image_url")
@@ -86,6 +90,7 @@ const Home = () => {
       .order("created_at", { ascending: false })
       .limit(4);
     if (data) setCharacters(data as CharacterPreview[]);
+    setCharsLoaded(true);
   }, [user]);
 
   useEffect(() => {
@@ -322,35 +327,45 @@ const Home = () => {
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {photoSlots.map((photo) => {
-                const isPlaceholder = !photo.url;
-                return (
-                  <button
-                    key={photo.id}
-                    type="button"
-                    onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                    className="overflow-hidden active:scale-[0.98] transition-transform"
-                    style={{
-                      borderRadius: 16,
-                      border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
-                      backgroundColor: "#111111",
-                    }}
-                  >
+              {!photosLoaded && images.length === 0 ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
                     <AspectRatio ratio={3 / 4}>
-                      {isPlaceholder ? (
-                        <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
-                      ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      )}
+                      <Skeleton className="h-full w-full" style={{ borderRadius: 16 }} />
                     </AspectRatio>
-                  </button>
-                );
-              })}
+                  </div>
+                ))
+              ) : (
+                photoSlots.map((photo) => {
+                  const isPlaceholder = !photo.url;
+                  return (
+                    <button
+                      key={photo.id}
+                      type="button"
+                      onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
+                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      style={{
+                        borderRadius: 16,
+                        border: isPlaceholder ? "2px dashed #222" : "2px solid #222",
+                        backgroundColor: "#111111",
+                      }}
+                    >
+                      <AspectRatio ratio={3 / 4}>
+                        {isPlaceholder ? (
+                          <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                        ) : (
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        )}
+                      </AspectRatio>
+                    </button>
+                  );
+                })
+              )}
             </div>
           </section>
 
           {/* Divider */}
-          <div style={{ height: 1, backgroundColor: "#222", margin: "4px 0 16px" }} />
+          <div style={{ height: 2, backgroundColor: "#222", margin: "4px 0 16px", borderRadius: 1 }} />
 
           {/* My Characters Section */}
           <section>
@@ -361,58 +376,65 @@ const Home = () => {
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {charSlots.map((char, i) => {
-                if (!char) {
+              {!charsLoaded && characters.length === 0 ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                    <AspectRatio ratio={3 / 4}>
+                      <Skeleton className="h-full w-full" style={{ borderRadius: 16 }} />
+                    </AspectRatio>
+                  </div>
+                ))
+              ) : (
+                charSlots.map((char, i) => {
+                  if (!char) {
+                    return (
+                      <button
+                        key={`empty-${i}`}
+                        type="button"
+                        onClick={handleOpenCreator}
+                        className="overflow-hidden active:scale-[0.98] transition-transform"
+                        style={{
+                          borderRadius: 16,
+                          border: "2px dashed #222",
+                          backgroundColor: "#111111",
+                        }}
+                      >
+                        <AspectRatio ratio={3 / 4}>
+                          <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                        </AspectRatio>
+                      </button>
+                    );
+                  }
+                  const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={`empty-${i}`}
+                      key={char.id}
                       type="button"
-                      onClick={handleOpenCreator}
-                      className="overflow-hidden active:scale-[0.98] transition-transform"
+                      onClick={() => navigate(`/characters/${char.id}`)}
+                      className="relative overflow-hidden active:scale-[0.98] transition-transform"
                       style={{
                         borderRadius: 16,
-                        border: "2px dashed #222",
+                        border: "2px solid #222",
                         backgroundColor: "#111111",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        <div className="flex h-full w-full items-center justify-center text-white/20 text-lg font-[300]">+</div>
+                        {hasFace ? (
+                          <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center">
+                            <User size={28} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                          </div>
+                        )}
                       </AspectRatio>
+                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
+                        <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
+                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
+                      </div>
                     </button>
                   );
-                }
-                const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
-                return (
-                  <button
-                    key={char.id}
-                    type="button"
-                    onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden active:scale-[0.98] transition-transform"
-                    style={{
-                      borderRadius: 16,
-                      border: "2px solid #222",
-                      backgroundColor: "#111111",
-                    }}
-                  >
-                    <AspectRatio ratio={3 / 4}>
-                      {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center">
-                          <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
-                            <circle cx="12" cy="8" r="5" />
-                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-                          </svg>
-                        </div>
-                      )}
-                    </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
-                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
-                    </div>
-                  </button>
-                );
-              })}
+                })
+              )}
             </div>
           </section>
         </main>
@@ -513,10 +535,7 @@ const Home = () => {
                         <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
-                          <svg width="32" height="32" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
-                            <circle cx="12" cy="8" r="5" />
-                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-                          </svg>
+                          <User size={32} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
                         </div>
                       )}
                     </AspectRatio>
