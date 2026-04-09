@@ -94,7 +94,7 @@ const Header = () => {
     { label: "my characters", path: "/characters", icon: LayoutGrid, auth: true },
     { label: "storage", path: "/storage", icon: Archive, auth: true },
     { label: "gems", path: "/top-ups", icon: Gem, auth: true },
-    { label: "account", path: "/account", icon: Settings, auth: false },
+    { label: "my account", path: "/account", icon: Settings, auth: false },
   ];
 
   const isLoggedIn = !loading && !!user?.id;
