@@ -277,7 +277,7 @@ const CharacterDetail = () => {
           color: "#000",
           borderRadius: 12,
           backgroundColor: "#facc15",
-          boxShadow: "0 -4px 24px 4px rgba(0,0,0,0.6)",
+          boxShadow: "0 0 40px 16px rgba(0,0,0,0.35)",
         }}
       >
         create photo

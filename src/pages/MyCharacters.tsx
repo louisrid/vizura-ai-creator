@@ -187,7 +187,7 @@ const MyCharacters = () => {
                 backgroundColor: hasCharacters ? "#facc15" : "#facc15",
                 color: "#000",
                 borderRadius: 12,
-                boxShadow: "0 -4px 24px 4px rgba(0,0,0,0.6)",
+                boxShadow: "0 0 40px 16px rgba(0,0,0,0.35)",
               }}
             >
               {hasCharacters ? (
