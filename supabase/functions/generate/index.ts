@@ -754,7 +754,7 @@ serve(async (req) => {
           JSON.stringify({
             angle_url: angleUrl,
             body_anchor_url: bodyAnchorUrl,
-            gems_remaining: creditData.balance - 1,
+            gems_remaining: creditData ? creditData.balance - 1 : undefined,
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
