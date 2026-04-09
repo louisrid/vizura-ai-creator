@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { X, User } from "lucide-react";
+import { X, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
@@ -237,9 +237,8 @@ const Home = () => {
 
       {!pageHidden && <AnimatePresence>
         {selectedImage && (
-          <motion.button
-            type="button"
-            className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
+          <motion.div
+            className="fixed inset-0 z-[9998] flex items-center justify-center px-6 pt-20 pb-8"
             style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -247,16 +246,33 @@ const Home = () => {
             transition={{ duration: 0.15, ease: "easeOut" }}
             onClick={() => setSelectedImage(null)}
           >
-            <button
-              type="button"
-              className="absolute flex items-center justify-center"
-              style={{ top: 16, right: 16, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
-              onClick={(e) => { e.stopPropagation(); setSelectedImage(null); }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
+              style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={14} strokeWidth={3} color="#fff" />
-            </button>
-            <img src={selectedImage.url} alt="latest photo" className="max-h-full max-w-full rounded-[2rem] object-contain" />
-          </motion.button>
+              <button
+                type="button"
+                onClick={() => setSelectedImage(null)}
+                className="absolute flex items-center justify-center z-10"
+                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
+              >
+                <X size={14} strokeWidth={3} color="#fff" />
+              </button>
+              <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
+              {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
+                <div className="px-3 pt-2.5 pb-3">
+                  <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    {selectedImage.prompt}
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>}
 
@@ -331,9 +347,11 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Loader2 size={14} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                      </div>
                     </AspectRatio>
                   </div>
                 ))
@@ -389,9 +407,11 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Loader2 size={14} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                      </div>
                     </AspectRatio>
                   </div>
                 ))

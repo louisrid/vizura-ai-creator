@@ -390,7 +390,7 @@ const CharacterCreator = () => {
         <div className="mt-8 mb-6">
           <button
             className="flex h-16 w-full items-center justify-center gap-1.5 rounded-2xl text-sm font-extrabold lowercase transition-all hover:opacity-90 disabled:opacity-50"
-            style={{ backgroundColor: "#050a10", color: "#00e0ff", border: "2px solid #00e0ff" }}
+            style={{ backgroundColor: "#050a10", color: "#00e0ff", border: "2px solid #00e0ff", boxShadow: "0 -4px 24px 4px rgba(0,0,0,0.6)" }}
             onClick={handleCreate}
             disabled={isSaving}
           >

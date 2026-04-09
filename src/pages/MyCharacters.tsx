@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, Camera, Sparkles } from "lucide-react";
+import { Plus, Loader2, Camera, Sparkles, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -8,7 +8,6 @@ import PageTitle from "@/components/PageTitle";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface Character {
   id: string;
@@ -67,10 +66,15 @@ const MyCharacters = () => {
 
   if (!authLoading && !user) return null;
 
+  const handleCreateCharacter = () => {
+    sessionStorage.removeItem("vizura_creator_dismissed");
+    sessionStorage.setItem("vizura_internal_nav", "1");
+    navigate("/", { state: { openCreator: true } });
+  };
+
   const handleBottomButton = () => {
     if (characters.length === 0) {
-      sessionStorage.setItem("vizura_internal_nav", "1");
-      navigate("/");
+      handleCreateCharacter();
       return;
     }
     if (characters.length === 1) {
@@ -95,9 +99,11 @@ const MyCharacters = () => {
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
-                  <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                  </div>
                 </AspectRatio>
               </div>
             ))}
@@ -105,7 +111,7 @@ const MyCharacters = () => {
         ) : (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             <button
-              onClick={() => { sessionStorage.setItem("vizura_internal_nav", "1"); navigate("/"); }}
+              onClick={handleCreateCharacter}
               className="overflow-hidden active:scale-[0.97] transition-transform"
               style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
             >
@@ -176,11 +182,16 @@ const MyCharacters = () => {
               onClick={handleBottomButton}
               animate={bounceActive ? { y: [0, -6, 0] } : {}}
               transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-              className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-base md:text-lg font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
-              style={{ backgroundColor: "#facc15", color: "#000", borderRadius: 12 }}
+              className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
+              style={{
+                backgroundColor: hasCharacters ? "#facc15" : "#facc15",
+                color: "#000",
+                borderRadius: 12,
+                boxShadow: "0 -4px 24px 4px rgba(0,0,0,0.6)",
+              }}
             >
               {hasCharacters ? (
-                <>create photo<Camera size={20} strokeWidth={2.5} /></>
+                <>create <span style={{ color: "rgba(0,0,0,0.3)" }}>·</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#000" }} /></>
               ) : (
                 <>create character<Sparkles size={20} strokeWidth={2.5} /></>
               )}

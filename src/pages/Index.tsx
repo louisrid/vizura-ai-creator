@@ -247,7 +247,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 }) => (
   <button
     className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 12 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 12, boxShadow: "0 -4px 24px 4px rgba(0,0,0,0.6)" }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -585,7 +585,7 @@ const Index = () => {
         )}
       </main>
 
-      <div className="fixed left-0 right-0 z-10 px-6 pt-2 bg-gradient-to-t from-background via-background/95 to-transparent" style={{ bottom: "clamp(8px, calc((100vh - 100dvh) / 3 + 6px), 24px)" }}>
+      <div className="fixed left-0 right-0 z-10 px-[14px] pt-4 pb-1" style={{ bottom: "clamp(8px, calc((100vh - 100dvh) / 3 + 6px), 24px)", background: "linear-gradient(to top, hsl(var(--background)) 60%, transparent)" }}>
         <div className="mx-auto max-w-lg">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
         </div>

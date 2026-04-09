@@ -125,9 +125,11 @@ const Storage = () => {
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden" }}>
+              <div key={`skel-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
-                  <Skeleton className="h-full w-full" style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }} />
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                  </div>
                 </AspectRatio>
               </div>
             ))}
