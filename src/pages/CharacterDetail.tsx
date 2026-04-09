@@ -305,7 +305,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[132px] md:hidden" style={{ minHeight: "100dvh" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[132px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           <BackButton />
         </div>
@@ -323,7 +323,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Desktop layout */}
-      <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-4 pb-10 flex-col min-h-screen">
+      <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-10 pb-10 flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
         </div>
