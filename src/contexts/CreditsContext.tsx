@@ -46,12 +46,6 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
       return;
     }
-    if (isTestAccount) {
-      writeCachedGems(user.id, 1000);
-      setGems(1000);
-      setLoading(false);
-      return;
-    }
     try {
       const { data, error } = await supabase
         .from("credits")
@@ -72,7 +66,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, isTestAccount, writeCachedGems]);
+  }, [user, writeCachedGems]);
 
   useEffect(() => {
     if (!user) {
