@@ -23,22 +23,25 @@ const DotDecal = () => {
   }, []);
 
   return (
-    <svg
-      className="pointer-events-none absolute inset-0 w-full h-full"
-      style={{ zIndex: 0 }}
-      preserveAspectRatio="none"
-    >
-      {dots.map((d, i) => (
-        <circle
-          key={i}
-          cx={`${(d.x / 430) * 100}%`}
-          cy={d.y}
-          r={1.4}
-          fill="#fde047"
-          opacity={d.opacity}
-        />
-      ))}
-    </svg>
+    <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
+      <svg
+        className="w-full h-full"
+        preserveAspectRatio="none"
+      >
+        {dots.map((d, i) => (
+          <circle
+            key={i}
+            cx={`${(d.x / 430) * 100}%`}
+            cy={d.y}
+            r={1.4}
+            fill="#fde047"
+            opacity={d.opacity}
+          />
+        ))}
+      </svg>
+      {/* 15% darkness overlay */}
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.15)" }} />
+    </div>
   );
 };
 
