@@ -99,6 +99,10 @@ const Header = () => {
 
   const isLoggedIn = !loading && !!user?.id;
 
+  // Detect desktop
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+  const menuWidth = isDesktop ? 280 : 190;
+
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = open && dropdownPos ? createPortal(
     <AnimatePresence>
@@ -113,10 +117,10 @@ const Header = () => {
           style={{
             top: dropdownPos.top,
             right: dropdownPos.right,
-            width: 190,
+            width: menuWidth,
             backgroundColor: "#000000",
             border: "2px solid #1a1a1a",
-            borderRadius: 16,
+            borderRadius: isDesktop ? 20 : 16,
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
           }}
@@ -124,13 +128,13 @@ const Header = () => {
           <div className="relative">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 transition-colors duration-150 hover:opacity-80"
+              className="absolute top-3 right-3 md:top-4 md:right-4 transition-colors duration-150 hover:opacity-80"
               style={{ color: "rgba(255,255,255,0.35)" }}
               aria-label="close menu"
             >
-              <X size={14} strokeWidth={2.5} />
+              <X size={14} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" />
             </button>
-            <div className="py-1">
+            <div className="py-1 md:py-2">
               {menuItems.map((item) => {
                 const isActive = location.pathname === item.path && !item.state;
                 return (
@@ -148,10 +152,10 @@ const Header = () => {
                         handleNav(item.path);
                       }
                     }}
-                    className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
+                    className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
                     style={{
-                      padding: "10px 14px",
-                      fontSize: 13,
+                      padding: isDesktop ? "14px 20px" : "10px 14px",
+                      fontSize: isDesktop ? 15 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
                       color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
@@ -160,7 +164,7 @@ const Header = () => {
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                    <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
+                    <item.icon size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
                     {item.label}
                   </button>
                 );
@@ -168,12 +172,12 @@ const Header = () => {
               {user && (
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
-                  style={{ color: "#ff4444", padding: "10px 14px", fontSize: 13, fontWeight: 700, textTransform: "lowercase" }}
+                  className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
+                  style={{ color: "#ff4444", padding: isDesktop ? "14px 20px" : "10px 14px", fontSize: isDesktop ? 15 : 13, fontWeight: 700, textTransform: "lowercase" }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
-                  <LogOut size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
+                  <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                   log out
                 </button>
               )}
@@ -188,7 +192,7 @@ const Header = () => {
   return (
     <>
       {/* Spacer that reserves header height in document flow */}
-      <div style={{ height: 80 }} aria-hidden="true" />
+      <div className="h-[80px] md:h-[90px]" aria-hidden="true" />
       <header
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
@@ -205,15 +209,15 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-8 pb-3">
-            <div className="flex items-center gap-2.5 md:gap-3.5">
-              <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-8 md:pt-6 pb-3">
+            <div className="flex items-center gap-2.5 md:gap-4">
+              <button onClick={() => handleNav("/")} className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
                 vizura
               </button>
               {isLoggedIn && (
                 <button
                   onClick={() => navigate("/account")}
-                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[38px] md:h-[38px]"
+                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "hsl(var(--card))",
@@ -221,29 +225,29 @@ const Header = () => {
                   }}
                   aria-label="my account"
                 >
-                  <User size={16} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
+                  <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => navigate("/top-ups")}
-                className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 md:py-2 active:scale-95 transition-transform duration-150"
+                className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
                 style={{
                   backgroundColor: "hsl(var(--card))",
                   border: "2px solid #00e0ff",
                   borderRadius: 10,
                 }}
               >
-                <Gem size={13} strokeWidth={2.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white">{gems}</span>
+                <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
               </button>
 
               <button
                 ref={menuBtnRef}
                 onClick={() => setOpen(!open)}
-                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[50px] md:h-[50px]"
+                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                 style={{
                   borderRadius: 12,
                   backgroundColor: "#1a1a1a",
