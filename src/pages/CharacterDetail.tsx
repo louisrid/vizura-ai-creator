@@ -305,7 +305,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-1 pb-[132px] md:hidden" style={{ minHeight: "100dvh" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[132px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           <BackButton />
         </div>
