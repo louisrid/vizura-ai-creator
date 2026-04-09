@@ -462,7 +462,7 @@ const Home = () => {
                 <span className="relative z-[1]">create photo</span>
               </button>
             </div>
-            <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
+            <section className="col-span-8 flex flex-col p-5" style={{ backgroundColor: "#1a1a1a", border: "2px solid #222", borderRadius: 18 }}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-[900] lowercase" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
                 <button onClick={() => navigate("/storage")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
@@ -478,7 +478,7 @@ const Home = () => {
                       type="button"
                       onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
                       className="overflow-hidden transition-transform active:scale-[0.98]"
-                      style={{ borderRadius: 16, border: isPlaceholder ? "2px dashed #222" : "2px solid #222", backgroundColor: "#151515" }}
+                      style={{ borderRadius: 16, border: isPlaceholder ? "2px dashed #222" : "2px solid #222", backgroundColor: "#1a1a1a" }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
@@ -494,7 +494,7 @@ const Home = () => {
             </section>
           </div>
           {/* Desktop characters section */}
-          <section className="mt-6 p-5" style={{ backgroundColor: "#151515", border: "2px solid #222", borderRadius: 18 }}>
+          <section className="mt-6 p-5" style={{ backgroundColor: "#1a1a1a", border: "2px solid #222", borderRadius: 18 }}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <button onClick={() => navigate("/characters")} className="text-[12px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
