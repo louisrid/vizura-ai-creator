@@ -393,7 +393,6 @@ const Home = () => {
                         style={{
                           borderRadius: 16,
                           backgroundColor: "#1e1e1e",
-                          backgroundColor: "#1e1e1e",
                         }}
                       >
                         <AspectRatio ratio={3 / 4}>
