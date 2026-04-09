@@ -7,6 +7,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import BackButton from "@/components/BackButton";
+import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 
@@ -308,6 +309,7 @@ const CharacterDetail = () => {
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[132px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           <BackButton />
+          <PageTitle className="mb-0">details</PageTitle>
         </div>
         <div className="flex flex-col gap-3">
           {contentTop(true)}
@@ -326,6 +328,7 @@ const CharacterDetail = () => {
       <main className="hidden md:flex relative z-[1] mx-auto w-full max-w-3xl px-10 pt-10 pb-10 flex-col min-h-screen">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
+          <PageTitle className="mb-0">details</PageTitle>
         </div>
         <div className="flex flex-col gap-4">
           {contentTop(false)}

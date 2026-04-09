@@ -196,9 +196,10 @@ const Header = () => {
         <TopGradientBar />
         {/* Full header gradient — smooth multi-stop fade */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-0"
+          className="pointer-events-none absolute inset-x-0 top-0 transition-opacity duration-200"
           style={{
             height: 120,
+            opacity: gradientOpacity,
             background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 20%, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.12) 88%, transparent 100%)",
           }}
         />
