@@ -534,39 +534,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
 
-    /* Reference */
-    if (isReferenceSlide) return (
-      <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <h2 className={SLIDE_TITLE_CLASS}>add a reference</h2>
-        <p className={`mt-2 ${HELPER_CLASS}`}>(optional)</p>
-        <div className="mt-5 flex w-full max-w-[11rem] md:max-w-[14rem] flex-col items-center gap-4">
-          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
-          {selections.referenceImage ? (
-            <div className="w-full">
-              <div className="relative w-full overflow-hidden" style={{ borderRadius: 14, border: "2px solid #2a2a2a", aspectRatio: "3/4" }}>
-                <img src={selections.referenceImage} alt="Reference" className="h-full w-full object-cover" />
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setSelections((p) => ({ ...p, referenceImage: null })); }}
-                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white text-xs font-bold"
-                >×</button>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-              className="flex w-full flex-col items-center justify-center gap-2 transition-colors duration-150"
-              style={{ aspectRatio: "3/4", borderRadius: 14, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
-            >
-              <Upload size={16} strokeWidth={2.5} className="text-white/30" />
-              <span className="text-[12px] font-extrabold lowercase text-white/30">upload image</span>
-            </button>
-          )}
-        </div>
-      </div>
-    );
-
     /* Create slide */
     if (isCreateSlide) {
       return (
