@@ -190,7 +190,7 @@ const History = () => {
                   </div>
                 </div>
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="block">
-                  <Button variant="outline" className="w-full h-12 bg-[#1a1a1a]">
+                  <Button variant="outline" className="w-full h-12 bg-[#1e1e1e]">
                     download <Download size={14} strokeWidth={2.5} />
                   </Button>
                 </a>

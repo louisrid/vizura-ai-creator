@@ -131,7 +131,7 @@ const Auth = () => {
           <PageTitle className="mb-0">sign in</PageTitle>
         </div>
 
-        <div className="rounded-2xl border-2 border-[#222] p-5 space-y-3" style={{ backgroundColor: "#1a1a1a" }}>
+        <div className="rounded-2xl border-2 border-[#222] p-5 space-y-3" style={{ backgroundColor: "#1e1e1e" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -170,7 +170,7 @@ const Auth = () => {
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[#222] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ backgroundColor: "#1a1a1a", borderRadius: 12 }}
+            style={{ backgroundColor: "#1e1e1e", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -182,7 +182,7 @@ const Auth = () => {
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[#222] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-            style={{ backgroundColor: "#1a1a1a", borderRadius: 12 }}
+            style={{ backgroundColor: "#1e1e1e", borderRadius: 12 }}
             disabled={submitting || googleLoading}
           />
 

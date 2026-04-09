@@ -242,7 +242,7 @@ const CharacterDetail = () => {
   const contentTop = (isMobile: boolean) => (
     <>
       {/* Box 1: Name + Photos */}
-      <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
+      <div style={{ backgroundColor: "#1e1e1e", borderRadius: 16 }} className={isMobile ? "p-5" : "p-6"}>
         <h1 className={`font-[900] lowercase tracking-tight text-white leading-none ${isMobile ? "text-[30px] mb-5" : "text-[36px] mb-6"}`}>
           {nameAge}
         </h1>
@@ -254,10 +254,10 @@ const CharacterDetail = () => {
       </div>
 
       {/* Details — compact */}
-      <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
+      <div style={{ backgroundColor: "#1e1e1e", borderRadius: 16 }} className={isMobile ? "px-4 py-3" : "p-4"}>
         <div className={`flex flex-wrap ${isMobile ? "gap-1.5" : "gap-2"}`}>
           {traits.map((t) => (
-            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1a1a1a", border: "2px solid #222" }}>
+            <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1e1e1e", border: "2px solid #222" }}>
               <span className={`block font-[800] uppercase leading-none mb-0.5 ${isMobile ? "text-[8px]" : "text-[10px]"}`} style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
               <span className={`block font-[800] lowercase text-white leading-none ${isMobile ? "text-[12px]" : "text-[14px]"}`}>{t.value}</span>
             </div>
