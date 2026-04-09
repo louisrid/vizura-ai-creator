@@ -577,7 +577,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Content area */}
         <div className="absolute inset-0 flex items-center justify-center px-6 md:px-12" style={{ paddingBottom: isHeroSlide ? "0%" : "0%", paddingTop: isHeroSlide ? "5%" : "0%" }}>
-          <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center" style={{ marginTop: isHeroSlide ? 0 : "-5vh" }}>
+          <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[4vh]">
             <AnimatePresence mode="wait" custom={slideDirection}>
               <motion.div
                 key={step}
