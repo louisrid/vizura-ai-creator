@@ -174,6 +174,10 @@ function buildCharacterTraits(char: any): string {
   const bodyKey = (char.body || "regular").toLowerCase();
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
+  const bustKey = (char.bust_size || "regular").toLowerCase();
+  const bustDesc = BUST_SIZE_MAP[bustKey] || BUST_SIZE_MAP.regular;
+  parts.push(bustDesc);
+
   if (bodyKey === "slim") {
     parts.push("lean angular face, no roundness or puffiness in face");
   } else if (bodyKey === "regular" || bodyKey === "average") {
