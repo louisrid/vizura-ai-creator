@@ -99,6 +99,10 @@ const Header = () => {
 
   const isLoggedIn = !loading && !!user?.id;
 
+  // Detect desktop
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+  const menuWidth = isDesktop ? 280 : 190;
+
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = open && dropdownPos ? createPortal(
     <AnimatePresence>
@@ -113,10 +117,10 @@ const Header = () => {
           style={{
             top: dropdownPos.top,
             right: dropdownPos.right,
-            width: 190,
+            width: menuWidth,
             backgroundColor: "#000000",
             border: "2px solid #1a1a1a",
-            borderRadius: 16,
+            borderRadius: isDesktop ? 20 : 16,
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
           }}
@@ -124,13 +128,13 @@ const Header = () => {
           <div className="relative">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 transition-colors duration-150 hover:opacity-80"
+              className="absolute top-3 right-3 md:top-4 md:right-4 transition-colors duration-150 hover:opacity-80"
               style={{ color: "rgba(255,255,255,0.35)" }}
               aria-label="close menu"
             >
-              <X size={14} strokeWidth={2.5} />
+              <X size={14} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" />
             </button>
-            <div className="py-1">
+            <div className="py-1 md:py-2">
               {menuItems.map((item) => {
                 const isActive = location.pathname === item.path && !item.state;
                 return (
@@ -148,10 +152,10 @@ const Header = () => {
                         handleNav(item.path);
                       }
                     }}
-                    className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
+                    className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
                     style={{
-                      padding: "10px 14px",
-                      fontSize: 13,
+                      padding: isDesktop ? "14px 20px" : "10px 14px",
+                      fontSize: isDesktop ? 15 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
                       color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
@@ -160,7 +164,7 @@ const Header = () => {
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                    <item.icon size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
+                    <item.icon size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
                     {item.label}
                   </button>
                 );
@@ -168,12 +172,12 @@ const Header = () => {
               {user && (
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left flex items-center gap-2.5 transition-colors duration-150"
-                  style={{ color: "#ff4444", padding: "10px 14px", fontSize: 13, fontWeight: 700, textTransform: "lowercase" }}
+                  className="w-full text-left flex items-center gap-2.5 md:gap-3.5 transition-colors duration-150"
+                  style={{ color: "#ff4444", padding: isDesktop ? "14px 20px" : "10px 14px", fontSize: isDesktop ? 15 : 13, fontWeight: 700, textTransform: "lowercase" }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(250,204,21,0.06)")}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
-                  <LogOut size={18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
+                  <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                   log out
                 </button>
               )}
