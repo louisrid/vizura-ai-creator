@@ -171,75 +171,75 @@ const Header = () => {
     <>
       {/* Spacer that reserves header height in document flow */}
       <div style={{ height: 80 }} aria-hidden="true" />
-      {/* Gradient backdrop */}
-      <div
-        className="fixed top-0 left-0 right-0 pointer-events-none"
-        style={{
-          zIndex: 9989,
-          height: 104,
-          background: "linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background) / 0.98) 15%, hsl(var(--background) / 0.94) 30%, hsl(var(--background) / 0.85) 45%, hsl(var(--background) / 0.68) 60%, hsl(var(--background) / 0.42) 75%, hsl(var(--background) / 0.15) 90%, transparent 100%)",
-        }}
-      >
-        <TopGradientBar />
-      </div>
-      {/* Controls layer — above gradient */}
       <header
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
       >
-        <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-2">
-          <div className="flex items-center gap-2.5 md:gap-3.5">
-            <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
-              vizura
-            </button>
-            {isLoggedIn && (
-              <button
-                onClick={() => navigate("/account")}
-                className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[38px] md:h-[38px]"
-                style={{
-                  borderRadius: "50%",
-                  backgroundColor: "hsl(var(--card))",
-                  border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "rgba(255,255,255,0.25)"}`,
-                }}
-                aria-label="my account"
-              >
-                <User size={16} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
+        <TopGradientBar />
+        {/* Solid black bar behind controls */}
+        <div style={{ backgroundColor: "hsl(var(--background))" }}>
+          <div className="max-w-lg md:max-w-5xl mx-auto flex items-center justify-between px-[14px] md:px-10 pt-6 pb-3">
+            <div className="flex items-center gap-2.5 md:gap-3.5">
+              <button onClick={() => handleNav("/")} className="text-[26px] md:text-[32px] font-[900] lowercase text-white tracking-tight active:opacity-80 transition-opacity duration-150">
+                vizura
               </button>
-            )}
-          </div>
+              {isLoggedIn && (
+                <button
+                  onClick={() => navigate("/account")}
+                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[38px] md:h-[38px]"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "hsl(var(--card))",
+                    border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "rgba(255,255,255,0.25)"}`,
+                  }}
+                  aria-label="my account"
+                >
+                  <User size={16} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
+                </button>
+              )}
+            </div>
 
-          <div className="flex items-center gap-3 md:gap-4">
-            <button
-              onClick={() => navigate("/top-ups")}
-              className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 md:py-2 active:scale-95 transition-transform duration-150"
-              style={{
-                backgroundColor: "hsl(var(--card))",
-                border: "2px solid #00e0ff",
-                borderRadius: 10,
-              }}
-            >
-              <Gem size={13} strokeWidth={2.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
-              <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white">{gems}</span>
-            </button>
+            <div className="flex items-center gap-3 md:gap-4">
+              <button
+                onClick={() => navigate("/top-ups")}
+                className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-3.5 py-1.5 md:py-2 active:scale-95 transition-transform duration-150"
+                style={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "2px solid #00e0ff",
+                  borderRadius: 10,
+                }}
+              >
+                <Gem size={13} strokeWidth={2.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white">{gems}</span>
+              </button>
 
-            <button
-              ref={menuBtnRef}
-              onClick={() => setOpen(!open)}
-              className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[50px] md:h-[50px]"
-              style={{
-                borderRadius: 12,
-                backgroundColor: "#1e1e1e",
-              }}
-              aria-label="open menu"
-            >
-              <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
-                <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
-                <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
-                <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
-              </svg>
-            </button>
+              <button
+                ref={menuBtnRef}
+                onClick={() => setOpen(!open)}
+                className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[50px] md:h-[50px]"
+                style={{
+                  borderRadius: 12,
+                  backgroundColor: "#1e1e1e",
+                }}
+                aria-label="open menu"
+              >
+                <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
+                  <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
+                  <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
+                  <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
+        {/* Gradient fade below controls */}
+        <div
+          className="pointer-events-none"
+          style={{
+            height: 28,
+            background: "linear-gradient(to bottom, hsl(var(--background)), transparent)",
+          }}
+        />
       </header>
       {menuDropdown}
     </>
