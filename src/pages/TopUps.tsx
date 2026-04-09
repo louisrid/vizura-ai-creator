@@ -34,20 +34,7 @@ const TopUps = () => {
   if (!loading && !user) return null;
 
   const handleBuy = async (plan: typeof plans[number]) => {
-    setBuying(plan.label);
-    try {
-      const { data, error } = await supabase.functions.invoke("add-credits", {
-        body: { amount: plan.gems },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      await refetch();
-      toast.success(`${plan.gems} gems added!`);
-    } catch (e: any) {
-      toast.error(e.message || "failed to add gems");
-    } finally {
-      setBuying(null);
-    }
+    toast("coming soon");
   };
 
   return (
