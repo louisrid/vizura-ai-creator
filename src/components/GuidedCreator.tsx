@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Upload, Gem } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
