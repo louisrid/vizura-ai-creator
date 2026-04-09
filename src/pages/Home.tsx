@@ -543,7 +543,7 @@ const Home = () => {
                     key={char.id}
                     type="button"
                     onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden active:scale-[0.98] transition-transform"
+                    className="relative overflow-hidden"
                     style={{ borderRadius: 16, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                   >
                     <AspectRatio ratio={3 / 4}>
