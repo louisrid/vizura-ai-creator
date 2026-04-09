@@ -699,6 +699,7 @@ serve(async (req) => {
 
       const traits = buildCharacterTraits(charData);
       const dbBodyType = (charData.body || "regular").toLowerCase();
+      const dbBustSize = (charData.bust_size || "regular").toLowerCase();
 
       // Use the fresh face_image_url from DB, not the client-provided one
       const freshFaceUrl = charData.face_image_url;
@@ -706,7 +707,7 @@ serve(async (req) => {
 
       try {
         const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-          freshFaceUrl, traits, dbBodyType, XAI_API_KEY, adminClient, userId, regenerateSingle
+          freshFaceUrl, traits, dbBodyType, dbBustSize, XAI_API_KEY, adminClient, userId, regenerateSingle
         );
 
         const updates: Record<string, string | null> = {};
@@ -795,6 +796,7 @@ serve(async (req) => {
       console.log("Face URL:", selectedFaceUrl.slice(0, 80));
 
       let dbBodyType = "regular";
+      let dbBustSize = "regular";
       let traits = prompt;
       if (angleCharacterId) {
         const { data: charData } = await adminClient
@@ -806,13 +808,14 @@ serve(async (req) => {
         if (charData) {
           traits = buildCharacterTraits(charData);
           dbBodyType = (charData.body || "regular").toLowerCase();
+          dbBustSize = (charData.bust_size || "regular").toLowerCase();
           console.log("Built character traits from DB:", traits.slice(0, 120));
-          console.log("Body type from DB:", dbBodyType);
+          console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
         }
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, traits, dbBodyType, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
+        selectedFaceUrl, traits, dbBodyType, dbBustSize, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
       );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
