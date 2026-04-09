@@ -343,11 +343,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     updateCharacterName(RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)]);
   }, [updateCharacterName]);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setSelections((p) => ({ ...p, referenceImage: URL.createObjectURL(file) }));
-  };
 
   const advance = useCallback(() => {
     if (animating.current) return;
