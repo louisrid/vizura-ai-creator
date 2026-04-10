@@ -95,9 +95,10 @@ const AnimatedRings = ({ t }: { t: number }) => (
 );
 
 /* ── Nav arrow (cyan/blue style) ── */
-const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean }>(
-  ({ direction, onClick, disabled }, ref) => {
+const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }>(
+  ({ direction, onClick, disabled, colorOverride }, ref) => {
     const isForward = direction === "right";
+    const fillColor = colorOverride || "#ffe603";
     return (
       <button
         ref={ref}
@@ -107,10 +108,10 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
         style={{
           borderRadius: 16,
-          backgroundColor: isForward ? "#ffe603" : "#000000",
-          border: isForward ? "none" : `2px solid #ffe603`,
+          backgroundColor: isForward ? fillColor : "#000000",
+          border: isForward ? "none" : `2px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#000" : "#ffe603",
+          color: isForward ? "#000" : fillColor,
         }}
       >
         {direction === "left" ? (
@@ -652,7 +653,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
                 <NavArrow direction="left" onClick={goBack} />
               </motion.div>
-              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} />
+              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
             </div>
             {/* Home exit icon — white, matching arrow stroke weight */}
             <button
