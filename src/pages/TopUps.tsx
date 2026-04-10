@@ -20,7 +20,7 @@ const TopUps = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const [buying, setBuying] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -32,8 +32,6 @@ const TopUps = () => {
   }, [location.search, refetch]);
 
   if (!loading && !user) return null;
-
-  const [buying, setBuying] = useState(false);
 
   const handleBuy = async (plan: typeof plans[number]) => {
     if (buying) return;
