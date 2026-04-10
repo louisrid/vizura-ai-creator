@@ -135,18 +135,12 @@ const MyCharacters = () => {
               </AspectRatio>
             </button>
 
-            <AnimatePresence>
               {characters.map((char) => {
                 const isNew = newCharId === char.id;
                 const hasFace = char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg");
                 return (
-                  <motion.button
+                  <button
                     key={char.id}
-                    layout
-                    initial={{ opacity: 1, scale: 1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
                     onClick={() => navigate(`/characters/${char.id}`)}
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{
@@ -180,10 +174,9 @@ const MyCharacters = () => {
                         age {displayAge(char.id, char.age)}
                       </span>
                     </div>
-                  </motion.button>
+                  </button>
                 );
               })}
-            </AnimatePresence>
           </div>
         )}
       </main>
