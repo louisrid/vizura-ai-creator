@@ -425,7 +425,7 @@ const ChooseFace = () => {
             hair: sanitiseText(draft.hairColour || "", 50),
             eye: sanitiseText(draft.eye || "", 50),
             body: sanitiseText(draft.bodyType || "", 50),
-            style: sanitiseText(draft.makeup || "", 50),
+            style: "",
             description: sanitiseText(`${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
             generation_prompt: prompt || "",
             face_image_url: faceUrl,
