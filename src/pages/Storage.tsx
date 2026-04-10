@@ -202,7 +202,7 @@ const Storage = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-[341px] md:max-w-[585px]"
-              style={{ marginTop: "8vh" }}
+              style={{ marginTop: "10vh" }}
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
 
