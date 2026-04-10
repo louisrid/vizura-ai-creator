@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Loader2, Trash2, Lock, RefreshCw, Camera, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,7 @@ import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
+import { displayAge } from "@/lib/displayAge";
 
 interface Character {
   id: string;
@@ -192,7 +193,7 @@ const CharacterDetail = () => {
     { label: "skin", value: skinLabel || "—" },
     { label: "body", value: character.body || "—" },
     { label: "bust", value: character.bust_size || "regular" },
-    { label: "age", value: character.age || "—" },
+    { label: "age", value: displayAge(character.age) },
     { label: "hair colour", value: character.hair || "—" },
     { label: "hair style", value: hairStyle || "—" },
     { label: "eyes", value: character.eye || "—" },
@@ -202,7 +203,7 @@ const CharacterDetail = () => {
   const isValidImg = (url: string | null | undefined) =>
     url && !url.startsWith("data:image/svg") && !url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
 
-  const nameAge = [character.name || "unnamed", character.age].filter(Boolean).join(", ");
+  const nameAge = [character.name || "unnamed", displayAge(character.age)].filter(Boolean).join(", ");
 
   const imgSlot = (
     url: string | null | undefined,
