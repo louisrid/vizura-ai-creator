@@ -192,7 +192,7 @@ const CharacterDetail = () => {
   if (character.age) traits.push({ label: "age", value: character.age });
   if (skinLabel) traits.push({ label: "skin", value: skinLabel });
   if (character.body) traits.push({ label: "body", value: character.body });
-  if (character.bust_size && character.bust_size !== "regular") traits.push({ label: "bust", value: character.bust_size });
+  traits.push({ label: "bust", value: character.bust_size || "regular" });
   if (hairStyle) traits.push({ label: "hair style", value: hairStyle });
   if (character.hair) traits.push({ label: "hair colour", value: character.hair });
   if (character.eye) traits.push({ label: "eyes", value: character.eye });
@@ -255,11 +255,11 @@ const CharacterDetail = () => {
             </div>
           </div>
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="px-4 py-3">
-            <div className="flex flex-wrap gap-1.5">
+            <div className="grid grid-cols-4 gap-1.5">
               {traits.map((t) => (
-                <div key={t.label} className="rounded-[10px] px-3 py-1.5 text-center" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}>
-                  <span className="block font-[800] uppercase leading-none mb-0.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                  <span className="block font-[800] lowercase text-white leading-none text-[12px]">{t.value}</span>
+                <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
+                  <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                  <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
                 </div>
               ))}
             </div>
