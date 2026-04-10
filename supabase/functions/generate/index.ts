@@ -410,18 +410,18 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
     "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
+    "visible eyeshadow, thick mascara, defined eyeliner, blush, influencer makeup",
   ];
 
-   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, matte skin with visible pores and colour variation, long styled hair past shoulders, lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
+   const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -503,12 +503,12 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  thin: "petite slim frame, B cup, toned flat stomach, narrow hips",
-  slim: "petite slim frame, B cup, toned flat stomach, narrow hips",
-  regular: "hourglass figure, C cup, defined waist, feminine hips",
-  average: "hourglass figure, C cup, defined waist, feminine hips",
-  curvy: "voluptuous figure, D cup, wider hips, natural curves, soft full thighs",
-  thick: "voluptuous figure, D cup, wider hips, natural curves, soft full thighs",
+  thin: "petite frame, B cup, toned stomach, narrow hips",
+  slim: "petite frame, B cup, toned stomach, narrow hips",
+  regular: "hourglass figure, C-D cup, defined waist, feminine hips",
+  average: "hourglass figure, C-D cup, defined waist, feminine hips",
+  curvy: "voluptuous, D-DD cup, wider hips, natural curves, soft thighs",
+  thick: "voluptuous, D-DD cup, wider hips, natural curves, soft thighs",
 };
 
 /* ── bust size descriptor ── */
