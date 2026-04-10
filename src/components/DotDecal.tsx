@@ -13,7 +13,7 @@ const DotDecal = () => {
         const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
         if (dist > radius) continue;
         const normalised = dist / radius;
-        const opacity = 0.52 * (1 - normalised * normalised);
+        const opacity = 0.55 * (1 - normalised * normalised);
         if (opacity > 0.01) {
           result.push({ x, y, opacity });
         }
@@ -23,23 +23,26 @@ const DotDecal = () => {
   }, []);
 
   return (
-    <svg
-      className="pointer-events-none absolute inset-0 w-full h-full"
-      style={{ zIndex: 0 }}
-      preserveAspectRatio="none"
-    >
-      {dots.map((d, i) => (
-        <circle
-          key={i}
-          cx={`${(d.x / 430) * 100}%`}
-          cy={d.y}
-          r={1.4}
-          fill="#ffe603"
-          opacity={d.opacity}
-          className="md:opacity-[0.3]"
-        />
-      ))}
-    </svg>
+    <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="none"
+      >
+        {dots.map((d, i) => (
+          <circle
+            key={i}
+            cx={`${(d.x / 430) * 100}%`}
+            cy={d.y}
+            r={1.4}
+            fill="#ffe603"
+            opacity={d.opacity}
+            className="md:opacity-[0.3]"
+          />
+        ))}
+      </svg>
+      {/* Black overlay on top of dots — 28% opacity */}
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.28)" }} />
+    </div>
   );
 };
 
