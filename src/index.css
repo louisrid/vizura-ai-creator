@@ -22,7 +22,7 @@
     --muted: 0 0% 13%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 50 98% 50%;
+    --accent: 48 97% 53%;
     --accent-foreground: 0 0% 0%;
 
     --border: 0 0% 10%;
@@ -32,8 +32,8 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* neon yellow accent — #fcd303 */
-    --neon-yellow: 50 98% 50%;
+    /* neon yellow accent — #facc15 */
+    --neon-yellow: 48 97% 53%;
     --neon-yellow-foreground: 0 0% 0%;
 
     /* loader bar — light blue */
@@ -56,7 +56,7 @@
     --ambient-blue-3: 231 74% 38%;
 
     --loader-cyan: 189 100% 50%;
-    --loader-gold: 50 98% 50%;
+    --loader-gold: 48 97% 53%;
     --loader-green: 130 85% 49%;
     --loader-pink: 330 80% 55%;
     --loader-blue: 210 100% 55%;
@@ -201,7 +201,7 @@ button:active, a[role="button"]:active, [role="button"]:active {
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(252, 211, 3, 0.15);
+    box-shadow: 0 8px 24px -8px rgba(250, 204, 21, 0.15);
   }
 
   /* Subtle border glow on hover */
@@ -209,6 +209,6 @@ button:active, a[role="button"]:active, [role="button"]:active {
     transition: border-color 0.2s ease-out;
   }
   .hover-glow:hover {
-    border-color: rgba(252, 211, 3, 0.4) !important;
+    border-color: rgba(250, 204, 21, 0.4) !important;
   }
 }

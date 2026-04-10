@@ -8,7 +8,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
-const Y = "#fcd303";
+const Y = "#facc15";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.75;
@@ -107,10 +107,10 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
         style={{
           borderRadius: 16,
-          backgroundColor: isForward ? "#fcd303" : "#000000",
-          border: isForward ? "none" : `2px solid #fcd303`,
+          backgroundColor: isForward ? "#facc15" : "#000000",
+          border: isForward ? "none" : `2px solid #facc15`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#000" : "#fcd303",
+          color: isForward ? "#000" : "#facc15",
         }}
       >
         {direction === "left" ? (
@@ -429,7 +429,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={() => navigateTo(`/auth${window.location.search}`)}
             className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[22px] md:text-[26px]"
             style={{
-              background: "#000000", border: "2px solid #fcd303",
+              background: "#000000", border: "2px solid #facc15",
               borderRadius: 12, fontWeight: 900, color: "#ffffff",
               textTransform: "lowercase" as const, cursor: "pointer",
             }}

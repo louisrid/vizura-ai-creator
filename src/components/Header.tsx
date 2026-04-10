@@ -168,14 +168,14 @@ const Header = () => {
                         fontSize: isDesktop ? 17 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
-                        color: isActive ? "#fcd303" : "rgba(255,255,255,0.9)",
+                        color: isActive ? "#facc15" : "rgba(255,255,255,0.9)",
                         backgroundColor: "transparent",
                         borderRadius,
                       }}
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                      <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#fcd303" }} />
+                      <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#facc15" }} />
                       {item.label}
                     </button>
                   </div>
@@ -231,7 +231,7 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-6 md:pt-8 pb-3">
+          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-7 md:pt-9 pb-3">
             <div className="flex items-center gap-1.5 md:gap-2">
               <button onClick={() => handleNav("/")} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
