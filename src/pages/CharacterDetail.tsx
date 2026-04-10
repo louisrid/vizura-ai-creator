@@ -188,15 +188,16 @@ const CharacterDetail = () => {
   };
   const hairStyle = getHairStyle(character.description);
 
-  const traits: { label: string; value: string }[] = [];
-  if (character.age) traits.push({ label: "age", value: character.age });
-  if (skinLabel) traits.push({ label: "skin", value: skinLabel });
-  if (character.body) traits.push({ label: "body", value: character.body });
-  traits.push({ label: "bust", value: character.bust_size || "regular" });
-  if (hairStyle) traits.push({ label: "hair style", value: hairStyle });
-  if (character.hair) traits.push({ label: "hair colour", value: character.hair });
-  if (character.eye) traits.push({ label: "eyes", value: character.eye });
-  if (character.style) traits.push({ label: "makeup", value: character.style });
+  const traits: { label: string; value: string }[] = [
+    { label: "skin", value: skinLabel || "—" },
+    { label: "body", value: character.body || "—" },
+    { label: "bust", value: character.bust_size || "regular" },
+    { label: "age", value: character.age || "—" },
+    { label: "hair colour", value: character.hair || "—" },
+    { label: "hair style", value: hairStyle || "—" },
+    { label: "eyes", value: character.eye || "—" },
+    { label: "makeup", value: character.style || "—" },
+  ];
 
   const isValidImg = (url: string | null | undefined) =>
     url && !url.startsWith("data:image/svg") && !url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
