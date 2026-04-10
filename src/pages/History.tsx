@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { displayAge } from "@/lib/displayAge";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, X, Calendar, Wand2, User, Camera } from "lucide-react";
@@ -45,7 +46,7 @@ const History = () => {
 
       const charMap = new Map<string, string>();
       (characters || []).forEach((c: any) => {
-        charMap.set(c.id, c.name || `${c.hair} ${c.eye} ${c.age}`);
+        charMap.set(c.id, c.name || `${c.hair} ${c.eye} ${displayAge(c.age)}`);
       });
 
       const allItems: HistoryItem[] = [];
