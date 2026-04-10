@@ -417,7 +417,7 @@ const ChooseFace = () => {
         const raw = sessionStorage.getItem(STORAGE_KEY);
         if (raw) {
           const draft = JSON.parse(raw);
-            const charData = {
+          console.log("[ChooseFace] Draft from sessionStorage:", { bustSize: draft.bustSize, bodyType: draft.bodyType });
             user_id: currentUser.id,
             name: sanitiseText(draft.characterName || "", 100) || "new character",
             country: sanitiseText(draft.skin || "", 50),

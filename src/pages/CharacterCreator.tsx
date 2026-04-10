@@ -222,7 +222,7 @@ const CharacterCreator = () => {
       description: selections.description || "",
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
-
+    console.log("[CharacterCreator] Draft saved with bustSize:", draft.bustSize);
     const sk = selections.skin || "tan";
     const bt = selections.bodyType || "regular";
     const hs = selections.hairStyle || "long straight";
