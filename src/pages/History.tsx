@@ -61,7 +61,7 @@ const History = () => {
         }
 
         (gen.image_urls || []).forEach((url: string, i: number) => {
-          if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return;
+          if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
           allItems.push({
             id: `${gen.id}-${i}`,
             url,
@@ -118,7 +118,7 @@ const History = () => {
                 onClick={() => setExpanded(item)}
                 className="w-full text-left rounded-2xl border-[2px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
               >
-                <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" />
+                <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={() => setItems((prev) => prev.filter((x) => x.id !== item.id))} />
                 <div className="p-4 space-y-2">
                   <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed">
                     {item.prompt || "no prompt"}

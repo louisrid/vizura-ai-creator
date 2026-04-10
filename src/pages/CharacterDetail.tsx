@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Lock, RefreshCw, Camera, X, Check } from "lucide-react";
+import { Loader2, Trash2, Lock, RefreshCw, Camera, Check } from "lucide-react";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -419,13 +420,7 @@ const CharacterDetail = () => {
               className="relative w-full max-w-sm md:max-w-md"
               style={{ backgroundColor: "#000000", borderRadius: 16, border: "2px solid #1a1a1a", padding: "28px 24px 24px" }}
             >
-              <button
-                onClick={() => setShowDelete(false)}
-                className="absolute flex items-center justify-center"
-                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
-              >
-                <X size={16} strokeWidth={3} color="#fff" />
-              </button>
+              <ModalCloseButton onClick={() => setShowDelete(false)} />
 
               <h2 className="text-lg md:text-xl font-[900] lowercase text-white leading-[1.1] mb-2 text-center">
                 delete this character?
