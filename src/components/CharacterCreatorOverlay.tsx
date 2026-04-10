@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 
-const Y = "#ffe414";
+const Y = "#fce303";
 
 const categories = [
   { key: "skin", label: "skin", options: ["white", "tan", "asian", "black"] },

@@ -168,14 +168,14 @@ const Header = () => {
                         fontSize: isDesktop ? 17 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
-                        color: isActive ? "#ffe414" : "rgba(255,255,255,0.9)",
+                        color: isActive ? "#fce303" : "rgba(255,255,255,0.9)",
                         backgroundColor: "transparent",
                         borderRadius,
                       }}
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                      <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe414" }} />
+                      <item.icon size={isDesktop ? 22 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#fce303" }} />
                       {item.label}
                     </button>
                   </div>
