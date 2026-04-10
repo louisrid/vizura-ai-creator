@@ -201,7 +201,7 @@ button:active, a[role="button"]:active, [role="button"]:active {
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(250, 204, 21, 0.15);
+    box-shadow: 0 8px 24px -8px rgba(255, 228, 20, 0.15);
   }
 
   /* Subtle border glow on hover */
@@ -209,6 +209,6 @@ button:active, a[role="button"]:active, [role="button"]:active {
     transition: border-color 0.2s ease-out;
   }
   .hover-glow:hover {
-    border-color: rgba(250, 204, 21, 0.4) !important;
+    border-color: rgba(255, 228, 20, 0.4) !important;
   }
 }
