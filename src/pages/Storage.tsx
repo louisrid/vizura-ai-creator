@@ -170,8 +170,8 @@ const Storage = () => {
                   href={img.url}
                   download={`facefox-${img.id}.png`}
                   target="_blank"
-                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid #1a1a1a", borderTop: "none" }}
+                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
+                  style={{ backgroundColor: "#000", color: "#ffffff", border: "2px solid rgba(255,255,255,0.15)", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
@@ -192,7 +192,8 @@ const Storage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center px-6 pt-24 pb-6"
+            className="fixed inset-0 z-50 flex items-center justify-center px-6 pb-6"
+            onClick={(e) => { if (e.target === e.currentTarget) setExpanded(null); }}
             style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
           >
             <motion.div
@@ -200,14 +201,15 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[280px] md:max-w-[480px]"
+              className="relative w-full max-w-[322px] md:max-w-[552px]"
+              style={{ marginTop: "5vh" }}
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
 
               <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                  <div className="px-4 md:px-5 py-3 md:py-4 flex items-center justify-center">
+                  <div className="px-4 md:px-5 py-5 md:py-6 flex items-center justify-center">
                     <p className="text-[12px] md:text-[14px] font-[800] lowercase leading-snug text-white text-center">
                       {expanded.prompt}
                     </p>

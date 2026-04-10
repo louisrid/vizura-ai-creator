@@ -313,17 +313,24 @@ const Index = () => {
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      if (data) {
+      if (data && data.length > 0) {
         setCharacters(data as Character[]);
-        const latestId = data[0]?.id;
-        if (latestId) {
-          setSelectedCharId(latestId);
-          sessionStorage.setItem("vizura_last_selected_character_id", latestId);
-        }
+        // Priority: preselected > last used (persisted) > most recent
+        const persisted = sessionStorage.getItem("vizura_last_selected_character_id") ?? "";
+        const validPersisted = data.some((c: any) => c.id === persisted);
+        const pickId = preselectedCharacterId && data.some((c: any) => c.id === preselectedCharacterId)
+          ? preselectedCharacterId
+          : validPersisted
+            ? persisted
+            : data[0].id;
+        setSelectedCharId(pickId);
+        sessionStorage.setItem("vizura_last_selected_character_id", pickId);
+      } else if (data) {
+        setCharacters([]);
       }
     };
     fetchCharacters();
-  }, [user]);
+  }, [user, preselectedCharacterId]);
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);

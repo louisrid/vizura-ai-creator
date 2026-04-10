@@ -170,7 +170,7 @@ const ProgressBarLoader = ({
 
   return (
     <div
-      className="relative z-10 flex flex-col items-center gap-5 px-2 -translate-y-8 md:-translate-y-12"
+      className="relative z-10 flex flex-col items-center gap-5 px-2"
       style={{ ...contentStyle, overflow: "hidden", touchAction: "none" }}
     >
       <motion.span
