@@ -193,7 +193,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
                   type="button"
                   onClick={() => { onChange(opt.value); setOpen(false); }}
                   className={`flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase ${value === opt.value ? "bg-white/5" : "hover:bg-white/5"}`}
-                  style={{ color: value === opt.value ? "#ffe603" : "#fff" }}
+                  style={{ color: value === opt.value ? "#ffdd00" : "#fff" }}
                 >
                   {opt.label}
                 </button>
@@ -414,7 +414,7 @@ const Index = () => {
               )}
               <span
                 className="text-lg font-[900] lowercase truncate"
-                style={{ color: selectedCharId === c.id ? "#ffe603" : "#fff" }}
+                style={{ color: selectedCharId === c.id ? "#ffdd00" : "#fff" }}
               >
                 {c.name || "unnamed"}
               </span>
@@ -434,7 +434,7 @@ const Index = () => {
               <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                 <span className="text-xs">+</span>
               </div>
-              <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
+              <span className="text-lg font-[900] lowercase" style={{ color: "#ffdd00" }}>create character</span>
             </button>
           )}
         </motion.div>
@@ -468,7 +468,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 12, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 12, backgroundColor: "#ffdd00" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -498,7 +498,7 @@ const Index = () => {
                   <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffdd00" }}>
                       <span className="text-xl">🪄</span>
                     </div>
                   </div>
@@ -552,7 +552,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 14, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 14, backgroundColor: "#ffdd00" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -582,7 +582,7 @@ const Index = () => {
                   <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffdd00" }}>
                       <span className="text-2xl">🪄</span>
                     </div>
                   </div>
