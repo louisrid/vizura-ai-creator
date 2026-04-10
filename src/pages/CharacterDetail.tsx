@@ -273,7 +273,7 @@ const CharacterDetail = () => {
           <div className="flex flex-col gap-3">
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-xl"
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-10 text-xs"
               style={{ color: "#000", borderRadius: 12, backgroundColor: "#ffe603" }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
@@ -323,7 +323,7 @@ const CharacterDetail = () => {
             <div className="flex-1" />
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-16 text-xl"
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-12 text-sm"
               style={{ color: "#000", borderRadius: 12, backgroundColor: "#ffe603" }}
             >
               create photo <Camera size={18} strokeWidth={2.5} />
