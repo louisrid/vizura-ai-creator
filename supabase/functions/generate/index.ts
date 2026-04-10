@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores, small-forehead";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -410,9 +410,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, matte skin with visible pores, natural hair with subtle sheen, SAME hair style and colour as described",
-    "very large tall doe-eyes positioned low on face, small-forehead, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
-    "large almond cat-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, small-forehead, natural hair with satin finish, SAME hair style and colour as described",
+    "large round doe-eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with subtle sheen, SAME hair style and colour as described",
+    "very large tall doe-eyes positioned low on face, low-set hairline, small delicate nose, full tall lips with bare pink tint, soft round face, smooth chin, natural hair with matte finish, SAME hair style and colour as described",
+    "almond-shaped bright eyes positioned in centre of face, small delicate nose, full pouty lips, heart-shaped face, low-set hairline, natural hair with satin finish, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
