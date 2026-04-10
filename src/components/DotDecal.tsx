@@ -13,7 +13,7 @@ const DotDecal = () => {
         const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
         if (dist > radius) continue;
         const normalised = dist / radius;
-        const opacity = 0.55 * (1 - normalised * normalised);
+        const opacity = 0.52 * (1 - normalised * normalised);
         if (opacity > 0.01) {
           result.push({ x, y, opacity });
         }
@@ -34,7 +34,7 @@ const DotDecal = () => {
           cx={`${(d.x / 430) * 100}%`}
           cy={d.y}
           r={1.4}
-          fill="#c9b43a"
+          fill="#ffe603"
           opacity={d.opacity}
           className="md:opacity-[0.3]"
         />
