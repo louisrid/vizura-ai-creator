@@ -763,16 +763,13 @@ const ChooseFace = () => {
                     ].filter(t => t.value);
                     if (traitItems.length === 0) return null;
                     return (
-                      <div className="mt-4 md:mt-6">
-                        <div className="flex flex-wrap gap-1.5 md:gap-2 justify-center">
+                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }}>
+                        <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
-                            <span
-                              key={t.label}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] md:text-[12px] font-[900] lowercase"
-                              style={{ backgroundColor: "#ffe603", color: "#000", borderRadius: 999 }}
-                            >
-                              <span style={{ opacity: 0.5 }}>{t.label}:</span> {t.value}
-                            </span>
+                            <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
+                              <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                              <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
+                            </div>
                           ))}
                         </div>
                       </div>

@@ -72,12 +72,15 @@ const ProgressBarLoader = ({
     completedRef.current = true;
     accelStartRef.current = null;
     setPct(100);
-    setIsComplete(true);
+    // Delay showing "tap to continue" until the CSS bar transition (120ms) visually reaches 100%
+    window.setTimeout(() => {
+      setIsComplete(true);
 
-    if (!requireTapToContinue && !continuedRef.current) {
-      continuedRef.current = true;
-      window.setTimeout(() => onCompleteRef.current?.(), 250);
-    }
+      if (!requireTapToContinue && !continuedRef.current) {
+        continuedRef.current = true;
+        window.setTimeout(() => onCompleteRef.current?.(), 250);
+      }
+    }, 150);
   }, [requireTapToContinue, setPct]);
 
   const updateProgress = useCallback((timestamp: number) => {
