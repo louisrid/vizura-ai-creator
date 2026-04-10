@@ -475,113 +475,190 @@ const Home = () => {
           </section>
         </main>
 
-        {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-10 pt-14 pb-[280px]">
+        {/* Desktop layout — matches mobile structure, scaled up */}
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-14 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
           <div className="mt-4 mb-10" style={{ width: 70, height: 7, borderRadius: 3, backgroundColor: "#facc15" }} />
-          <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-4 flex flex-col gap-4">
-              <button
-                type="button"
-                onClick={handleOpenCreator}
-                className="flex h-20 items-center justify-center gap-3 text-[26px] font-[900] lowercase text-black transition-all active:scale-[0.98] hover-lift"
-                style={{ backgroundColor: "#facc15", borderRadius: 14 }}
-              >
-                create character
-              </button>
-              <button
-                type="button"
-                onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
-                className="relative flex h-20 items-center justify-center gap-3 text-[26px] font-[900] lowercase text-white transition-all active:scale-[0.98] overflow-hidden hover-glow"
-                style={{ backgroundColor: "#000000", borderRadius: 14 }}
-              >
-                <div className="absolute inset-0" style={{ backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 14 }} />
-                <span className="relative z-[1]">create photo</span>
+
+          {/* Two action buttons */}
+          <div className="flex gap-3 mb-8">
+            <button
+              type="button"
+              onClick={handleOpenCreator}
+              className="flex items-center justify-between active:scale-[0.98] transition-transform hover-lift"
+              style={{
+                flex: "1 1 0%",
+                minWidth: 0,
+                backgroundColor: "#facc15",
+                padding: "22px 20px",
+                borderRadius: 14,
+              }}
+            >
+              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-hidden hover-lift"
+              style={{
+                flex: "1 1 0%",
+                minWidth: 0,
+                padding: "22px 20px",
+                borderRadius: 14,
+                color: "#ffffff",
+                backgroundColor: "#000000",
+                border: "2px solid #facc15",
+              }}
+            >
+              <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <svg className="relative z-[1]" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Latest Photos Section */}
+          <section className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
+              <button onClick={() => navigate("/storage")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
+                see all →
               </button>
             </div>
-            <section className="col-span-8 flex flex-col p-6" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: 18 }}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-[900] lowercase" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-                <button onClick={() => navigate("/storage")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
-                  see all →
-                </button>
-              </div>
-              <div className="grid grid-cols-4 gap-5 flex-1">
-                {photoSlots.map((photo) => {
+            <div className="grid grid-cols-4 gap-3">
+              {!photosLoaded && images.length === 0 ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                    <AspectRatio ratio={3 / 4}>
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                      </div>
+                    </AspectRatio>
+                  </div>
+                ))
+              ) : (
+                photoSlots.map((photo, i) => {
                   const isPlaceholder = !photo.url;
+                  const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
                   return (
                     <button
                       key={photo.id}
                       type="button"
-                      onClick={() => { if (!isPlaceholder) setSelectedImage(photo); }}
-                      className="overflow-hidden hover-lift"
-                      style={{ borderRadius: 16, border: isPlaceholder ? "none" : "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
+                      onClick={() => {
+                        if (!isPlaceholder) setSelectedImage(photo);
+                        else if (isFirstPlaceholder) {
+                          if (!user) { navigate("/auth?redirect=/create"); return; }
+                          navigate("/create");
+                        }
+                      }}
+                      className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
+                      style={{
+                        borderRadius: 16,
+                        border: isPlaceholder ? "none" : "2px solid #1a1a1a",
+                        backgroundColor: "#1a1a1a",
+                        cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
+                      }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          isFirstPlaceholder ? (
+                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          ) : (
+                            <div className="h-full w-full" />
+                          )
                         ) : (
                           <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         )}
                       </AspectRatio>
                     </button>
                   );
-                })}
-              </div>
-            </section>
-          </div>
-          {/* Desktop characters section */}
-          <section className="mt-6 p-5" style={{ backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: 18 }}>
+                })
+              )}
+            </div>
+          </section>
+
+          {/* My Characters Section */}
+          <section className="mt-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
+              <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <button onClick={() => navigate("/characters")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#facc15", backgroundColor: "#000000", border: "2px solid #facc15", borderRadius: 12 }}>
                 manage →
               </button>
             </div>
-            <div className="grid grid-cols-6 gap-5">
-              {[...charSlots, null, null].slice(0, 6).map((char, i) => {
-                if (!char) {
+            <div className="grid grid-cols-4 gap-3">
+              {!charsLoaded && characters.length === 0 ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                    <AspectRatio ratio={3 / 4}>
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
+                      </div>
+                    </AspectRatio>
+                  </div>
+                ))
+              ) : (
+                charSlots.map((char, i) => {
+                  if (!char) {
+                    const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
+                    return (
+                      <button
+                        key={`empty-${i}`}
+                        type="button"
+                        onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
+                        className="overflow-hidden"
+                        style={{
+                          borderRadius: 16,
+                          backgroundColor: "#1a1a1a",
+                          cursor: isFirstEmpty ? "pointer" : "default",
+                        }}
+                      >
+                        <AspectRatio ratio={3 / 4}>
+                          {isFirstEmpty ? (
+                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          ) : (
+                            <div className="h-full w-full" />
+                          )}
+                        </AspectRatio>
+                      </button>
+                    );
+                  }
+                  const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={`empty-${i}`}
+                      key={char.id}
                       type="button"
-                      onClick={handleOpenCreator}
-                      className="overflow-hidden"
-                      style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
+                      onClick={() => navigate(`/characters/${char.id}`)}
+                      className="relative overflow-hidden hover-lift"
+                      style={{
+                        borderRadius: 16,
+                        border: "2px solid #1a1a1a",
+                        backgroundColor: "#1a1a1a",
+                      }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                        {hasFace ? (
+                          <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center">
+                            <User size={32} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                          </div>
+                        )}
                       </AspectRatio>
+                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
+                        <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
+                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
+                      </div>
                     </button>
                   );
-                }
-                const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
-                return (
-                  <button
-                    key={char.id}
-                    type="button"
-                    onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden hover-lift"
-                    style={{ borderRadius: 16, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
-                  >
-                    <AspectRatio ratio={3 / 4}>
-                      {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center">
-                          <User size={32} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
-                        </div>
-                      )}
-                    </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2.5 pt-5">
-                      <span className="block text-[12px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                      <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {char.age}</span>
-                    </div>
-                  </button>
-                );
-              })}
+                })
+              )}
             </div>
           </section>
         </main>
