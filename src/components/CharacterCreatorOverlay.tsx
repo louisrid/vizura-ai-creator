@@ -12,7 +12,7 @@ const Y = "#ffe603";
 
 const categories = [
   { key: "skin", label: "skin", options: ["white", "tan", "asian", "black"] },
-  { key: "bodyType", label: "body type", options: ["slim", "regular", "curvy"] },
+  { key: "bodyType", label: "body type", options: ["thin", "regular", "curvy"] },
   { key: "chest", label: "chest", options: ["small", "medium", "large"] },
   { key: "hairStyle", label: "hair", options: ["straight", "wavy", "bangs", "short"] },
   { key: "hairColour", label: "hair colour", options: ["blonde", "brunette", "black", "pink"] },
