@@ -132,8 +132,7 @@ const Header = () => {
             zIndex: 99999,
           }}
         >
-          <div className="relative">
-            <ModalCloseButton onClick={() => setOpen(false)} aria-label="close menu" />
+          <div>
             <div
               className="overflow-hidden py-0"
               style={{
