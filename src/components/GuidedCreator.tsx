@@ -619,14 +619,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           style={{ paddingTop: isHeroSlide ? "5%" : undefined }}
         >
           <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[2vh]">
-            <AnimatePresence mode="wait" custom={slideDirection}>
+            <AnimatePresence mode="wait">
               <motion.div
                 key={step}
                 className="w-full"
-                custom={slideDirection}
                 variants={slideVariants}
                 initial="enter" animate="center" exit="exit"
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                transition={{ duration: 0.55, ease: "easeInOut" }}
               >
                 {renderSlide()}
               </motion.div>
