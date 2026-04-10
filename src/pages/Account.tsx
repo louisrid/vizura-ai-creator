@@ -62,7 +62,7 @@ const Account = () => {
           {subscribed ? (
             <div
               className="w-full h-14 md:h-16 text-base md:text-xl font-extrabold lowercase flex items-center justify-center pointer-events-none"
-              style={{ borderRadius: 12, backgroundColor: "hsl(var(--member-green) / 0.65)", color: "hsl(var(--neon-green-foreground))" }}
+              style={{ borderRadius: 12, backgroundColor: "hsl(var(--neon-green))", color: "hsl(var(--neon-green-foreground))" }}
             >
               subscribed
             </div>
