@@ -706,7 +706,7 @@ const ChooseFace = () => {
                     style={{
                       borderRadius: 12,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "#1a1a1a",
-                      color: selectedIndex !== null ? "#000" : "transparent",
+                      color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.25)",
                     }}
                   >
                     {selectedIndex !== null ? "use this face →" : "\u00A0"}

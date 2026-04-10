@@ -103,7 +103,7 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
 const SKIN_MAP: Record<string, string> = {
   white: "fair skin with warm undertone",
   pale: "pale fair skin",
-  tan: "tanned warm skin",
+  tan: "olive mediterranean skin tone",
   asian: "asian skin tone",
   black: "rich dark skin with natural healthy glow",
   dark: "rich dark skin with natural healthy glow",
@@ -125,7 +125,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, full chubby cheeks covering cheekbones, big bright eyes, small button nose, plump lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, soft cheeks, big bright eyes, small button nose, natural lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face";
   return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
 }
 
@@ -175,6 +175,9 @@ function buildCharacterTraits(char: any): string {
   const skinKey = (char.country || "").toLowerCase();
   if (skinKey && skinKey !== "any") {
     parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
+    if (skinKey === "asian") parts.push("east asian facial structure, flatter nose bridge, monolid or subtle double eyelid");
+    if (skinKey === "black" || skinKey === "dark") parts.push("natural african facial structure, wider nose, full natural lips");
+    if (skinKey === "tan") parts.push("mediterranean facial structure, defined brow bone, olive undertone");
   }
 
   const bodyKey = (char.body || "regular").toLowerCase();
@@ -410,9 +413,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
    const variations = [
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, natural lips, heart-shaped face, SAME hair style and colour as described",
     "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
-    "large doe eyes, small upturned button nose, full pouty lips, heart-shaped face, SAME hair style and colour as described",
+    "large doe eyes, small upturned button nose, natural lips, heart-shaped face, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -421,7 +424,7 @@ async function generateFaceImages(
     "visible eyeshadow, thick mascara, defined eyeliner, blush, influencer makeup",
   ];
 
-   const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, small rounded chin, slim face, small button nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
+   const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, soft rounded chin, slim face, small button nose, matte skin with visible pores and natural texture and colour variation, long styled hair past shoulders, natural lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
