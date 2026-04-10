@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Users, ImageIcon, Sparkles, X, ArrowLeft, Download } from "lucide-react";
+import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -28,17 +29,19 @@ const fmtDate = (iso: string) => {
 };
 
 const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => (
-  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 px-4" onClick={onClose}>
-    <button onClick={onClose} className="absolute top-5 right-5 text-white/50 hover:text-white z-10"><X size={22} /></button>
-    <div className="max-w-md md:max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
-      <img src={photo.image_url} alt="" className="w-full rounded-xl object-contain max-h-[60vh]" />
-      <div className="mt-4 space-y-1.5">
-        <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
-        <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>
-          {photo.user_email}
-          {photo.character_name && ` · ${photo.character_name}`}
-          {` · ${fmtDate(photo.created_at)}`}
-        </p>
+  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 px-4 pt-24 pb-6">
+    <div className="relative w-full max-w-md md:max-w-lg">
+      <ModalCloseButton onClick={onClose} />
+      <div>
+        <img src={photo.image_url} alt="" className="w-full rounded-xl object-contain max-h-[60vh]" />
+        <div className="mt-4 space-y-1.5">
+          <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
+          <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+            {photo.user_email}
+            {photo.character_name && ` · ${photo.character_name}`}
+            {` · ${fmtDate(photo.created_at)}`}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -170,34 +173,27 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center px-6 pt-20 pb-8"
+            className="fixed inset-0 z-50 flex items-center justify-center px-6 pt-24 pb-6"
             style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-            onClick={() => setExpanded(null)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[280px] md:max-w-[480px] overflow-hidden"
-              style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
-              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
-              <button
-                onClick={() => setExpanded(null)}
-                className="absolute flex items-center justify-center z-10"
-                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
-              >
-                <X size={16} strokeWidth={3} color="#fff" />
-              </button>
-              <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
-              {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                <div className="px-3 md:px-4 pt-2.5 pb-2.5">
-                  <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
-                    {expanded.prompt}
-                  </p>
-                </div>
-              )}
+              <ModalCloseButton onClick={() => setExpanded(null)} />
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
+                <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
+                {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
+                  <div className="px-3 md:px-4 pt-2.5 pb-2.5">
+                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                      {expanded.prompt}
+                    </p>
+                  </div>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}

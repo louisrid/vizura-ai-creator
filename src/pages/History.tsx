@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Download, X, Calendar, Wand2, User, Camera } from "lucide-react";
+import { Loader2, Download, Calendar, Wand2, User, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -148,49 +149,43 @@ const History = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center px-4"
+            className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-24 pb-6"
             style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-            onClick={() => setExpanded(null)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="bg-card border-[2px] border-border rounded-2xl shadow-medium w-full max-w-sm md:max-w-lg overflow-hidden relative"
-              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-sm md:max-w-lg"
             >
-              <button
-                onClick={() => setExpanded(null)}
-                className="absolute flex items-center justify-center z-10"
-                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
-              >
-                <X size={16} strokeWidth={3} color="#fff" />
-              </button>
-              <div className="relative">
-                <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
-              </div>
-              <div className="p-4 md:p-5 space-y-3">
-                <p className="text-[10px] md:text-[12px] font-extrabold lowercase text-foreground/60 leading-relaxed">
-                  {expanded.prompt || "no prompt"}
-                </p>
-                <div className="flex items-center gap-3">
-                  {expanded.characterName && (
-                    <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] font-extrabold lowercase text-neon-yellow">
-                      <User size={10} strokeWidth={2.5} />
-                      {expanded.characterName}
-                    </div>
-                  )}
-                  <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-extrabold lowercase text-foreground/30">
-                    <Calendar size={10} strokeWidth={2.5} />
-                    {formatDate(expanded.created_at)}
-                  </div>
+              <ModalCloseButton onClick={() => setExpanded(null)} />
+              <div className="bg-card border-[2px] border-border rounded-2xl shadow-medium overflow-hidden">
+                <div className="relative">
+                  <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 </div>
-                <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
-                  <Button variant="outline" className="w-full h-12 md:h-14 bg-[#1a1a1a]">
-                    download <Download size={14} strokeWidth={2.5} />
-                  </Button>
-                </a>
+                <div className="p-4 md:p-5 space-y-3">
+                  <p className="text-[10px] md:text-[12px] font-extrabold lowercase text-foreground/60 leading-relaxed">
+                    {expanded.prompt || "no prompt"}
+                  </p>
+                  <div className="flex items-center gap-3">
+                    {expanded.characterName && (
+                      <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] font-extrabold lowercase text-neon-yellow">
+                        <User size={10} strokeWidth={2.5} />
+                        {expanded.characterName}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-extrabold lowercase text-foreground/30">
+                      <Calendar size={10} strokeWidth={2.5} />
+                      {formatDate(expanded.created_at)}
+                    </div>
+                  </div>
+                  <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
+                    <Button variant="outline" className="w-full h-12 md:h-14 bg-[#1a1a1a]">
+                      download <Download size={14} strokeWidth={2.5} />
+                    </Button>
+                  </a>
+                </div>
               </div>
             </motion.div>
           </motion.div>

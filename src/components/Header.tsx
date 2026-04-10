@@ -2,10 +2,11 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, X, Home, UserPlus, Archive, User } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, User } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import TopGradientBar from "@/components/TopGradientBar";
 import { checkNavGuard } from "@/lib/navGuard";
 
@@ -123,28 +124,25 @@ const Header = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 20 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
-          className="fixed overflow-hidden"
+          className="fixed"
           style={{
             top: dropdownPos.top,
             right: dropdownPos.right,
             width: menuWidth,
-            backgroundColor: "#000000",
-            border: "2px solid #1a1a1a",
-            borderRadius: isDesktop ? 20 : 16,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
             zIndex: 99999,
           }}
         >
           <div className="relative">
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 md:top-4 md:right-4 transition-colors duration-150 hover:opacity-80"
-              style={{ color: "rgba(255,255,255,0.35)" }}
-              aria-label="close menu"
+            <ModalCloseButton onClick={() => setOpen(false)} aria-label="close menu" />
+            <div
+              className="overflow-hidden py-0"
+              style={{
+                backgroundColor: "#000000",
+                border: "2px solid #1a1a1a",
+                borderRadius: isDesktop ? 20 : 16,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
+              }}
             >
-              <X size={14} strokeWidth={2.5} className="md:!w-[18px] md:!h-[18px]" />
-            </button>
-            <div className="py-0">
               {menuItems.map((item, idx) => {
                 const isActive = location.pathname === item.path && !item.state;
                 const isFirst = idx === 0;

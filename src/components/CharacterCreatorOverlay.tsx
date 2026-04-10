@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader2, Zap, Gem } from "lucide-react";
+import { Loader2, Zap, Gem } from "lucide-react";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -146,10 +147,10 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
     <AnimatePresence>
       {open && (
         <motion.div className="fixed inset-0 z-[9998] flex flex-col" style={{ background: "#000" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: "easeOut" }}>
-          <div className="flex items-center px-5 pt-5 pb-2">
-            <button onClick={onClose} className="flex h-10 w-10 items-center justify-center transition-colors hover:opacity-70" style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }} aria-label="close">
-              <X size={16} strokeWidth={2.5} className="text-white" />
-            </button>
+          <div className="px-5 pt-5 pb-2">
+            <div className="relative mx-auto w-full max-w-sm">
+              <ModalCloseButton onClick={onClose} aria-label="close" />
+            </div>
           </div>
           <div className="flex-1 overflow-y-auto px-5 pb-28">
             <div className="mx-auto flex w-full max-w-sm flex-col pt-2">
