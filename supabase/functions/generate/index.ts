@@ -526,8 +526,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "",
-  large: "very-large prominent DD-F cup breasts, heavy full-chest, visible deep cleavage",
+  regular: "natural C-cup breasts",
+  large: "very-large prominent DD-F cup breasts, heavy full-chest",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -547,7 +547,7 @@ async function generateAngleAndBody(
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and shoulders only, cropped below collarbone. Matte skin with visible pores and colour variation. Relaxed neutral expression, lips together. ${characterTraits}`;
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. Same white t-shirt, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and shoulders only, cropped below collarbone. Matte skin with visible pores and colour variation. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -565,7 +565,7 @@ async function generateAngleAndBody(
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture. Fitted plain matte cotton white t-shirt, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc : ''}. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture. Fitted very low-cut matte white top, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc + ', visible cleavage from low-cut top' : ''}. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
