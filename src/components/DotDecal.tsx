@@ -41,7 +41,7 @@ const DotDecal = () => {
         ))}
       </svg>
       {/* Black overlay on top of dots — 28% opacity */}
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.31)" }} />
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.33)" }} />
     </div>
   );
 };
