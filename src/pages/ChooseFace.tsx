@@ -709,7 +709,7 @@ const ChooseFace = () => {
                       color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.25)",
                     }}
                   >
-                    {selectedIndex !== null ? "use this face →" : "\u00A0"}
+                    {selectedIndex !== null ? "use this face →" : "use this face →"}
                   </button>
 
                   <button
