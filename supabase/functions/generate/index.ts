@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred in upper third of frame, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and subtle skin-texture, hairline starting very low on head, forehead tightly cropped at hairline, head filling upper portion of frame";
+  "passport photo, plain white background, face and upper shoulders only, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores, hairline starting extremely low, minimal forehead, head high in frame with space above, face takes up most of frame";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -101,7 +101,7 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "warm light skin with peachy-pink undertone, healthy natural colour, not pale not ghostly",
+  white: "fair skin with natural warm undertone, healthy complexion with subtle pink in cheeks",
   pale: "pale fair skin",
   tan: "olive mediterranean skin tone",
   asian: "asian skin tone",
@@ -210,7 +210,7 @@ function buildCharacterTraits(char: any): string {
   
   if (char.eye) {
     const eyeMap: Record<string, string> = {
-      blue: "subtle muted steel-blue",
+      blue: "subtle dark grey-blue",
       green: "dark rich emerald-green",
       brown: "warm deep brown",
     };
@@ -439,7 +439,7 @@ async function generateFaceImages(
   ];
   const makeupVariations = [...allMakeup].sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim face, soft-rounded jaw, rounded-chin, small-nose, matte skin with pores, long styled hair past shoulders, warm natural lip colour, mascara, subtle blush, subtle closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim narrow face, soft-rounded jaw, rounded-chin, very small-nose, matte skin with pores, long styled hair past shoulders, warm natural lip colour, mascara, subtle blush, subtle closed-mouth smile, thin natural eyebrows";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -450,7 +450,7 @@ async function generateFaceImages(
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
     const colourVariants: Record<string, string[]> = {
-      blonde: ["warm honey-blonde", "cool white-blonde", "light-blonde"],
+      blonde: ["cool white-blonde", "cool white-blonde", "light platinum-blonde"],
       brown: ["brown", "rich brown"],
       black: ["black", "dark black"],
       red: ["red", "warm red"],
@@ -469,8 +469,8 @@ async function generateFaceImages(
 
     const raceFeatures: Record<string, string> = {
       asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion, natural warm skin not orange, no green colour cast",
-      black: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush, brown lip colour, slim face not wide, always some visible makeup",
-      dark: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush, brown lip colour, slim face not wide, always some visible makeup",
+      black: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy natural glow and sheen, subtle brown-toned blush, brown lip colour, slim narrow face not wide, always some visible makeup",
+      dark: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy natural glow and sheen, subtle brown-toned blush, brown lip colour, slim narrow face not wide, always some visible makeup",
       tan: ", defined brow-bone, olive warm undertone, strong lashes, warm Mediterranean complexion",
     };
     let raceAppend = "";

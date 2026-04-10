@@ -390,7 +390,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step]);
 
   const handleClose = () => {
-    persistFlow();
+    // User left before completing — clear all progress so next open starts fresh
+    sessionStorage.removeItem(FLOW_STATE_KEY);
+    setStep(0);
+    setSelections({ ...emptySelections });
     setVisible(false);
     onExit(selectionsRef.current);
   };

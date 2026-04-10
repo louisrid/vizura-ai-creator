@@ -600,7 +600,7 @@ const ChooseFace = () => {
               key="face-loader"
               className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10"
               style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -608,7 +608,7 @@ const ChooseFace = () => {
               <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
+              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={45000}
@@ -631,7 +631,7 @@ const ChooseFace = () => {
               key="angle-loader"
               className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10"
               style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -745,6 +745,40 @@ const ChooseFace = () => {
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                   </button>
                 </div>
+
+                {/* Traits summary */}
+                {(() => {
+                  try {
+                    const raw = sessionStorage.getItem("vizura_character_draft");
+                    if (!raw) return null;
+                    const draft = JSON.parse(raw);
+                    const traitItems = [
+                      { label: "skin", value: draft.skin },
+                      { label: "body", value: draft.bodyType },
+                      { label: "bust", value: draft.bustSize || "regular" },
+                      { label: "age", value: draft.age },
+                      { label: "hair colour", value: draft.hairColour },
+                      { label: "hair style", value: draft.hairStyle },
+                      { label: "eyes", value: draft.eye },
+                    ].filter(t => t.value);
+                    if (traitItems.length === 0) return null;
+                    return (
+                      <div className="mt-4 md:mt-6">
+                        <div className="flex flex-wrap gap-1.5 md:gap-2 justify-center">
+                          {traitItems.map((t) => (
+                            <span
+                              key={t.label}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] md:text-[12px] font-[900] lowercase"
+                              style={{ backgroundColor: "#ffe603", color: "#000", borderRadius: 999 }}
+                            >
+                              <span style={{ opacity: 0.5 }}>{t.label}:</span> {t.value}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  } catch { return null; }
+                })()}
               </div>
             </main>
           </>
