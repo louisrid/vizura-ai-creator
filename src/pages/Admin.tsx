@@ -110,7 +110,7 @@ const Admin = () => {
                   { label: "photos", value: overview?.photos ?? 0, icon: ImageIcon },
                 ].map(({ label, value, icon: Icon }) => (
                   <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 14, backgroundColor: "#1a1a1a" }}>
-                    <Icon size={16} strokeWidth={2.5} style={{ color: "#facc15" }} className="mb-1 md:w-5 md:h-5" />
+                    <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe414" }} className="mb-1 md:w-5 md:h-5" />
                     <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
                     <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>{label}</span>
                   </div>

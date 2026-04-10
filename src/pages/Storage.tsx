@@ -220,7 +220,7 @@ const Storage = () => {
                   </p>
                 </div>
               )}
-              <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#facc15", borderRadius: "0 0 14px 14px" }}>
+              <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#ffe414", borderRadius: "0 0 14px 14px" }}>
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
                   <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[#1a1a1a] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#1a1a1a", color: "#ffffff" }}>
                     download <Download size={12} strokeWidth={2.5} />
