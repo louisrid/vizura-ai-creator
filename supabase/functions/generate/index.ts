@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, skin with visible pores";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with pores, minimal forehead visible";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -125,8 +125,8 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, uniform fullness across face, soft cheeks, big bright eyes, small button nose, natural lips, smooth even skin, soft jaw blending into neck, small smooth chin, compact features, average width face";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced distinct features, clear skin, structured feminine face";
+  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
+  return "24 year old woman, visible cheekbones, clean jawline, balanced features, clear skin";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -200,8 +200,8 @@ function buildCharacterTraits(char: any): string {
   if (hairStyle.toLowerCase() === "bangs") {
     parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
-    const frameChance = Math.random() < 0.33 ? " with thick face-framing layers falling beside cheeks" : "";
-    parts.push(`long straight ${mappedHairColour} hair${frameChance}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    const strandChance = Math.random() < 0.4 ? " with several thick strands falling onto cheeks" : "";
+    parts.push(`long straight ${mappedHairColour} hair${strandChance}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
     parts.push(`long ${mappedHairColour} hair with soft voluminous waves draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle || hairColour) {
@@ -412,19 +412,27 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-   const variations = [
-    "large doe eyes, small upturned button nose, natural lips, heart-shaped face, SAME hair style and colour as described",
-    "almond-shaped eyes, small refined nose, thin defined lips, soft oval face, soft rounded chin, SAME hair style and colour as described",
-    "large doe eyes, small upturned button nose, natural lips, heart-shaped face, SAME hair style and colour as described",
+  const allVariations = [
+    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "large bright almond-eyes, tiny nose, natural lips, slim face, smooth-chin, SAME hair style and colour as described",
+    "large bright almond-eyes, tiny nose, natural lips, slim face, smooth-chin, SAME hair style and colour as described",
+    "very large eyes low on face, small-nose, soft lips, round baby-face, smooth-chin, SAME hair style and colour as described",
+    "hooded eyes, defined brows, small-nose, natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "big wide-set bright-eyes, tiny button-nose, soft lips, round youthful face, smooth-chin, SAME hair style and colour as described",
   ];
+  const shuffled = [...allVariations].sort(() => Math.random() - 0.5);
+  const variations = shuffled.slice(0, 3);
 
-  const makeupVariations = [
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "light eyeshadow, mascara, thin eyeliner, subtle blush, everyday natural makeup",
-    "visible eyeshadow, thick mascara, defined eyeliner, blush, influencer makeup",
+  const allMakeup = [
+    "mascara, thin eyeliner, hint of blush",
+    "mascara, thin eyeliner, hint of blush",
+    "light mascara, hint of lip-gloss",
+    "defined mascara, eyeliner, blush, light eyeshadow",
   ];
+  const makeupVariations = [...allMakeup].sort(() => Math.random() - 0.5).slice(0, 3);
 
-   const beautyCore = "extremely attractive young-woman, soft rounded jaw blending into neck, soft rounded chin, slim face, small button nose, matte skin with visible pores and natural texture and colour variation, long styled hair past shoulders, natural lips with soft pink tint, thick mascara, eyeliner, light eyeshadow, blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, low-hairline, slim face, soft-rounded jaw, small-chin, small-nose, matte skin with pores, long styled hair past shoulders, natural lips, mascara, subtle blush, closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -435,7 +443,7 @@ async function generateFaceImages(
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
     const colourVariants: Record<string, string[]> = {
-      blonde: ["cool white-blonde", "light blonde"],
+      blonde: ["cool white-blonde", "cool white-blonde", "light-blonde"],
       brown: ["brown", "rich brown"],
       black: ["black", "dark black"],
       red: ["red", "warm red"],
@@ -452,7 +460,21 @@ async function generateFaceImages(
       }
     }
 
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}. ${FACE_QUALITY}`;
+    const raceFeatures: Record<string, string> = {
+      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face",
+      black: ", fuller natural lips, wider soft nose, warm rich skin-glow",
+      dark: ", fuller natural lips, wider soft nose, warm rich skin-glow",
+      tan: ", defined brow-bone, olive warm undertone, strong lashes",
+    };
+    let raceAppend = "";
+    for (const [key, features] of Object.entries(raceFeatures)) {
+      if (tonedPrompt.toLowerCase().includes(key + " skin") || tonedPrompt.toLowerCase().includes(key + " tone")) {
+        raceAppend = features;
+        break;
+      }
+    }
+
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -517,7 +539,7 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
   regular: "",
-  large: "much larger bust, prominent cleavage",
+  large: "very-large prominent DD-F cup breasts, heavy full-chest, visible deep cleavage",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -555,7 +577,7 @@ async function generateAngleAndBody(
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc : ''}. Matte skin with visible pores and colour variation. Arms hanging loosely and naturally at sides, relaxed casual posture, hands near outer thighs. Neutral relaxed expression, lips together. Framed from forehead to upper thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc : ''}. Matte skin with visible pores and colour variation. Short-arms ending at mid-thigh, hands near outer thighs, relaxed posture. Neutral relaxed expression, lips together. Proportional-head, framed from forehead to upper thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
