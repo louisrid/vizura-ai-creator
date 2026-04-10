@@ -109,9 +109,10 @@ const SKIN_MAP: Record<string, string> = {
   dark: "rich dark skin with natural healthy glow",
 };
 
+const normalizeBodyType = (v: string) => v === "slim" ? "thin" : v;
+
 const BODY_MAP: Record<string, string> = {
   thin: "slim toned body, narrow waist",
-  slim: "slim toned body, narrow waist",
   regular: "soft feminine body, defined waist",
   average: "soft feminine body, defined waist",
   curvy: "curvy feminine figure, wide hips, defined waist",
@@ -506,7 +507,6 @@ async function generateFaceImages(
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
   thin: "slim toned body, narrow waist, lean figure",
-  slim: "slim toned body, narrow waist, lean figure",
   regular: "soft feminine body, defined waist, feminine hips",
   average: "soft feminine body, defined waist, feminine hips",
   curvy: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
@@ -517,7 +517,6 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
   thin: "petite frame, B cup, toned stomach, narrow hips",
-  slim: "petite frame, B cup, toned stomach, narrow hips",
   regular: "hourglass figure, C-D cup, defined waist, feminine hips",
   average: "hourglass figure, C-D cup, defined waist, feminine hips",
   curvy: "voluptuous, D-DD cup, wider hips, natural curves, soft thighs",
