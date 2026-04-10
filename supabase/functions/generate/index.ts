@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with pores, minimal forehead visible";
+  "passport photo, plain white background, face and upper shoulders centred in upper third of frame with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, realistic matte skin with visible pores and subtle skin-texture and natural colour-variation, minimal forehead visible, head positioned high in frame";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -101,7 +101,7 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "fair skin with warm undertone",
+  white: "fair skin with warm natural undertone, natural subtle colour in cheeks",
   pale: "pale fair skin",
   tan: "olive mediterranean skin tone",
   asian: "asian skin tone",
@@ -198,7 +198,7 @@ function buildCharacterTraits(char: any): string {
   const hairColour = char.hair || "";
   const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "cool white-blonde" : hairColour;
   if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
+    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: curtain bangs not flat fringe, hair must be long draped over shoulders in every image`.trim());
   } else if (hairStyle.toLowerCase() === "straight") {
     const strandChance = Math.random() < 0.4 ? " with several thick strands falling onto cheeks" : "";
     parts.push(`long straight ${mappedHairColour} hair${strandChance}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
@@ -209,7 +209,7 @@ function buildCharacterTraits(char: any): string {
   }
   
   if (char.eye) {
-    const eyeColour = char.eye.toLowerCase() === "green" ? "natural dark green" : char.eye;
+    const eyeColour = char.eye.toLowerCase() === "green" ? "deep forest-green" : char.eye;
     parts.push(`bright ${eyeColour} eyes`);
   }
 
@@ -425,14 +425,14 @@ async function generateFaceImages(
   const variations = shuffled.slice(0, 3);
 
   const allMakeup = [
-    "mascara, thin eyeliner, hint of blush",
-    "mascara, thin eyeliner, hint of blush",
-    "light mascara, hint of lip-gloss",
-    "defined mascara, eyeliner, blush, light eyeshadow",
+    "light mascara, hint of natural blush, bare lips",
+    "light mascara, hint of natural blush, bare lips",
+    "mascara, thin eyeliner, subtle lip-gloss",
+    "light mascara, barely-there makeup, natural skin showing through",
   ];
   const makeupVariations = [...allMakeup].sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const beautyCore = "extremely attractive young-woman, low-hairline, slim face, soft-rounded jaw, small-chin, small-nose, matte skin with pores, long styled hair past shoulders, natural lips, mascara, subtle blush, closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim face, soft-rounded jaw, rounded-chin, small-nose, matte skin with pores and subtle unevenness and natural blemishes, long styled hair past shoulders, natural lips, closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -443,7 +443,7 @@ async function generateFaceImages(
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
     const colourVariants: Record<string, string[]> = {
-      blonde: ["cool white-blonde", "cool white-blonde", "light-blonde"],
+      blonde: ["warm honey-blonde", "cool white-blonde", "light-blonde"],
       brown: ["brown", "rich brown"],
       black: ["black", "dark black"],
       red: ["red", "warm red"],
@@ -461,10 +461,10 @@ async function generateFaceImages(
     }
 
     const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face",
-      black: ", fuller natural lips, wider soft nose, warm rich skin-glow",
-      dark: ", fuller natural lips, wider soft nose, warm rich skin-glow",
-      tan: ", defined brow-bone, olive warm undertone, strong lashes",
+      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion",
+      black: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, minimal blush, brown-toned lip colour only, subtle natural makeup",
+      dark: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, minimal blush, brown-toned lip colour only, subtle natural makeup",
+      tan: ", defined brow-bone, olive warm undertone, strong lashes, warm Mediterranean complexion",
     };
     let raceAppend = "";
     for (const [key, features] of Object.entries(raceFeatures)) {
