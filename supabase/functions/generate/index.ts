@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred in upper third of frame with generous space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and subtle skin-texture, very small forehead visible, head positioned high in frame, forehead cropped near hairline";
+  "passport photo, plain white background, face and upper shoulders centred in upper third of frame, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and subtle skin-texture, hairline starting very low on head, forehead tightly cropped at hairline, head filling upper portion of frame";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -101,7 +101,7 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "fair skin with warm natural undertone, natural subtle colour in cheeks",
+  white: "warm light skin with peachy-pink undertone, healthy natural colour, not pale not ghostly",
   pale: "pale fair skin",
   tan: "olive mediterranean skin tone",
   asian: "asian skin tone",
@@ -209,8 +209,14 @@ function buildCharacterTraits(char: any): string {
   }
   
   if (char.eye) {
-    const eyeColour = char.eye.toLowerCase() === "green" ? "dark rich emerald-green" : char.eye;
-    parts.push(`bright ${eyeColour} eyes`);
+    const eyeMap: Record<string, string> = {
+      blue: "subtle muted steel-blue",
+      green: "dark rich emerald-green",
+      brown: "warm deep brown",
+    };
+    const eyeKey = char.eye.toLowerCase();
+    const eyeColour = eyeMap[eyeKey] || char.eye;
+    parts.push(`${eyeColour} eyes`);
   }
 
   const makeupKey = (char.style || "").toLowerCase();
@@ -425,14 +431,15 @@ async function generateFaceImages(
   const variations = shuffled.slice(0, 3);
 
   const allMakeup = [
-    "mascara, thin eyeliner, hint of blush",
-    "mascara, thin eyeliner, hint of blush",
+    "mascara, thin eyeliner, hint of blush, subtle lip tint",
+    "mascara, thin eyeliner, hint of blush, subtle lip tint",
     "mascara, subtle blush, hint of lip-gloss",
+    "mascara, subtle blush, soft lip colour",
     "defined mascara, eyeliner, blush, light eyeshadow",
   ];
   const makeupVariations = [...allMakeup].sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim face, soft-rounded jaw, rounded-chin, small-nose, matte skin with pores, long styled hair past shoulders, natural lips, mascara, subtle blush, subtle closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim face, soft-rounded jaw, rounded-chin, small-nose, matte skin with pores, long styled hair past shoulders, warm natural lip colour, mascara, subtle blush, subtle closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -461,9 +468,9 @@ async function generateFaceImages(
     }
 
     const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion, natural warm skin not orange",
-      black: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush only, brown lip colour, slim face not wide",
-      dark: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush only, brown lip colour, slim face not wide",
+      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion, natural warm skin not orange, no green colour cast",
+      black: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush, brown lip colour, slim face not wide, always some visible makeup",
+      dark: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush, brown lip colour, slim face not wide, always some visible makeup",
       tan: ", defined brow-bone, olive warm undertone, strong lashes, warm Mediterranean complexion",
     };
     let raceAppend = "";
