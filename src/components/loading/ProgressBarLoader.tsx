@@ -13,8 +13,6 @@ interface ProgressBarLoaderProps {
   phrases: string[];
   phraseInterval?: number;
   onComplete?: () => void;
-  requireTapToContinue?: boolean;
-  expandTapTarget?: boolean;
   /** When set to true, smoothly accelerates to 100% regardless of elapsed time */
   completeNow?: boolean;
   /** Controlled progress value from 0-100 for async work */
@@ -34,8 +32,6 @@ const ProgressBarLoader = ({
   phrases,
   phraseInterval = 4500,
   onComplete,
-  requireTapToContinue = false,
-  expandTapTarget = false,
   completeNow = false,
   progressOverride,
 }: ProgressBarLoaderProps) => {
@@ -72,16 +68,14 @@ const ProgressBarLoader = ({
     completedRef.current = true;
     accelStartRef.current = null;
     setPct(100);
-    // Delay showing "tap to continue" until the CSS bar transition (120ms) visually reaches 100%
     window.setTimeout(() => {
       setIsComplete(true);
-
-      if (!requireTapToContinue && !continuedRef.current) {
+      if (!continuedRef.current) {
         continuedRef.current = true;
-        window.setTimeout(() => onCompleteRef.current?.(), 250);
+        onCompleteRef.current?.();
       }
     }, 150);
-  }, [requireTapToContinue, setPct]);
+  }, [setPct]);
 
   const updateProgress = useCallback((timestamp: number) => {
     if (completedRef.current) return;
@@ -174,124 +168,80 @@ const ProgressBarLoader = ({
     };
   }, [effectivePhraseInterval, isComplete, phraseIndex, safePhrases.length]);
 
-  const handleContinue = () => {
-    if (!isComplete || continuedRef.current) return;
-    continuedRef.current = true;
-    onComplete?.();
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
-    handleContinue();
-  };
-
   return (
-    <>
-      {/* Full-screen tap target when complete */}
-      {expandTapTarget && isComplete && requireTapToContinue && (
-        <button
-          type="button"
-          className="fixed inset-0 z-0 cursor-pointer"
-          onClick={handleContinue}
-          aria-label="tap to continue"
-        />
-      )}
-      <div
-        className={`relative z-10 flex flex-col items-center gap-5 px-2 -translate-y-8 md:-translate-y-12 ${isComplete && requireTapToContinue ? "cursor-pointer" : ""}`}
-        style={{ ...contentStyle, overflow: "hidden", touchAction: "none" }}
-        
-        onClick={handleContinue}
-        onKeyDown={handleKeyDown}
-        role={isComplete && requireTapToContinue ? "button" : undefined}
-        tabIndex={isComplete && requireTapToContinue ? 0 : -1}
-        aria-label={isComplete && requireTapToContinue ? "tap to continue" : undefined}
+    <div
+      className="relative z-10 flex flex-col items-center gap-5 px-2 -translate-y-8 md:-translate-y-12"
+      style={{ ...contentStyle, overflow: "hidden", touchAction: "none" }}
+    >
+      <motion.span
+        className="text-[3.5rem] inline-block select-none"
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: [0, -5, 0] }}
+        transition={{
+          opacity: { duration: 0.7, delay: 0.1, ease: "easeOut" },
+          y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
+        }}
       >
-        <motion.span
-          className="text-[3.5rem] inline-block select-none"
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: [0, -5, 0] }}
-          transition={{
-            opacity: { duration: 0.7, delay: 0.1, ease: "easeOut" },
-            y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
-          }}
-        >
-          🦊
-        </motion.span>
+        🦊
+      </motion.span>
 
-        <motion.div
-          className="w-full flex flex-col gap-2.5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        >
-          <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                transform: `scaleX(${pct / 100})`,
-                transformOrigin: "left center",
-                transition: "transform 120ms linear",
-                willChange: "transform",
-                background: "linear-gradient(90deg, #00e0ff 0%, #00e0ff 85%, #00bcd4 100%)",
+      <motion.div
+        className="w-full flex flex-col gap-2.5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+      >
+        <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              transform: `scaleX(${pct / 100})`,
+              transformOrigin: "left center",
+              transition: "transform 120ms linear",
+              willChange: "transform",
+              background: "linear-gradient(90deg, #00e0ff 0%, #00e0ff 85%, #00bcd4 100%)",
+            }}
+          />
+        </div>
+        <div className="flex justify-end">
+          <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums" style={{ color: "#ffffff" }}>{pct}%</span>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="flex h-8 items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+      >
+        <AnimatePresence mode="wait">
+          {phraseVisible ? (
+            <motion.p
+              key={safePhrases[phraseIndex]}
+              className="text-center text-[1.3rem] font-[900] lowercase text-white"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, -4, 0] }}
+              exit={{ opacity: 0 }}
+              transition={{
+                opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
+                y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
               }}
+            >
+              {safePhrases[phraseIndex]}
+            </motion.p>
+          ) : (
+            <motion.div
+              key={`phrase-gap-${phraseIndex}`}
+              className="h-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: PHRASE_FADE_OUT_DURATION, ease: "easeInOut" }}
             />
-          </div>
-          <div className="flex justify-end">
-            <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums" style={{ color: "#ffffff" }}>{pct}%</span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="flex h-8 items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-        >
-          <AnimatePresence mode="wait">
-            {isComplete && requireTapToContinue ? (
-              <motion.p
-                key="tap-to-continue"
-                className="text-center text-[1.3rem] font-[900] lowercase"
-                style={{ color: "hsl(140, 100%, 50%)" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, y: [0, -4, 0] }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
-                  y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-                }}
-              >
-                tap to continue
-              </motion.p>
-            ) : phraseVisible ? (
-              <motion.p
-                key={safePhrases[phraseIndex]}
-                className="text-center text-[1.3rem] font-[900] lowercase text-white"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, y: [0, -4, 0] }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
-                  y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-                }}
-              >
-                {safePhrases[phraseIndex]}
-              </motion.p>
-            ) : (
-              <motion.div
-                key={`phrase-gap-${phraseIndex}`}
-                className="h-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: PHRASE_FADE_OUT_DURATION, ease: "easeInOut" }}
-              />
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
-    </>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
   );
 };
 

@@ -102,12 +102,7 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (authLoading) return;
-
-    const timer = window.setTimeout(() => {
-      window.dispatchEvent(new CustomEvent("vizura:blackout:end"));
-    }, 320);
-
-    return () => window.clearTimeout(timer);
+    window.dispatchEvent(new CustomEvent("vizura:blackout:end"));
   }, [authLoading, showSignIn, loading]);
 
   useEffect(() => {
@@ -396,6 +391,22 @@ const ChooseFace = () => {
     await doFinalSave(faceIndex);
   };
 
+  const normaliseDraftAge = (value?: string) => {
+    if (value === "18-24" || value === "18") return "18";
+    if (value === "24+" || value === "24") return "24";
+    return "18";
+  };
+
+  const normaliseDraftBodyType = (value?: string) => {
+    const key = (value || "regular").toLowerCase();
+    if (key === "slim") return "thin";
+    if (key === "average") return "regular";
+    if (key === "thin" || key === "curvy") return key;
+    return "regular";
+  };
+
+  const normaliseDraftBustSize = (value?: string) => (value === "large" ? "large" : "regular");
+
   const doFinalSave = async (forcedFaceIdx?: number) => {
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
@@ -411,57 +422,73 @@ const ChooseFace = () => {
 
     const faceUrl = faces[faceIdx] || null;
     let cId = characterId;
+    let draft: Record<string, string> | null = null;
+
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      draft = raw ? JSON.parse(raw) : null;
+    } catch {
+      draft = null;
+    }
+
+    const draftBodyType = normaliseDraftBodyType(draft?.bodyType);
+    const draftBustSize = normaliseDraftBustSize(draft?.bustSize);
 
     if (!cId) {
+      if (!draft) {
+        toast.error("failed to load character details");
+        return false;
+      }
+
       try {
-        const raw = sessionStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const draft = JSON.parse(raw);
-          console.log("[ChooseFace] Draft from sessionStorage:", { bustSize: draft.bustSize, bodyType: draft.bodyType });
-          const charData = {
-            user_id: currentUser.id,
-            name: sanitiseText(draft.characterName || "", 100) || "new character",
-            country: sanitiseText(draft.skin || "", 50),
-            age: draft.age === "18-24" ? "18" : draft.age === "24+" ? "24" : draft.age === "18" ? "18" : draft.age === "24" ? "24" : "18",
-            hair: sanitiseText(draft.hairColour || "", 50),
-            eye: sanitiseText(draft.eye || "", 50),
-            body: sanitiseText(draft.bodyType || "", 50),
-            bust_size: draft.bustSize || "regular",
-            style: "",
-            description: sanitiseText(`${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
-            generation_prompt: prompt || "",
-            face_image_url: faceUrl,
-          };
-          const { data: inserted, error: insertError } = await supabase
-            .from("characters")
-            .insert(charData)
-            .select("id")
-            .single();
-          if (insertError) {
-            toast.error("failed to save character");
-            return false;
-          }
-          if (inserted) {
-            cId = inserted.id;
-            setCharacterId(cId);
-            sessionStorage.setItem("vizura_pending_char_id", cId);
-          }
+        console.log("[ChooseFace] Draft from sessionStorage:", { bustSize: draft.bustSize, bodyType: draft.bodyType });
+        const charData = {
+          user_id: currentUser.id,
+          name: sanitiseText(draft.characterName || "", 100) || "new character",
+          country: sanitiseText(draft.skin || "", 50),
+          age: normaliseDraftAge(draft.age),
+          hair: sanitiseText(draft.hairColour || "", 50),
+          eye: sanitiseText(draft.eye || "", 50),
+          body: sanitiseText(draftBodyType, 50),
+          bust_size: draftBustSize,
+          style: "",
+          description: sanitiseText(`${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
+          generation_prompt: prompt || "",
+          face_image_url: faceUrl,
+        };
+        const { data: inserted, error: insertError } = await supabase
+          .from("characters")
+          .insert(charData)
+          .select("id")
+          .single();
+        if (insertError) {
+          toast.error("failed to save character");
+          return false;
+        }
+        if (inserted) {
+          cId = inserted.id;
+          setCharacterId(cId);
+          sessionStorage.setItem("vizura_pending_char_id", cId);
         }
       } catch (err) {
         toast.error("failed to save character");
         return false;
       }
     } else {
-      // Character already exists — update face + ensure bust_size is correct from draft
       try {
         const updateData: Record<string, unknown> = { face_image_url: faceUrl, generation_prompt: prompt };
-        try {
-          const raw = sessionStorage.getItem(STORAGE_KEY);
-          if (raw) {
-            const draft = JSON.parse(raw);
-            if (draft.bustSize) updateData.bust_size = draft.bustSize;
-          }
-        } catch {}
+        if (draft) {
+          Object.assign(updateData, {
+            name: sanitiseText(draft.characterName || "", 100) || "new character",
+            country: sanitiseText(draft.skin || "", 50),
+            age: normaliseDraftAge(draft.age),
+            hair: sanitiseText(draft.hairColour || "", 50),
+            eye: sanitiseText(draft.eye || "", 50),
+            body: sanitiseText(draftBodyType, 50),
+            bust_size: draftBustSize,
+            description: sanitiseText(`${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
+          });
+        }
         const { error: updateError } = await supabase
           .from("characters")
           .update(updateData)
@@ -474,7 +501,6 @@ const ChooseFace = () => {
       }
     }
 
-    // Save the selected face to generations (angle + body will be added later)
     if (faceUrl) {
       await supabase.from("generations").insert({
         user_id: currentUser.id,
@@ -483,28 +509,22 @@ const ChooseFace = () => {
       });
     }
 
-    // Generate angle + body with a second loading bar
     if (faceUrl && cId) {
       const angleCharacterId = cId;
       const anglePrompt = prompt || "";
-      let bodyType = "regular";
-      try {
-        const raw = sessionStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const draft = JSON.parse(raw);
-          bodyType = draft.bodyType || "regular";
-        }
-      } catch {}
+      let bodyType = draftBodyType;
+      let bustSize = draftBustSize;
+
       try {
         const { data: charRecord } = await supabase
           .from("characters")
-          .select("body")
+          .select("body, bust_size")
           .eq("id", angleCharacterId)
           .single();
         if (charRecord?.body) bodyType = charRecord.body;
+        if (charRecord?.bust_size) bustSize = charRecord.bust_size;
       } catch {}
 
-      // Show second loading bar
       setAngleLoading(true);
       setAngleApiDone(false);
       setAngleBarComplete(false);
@@ -517,21 +537,20 @@ const ChooseFace = () => {
             generate_angles: true,
             selected_face_url: faceUrl,
             body_type: bodyType,
+            bust_size: bustSize,
             angle_character_id: angleCharacterId,
           },
         });
         if (error) console.error("Angle + body generation failed:", error);
-        else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url });
+        else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
       } catch (e) {
         console.error("Angle + body generation failed:", e);
       }
 
       setAngleApiDone(true);
-      // Don't navigate yet — wait for bar to complete via tap
       return true;
     }
 
-    // No angle gen needed — navigate immediately
     if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
@@ -547,7 +566,6 @@ const ChooseFace = () => {
   };
   doFinalSaveRef.current = doFinalSave;
 
-  // Handle second loading bar completion — navigate to character page
   const handleAngleBarComplete = useCallback(() => {
     setAngleBarComplete(true);
   }, []);
@@ -605,29 +623,25 @@ const ChooseFace = () => {
       <div className="relative min-h-screen overflow-hidden bg-background w-full">
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-        {/* Solid black underlay to prevent page flash during loading transitions */}
         {(loading || angleLoading) && (
           <div className="fixed inset-0 z-[10000] bg-black" />
         )}
 
-        {/* Full-screen loading bar while faces generate */}
         <AnimatePresence>
           {loading && (
             <motion.div
               key="face-loader"
               className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10"
               style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-              initial={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
             >
                 <ProgressBarLoader
                   duration={45000}
                   phrases={FACE_GEN_PHRASES}
                   phraseInterval={5000}
-                  requireTapToContinue={true}
-                  expandTapTarget={true}
                   completeNow={apiDone}
                   onComplete={() => setBarComplete(true)}
                 />
@@ -635,24 +649,21 @@ const ChooseFace = () => {
           )}
         </AnimatePresence>
 
-        {/* Second loading bar: angle + body generation */}
         <AnimatePresence>
           {angleLoading && (
             <motion.div
               key="angle-loader"
               className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10"
               style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-              initial={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
             >
                 <ProgressBarLoader
                   duration={30000}
                   phrases={ANGLE_GEN_PHRASES}
                   phraseInterval={5000}
-                  requireTapToContinue={true}
-                  expandTapTarget={true}
                   completeNow={angleApiDone}
                   onComplete={handleAngleTapContinue}
                 />

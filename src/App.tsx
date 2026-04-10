@@ -178,7 +178,7 @@ const AppRoutes = () => {
   return (
     <>
       <motion.div
-        className="pointer-events-none fixed inset-0 z-[2147483646] bg-black"
+        className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
         animate={{ opacity: blackoutActive ? 1 : 0 }}
         transition={blackoutActive ? { duration: 0 } : { duration: 0.6, ease: "easeInOut" }}
@@ -187,10 +187,10 @@ const AppRoutes = () => {
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: blackoutActive ? 1 : 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+          exit={{ opacity: blackoutActive ? 1 : 0 }}
+          transition={blackoutActive ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <Routes location={location}>
             <Route path="/" element={<Home />} />

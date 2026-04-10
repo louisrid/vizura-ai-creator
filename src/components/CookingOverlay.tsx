@@ -74,7 +74,6 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
               duration={25000}
               phrases={PHRASES}
               phraseInterval={5200}
-              requireTapToContinue
               onComplete={() => setPhase("success")}
             />
           )}
