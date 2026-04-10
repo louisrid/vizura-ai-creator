@@ -419,18 +419,18 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
   const variations = [
-    "big round doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "very large doe-eyes, small button-nose, natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "large bright almond-eyes, small button-nose, soft natural lips, slim oval face, smooth-chin, SAME hair style and colour as described",
+    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
-    "mascara, thin eyeliner, hint of blush",
-    "mascara, thin eyeliner",
-    "mascara, eyeliner, subtle blush",
+    "defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
+    "mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
+    "defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, matte skin with visible pores and fine texture and subtle colour variation, long styled hair past shoulders, natural soft lips, mascara, eyeliner, subtle blush, subtle relaxed closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, skin with visible pores and colour variation, long styled hair past shoulders, plump lips with soft pink tint, mascara, eyeliner, eyeshadow, blush, confident subtle closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -440,22 +440,12 @@ async function generateFaceImages(
     const makeupVar = makeupVariations[i] || makeupVariations[0];
     const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
 
-    const colourVariants: Record<string, string[]> = {
-      blonde: ["cool white-blonde", "cool white-blonde", "light platinum-blonde"],
-      brown: ["brown", "rich brown"],
-      black: ["black", "dark black"],
-      red: ["red", "warm red"],
-      ginger: ["ginger", "light ginger"],
-      pink: ["pink", "soft pink"],
-    };
-
     let tonedPrompt = faceOnlyPrompt;
-    for (const [base, variants] of Object.entries(colourVariants)) {
-      if (tonedPrompt.toLowerCase().includes(base)) {
-        const pick = variants[Math.floor(Math.random() * variants.length)];
-        tonedPrompt = tonedPrompt.replace(new RegExp(base, 'i'), pick);
-        break;
-      }
+
+    const blondePattern = /\b(cool\s+white-blonde|white-blonde|platinum-blonde|blonde)\b/i;
+    if (blondePattern.test(tonedPrompt)) {
+      const picks = ["cool white-blonde", "cool white-blonde", "light platinum-blonde"];
+      tonedPrompt = tonedPrompt.replace(blondePattern, picks[Math.floor(Math.random() * picks.length)]);
     }
 
     const raceFeatures: Record<string, string> = {
