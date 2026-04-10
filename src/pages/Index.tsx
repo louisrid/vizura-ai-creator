@@ -185,18 +185,25 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
-              {EXPRESSION_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => { onChange(opt.value); setOpen(false); }}
-                  className={`flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase ${value === opt.value ? "bg-white/5" : "hover:bg-white/5"}`}
-                  style={{ color: value === opt.value ? "#ffe603" : "#fff" }}
-                >
-                  {opt.label}
-                </button>
+              {EXPRESSION_OPTIONS.map((opt, idx) => (
+                <div key={opt.value}>
+                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
+                  <button
+                    type="button"
+                    onClick={() => { onChange(opt.value); setOpen(false); }}
+                    className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
+                    style={{
+                      color: value === opt.value ? "#ffe603" : "#fff",
+                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
+                  >
+                    {opt.label}
+                  </button>
+                </div>
               ))}
             </motion.div>
           )}
