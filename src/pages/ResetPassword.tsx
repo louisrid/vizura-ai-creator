@@ -59,7 +59,7 @@ const ResetPassword = () => {
             <div className="border-[2px] border-border rounded-2xl p-6 md:p-8 text-center">
               <p className="text-xs md:text-sm font-extrabold lowercase mb-3 text-foreground">invalid link</p>
               <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px] md:text-[12px]">
-                back to log in
+                back to sign in
               </button>
             </div>
           ) : (
