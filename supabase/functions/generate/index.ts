@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -525,8 +525,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "natural B-cup breasts",
-  large: "very-large prominent DD-F cup breasts, heavy full-chest",
+  regular: "C-cup breasts",
+  large: "very-large DD-cup breasts",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -548,7 +548,7 @@ async function generateAngleAndBody(
       console.log("Generating 3/4 angle...");
       const angleBustKey = (bustSize || "regular").toLowerCase();
       const angleBustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. Fitted very low-cut matte white top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and upper chest, cropped just below collarbone showing very top of cleavage. ${angleBustDesc ? angleBustDesc + '.' : ''} Matte skin with visible pores and colour variation. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. Low-scoop white top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and upper chest, cropped just below collarbone showing very top of cleavage. ${angleBustDesc ? angleBustDesc + '.' : ''} Matte skin with visible pores and colour variation. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -566,7 +566,7 @@ async function generateAngleAndBody(
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, short-female-arms hanging straight-down visible from-front. Fitted very low-cut matte white top, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc + ', visible cleavage from low-cut top' : ''}. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Low-scoop white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. ${bustDesc} cleavage visible. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
