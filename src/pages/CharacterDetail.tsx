@@ -340,16 +340,20 @@ const CharacterDetail = () => {
           <div className="col-span-7">
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-6">
               {editingName ? (
-                <div className="flex items-center gap-2 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") setEditingName(false); }} className="h-12 text-2xl font-[900] lowercase bg-black border-white/20 text-white rounded-lg flex-1" />
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center w-12 h-12 rounded-lg" style={{ backgroundColor: "#ffe603" }}>
-                    {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={20} strokeWidth={3} color="#000" />}
+                <div className="flex items-center gap-3 mb-6">
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") setEditingName(false); }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 56, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
+                  <span className="font-[900] lowercase tracking-tight text-white text-[40px] leading-none">, {ageDisplay}</span>
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: "#ffe603" }}>
+                    {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000" />}
                   </button>
                 </div>
               ) : (
-                <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px] mb-6">
-                  {displayName} <button onClick={startEditName} className="inline-block align-middle ml-1 active:scale-90 transition-transform">✏️</button>
-                </h1>
+                <div className="flex items-center justify-between mb-6">
+                  <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px]">
+                    {displayName}, {ageDisplay}
+                  </h1>
+                  <button onClick={startEditName} className="active:scale-90 transition-transform shrink-0 ml-2" style={{ fontSize: 18 }}>✏️</button>
+                </div>
               )}
               <div className="grid grid-cols-3 gap-4" style={{ overflow: "visible" }}>
                 {imgSlot(character.face_image_url, "front", "lock")}
