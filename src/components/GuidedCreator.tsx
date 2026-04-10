@@ -683,7 +683,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
    SIGN-IN OVERLAY
    ══════════════════════════════════════════ */
 export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn: () => void }) => {
-  const { user, signIn, signUp } = useAuth();
+  const { user, signIn, signUp, signInPreview } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [visible, setVisible] = useState(false);
