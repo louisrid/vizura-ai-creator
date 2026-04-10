@@ -189,7 +189,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
-                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
+                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
                   <button
                     type="button"
                     onClick={() => { onChange(opt.value); setOpen(false); }}
@@ -410,7 +410,7 @@ const Index = () => {
             const borderRadius = isFirst && isLast ? "14px" : isFirst ? "14px 14px 0 0" : isLast ? "0 0 14px 14px" : "0";
             return (
               <Fragment key={c.id}>
-                {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
+                {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
                 <button
                   type="button"
                   onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
