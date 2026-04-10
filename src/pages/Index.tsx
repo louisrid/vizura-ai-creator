@@ -165,7 +165,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
 
   return (
     <div>
-      <span className="block text-base md:text-lg font-[900] lowercase mb-2 text-white">expression</span>
+      <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">expression</span>
       <div className="relative" ref={ref}>
         <button
           type="button"
