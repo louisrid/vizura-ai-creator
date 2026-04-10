@@ -91,6 +91,7 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
+    if (checkNavGuard()) { setOpen(false); return; }
     setOpen(false);
     await signOut();
     navigate("/");
