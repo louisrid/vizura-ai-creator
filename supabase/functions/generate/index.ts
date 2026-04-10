@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred in upper third of frame with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, realistic matte skin with visible pores and subtle skin-texture and natural colour-variation, minimal forehead visible, head positioned high in frame";
+  "passport photo, plain white background, face and upper shoulders centred in upper third of frame with generous space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and subtle skin-texture, very small forehead visible, head positioned high in frame, forehead cropped near hairline";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -114,8 +114,8 @@ const BODY_MAP: Record<string, string> = {
   slim: "slim toned body, narrow waist",
   regular: "soft feminine body, defined waist",
   average: "soft feminine body, defined waist",
-  curvy: "curvy full figure, wide hips",
-  thick: "curvy full figure, wide hips",
+  curvy: "curvy feminine figure, wide hips, defined waist",
+  thick: "curvy feminine figure, wide hips, defined waist",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
@@ -125,7 +125,7 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "18 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
+  if (isNaN(num) || num <= 24) return "20 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
   return "24 year old woman, visible cheekbones, clean jawline, balanced features, clear skin";
 }
 
@@ -209,7 +209,7 @@ function buildCharacterTraits(char: any): string {
   }
   
   if (char.eye) {
-    const eyeColour = char.eye.toLowerCase() === "green" ? "deep forest-green" : char.eye;
+    const eyeColour = char.eye.toLowerCase() === "green" ? "dark rich emerald-green" : char.eye;
     parts.push(`bright ${eyeColour} eyes`);
   }
 
@@ -425,14 +425,14 @@ async function generateFaceImages(
   const variations = shuffled.slice(0, 3);
 
   const allMakeup = [
-    "light mascara, hint of natural blush, bare lips",
-    "light mascara, hint of natural blush, bare lips",
-    "mascara, thin eyeliner, subtle lip-gloss",
-    "light mascara, barely-there makeup, natural skin showing through",
+    "mascara, thin eyeliner, hint of blush",
+    "mascara, thin eyeliner, hint of blush",
+    "mascara, subtle blush, hint of lip-gloss",
+    "defined mascara, eyeliner, blush, light eyeshadow",
   ];
   const makeupVariations = [...allMakeup].sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim face, soft-rounded jaw, rounded-chin, small-nose, matte skin with pores and subtle unevenness and natural blemishes, long styled hair past shoulders, natural lips, closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim face, soft-rounded jaw, rounded-chin, small-nose, matte skin with pores, long styled hair past shoulders, natural lips, mascara, subtle blush, subtle closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -461,9 +461,9 @@ async function generateFaceImages(
     }
 
     const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion",
-      black: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, minimal blush, brown-toned lip colour only, subtle natural makeup",
-      dark: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, minimal blush, brown-toned lip colour only, subtle natural makeup",
+      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion, natural warm skin not orange",
+      black: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush only, brown lip colour, slim face not wide",
+      dark: ", fuller natural lips, wider soft nose, warm rich dark skin-glow, subtle brown-toned blush only, brown lip colour, slim face not wide",
       tan: ", defined brow-bone, olive warm undertone, strong lashes, warm Mediterranean complexion",
     };
     let raceAppend = "";
