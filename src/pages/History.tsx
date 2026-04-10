@@ -163,9 +163,9 @@ const History = () => {
               <button
                 onClick={() => setExpanded(null)}
                 className="absolute flex items-center justify-center z-10"
-                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
+                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
               >
-                <X size={14} strokeWidth={3} color="#fff" />
+                <X size={16} strokeWidth={3} color="#fff" />
               </button>
               <div className="relative">
                 <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
