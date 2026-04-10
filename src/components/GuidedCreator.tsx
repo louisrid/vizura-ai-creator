@@ -451,7 +451,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* Intro */
     if (isIntroSlide) return (
       <div className="flex w-full flex-col items-center">
-        <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">💫</span>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -8, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>💫</motion.span>
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <motion.p
           className="mt-5 text-[13px] md:text-[15px] font-[800] lowercase"
@@ -465,7 +465,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">✨</span>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -8, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>✨</motion.span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -498,7 +498,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[64px] md:text-[86px] mb-5 md:mb-7">{trait.emoji}</span>
+          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -8, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>{trait.emoji}</motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
