@@ -763,7 +763,7 @@ const ChooseFace = () => {
                     ].filter(t => t.value);
                     if (traitItems.length === 0) return null;
                     return (
-                      <div className="mt-4 md:mt-6" style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="mt-4 md:mt-6 px-4 py-3">
+                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }}>
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
