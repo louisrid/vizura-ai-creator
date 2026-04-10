@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { displayAge } from "@/lib/displayAge";
-import { X, User, Loader2 } from "lucide-react";
+import { User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
@@ -11,6 +11,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
 import DotDecal from "@/components/DotDecal";
+import ModalCloseButton from "@/components/ModalCloseButton";
 
 const STORAGE_KEY = "vizura_character_draft";
 const FLOW_STATE_KEY = "vizura_guided_flow_state";
@@ -243,39 +244,31 @@ const Home = () => {
       {!pageHidden && <AnimatePresence>
         {selectedImage && (
           <motion.div
-            className="fixed inset-0 z-[9998] flex items-center justify-center px-6 pt-20 pb-8"
+            className="fixed inset-0 z-[9998] flex items-center justify-center px-6 pt-24 pb-6"
             style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            onClick={() => setSelectedImage(null)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[280px] md:max-w-[400px] overflow-hidden"
-              style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
-              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-[280px] md:max-w-[400px]"
             >
-              <button
-                type="button"
-                onClick={() => setSelectedImage(null)}
-                className="absolute flex items-center justify-center z-10"
-                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
-              >
-                <X size={16} strokeWidth={3} color="#fff" />
-              </button>
-              <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
-              {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
-                <div className="px-3 pt-2.5 pb-3">
-                  <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
-                    {selectedImage.prompt}
-                  </p>
-                </div>
-              )}
+              <ModalCloseButton onClick={() => setSelectedImage(null)} />
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
+                <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
+                {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
+                  <div className="px-3 pt-2.5 pb-3">
+                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                      {selectedImage.prompt}
+                    </p>
+                  </div>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Download, Trash2, X, Wand2 } from "lucide-react";
+import { Loader2, Download, Trash2, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -191,48 +192,41 @@ const Storage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center px-6 pt-20 pb-8"
+            className="fixed inset-0 z-50 flex items-center justify-center px-6 pt-24 pb-6"
             style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-            onClick={() => setExpanded(null)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[280px] md:max-w-[480px] overflow-hidden"
-              style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}
-              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
-              <button
-                onClick={() => setExpanded(null)}
-                className="absolute flex items-center justify-center z-10"
-                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
-              >
-                <X size={16} strokeWidth={3} color="#fff" />
-              </button>
+              <ModalCloseButton onClick={() => setExpanded(null)} />
 
-              <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
-              {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                <div className="px-4 md:px-5 py-3 md:py-4 flex items-center justify-center">
-                  <p className="text-[12px] md:text-[14px] font-[800] lowercase leading-snug text-white text-center">
-                    {expanded.prompt}
-                  </p>
-                </div>
-              )}
-              <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 14px 14px" }}>
-                <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
-                    download <Download size={12} strokeWidth={2.5} />
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
+                <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
+                {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
+                  <div className="px-4 md:px-5 py-3 md:py-4 flex items-center justify-center">
+                    <p className="text-[12px] md:text-[14px] font-[800] lowercase leading-snug text-white text-center">
+                      {expanded.prompt}
+                    </p>
+                  </div>
+                )}
+                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 14px 14px" }}>
+                  <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
+                    <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
+                      download <Download size={12} strokeWidth={2.5} />
+                    </Button>
+                  </a>
+                  <Button
+                    variant="outline"
+                    className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                    onClick={() => handleDelete(expanded)}
+                  >
+                    <Trash2 size={12} strokeWidth={2.5} />
                   </Button>
-                </a>
-                <Button
-                  variant="outline"
-                  className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                  onClick={() => handleDelete(expanded)}
-                >
-                  <Trash2 size={12} strokeWidth={2.5} />
-                </Button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

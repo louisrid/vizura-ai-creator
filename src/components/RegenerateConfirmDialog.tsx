@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Gem, X } from "lucide-react";
+import { Loader2, Gem } from "lucide-react";
+import ModalCloseButton from "@/components/ModalCloseButton";
 
 interface RegenerateConfirmDialogProps {
   open: boolean;
@@ -45,7 +46,6 @@ const RegenerateConfirmDialog = ({
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="fixed inset-0 z-[9998] flex items-center justify-center px-5"
           style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-          onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 8 }}
@@ -60,23 +60,7 @@ const RegenerateConfirmDialog = ({
               padding: "28px 24px 24px",
             }}
           >
-            {/* X dismiss button */}
-            <button
-              onClick={onCancel}
-              className="absolute flex items-center justify-center"
-              style={{
-                top: -10,
-                right: -10,
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                backgroundColor: "#1a1a1a",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <X size={14} strokeWidth={3} color="#fff" />
-            </button>
+            <ModalCloseButton onClick={onCancel} />
 
             <h2 className="text-lg font-[900] lowercase text-white leading-[1.1] mb-5 text-center whitespace-pre-line">
               {message}
