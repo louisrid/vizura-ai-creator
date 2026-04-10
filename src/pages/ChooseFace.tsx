@@ -655,7 +655,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
                   className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 12, backgroundColor: "#ffdd00" }}
+                  style={{ borderRadius: 12, backgroundColor: "#fcdb08" }}
                   aria-label="go back"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -684,7 +684,7 @@ const ChooseFace = () => {
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
                           borderRadius: 12,
-                          border: selectedIndex === i ? "3px solid #ffdd00" : "none",
+                          border: selectedIndex === i ? "3px solid #fcdb08" : "none",
                           padding: selectedIndex === i ? 0 : 3,
                           overflow: "hidden",
                         }}
@@ -705,7 +705,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 12,
-                      backgroundColor: selectedIndex !== null ? "#ffdd00" : "#1a1a1a",
+                      backgroundColor: selectedIndex !== null ? "#fcdb08" : "#1a1a1a",
                       color: selectedIndex !== null ? "#000" : "transparent",
                     }}
                   >
@@ -748,7 +748,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#ffdd00", color: "#000", borderRadius: 12 }}
+                  style={{ backgroundColor: "#fcdb08", color: "#000", borderRadius: 12 }}
                 >
                   try again
                 </button>
