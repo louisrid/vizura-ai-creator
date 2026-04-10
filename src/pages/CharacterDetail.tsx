@@ -298,8 +298,8 @@ const CharacterDetail = () => {
             <div className="grid grid-cols-4 gap-1.5">
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
-                  <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                  <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
+                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                  <span className="inline-block font-[800] lowercase text-white leading-none text-[11px]" style={{ backgroundColor: "#111", borderRadius: 8, padding: "4px 10px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -367,8 +367,8 @@ const CharacterDetail = () => {
               <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
                   <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid #1a1a1a" }}>
-                    <span className="block font-[800] uppercase leading-none mb-0.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                    <span className="block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
+                    <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                    <span className="inline-block font-[800] lowercase text-white leading-none text-[14px]" style={{ backgroundColor: "#111", borderRadius: 10, padding: "5px 12px" }}>{t.value}</span>
                   </div>
                 ))}
               </div>

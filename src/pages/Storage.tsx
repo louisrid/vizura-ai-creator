@@ -202,7 +202,7 @@ const Storage = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-[341px] md:max-w-[585px]"
-              style={{ marginTop: "10vh" }}
+              style={{ marginTop: "12vh" }}
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
 
@@ -212,10 +212,10 @@ const Storage = () => {
                   <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: "12px 12px 0 0" }} />
                 </div>
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                  <div className="flex items-center justify-center" style={{ padding: "12px 12px" }}>
+                  <div className="flex items-center justify-center" style={{ padding: "10px 12px" }}>
                     <span
-                      className="text-xs md:text-sm font-[900] lowercase text-white text-center block"
-                      style={{ backgroundColor: "#000", borderRadius: 8, padding: "6px 14px" }}
+                      className="text-xs md:text-sm font-[900] lowercase text-white text-center inline-block"
+                      style={{ backgroundColor: "#111", borderRadius: 10, padding: "7px 14px" }}
                     >
                       {expanded.prompt}
                     </span>
