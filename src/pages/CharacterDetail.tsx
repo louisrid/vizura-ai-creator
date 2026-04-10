@@ -425,9 +425,9 @@ const CharacterDetail = () => {
               <button
                 onClick={() => setShowDelete(false)}
                 className="absolute flex items-center justify-center"
-                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
+                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
               >
-                <X size={14} strokeWidth={3} color="#fff" />
+                <X size={16} strokeWidth={3} color="#fff" />
               </button>
 
               <h2 className="text-lg md:text-xl font-[900] lowercase text-white leading-[1.1] mb-2 text-center">

@@ -266,9 +266,9 @@ const Home = () => {
                 type="button"
                 onClick={() => setSelectedImage(null)}
                 className="absolute flex items-center justify-center z-10"
-                style={{ top: -10, right: -10, width: 28, height: 28, borderRadius: "50%", backgroundColor: "#1a1a1a" }}
+                style={{ top: -12, right: -12, width: 36, height: 36, borderRadius: "50%", backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.25)" }}
               >
-                <X size={14} strokeWidth={3} color="#fff" />
+                <X size={16} strokeWidth={3} color="#fff" />
               </button>
               <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
               {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
