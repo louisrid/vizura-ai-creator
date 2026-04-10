@@ -783,7 +783,7 @@ const ChooseFace = () => {
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                              <span className="inline-block font-[800] lowercase text-white leading-none text-[11px]" style={{ backgroundColor: "#111", borderRadius: 8, padding: "4px 10px" }}>{t.value}</span>
+                              <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[rgba(255,255,255,0.15)]" style={{ backgroundColor: "#000", borderRadius: 8, padding: "4px 10px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>
