@@ -419,9 +419,9 @@ async function generateFaceImages(
   userId: string
 ): Promise<string[]> {
   const variations = [
-    "big round doe-eyes, small button-nose, full pouty lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "big round doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
     "very large doe-eyes, small button-nose, natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "large bright almond-eyes, small button-nose, full plump lips, slim oval face, smooth-chin, SAME hair style and colour as described",
+    "large bright almond-eyes, small button-nose, soft natural lips, slim oval face, smooth-chin, SAME hair style and colour as described",
   ];
 
   const makeupVariations = [
@@ -430,7 +430,7 @@ async function generateFaceImages(
     "mascara, eyeliner, subtle blush",
   ];
 
-  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident closed-mouth smile";
+  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, matte skin with visible pores and fine texture and subtle colour variation, long styled hair past shoulders, natural soft lips, mascara, eyeliner, subtle blush, subtle relaxed closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -575,7 +575,7 @@ async function generateAngleAndBody(
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright, facing camera. Fitted low-cut white top with visible upper chest, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc : ''}. Matte skin with visible pores and colour variation. Short-arms ending at mid-thigh, hands near outer thighs, relaxed posture. Neutral relaxed expression, lips together. Proportional-head, framed from forehead to upper thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture. Fitted plain matte cotton white t-shirt, tight black leggings. Same white background, same lighting. ${bodyDesc}${bustDesc ? ', ' + bustDesc : ''}. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
