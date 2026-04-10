@@ -368,7 +368,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();
-      }, 1200);
+      }, 800);
       return;
     }
     animating.current = true;
@@ -596,12 +596,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
       {isHeroSlide && <TopLine />}
-      {/* Exit fade */}
+      {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 1.0, ease: "easeInOut" }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
