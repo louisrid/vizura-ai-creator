@@ -622,7 +622,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 className="w-full"
                 variants={slideVariants}
                 initial="enter" animate="center" exit="exit"
-                transition={{ duration: 0.35, ease: "easeInOut" }}
+                transition={{ duration: isCreateSlide ? 0.5 : 0.35, ease: "easeInOut" }}
               >
                 {renderSlide()}
               </motion.div>
