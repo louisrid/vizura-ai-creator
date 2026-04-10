@@ -214,15 +214,15 @@ const Storage = () => {
 
               <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
               {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                <div className="px-3 md:px-4 pt-2.5 pb-0">
-                  <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <div className="px-4 md:px-5 py-3 md:py-4 flex items-center">
+                  <p className="text-[12px] md:text-[14px] font-[800] lowercase leading-snug text-white">
                     {expanded.prompt}
                   </p>
                 </div>
               )}
               <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#ffe603", borderRadius: "0 0 14px 14px" }}>
                 <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                  <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[#1a1a1a] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#1a1a1a", color: "#ffffff" }}>
+                  <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-white text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#1a1a1a", color: "#ffffff" }}>
                     download <Download size={12} strokeWidth={2.5} />
                   </Button>
                 </a>
