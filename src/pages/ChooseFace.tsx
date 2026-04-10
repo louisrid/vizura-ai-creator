@@ -452,10 +452,19 @@ const ChooseFace = () => {
         return false;
       }
     } else {
+      // Character already exists — update face + ensure bust_size is correct from draft
       try {
+        const updateData: Record<string, unknown> = { face_image_url: faceUrl, generation_prompt: prompt };
+        try {
+          const raw = sessionStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const draft = JSON.parse(raw);
+            if (draft.bustSize) updateData.bust_size = draft.bustSize;
+          }
+        } catch {}
         const { error: updateError } = await supabase
           .from("characters")
-          .update({ face_image_url: faceUrl, generation_prompt: prompt })
+          .update(updateData)
           .eq("id", cId)
           .eq("user_id", currentUser.id);
         if (updateError) throw updateError;
