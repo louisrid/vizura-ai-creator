@@ -686,7 +686,7 @@ const ChooseFace = () => {
 
 
               <div className="mx-auto mt-2 flex w-full max-w-[26rem] md:max-w-[40rem] flex-col gap-4 md:gap-6">
-                <div className="grid grid-cols-3 gap-3 md:gap-6" style={{ perspective: "800px" }}>
+                <div className="grid grid-cols-3 gap-3 md:gap-6">
                   {faces.map((url, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
                     <motion.button
