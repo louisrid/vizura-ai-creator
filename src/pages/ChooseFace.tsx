@@ -610,13 +610,8 @@ const ChooseFace = () => {
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
             >
-              <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.35, delay: 0.15, ease: "easeOut" }}
-              >
                 <ProgressBarLoader
                   duration={45000}
                   phrases={FACE_GEN_PHRASES}
@@ -626,7 +621,6 @@ const ChooseFace = () => {
                   completeNow={apiDone}
                   onComplete={() => setBarComplete(true)}
                 />
-              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -641,13 +635,8 @@ const ChooseFace = () => {
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
             >
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.35, delay: 0.15, ease: "easeOut" }}
-              >
                 <ProgressBarLoader
                   duration={30000}
                   phrases={ANGLE_GEN_PHRASES}
@@ -657,7 +646,6 @@ const ChooseFace = () => {
                   completeNow={angleApiDone}
                   onComplete={handleAngleTapContinue}
                 />
-              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -761,7 +749,7 @@ const ChooseFace = () => {
                     const traitItems = [
                       { label: "skin", value: draft.skin },
                       { label: "body", value: draft.bodyType },
-                      { label: "bust", value: draft.bustSize || "regular" },
+                      { label: "size", value: draft.bustSize || "regular" },
                       { label: "age", value: displayAge(draft.characterName || "draft", draft.age) },
                       { label: "hair colour", value: draft.hairColour },
                       { label: "hair style", value: draft.hairStyle },
