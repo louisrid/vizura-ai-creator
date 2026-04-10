@@ -133,6 +133,7 @@ serve(async (req) => {
 
       const activeUsers = activeIds
         .map((uid) => ({
+          user_id: uid,
           email: emailMap[uid] || "unknown",
           photos_this_week: countMap[uid],
           gems_remaining: balMap[uid] ?? 0,
