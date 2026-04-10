@@ -7,6 +7,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
+import { checkNavGuard } from "@/lib/navGuard";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -75,6 +76,7 @@ const Header = () => {
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
+    if (checkNavGuard()) return;
     if (requiresAuth && !user) {
       navigate(`/auth?redirect=${encodeURIComponent(path)}`);
       return;
@@ -83,7 +85,13 @@ const Header = () => {
     navigate(path);
   };
 
+  const handleLogoClick = () => {
+    if (checkNavGuard()) return;
+    handleNav("/");
+  };
+
   const handleLogout = async () => {
+    if (checkNavGuard()) { setOpen(false); return; }
     setOpen(false);
     await signOut();
     navigate("/");
@@ -151,6 +159,7 @@ const Header = () => {
                     {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
                     <button
                       onClick={() => {
+                        if (checkNavGuard()) { setOpen(false); return; }
                         setOpen(false);
                         if (item.auth && !user) {
                           navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
@@ -233,7 +242,7 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-7 md:pt-9 pb-3">
             <div className="flex items-center gap-1.5 md:gap-2">
-              <button onClick={() => handleNav("/")} className="flex items-center active:opacity-80 transition-opacity duration-150">
+              <button onClick={handleLogoClick} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
               </button>
               {isLoggedIn && (

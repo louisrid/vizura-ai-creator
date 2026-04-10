@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Loader2, RefreshCw, Gem } from "lucide-react";
+import { RefreshCw, Gem } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { registerNavGuard } from "@/lib/navGuard";
 
 import PageTitle from "@/components/PageTitle";
 
@@ -136,6 +137,14 @@ const ChooseFace = () => {
       return () => clearTimeout(t);
     }
   }, [loading, cardsRevealed, faces.length]);
+
+  // Register navigation guard — blocks Header nav and shows confirm dialog
+  useEffect(() => {
+    return registerNavGuard(() => {
+      setShowBackConfirm(true);
+      return true;
+    });
+  }, []);
 
   // Intercept swipe-back gesture and show confirmation dialog instead
   useEffect(() => {
