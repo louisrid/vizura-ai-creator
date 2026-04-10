@@ -63,6 +63,7 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
         <motion.div
           key={phase}
           className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center ${phase === "success" ? "bg-member-green" : "bg-black"}`}
+          style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
