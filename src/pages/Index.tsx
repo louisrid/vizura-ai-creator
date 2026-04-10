@@ -41,26 +41,30 @@ const ToggleBox = ({ label, options, value, onChange }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
 }) => (
   <div className="flex-1 flex flex-col gap-2">
-    <span className="text-base md:text-lg font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-center rounded-2xl border-2 border-input bg-card p-1.5">
+    <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
+    <div className="flex items-stretch rounded-2xl border-2 border-[#1a1a1a] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
+        const isFirst = i === 0;
+        const isLast = i === options.length - 1;
         return (
           <Fragment key={opt}>
+            {i > 0 && (
+              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.12)" }} />
+            )}
             <button
               type="button"
               aria-pressed={isSelected}
               onClick={() => onChange(opt)}
-              className="flex-1 flex items-center justify-center rounded-2xl px-0 py-[10px] md:py-[12px] text-[15px] md:text-[16px] font-extrabold lowercase transition-all"
-              style={isSelected
-                ? { backgroundColor: "hsl(var(--neon-yellow))", color: "hsl(var(--neon-yellow-foreground))", boxShadow: "0 0 0 2px hsl(var(--neon-yellow) / 0.22) inset" }
-                : { backgroundColor: "transparent", color: "hsl(var(--foreground) / 0.48)" }}
+              className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[17px] font-[900] lowercase transition-all"
+              style={{
+                backgroundColor: isSelected ? "#ffe603" : "transparent",
+                color: isSelected ? "#000" : "rgba(255,255,255,0.4)",
+                borderRadius: isFirst && isLast ? "14px" : isFirst ? "14px 0 0 14px" : isLast ? "0 14px 14px 0" : "0",
+              }}
             >
               {opt}
             </button>
-            {i < options.length - 1 && (
-              <div aria-hidden className="mx-1.5 h-[34px] w-px shrink-0 self-center bg-foreground/30" />
-            )}
           </Fragment>
         );
       })}
