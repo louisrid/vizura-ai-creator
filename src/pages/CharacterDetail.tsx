@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Lock, RefreshCw, Camera, X } from "lucide-react";
+import { Loader2, Trash2, Lock, RefreshCw, Camera, X, Check } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
@@ -45,6 +46,10 @@ const CharacterDetail = () => {
   const [regeneratingAngle, setRegeneratingAngle] = useState(false);
   const [regeneratingBody, setRegeneratingBody] = useState(false);
   const [regenTarget, setRegenTarget] = useState<"angle" | "body" | null>(null);
+  const [editingName, setEditingName] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [savingName, setSavingName] = useState(false);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -203,7 +208,25 @@ const CharacterDetail = () => {
   const isValidImg = (url: string | null | undefined) =>
     url && !url.startsWith("data:image/svg") && !url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
 
-  const nameAge = [character.name || "unnamed", displayAge(character.id, character.age)].filter(Boolean).join(", ");
+  const displayName = character.name || "unnamed";
+
+  const startEditName = () => {
+    setEditName(character.name || "");
+    setEditingName(true);
+    setTimeout(() => nameInputRef.current?.focus(), 50);
+  };
+
+  const saveEditName = async () => {
+    if (!character || savingName) return;
+    const trimmed = editName.trim();
+    if (!trimmed) { setEditingName(false); return; }
+    setSavingName(true);
+    const { error } = await supabase.from("characters").update({ name: trimmed }).eq("id", character.id);
+    if (error) { toast.error("failed to save name"); }
+    else { setCharacter((prev) => prev ? { ...prev, name: trimmed } : prev); toast.success("name updated"); }
+    setSavingName(false);
+    setEditingName(false);
+  };
 
   const imgSlot = (
     url: string | null | undefined,
@@ -249,7 +272,18 @@ const CharacterDetail = () => {
         </div>
         <div className="flex flex-col gap-3">
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
-            <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">{nameAge}</h1>
+            {editingName ? (
+              <div className="flex items-center gap-2 mb-5">
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") setEditingName(false); }} className="h-10 text-lg font-[900] lowercase bg-black border-white/20 text-white rounded-lg flex-1" style={{ fontSize: 20 }} />
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center w-10 h-10 rounded-lg" style={{ backgroundColor: "#ffe603" }}>
+                  {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000" />}
+                </button>
+              </div>
+            ) : (
+              <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
+                {displayName} <button onClick={startEditName} className="inline-block align-middle ml-1 active:scale-90 transition-transform">✏️</button>
+              </h1>
+            )}
             <div className="grid grid-cols-3 gap-2" style={{ overflow: "visible" }}>
               {imgSlot(character.face_image_url, "front", "lock")}
               {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
@@ -300,7 +334,18 @@ const CharacterDetail = () => {
           {/* Left: photos */}
           <div className="col-span-7">
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-6">
-              <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px] mb-6">{nameAge}</h1>
+              {editingName ? (
+                <div className="flex items-center gap-2 mb-6">
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") setEditingName(false); }} className="h-12 text-2xl font-[900] lowercase bg-black border-white/20 text-white rounded-lg flex-1" />
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center w-12 h-12 rounded-lg" style={{ backgroundColor: "#ffe603" }}>
+                    {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={20} strokeWidth={3} color="#000" />}
+                  </button>
+                </div>
+              ) : (
+                <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px] mb-6">
+                  {displayName} <button onClick={startEditName} className="inline-block align-middle ml-1 active:scale-90 transition-transform">✏️</button>
+                </h1>
+              )}
               <div className="grid grid-cols-3 gap-4" style={{ overflow: "visible" }}>
                 {imgSlot(character.face_image_url, "front", "lock")}
                 {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
