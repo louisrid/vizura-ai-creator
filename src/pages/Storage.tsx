@@ -45,7 +45,7 @@ const Storage = () => {
       const allImages: StorageImage[] = [];
       (data || []).forEach((gen: any) => {
         (gen.image_urls || []).forEach((url: string, i: number) => {
-          if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return;
+          if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
           allImages.push({
             id: `${gen.id}-${i}`,
             genId: gen.id,
@@ -163,7 +163,7 @@ const Storage = () => {
                   className="group relative rounded-t-2xl border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
-                    <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                    <img src={img.url} alt="" className="h-full w-full object-cover" onError={() => { handleDelete(img); }} />
                   </AspectRatio>
                 </button>
                 <a
