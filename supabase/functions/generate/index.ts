@@ -109,9 +109,10 @@ const SKIN_MAP: Record<string, string> = {
   dark: "rich dark skin with natural healthy glow",
 };
 
+const normalizeBodyType = (v: string) => v === "slim" ? "thin" : v;
+
 const BODY_MAP: Record<string, string> = {
   thin: "slim toned body, narrow waist",
-  slim: "slim toned body, narrow waist",
   regular: "soft feminine body, defined waist",
   average: "soft feminine body, defined waist",
   curvy: "curvy feminine figure, wide hips, defined waist",
@@ -180,14 +181,14 @@ function buildCharacterTraits(char: any): string {
     if (skinKey === "tan") parts.push("mediterranean facial structure, defined brow bone, olive undertone");
   }
 
-  const bodyKey = (char.body || "regular").toLowerCase();
+  const bodyKey = normalizeBodyType((char.body || "regular").toLowerCase());
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
   const bustKey = (char.bust_size || "regular").toLowerCase();
   const bustDesc = BUST_SIZE_MAP[bustKey] || "";
   if (bustDesc) parts.push(bustDesc);
 
-  if (bodyKey === "slim") {
+  if (bodyKey === "thin") {
     parts.push("lean angular face, no roundness or puffiness in face");
   } else if (bodyKey === "regular" || bodyKey === "average") {
     parts.push("soft face but not fat, no round chubby face");
@@ -271,7 +272,7 @@ function buildFinalPrompt(
   parts.push(perspective);
 
   if (bodyType) {
-    const bKey = bodyType.toLowerCase();
+    const bKey = normalizeBodyType(bodyType.toLowerCase());
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
   }
@@ -506,7 +507,6 @@ async function generateFaceImages(
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
   thin: "slim toned body, narrow waist, lean figure",
-  slim: "slim toned body, narrow waist, lean figure",
   regular: "soft feminine body, defined waist, feminine hips",
   average: "soft feminine body, defined waist, feminine hips",
   curvy: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
@@ -517,7 +517,6 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
   thin: "petite frame, B cup, toned stomach, narrow hips",
-  slim: "petite frame, B cup, toned stomach, narrow hips",
   regular: "hourglass figure, C-D cup, defined waist, feminine hips",
   average: "hourglass figure, C-D cup, defined waist, feminine hips",
   curvy: "voluptuous, D-DD cup, wider hips, natural curves, soft thighs",
@@ -563,7 +562,7 @@ async function generateAngleAndBody(
   if (target === "body" || target === "both") {
     try {
       console.log("Generating full-body anchor...");
-      const bodyKey = (bodyType || "regular").toLowerCase();
+      const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
@@ -719,7 +718,7 @@ serve(async (req) => {
       if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
       const traits = buildCharacterTraits(charData);
-      const dbBodyType = (charData.body || "regular").toLowerCase();
+      const dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
       const dbBustSize = (charData.bust_size || "regular").toLowerCase();
 
       // Use the fresh face_image_url from DB, not the client-provided one
@@ -828,7 +827,7 @@ serve(async (req) => {
           .single();
         if (charData) {
           traits = buildCharacterTraits(charData);
-          dbBodyType = (charData.body || "regular").toLowerCase();
+          dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
           dbBustSize = (charData.bust_size || "regular").toLowerCase();
           console.log("Built character traits from DB:", traits.slice(0, 120));
           console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
@@ -888,7 +887,7 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
-        characterBodyType = (charData.body || "regular").toLowerCase();
+        characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
