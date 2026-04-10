@@ -675,7 +675,7 @@ serve(async (req) => {
       );
 
       let creditData: { balance: number } | null = null;
-      if (!isBetaUser) {
+      {
         const { data: cd } = await adminClient
           .from("credits")
           .select("balance")
@@ -683,17 +683,19 @@ serve(async (req) => {
           .single();
         creditData = cd;
 
-        if (!creditData || creditData.balance <= 0) {
+        if (!isBetaUser && (!creditData || creditData.balance <= 0)) {
           return new Response(
             JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
 
-        await adminClient
-          .from("credits")
-          .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
-          .eq("user_id", userId);
+        if (creditData) {
+          await adminClient
+            .from("credits")
+            .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
+            .eq("user_id", userId);
+        }
       }
 
       // Always fetch fresh character data from DB
@@ -985,7 +987,7 @@ serve(async (req) => {
 
     /* ── STANDARD GEM-BASED FLOW ── */
     let creditData: { balance: number } | null = null;
-    if (!isBetaUser) {
+    {
       const { data: cd } = await adminClient
         .from("credits")
         .select("balance")
@@ -993,7 +995,7 @@ serve(async (req) => {
         .single();
       creditData = cd;
 
-      if (!creditData || creditData.balance <= 0) {
+      if (!isBetaUser && (!creditData || creditData.balance <= 0)) {
         const { data: subData } = await adminClient
           .from("subscriptions")
           .select("status")
@@ -1010,13 +1012,15 @@ serve(async (req) => {
         );
       }
 
-      await adminClient
-        .from("credits")
-        .update({
-          balance: creditData.balance - 1,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
+      if (creditData) {
+        await adminClient
+          .from("credits")
+          .update({
+            balance: creditData.balance - 1,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("user_id", userId);
+      }
     }
 
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
