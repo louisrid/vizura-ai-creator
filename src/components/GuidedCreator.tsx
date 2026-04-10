@@ -369,7 +369,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();
-      }, 650);
+      }, 900);
       return;
     }
     animating.current = true;
@@ -602,7 +602,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
@@ -645,7 +645,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   {Array.from({ length: dashCount }).map((_, i) => (
                     <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                       flex: 1, borderRadius: 2,
-                      background: i < activeIndex ? Y : "rgba(250,204,21,0.1)",
+                      background: i <= activeIndex ? Y : "rgba(250,204,21,0.1)",
                     }} />
                   ))}
                 </div>
