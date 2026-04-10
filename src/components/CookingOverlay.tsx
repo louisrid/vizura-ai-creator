@@ -66,7 +66,7 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
         >
           {phase === "cooking" && (
             <ProgressBarLoader

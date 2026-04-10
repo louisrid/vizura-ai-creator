@@ -602,12 +602,12 @@ const ChooseFace = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
             >
               <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+              transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={45000}
@@ -632,12 +632,12 @@ const ChooseFace = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
             >
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.1, ease: "easeInOut" }}
+                transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={30000}
