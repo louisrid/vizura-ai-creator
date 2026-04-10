@@ -143,10 +143,10 @@ const MyCharacters = () => {
                   <motion.button
                     key={char.id}
                     layout
-                    initial={isNew ? { opacity: 0, scale: 0.7 } : { opacity: 1, scale: 1 }}
+                    initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    transition={isNew ? { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } : { duration: 0.3, ease: "easeOut" }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     onClick={() => navigate(`/characters/${char.id}`)}
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{

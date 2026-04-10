@@ -375,8 +375,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     setSlideDirection(1);
     const nextStep = step + 1;
     if (nextStep >= TOTAL) return;
-    setStep(nextStep);
-    setTimeout(() => { animating.current = false; }, 200);
+    // Delay step change slightly so layout doesn't jump before exit animation
+    requestAnimationFrame(() => {
+      setStep(nextStep);
+      setTimeout(() => { animating.current = false; }, 250);
+    });
   }, [step, isNameSlide, isCreateSlide, currentTraitIndex, TOTAL, completeCookingFlow]);
 
   const goBack = useCallback(() => {

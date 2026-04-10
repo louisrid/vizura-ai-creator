@@ -417,7 +417,7 @@ const ChooseFace = () => {
         const raw = sessionStorage.getItem(STORAGE_KEY);
         if (raw) {
           const draft = JSON.parse(raw);
-          const charData = {
+            const charData = {
             user_id: currentUser.id,
             name: sanitiseText(draft.characterName || "", 100) || "new character",
             country: sanitiseText(draft.skin || "", 50),
@@ -425,6 +425,7 @@ const ChooseFace = () => {
             hair: sanitiseText(draft.hairColour || "", 50),
             eye: sanitiseText(draft.eye || "", 50),
             body: sanitiseText(draft.bodyType || "", 50),
+            bust_size: draft.bustSize || "regular",
             style: "",
             description: sanitiseText(`${draft.hairStyle || ""} hair. ${draft.description || ""}`, 500),
             generation_prompt: prompt || "",
@@ -594,6 +595,11 @@ const ChooseFace = () => {
       <div className="relative min-h-screen overflow-hidden bg-background w-full">
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
+        {/* Solid black underlay to prevent page flash during loading transitions */}
+        {(loading || angleLoading) && (
+          <div className="fixed inset-0 z-[10000] bg-black" />
+        )}
+
         {/* Full-screen loading bar while faces generate */}
         <AnimatePresence>
           {loading && (
@@ -683,15 +689,14 @@ const ChooseFace = () => {
                 <div className="grid grid-cols-3 gap-3 md:gap-6" style={{ perspective: "800px" }}>
                   {faces.map((url, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
-                      <motion.button
+                    <motion.button
                         type="button"
                         onClick={() => handleFaceClick(i)}
-                        initial={{ rotateY: 90, opacity: 0 }}
-                        animate={cardsRevealed ? { rotateY: 0, opacity: 1 } : { rotateY: 90, opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={cardsRevealed ? { opacity: 1 } : { opacity: 0 }}
                         whileTap={{ scale: 1.02 }}
                         transition={{
-                          rotateY: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
-                          opacity: { duration: 0.5, delay: cardDelays[i], ease: [0.34, 1.56, 0.64, 1] },
+                          opacity: { duration: 0.4, ease: "easeOut" },
                         }}
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
