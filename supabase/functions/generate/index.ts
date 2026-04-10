@@ -23,7 +23,7 @@ const PHOTO_PREFIX =
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders only, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores, hairline starting extremely low, minimal forehead, head high in frame with space above, face takes up most of frame";
+  "passport photo, plain white background, face and upper shoulders centred with space above head, white t-shirt at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -101,10 +101,10 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
 
 /* ── trait mapping ─────────────────────────────────────── */
 const SKIN_MAP: Record<string, string> = {
-  white: "fair skin with natural warm undertone, healthy complexion with subtle pink in cheeks",
-  pale: "pale fair skin",
+  white: "light pale skin with warm undertone",
+  pale: "very pale fair skin",
   tan: "olive mediterranean skin tone",
-  asian: "asian skin tone",
+  asian: "warm golden-beige asian skin tone",
   black: "rich dark skin with natural healthy glow",
   dark: "rich dark skin with natural healthy glow",
 };
@@ -418,28 +418,19 @@ async function generateFaceImages(
   adminClient: any,
   userId: string
 ): Promise<string[]> {
-  const allVariations = [
-    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "large bright almond-eyes, tiny nose, natural lips, slim face, smooth-chin, SAME hair style and colour as described",
-    "large bright almond-eyes, tiny nose, natural lips, slim face, smooth-chin, SAME hair style and colour as described",
-    "very large eyes low on face, small-nose, soft lips, round baby-face, smooth-chin, SAME hair style and colour as described",
-    "hooded eyes, defined brows, small-nose, natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "big wide-set bright-eyes, tiny button-nose, soft lips, round youthful face, smooth-chin, SAME hair style and colour as described",
+  const variations = [
+    "big round doe-eyes, small button-nose, full pouty lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "very large doe-eyes, small button-nose, natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
+    "large bright almond-eyes, small button-nose, full plump lips, slim oval face, smooth-chin, SAME hair style and colour as described",
   ];
-  const shuffled = [...allVariations].sort(() => Math.random() - 0.5);
-  const variations = shuffled.slice(0, 3);
 
-  const allMakeup = [
-    "mascara, thin eyeliner, hint of blush, subtle lip tint",
-    "mascara, thin eyeliner, hint of blush, subtle lip tint",
-    "mascara, subtle blush, hint of lip-gloss",
-    "mascara, subtle blush, soft lip colour",
-    "defined mascara, eyeliner, blush, light eyeshadow",
+  const makeupVariations = [
+    "mascara, thin eyeliner, hint of blush",
+    "mascara, thin eyeliner",
+    "mascara, eyeliner, subtle blush",
   ];
-  const makeupVariations = [...allMakeup].sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const beautyCore = "extremely attractive young-woman, low-hairline, small-forehead, slim narrow face, soft-rounded jaw, rounded-chin, very small-nose, matte skin with pores, long styled hair past shoulders, warm natural lip colour, mascara, subtle blush, subtle closed-mouth smile, thin natural eyebrows";
+  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, mascara, eyeliner, subtle blush, confident closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -468,10 +459,10 @@ async function generateFaceImages(
     }
 
     const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, warm golden-beige skin, clearly asian complexion, natural warm skin not orange, no green colour cast",
-      black: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy natural glow and sheen, subtle brown-toned blush, brown lip colour, slim narrow face not wide, always some visible makeup",
-      dark: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy natural glow and sheen, subtle brown-toned blush, brown lip colour, slim narrow face not wide, always some visible makeup",
-      tan: ", defined brow-bone, olive warm undertone, strong lashes, warm Mediterranean complexion",
+      asian: ", east-asian eyelid-fold, flatter nose-bridge, warm golden-beige skin",
+      black: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy glow",
+      dark: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy glow",
+      tan: ", defined brow-bone, olive warm undertone, strong lashes",
     };
     let raceAppend = "";
     for (const [key, features] of Object.entries(raceFeatures)) {
