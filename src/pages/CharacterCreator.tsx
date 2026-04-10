@@ -233,38 +233,10 @@ const CharacterCreator = () => {
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
-    // Navigate immediately, save character to DB in background to avoid black screen delay
+    // Navigate immediately — ChooseFace will create the character from the draft in sessionStorage
     sessionStorage.removeItem("vizura_face_options");
-
-    if (user) {
-      const charData = {
-        user_id: user.id,
-        name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
-        country: sanitiseText(sk, 50),
-        age: ag,
-        hair: sanitiseText(hc, 50),
-        eye: sanitiseText(ey, 50),
-        body: sanitiseText(bt, 50),
-        bust_size: selections.bustSize || "regular",
-        style: "",
-        description: sanitiseText(`${hs} hair. ${selections.description || ""}`, 500),
-        generation_prompt: prompt,
-      };
-      // Fire-and-forget DB insert — navigate first for smooth transition
-      supabase
-        .from("characters")
-        .insert(charData)
-        .select("id")
-        .single()
-        .then(({ data: inserted, error: insertError }) => {
-          if (!insertError && inserted) {
-            sessionStorage.setItem("vizura_pending_char_id", inserted.id);
-          }
-        });
-      navigate("/choose-face", { state: { prompt, freshCreation: true } });
-    } else {
-      navigate("/choose-face", { state: { prompt, freshCreation: true } });
-    }
+    sessionStorage.removeItem("vizura_pending_char_id");
+    navigate("/choose-face", { state: { prompt, freshCreation: true } });
 
     // Close guided overlay after navigation is queued
     sessionStorage.removeItem(FLOW_STATE_KEY);
