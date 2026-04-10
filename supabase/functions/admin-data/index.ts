@@ -133,6 +133,7 @@ serve(async (req) => {
 
       const activeUsers = activeIds
         .map((uid) => ({
+          user_id: uid,
           email: emailMap[uid] || "unknown",
           photos_this_week: countMap[uid],
           gems_remaining: balMap[uid] ?? 0,
@@ -160,6 +161,29 @@ serve(async (req) => {
         }));
 
       return new Response(JSON.stringify(enriched), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (section === "user-storage") {
+      const userId = searchParams.get("user_id");
+      if (!userId) {
+        return new Response(JSON.stringify({ error: "user_id required" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const [gensRes, charsRes] = await Promise.all([
+        admin.from("generations").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+        admin.from("characters").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+      ]);
+
+      return new Response(JSON.stringify({
+        email: emailMap[userId] || "unknown",
+        generations: gensRes.data || [],
+        characters: charsRes.data || [],
+      }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
