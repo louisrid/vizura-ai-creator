@@ -45,7 +45,7 @@ const Storage = () => {
       const allImages: StorageImage[] = [];
       (data || []).forEach((gen: any) => {
         (gen.image_urls || []).forEach((url: string, i: number) => {
-          if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return;
+          if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
           allImages.push({
             id: `${gen.id}-${i}`,
             genId: gen.id,
