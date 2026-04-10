@@ -718,7 +718,7 @@ serve(async (req) => {
       if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
       const traits = buildCharacterTraits(charData);
-      const dbBodyType = (charData.body || "regular").toLowerCase();
+      const dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
       const dbBustSize = (charData.bust_size || "regular").toLowerCase();
 
       // Use the fresh face_image_url from DB, not the client-provided one
@@ -827,7 +827,7 @@ serve(async (req) => {
           .single();
         if (charData) {
           traits = buildCharacterTraits(charData);
-          dbBodyType = (charData.body || "regular").toLowerCase();
+          dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
           dbBustSize = (charData.bust_size || "regular").toLowerCase();
           console.log("Built character traits from DB:", traits.slice(0, 120));
           console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
@@ -887,7 +887,7 @@ serve(async (req) => {
 
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
-        characterBodyType = (charData.body || "regular").toLowerCase();
+        characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
