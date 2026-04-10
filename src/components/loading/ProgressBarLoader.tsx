@@ -213,7 +213,7 @@ const ProgressBarLoader = ({
             y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
           }}
         >
-          ⚙️
+          🦊
         </motion.span>
 
         <motion.div
