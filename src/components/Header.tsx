@@ -7,6 +7,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
+import { checkNavGuard } from "@/lib/navGuard";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -75,12 +76,18 @@ const Header = () => {
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
+    if (checkNavGuard()) return;
     if (requiresAuth && !user) {
       navigate(`/auth?redirect=${encodeURIComponent(path)}`);
       return;
     }
     if (path === "/") sessionStorage.removeItem("vizura_internal_nav");
     navigate(path);
+  };
+
+  const handleLogoClick = () => {
+    if (checkNavGuard()) return;
+    handleNav("/");
   };
 
   const handleLogout = async () => {
