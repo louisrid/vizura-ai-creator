@@ -193,7 +193,7 @@ const CharacterDetail = () => {
     { label: "skin", value: skinLabel || "—" },
     { label: "body", value: character.body || "—" },
     { label: "bust", value: character.bust_size || "regular" },
-    { label: "age", value: displayAge(character.age) },
+    { label: "age", value: displayAge(character.id, character.age) },
     { label: "hair colour", value: character.hair || "—" },
     { label: "hair style", value: hairStyle || "—" },
     { label: "eyes", value: character.eye || "—" },
@@ -203,7 +203,7 @@ const CharacterDetail = () => {
   const isValidImg = (url: string | null | undefined) =>
     url && !url.startsWith("data:image/svg") && !url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen");
 
-  const nameAge = [character.name || "unnamed", displayAge(character.age)].filter(Boolean).join(", ");
+  const nameAge = [character.name || "unnamed", displayAge(character.id, character.age)].filter(Boolean).join(", ");
 
   const imgSlot = (
     url: string | null | undefined,

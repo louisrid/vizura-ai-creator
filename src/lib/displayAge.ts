@@ -1,29 +1,52 @@
 /**
  * Display-only age randomizer.
- * Caches per raw value so repeated calls in the same page view return the same number.
+ * Generates a random display age once per character and persists it in localStorage
+ * so it stays consistent across all pages and sessions.
  */
-const cache = new Map<string, number>();
+
+const STORAGE_KEY = "vizura_display_ages";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function displayAge(storedAge: string | undefined | null): string {
+function getPersistedMap(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function persistMap(map: Record<string, number>) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+  } catch {}
+}
+
+/**
+ * Returns a consistent random display age for a character.
+ * @param characterId - unique character ID (used as persistence key)
+ * @param storedAge - the raw age value from the database
+ */
+export function displayAge(characterId: string, storedAge: string | undefined | null): string {
   if (!storedAge) return "—";
 
-  const key = storedAge.trim().toLowerCase();
-  if (cache.has(key)) return String(cache.get(key)!);
+  const map = getPersistedMap();
+  if (map[characterId] != null) return String(map[characterId]);
 
+  const key = storedAge.trim().toLowerCase();
   const num = parseInt(key, 10);
   let result: number;
 
   if (key === "18-24" || key === "18" || (!isNaN(num) && num <= 24)) {
     result = rand(18, 23);
   } else {
-    // "24+", "25", or any value > 24
     result = rand(24, 29);
   }
 
-  cache.set(key, result);
+  map[characterId] = result;
+  persistMap(map);
   return String(result);
 }
