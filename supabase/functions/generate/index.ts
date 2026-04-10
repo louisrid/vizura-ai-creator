@@ -110,12 +110,12 @@ const SKIN_MAP: Record<string, string> = {
 };
 
 const BODY_MAP: Record<string, string> = {
-  thin: "slim toned body, narrow waist, lean face",
-  slim: "slim toned body, narrow waist, lean face",
-  regular: "soft feminine body, defined waist, soft face",
-  average: "soft feminine body, defined waist, soft face",
-  curvy: "curvy full figure, wide hips, fuller face but still attractive",
-  thick: "curvy full figure, wide hips, fuller face but still attractive",
+  thin: "slim toned body, narrow waist",
+  slim: "slim toned body, narrow waist",
+  regular: "soft feminine body, defined waist",
+  average: "soft feminine body, defined waist",
+  curvy: "curvy full figure, wide hips",
+  thick: "curvy full figure, wide hips",
 };
 
 const MAKEUP_MAP: Record<string, string> = {
@@ -421,7 +421,7 @@ async function generateFaceImages(
     "eyeshadow, mascara, eyeliner, subtle blush, polished makeup",
   ];
 
-   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, small-forehead, eyes positioned in centre of face, matte skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
+   const beautyCore = "extremely attractive young-woman, feminine soft features, soft rounded jaw, small rounded chin, slim face, small delicate nose, low-set hairline, eyes positioned in centre of face, matte skin with visible pores and colour variation, long styled hair past shoulders, plump full lips with soft pink tint, thick mascara, thick eyeliner, eyeshadow, blush, confident closed-mouth smile";
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
@@ -503,12 +503,12 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  thin: "petite slim frame, toned flat stomach, narrow hips, lean build",
-  slim: "petite slim frame, toned flat stomach, narrow hips, lean build",
-  regular: "hourglass figure, defined waist, feminine hips, soft stomach",
-  average: "hourglass figure, defined waist, feminine hips, soft stomach",
-  curvy: "voluptuous figure, wider hips, natural curves, soft full thighs, hourglass shape",
-  thick: "voluptuous figure, wider hips, natural curves, soft full thighs, hourglass shape",
+  thin: "petite slim frame, B cup, toned flat stomach, narrow hips",
+  slim: "petite slim frame, B cup, toned flat stomach, narrow hips",
+  regular: "hourglass figure, C cup, defined waist, feminine hips",
+  average: "hourglass figure, C cup, defined waist, feminine hips",
+  curvy: "voluptuous figure, D cup, wider hips, natural curves, soft full thighs",
+  thick: "voluptuous figure, D cup, wider hips, natural curves, soft full thighs",
 };
 
 /* ── bust size descriptor ── */
