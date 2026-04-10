@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
-import { sanitiseText } from "@/lib/sanitise";
+
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
@@ -156,7 +156,8 @@ const Home = () => {
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
-      bodyType: selections.bodyType || "average",
+      bodyType: selections.bodyType || "regular",
+      bustSize: selections.bustSize || "regular",
       hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
@@ -166,7 +167,6 @@ const Home = () => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
 
     const sk = selections.skin || "tan";
-    const bt = selections.bodyType || "average";
     const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
@@ -174,36 +174,13 @@ const Home = () => {
     const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
-
-    if (user) {
-      const charData = {
-        user_id: user.id,
-        name: sanitiseText(selections.characterName, 100) || `${hc} ${ey} ${ag}`,
-        country: sanitiseText(sk, 50),
-        age: ag,
-        hair: sanitiseText(hc, 50),
-        eye: sanitiseText(ey, 50),
-        body: sanitiseText(bt, 50),
-        style: "",
-        description: sanitiseText(`${hs} hair. ${selections.description || ""}`, 500),
-        generation_prompt: prompt,
-      };
-      const { data: inserted } = await supabase
-        .from("characters")
-        .insert(charData)
-        .select("id")
-        .single();
-      if (inserted) {
-        sessionStorage.setItem("vizura_pending_char_id", inserted.id);
-      }
-      navigate("/choose-face", { state: { prompt, characterId: inserted?.id, freshCreation: true } });
-    } else {
-      navigate("/choose-face", { state: { prompt, freshCreation: true } });
-    }
+    sessionStorage.removeItem("vizura_face_options");
+    sessionStorage.removeItem("vizura_pending_char_id");
+    navigate("/choose-face", { state: { prompt, freshCreation: true } });
 
     sessionStorage.removeItem(FLOW_STATE_KEY);
     sessionStorage.setItem(DISMISSED_KEY, "1");
-    setTimeout(() => setShowGuided(false), 800);
+    setTimeout(() => setShowGuided(false), 600);
   };
 
   const handleGuidedExit = () => {
