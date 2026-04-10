@@ -17,7 +17,6 @@ const categories = [
   { key: "hairStyle", label: "hair", options: ["straight", "wavy", "bangs", "short"] },
   { key: "hairColour", label: "hair colour", options: ["blonde", "brunette", "black", "pink"] },
   { key: "eyes", label: "eyes", options: ["brown", "blue", "green", "hazel"] },
-  { key: "makeup", label: "makeup", options: ["natural", "classic"] },
 ] as const;
 
 type CatKey = (typeof categories)[number]["key"];
@@ -71,7 +70,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
   const [mounted, setMounted] = useState(false);
 
   const [values, setValues] = useState<Record<CatKey, string | null>>({
-    skin: null, bodyType: null, chest: null, hairStyle: null, hairColour: null, eyes: null, makeup: null,
+    skin: null, bodyType: null, chest: null, hairStyle: null, hairColour: null, eyes: null,
   });
   const [expandedKey, setExpandedKey] = useState<CatKey | null>(null);
   const [description, setDescription] = useState("");
@@ -81,7 +80,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
 
   useEffect(() => {
     if (open) {
-      setValues({ skin: null, bodyType: null, chest: null, hairStyle: null, hairColour: null, eyes: null, makeup: null });
+      setValues({ skin: null, bodyType: null, chest: null, hairStyle: null, hairColour: null, eyes: null });
       setExpandedKey(null);
       setDescription("");
     }
@@ -106,8 +105,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
     const hs = values.hairStyle || "straight";
     const hc = values.hairColour || "brunette";
     const e = values.eyes || "brown";
-    const m = values.makeup || "natural";
-    let prompt = `photorealistic portrait, woman, ${sk} skin, ${hs} ${hc} hair, ${e} eyes, ${m} makeup`;
+    let prompt = `photorealistic portrait, woman, ${sk} skin, ${hs} ${hc} hair, ${e} eyes`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -119,13 +117,13 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
     try {
       const charData = {
         user_id: user.id,
-        name: `${values.hairColour || "brunette"} ${values.eyes || "brown"} ${values.makeup || "natural"}`,
+        name: `${values.hairColour || "brunette"} ${values.eyes || "brown"}`,
         country: sanitiseText(values.skin || "tan", 50),
         age: "18",
         hair: sanitiseText(values.hairColour || "brunette", 50),
         eye: sanitiseText(values.eyes || "brown", 50),
         body: sanitiseText(values.bodyType || "regular", 50),
-        style: sanitiseText(values.makeup || "natural", 50),
+        style: "",
         description: sanitiseText(`${values.chest || "medium"} chest, ${values.hairStyle || "straight"} hair. ${description}`, 500),
       };
       const { data: inserted, error: insertError } = await supabase.from("characters").insert(charData).select("id").single();

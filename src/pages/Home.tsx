@@ -159,7 +159,6 @@ const Home = () => {
       hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
-      makeup: selections.makeup || "natural",
       age: selections.age,
       description: selections.description || "",
     };
@@ -170,9 +169,8 @@ const Home = () => {
     const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
-    const mk = selections.makeup || "natural";
     const ag = selections.age === "18-24" ? "18" : selections.age === "24+" ? "24" : selections.age || "18";
-    const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup`;
+    const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
@@ -185,7 +183,7 @@ const Home = () => {
         hair: sanitiseText(hc, 50),
         eye: sanitiseText(ey, 50),
         body: sanitiseText(bt, 50),
-        style: sanitiseText(mk, 50),
+        style: "",
         description: sanitiseText(`${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,
       };

@@ -166,7 +166,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
 /* ── Types ── */
 export interface GuidedSelections {
   skin: string; bodyType: string; bustSize: string; hairStyle: string;
-  hairColour: string; eye: string; makeup: string;
+  hairColour: string; eye: string;
   characterName: string; age: string;
   description: string;
   referenceImage: string | null;
@@ -174,7 +174,7 @@ export interface GuidedSelections {
 }
 
 const emptySelections: GuidedSelections = {
-  skin: "", bodyType: "", bustSize: "", hairStyle: "", hairColour: "", eye: "", makeup: "classic",
+  skin: "", bodyType: "", bustSize: "", hairStyle: "", hairColour: "", eye: "",
   characterName: "", age: "", description: "",
   referenceImage: null, referenceStrength: 50,
 };
@@ -202,7 +202,6 @@ const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","rub
 const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<GuidedSelections> => ({
   ...partial,
   skin: partial.skin === "pale" ? "white" : partial.skin === "dark" ? "black" : partial.skin,
-  makeup: partial.makeup === "glam" || partial.makeup === "model" ? "classic" : partial.makeup,
 });
 
 /* ══════════════════════════════════════════

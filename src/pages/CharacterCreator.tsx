@@ -17,7 +17,6 @@ const bodyOptions = ["thin", "regular", "curvy"] as const;
 const hairStyleOptions = ["long straight", "long wavy", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
-const makeupOptions = ["natural", "classic"] as const;
 const ageOptions = ["18-24", "24+"] as const;
 
 const STORAGE_KEY = "vizura_character_draft";
@@ -108,7 +107,6 @@ const CharacterCreator = () => {
   const [hairStyle, setHairStyle] = useState<string>(saved?.hairStyle || "long straight");
   const [hairColour, setHairColour] = useState<string>(saved?.hairColour || "brunette");
   const [eye, setEye] = useState<string>(saved?.eye || "brown");
-  const [makeup, setMakeup] = useState<string>(saved?.makeup === "glam" || saved?.makeup === "model" ? "classic" : saved?.makeup || "natural");
   const [age, setAge] = useState<string>(saved?.age || "");
   const [description, setDescription] = useState(saved?.description || "");
   const [characterName, setCharacterName] = useState(saved?.characterName || "");
@@ -136,7 +134,7 @@ const CharacterCreator = () => {
 
   const buildPrompt = () => {
     const skinPart = skin ? `, ${skin} skin` : "";
-    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${hairStyle} ${hairColour} hair, ${eye} eyes, ${makeup} makeup`;
+    let prompt = `photorealistic portrait, ${age || "25"} year old woman${skinPart}, ${bodyType} body type, ${hairStyle} ${hairColour} hair, ${eye} eyes`;
     if (description.trim()) prompt += `, ${description.trim()}`;
     prompt += ", professional photography, natural lighting, shallow depth of field, hyperdetailed";
     return prompt;
@@ -145,7 +143,7 @@ const CharacterCreator = () => {
   const saveCharacter = async () => {
     if (!user) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        characterName, skin, bodyType, hairStyle, hairColour, eye, makeup, age, description,
+        characterName, skin, bodyType, hairStyle, hairColour, eye, age, description,
       }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return null;
@@ -158,7 +156,7 @@ const CharacterCreator = () => {
         hair: sanitiseText(hairColour, 50),
         eye: sanitiseText(eye, 50),
         body: sanitiseText(bodyType, 50),
-        style: sanitiseText(makeup, 50),
+        style: "",
         description: sanitiseText(`${hairStyle} hair. ${description}`, 500),
         generation_prompt: buildPrompt(),
       };
@@ -196,7 +194,7 @@ const CharacterCreator = () => {
     }
     if (!user) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        characterName, skin, bodyType, hairStyle, hairColour, eye, makeup, age, description,
+        characterName, skin, bodyType, hairStyle, hairColour, eye, age, description,
       }));
       navigate(`/account?redirect=${encodeURIComponent(location.pathname)}`);
       return;
@@ -220,7 +218,6 @@ const CharacterCreator = () => {
       hairStyle: selections.hairStyle || "long straight",
       hairColour: selections.hairColour || "brunette",
       eye: selections.eye || "brown",
-      makeup: selections.makeup || "natural",
       age: selections.age,
       description: selections.description || "",
     };
@@ -231,9 +228,8 @@ const CharacterCreator = () => {
     const hs = selections.hairStyle || "long straight";
     const hc = selections.hairColour || "brunette";
     const ey = selections.eye || "brown";
-    const mk = selections.makeup || "natural";
     const ag = selections.age === "18-24" ? "18" : selections.age === "24+" ? "24" : selections.age || "18";
-    const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes, ${mk} makeup`;
+    const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes`;
 
     sessionStorage.setItem("vizura_guided_prompt", prompt);
 
@@ -250,7 +246,7 @@ const CharacterCreator = () => {
         eye: sanitiseText(ey, 50),
         body: sanitiseText(bt, 50),
         bust_size: selections.bustSize || "regular",
-        style: sanitiseText(mk, 50),
+        style: "",
         description: sanitiseText(`${hs} hair. ${selections.description || ""}`, 500),
         generation_prompt: prompt,
       };
@@ -281,7 +277,6 @@ const CharacterCreator = () => {
     if (partial.hairStyle) setHairStyle(partial.hairStyle);
     if (partial.hairColour) setHairColour(partial.hairColour);
     if (partial.eye) setEye(partial.eye);
-    if (partial.makeup) setMakeup(partial.makeup);
     if (partial.characterName) setCharacterName(partial.characterName);
     if (partial.age) setAge(partial.age);
     setShowGuided(false);
@@ -339,7 +334,6 @@ const CharacterCreator = () => {
           <PillGroup label="hair" options={hairStyleOptions} value={hairStyle} onChange={setHairStyle} />
           <PillGroup label="hair colour" options={hairColourOptions} value={hairColour} onChange={setHairColour} />
           <PillGroup label="eyes" options={eyeOptions} value={eye} onChange={setEye} />
-          <PillGroup label="makeup" options={makeupOptions} value={makeup} onChange={setMakeup} />
         </section>
 
         {/* Reference image upload */}
