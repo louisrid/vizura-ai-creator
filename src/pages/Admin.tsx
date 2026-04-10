@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download } from "lucide-react";
+import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, Lock, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import ModalCloseButton from "@/components/ModalCloseButton";
@@ -9,6 +9,7 @@ import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { supabase } from "@/integrations/supabase/client";
+import { displayAge } from "@/lib/displayAge";
 
 const ADMIN_EMAIL = "louisjridland@gmail.com";
 
@@ -27,6 +28,15 @@ const fmtDate = (iso: string) => {
   const d = new Date(iso);
   return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 };
+
+/* ── Standardised admin loading spinner ── */
+const AdminLoader = () => (
+  <div className="flex items-center justify-center py-24">
+    <div style={{ borderRadius: 16, backgroundColor: "#1a1a1a", padding: 24 }}>
+      <Loader2 className="animate-spin" size={24} style={{ color: "rgba(255,255,255,0.5)" }} />
+    </div>
+  </div>
+);
 
 const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => (
   <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 px-4 pt-24 pb-6">
@@ -47,6 +57,86 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
   </div>
 );
 
+/* ── Skin label helper ── */
+const SKIN_LABELS: Record<string, string> = {
+  white: "white", pale: "pale", tan: "tan", asian: "asian", black: "black", dark: "dark",
+};
+
+/* ── Read-only Character Detail (admin) ── */
+const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: () => void }) => {
+  const skinLabel = SKIN_LABELS[(character.country || "").toLowerCase()] || character.country;
+  const getHairStyle = (desc: string | null | undefined): string => {
+    if (!desc) return "";
+    const match = desc.match(/^(.*?)\s*hair\./i);
+    return match?.[1]?.trim() || "";
+  };
+  const hairStyle = getHairStyle(character.description);
+
+  const traits: { label: string; value: string }[] = [
+    { label: "skin", value: skinLabel || "—" },
+    { label: "body", value: character.body || "—" },
+    { label: "bust", value: character.bust_size || "regular" },
+    { label: "age", value: displayAge(character.id, character.age) },
+    { label: "hair colour", value: character.hair || "—" },
+    { label: "hair style", value: hairStyle || "—" },
+    { label: "eyes", value: character.eye || "—" },
+  ];
+
+  const isValidImg = (url: string | null | undefined) =>
+    url && !url.startsWith("data:image/svg") && !url.includes("imgen.x.ai");
+
+  const displayName = character.name || "unnamed";
+  const ageDisplay = displayAge(character.id, character.age);
+
+  const imgSlot = (url: string | null | undefined, label: string) => (
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
+      {isValidImg(url) ? (
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 12 }} />
+      ) : (
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
+      )}
+    </div>
+  );
+
+  return (
+    <>
+      <div className="flex items-center gap-3 mb-2">
+        <button
+          onClick={onBack}
+          className="flex items-center justify-center shrink-0"
+          style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: "#1a1a1a" }}
+        >
+          <ArrowLeft size={16} strokeWidth={2.5} color="#fff" />
+        </button>
+        <PageTitle className="mb-0">character</PageTitle>
+      </div>
+
+      <div className="flex flex-col gap-3 max-w-lg">
+        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
+          <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
+            {displayName}, {ageDisplay}
+          </h1>
+          <div className="grid grid-cols-3 gap-2" style={{ overflow: "visible" }}>
+            {imgSlot(character.face_image_url, "front")}
+            {imgSlot(character.face_angle_url, "3/4 angle")}
+            {imgSlot(character.body_anchor_url, "full body")}
+          </div>
+        </div>
+        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="px-4 py-3">
+          <div className="grid grid-cols-4 gap-1.5">
+            {traits.map((t) => (
+              <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
+                <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 /* ── User Storage View ── */
 interface StorageImage {
   id: string;
@@ -61,6 +151,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
   const [images, setImages] = useState<StorageImage[]>([]);
   const [characters, setCharacters] = useState<any[]>([]);
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
+  const [viewingCharacter, setViewingCharacter] = useState<any | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -73,7 +164,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
         const allImages: StorageImage[] = [];
         (data.generations || []).forEach((gen: any) => {
           (gen.image_urls || []).forEach((url: string, i: number) => {
-            if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return;
+            if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
             allImages.push({ id: `${gen.id}-${i}`, url, prompt: gen.prompt || "", created_at: gen.created_at });
           });
         });
@@ -84,6 +175,10 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
       setLoading(false);
     })();
   }, [userId]);
+
+  if (viewingCharacter) {
+    return <AdminCharacterDetail character={viewingCharacter} onBack={() => setViewingCharacter(null)} />;
+  }
 
   return (
     <>
@@ -100,7 +195,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
       <p className="text-[12px] md:text-[13px] font-extrabold lowercase mb-6" style={{ color: "#ffe603" }}>{email}</p>
 
       {loading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-foreground/30" size={28} /></div>
+        <AdminLoader />
       ) : (
         <>
           {/* Characters */}
@@ -109,7 +204,12 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
               <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">characters ({characters.length})</h2>
               <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
                 {characters.map((c: any) => (
-                  <div key={c.id} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <button
+                    key={c.id}
+                    onClick={() => setViewingCharacter(c)}
+                    className="relative overflow-hidden hover-lift active:scale-[0.97] transition-transform text-left"
+                    style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
+                  >
                     {c.face_image_url ? (
                       <AspectRatio ratio={3 / 4}>
                         <img src={c.face_image_url} alt="" className="h-full w-full object-cover" />
@@ -117,14 +217,15 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                     ) : (
                       <AspectRatio ratio={3 / 4}>
                         <div className="flex h-full w-full items-center justify-center">
-                          <Sparkles size={16} style={{ color: "rgba(255,255,255,0.2)" }} />
+                          <User size={24} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
                         </div>
                       </AspectRatio>
                     )}
-                    <div className="px-2.5 py-2">
-                      <p className="text-[10px] md:text-[11px] font-extrabold lowercase text-white truncate">{c.name || "unnamed"}</p>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
+                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{c.name || "unnamed"}</span>
+                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(c.id, c.age)}</span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -202,6 +303,15 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
   );
 };
 
+/* ── Helper: format prompt for admin latest photos ── */
+const formatPhotoLabel = (prompt: string): { label: string; type: "prompt" | "system" } => {
+  if (!prompt) return { label: "no prompt", type: "system" };
+  const lower = prompt.toLowerCase().trim();
+  if (lower === "character references") return { label: "character setup", type: "system" };
+  if (lower === "face generation") return { label: "face generation", type: "system" };
+  return { label: prompt, type: "prompt" };
+};
+
 /* ── Main Admin ── */
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
@@ -264,7 +374,7 @@ const Admin = () => {
             </div>
 
             {loading ? (
-              <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-foreground/30" size={28} /></div>
+              <AdminLoader />
             ) : (
               <div className="md:grid md:grid-cols-12 md:gap-8">
                 {/* Left column: stats + photos */}
@@ -289,15 +399,29 @@ const Admin = () => {
                     <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">latest photos</h2>
                     {photos.length > 0 ? (
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
-                        {photos.map((p: any, i: number) => (
-                          <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 14, backgroundColor: "#1a1a1a", overflow: "hidden" }}>
-                            <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
-                            <div className="px-3 py-2.5">
-                              <p className="text-[10px] md:text-[11px] font-extrabold lowercase text-white truncate leading-tight">{p.prompt || "—"}</p>
-                              <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.3)" }}>{p.user_email}</p>
-                            </div>
-                          </button>
-                        ))}
+                        {photos.map((p: any, i: number) => {
+                          const { label, type } = formatPhotoLabel(p.prompt);
+                          return (
+                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 14, backgroundColor: "#1a1a1a", overflow: "hidden" }}>
+                              <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
+                              <div className="px-3 py-2.5 space-y-1">
+                                {type === "system" ? (
+                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.4)" }}>
+                                    {label}
+                                  </span>
+                                ) : (
+                                  <p className="text-[10px] md:text-[11px] font-extrabold lowercase text-white truncate leading-tight">{label}</p>
+                                )}
+                                <div className="flex items-center gap-1.5">
+                                  <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "rgba(255,255,255,0.3)" }}>{p.user_email}</p>
+                                  {p.character_name && (
+                                    <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
+                                  )}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>
                     ) : (
                       <p className="text-[11px] font-extrabold lowercase text-foreground/30 py-6 text-center">no photos yet</p>
