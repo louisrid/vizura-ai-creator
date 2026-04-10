@@ -505,12 +505,12 @@ async function generateFaceImages(
 
 /* ── body-type descriptor for full-body anchor ─────────── */
 const BODY_ANCHOR_MAP: Record<string, string> = {
-  thin: "slim toned body, B cup bust, narrow waist, lean figure",
-  slim: "slim toned body, B cup bust, narrow waist, lean figure",
-  regular: "soft feminine body, C cup bust, defined waist, feminine hips",
-  average: "soft feminine body, C cup bust, defined waist, feminine hips",
-  curvy: "curvy feminine figure, D cup bust, defined waist, wider hips, soft thighs, hourglass shape",
-  thick: "curvy feminine figure, D cup bust, defined waist, wider hips, soft thighs, hourglass shape",
+  thin: "slim toned body, narrow waist, lean figure",
+  slim: "slim toned body, narrow waist, lean figure",
+  regular: "soft feminine body, defined waist, feminine hips",
+  average: "soft feminine body, defined waist, feminine hips",
+  curvy: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
+  thick: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
 };
 
 
