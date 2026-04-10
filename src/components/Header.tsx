@@ -158,6 +158,7 @@ const Header = () => {
                     {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
                     <button
                       onClick={() => {
+                        if (checkNavGuard()) { setOpen(false); return; }
                         setOpen(false);
                         if (item.auth && !user) {
                           navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
