@@ -369,7 +369,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();
-      }, 900);
+      }, 1200);
       return;
     }
     animating.current = true;
@@ -400,9 +400,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   if (!mounted || !visible) return null;
 
   const slideVariants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 30 : -30 }),
-    center: { opacity: 1, x: 0 },
-    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -30 : 30 }),
+    enter: () => ({ opacity: 0 }),
+    center: { opacity: 1 },
+    exit: () => ({ opacity: 0 }),
   };
 
   /* ── HERO SLIDE (new first screen) ── */
@@ -602,7 +602,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        transition={{ duration: 1.0, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
@@ -619,14 +619,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           style={{ paddingTop: isHeroSlide ? "5%" : undefined }}
         >
           <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[2vh]">
-            <AnimatePresence mode="wait" custom={slideDirection}>
+            <AnimatePresence mode="wait">
               <motion.div
                 key={step}
                 className="w-full"
-                custom={slideDirection}
                 variants={slideVariants}
                 initial="enter" animate="center" exit="exit"
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                transition={{ duration: 0.55, ease: "easeInOut" }}
               >
                 {renderSlide()}
               </motion.div>
