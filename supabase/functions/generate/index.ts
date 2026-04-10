@@ -104,7 +104,7 @@ const SKIN_MAP: Record<string, string> = {
   white: "light pale skin with warm undertone",
   pale: "very pale fair skin",
   tan: "olive mediterranean skin tone",
-  asian: "warm golden-beige asian skin tone",
+  asian: "asian skin tone",
   black: "rich dark skin with natural healthy glow",
   dark: "rich dark skin with natural healthy glow",
 };
@@ -459,9 +459,9 @@ async function generateFaceImages(
     }
 
     const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, warm golden-beige skin",
-      black: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy glow",
-      dark: ", fuller natural lips, wider soft nose, warm rich dark skin with healthy glow",
+      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, clearly asian complexion, warm skin not orange, no green cast",
+      black: ", fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
+      dark: ", fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
       tan: ", defined brow-bone, olive warm undertone, strong lashes",
     };
     let raceAppend = "";
