@@ -266,7 +266,7 @@ const Header = () => {
                 onClick={() => navigate("/top-ups")}
                 className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
                 style={{
-                  backgroundColor: "hsl(var(--card))",
+                  backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
                   borderRadius: 10,
                 }}
