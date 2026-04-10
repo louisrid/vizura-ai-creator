@@ -400,9 +400,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   if (!mounted || !visible) return null;
 
   const slideVariants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 30 : -30 }),
-    center: { opacity: 1, x: 0 },
-    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -30 : 30 }),
+    enter: () => ({ opacity: 0 }),
+    center: { opacity: 1 },
+    exit: () => ({ opacity: 0 }),
   };
 
   /* ── HERO SLIDE (new first screen) ── */
