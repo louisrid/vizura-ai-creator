@@ -608,7 +608,7 @@ const ChooseFace = () => {
               <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+              transition={{ duration: 0.35, delay: 0.15, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={45000}
@@ -639,7 +639,7 @@ const ChooseFace = () => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
+                transition={{ duration: 0.35, delay: 0.15, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={30000}
