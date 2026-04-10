@@ -274,7 +274,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         setSelections({ ...emptySelections });
       }
       setShaking(false);
-      setInitialFadeIn(false);
+      setInitialFadeIn(!restored);
       setVisible(true);
       animating.current = false;
       setNameToastShown(false);
@@ -605,9 +605,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
-        initial={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0 }}
+        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
       >
         {/* Close button removed — home icon below arrows is the only exit */}
         {/* Skip button removed */}

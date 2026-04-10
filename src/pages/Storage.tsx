@@ -201,8 +201,8 @@ const Storage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[362px] md:max-w-[620px]"
-              style={{ marginTop: "11vh" }}
+              className="relative w-full max-w-[341px] md:max-w-[585px]"
+              style={{ marginTop: "8vh" }}
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
 
@@ -212,10 +212,10 @@ const Storage = () => {
                   <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: "12px 12px 0 0" }} />
                 </div>
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                  <div className="flex items-center justify-center py-4 md:py-5">
-                    <span className="inline-block px-4 py-2 text-xs md:text-sm font-[900] lowercase text-white text-center" style={{ backgroundColor: "#000", borderRadius: 10 }}>
+                  <div className="px-4 md:px-5 py-4 md:py-5 flex items-center justify-center">
+                    <p className="text-[18px] md:text-[20px] font-[800] lowercase leading-snug text-white text-center">
                       {expanded.prompt}
-                    </span>
+                    </p>
                   </div>
                 )}
                 <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 14px 14px" }}>
