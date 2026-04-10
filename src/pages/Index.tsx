@@ -394,48 +394,67 @@ const Index = () => {
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
+          style={{ borderRadius: 16, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
         >
-          {characters.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
-              className={`flex w-full items-center gap-3 px-4 py-3 transition-colors ${selectedCharId === c.id ? "bg-white/5" : "hover:bg-white/5"}`}
-            >
-              {c.face_image_url ? (
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/10">
-                  <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
-                </div>
-              ) : (
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
-                  <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
-                </div>
-              )}
-              <span
-                className="text-lg font-[900] lowercase truncate"
-                style={{ color: selectedCharId === c.id ? "#ffe603" : "#fff" }}
-              >
-                {c.name || "unnamed"}
-              </span>
-            </button>
-          ))}
+          {characters.map((c, idx) => {
+            const isFirst = idx === 0;
+            const isLast = idx === characters.length - 1 && !(characters.length === 0 && user);
+            const isSelected = selectedCharId === c.id;
+            const borderRadius = isFirst && isLast ? "14px" : isFirst ? "14px 14px 0 0" : isLast ? "0 0 14px 14px" : "0";
+            return (
+              <Fragment key={c.id}>
+                {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
+                <button
+                  type="button"
+                  onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
+                  className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
+                  style={{
+                    backgroundColor: isSelected ? "rgba(255,255,255,0.07)" : "transparent",
+                    borderRadius,
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? "rgba(255,255,255,0.07)" : "transparent")}
+                >
+                  {c.face_image_url ? (
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/10">
+                      <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
+                      <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
+                    </div>
+                  )}
+                  <span
+                    className="text-lg font-[900] lowercase truncate"
+                    style={{ color: isSelected ? "#ffe603" : "#fff" }}
+                  >
+                    {c.name || "unnamed"}
+                  </span>
+                </button>
+              </Fragment>
+            );
+          })}
           {characters.length === 0 && user && (
-            <button
-              type="button"
-              onClick={() => {
-                setCharDropdownOpen(false);
-                sessionStorage.removeItem("vizura_creator_dismissed");
-                sessionStorage.removeItem("vizura_guided_flow_state");
-                navigate("/", { state: { openCreator: true } });
-              }}
-              className="flex w-full items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
-            >
-              <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
-                <span className="text-xs">+</span>
-              </div>
-              <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
-            </button>
+            <Fragment>
+              <button
+                type="button"
+                onClick={() => {
+                  setCharDropdownOpen(false);
+                  sessionStorage.removeItem("vizura_creator_dismissed");
+                  sessionStorage.removeItem("vizura_guided_flow_state");
+                  navigate("/", { state: { openCreator: true } });
+                }}
+                className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
+                style={{ borderRadius: "14px" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+              >
+                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
+                  <span className="text-xs">+</span>
+                </div>
+                <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
+              </button>
+            </Fragment>
           )}
         </motion.div>
       )}
