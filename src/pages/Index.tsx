@@ -402,7 +402,7 @@ const Index = () => {
             const isSelected = selectedCharId === c.id;
             const borderRadius = isFirst && isLast ? "14px" : isFirst ? "14px 14px 0 0" : isLast ? "0 0 14px 14px" : "0";
             return (
-              <React.Fragment key={c.id}>
+              <Fragment key={c.id}>
                 {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0 14px" }} />}
                 <button
                   type="button"
@@ -431,11 +431,11 @@ const Index = () => {
                     {c.name || "unnamed"}
                   </span>
                 </button>
-              </React.Fragment>
+              </Fragment>
             );
           })}
           {characters.length === 0 && user && (
-            <>
+            <Fragment>
               <button
                 type="button"
                 onClick={() => {
@@ -454,7 +454,7 @@ const Index = () => {
                 </div>
                 <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
               </button>
-            </>
+            </Fragment>
           )}
         </motion.div>
       )}
