@@ -58,7 +58,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
     setDismissing(true);
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent("photo-overlay-dismiss"));
-    }, 450);
+    }, 550);
   };
 
   return createPortal(
@@ -69,7 +69,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           className="fixed inset-0 z-[9999] bg-black"
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: "easeInOut" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
         />
       ) : !showSuccess ? (
         <motion.div
@@ -79,7 +79,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: OVERLAY_FADE_DURATION, ease: "easeInOut" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
         >
           <ProgressBarLoader
             duration={25000}

@@ -292,12 +292,10 @@ const Index = () => {
 
   useEffect(() => {
     const handler = () => {
-      setFadingBack(true);
-      setTimeout(() => {
-        setPhotoOverlayPhase("hidden");
-        setFadingBack(false);
-        navigate("/storage", { replace: true });
-      }, 100);
+      setPhotoOverlayPhase("hidden");
+      setFadingBack(false);
+      // Scroll to top of the page where the new image sits
+      window.scrollTo({ top: 0, behavior: "smooth" });
     };
     window.addEventListener("photo-overlay-dismiss", handler);
     return () => window.removeEventListener("photo-overlay-dismiss", handler);
