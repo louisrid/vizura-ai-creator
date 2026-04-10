@@ -595,7 +595,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex flex-col overflow-hidden" style={{ background: "#000" }}>
+    <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
       {isHeroSlide && <TopLine />}
       {/* Exit fade */}
       <motion.div

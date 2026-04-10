@@ -598,16 +598,17 @@ const ChooseFace = () => {
           {loading && (
             <motion.div
               key="face-loader"
-              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10 overflow-hidden"
+              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10"
+              style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.9, ease: "easeInOut" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={45000}
@@ -628,16 +629,17 @@ const ChooseFace = () => {
           {angleLoading && (
             <motion.div
               key="angle-loader"
-              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10 overflow-hidden"
+              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black pt-10"
+              style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.9, ease: "easeInOut" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
               >
                 <ProgressBarLoader
                   duration={30000}
