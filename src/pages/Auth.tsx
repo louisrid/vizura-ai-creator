@@ -8,6 +8,12 @@ import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 
+function isInAppWebView(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /FBAN|FBAV|Instagram|WhatsApp|Discord|Line|Snapchat|Twitter|MicroMessenger|WebView|wv\)/i.test(ua);
+}
+
 const Auth = () => {
   const { user, loading: authLoading, signIn, signUp, signInPreview } = useAuth();
   const navigate = useNavigate();
