@@ -202,7 +202,6 @@ const CharacterDetail = () => {
     { label: "hair colour", value: character.hair || "—" },
     { label: "hair style", value: hairStyle || "—" },
     { label: "eyes", value: character.eye || "—" },
-    { label: "makeup", value: character.style || "—" },
   ];
 
   const isValidImg = (url: string | null | undefined) =>
@@ -275,9 +274,8 @@ const CharacterDetail = () => {
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") setEditingName(false); }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 44, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
-                <span className="font-[900] lowercase tracking-tight text-white text-[30px] leading-none">, {ageDisplay}</span>
-                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: "#ffe603" }}>
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 12, backgroundColor: "#ffe603" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000" />}
                 </button>
               </div>
@@ -341,9 +339,8 @@ const CharacterDetail = () => {
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") setEditingName(false); }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 56, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
-                  <span className="font-[900] lowercase tracking-tight text-white text-[40px] leading-none">, {ageDisplay}</span>
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: "#ffe603" }}>
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 12, backgroundColor: "#ffe603" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000" />}
                   </button>
                 </div>
