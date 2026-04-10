@@ -85,11 +85,17 @@ const Home = () => {
     if (!user) { setCharacters([]); setCharsLoaded(true); return; }
     const { data } = await supabase
       .from("characters")
-      .select("id, name, age, face_image_url")
+      .select("id, name, age, face_image_url, face_angle_url, body_anchor_url")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
-      .limit(4);
-    if (data) setCharacters(data as CharacterPreview[]);
+      .limit(20);
+    if (data) {
+      // Only show fully complete characters (all 3 reference photos)
+      const complete = (data as any[]).filter(
+        (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
+      );
+      setCharacters(complete.slice(0, 4) as CharacterPreview[]);
+    }
     setCharsLoaded(true);
   }, [user]);
 

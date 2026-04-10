@@ -44,9 +44,21 @@ const MyCharacters = () => {
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
-        .limit(12);
+        .limit(50);
       if (data) {
-        setCharacters(data as Character[]);
+        const allChars = data as (Character & { face_angle_url?: string | null; body_anchor_url?: string | null })[];
+        // Delete incomplete characters (missing any of the 3 reference photos)
+        const incomplete = allChars.filter(
+          (c) => !c.face_image_url || !c.face_angle_url || !c.body_anchor_url
+        );
+        if (incomplete.length > 0) {
+          const ids = incomplete.map((c) => c.id);
+          supabase.from("characters").delete().in("id", ids).then(() => {});
+        }
+        const complete = allChars.filter(
+          (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
+        );
+        setCharacters(complete.slice(0, 12) as Character[]);
         const pendingNew = sessionStorage.getItem("vizura_new_char_highlight");
         if (pendingNew) {
           sessionStorage.removeItem("vizura_new_char_highlight");
