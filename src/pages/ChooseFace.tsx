@@ -138,6 +138,14 @@ const ChooseFace = () => {
     }
   }, [loading, cardsRevealed, faces.length]);
 
+  // Register navigation guard — blocks Header nav and shows confirm dialog
+  useEffect(() => {
+    return registerNavGuard(() => {
+      setShowBackConfirm(true);
+      return true;
+    });
+  }, []);
+
   // Intercept swipe-back gesture and show confirmation dialog instead
   useEffect(() => {
     const handler = (e: Event) => {
