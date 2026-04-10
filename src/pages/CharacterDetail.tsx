@@ -216,7 +216,7 @@ const CharacterDetail = () => {
         <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
       {overlay === "lock" && (
-        <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#fcd303", top: -6, right: -6 }}>
+        <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#facc15", top: -6, right: -6 }}>
           <Lock size={14} strokeWidth={3} color="#000" fill="none" />
         </div>
       )}
@@ -270,7 +270,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-xl"
-              style={{ color: "#000", borderRadius: 12, backgroundColor: "#fcd303" }}
+              style={{ color: "#000", borderRadius: 12, backgroundColor: "#facc15" }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
@@ -320,7 +320,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-16 text-xl"
-              style={{ color: "#000", borderRadius: 12, backgroundColor: "#fcd303" }}
+              style={{ color: "#000", borderRadius: 12, backgroundColor: "#facc15" }}
             >
               create photo <Camera size={18} strokeWidth={2.5} />
             </button>

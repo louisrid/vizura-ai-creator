@@ -150,7 +150,7 @@ const MyCharacters = () => {
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{
                       borderRadius: 16,
-                      border: isNew ? "3px solid #fcd303" : "2px solid #1a1a1a",
+                      border: isNew ? "3px solid #facc15" : "2px solid #1a1a1a",
                       backgroundColor: "#1a1a1a",
                     }}
                   >
@@ -196,7 +196,7 @@ const MyCharacters = () => {
               transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
               className="flex h-14 md:h-16 w-full md:max-w-md md:mx-auto items-center justify-center gap-2 text-xl md:text-2xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
               style={{
-                backgroundColor: "#fcd303",
+                backgroundColor: "#facc15",
                 color: "#000",
                 borderRadius: 12,
               }}
