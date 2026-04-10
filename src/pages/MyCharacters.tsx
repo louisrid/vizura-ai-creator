@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, Camera, Sparkles } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -96,7 +96,7 @@ const MyCharacters = () => {
     navigate("/create");
   };
 
-  const hasCharacters = characters.length > 0;
+  
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
@@ -187,29 +187,6 @@ const MyCharacters = () => {
         )}
       </main>
 
-      {!loading && (
-        <div className="fixed left-0 right-0 bottom-0 z-10 px-6 md:px-10" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
-          <div className="mx-auto max-w-lg md:max-w-6xl">
-            <motion.button
-              onClick={handleBottomButton}
-              animate={bounceActive ? { y: [0, -6, 0] } : {}}
-              transition={bounceActive ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : {}}
-              className="flex h-14 md:h-16 w-full md:max-w-md md:mx-auto items-center justify-center gap-2 text-xl md:text-2xl font-[900] lowercase tracking-tight transition-all duration-200 active:scale-[0.97]"
-              style={{
-                backgroundColor: "#ffe603",
-                color: "#000",
-                borderRadius: 12,
-              }}
-            >
-              {hasCharacters ? (
-                <>create photo<Camera size={18} strokeWidth={2.5} /></>
-              ) : (
-                <>create character<Sparkles size={20} strokeWidth={2.5} /></>
-              )}
-            </motion.button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
