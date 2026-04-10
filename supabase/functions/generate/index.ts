@@ -181,14 +181,14 @@ function buildCharacterTraits(char: any): string {
     if (skinKey === "tan") parts.push("mediterranean facial structure, defined brow bone, olive undertone");
   }
 
-  const bodyKey = (char.body || "regular").toLowerCase();
+  const bodyKey = normalizeBodyType((char.body || "regular").toLowerCase());
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
   const bustKey = (char.bust_size || "regular").toLowerCase();
   const bustDesc = BUST_SIZE_MAP[bustKey] || "";
   if (bustDesc) parts.push(bustDesc);
 
-  if (bodyKey === "slim") {
+  if (bodyKey === "thin") {
     parts.push("lean angular face, no roundness or puffiness in face");
   } else if (bodyKey === "regular" || bodyKey === "average") {
     parts.push("soft face but not fat, no round chubby face");
@@ -272,7 +272,7 @@ function buildFinalPrompt(
   parts.push(perspective);
 
   if (bodyType) {
-    const bKey = bodyType.toLowerCase();
+    const bKey = normalizeBodyType(bodyType.toLowerCase());
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
   }
@@ -562,7 +562,7 @@ async function generateAngleAndBody(
   if (target === "body" || target === "both") {
     try {
       console.log("Generating full-body anchor...");
-      const bodyKey = (bodyType || "regular").toLowerCase();
+      const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
