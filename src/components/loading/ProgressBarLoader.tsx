@@ -209,7 +209,7 @@ const ProgressBarLoader = ({
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: [0, -5, 0] }}
           transition={{
-            opacity: { duration: 0.5, delay: 0.1, ease: "easeOut" },
+            opacity: { duration: 0.7, delay: 0.1, ease: "easeOut" },
             y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
           }}
         >
@@ -220,7 +220,7 @@ const ProgressBarLoader = ({
           className="w-full flex flex-col gap-2.5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         >
           <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
             <div
