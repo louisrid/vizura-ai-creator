@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Loader2, Camera, Sparkles } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
@@ -96,7 +96,7 @@ const MyCharacters = () => {
     navigate("/create");
   };
 
-  const hasCharacters = characters.length > 0;
+  
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
