@@ -46,7 +46,7 @@ const History = () => {
 
       const charMap = new Map<string, string>();
       (characters || []).forEach((c: any) => {
-        charMap.set(c.id, c.name || `${c.hair} ${c.eye} ${displayAge(c.age)}`);
+        charMap.set(c.id, c.name || `${c.hair} ${c.eye} ${displayAge(c.id, c.age)}`);
       });
 
       const allItems: HistoryItem[] = [];

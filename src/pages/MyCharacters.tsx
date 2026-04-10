@@ -177,7 +177,7 @@ const MyCharacters = () => {
                         {char.name || "unnamed"}
                       </span>
                       <span className="block text-[9px] md:text-[11px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>
-                        age {displayAge(char.age)}
+                        age {displayAge(char.id, char.age)}
                       </span>
                     </div>
                   </motion.button>

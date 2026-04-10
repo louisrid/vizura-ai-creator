@@ -472,7 +472,7 @@ const Home = () => {
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
                         <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.age)}</span>
+                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );
@@ -660,7 +660,7 @@ const Home = () => {
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
                         <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.age)}</span>
+                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );

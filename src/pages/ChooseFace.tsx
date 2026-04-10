@@ -757,7 +757,7 @@ const ChooseFace = () => {
                       { label: "skin", value: draft.skin },
                       { label: "body", value: draft.bodyType },
                       { label: "bust", value: draft.bustSize || "regular" },
-                      { label: "age", value: displayAge(draft.age) },
+                      { label: "age", value: displayAge(draft.characterName || "draft", draft.age) },
                       { label: "hair colour", value: draft.hairColour },
                       { label: "hair style", value: draft.hairStyle },
                       { label: "eyes", value: draft.eye },
