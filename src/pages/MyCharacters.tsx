@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { displayAge } from "@/lib/displayAge";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -176,7 +177,7 @@ const MyCharacters = () => {
                         {char.name || "unnamed"}
                       </span>
                       <span className="block text-[9px] md:text-[11px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.35)" }}>
-                        age {char.age}
+                        age {displayAge(char.age)}
                       </span>
                     </div>
                   </motion.button>
