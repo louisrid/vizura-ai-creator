@@ -48,19 +48,9 @@ const ChooseFace = () => {
     freshCreation?: boolean;
   }) || {};
 
-  // Fresh creation should only wipe faces when there are genuinely no cached
-  // results yet.  On a browser refresh location.state persists, so we must NOT
-  // re-clear faces that were already generated and stored in sessionStorage.
-  const cachedFacesExist = (() => {
-    try {
-      const raw = sessionStorage.getItem(FACE_STORAGE_KEY);
-      if (!raw) return false;
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) && arr.length > 0;
-    } catch { return false; }
-  })();
-
-  const isFreshCreation = !!stateFresh && !cachedFacesExist;
+  // Fresh creation = user just came from the guided creator flow.
+  // Always clear cached faces so we generate new ones for the new character.
+  const isFreshCreation = !!stateFresh;
   if (isFreshCreation) {
     sessionStorage.removeItem(FACE_STORAGE_KEY);
   }
