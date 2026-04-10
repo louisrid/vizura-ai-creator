@@ -230,7 +230,7 @@ const ProgressBarLoader = ({
                 transformOrigin: "left center",
                 transition: "transform 120ms linear",
                 willChange: "transform",
-                background: "linear-gradient(90deg, hsl(var(--loader-bar-from)) 0%, hsl(var(--loader-bar-from)) 85%, hsl(var(--loader-bar-to)) 100%)",
+                background: "linear-gradient(90deg, #00e0ff 0%, #00e0ff 85%, #00bcd4 100%)",
               }}
             />
           </div>
