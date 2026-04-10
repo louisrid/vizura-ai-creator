@@ -19,6 +19,7 @@ interface Character {
   hair: string;
   eye: string;
   body: string;
+  bust_size?: string;
   style: string;
   description: string;
   face_image_url: string | null;
@@ -188,8 +189,10 @@ const CharacterDetail = () => {
   const hairStyle = getHairStyle(character.description);
 
   const traits: { label: string; value: string }[] = [];
+  if (character.age) traits.push({ label: "age", value: character.age });
   if (skinLabel) traits.push({ label: "skin", value: skinLabel });
   if (character.body) traits.push({ label: "body", value: character.body });
+  if (character.bust_size && character.bust_size !== "regular") traits.push({ label: "bust", value: character.bust_size });
   if (hairStyle) traits.push({ label: "hair style", value: hairStyle });
   if (character.hair) traits.push({ label: "hair colour", value: character.hair });
   if (character.eye) traits.push({ label: "eyes", value: character.eye });
