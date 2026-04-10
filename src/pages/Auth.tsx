@@ -171,7 +171,9 @@ const Auth = () => {
                   <div className="flex-1 h-[2px] bg-border" />
                   <span className="text-[11px] font-extrabold lowercase text-foreground/40">or use email</span>
                   <div className="flex-1 h-[2px] bg-border" />
-            </div>
+                </div>
+              </>
+            )}
 
             <input
               type="email"
