@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Gem } from "lucide-react";
 import BackButton from "@/components/BackButton";
@@ -6,6 +6,7 @@ import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 
 const plans = [
@@ -32,8 +33,24 @@ const TopUps = () => {
 
   if (!loading && !user) return null;
 
+  const [buying, setBuying] = useState(false);
+
   const handleBuy = async (plan: typeof plans[number]) => {
-    toast("coming soon");
+    if (buying) return;
+    setBuying(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("add-credits", {
+        body: { amount: plan.gems },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      await refetch();
+      toast.success(`purchase successful! +${plan.gems} gems`);
+    } catch (err: any) {
+      toast.error(err.message || "purchase failed");
+    } finally {
+      setBuying(false);
+    }
   };
 
   return (
