@@ -22,7 +22,7 @@
     --muted: 0 0% 13%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 48 97% 53%;
+    --accent: 52 100% 54%;
     --accent-foreground: 0 0% 0%;
 
     --border: 0 0% 10%;
@@ -32,8 +32,8 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* neon yellow accent — #facc15 */
-    --neon-yellow: 48 97% 53%;
+    /* neon yellow accent — #ffe414 */
+    --neon-yellow: 52 100% 54%;
     --neon-yellow-foreground: 0 0% 0%;
 
     /* loader bar — light blue */
@@ -56,7 +56,7 @@
     --ambient-blue-3: 231 74% 38%;
 
     --loader-cyan: 189 100% 50%;
-    --loader-gold: 48 97% 53%;
+    --loader-gold: 52 100% 54%;
     --loader-green: 130 85% 49%;
     --loader-pink: 330 80% 55%;
     --loader-blue: 210 100% 55%;
