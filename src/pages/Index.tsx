@@ -545,7 +545,7 @@ const Index = () => {
           <ExpressionDropdown value={expression} onChange={setExpression} />
 
           <div className="relative">
-            <span className="block text-sm font-[900] lowercase mb-2 text-white">describe your photo</span>
+            <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
               value={prompt}
               onChange={setPrompt}
