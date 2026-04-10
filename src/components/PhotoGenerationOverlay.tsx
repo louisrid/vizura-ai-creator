@@ -85,8 +85,6 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
             duration={25000}
             phrases={phrases}
             phraseInterval={5200}
-            requireTapToContinue
-            expandTapTarget
             onComplete={() => setLoadingDone(true)}
           />
         </motion.div>
