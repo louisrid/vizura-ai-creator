@@ -6,6 +6,7 @@ import { registerNavGuard } from "@/lib/navGuard";
 import { displayAge } from "@/lib/displayAge";
 
 import PageTitle from "@/components/PageTitle";
+import ImageZoomViewer from "@/components/ImageZoomViewer";
 
 import DotDecal from "@/components/DotDecal";
 import { SignInOverlay } from "@/components/GuidedCreator";
@@ -90,6 +91,7 @@ const ChooseFace = () => {
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Second loading phase: angle + body generation

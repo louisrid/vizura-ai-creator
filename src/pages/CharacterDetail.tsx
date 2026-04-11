@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Loader2, Trash2, Lock, RefreshCw, Camera, Check } from "lucide-react";
 import ModalCloseButton from "@/components/ModalCloseButton";
+import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -50,6 +51,9 @@ const CharacterDetail = () => {
   const [editingName, setEditingName] = useState(false);
   const [editName, setEditName] = useState("");
   const [savingName, setSavingName] = useState(false);
+  const [zoomedUrl, setZoomedUrl] = useState<string | null>(null);
+  const [revealingAngle, setRevealingAngle] = useState(false);
+  const [revealingBody, setRevealingBody] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -67,7 +71,22 @@ const CharacterDetail = () => {
         .eq("id", id)
         .eq("user_id", user.id)
         .single();
-      if (data) setCharacter(data as unknown as Character);
+      if (data) {
+        // Check if angle/body were regenerated while away
+        const regenAngle = sessionStorage.getItem(`vizura_regen_angle_${id}`);
+        const regenBody = sessionStorage.getItem(`vizura_regen_body_${id}`);
+        if (regenAngle && data.face_angle_url) {
+          sessionStorage.removeItem(`vizura_regen_angle_${id}`);
+          setRevealingAngle(true);
+          setTimeout(() => setRevealingAngle(false), 1200);
+        }
+        if (regenBody && data.body_anchor_url) {
+          sessionStorage.removeItem(`vizura_regen_body_${id}`);
+          setRevealingBody(true);
+          setTimeout(() => setRevealingBody(false), 1200);
+        }
+        setCharacter(data as unknown as Character);
+      }
       setLoading(false);
     };
     if (user) fetch();
@@ -97,8 +116,13 @@ const CharacterDetail = () => {
     const target = regenTarget;
     setRegenTarget(null);
 
-    if (target === "angle") setRegeneratingAngle(true);
-    else setRegeneratingBody(true);
+    if (target === "angle") {
+      setRegeneratingAngle(true);
+      sessionStorage.setItem(`vizura_regen_angle_${character.id}`, "1");
+    } else {
+      setRegeneratingBody(true);
+      sessionStorage.setItem(`vizura_regen_body_${character.id}`, "1");
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke("generate", {
@@ -121,9 +145,13 @@ const CharacterDetail = () => {
       });
 
       await refetchGems();
+      if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
+      else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
       toast("1 gem used");
     } catch (err) {
       console.error("Regenerate error:", err);
+      if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
+      else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
       toast.error("regeneration failed, please try again");
     } finally {
       setRegeneratingAngle(false);
@@ -235,9 +263,14 @@ const CharacterDetail = () => {
     overlay: "lock" | "regenerate" | null,
     showSpinner = false,
     onRegenClick?: () => void,
+    isRevealing = false,
   ) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift" style={{ borderRadius: 10, backgroundColor: "#000000" }}>
-      {showSpinner ? (
+    <div
+      className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift cursor-pointer"
+      style={{ borderRadius: 10, backgroundColor: "#000000" }}
+      onClick={() => { if (isValidImg(url) && !showSpinner && !isRevealing) setZoomedUrl(url!); }}
+    >
+      {showSpinner || isRevealing ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -290,8 +323,8 @@ const CharacterDetail = () => {
             )}
             <div className="grid grid-cols-3 gap-2" style={{ overflow: "visible" }}>
               {imgSlot(character.face_image_url, "front", "lock")}
-              {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
-              {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
+              {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"), revealingAngle)}
+              {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"), revealingBody)}
             </div>
           </div>
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
@@ -355,8 +388,8 @@ const CharacterDetail = () => {
               )}
               <div className="grid grid-cols-3 gap-4" style={{ overflow: "visible" }}>
                 {imgSlot(character.face_image_url, "front", "lock")}
-                {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"))}
-                {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
+                {imgSlot(character.face_angle_url, "3/4 angle", "regenerate", regeneratingAngle, () => setRegenTarget("angle"), revealingAngle)}
+                {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"), revealingBody)}
               </div>
             </div>
           </div>
@@ -450,6 +483,8 @@ const CharacterDetail = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ImageZoomViewer url={zoomedUrl} onClose={() => setZoomedUrl(null)} />
     </div>
   );
 };
