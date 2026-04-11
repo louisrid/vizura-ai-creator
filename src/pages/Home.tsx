@@ -508,9 +508,7 @@ const Home = () => {
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="flex h-full w-full items-center justify-center">
-                        <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
-                      </div>
+                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -568,9 +566,7 @@ const Home = () => {
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="flex h-full w-full items-center justify-center">
-                        <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
-                      </div>
+                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
                     </AspectRatio>
                   </div>
                 ))
