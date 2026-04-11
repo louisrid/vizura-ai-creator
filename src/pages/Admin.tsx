@@ -32,9 +32,7 @@ const fmtDate = (iso: string) => {
 /* ── Standardised admin loading spinner ── */
 const AdminLoader = () => (
   <div className="flex items-center justify-center py-24">
-    <div style={{ borderRadius: 10, backgroundColor: "#1a1a1a", padding: 24 }}>
-      <Loader2 className="animate-spin" size={24} style={{ color: "rgba(255,255,255,0.5)" }} />
-    </div>
+    <Loader2 className="animate-spin" size={24} style={{ color: "#ffffff" }} strokeWidth={3} />
   </div>
 );
 
@@ -355,7 +353,24 @@ const Admin = () => {
   }, [user, loadAll]);
 
   if (authLoading || !user || user.email !== ADMIN_EMAIL) {
-    return <div className="flex min-h-screen items-center justify-center bg-background"><Loader2 className="animate-spin text-foreground" size={28} /></div>;
+    return (
+      <div className="relative min-h-screen bg-background overflow-hidden">
+        <DotDecal />
+        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-20">
+          <div className="flex items-center gap-3 mb-7">
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
+            <div className="h-7 w-20" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+          </div>
+          <div className="grid grid-cols-3 gap-2.5 mb-8">
+            {[0,1,2].map(i => (
+              <div key={i} className="py-6" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
+                <div className="h-8 w-16 mx-auto" style={{ borderRadius: 6, backgroundColor: "#111" }} />
+              </div>
+            ))}
+          </div>
+        </main>
+      </div>
+    );
   }
 
   return (

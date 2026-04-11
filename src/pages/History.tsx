@@ -95,8 +95,16 @@ const History = () => {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="animate-spin text-foreground" size={24} />
+          <div className="space-y-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:space-y-0">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}>
+                <div className="w-full aspect-[4/3]" style={{ backgroundColor: "#111" }} />
+                <div className="p-4 space-y-2">
+                  <div className="h-3 w-3/4" style={{ borderRadius: 4, backgroundColor: "#111" }} />
+                  <div className="h-3 w-1/2" style={{ borderRadius: 4, backgroundColor: "#111" }} />
+                </div>
+              </div>
+            ))}
           </div>
         ) : items.length === 0 ? (
           <div className="border-[2px] border-border rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto">
