@@ -667,6 +667,19 @@ serve(async (req) => {
     const regenerateTarget = body?.regenerate_target || "both";
     const regenerateSingle = body?.regenerate_single || null;
 
+    /* ── banned words check ── */
+    if (rawPrompt && BANNED_RE.test(rawPrompt)) {
+      const adminClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      await logRejectedPrompt(adminClient, userId, rawPrompt);
+      return new Response(
+        JSON.stringify({ error: "Prompt not allowed", code: "CONTENT_POLICY" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     /* ── SINGLE PHOTO REGENERATION FLOW (1 gem) ── */
     if (regenerateSingle && (regenerateSingle === "angle" || regenerateSingle === "body")) {
       const singleCharId = body?.character_id;
