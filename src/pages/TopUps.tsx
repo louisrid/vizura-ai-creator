@@ -80,7 +80,7 @@ const TopUps = () => {
 
                 <div className="mt-3">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-black"
+                    className="inline-flex items-center gap-1.5 rounded-[10px] px-4 py-2 text-sm font-[900] lowercase text-black"
                     style={{ backgroundColor: "#00e0ff" }}
                   >
                     <Gem size={14} strokeWidth={2.5} className="text-black" />
@@ -93,7 +93,7 @@ const TopUps = () => {
                     <span className="text-[11px] font-[700] lowercase text-white/35">{pack.subtitle}</span>
                   )}
                   {pack.badge && (
-                    <span className="inline-block rounded-full px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                    <span className="inline-block rounded-[10px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
                   )}
