@@ -45,7 +45,7 @@ const IntroNavArrow = ({
     style={{
       backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
       border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${NEON_BLUE}`,
-      borderRadius: 16, outline: "none", padding: 0,
+      borderRadius: 10, outline: "none", padding: 0,
       cursor: disabled ? "default" : "pointer",
       opacity: disabled ? 0.3 : 1,
       transition: "transform 0.05s, opacity 0.2s",

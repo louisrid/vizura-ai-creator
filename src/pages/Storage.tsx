@@ -122,7 +122,7 @@ const Storage = () => {
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             {Array.from({ length: 12 }).map((_, i) => (
-              <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+              <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
                   <div className="flex h-full w-full items-center justify-center">
                     <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -132,13 +132,13 @@ const Storage = () => {
             ))}
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[#1a1a1a] rounded-2xl p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="border-2 border-[#1a1a1a] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
               className="h-12 md:h-14 w-full max-w-[12rem] md:max-w-[16rem] mx-auto bg-neon-yellow text-sm md:text-base font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-              style={{ borderRadius: 12 }}
+              style={{ borderRadius: 10 }}
             >
               create a photo
             </button>
@@ -206,22 +206,22 @@ const Storage = () => {
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
 
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid #1a1a1a" }}>
                 <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
-                <div className="px-3 overflow-hidden" style={{ borderRadius: 12 }}>
-                  <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 12 }} />
+                <div className="px-3 overflow-hidden" style={{ borderRadius: 10 }}>
+                  <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 10 }} />
                 </div>
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2" style={{ backgroundColor: "#1a1a1a" }}>
                     <div
-                      className="h-10 md:h-12 flex items-center justify-center border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[12px]"
+                      className="h-10 md:h-12 flex items-center justify-center border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
                       style={{ backgroundColor: "#000" }}
                     >
                       {expanded.prompt}
                     </div>
                   </div>
                 )}
-                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 14px 14px" }}>
+                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
                   <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
                     <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
                       download <Download size={12} strokeWidth={2.5} />

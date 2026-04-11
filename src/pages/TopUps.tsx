@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 
 const packs = [
-  { id: "starter", title: "starter pack", gems: 15, price: 9, badge: null, subtitle: "recommended for beginners" },
-  { id: "pro", title: "pro pack", gems: 35, price: 20, badge: "15% off!", subtitle: null },
-  { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!", subtitle: null },
+  { id: "starter", title: "starter pack", gems: 15, price: 9, badge: null },
+  { id: "pro", title: "pro pack", gems: 35, price: 20, badge: "15% off!" },
+  { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!" },
 ] as const;
 
 const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-4 4l8-8M0 16L16 0M12 20l8-8' stroke='%23ffffff' stroke-opacity='0.035' stroke-width='0.5'/%3E%3C/svg%3E")`;
@@ -66,7 +66,7 @@ const TopUps = () => {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
+              className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000",
                 backgroundImage: gridPatternSvg,
@@ -80,20 +80,17 @@ const TopUps = () => {
 
                 <div className="mt-3">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-black"
-                    style={{ backgroundColor: "#00e0ff" }}
+                    className="inline-flex items-center gap-1.5 rounded-[10px] px-4 py-2 text-sm font-[900] lowercase text-white"
+                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
                   >
-                    <Gem size={14} strokeWidth={2.5} className="text-black" />
+                    <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                     {pack.gems} gems
                   </span>
                 </div>
 
-                <div className="mt-3">
-                  {pack.subtitle && (
-                    <span className="text-[11px] font-[700] lowercase text-white/35">{pack.subtitle}</span>
-                  )}
+                <div className="mt-3 min-h-[24px]">
                   {pack.badge && (
-                    <span className="inline-block rounded-full px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                    <span className="inline-block rounded-[10px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
                   )}
@@ -108,7 +105,7 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-[12px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
+                  className="rounded-[10px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
                   <ShoppingCart size={22} strokeWidth={3} />
                 </span>

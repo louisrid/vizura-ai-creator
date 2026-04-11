@@ -147,9 +147,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? (isDesktop ? "18px 18px 0 0" : "14px 14px 0 0")
+                  ? (isDesktop ? "18px 18px 0 0" : "10px 10px 0 0")
                   : isLast
-                    ? (isDesktop ? "0 0 18px 18px" : "0 0 14px 14px")
+                    ? (isDesktop ? "0 0 18px 18px" : "0 0 10px 10px")
                     : "0";
                 return (
                   <div key={item.label}>
@@ -199,7 +199,7 @@ const Header = () => {
                       fontSize: isDesktop ? 17 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
-                      borderRadius: isDesktop ? "0 0 18px 18px" : "0 0 14px 14px",
+                      borderRadius: isDesktop ? "0 0 18px 18px" : "0 0 10px 10px",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
@@ -277,7 +277,7 @@ const Header = () => {
                 onClick={() => setOpen(!open)}
                 className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                 style={{
-                  borderRadius: 12,
+                  borderRadius: 10,
                   backgroundColor: "#1a1a1a",
                 }}
                 aria-label="open menu"

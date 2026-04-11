@@ -112,7 +112,7 @@ const MyCharacters = () => {
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             {Array.from({ length: 12 }).map((_, i) => (
-              <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+              <div key={`skel-${i}`} className="hover-lift" style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                 <AspectRatio ratio={3 / 4}>
                   <div className="flex h-full w-full items-center justify-center">
                     <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -126,7 +126,7 @@ const MyCharacters = () => {
             <button
               onClick={handleCreateCharacter}
               className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
-              style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
@@ -144,7 +144,7 @@ const MyCharacters = () => {
                     onClick={() => navigate(`/characters/${char.id}`)}
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{
-                      borderRadius: 16,
+                      borderRadius: 10,
                       border: isNew ? "3px solid #ffe603" : "2px solid #1a1a1a",
                       backgroundColor: "#1a1a1a",
                     }}

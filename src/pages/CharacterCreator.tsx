@@ -35,7 +35,7 @@ const PillGroup = ({
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
-          className={`rounded-xl px-3.5 py-2 text-xs font-extrabold lowercase transition-all ${
+          className={`rounded-[10px] px-3.5 py-2 text-xs font-extrabold lowercase transition-all ${
             value === opt
               ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
               : "border-[3px] border-border bg-card text-foreground/70 hover:border-foreground/40"
@@ -276,7 +276,7 @@ const CharacterCreator = () => {
         </div>
 
         {/* Hero image box */}
-        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-2xl border-[2px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
+        <section className="mx-auto mb-8 flex w-[92%] max-w-[22rem] items-center justify-center rounded-[10px] border-[2px] border-border bg-card" style={{ aspectRatio: "10/11" }}>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neon-yellow">
             <Sparkles size={28} strokeWidth={2.5} className="text-neon-yellow-foreground" />
           </div>
@@ -292,7 +292,7 @@ const CharacterCreator = () => {
             value={characterName}
             onChange={(e) => setCharacterName(e.target.value)}
             placeholder="give your character a name..."
-            className="h-12 w-full rounded-2xl border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="h-12 w-full rounded-[10px] border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -320,14 +320,14 @@ const CharacterCreator = () => {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex w-full items-center justify-center rounded-2xl border-[3px] border-dashed border-foreground/20 bg-card transition-colors hover:border-foreground/40"
+            className="flex w-full items-center justify-center rounded-[10px] border-[3px] border-dashed border-foreground/20 bg-card transition-colors hover:border-foreground/40"
             style={{ aspectRatio: "4/3" }}
           >
             {referencePreview ? (
               <img
                 src={referencePreview}
                 alt="Reference"
-                className="h-full w-full rounded-2xl object-cover"
+                className="h-full w-full rounded-[10px] object-cover"
               />
             ) : (
               <Upload size={28} strokeWidth={2.5} className="text-foreground/30" />
@@ -344,12 +344,12 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
             rows={8}
-            className="min-h-52 w-full resize-none rounded-2xl border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-52 w-full resize-none rounded-[10px] border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
         {error && (
-          <div className="mt-5 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-5 rounded-[10px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -357,7 +357,7 @@ const CharacterCreator = () => {
         {/* Create button */}
         <div className="mt-8 mb-6">
           <button
-            className="flex h-16 w-full items-center justify-center gap-1.5 rounded-2xl text-sm font-extrabold lowercase transition-all hover:opacity-90 disabled:opacity-50"
+            className="flex h-16 w-full items-center justify-center gap-1.5 rounded-[10px] text-sm font-extrabold lowercase transition-all hover:opacity-90 disabled:opacity-50"
             style={{ backgroundColor: "#050a10", color: "#00e0ff", border: "2px solid #00e0ff", boxShadow: "0 0 40px 16px rgba(0,0,0,0.35)" }}
             onClick={handleCreate}
             disabled={isSaving}

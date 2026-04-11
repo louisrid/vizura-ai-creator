@@ -32,7 +32,7 @@ const fmtDate = (iso: string) => {
 /* ── Standardised admin loading spinner ── */
 const AdminLoader = () => (
   <div className="flex items-center justify-center py-24">
-    <div style={{ borderRadius: 16, backgroundColor: "#1a1a1a", padding: 24 }}>
+    <div style={{ borderRadius: 10, backgroundColor: "#1a1a1a", padding: 24 }}>
       <Loader2 className="animate-spin" size={24} style={{ color: "rgba(255,255,255,0.5)" }} />
     </div>
   </div>
@@ -43,7 +43,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
     <div className="relative w-full max-w-md md:max-w-lg">
       <ModalCloseButton onClick={onClose} />
       <div>
-        <img src={photo.image_url} alt="" className="w-full rounded-xl object-contain max-h-[60vh]" />
+        <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" />
         <div className="mt-4 space-y-1.5">
           <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
           <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>
@@ -89,9 +89,9 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
   const ageDisplay = displayAge(character.id, character.age);
 
   const imgSlot = (url: string | null | undefined, label: string) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 10, backgroundColor: "#000000" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 12 }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
       ) : (
         <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
@@ -112,7 +112,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
       </div>
 
       <div className="flex flex-col gap-3 max-w-lg">
-        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
+        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
           <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
             {displayName}, {ageDisplay}
           </h1>
@@ -122,7 +122,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
             {imgSlot(character.body_anchor_url, "full body")}
           </div>
         </div>
-        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="px-4 py-3">
+        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
           <div className="grid grid-cols-4 gap-1.5">
             {traits.map((t) => (
               <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
@@ -208,7 +208,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                     key={c.id}
                     onClick={() => setViewingCharacter(c)}
                     className="relative overflow-hidden hover-lift active:scale-[0.97] transition-transform text-left"
-                    style={{ borderRadius: 16, backgroundColor: "#1a1a1a" }}
+                    style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
                   >
                     {c.face_image_url ? (
                       <AspectRatio ratio={3 / 4}>
@@ -285,7 +285,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid #1a1a1a" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
@@ -386,7 +386,7 @@ const Admin = () => {
                       { label: "characters", value: overview?.characters ?? 0, icon: Sparkles },
                       { label: "photos", value: overview?.photos ?? 0, icon: ImageIcon },
                     ].map(({ label, value, icon: Icon }) => (
-                      <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 14, backgroundColor: "#1a1a1a" }}>
+                      <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
                         <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
                         <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
                         <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>{label}</span>
@@ -402,7 +402,7 @@ const Admin = () => {
                         {photos.map((p: any, i: number) => {
                           const { label, type } = formatPhotoLabel(p.prompt);
                           return (
-                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 14, backgroundColor: "#1a1a1a", overflow: "hidden" }}>
+                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 10, backgroundColor: "#1a1a1a", overflow: "hidden" }}>
                               <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
@@ -441,7 +441,7 @@ const Admin = () => {
                             key={i}
                             onClick={() => setViewingUserId(u.user_id)}
                             className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20 active:scale-[0.98]"
-                            style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}
+                            style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
                           >
                             <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
                             <div className="flex items-center gap-3 shrink-0">
@@ -462,7 +462,7 @@ const Admin = () => {
                     {rejected.length > 0 ? (
                       <div className="space-y-1.5">
                         {rejected.map((r: any, i: number) => (
-                          <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+                          <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
                             <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-white leading-snug">{r.prompt_text}</p>
                             <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>
                               {r.user_email} · {fmtDate(r.rejected_at)}

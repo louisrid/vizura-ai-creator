@@ -132,7 +132,7 @@ const Auth = () => {
             <button
               type="button"
               onClick={handleBack}
-              className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95 md:w-12 md:h-12"
+              className="w-10 h-10 rounded-[10px] bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95 md:w-12 md:h-12"
               aria-label="go back"
             >
               <ArrowLeft size={18} strokeWidth={3} />
@@ -140,14 +140,14 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-2xl border-2 border-[#1a1a1a] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="rounded-[10px] border-2 border-[#1a1a1a] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
             {!inWebView && (
               <>
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                  style={{ borderRadius: 12 }}
+                  style={{ borderRadius: 10 }}
                 >
                   {googleLoading ? (
                     <>
@@ -183,7 +183,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[#2a2a2a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+              style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -195,7 +195,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[#2a2a2a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+              style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
 

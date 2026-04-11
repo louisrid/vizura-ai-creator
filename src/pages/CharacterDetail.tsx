@@ -236,11 +236,11 @@ const CharacterDetail = () => {
     showSpinner = false,
     onRegenClick?: () => void,
   ) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift" style={{ borderRadius: 12, backgroundColor: "#000000" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift" style={{ borderRadius: 10, backgroundColor: "#000000" }}>
       {showSpinner ? (
         <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
       ) : isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 12 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
       )}
@@ -272,11 +272,11 @@ const CharacterDetail = () => {
           <PageTitle className="mb-0">details</PageTitle>
         </div>
         <div className="flex flex-col gap-3">
-          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
+          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
-                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 12, backgroundColor: "#ffe603" }}>
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 10 }} />
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 10, backgroundColor: "#ffe603" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000" />}
                 </button>
               </div>
@@ -294,12 +294,12 @@ const CharacterDetail = () => {
               {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"))}
             </div>
           </div>
-          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="px-4 py-3">
+          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
             <div className="grid grid-cols-4 gap-1.5">
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                  <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[12px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
+                  <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -313,14 +313,14 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-10 text-xs"
-              style={{ color: "#000", borderRadius: 12, backgroundColor: "#ffe603" }}
+              style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
             <button
               onClick={() => setShowDelete(true)}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-10 text-xs"
-              style={{ color: "#ff4444", borderRadius: 12, backgroundColor: "#100505", border: "2px solid #ff4444" }}
+              style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
             >
               delete character <Trash2 size={14} strokeWidth={2.5} />
             </button>
@@ -337,11 +337,11 @@ const CharacterDetail = () => {
         <div className="grid grid-cols-12 gap-8">
           {/* Left: photos */}
           <div className="col-span-7">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-6">
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 12 }} />
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 12, backgroundColor: "#ffe603" }}>
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 10 }} />
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 10, backgroundColor: "#ffe603" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000" />}
                   </button>
                 </div>
@@ -362,13 +362,13 @@ const CharacterDetail = () => {
           </div>
           {/* Right: details + actions */}
           <div className="col-span-5 flex flex-col gap-5">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }} className="p-5">
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
               <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">traits</h3>
               <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
                   <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid #1a1a1a" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                    <span className="inline-block font-[800] lowercase text-white leading-none text-[14px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[12px]" style={{ backgroundColor: "#000", padding: "8px 16px" }}>{t.value}</span>
+                    <span className="inline-block font-[800] lowercase text-white leading-none text-[14px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "8px 16px" }}>{t.value}</span>
                   </div>
                 ))}
               </div>
@@ -377,14 +377,14 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-12 text-sm"
-              style={{ color: "#000", borderRadius: 12, backgroundColor: "#ffe603" }}
+              style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
               create photo <Camera size={18} strokeWidth={2.5} />
             </button>
             <button
               onClick={() => setShowDelete(true)}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-12 text-sm"
-              style={{ color: "#ff4444", borderRadius: 12, backgroundColor: "#100505", border: "2px solid #ff4444" }}
+              style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
             >
               delete character <Trash2 size={14} strokeWidth={2.5} />
             </button>
@@ -418,7 +418,7 @@ const CharacterDetail = () => {
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-sm md:max-w-md"
-              style={{ backgroundColor: "#000000", borderRadius: 16, border: "2px solid #1a1a1a", padding: "28px 24px 24px" }}
+              style={{ backgroundColor: "#000000", borderRadius: 10, border: "2px solid #1a1a1a", padding: "28px 24px 24px" }}
             >
               <ModalCloseButton onClick={() => setShowDelete(false)} />
 
@@ -433,7 +433,7 @@ const CharacterDetail = () => {
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
                   className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
-                  style={{ backgroundColor: "#1a1a1a", borderRadius: 12 }}
+                  style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
                 >
                   no
                 </button>
@@ -441,7 +441,7 @@ const CharacterDetail = () => {
                   onClick={handleDelete}
                   disabled={deleting}
                   className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
-                  style={{ backgroundColor: "#1a0505", borderRadius: 12, border: "2px solid #ff4444", color: "#ff4444" }}
+                  style={{ backgroundColor: "#1a0505", borderRadius: 10, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
                 </button>

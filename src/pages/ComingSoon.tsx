@@ -10,7 +10,7 @@ const ComingSoon = ({ title }: { title: string }) => (
           <BackButton />
           <PageTitle className="mb-0">{title}</PageTitle>
         </div>
-        <div className="border-[2px] border-neon-yellow rounded-2xl p-8 md:p-12 text-center bg-card md:max-w-md md:mx-auto">
+        <div className="border-[2px] border-neon-yellow rounded-[10px] p-8 md:p-12 text-center bg-card md:max-w-md md:mx-auto">
           <Sparkles size={20} className="mx-auto mb-3 text-neon-yellow md:w-7 md:h-7" />
           <p className="text-sm md:text-base font-extrabold lowercase text-foreground">coming soon</p>
           <p className="text-xs md:text-sm font-bold lowercase text-foreground/50 mt-2">this feature is on the way</p>

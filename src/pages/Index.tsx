@@ -42,7 +42,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-2xl border-2 border-[#1a1a1a] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
+    <div className="flex items-stretch rounded-[10px] border-2 border-[#1a1a1a] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -60,7 +60,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
                 color: isSelected ? "#000" : "rgba(255,255,255,0.4)",
-                borderRadius: isFirst && isLast ? "14px" : isFirst ? "14px 0 0 14px" : isLast ? "0 14px 14px 0" : "0",
+                borderRadius: isFirst && isLast ? "10px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
               }}
             >
               {opt}
@@ -114,7 +114,7 @@ const HighlightedPromptArea = ({
   }, [value, charName]);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-input bg-card">
+    <div className="relative overflow-hidden rounded-[10px] border-2 border-input bg-card">
       <div
         ref={overlayRef}
         aria-hidden
@@ -171,7 +171,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 12, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}
+          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-foreground">{selected.label}</span>
           <ChevronDown
@@ -189,7 +189,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 12, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -223,7 +223,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 12 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 10 }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -410,13 +410,13 @@ const Index = () => {
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 16, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+          style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
         >
           {characters.map((c, idx) => {
             const isFirst = idx === 0;
             const isLast = idx === characters.length - 1 && !(characters.length === 0 && user);
             const isSelected = selectedCharId === c.id;
-            const borderRadius = isFirst && isLast ? "14px" : isFirst ? "14px 14px 0 0" : isLast ? "0 0 14px 14px" : "0";
+            const borderRadius = isFirst && isLast ? "10px" : isFirst ? "10px 10px 0 0" : isLast ? "0 0 10px 10px" : "0";
             return (
               <Fragment key={c.id}>
                 {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
@@ -461,7 +461,7 @@ const Index = () => {
                   navigate("/", { state: { openCreator: true } });
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
-                style={{ borderRadius: "14px" }}
+                style={{ borderRadius: "10px" }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
@@ -503,7 +503,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 12, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -525,7 +525,7 @@ const Index = () => {
             <motion.section
               layout
               className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 14, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -565,7 +565,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[10px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -587,7 +587,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 14, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -609,7 +609,7 @@ const Index = () => {
             <motion.section
               layout
               className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 16, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -654,7 +654,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-2xl border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[10px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}

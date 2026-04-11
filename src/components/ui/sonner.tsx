@@ -95,7 +95,7 @@ export const Toaster = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 80, transition: { duration: 0.3, ease: "easeIn" } }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="pointer-events-auto inline-flex items-center rounded-2xl px-4 py-2.5"
+                className="pointer-events-auto inline-flex items-center rounded-[10px] px-4 py-2.5"
                 style={{ backgroundColor: "hsl(140 100% 50%)", color: "hsl(140 60% 15%)" }}
                 role="status"
                 aria-live="polite"
