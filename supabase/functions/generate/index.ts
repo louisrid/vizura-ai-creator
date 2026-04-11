@@ -15,9 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "close-up selfie-angle, above-eye-level, sharp-focus";
+const SELFIE_PREFIX = "one-arm selfie-angle, other arm casually by side, above-eye-level, sharp-focus";
 
-const PHOTO_PREFIX = "third-person natural-photography, sharp-focus, no-bokeh";
+const PHOTO_PREFIX = "third-person natural-photography, sharp-focus on entire-image, sharp detailed-background, no-bokeh, no-blur";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -255,18 +255,18 @@ function buildFinalPrompt(
   const parts: string[] = [];
 
   if (characterTraits) {
+    parts.push(scenePrompt);
     parts.push(`a realistic casual iPhone-style ${typeLabel} of ${charName} shown in the reference images`);
     parts.push(`very attractive${exprStr}`);
-    parts.push(scenePrompt);
     parts.push(`IMPORTANT: the outfit described in the scene description MUST override any clothing from reference images. She must wear exactly what is described above, NOT the clothing from reference photos`);
     parts.push(`She has: ${characterTraits}`);
   } else {
+    parts.push(scenePrompt);
     parts.push(`a realistic casual iPhone-style ${typeLabel} of a woman`);
     parts.push(`very attractive${exprStr}`);
-    parts.push(scenePrompt);
   }
 
-  parts.push("direct-eye-contact, sharp-focus entire-image no-bokeh, natural-framing, matte-skin with texture");
+  parts.push("direct-eye-contact, sharp-focus entire-image no-bokeh no-blur sharp-background, natural-framing, realistic matte-skin with visible-pores and fine-texture and skin-imperfections, soft-ribcage smooth-torso");
   parts.push(perspective);
 
   if (bodyType) {
