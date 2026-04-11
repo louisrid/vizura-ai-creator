@@ -189,7 +189,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -410,7 +410,7 @@ const Index = () => {
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+          style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
         >
           {characters.map((c, idx) => {
             const isFirst = idx === 0;

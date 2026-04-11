@@ -155,7 +155,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#1a1a1a", color: "#fff", border: "2px solid #1a1a1a" }
+        : { backgroundColor: "#1a1a1a", color: "#fff", border: "2px solid rgba(255,255,255,0.15)" }
       ),
     }}
   >
@@ -480,7 +480,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
             className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
+            style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#1a1a1a" }}
           />
           <motion.button
             type="button"

@@ -206,7 +206,7 @@ const Storage = () => {
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
 
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid #1a1a1a" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
                 <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
                 <div className="px-3 overflow-hidden" style={{ borderRadius: 10 }}>
                   <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 10 }} />
