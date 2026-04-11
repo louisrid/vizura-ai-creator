@@ -523,8 +523,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full rounded C-D cup breasts",
-  large: "very-large heavy DD-F cup breasts",
+  regular: "full rounded C cup breasts",
+  large: "very-large heavy DD cup breasts",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
