@@ -66,7 +66,7 @@ const TopUps = () => {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
+              className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000",
                 border: "2px solid rgba(255,255,255,0.15)",

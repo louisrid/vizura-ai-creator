@@ -423,11 +423,11 @@ const CharacterDetail = () => {
           <div className="col-span-5 flex flex-col gap-5">
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
               <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">traits</h3>
-              <div className="grid grid-cols-2 gap-2">
+               <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
                   <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.15)" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                    <span className="inline-block font-[800] lowercase text-white leading-none text-[14px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "8px 16px" }}>{t.value}</span>
+                    <span className="inline-block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
                   </div>
                 ))}
               </div>
