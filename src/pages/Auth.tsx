@@ -116,8 +116,20 @@ const Auth = () => {
 
   if (authLoading || user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="animate-spin text-foreground" size={28} />
+      <div className="relative min-h-screen bg-background overflow-hidden">
+        <DotDecal />
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-10 w-full">
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
+            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+          </div>
+          <div className="w-full space-y-3 p-5" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#111" }} />
+            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#222" }} />
+            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#222" }} />
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#111" }} />
+          </div>
+        </main>
       </div>
     );
   }

@@ -372,7 +372,6 @@ const Admin = () => {
       </div>
     );
   }
-  }
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
