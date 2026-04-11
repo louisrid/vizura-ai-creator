@@ -15,11 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX =
-  "iPhone selfie taken with front camera, one hand holding the phone at arms length, casual angle, everything in focus";
+const SELFIE_PREFIX = "close-up selfie-angle, above-eye-level, sharp-focus";
 
-const PHOTO_PREFIX =
-  "third person framing, composed perspective, natural photography angle";
+const PHOTO_PREFIX = "third-person natural-photography, sharp-focus, no-bokeh";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -268,7 +266,7 @@ function buildFinalPrompt(
     parts.push(scenePrompt);
   }
 
-  parts.push("natural framing with space above the head, authentic influencer style instagram photo, everything in focus including background, realistic matte skin with texture");
+  parts.push("direct-eye-contact, sharp-focus entire-image no-bokeh, natural-framing, matte-skin with texture");
   parts.push(perspective);
 
   if (bodyType) {
