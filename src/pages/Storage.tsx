@@ -208,14 +208,14 @@ const Storage = () => {
 
               <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
                 <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
-                <div className="px-3 overflow-hidden" style={{ borderRadius: "12px 12px 0 0" }}>
-                  <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: "12px 12px 0 0" }} />
+                <div className="px-3 overflow-hidden" style={{ borderRadius: 12 }}>
+                  <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 12 }} />
                 </div>
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2" style={{ backgroundColor: "#1a1a1a" }}>
                     <div
-                      className="h-10 md:h-12 flex items-center justify-center border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center"
-                      style={{ backgroundColor: "#000", borderRadius: "var(--radius)" }}
+                      className="h-10 md:h-12 flex items-center justify-center border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[12px]"
+                      style={{ backgroundColor: "#000" }}
                     >
                       {expanded.prompt}
                     </div>
