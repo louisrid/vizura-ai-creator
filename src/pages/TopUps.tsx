@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem } from "lucide-react";
+import { Gem, ShoppingCart } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -15,7 +15,7 @@ const packs = [
   { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!", subtitle: null },
 ] as const;
 
-const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M20 0v20M0 20h20' stroke='%23ffffff' stroke-opacity='0.03' stroke-width='0.5'/%3E%3C/svg%3E")`;
+const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-4 4l8-8M0 16L16 0M12 20l8-8' stroke='%23ffffff' stroke-opacity='0.035' stroke-width='0.5'/%3E%3C/svg%3E")`;
 
 const TopUps = () => {
   const { refetch } = useGems();
@@ -80,10 +80,10 @@ const TopUps = () => {
 
                 <div className="mt-3">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-white"
-                    style={{ backgroundColor: "hsl(189 100% 50% / 0.15)", border: "1.5px solid hsl(189 100% 50% / 0.3)" }}
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-black"
+                    style={{ backgroundColor: "#00e0ff" }}
                   >
-                    <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    <Gem size={14} strokeWidth={2.5} className="text-black" />
                     {pack.gems} gems
                   </span>
                 </div>
@@ -108,9 +108,9 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-[12px] px-6 py-3 text-base font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground"
+                  className="rounded-[12px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
-                  buy
+                  <ShoppingCart size={22} strokeWidth={3} />
                 </span>
               </button>
             </div>
