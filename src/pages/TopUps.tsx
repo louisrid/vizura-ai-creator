@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -9,10 +8,10 @@ import { toast } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 
-const plans = [
-  { label: "15 gems", gems: 15, price: 9 },
-  { label: "35 gems", gems: 35, price: 20 },
-  { label: "80 gems", gems: 80, price: 40 },
+const packs = [
+  { id: "starter", title: "starter pack", gems: 15, price: 9, tag: null },
+  { id: "pro", title: "pro pack", gems: 35, price: 20, tag: "popular" },
+  { id: "elite", title: "elite pack", gems: 80, price: 40, tag: "best value" },
 ];
 
 const TopUps = () => {
@@ -20,7 +19,7 @@ const TopUps = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [buying, setBuying] = useState(false);
+  const [buying, setBuying] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -33,65 +32,65 @@ const TopUps = () => {
 
   if (!loading && !user) return null;
 
-  const handleBuy = async (plan: typeof plans[number]) => {
+  const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;
-    setBuying(true);
+    setBuying(pack.id);
     try {
       const { data, error } = await supabase.functions.invoke("add-credits", {
-        body: { amount: plan.gems },
+        body: { amount: pack.gems },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       await refetch();
-      toast.success(`purchase successful! +${plan.gems} gems`);
+      toast.success(`+${pack.gems} gems added`);
     } catch (err: any) {
       toast.error(err.message || "purchase failed");
     } finally {
-      setBuying(false);
+      setBuying(null);
     }
   };
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
-        <div className="flex items-center gap-3 mb-7">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px] flex flex-col items-center">
+        <div className="flex items-center gap-3 mb-10 w-full">
           <BackButton />
           <PageTitle className="mb-0">top-ups</PageTitle>
         </div>
 
-        <div className="flex items-center gap-2 mb-6">
-          <Gem size={20} strokeWidth={2.5} className="text-gem-green" />
-          <span className="text-2xl font-extrabold lowercase text-foreground">{gems} gems</span>
+        {/* Gem balance */}
+        <div className="flex items-center justify-center gap-2 mb-10">
+          <span className="text-2xl">💎</span>
+          <span className="text-3xl font-[900] text-white">{gems}</span>
+          <span className="text-lg font-[800] lowercase text-white/50">gems</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-          {plans.map((plan) => (
-            <div
-              key={plan.label}
-              className="rounded-2xl p-4 md:p-5"
+        {/* Pack cards */}
+        <div className="w-full flex flex-col gap-4">
+          {packs.map((pack) => (
+            <button
+              key={pack.id}
+              disabled={buying !== null}
+              onClick={() => handleBuy(pack)}
+              className="relative w-full rounded-[16px] px-5 py-5 flex items-center justify-between transition-all active:scale-[0.97] disabled:opacity-60"
               style={{ backgroundColor: "#1a1a1a" }}
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Gem size={16} strokeWidth={2.5} className="text-gem-green" />
-                  <span className="text-lg md:text-xl font-extrabold lowercase text-foreground">
-                    {plan.gems} gems
-                  </span>
-                </div>
-                <span className="text-xl md:text-2xl font-extrabold lowercase text-foreground">
-                  ${plan.price}
+              {pack.tag && (
+                <span
+                  className="absolute top-3 right-4 text-[10px] font-[900] lowercase px-2 py-0.5 rounded-full bg-neon-yellow text-neon-yellow-foreground"
+                >
+                  {pack.tag}
+                </span>
+              )}
+              <div className="flex flex-col items-start">
+                <span className="text-sm font-[900] lowercase text-white">{pack.title}</span>
+                <span className="text-xs font-[700] lowercase text-white/40 mt-1 flex items-center gap-1">
+                  💎 {pack.gems} gems
                 </span>
               </div>
-
-              <button
-                className="w-full h-11 md:h-12 text-sm md:text-base font-extrabold lowercase transition-all bg-neon-yellow text-neon-yellow-foreground hover:opacity-90"
-                style={{ borderRadius: 12 }}
-                onClick={() => handleBuy(plan)}
-              >
-                buy gems
-              </button>
-            </div>
+              <span className="text-2xl font-[900] text-white">${pack.price}</span>
+            </button>
           ))}
         </div>
       </main>
