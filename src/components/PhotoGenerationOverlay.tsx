@@ -14,12 +14,14 @@ const OVERLAY_FADE_DURATION = 0.55;
 
 const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoGenerationOverlayProps) => {
   const [loadingDone, setLoadingDone] = useState(false);
+  const [showingLoader, setShowingLoader] = useState(true);
   const [dismissing, setDismissing] = useState(false);
   const loadingKeyRef = useRef(0);
 
   useEffect(() => {
     if (!open) {
       setLoadingDone(false);
+      setShowingLoader(true);
       setDismissing(false);
       loadingKeyRef.current += 1;
     }
@@ -43,16 +45,12 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
     };
   }, [open]);
 
-  // As soon as phase=success, mark loading done immediately so tap works right away
-  useEffect(() => {
-    if (phase === "success" && !loadingDone) {
-      setLoadingDone(true);
-    }
-  }, [phase, loadingDone]);
+  // When phase=success, let the bar accelerate to 100% via completeNow
+  // loadingDone will be set by the bar's onComplete callback
 
   if (!open) return null;
 
-  const showSuccess = phase === "success" && loadingDone && !dismissing;
+  const showSuccess = phase === "success" && loadingDone && !showingLoader && !dismissing;
 
   const dismissOverlay = () => {
     setDismissing(true);
@@ -85,7 +83,12 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
             duration={25000}
             phrases={phrases}
             phraseInterval={5200}
-            onComplete={() => setLoadingDone(true)}
+            completeNow={phase === "success"}
+            onComplete={() => {
+              setLoadingDone(true);
+              // Brief delay for the bar to sit at 100%, then fade to success
+              setTimeout(() => setShowingLoader(false), 400);
+            }}
           />
         </motion.div>
       ) : (
