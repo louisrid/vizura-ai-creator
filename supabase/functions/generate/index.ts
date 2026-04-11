@@ -523,8 +523,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "rounded B cup breasts",
-  large: "large prominent DD cup breasts, heavy bust",
+  regular: "full rounded C cup breasts, prominent chest",
+  large: "huge DD cup breasts, very heavy prominent chest, large cleavage",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -545,9 +545,8 @@ async function generateAngleAndBody(
     try {
       console.log("Generating 3/4 angle...");
       const angleBustKey = (bustSize || "regular").toLowerCase();
-      const angleBustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const angleBustPromptSegment = angleBustDesc ? `tight white v-neck top, ${angleBustDesc} with visible cleavage` : "tight white v-neck top, cleavage visible";
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. ${angleBustPromptSegment}. Same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Upper-body framed from top of head to chest. Matte skin with visible pores. Relaxed neutral expression, lips together.`;
+      const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}, visible cleavage. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Matte skin with visible pores. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -566,7 +565,7 @@ async function generateAngleAndBody(
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
       const bustPromptSegment = bustDesc ? `tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage` : "tight white v-neck top tucked into leggings, cleavage visible";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
       console.log("Full body prompt:", bodyPrompt);
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
