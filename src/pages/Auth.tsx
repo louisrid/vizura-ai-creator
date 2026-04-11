@@ -182,7 +182,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[#2a2a2a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
@@ -194,7 +194,7 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[#2a2a2a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
