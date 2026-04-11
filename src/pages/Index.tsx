@@ -603,7 +603,7 @@ const Index = () => {
 
           <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
-          <div className="relative" style={{ zIndex: 20 }}>
+          <div className="relative">
             <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
               value={prompt}
@@ -765,8 +765,8 @@ const Index = () => {
         )}
       </AnimatePresence>
 
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
-        <div className="mx-auto max-w-lg">
+      <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
+        <div className="mx-auto max-w-lg pointer-events-auto">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
         </div>
       </div>
