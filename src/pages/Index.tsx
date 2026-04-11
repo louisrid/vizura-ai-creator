@@ -254,6 +254,7 @@ const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
