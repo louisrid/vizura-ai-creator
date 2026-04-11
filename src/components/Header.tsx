@@ -138,7 +138,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid rgba(255,255,255,0.15)",
-                borderRadius: isDesktop ? 20 : 16,
+                borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -147,9 +147,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? (isDesktop ? "18px 18px 0 0" : "10px 10px 0 0")
+                  ? "10px 10px 0 0"
                   : isLast
-                    ? (isDesktop ? "0 0 18px 18px" : "0 0 10px 10px")
+                    ? "0 0 10px 10px"
                     : "0";
                 return (
                   <div key={item.label}>
@@ -207,6 +207,7 @@ const Header = () => {
                     <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                     log out
                   </button>
+                </>
                 </>
               )}
             </div>
@@ -279,6 +280,7 @@ const Header = () => {
                 style={{
                   borderRadius: 10,
                   backgroundColor: "#1a1a1a",
+                  border: "2px solid rgba(255,255,255,0.15)",
                 }}
                 aria-label="open menu"
               >
