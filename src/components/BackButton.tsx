@@ -21,7 +21,7 @@ const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
       onClick={handleBack}
       className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
       style={{
-        borderRadius: 12,
+        borderRadius: 10,
         backgroundColor: "#ffe603",
       }}
       aria-label="go back"

@@ -105,7 +105,7 @@ const History = () => {
             <button
               onClick={() => navigate("/create")}
               className="h-12 md:h-14 w-full max-w-[12rem] mx-auto bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-              style={{ borderRadius: 12 }}
+              style={{ borderRadius: 10 }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
