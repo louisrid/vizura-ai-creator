@@ -702,7 +702,13 @@ const ChooseFace = () => {
                     <div key={i} className="flex flex-col items-center gap-2">
                     <motion.button
                         type="button"
-                        onClick={() => handleFaceClick(i)}
+                        onClick={() => {
+                          if (selectedIndex === i) {
+                            setZoomedFaceUrl(url);
+                          } else {
+                            handleFaceClick(i);
+                          }
+                        }}
                         initial={{ opacity: 0 }}
                         animate={cardsRevealed ? { opacity: 1 } : { opacity: 0 }}
                         whileTap={{ scale: 1.02 }}
@@ -849,6 +855,7 @@ const ChooseFace = () => {
           }}
           onCancel={() => setShowBackConfirm(false)}
         />
+        <ImageZoomViewer url={zoomedFaceUrl} onClose={() => setZoomedFaceUrl(null)} showDownload={false} />
       </div>
     </>
   );
