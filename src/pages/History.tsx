@@ -99,7 +99,7 @@ const History = () => {
             <Loader2 className="animate-spin text-foreground" size={24} />
           </div>
         ) : items.length === 0 ? (
-          <div className="border-[2px] border-border rounded-2xl p-8 md:p-12 text-center md:max-w-md md:mx-auto">
+          <div className="border-[2px] border-border rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto">
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -116,7 +116,7 @@ const History = () => {
               <button
                 key={item.id}
                 onClick={() => setExpanded(item)}
-                className="w-full text-left rounded-2xl border-[2px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
+                className="w-full text-left rounded-[10px] border-[2px] border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={() => setItems((prev) => prev.filter((x) => x.id !== item.id))} />
                 <div className="p-4 space-y-2">
@@ -160,7 +160,7 @@ const History = () => {
               className="relative w-full max-w-sm md:max-w-lg"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="bg-card border-[2px] border-border rounded-2xl shadow-medium overflow-hidden">
+              <div className="bg-card border-[2px] border-border rounded-[10px] shadow-medium overflow-hidden">
                 <div className="relative">
                   <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 </div>

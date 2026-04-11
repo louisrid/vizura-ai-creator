@@ -43,7 +43,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
     <div className="relative w-full max-w-md md:max-w-lg">
       <ModalCloseButton onClick={onClose} />
       <div>
-        <img src={photo.image_url} alt="" className="w-full rounded-xl object-contain max-h-[60vh]" />
+        <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" />
         <div className="mt-4 space-y-1.5">
           <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
           <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>

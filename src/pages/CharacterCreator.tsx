@@ -35,7 +35,7 @@ const PillGroup = ({
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
-          className={`rounded-xl px-3.5 py-2 text-xs font-extrabold lowercase transition-all ${
+          className={`rounded-[10px] px-3.5 py-2 text-xs font-extrabold lowercase transition-all ${
             value === opt
               ? "bg-neon-yellow text-neon-yellow-foreground border-[3px] border-neon-yellow"
               : "border-[3px] border-border bg-card text-foreground/70 hover:border-foreground/40"

@@ -132,7 +132,7 @@ const Auth = () => {
             <button
               type="button"
               onClick={handleBack}
-              className="w-10 h-10 rounded-2xl bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95 md:w-12 md:h-12"
+              className="w-10 h-10 rounded-[10px] bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95 md:w-12 md:h-12"
               aria-label="go back"
             >
               <ArrowLeft size={18} strokeWidth={3} />
@@ -140,7 +140,7 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-2xl border-2 border-[#1a1a1a] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="rounded-[10px] border-2 border-[#1a1a1a] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
             {!inWebView && (
               <>
                 <button
