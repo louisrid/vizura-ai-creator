@@ -533,7 +533,12 @@ const Index = () => {
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
-                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                  <img
+                    src={resultImage}
+                    alt="generated photo"
+                    className="h-full w-full object-cover cursor-pointer"
+                    onClick={() => setExpandedImage(resultImage)}
+                  />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
                     <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
@@ -617,7 +622,12 @@ const Index = () => {
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
-                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                  <img
+                    src={resultImage}
+                    alt="generated photo"
+                    className="h-full w-full object-cover cursor-pointer"
+                    onClick={() => setExpandedImage(resultImage)}
+                  />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
                     <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
