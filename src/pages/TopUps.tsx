@@ -9,13 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 
 const packs = [
-  { id: "starter", title: "starter pack", gems: 15, price: 9, tag: null },
-  { id: "pro", title: "pro pack", gems: 35, price: 20, tag: "popular" },
-  { id: "elite", title: "elite pack", gems: 80, price: 40, tag: "best value" },
-];
+  { id: "starter", title: "starter pack", gems: 15, price: 9, badge: null, subtitle: "recommended for beginners" },
+  { id: "pro", title: "pro pack", gems: 35, price: 20, badge: "15% off!", subtitle: null },
+  { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!", subtitle: null },
+] as const;
 
 const TopUps = () => {
-  const { gems, refetch } = useGems();
+  const { refetch } = useGems();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,44 +53,76 @@ const TopUps = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px] flex flex-col items-center">
-        <div className="flex items-center gap-3 mb-10 w-full">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px]">
+        <div className="flex items-center gap-3 mb-8 w-full">
           <BackButton />
           <PageTitle className="mb-0">top-ups</PageTitle>
         </div>
 
-        {/* Gem balance */}
-        <div className="flex items-center justify-center gap-2 mb-10">
-          <span className="text-2xl">💎</span>
-          <span className="text-3xl font-[900] text-white">{gems}</span>
-          <span className="text-lg font-[800] lowercase text-white/50">gems</span>
-        </div>
-
-        {/* Pack cards */}
-        <div className="w-full flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           {packs.map((pack) => (
-            <button
+            <div
               key={pack.id}
-              disabled={buying !== null}
-              onClick={() => handleBuy(pack)}
-              className="relative w-full rounded-[16px] px-5 py-5 flex items-center justify-between transition-all active:scale-[0.97] disabled:opacity-60"
-              style={{ backgroundColor: "#1a1a1a" }}
+              className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
+              style={{ backgroundColor: "#000", minHeight: 160 }}
             >
-              {pack.tag && (
-                <span
-                  className="absolute top-3 right-4 text-[10px] font-[900] lowercase px-2 py-0.5 rounded-full bg-neon-yellow text-neon-yellow-foreground"
+              {/* Sparkle overlay for elite */}
+              {pack.id === "elite" && (
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background: "radial-gradient(ellipse at 100% 100%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 30%, transparent 65%)",
+                  }}
                 >
-                  {pack.tag}
-                </span>
+                  {/* Sparkle dots */}
+                  <div className="absolute bottom-4 right-4 w-1 h-1 rounded-full bg-white/20" />
+                  <div className="absolute bottom-7 right-8 w-0.5 h-0.5 rounded-full bg-white/15" />
+                  <div className="absolute bottom-3 right-12 w-0.5 h-0.5 rounded-full bg-white/10" />
+                  <div className="absolute bottom-10 right-5 w-0.5 h-0.5 rounded-full bg-white/10" />
+                  <div className="absolute bottom-6 right-14 w-[3px] h-[3px] rounded-full bg-white/15" />
+                  <div className="absolute bottom-12 right-10 w-0.5 h-0.5 rounded-full bg-white/10" />
+                </div>
               )}
-              <div className="flex flex-col items-start">
-                <span className="text-sm font-[900] lowercase text-white">{pack.title}</span>
-                <span className="text-xs font-[700] lowercase text-white/40 mt-1 flex items-center gap-1">
-                  💎 {pack.gems} gems
-                </span>
+
+              {/* Left side */}
+              <div className="flex-1 flex flex-col justify-between relative z-[1]">
+                <span className="text-xl font-[900] lowercase text-white">{pack.title}</span>
+
+                <div className="mt-3">
+                  <span
+                    className="inline-block rounded-full px-4 py-2 text-sm font-[900] lowercase text-white"
+                    style={{ backgroundColor: "#1a3a5c" }}
+                  >
+                    💎 {pack.gems} gems
+                  </span>
+                </div>
+
+                <div className="mt-3">
+                  {pack.subtitle && (
+                    <span className="text-[11px] font-[700] lowercase text-white/35">{pack.subtitle}</span>
+                  )}
+                  {pack.badge && (
+                    <span className="inline-block rounded-full px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                      {pack.badge}
+                    </span>
+                  )}
+                </div>
               </div>
-              <span className="text-2xl font-[900] text-white">${pack.price}</span>
-            </button>
+
+              {/* Right side — price + buy */}
+              <button
+                disabled={buying !== null}
+                onClick={() => handleBuy(pack)}
+                className="relative z-[1] flex flex-col items-center justify-center gap-2 min-w-[80px] disabled:opacity-60 transition-all active:scale-95"
+              >
+                <span className="text-3xl font-[900] text-white">${pack.price}</span>
+                <span
+                  className="rounded-full px-5 py-2 text-xs font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground"
+                >
+                  buy
+                </span>
+              </button>
+            </div>
           ))}
         </div>
       </main>
