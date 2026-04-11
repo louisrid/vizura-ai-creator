@@ -6,6 +6,7 @@ import { registerNavGuard } from "@/lib/navGuard";
 import { displayAge } from "@/lib/displayAge";
 
 import PageTitle from "@/components/PageTitle";
+import ImageZoomViewer from "@/components/ImageZoomViewer";
 
 import DotDecal from "@/components/DotDecal";
 import { SignInOverlay } from "@/components/GuidedCreator";
@@ -90,6 +91,7 @@ const ChooseFace = () => {
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
 
   // Second loading phase: angle + body generation
@@ -700,7 +702,13 @@ const ChooseFace = () => {
                     <div key={i} className="flex flex-col items-center gap-2">
                     <motion.button
                         type="button"
-                        onClick={() => handleFaceClick(i)}
+                        onClick={() => {
+                          if (selectedIndex === i) {
+                            setZoomedFaceUrl(url);
+                          } else {
+                            handleFaceClick(i);
+                          }
+                        }}
                         initial={{ opacity: 0 }}
                         animate={cardsRevealed ? { opacity: 1 } : { opacity: 0 }}
                         whileTap={{ scale: 1.02 }}
@@ -847,6 +855,7 @@ const ChooseFace = () => {
           }}
           onCancel={() => setShowBackConfirm(false)}
         />
+        <ImageZoomViewer url={zoomedFaceUrl} onClose={() => setZoomedFaceUrl(null)} showDownload={false} />
       </div>
     </>
   );

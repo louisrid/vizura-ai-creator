@@ -546,7 +546,7 @@ async function generateAngleAndBody(
       console.log("Generating 3/4 angle...");
       const angleBustKey = (bustSize || "regular").toLowerCase();
       const angleBustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. Low-scoop white top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile, facing their right. Head and upper chest, cropped just below collarbone showing very top of cleavage. ${angleBustDesc ? angleBustDesc + '.' : ''} Matte skin with visible pores and colour variation. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. ${angleBustDesc ? angleBustDesc + ',' : ''} upper-body framed from top of head to chest. Matte skin with visible pores. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
