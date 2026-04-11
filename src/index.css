@@ -96,8 +96,8 @@
     @apply bg-background text-foreground antialiased;
     font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
-    overflow-x: hidden;
-    overscroll-behavior-y: contain;
+    overflow: hidden;
+    overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
     position: fixed;
     width: 100%;
@@ -110,8 +110,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-    scroll-snap-type: none;
+    overscroll-behavior: none;
   }
 
   /* Desktop: remove fixed positioning, full-height scroll */
@@ -119,9 +118,11 @@
     html, body {
       position: static;
       overflow: hidden;
+      overscroll-behavior: none;
     }
     #root {
       height: 100vh;
+      overscroll-behavior: none;
     }
   }
 
