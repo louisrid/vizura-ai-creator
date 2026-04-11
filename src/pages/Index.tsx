@@ -251,16 +251,17 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState(() => sessionStorage.getItem("vizura_photo_prompt") || "");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [resultImage, setResultImage] = useState<string | null>(null);
+  const [resultImage, setResultImage] = useState<string | null>(() => sessionStorage.getItem("vizura_photo_result") || null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharId, setSelectedCharId] = useState(preselectedCharacterId || persistedCharacterId || "");
-  const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">("hidden");
-  const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(null);
+  const cachedOverlay = sessionStorage.getItem("vizura_photo_overlay");
+  const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">(cachedOverlay === "success" ? "success" : "hidden");
+  const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(() => cachedOverlay === "success" ? sessionStorage.getItem("vizura_photo_result") : null);
   const [fadingBack, setFadingBack] = useState(false);
 
   const [photoType, setPhotoType] = useState("selfie");
@@ -297,6 +298,10 @@ const Index = () => {
     const handler = () => {
       setPhotoOverlayPhase("hidden");
       setFadingBack(false);
+      // Clear cached overlay state
+      try {
+        sessionStorage.removeItem("vizura_photo_overlay");
+      } catch {}
       // Scroll to top of the page where the new image sits
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -411,6 +416,12 @@ const Index = () => {
       setPhotoOverlayResult(generatedUrl);
       setPhotoOverlayPhase("success");
       setResultImage(generatedUrl);
+      // Cache for refresh persistence
+      try {
+        sessionStorage.setItem("vizura_photo_result", generatedUrl);
+        sessionStorage.setItem("vizura_photo_overlay", "success");
+        sessionStorage.setItem("vizura_photo_prompt", prompt);
+      } catch {}
 
       await refetchCredits();
     } catch (e: any) {
