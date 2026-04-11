@@ -126,7 +126,7 @@ const Auth = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       {/* Desktop: centered card layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0 md:max-w-2xl">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[120px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0 md:max-w-2xl">
         <div className="w-full md:max-w-md">
           <div className="mb-7 flex items-center gap-3">
             <button
