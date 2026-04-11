@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { LogOut, Mail, Gem, Calendar, Crown, ArrowRight, Loader2, Eye } from "lucide-react";
+import { LogOut, ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
 
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
-import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -13,8 +12,8 @@ import DotDecal from "@/components/DotDecal";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
-  const { gems, refetch: refetchGems } = useGems();
-  const { subscribed, refetch: refetchSub, optimisticSubscribe, optimisticUnsubscribe } = useSubscription();
+  const { subscribed, refetch: refetchSub } = useSubscription();
+  const { refetch: refetchGems } = await import("@/contexts/CreditsContext").then(m => ({ refetch: () => {} }));
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
@@ -26,8 +25,8 @@ const Account = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get("checkout") === "success") { refetchSub(); refetchGems(); }
-  }, [location.search, refetchSub, refetchGems]);
+    if (params.get("checkout") === "success") { refetchSub(); }
+  }, [location.search, refetchSub]);
 
   if (authLoading) {
     return (
@@ -41,128 +40,100 @@ const Account = () => {
 
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
-  const handleSubscribe = () => {
-    toast("coming soon");
-  };
-
-  const handleCancel = () => {
-    optimisticUnsubscribe();
-  };
+  const initial = (user.email?.[0] || "?").toUpperCase();
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-10 pb-[280px] md:flex md:flex-col md:items-center">
-        <div className="flex items-center gap-3 mb-7 w-full">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px] flex flex-col items-center">
+        <div className="flex items-center gap-3 mb-10 w-full">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
 
-        <div className="flex flex-col w-full max-w-lg">
-          {subscribed ? (
-            <div
-              className="w-full h-14 md:h-16 text-base md:text-xl font-extrabold lowercase flex items-center justify-center pointer-events-none"
-              style={{ borderRadius: 12, backgroundColor: "hsl(var(--neon-green))", color: "hsl(var(--neon-green-foreground))" }}
-            >
-              subscribed
-            </div>
-          ) : (
-            <button
-              className="w-full h-16 md:h-[72px] bg-neon-yellow text-neon-yellow-foreground text-lg md:text-2xl font-extrabold lowercase hover:opacity-90 transition-all"
-              style={{ borderRadius: 12 }}
-              onClick={handleSubscribe}
-            >
-              subscribe
-            </button>
-          )}
-
-          {subscribed && (
-            <div className="flex justify-center pt-3">
-              <button
-                className="mx-auto h-9 px-5 text-[11px] md:h-10 md:text-[12px] font-extrabold lowercase leading-none transition-all hover:opacity-90"
-                style={{ borderRadius: 12, backgroundColor: "#1a0808", color: "hsl(var(--destructive))", border: "2px solid hsl(var(--destructive))" }}
-                onClick={handleCancel}
-              >
-                cancel
-              </button>
-            </div>
-          )}
-
-          <div className="mt-7">
-            <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
-                <Mail size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <span className="block text-xs font-extrabold lowercase text-foreground">email</span>
-                  <span className="block text-sm font-extrabold lowercase text-foreground truncate">
-                    {user?.email || "..."}
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
-                <Calendar size={16} strokeWidth={2.5} className="text-foreground shrink-0" />
-                <div className="flex-1">
-                  <span className="block text-xs font-extrabold lowercase text-foreground">member since</span>
-                  <span className="block text-sm font-extrabold lowercase text-foreground">
-                    {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }).toLowerCase() : "..."}
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
-                <Gem size={16} strokeWidth={2.5} className="text-gem-green shrink-0" />
-                <div className="flex-1">
-                  <span className="block text-xs font-extrabold lowercase text-foreground">gems</span>
-                  <span className="block text-sm font-extrabold lowercase text-foreground">{gems}</span>
-                </div>
-              </div>
-
-              {subscribed && (
-                <div className="border-2 border-[#1a1a1a] p-3 md:p-4 flex items-center gap-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
-                  <Crown size={16} strokeWidth={2.5} className="text-neon-yellow shrink-0" />
-                  <div className="flex-1">
-                    <span className="block text-xs font-extrabold lowercase text-foreground">renewal</span>
-                    <span className="block text-sm font-extrabold lowercase text-foreground">50 gems on renewal</span>
-                  </div>
-                </div>
-              )}
-            </div>
+        {/* Profile avatar + email */}
+        <div className="flex flex-col items-center mb-8">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mb-3"
+            style={{ backgroundColor: "#2a2a2a" }}
+          >
+            <span className="text-3xl font-[900] text-white leading-none">{initial}</span>
           </div>
+          <span className="text-sm font-[800] lowercase text-white truncate max-w-[280px]">
+            {user.email || "..."}
+          </span>
+        </div>
 
-          {user?.email === "louisjridland@gmail.com" && (
-            <div className="pt-3">
-              <button
-                className="w-full h-12 md:h-14 text-sm md:text-base font-extrabold lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
-                style={{ borderRadius: 12, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a", color: "rgba(255,255,255,0.9)" }}
-                onClick={() => navigate("/admin")}
+        {/* Settings card */}
+        <div className="w-full rounded-[16px] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
+          <button
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#222]"
+            onClick={() => toast("coming soon")}
+          >
+            <span className="text-sm font-[800] lowercase text-white">subscription</span>
+            <div className="flex items-center gap-2">
+              <span
+                className="text-xs font-[800] lowercase"
+                style={{ color: subscribed ? "#12e62b" : "rgba(255,255,255,0.35)" }}
               >
-                admin
-                <Eye size={16} strokeWidth={2.5} />
-              </button>
+                {subscribed ? "active" : "inactive"}
+              </span>
+              <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
             </div>
-          )}
+          </button>
 
-          <div className="pt-6">
+          <div className="h-[1px] mx-5" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
+
+          <button
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#222]"
+            onClick={() => toast("coming soon")}
+          >
+            <span className="text-sm font-[800] lowercase text-white">change password</span>
+            <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
+          </button>
+
+          <div className="h-[1px] mx-5" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
+
+          <button
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#222]"
+            onClick={() => toast("coming soon")}
+          >
+            <span className="text-sm font-[800] lowercase text-white">change email</span>
+            <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
+          </button>
+        </div>
+
+        {/* Admin button */}
+        {user?.email === "louisjridland@gmail.com" && (
+          <div className="w-full pt-4">
             <button
-              className="w-full h-12 md:h-14 text-sm md:text-base font-extrabold lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
-              style={{ borderRadius: 12, backgroundColor: "#100808", border: "2px solid #ff4444", color: "#ff4444" }}
-              onClick={handleSignOut}
+              className="w-full h-12 text-sm font-[900] lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
+              style={{ borderRadius: 12, backgroundColor: "#1a1a1a", color: "rgba(255,255,255,0.9)" }}
+              onClick={() => navigate("/admin")}
             >
-              sign out
-              <LogOut size={16} strokeWidth={2.5} />
+              admin
+              <Eye size={16} strokeWidth={2.5} />
             </button>
           </div>
+        )}
 
-          <div className="pt-6 flex justify-center">
-            <Link
-              to="/info"
-              className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-foreground/60"
-              style={{ color: "rgba(255,255,255,0.4)" }}
-            >
-              terms &amp; privacy
-            </Link>
-          </div>
+        {/* Sign out */}
+        <button
+          className="mt-8 text-sm font-[900] lowercase transition-all hover:opacity-70"
+          style={{ color: "#ff4444" }}
+          onClick={handleSignOut}
+        >
+          sign out
+        </button>
+
+        <div className="pt-6">
+          <Link
+            to="/info"
+            className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-foreground/60"
+            style={{ color: "rgba(255,255,255,0.4)" }}
+          >
+            terms &amp; privacy
+          </Link>
         </div>
       </main>
     </div>
@@ -225,12 +196,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-4 md:px-10 pt-10 pb-[280px] md:flex md:flex-col md:items-center">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="border-2 border-[#1a1a1a] p-5 space-y-3 mx-auto max-w-md md:max-w-lg" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
+        <div className="w-full border-2 border-[#1a1a1a] p-5 space-y-3" style={{ borderRadius: 12, backgroundColor: "#1a1a1a" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
