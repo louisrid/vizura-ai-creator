@@ -46,7 +46,7 @@ const Account = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[120px] flex flex-col items-center">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-10 w-full">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
@@ -186,7 +186,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[120px] flex flex-col items-center">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
