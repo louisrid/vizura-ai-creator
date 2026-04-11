@@ -147,7 +147,7 @@ const Auth = () => {
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                  style={{ borderRadius: 12 }}
+                  style={{ borderRadius: 10 }}
                 >
                   {googleLoading ? (
                     <>
@@ -183,7 +183,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[#2a2a2a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+              style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -195,7 +195,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[#2a2a2a] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#2a2a2a", borderRadius: 12 }}
+              style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
 

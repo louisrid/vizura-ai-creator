@@ -236,7 +236,7 @@ const Home = () => {
               className="relative w-full max-w-[280px] md:max-w-[400px]"
             >
               <ModalCloseButton onClick={() => setSelectedImage(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 16, border: "2px solid #1a1a1a" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid #1a1a1a" }}>
                 <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
                 {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
                   <div className="px-3 pt-2.5 pb-3">
@@ -273,7 +273,7 @@ const Home = () => {
                 minWidth: 0,
                 backgroundColor: "#ffe603",
                 padding: "16px 14px",
-                borderRadius: 12,
+                borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
@@ -296,7 +296,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 padding: "16px 14px",
-                borderRadius: 12,
+                borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
                 backgroundColor: "#000000",
@@ -315,14 +315,14 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 12 }}>
+              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                 see all →
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
                       <div className="flex h-full w-full items-center justify-center">
                         <Loader2 size={14} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -347,7 +347,7 @@ const Home = () => {
                       }}
                       className="overflow-hidden"
                       style={{
-                        borderRadius: 16,
+                        borderRadius: 10,
                         border: isPlaceholder ? "none" : "2px solid #1a1a1a",
                         backgroundColor: "#1a1a1a",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
@@ -375,14 +375,14 @@ const Home = () => {
           <section className="mt-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 12 }}>
+              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                 manage →
               </button>
             </div>
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
                       <div className="flex h-full w-full items-center justify-center">
                         <Loader2 size={14} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -401,7 +401,7 @@ const Home = () => {
                         onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
                         className="overflow-hidden"
                         style={{
-                          borderRadius: 16,
+                          borderRadius: 10,
                           backgroundColor: "#1a1a1a",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
@@ -424,7 +424,7 @@ const Home = () => {
                       onClick={() => navigate(`/characters/${char.id}`)}
                       className="relative overflow-hidden"
                       style={{
-                        borderRadius: 16,
+                        borderRadius: 10,
                         border: "2px solid #1a1a1a",
                         backgroundColor: "#1a1a1a",
                       }}
@@ -468,7 +468,7 @@ const Home = () => {
                 minWidth: 0,
                 backgroundColor: "#ffe603",
                 padding: "22px 20px",
-                borderRadius: 14,
+                borderRadius: 10,
               }}
             >
               <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
@@ -485,7 +485,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 padding: "22px 20px",
-                borderRadius: 14,
+                borderRadius: 10,
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
@@ -503,14 +503,14 @@ const Home = () => {
           <section className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <button onClick={() => navigate("/storage")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 12 }}>
+              <button onClick={() => navigate("/storage")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                 see all →
               </button>
             </div>
             <div className="grid grid-cols-4 gap-3">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
                       <div className="flex h-full w-full items-center justify-center">
                         <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -535,7 +535,7 @@ const Home = () => {
                       }}
                       className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
                       style={{
-                        borderRadius: 16,
+                        borderRadius: 10,
                         border: isPlaceholder ? "none" : "2px solid #1a1a1a",
                         backgroundColor: "#1a1a1a",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
@@ -563,14 +563,14 @@ const Home = () => {
           <section className="mt-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 12 }}>
+              <button onClick={() => navigate("/characters")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                 manage →
               </button>
             </div>
             <div className="grid grid-cols-4 gap-3">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 16, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
                     <AspectRatio ratio={3 / 4}>
                       <div className="flex h-full w-full items-center justify-center">
                         <Loader2 size={16} className="animate-spin" style={{ color: "rgba(255,255,255,0.2)" }} />
@@ -589,7 +589,7 @@ const Home = () => {
                         onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
                         className="overflow-hidden"
                         style={{
-                          borderRadius: 16,
+                          borderRadius: 10,
                           backgroundColor: "#1a1a1a",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
@@ -612,7 +612,7 @@ const Home = () => {
                       onClick={() => navigate(`/characters/${char.id}`)}
                       className="relative overflow-hidden hover-lift"
                       style={{
-                        borderRadius: 16,
+                        borderRadius: 10,
                         border: "2px solid #1a1a1a",
                         backgroundColor: "#1a1a1a",
                       }}
