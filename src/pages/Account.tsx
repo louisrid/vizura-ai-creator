@@ -55,20 +55,20 @@ const Account = () => {
         {/* Profile avatar + email */}
         <div className="flex flex-col items-center mb-8">
           <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mb-3"
-            style={{ backgroundColor: "#2a2a2a" }}
+            className="w-20 h-20 rounded-full flex items-center justify-center mb-3 bg-neon-yellow"
           >
-            <span className="text-3xl font-[900] text-white leading-none">{initial}</span>
+            <span className="text-3xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
           <span className="text-sm font-[800] lowercase text-white truncate max-w-[280px]">
             {user.email || "..."}
           </span>
         </div>
 
-        {/* Settings card */}
-        <div className="w-full rounded-[16px] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
+        {/* Settings rows */}
+        <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#222]"
+            className="w-full rounded-[16px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
+            style={{ backgroundColor: "#000" }}
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">subscription</span>
@@ -83,23 +83,12 @@ const Account = () => {
             </div>
           </button>
 
-          <div className="h-[1px] mx-5" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
-
           <button
-            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#222]"
+            className="w-full rounded-[16px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
+            style={{ backgroundColor: "#000" }}
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">change password</span>
-            <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
-          </button>
-
-          <div className="h-[1px] mx-5" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
-
-          <button
-            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#222]"
-            onClick={() => toast("coming soon")}
-          >
-            <span className="text-sm font-[800] lowercase text-white">change email</span>
             <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
           </button>
         </div>
