@@ -232,7 +232,7 @@ const Header = () => {
           style={{
             height: 120,
             opacity: gradientOpacity,
-            background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 20%, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.12) 88%, transparent 100%)",
+            background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,0.96) 40%, rgba(0,0,0,0.77) 60%, rgba(0,0,0,0.47) 75%, rgba(0,0,0,0.24) 88%, transparent 100%)",
           }}
         />
         {/* Controls on top of gradient */}
