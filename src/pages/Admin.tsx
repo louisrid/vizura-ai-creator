@@ -242,7 +242,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                   <div key={img.id} className="flex flex-col hover-lift">
                     <button
                       onClick={() => setExpanded(img)}
-                      className="group relative rounded-t-2xl border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+                      className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
                     >
                       <AspectRatio ratio={3 / 4}>
                         <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -252,7 +252,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                       href={img.url}
                       download={`facefox-${img.id}.png`}
                       target="_blank"
-                      className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
+                      className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
                       style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid rgba(255,255,255,0.15)", borderTop: "none" }}
                     >
                       download

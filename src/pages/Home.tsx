@@ -236,7 +236,7 @@ const Home = () => {
               className="relative w-full max-w-[280px] md:max-w-[400px]"
             >
               <ModalCloseButton onClick={() => setSelectedImage(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid #1a1a1a" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
                 <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
                 {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
                   <div className="px-3 pt-2.5 pb-3">
@@ -254,7 +254,7 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-14 pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-14 pb-[120px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
@@ -451,7 +451,7 @@ const Home = () => {
         </main>
 
         {/* Desktop layout — matches mobile structure, scaled up */}
-        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-14 pb-[280px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-14 pb-[120px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
@@ -536,7 +536,7 @@ const Home = () => {
                       className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
                       style={{
                         borderRadius: 10,
-                        border: isPlaceholder ? "none" : "2px solid #1a1a1a",
+                        border: isPlaceholder ? "none" : "2px solid rgba(255,255,255,0.15)",
                         backgroundColor: "#1a1a1a",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
@@ -613,7 +613,7 @@ const Home = () => {
                       className="relative overflow-hidden hover-lift"
                       style={{
                         borderRadius: 10,
-                        border: "2px solid #1a1a1a",
+                        border: "2px solid rgba(255,255,255,0.15)",
                         backgroundColor: "#1a1a1a",
                       }}
                     >
