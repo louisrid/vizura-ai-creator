@@ -524,7 +524,7 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
   regular: "rounded B cup breasts",
-  large: "very-large heavy DD cup breasts",
+  large: "large prominent DD cup breasts, heavy bust",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -546,7 +546,8 @@ async function generateAngleAndBody(
       console.log("Generating 3/4 angle...");
       const angleBustKey = (bustSize || "regular").toLowerCase();
       const angleBustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. ${angleBustDesc ? angleBustDesc + ',' : ''} upper-body framed from top of head to chest. Matte skin with visible pores. Relaxed neutral expression, lips together.`;
+      const angleBustPromptSegment = angleBustDesc ? `tight white v-neck top, ${angleBustDesc} with visible cleavage` : "tight white v-neck top, cleavage visible";
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Naturally resembles the person in the reference photo. ${angleBustPromptSegment}. Same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Upper-body framed from top of head to chest. Matte skin with visible pores. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
