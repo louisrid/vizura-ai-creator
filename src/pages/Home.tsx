@@ -348,7 +348,7 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: isPlaceholder ? "none" : "2px solid #1a1a1a",
+                        border: isPlaceholder ? "none" : "2px solid rgba(255,255,255,0.15)",
                         backgroundColor: "#1a1a1a",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
@@ -425,7 +425,7 @@ const Home = () => {
                       className="relative overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: "2px solid #1a1a1a",
+                        border: "2px solid rgba(255,255,255,0.15)",
                         backgroundColor: "#1a1a1a",
                       }}
                     >
