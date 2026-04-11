@@ -199,7 +199,7 @@ const Header = () => {
                       fontSize: isDesktop ? 17 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
-                      borderRadius: isDesktop ? "0 0 18px 18px" : "0 0 10px 10px",
+                      borderRadius: "0 0 10px 10px",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
@@ -207,7 +207,6 @@ const Header = () => {
                     <LogOut size={isDesktop ? 20 : 18} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                     log out
                   </button>
-                </>
                 </>
               )}
             </div>
