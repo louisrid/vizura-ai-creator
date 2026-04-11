@@ -15,7 +15,7 @@ const packs = [
   { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!", subtitle: null },
 ] as const;
 
-const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M20 0v20M0 20h20' stroke='%23ffffff' stroke-opacity='0.03' stroke-width='0.5'/%3E%3C/svg%3E")`;
+const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-4 4l8-8M0 16L16 0M12 20l8-8' stroke='%23ffffff' stroke-opacity='0.035' stroke-width='0.5'/%3E%3C/svg%3E")`;
 
 const TopUps = () => {
   const { refetch } = useGems();
