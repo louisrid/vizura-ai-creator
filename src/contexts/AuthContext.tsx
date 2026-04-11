@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch {}
   }, [user, loading]);
 
-
+  useEffect(() => {
     let cancelled = false;
 
     const initializeAuth = async () => {
