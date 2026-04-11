@@ -68,30 +68,36 @@ const TopUps = () => {
               key={pack.id}
               className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
               style={{
-                backgroundColor: "#1a1a1a",
+                backgroundColor: "#000",
+                border: "2px solid rgba(255,255,255,0.15)",
                 minHeight: 170,
               }}
             >
               {/* Left side */}
-              <div className="flex-1 flex flex-col justify-between relative z-[1]">
+              <div className="flex-1 flex flex-col relative z-[1]">
                 <div>
                   <span className="block text-[32px] leading-[0.95] font-[900] lowercase text-white">{pack.name}</span>
-                  <span className="block text-[32px] leading-[0.95] font-[900] lowercase text-white">pack</span>
+                  <span className="inline-flex items-center gap-1.5 text-[32px] leading-[0.95] font-[900] lowercase text-white">
+                    pack <Gem size={20} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                  </span>
                 </div>
 
-                <div className="mt-auto pt-3 flex items-end gap-2">
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-[14px] px-5 py-2.5 text-[15px] font-[900] lowercase text-white"
-                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
-                  >
-                    <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                    {pack.gems} gems
-                  </span>
-                  {pack.badge && (
+                {pack.badge && (
+                  <div className="mt-2">
                     <span className="inline-block rounded-[14px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
-                  )}
+                  </div>
+                )}
+
+                <div className="mt-auto pt-2">
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-[14px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
+                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
+                  >
+                    <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    {pack.gems} gems
+                  </span>
                 </div>
               </div>
 
