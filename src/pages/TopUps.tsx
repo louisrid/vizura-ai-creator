@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem, ShoppingCart } from "lucide-react";
+import { Gem, ShoppingBag } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -15,7 +15,7 @@ const packs = [
   { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!" },
 ] as const;
 
-const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-4 4l8-8M0 16L16 0M12 20l8-8' stroke='%23ffffff' stroke-opacity='0.035' stroke-width='0.5'/%3E%3C/svg%3E")`;
+const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='12' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-2 2l4-4M0 12L12 0M10 14l4-4' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='0.6'/%3E%3C/svg%3E")`;
 
 const TopUps = () => {
   const { refetch } = useGems();
@@ -70,7 +70,8 @@ const TopUps = () => {
               style={{
                 backgroundColor: "#000",
                 backgroundImage: gridPatternSvg,
-                backgroundSize: "20px 20px",
+                backgroundSize: "12px 12px",
+                border: "2px solid #ffe603",
                 minHeight: 160,
               }}
             >
@@ -107,7 +108,7 @@ const TopUps = () => {
                 <span
                   className="rounded-[10px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
-                  <ShoppingCart size={22} strokeWidth={3} />
+                  <ShoppingBag size={22} strokeWidth={3} />
                 </span>
               </button>
             </div>
