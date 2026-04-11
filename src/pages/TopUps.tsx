@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem, ShoppingBasket } from "lucide-react";
+import { Gem, ShoppingCart } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 
 const packs = [
-  { id: "starter", title: "starter pack", gems: 15, price: 9, badge: null },
-  { id: "pro", title: "pro pack", gems: 35, price: 20, badge: "15% off!" },
-  { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!" },
+  { id: "starter", name: "starter", gems: 15, price: 9, badge: null },
+  { id: "pro", name: "pro", gems: 35, price: 20, badge: "15% off!" },
+  { id: "elite", name: "elite", gems: 80, price: 40, badge: "20% off!" },
 ] as const;
 
 
@@ -68,32 +68,25 @@ const TopUps = () => {
               key={pack.id}
               className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
               style={{
-                backgroundColor: "#000",
-                minHeight: 160,
+                backgroundColor: "#1a1a1a",
+                minHeight: 170,
               }}
             >
-              {/* Bottom-right white glow */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: "radial-gradient(ellipse at 100% 100%, rgba(255,255,255,0.06) 0%, transparent 60%)",
-                }}
-              />
               {/* Left side */}
               <div className="flex-1 flex flex-col justify-between relative z-[1]">
-                <span className="text-xl font-[900] lowercase text-white">{pack.title}</span>
-
-                <div className="mt-3">
-                  <span
-                    className="inline-flex items-center gap-1.5 rounded-[14px] px-4 py-2 text-sm font-[900] lowercase text-white"
-                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
-                  >
-                    <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                    {pack.gems} gems
-                  </span>
+                <div>
+                  <span className="block text-[32px] leading-[0.95] font-[900] lowercase text-white">{pack.name}</span>
+                  <span className="block text-[32px] leading-[0.95] font-[900] lowercase text-white">pack</span>
                 </div>
 
-                <div className="mt-3 min-h-[24px]">
+                <div className="mt-auto pt-3 flex items-end gap-2">
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-[14px] px-5 py-2.5 text-[15px] font-[900] lowercase text-white"
+                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
+                  >
+                    <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    {pack.gems} gems
+                  </span>
                   {pack.badge && (
                     <span className="inline-block rounded-[14px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
@@ -112,7 +105,7 @@ const TopUps = () => {
                 <span
                   className="rounded-[14px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
-                  <ShoppingBasket size={22} strokeWidth={3} />
+                  <ShoppingCart size={22} strokeWidth={3} />
                 </span>
               </button>
             </div>
