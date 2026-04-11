@@ -194,8 +194,34 @@ const CharacterDetail = () => {
 
   if (loading || authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="animate-spin text-foreground" size={28} />
+      <div className="relative min-h-screen bg-background overflow-hidden">
+        <DotDecal />
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[280px] md:hidden">
+          <div className="flex items-center gap-3 mb-7">
+            <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
+            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+          </div>
+          <div className="flex flex-col gap-3">
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
+              <div className="h-9 w-48 mb-5" style={{ borderRadius: 8, backgroundColor: "#111" }} />
+              <div className="grid grid-cols-3 gap-2">
+                {[0,1,2].map(i => (
+                  <div key={i} className="aspect-[3/4] w-full" style={{ borderRadius: 10, backgroundColor: "#111" }} />
+                ))}
+              </div>
+            </div>
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
+              <div className="grid grid-cols-4 gap-1.5">
+                {[0,1,2,3,4,5,6].map(i => (
+                  <div key={i} className="rounded-[10px] py-2 flex flex-col items-center gap-1.5">
+                    <div className="h-2 w-8" style={{ borderRadius: 4, backgroundColor: "#111" }} />
+                    <div className="h-6 w-12" style={{ borderRadius: 8, backgroundColor: "#111" }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -271,7 +297,7 @@ const CharacterDetail = () => {
       onClick={() => { if (isValidImg(url) && !showSpinner && !isRevealing) setZoomedUrl(url!); }}
     >
       {showSpinner || isRevealing ? (
-        <Loader2 className="animate-spin" size={18} style={{ color: "rgba(255,255,255,0.4)" }} />
+        <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
       ) : isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
