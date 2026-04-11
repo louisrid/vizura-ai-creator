@@ -36,7 +36,7 @@ const ProgressBarLoader = ({
   progressOverride,
 }: ProgressBarLoaderProps) => {
   const [pct, setPctState] = useState(0);
-  const pctRef = useRef(0);
+  const highWaterRef = useRef(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [phraseVisible, setPhraseVisible] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
@@ -47,6 +47,9 @@ const ProgressBarLoader = ({
   const animationFrameRef = useRef<number | null>(null);
   const accelStartRef = useRef<number | null>(null);
   const accelStartPctRef = useRef(0);
+  /** Track elapsed time across visibility changes to avoid jumps */
+  const pausedAtRef = useRef<number | null>(null);
+  const totalPausedRef = useRef(0);
   const isControlled = typeof progressOverride === "number";
 
   onCompleteRef.current = onComplete;
@@ -55,11 +58,12 @@ const ProgressBarLoader = ({
   const effectivePhraseInterval = Math.max(phraseInterval, 4200);
   const contentStyle = useMemo(() => ({ width: FIXED_CONTENT_WIDTH, maxWidth: "100%" }), []);
 
+  /** Only ever moves forward */
   const setPct = useCallback((next: number) => {
     const capped = Math.min(next, 100);
-    const safeNext = Math.max(capped, pctRef.current);
-    if (safeNext === pctRef.current) return;
-    pctRef.current = safeNext;
+    const safeNext = Math.max(capped, highWaterRef.current);
+    if (safeNext === highWaterRef.current) return;
+    highWaterRef.current = safeNext;
     setPctState(safeNext);
   }, []);
 
@@ -77,17 +81,23 @@ const ProgressBarLoader = ({
     }, 150);
   }, [setPct]);
 
-  const updateProgress = useCallback((timestamp: number) => {
-    if (completedRef.current) return;
+  const getElapsed = useCallback(() => {
+    return Date.now() - startTimeRef.current - totalPausedRef.current;
+  }, []);
 
-    let nextPct = pctRef.current;
+  const tick = useCallback(() => {
+    if (completedRef.current) return;
+    // Don't update while hidden
+    if (document.hidden) return;
+
+    let nextPct = highWaterRef.current;
 
     if (accelStartRef.current !== null) {
-      const t = Math.min((timestamp - accelStartRef.current) / ACCEL_DURATION_MS, 1);
+      const t = Math.min((performance.now() - accelStartRef.current) / ACCEL_DURATION_MS, 1);
       const eased = 1 - Math.pow(1 - t, 3);
       nextPct = Math.round(accelStartPctRef.current + (100 - accelStartPctRef.current) * eased);
     } else {
-      const elapsed = Date.now() - startTimeRef.current;
+      const elapsed = getElapsed();
       const progress = Math.min(elapsed / duration, 1);
       nextPct = mapProgressToPct(progress);
       if (progress >= 1) nextPct = 100;
@@ -95,49 +105,75 @@ const ProgressBarLoader = ({
 
     setPct(nextPct);
     if (nextPct >= 100) finish();
-  }, [duration, finish, setPct]);
+  }, [duration, finish, getElapsed, setPct]);
 
-  const scheduleNextFrame = useCallback((timestamp: number) => {
-    updateProgress(timestamp);
+  const loop = useCallback((ts: number) => {
+    tick();
     if (!completedRef.current) {
-      animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
+      animationFrameRef.current = requestAnimationFrame(loop);
     }
-  }, [updateProgress]);
+  }, [tick]);
 
+  // Visibility change: pause/resume elapsed tracking
+  useEffect(() => {
+    if (isControlled) return;
+
+    const onVisChange = () => {
+      if (document.hidden) {
+        // Entering background — record when we paused
+        pausedAtRef.current = Date.now();
+        // Cancel rAF while hidden
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+      } else {
+        // Coming back — accumulate paused duration
+        if (pausedAtRef.current !== null) {
+          totalPausedRef.current += Date.now() - pausedAtRef.current;
+          pausedAtRef.current = null;
+        }
+        // Resume loop
+        if (!completedRef.current && animationFrameRef.current === null) {
+          tick(); // immediate update
+          animationFrameRef.current = requestAnimationFrame(loop);
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisChange);
+    return () => document.removeEventListener("visibilitychange", onVisChange);
+  }, [isControlled, tick, loop]);
+
+  // Main animation loop
   useEffect(() => {
     startTimeRef.current = Date.now();
     completedRef.current = false;
     continuedRef.current = false;
     accelStartRef.current = null;
     accelStartPctRef.current = 0;
-    pctRef.current = 0;
+    highWaterRef.current = 0;
+    totalPausedRef.current = 0;
+    pausedAtRef.current = null;
     setPctState(0);
     setPhraseIndex(0);
     setPhraseVisible(true);
     setIsComplete(false);
 
-    if (isControlled) {
-      return;
-    }
+    if (isControlled) return;
 
-    updateProgress(window.performance.now());
-    animationFrameRef.current = window.requestAnimationFrame(scheduleNextFrame);
-
-    const syncFromElapsedTime = () => updateProgress(window.performance.now());
-    document.addEventListener("visibilitychange", syncFromElapsedTime);
-    window.addEventListener("focus", syncFromElapsedTime);
-    window.addEventListener("pageshow", syncFromElapsedTime);
+    tick();
+    animationFrameRef.current = requestAnimationFrame(loop);
 
     return () => {
       if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
+        cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
-      document.removeEventListener("visibilitychange", syncFromElapsedTime);
-      window.removeEventListener("focus", syncFromElapsedTime);
-      window.removeEventListener("pageshow", syncFromElapsedTime);
     };
-  }, [isControlled, scheduleNextFrame, updateProgress]);
+    // Only re-run on mount or when isControlled changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isControlled]);
 
   useEffect(() => {
     if (!isControlled) return;
@@ -148,8 +184,8 @@ const ProgressBarLoader = ({
 
   useEffect(() => {
     if (!completeNow || completedRef.current || accelStartRef.current !== null) return;
-    accelStartRef.current = window.performance.now();
-    accelStartPctRef.current = pctRef.current;
+    accelStartRef.current = performance.now();
+    accelStartPctRef.current = highWaterRef.current;
   }, [completeNow]);
 
   useEffect(() => {
