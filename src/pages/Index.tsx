@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Sparkles, ChevronDown, Gem, User } from "lucide-react";
+import { Loader2, Zap, Sparkles, ChevronDown, Gem, User, Download } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import DotDecal from "@/components/DotDecal";
+import ModalCloseButton from "@/components/ModalCloseButton";
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import PageTitle from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -252,6 +254,7 @@ const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -530,7 +533,12 @@ const Index = () => {
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
-                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                  <img
+                    src={resultImage}
+                    alt="generated photo"
+                    className="h-full w-full object-cover cursor-pointer"
+                    onClick={() => setExpandedImage(resultImage)}
+                  />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
                     <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
@@ -614,7 +622,12 @@ const Index = () => {
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
-                  <img src={resultImage} alt="generated photo" className="h-full w-full object-cover" />
+                  <img
+                    src={resultImage}
+                    alt="generated photo"
+                    className="h-full w-full object-cover cursor-pointer"
+                    onClick={() => setExpandedImage(resultImage)}
+                  />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
                     <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
@@ -660,7 +673,46 @@ const Index = () => {
         )}
       </main>
 
-      {/* Mobile sticky create button */}
+      {/* Expanded image viewer */}
+      <AnimatePresence>
+        {expandedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="fixed inset-0 z-50 flex items-center justify-center px-6 pb-6"
+            onClick={(e) => { if (e.target === e.currentTarget) setExpandedImage(null); }}
+            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="relative w-full max-w-[341px] md:max-w-[585px]"
+              style={{ marginTop: "12vh" }}
+            >
+              <ModalCloseButton onClick={() => setExpandedImage(null)} />
+
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
+                <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
+                <div className="px-3 overflow-hidden" style={{ borderRadius: 10 }}>
+                  <img src={expandedImage} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 10 }} />
+                </div>
+                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
+                  <a href={expandedImage} download="facefox-photo.png" target="_blank" className="flex-1">
+                    <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
+                      download <Download size={12} strokeWidth={2.5} />
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 48 }}>
         <div className="mx-auto max-w-lg">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
