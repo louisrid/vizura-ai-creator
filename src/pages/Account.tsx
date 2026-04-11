@@ -6,6 +6,7 @@ import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
