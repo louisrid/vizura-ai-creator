@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem, ShoppingBag } from "lucide-react";
+import { Gem, ShoppingBasket } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -15,7 +15,7 @@ const packs = [
   { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!" },
 ] as const;
 
-const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='12' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-2 2l4-4M0 12L12 0M10 14l4-4' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='0.6'/%3E%3C/svg%3E")`;
+
 
 const TopUps = () => {
   const { refetch } = useGems();
@@ -66,22 +66,26 @@ const TopUps = () => {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
+              className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000",
-                backgroundImage: gridPatternSvg,
-                backgroundSize: "12px 12px",
-                border: "2px solid #ffe603",
                 minHeight: 160,
               }}
             >
+              {/* Bottom-right white glow */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "radial-gradient(ellipse at 100% 100%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+                }}
+              />
               {/* Left side */}
               <div className="flex-1 flex flex-col justify-between relative z-[1]">
                 <span className="text-xl font-[900] lowercase text-white">{pack.title}</span>
 
                 <div className="mt-3">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-[10px] px-4 py-2 text-sm font-[900] lowercase text-white"
+                    className="inline-flex items-center gap-1.5 rounded-[14px] px-4 py-2 text-sm font-[900] lowercase text-white"
                     style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
                   >
                     <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
@@ -91,7 +95,7 @@ const TopUps = () => {
 
                 <div className="mt-3 min-h-[24px]">
                   {pack.badge && (
-                    <span className="inline-block rounded-[10px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                    <span className="inline-block rounded-[14px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
                   )}
@@ -106,9 +110,9 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-[10px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
+                  className="rounded-[14px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
-                  <ShoppingBag size={22} strokeWidth={3} />
+                  <ShoppingBasket size={22} strokeWidth={3} />
                 </span>
               </button>
             </div>
