@@ -357,19 +357,35 @@ const Index = () => {
     const cleanPrompt = sanitiseText(prompt.trim());
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("generate", {
-        body: {
-          prompt: cleanPrompt,
-          character_id: selectedCharId || undefined,
-          photo_type: photoType,
-          aspect_ratio: photoRatio,
-          expression: expression || undefined,
-        },
-      });
-      if (fnError) throw fnError;
+      const controller = new AbortController();
+      // 3-minute timeout to survive tab-backgrounding
+      const timeout = setTimeout(() => controller.abort(), 180_000);
+
+      let data: any;
+      let fnError: any;
+      try {
+        const result = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: cleanPrompt,
+            character_id: selectedCharId || undefined,
+            photo_type: photoType,
+            aspect_ratio: photoRatio,
+            expression: expression || undefined,
+          },
+        });
+        data = result.data;
+        fnError = result.error;
+      } finally {
+        clearTimeout(timeout);
+      }
+
+      if (fnError) {
+        const msg = typeof fnError === "object" && fnError.message ? fnError.message : String(fnError);
+        throw new Error(msg);
+      }
       if (data?.error) {
         if (data?.code === "CONTENT_POLICY") {
-          toast("prompt not allowed");
+          toast("prompt not allowed — try a different description");
           setPhotoOverlayPhase("hidden");
           await refetchCredits();
           return;
@@ -379,10 +395,18 @@ const Index = () => {
           setShowPaywall(true);
           return;
         }
+        if (data?.code === "RATE_LIMITED") {
+          toast.error("too many requests — wait a moment and try again");
+          setPhotoOverlayPhase("hidden");
+          return;
+        }
         throw new Error(data.error);
       }
 
       const generatedUrl = (data.images || [])[0] || null;
+      if (!generatedUrl) {
+        throw new Error("no image returned — the AI may have rejected this prompt");
+      }
 
       setPhotoOverlayResult(generatedUrl);
       setPhotoOverlayPhase("success");
@@ -390,11 +414,22 @@ const Index = () => {
 
       await refetchCredits();
     } catch (e: any) {
+      console.error("Photo generation error:", e);
       setPhotoOverlayPhase("hidden");
-      if (e.message?.includes("No gems") || e.message?.includes("402")) {
+
+      const msg = e?.message || String(e);
+      if (msg.includes("No gems") || msg.includes("402")) {
         setShowPaywall(true);
+      } else if (msg.includes("abort") || msg.includes("AbortError")) {
+        toast.error("request timed out — please try again");
+      } else if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("network")) {
+        toast.error("network error — check your connection and try again");
+      } else if (msg.includes("content policy") || msg.includes("safety") || msg.includes("blocked")) {
+        toast.error("prompt not allowed — try a different description");
       } else {
-        toast.error("generation failed, please try again");
+        // Show the actual error so user knows what happened
+        const displayMsg = msg.length > 120 ? msg.slice(0, 120) + "…" : msg;
+        toast.error(`generation failed: ${displayMsg}`);
       }
     } finally {
       setIsGenerating(false);
