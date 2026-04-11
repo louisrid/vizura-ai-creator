@@ -359,7 +359,7 @@ const Index = () => {
     setPhotoOverlayResult(null);
 
     toast("1 gem used");
-    const cleanPrompt = sanitiseText(prompt.trim());
+    const userPrompt = prompt.trim();
 
     try {
       const controller = new AbortController();
@@ -371,7 +371,7 @@ const Index = () => {
       try {
         const result = await supabase.functions.invoke("generate", {
           body: {
-            prompt: cleanPrompt,
+            prompt: userPrompt,
             character_id: selectedCharId || undefined,
             photo_type: photoType,
             aspect_ratio: photoRatio,
