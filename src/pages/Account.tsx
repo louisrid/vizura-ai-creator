@@ -13,7 +13,7 @@ import DotDecal from "@/components/DotDecal";
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
   const { subscribed, refetch: refetchSub } = useSubscription();
-  const { refetch: refetchGems } = await import("@/contexts/CreditsContext").then(m => ({ refetch: () => {} }));
+  const { refetch: refetchGems } = useGems();
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
