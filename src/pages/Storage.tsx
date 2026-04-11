@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Download, Trash2, Wand2 } from "lucide-react";
+import { Loader2, Download, Trash2, Wand2, Copy } from "lucide-react";
+import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import ModalCloseButton from "@/components/ModalCloseButton";
@@ -211,12 +212,20 @@ const Storage = () => {
                 </div>
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2" style={{ backgroundColor: "#1a1a1a" }}>
-                    <div
-                      className="h-10 md:h-12 flex items-center justify-center border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          await navigator.clipboard.writeText(expanded.prompt);
+                          toast.success("copied!");
+                        } catch { toast.error("failed to copy"); }
+                      }}
+                      className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
                       style={{ backgroundColor: "#000" }}
                     >
-                      {expanded.prompt}
-                    </div>
+                      <span className="truncate">{expanded.prompt}</span>
+                      <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
+                    </button>
                   </div>
                 )}
                 <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
