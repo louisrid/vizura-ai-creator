@@ -89,8 +89,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     url.hash = "";
     window.history.replaceState({}, document.title, `${url.pathname}${url.search}`);
   }, []);
-
+  // Cache user to localStorage for instant header on reload
   useEffect(() => {
+    try {
+      if (user) {
+        localStorage.setItem("vizura_cached_user", JSON.stringify(user));
+      } else if (!loading) {
+        localStorage.removeItem("vizura_cached_user");
+      }
+    } catch {}
+  }, [user, loading]);
+
+
     let cancelled = false;
 
     const initializeAuth = async () => {
