@@ -15,7 +15,7 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "one-arm selfie-angle, other arm casually by side, above-eye-level, sharp-focus";
+const SELFIE_PREFIX = "selfie pose, one arm extended forward taking photo, close-up above-eye-level, sharp-focus";
 
 const PHOTO_PREFIX = "third-person natural-photography, sharp-focus on entire-image, sharp detailed-background, no-bokeh, no-blur";
 
@@ -110,7 +110,7 @@ const SKIN_MAP: Record<string, string> = {
 const normalizeBodyType = (v: string) => v === "slim" ? "thin" : v;
 
 const BODY_MAP: Record<string, string> = {
-  thin: "slim toned body, narrow waist",
+  thin: "slim body, narrow waist",
   regular: "soft feminine body, defined waist",
   average: "soft feminine body, defined waist",
   curvy: "curvy feminine figure, wide hips, defined waist",
@@ -254,19 +254,20 @@ function buildFinalPrompt(
 
   const parts: string[] = [];
 
+  // Scene MUST be first — Grok prioritises early tokens
+  parts.push(scenePrompt);
+
   if (characterTraits) {
-    parts.push(scenePrompt);
     parts.push(`a realistic casual iPhone-style ${typeLabel} of ${charName} shown in the reference images`);
     parts.push(`very attractive${exprStr}`);
     parts.push(`IMPORTANT: the outfit described in the scene description MUST override any clothing from reference images. She must wear exactly what is described above, NOT the clothing from reference photos`);
     parts.push(`She has: ${characterTraits}`);
   } else {
-    parts.push(scenePrompt);
     parts.push(`a realistic casual iPhone-style ${typeLabel} of a woman`);
     parts.push(`very attractive${exprStr}`);
   }
 
-  parts.push("direct-eye-contact, sharp-focus entire-image no-bokeh no-blur sharp-background, natural-framing, realistic matte-skin with visible-pores and fine-texture and skin-imperfections, soft-ribcage smooth-torso");
+  parts.push("direct-eye-contact, sharp-focus entire-image no-bokeh no-blur sharp-background, natural-framing, matte-skin, visible-pores, fine-texture, no-shine, smooth-midsection");
   parts.push(perspective);
 
   if (bodyType) {
