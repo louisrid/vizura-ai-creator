@@ -113,7 +113,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[120px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
@@ -132,7 +132,7 @@ const Storage = () => {
             ))}
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[#1a1a1a] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="border-2 border-[rgba(255,255,255,0.15)] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -160,7 +160,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => setExpanded(img)}
-                  className="group relative rounded-t-2xl border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+                  className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img src={img.url} alt="" className="h-full w-full object-cover" onError={() => { handleDelete(img); }} />
@@ -170,7 +170,7 @@ const Storage = () => {
                   href={img.url}
                   download={`facefox-${img.id}.png`}
                   target="_blank"
-                  className="flex items-center justify-center gap-1.5 rounded-b-2xl py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
                   style={{ backgroundColor: "#000", color: "#ffffff", border: "2px solid rgba(255,255,255,0.15)", borderTop: "none" }}
                 >
                    download

@@ -103,7 +103,7 @@ const MyCharacters = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-[280px]">
+        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-[120px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -126,7 +126,7 @@ const MyCharacters = () => {
             <button
               onClick={handleCreateCharacter}
               className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
-              style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">

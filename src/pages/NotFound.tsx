@@ -14,12 +14,12 @@ const NotFound = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[120px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">not found</PageTitle>
         </div>
-        <div className="border-2 border-[#1a1a1a] rounded-[10px] p-6 text-center" style={{ backgroundColor: "#1a1a1a" }}>
+        <div className="border-2 border-[rgba(255,255,255,0.15)] rounded-[10px] p-6 text-center" style={{ backgroundColor: "#1a1a1a" }}>
           <p className="text-xs font-extrabold lowercase mb-3 text-foreground">page not found</p>
           <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">
             back to home

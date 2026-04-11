@@ -138,7 +138,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid rgba(255,255,255,0.15)",
-                borderRadius: isDesktop ? 20 : 16,
+                borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -147,9 +147,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? (isDesktop ? "18px 18px 0 0" : "10px 10px 0 0")
+                  ? "10px 10px 0 0"
                   : isLast
-                    ? (isDesktop ? "0 0 18px 18px" : "0 0 10px 10px")
+                    ? "0 0 10px 10px"
                     : "0";
                 return (
                   <div key={item.label}>
@@ -199,7 +199,7 @@ const Header = () => {
                       fontSize: isDesktop ? 17 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
-                      borderRadius: isDesktop ? "0 0 18px 18px" : "0 0 10px 10px",
+                      borderRadius: "0 0 10px 10px",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
@@ -279,6 +279,7 @@ const Header = () => {
                 style={{
                   borderRadius: 10,
                   backgroundColor: "#1a1a1a",
+                  border: "2px solid rgba(255,255,255,0.15)",
                 }}
                 aria-label="open menu"
               >
