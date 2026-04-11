@@ -583,9 +583,12 @@ const ChooseFace = () => {
     sessionStorage.removeItem(AUTH_RESUME_KEY);
     setPendingAuthSave(false);
     setShowSignIn(false);
+    // Start fade-out, then navigate after animation completes
     setAngleLoading(false);
-    toast.success("character added!");
-    navigate(`/characters/${cId}`, { replace: true });
+    setTimeout(() => {
+      toast.success("character added!");
+      navigate(`/characters/${cId}`, { replace: true });
+    }, 550);
   }, [pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
@@ -625,9 +628,18 @@ const ChooseFace = () => {
       <div className="relative min-h-screen overflow-hidden bg-background w-full">
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
-        {(loading || angleLoading) && (
-          <div className="fixed inset-0 z-[10000] bg-black" />
-        )}
+        <AnimatePresence>
+          {(loading || angleLoading) && (
+            <motion.div
+              key="black-underlay"
+              className="fixed inset-0 z-[10000] bg-black"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
+          )}
+        </AnimatePresence>
 
         <AnimatePresence>
           {loading && (
