@@ -46,10 +46,12 @@ const Account = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px] flex flex-col items-center">
-        <div className="flex items-center gap-3 mb-10 w-full">
-          <BackButton />
-          <PageTitle className="mb-0">my account</PageTitle>
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-[30vh] pb-[280px] flex flex-col items-center">
+        <div className="fixed top-0 left-0 right-0 z-10 max-w-lg mx-auto px-4 pt-10">
+          <div className="flex items-center gap-3 w-full">
+            <BackButton />
+            <PageTitle className="mb-0">my account</PageTitle>
+          </div>
         </div>
 
         {/* Profile avatar + email */}
@@ -64,11 +66,10 @@ const Account = () => {
           </span>
         </div>
 
-        {/* Settings rows */}
-        <div className="w-full flex flex-col gap-3">
+        {/* Settings card */}
+        <div className="w-full rounded-[16px] border-[2px] border-[rgba(255,255,255,0.15)] overflow-hidden" style={{ backgroundColor: "#000" }}>
           <button
-            className="w-full rounded-[16px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
-            style={{ backgroundColor: "#000" }}
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">subscription</span>
@@ -83,9 +84,10 @@ const Account = () => {
             </div>
           </button>
 
+          <div className="h-[1px] w-full" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
+
           <button
-            className="w-full rounded-[16px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
-            style={{ backgroundColor: "#000" }}
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">change password</span>
@@ -95,10 +97,10 @@ const Account = () => {
 
         {/* Admin button */}
         {user?.email === "louisjridland@gmail.com" && (
-          <div className="w-full pt-4">
+          <div className="w-full pt-3">
             <button
-              className="w-full h-12 text-sm font-[900] lowercase transition-all hover:opacity-90 flex items-center justify-center gap-2"
-              style={{ borderRadius: 12, backgroundColor: "#1a1a1a", color: "rgba(255,255,255,0.9)" }}
+              className="w-full rounded-[16px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-[#111]"
+              style={{ backgroundColor: "#000" }}
               onClick={() => navigate("/admin")}
             >
               admin
