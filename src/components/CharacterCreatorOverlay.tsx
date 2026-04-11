@@ -27,7 +27,7 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
     onClick={onClick}
     className="flex h-[52px] w-full items-center justify-center text-sm font-[900] lowercase tracking-tight transition-colors"
     style={{
-      borderRadius: 12,
+      borderRadius: 10,
       border: active ? `2px solid ${Y}` : "2px solid #1a1a1a",
       backgroundColor: active ? "#000000" : "#1a1a1a",
       color: active ? "#fff" : "rgba(255,255,255,0.7)",
@@ -51,7 +51,7 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
         onClick={() => onSelect(opt)}
         className="px-4 py-2 text-xs font-[900] lowercase transition-all"
         style={{
-          borderRadius: 12,
+          borderRadius: 10,
           border: value === opt ? `2px solid ${Y}` : "2px solid #1a1a1a",
           backgroundColor: value === opt ? Y : "#1a1a1a",
           color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
@@ -173,7 +173,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
                   className="min-h-[100px] w-full resize-none px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors"
-                  style={{ borderRadius: 14, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
+                  style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#1a1a1a" }}
                 />
               </div>
             </div>
@@ -181,7 +181,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
           <div className="fixed bottom-0 left-0 right-0 z-10 px-10 pb-[max(env(safe-area-inset-bottom),2rem)] pt-3 bg-gradient-to-t from-black via-black/95 to-transparent">
             <button onClick={handleCreate} disabled={isSaving}
               className="flex h-[52px] w-full items-center justify-center gap-1.5 text-base font-[900] lowercase tracking-tight transition-transform active:scale-[0.97] disabled:opacity-60"
-              style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 12, border: "2px solid #00e0ff" }}>
+              style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}>
               {isSaving ? (<><Loader2 size={18} className="animate-spin" />saving...</>) : (<><Zap size={18} strokeWidth={2.5} style={{ color: "#00e0ff" }} />create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
             </button>
           </div>

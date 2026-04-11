@@ -80,7 +80,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         <button
           type="button"
           onClick={goPrev}
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-foreground text-background transition-colors hover:bg-foreground/90"
           aria-label="previous"
         >
           <ChevronLeft size={20} strokeWidth={2.5} />
@@ -93,7 +93,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
         <button
           type="button"
           onClick={goNext}
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-foreground text-background transition-colors hover:bg-foreground/90"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[10px] bg-foreground text-background transition-colors hover:bg-foreground/90"
           aria-label="next"
         >
           <ChevronRight size={20} strokeWidth={2.5} />
@@ -104,7 +104,7 @@ const CardCarousel = ({ images, activeIndex, onPrevious, onNext }: CardCarouselP
 };
 
 const CardContent = ({ image, index }: { image: string | null; index: number }) => (
-  <div className="relative h-full w-full overflow-hidden rounded-2xl border-[6px] border-border">
+  <div className="relative h-full w-full overflow-hidden rounded-[10px] border-[6px] border-border">
     {image ? (
       <img src={image} alt={`generated character ${index}`} className="h-full w-full object-cover" draggable={false} />
     ) : (

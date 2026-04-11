@@ -682,7 +682,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
                   className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 12, backgroundColor: "#ffe603" }}
+                  style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
                   aria-label="go back"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -709,7 +709,7 @@ const ChooseFace = () => {
                         }}
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
-                          borderRadius: 12,
+                          borderRadius: 10,
                           border: selectedIndex === i ? "3px solid #ffe603" : "none",
                           padding: selectedIndex === i ? 0 : 3,
                           overflow: "hidden",
@@ -730,7 +730,7 @@ const ChooseFace = () => {
                     disabled={selectedIndex === null}
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-all duration-150 active:scale-[0.99] disabled:cursor-not-allowed"
                     style={{
-                      borderRadius: 12,
+                      borderRadius: 10,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "#1a1a1a",
                       color: selectedIndex !== null ? "#000" : "rgba(255,255,255,0.25)",
                     }}
@@ -749,7 +749,7 @@ const ChooseFace = () => {
                     disabled={isFreeUser}
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
                     style={{
-                      borderRadius: 12,
+                      borderRadius: 10,
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
                       color: "#ffffff",
@@ -778,12 +778,12 @@ const ChooseFace = () => {
                     ].filter(t => t.value);
                     if (traitItems.length === 0) return null;
                     return (
-                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "#1a1a1a", borderRadius: 16 }}>
+                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}>
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                              <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[12px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
+                              <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>
@@ -805,7 +805,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#ffe603", color: "#000", borderRadius: 12 }}
+                  style={{ backgroundColor: "#ffe603", color: "#000", borderRadius: 10 }}
                 >
                   try again
                 </button>

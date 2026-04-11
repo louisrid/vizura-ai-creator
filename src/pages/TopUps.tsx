@@ -66,7 +66,7 @@ const TopUps = () => {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
+              className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000",
                 backgroundImage: gridPatternSvg,
@@ -108,7 +108,7 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-[12px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
+                  className="rounded-[10px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
                   <ShoppingCart size={22} strokeWidth={3} />
                 </span>
