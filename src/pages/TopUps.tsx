@@ -108,9 +108,9 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-[12px] px-6 py-3 text-base font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground"
+                  className="rounded-[12px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
-                  buy
+                  <ShoppingCart size={22} strokeWidth={3} />
                 </span>
               </button>
             </div>
