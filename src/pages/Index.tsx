@@ -691,11 +691,11 @@ const Index = () => {
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
             <div className="flex gap-4">
-              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
+              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
             </div>
 
-            <ExpressionDropdown value={expression} onChange={setExpression} />
+            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
             <div className="relative">
               <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
