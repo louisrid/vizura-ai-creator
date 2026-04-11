@@ -5,7 +5,7 @@ import { LogOut, ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useGems } from "@/contexts/CreditsContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
