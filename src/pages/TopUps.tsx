@@ -80,10 +80,10 @@ const TopUps = () => {
 
                 <div className="mt-3">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-white"
-                    style={{ backgroundColor: "hsl(189 100% 50% / 0.15)", border: "1.5px solid hsl(189 100% 50% / 0.3)" }}
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-black"
+                    style={{ backgroundColor: "#00e0ff" }}
                   >
-                    <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    <Gem size={14} strokeWidth={2.5} className="text-black" />
                     {pack.gems} gems
                   </span>
                 </div>
