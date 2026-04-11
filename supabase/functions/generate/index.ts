@@ -523,8 +523,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "C-D cup breasts, full rounded chest, prominent bust",
-  large: "very-large prominent DD-F cup breasts, heavy full-chest, deep cleavage",
+  regular: "full rounded C-D cup breasts",
+  large: "very-large heavy DD-F cup breasts",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -564,8 +564,8 @@ async function generateAngleAndBody(
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      const bustPromptSegment = bustDesc ? `${bustDesc} cleavage visible.` : "cleavage visible.";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Low-scoop white top, tight black leggings. Same white background, same lighting. ${bodyDesc}. ${bustPromptSegment} Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
+      const bustPromptSegment = bustDesc ? `tight white v-neck crop-top, ${bustDesc} with visible cleavage` : "tight white v-neck crop-top, cleavage visible";
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bodyDesc}. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
       console.log("Full body prompt:", bodyPrompt);
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
