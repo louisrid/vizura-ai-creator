@@ -140,7 +140,7 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[10px] border-2 border-[#1a1a1a] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="rounded-[10px] border-2 border-[rgba(255,255,255,0.15)] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
             {!inWebView && (
               <>
                 <button
