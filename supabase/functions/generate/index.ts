@@ -1118,7 +1118,7 @@ serve(async (req) => {
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,
-        prompt: sanitiseText(prompt),
+        prompt: rawPrompt.trim().slice(0, 1000),
         image_urls: imageUrls,
       });
     }
