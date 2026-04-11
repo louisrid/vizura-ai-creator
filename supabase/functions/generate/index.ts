@@ -523,7 +523,7 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full rounded C cup breasts, prominent chest",
+  regular: "natural B cup breasts",
   large: "huge DD cup breasts, very heavy prominent chest, large cleavage",
 };
 
@@ -565,7 +565,7 @@ async function generateAngleAndBody(
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
       const bustPromptSegment = bustDesc ? `tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage` : "tight white v-neck top tucked into leggings, cleavage visible";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed from top of head to mid-thigh.`;
+      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
       console.log("Full body prompt:", bodyPrompt);
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
@@ -607,6 +607,14 @@ async function generatePhoto(
 }
 
 /* ── handler ───────────────────────────────────────────── */
+/* ── banned words filter ────────────────────────────────── */
+const BANNED_WORDS = [
+  "naked", "nude", "topless", "tits", "nipples", "butthole", "pussy",
+  "dick", "cock", "penis", "vagina", "asshole", "anal", "cum", "sex",
+  "fuck", "porn",
+];
+const BANNED_RE = new RegExp(`\\b(${BANNED_WORDS.join("|")})\\b`, "i");
+
 serve(async (req) => {
   if (req.method === "OPTIONS")
     return new Response(null, { headers: corsHeaders });
