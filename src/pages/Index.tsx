@@ -264,9 +264,9 @@ const Index = () => {
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(() => cachedOverlay === "success" ? sessionStorage.getItem("vizura_photo_result") : null);
   const [fadingBack, setFadingBack] = useState(false);
 
-  const [photoType, setPhotoType] = useState("selfie");
-  const [photoRatio, setPhotoRatio] = useState("3:4");
-  const [expression, setExpression] = useState("casual smile");
+  const [photoType, setPhotoType] = useState(() => sessionStorage.getItem("vizura_photo_type") || "selfie");
+  const [photoRatio, setPhotoRatio] = useState(() => sessionStorage.getItem("vizura_photo_ratio") || "3:4");
+  const [expression, setExpression] = useState(() => sessionStorage.getItem("vizura_photo_expression") || "casual smile");
 
   const [charDropdownOpen, setCharDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -351,7 +351,7 @@ const Index = () => {
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { setShowPaywall(true); return; }
-    if (!selectedCharId || !prompt.trim()) { toast.error("finish info!"); return; }
+    if (!selectedCharId || !prompt.trim()) { toast.error("please fill all boxes"); return; }
 
     setIsGenerating(true);
     setError("");
@@ -597,17 +597,20 @@ const Index = () => {
           </div>
 
           <div className="flex gap-3">
-            <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-            <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+            <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
+            <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
           </div>
 
-          <ExpressionDropdown value={expression} onChange={setExpression} />
+          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
-          <div className="relative">
+          <div className="relative" style={{ zIndex: 20 }}>
             <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
               value={prompt}
-              onChange={setPrompt}
+              onChange={(v) => {
+                setPrompt(v);
+                try { sessionStorage.setItem("vizura_photo_prompt", v); } catch {}
+              }}
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
@@ -688,17 +691,20 @@ const Index = () => {
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
             <div className="flex gap-4">
-              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={setPhotoType} />
-              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={setPhotoRatio} />
+              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
+              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
             </div>
 
-            <ExpressionDropdown value={expression} onChange={setExpression} />
+            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
             <div className="relative">
               <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
-                onChange={setPrompt}
+                onChange={(v) => {
+                  setPrompt(v);
+                  try { sessionStorage.setItem("vizura_photo_prompt", v); } catch {}
+                }}
                 charName={selectedChar?.name || ""}
                 placeholder={
                   <div className="pointer-events-none absolute left-4 top-3 right-4">
