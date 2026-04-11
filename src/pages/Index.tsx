@@ -134,7 +134,7 @@ const HighlightedPromptArea = ({
         }}
         spellCheck={false}
         autoCorrect="off"
-        className="relative z-[20] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
+        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
         style={{ caretColor: "hsl(var(--foreground))", WebkitTextFillColor: "transparent" }}
       />
       {!value && placeholder}
