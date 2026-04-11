@@ -42,7 +42,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[10px] border-2 border-[#1a1a1a] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
+    <div className="flex items-stretch rounded-[10px] border-2 border-[rgba(255,255,255,0.15)] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -171,7 +171,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid #1a1a1a" }}
+          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-foreground">{selected.label}</span>
           <ChevronDown
@@ -189,7 +189,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -410,7 +410,7 @@ const Index = () => {
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 10, border: "2px solid #1a1a1a", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+          style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
         >
           {characters.map((c, idx) => {
             const isFirst = idx === 0;
@@ -525,7 +525,7 @@ const Index = () => {
             <motion.section
               layout
               className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#1a1a1a" }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -609,7 +609,7 @@ const Index = () => {
             <motion.section
               layout
               className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.08)", backgroundColor: "#1a1a1a" }}
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#1a1a1a" }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>

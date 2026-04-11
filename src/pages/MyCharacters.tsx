@@ -145,7 +145,7 @@ const MyCharacters = () => {
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{
                       borderRadius: 10,
-                      border: isNew ? "3px solid #ffe603" : "2px solid #1a1a1a",
+                      border: isNew ? "3px solid #ffe603" : "2px solid rgba(255,255,255,0.15)",
                       backgroundColor: "#1a1a1a",
                     }}
                   >

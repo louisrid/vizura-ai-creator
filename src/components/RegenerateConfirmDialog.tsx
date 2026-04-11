@@ -56,7 +56,7 @@ const RegenerateConfirmDialog = ({
             style={{
               backgroundColor: "#000000",
               borderRadius: 10,
-              border: "2px solid #1a1a1a",
+              border: "2px solid rgba(255,255,255,0.15)",
               padding: "28px 24px 24px",
             }}
           >
