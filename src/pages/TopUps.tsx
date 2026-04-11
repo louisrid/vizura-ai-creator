@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Gem } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -13,6 +14,8 @@ const packs = [
   { id: "pro", title: "pro pack", gems: 35, price: 20, badge: "15% off!", subtitle: null },
   { id: "elite", title: "elite pack", gems: 80, price: 40, badge: "20% off!", subtitle: null },
 ] as const;
+
+const gridPatternSvg = `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M20 0v20M0 20h20' stroke='%23ffffff' stroke-opacity='0.03' stroke-width='0.5'/%3E%3C/svg%3E")`;
 
 const TopUps = () => {
   const { refetch } = useGems();
@@ -64,36 +67,24 @@ const TopUps = () => {
             <div
               key={pack.id}
               className="relative rounded-[16px] overflow-hidden p-5 flex gap-4"
-              style={{ backgroundColor: "#000", minHeight: 160 }}
+              style={{
+                backgroundColor: "#000",
+                backgroundImage: gridPatternSvg,
+                backgroundSize: "20px 20px",
+                minHeight: 160,
+              }}
             >
-              {/* Sparkle overlay for elite */}
-              {pack.id === "elite" && (
-                <div
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background: "radial-gradient(ellipse at 100% 100%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 30%, transparent 65%)",
-                  }}
-                >
-                  {/* Sparkle dots */}
-                  <div className="absolute bottom-4 right-4 w-1 h-1 rounded-full bg-white/20" />
-                  <div className="absolute bottom-7 right-8 w-0.5 h-0.5 rounded-full bg-white/15" />
-                  <div className="absolute bottom-3 right-12 w-0.5 h-0.5 rounded-full bg-white/10" />
-                  <div className="absolute bottom-10 right-5 w-0.5 h-0.5 rounded-full bg-white/10" />
-                  <div className="absolute bottom-6 right-14 w-[3px] h-[3px] rounded-full bg-white/15" />
-                  <div className="absolute bottom-12 right-10 w-0.5 h-0.5 rounded-full bg-white/10" />
-                </div>
-              )}
-
               {/* Left side */}
               <div className="flex-1 flex flex-col justify-between relative z-[1]">
                 <span className="text-xl font-[900] lowercase text-white">{pack.title}</span>
 
                 <div className="mt-3">
                   <span
-                    className="inline-block rounded-full px-4 py-2 text-sm font-[900] lowercase text-white"
-                    style={{ backgroundColor: "#1a3a5c" }}
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-[900] lowercase text-white"
+                    style={{ backgroundColor: "hsl(189 100% 50% / 0.15)", border: "1.5px solid hsl(189 100% 50% / 0.3)" }}
                   >
-                    💎 {pack.gems} gems
+                    <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    {pack.gems} gems
                   </span>
                 </div>
 
@@ -113,11 +104,11 @@ const TopUps = () => {
               <button
                 disabled={buying !== null}
                 onClick={() => handleBuy(pack)}
-                className="relative z-[1] flex flex-col items-center justify-center gap-2 min-w-[80px] disabled:opacity-60 transition-all active:scale-95"
+                className="relative z-[1] flex flex-col items-center justify-center gap-3 min-w-[90px] disabled:opacity-60 transition-all active:scale-95"
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-full px-5 py-2 text-xs font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground"
+                  className="rounded-[12px] px-6 py-3 text-base font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground"
                 >
                   buy
                 </span>
