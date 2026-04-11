@@ -30,35 +30,17 @@ const useDotGrid = ({ cx, cy, radius, flipX }: DotGridProps) => {
 
 const DotDecal = () => {
   const dots1 = useDotGrid({ cx: 280, cy: 320, radius: 180, flipX: false });
-  const dots2 = useDotGrid({ cx: 280, cy: 320, radius: 180, flipX: true });
-
-  // Offset the second grid so it starts where the first fades out
-  const secondGridOffsetY = 360;
-
   return (
     <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
       <svg
         className="absolute inset-0 w-full h-full"
         preserveAspectRatio="none"
       >
-        {/* First dot grid — original position */}
         {dots1.map((d, i) => (
           <circle
             key={`a${i}`}
             cx={`${(d.x / 430) * 100}%`}
             cy={d.y}
-            r={1.4}
-            fill="#ffe603"
-            opacity={d.opacity}
-            className="md:opacity-[0.3]"
-          />
-        ))}
-        {/* Second dot grid — flipped horizontally, positioned below */}
-        {dots2.map((d, i) => (
-          <circle
-            key={`b${i}`}
-            cx={`${(d.x / 430) * 100}%`}
-            cy={d.y + secondGridOffsetY}
             r={1.4}
             fill="#ffe603"
             opacity={d.opacity}
