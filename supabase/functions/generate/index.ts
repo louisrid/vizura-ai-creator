@@ -678,7 +678,7 @@ async function generatePhoto(
   return await xaiTextToImage(finalPrompt, apiKey);
 }
 
-/* ── FLUX 2 Pro Edit provider ─────────────────────────── */
+/* ── FLUX 2 Pro Edit provider (async queue + polling) ── */
 async function generateWithFlux(
   prompt: string,
   imageUrls: string[],
@@ -696,13 +696,17 @@ async function generateWithFlux(
   console.log("FLUX generateWithFlux calling with", imageUrls.length, "references");
   console.log("FLUX prompt:", prompt.slice(0, 300));
 
-  const response = await fetch("https://queue.fal.run/fal-ai/flux-2-pro/edit", {
+  const FAL_BASE = "https://queue.fal.run/fal-ai/flux-2-pro/edit";
+  const authHeaders = {
+    "Authorization": `Key ${FAL_KEY}`,
+    "Content-Type": "application/json",
+  };
+
+  // Step 1: Submit to queue (returns immediately with request_id)
+  const submitRes = await fetch(FAL_BASE, {
     method: "POST",
-    signal: AbortSignal.timeout(120000),
-    headers: {
-      "Authorization": `Key ${FAL_KEY}`,
-      "Content-Type": "application/json",
-    },
+    signal: AbortSignal.timeout(15000),
+    headers: authHeaders,
     body: JSON.stringify({
       prompt,
       image_urls: imageUrls,
@@ -710,25 +714,78 @@ async function generateWithFlux(
       safety_tolerance: "5",
       enable_safety_checker: false,
       output_format: "jpeg",
-      sync_mode: true,
     }),
   });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    console.error("FLUX generation error:", response.status, errText);
-    if (response.status === 429) throw { status: 429 };
-    throw new Error("FLUX generation failed: " + response.status + " " + errText);
+  if (!submitRes.ok) {
+    const errText = await submitRes.text();
+    console.error("FLUX queue submit error:", submitRes.status, errText);
+    if (submitRes.status === 429) throw { status: 429 };
+    throw new Error("FLUX submit failed: " + submitRes.status + " " + errText);
   }
 
-  const result = await response.json();
+  const submitData = await submitRes.json();
+  const requestId = submitData?.request_id;
+  if (!requestId) {
+    console.error("FLUX submit missing request_id:", JSON.stringify(submitData).slice(0, 500));
+    throw new Error("FLUX submit missing request_id");
+  }
+  console.log("FLUX queued, request_id:", requestId);
+
+  // Step 2: Poll status until COMPLETED (each poll is a short HTTP call)
+  const STATUS_URL = `${FAL_BASE}/requests/${requestId}/status`;
+  const RESULT_URL = `${FAL_BASE}/requests/${requestId}`;
+  const MAX_POLLS = 30; // 30 × 2s = 60s max polling
+  const POLL_INTERVAL_MS = 2000;
+
+  for (let i = 0; i < MAX_POLLS; i++) {
+    await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+
+    const statusRes = await fetch(STATUS_URL, {
+      method: "GET",
+      signal: AbortSignal.timeout(10000),
+      headers: { "Authorization": `Key ${FAL_KEY}` },
+    });
+
+    if (!statusRes.ok) {
+      const errText = await statusRes.text();
+      console.error("FLUX status poll error:", statusRes.status, errText);
+      // Consume and retry on transient errors
+      continue;
+    }
+
+    const statusData = await statusRes.json();
+    const status = statusData?.status;
+    console.log(`FLUX poll ${i + 1}/${MAX_POLLS}: status=${status}`);
+
+    if (status === "COMPLETED") {
+      break;
+    }
+    if (status === "FAILED") {
+      console.error("FLUX job failed:", JSON.stringify(statusData).slice(0, 500));
+      throw new Error("FLUX generation failed on server");
+    }
+    // IN_QUEUE or IN_PROGRESS — keep polling
+  }
+
+  // Step 3: Fetch result
+  const resultRes = await fetch(RESULT_URL, {
+    method: "GET",
+    signal: AbortSignal.timeout(10000),
+    headers: { "Authorization": `Key ${FAL_KEY}` },
+  });
+
+  if (!resultRes.ok) {
+    const errText = await resultRes.text();
+    console.error("FLUX result fetch error:", resultRes.status, errText);
+    throw new Error("FLUX result fetch failed: " + resultRes.status);
+  }
+
+  const result = await resultRes.json();
   const url = result?.images?.[0]?.url
     || result?.data?.images?.[0]?.url
-    || result?.data?.[0]?.url
     || result?.output?.images?.[0]?.url
-    || result?.output?.[0]?.url
     || result?.image?.url
-    || result?.data?.image?.url
     || null;
 
   if (!url) {
@@ -736,6 +793,7 @@ async function generateWithFlux(
     throw new Error("FLUX response missing image URL");
   }
 
+  console.log("FLUX image URL received:", url.slice(0, 80));
   const permanentUrl = await storeImagePermanently(url, userId, adminClient, "photo");
   return permanentUrl;
 }
