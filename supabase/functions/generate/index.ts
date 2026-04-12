@@ -532,11 +532,11 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  thin: "petite frame, B cup, toned stomach, narrow hips",
-  regular: "hourglass figure, C-D cup, defined waist, feminine hips",
-  average: "hourglass figure, C-D cup, defined waist, feminine hips",
-  curvy: "voluptuous, D-DD cup, wider hips, natural curves, soft thighs",
-  thick: "voluptuous, D-DD cup, wider hips, natural curves, soft thighs",
+  thin: "petite frame, toned stomach, narrow hips",
+  regular: "hourglass figure, defined waist, feminine hips",
+  average: "hourglass figure, defined waist, feminine hips",
+  curvy: "voluptuous, wider hips, natural curves, soft thighs",
+  thick: "voluptuous, wider hips, natural curves, soft thighs",
 };
 
 /* ── bust size descriptor ── */

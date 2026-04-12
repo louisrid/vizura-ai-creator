@@ -62,7 +62,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[17px] font-[900] lowercase transition-all"
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
-                color: isSelected ? "#000" : "rgba(255,255,255,0.4)",
+                color: isSelected ? "#000" : "#ffffff",
                 borderRadius: isFirst && isLast ? "10px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
               }}
             >

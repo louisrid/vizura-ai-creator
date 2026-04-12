@@ -158,7 +158,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => setExpanded(img)}
-                  className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+                  className="group relative rounded-t-[10px] border-[2px] border-b-0 border-[rgba(255,255,255,0.15)] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img src={img.url} alt="" className="h-full w-full object-cover" onError={() => { handleDelete(img); }} />
