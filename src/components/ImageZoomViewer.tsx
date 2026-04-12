@@ -18,7 +18,7 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.15, ease: "easeOut" }}
-        className="fixed inset-0 z-[9998] flex items-center justify-center px-6 pb-6"
+        className="fixed inset-0 z-[9998] flex items-center justify-center px-5 pb-6"
         onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
       >
@@ -27,15 +27,14 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
-          className="relative w-full max-w-[341px] md:max-w-[585px]"
-          style={{ marginTop: "12vh" }}
+          className="relative w-full max-w-[370px] md:max-w-[620px]"
         >
           <ModalCloseButton onClick={onClose} />
 
           <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
             <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
             <div className="px-3 overflow-hidden" style={{ borderRadius: 10 }}>
-              <img src={url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 10 }} />
+              <img src={url} alt="" className="w-full object-contain max-h-[55vh] md:max-h-[68vh] block" style={{ borderRadius: 10 }} />
             </div>
             {showDownload && (
               <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>

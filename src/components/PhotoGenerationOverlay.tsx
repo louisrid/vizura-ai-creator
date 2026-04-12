@@ -102,7 +102,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           onPointerDown={dismissOverlay}
           style={{ touchAction: "manipulation", cursor: "pointer" }}
         >
-          <div className="relative z-10 flex w-full max-w-xs md:max-w-md flex-col items-center gap-2" style={{ marginTop: "8vh" }}>
+          <div className="relative z-10 flex w-full max-w-xs md:max-w-md flex-col items-center gap-2">
             <motion.p
               className="text-center text-[2.2rem] font-[900] lowercase text-white mb-1"
               initial={{ opacity: 0, y: 16, scale: 0.9 }}
