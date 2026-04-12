@@ -323,14 +323,14 @@ function buildFluxPrompt(
 
   const parts: string[] = [];
 
-  parts.push("Same woman from image 1, image 2, and image 3. Exact facial identity from image 1. Exact body shape, proportions, bust size, and cleavage level from image 3");
+  parts.push("Same woman from image 1, image 2, and image 3. Exact facial identity from image 1. Exact body shape, proportions, bust size, and cleavage level from image 3. Completely replace all clothing from reference images with the outfit described below");
 
   parts.push(scenePrompt);
 
   if (photoType === "selfie") {
-    parts.push("Authentic casual iPhone selfie, front camera, slight grain, amateur influencer Instagram style, not studio, not professional photography");
+    parts.push("Authentic casual iPhone selfie, front camera, natural lighting, amateur influencer Instagram style");
   } else {
-    parts.push("Casual candid iPhone photo, natural lighting, slight grain, amateur influencer Instagram style, not studio, not professional photography");
+    parts.push("Casual candid iPhone photo, natural lighting, amateur influencer Instagram style");
   }
 
   if (characterTraits) {
@@ -643,18 +643,29 @@ async function generateAngleAndBody(
   if (target === "body" || target === "both") {
     try {
       console.log("Generating full-body anchor...");
+      const bodyAnchorMode = Deno.env.get("BODY_ANCHOR_MODE") || "a";
       const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      const bustPromptSegment = bustDesc ? `tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage` : "tight white v-neck top tucked into leggings, cleavage visible";
-      const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
-      console.log("Full body prompt:", bodyPrompt);
-      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
-      if (bodyResult) {
-        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
-        console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
+
+      if (bodyAnchorMode === "a") {
+        const bustPromptSegment = bustDesc ? `tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage` : "tight white v-neck top tucked into leggings, cleavage visible";
+        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+        console.log("Body anchor mode A (full):", bodyPrompt.slice(0, 200));
+        const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+        if (bodyResult) {
+          bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
+        }
+      } else {
+        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Plain nude-tone strapless bodysuit, same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+        console.log("Body anchor mode B (minimal):", bodyPrompt.slice(0, 200));
+        const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+        if (bodyResult) {
+          bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
+        }
       }
+      console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
     } catch (e) {
       console.error("Full-body anchor generation failed:", e);
     }
@@ -1267,7 +1278,7 @@ serve(async (req) => {
         if (provider === "flux" && faceImageUrls.length > 0) {
           const fluxPrompt = buildFluxPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
           console.log("Using FLUX provider");
-          result = await generateWithFlux(fluxPrompt, [faceImageUrls[0]], aspectRatio, adminClient, userId);
+          result = await generateWithFlux(fluxPrompt, faceImageUrls, aspectRatio, adminClient, userId);
         } else {
           const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
           console.log("Using Grok provider");
