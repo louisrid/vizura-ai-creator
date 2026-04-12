@@ -392,8 +392,10 @@ const Index = () => {
 
     setIsGenerating(true);
     setError("");
+    setResultImage(null);
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
+    try { sessionStorage.removeItem("vizura_photo_result"); sessionStorage.removeItem("vizura_photo_overlay"); } catch {}
 
     toast("1 gem used");
     const userPrompt = prompt;
@@ -445,10 +447,12 @@ const Index = () => {
         throw new Error(data.error);
       }
 
-      const generatedUrl = (data.images || [])[0] || null;
-      if (!generatedUrl) {
+      const rawUrl = (data.images || [])[0] || null;
+      if (!rawUrl) {
         throw new Error("no image returned — the AI may have rejected this prompt");
       }
+      // Append cache-buster to prevent browser from showing a stale cached image
+      const generatedUrl = rawUrl + (rawUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
 
       setPhotoOverlayResult(generatedUrl);
       setPhotoOverlayPhase("success");
@@ -507,7 +511,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
-                  className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
+                  className="flex w-full items-center gap-3 px-4 py-3"
                   style={{
                     backgroundColor: isSelected ? "rgba(255,255,255,0.07)" : "transparent",
                     borderRadius,
