@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RefreshCw, Gem } from "lucide-react";
+import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { registerNavGuard } from "@/lib/navGuard";
 import { displayAge } from "@/lib/displayAge";
@@ -91,6 +91,7 @@ const ChooseFace = () => {
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const [regeneratingFaces, setRegeneratingFaces] = useState(false);
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
 
@@ -305,13 +306,9 @@ const ChooseFace = () => {
     }
     if (!user) return;
 
-    // Go back to loading bar, regenerate from scratch
-    setFaces([]);
+    // Stay on screen, show spinners on face cards
+    setRegeneratingFaces(true);
     setSelectedIndex(null);
-    setLoading(true);
-    setApiDone(false);
-    setBarComplete(false);
-    setCardsRevealed(false);
     setGenerationError(null);
 
     try {
@@ -365,12 +362,12 @@ const ChooseFace = () => {
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
-      setApiDone(true);
       await refetchGems();
       toast("1 gem used");
     } catch (err: any) {
       toast.error("generation failed, please try again");
-      setLoading(false);
+    } finally {
+      setRegeneratingFaces(false);
     }
   };
 
@@ -735,8 +732,12 @@ const ChooseFace = () => {
                           overflow: "hidden",
                         }}
                       >
-                        <div className="w-full h-full overflow-hidden" style={{ borderRadius: 10 }}>
-                          <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover block" />
+                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 10, backgroundColor: "#000" }}>
+                          {regeneratingFaces ? (
+                            <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
+                          ) : (
+                            <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover block" />
+                          )}
                         </div>
                       </motion.button>
                     </div>
