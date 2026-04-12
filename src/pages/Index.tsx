@@ -43,13 +43,13 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>{selected.label}</span>
+          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-foreground/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -72,10 +72,10 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: "transparent",
+                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -246,13 +246,13 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>{selected.label}</span>
+          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-foreground/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -275,10 +275,10 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: "transparent",
+                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -323,13 +323,13 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>{selected.label}</span>
+          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-foreground/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -352,10 +352,10 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: "transparent",
+                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -784,12 +784,12 @@ const Index = () => {
             </motion.section>
           </div>
 
-          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
-
           <div className="flex gap-3">
             <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
             <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
           </div>
+
+          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
           <div className="relative">
             <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
@@ -878,12 +878,12 @@ const Index = () => {
 
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
-            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
-
             <div className="flex gap-4">
               <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
               <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
             </div>
+
+            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
             <div className="relative">
               <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
