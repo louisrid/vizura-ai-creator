@@ -170,7 +170,7 @@ const Header = () => {
                       }}
                       className="w-full text-left flex items-center gap-2.5 md:gap-3.5"
                       style={{
-                        padding: isDesktop ? "16px 24px" : "10px 14px",
+                        padding: isDesktop ? "18px 24px" : "13px 14px",
                         fontSize: isDesktop ? 17 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
@@ -195,7 +195,7 @@ const Header = () => {
                     className="w-full text-left flex items-center gap-2.5 md:gap-3.5"
                     style={{
                       color: "#ff4444",
-                      padding: isDesktop ? "16px 24px" : "10px 14px",
+                       padding: isDesktop ? "18px 24px" : "13px 14px",
                       fontSize: isDesktop ? 17 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
