@@ -143,6 +143,81 @@ const HighlightedPromptArea = ({
   );
 };
 
+/* ── Photo type dropdown ── */
+const PHOTO_TYPE_OPTIONS = [
+  { value: "selfie", label: "selfie" },
+  { value: "photo", label: "photo" },
+  { value: "mirror_selfie", label: "mirror selfie" },
+] as const;
+
+const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = PHOTO_TYPE_OPTIONS.find((o) => o.value === value) ?? PHOTO_TYPE_OPTIONS[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: PointerEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", handler, true);
+    return () => document.removeEventListener("pointerdown", handler, true);
+  }, [open]);
+
+  return (
+    <div className="flex-1">
+      <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">type</span>
+      <div className="relative" ref={ref}>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
+          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+        >
+          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-foreground">{selected.label}</span>
+          <ChevronDown
+            size={18}
+            strokeWidth={2.5}
+            className={`text-foreground/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
+              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+            >
+              {PHOTO_TYPE_OPTIONS.map((opt, idx) => (
+                <div key={opt.value}>
+                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                  <button
+                    type="button"
+                    onClick={() => { onChange(opt.value); setOpen(false); }}
+                    className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
+                    style={{
+                      color: value === opt.value ? "#ffe603" : "#fff",
+                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
+                  >
+                    {opt.label}
+                  </button>
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
 /* ── Expression options ── */
 const EXPRESSION_OPTIONS = [
   { value: "casual smile", label: "casual smile 😊" },
@@ -636,7 +711,7 @@ const Index = () => {
           </div>
 
           <div className="flex gap-3">
-            <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
+            <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
             <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
           </div>
 
@@ -730,7 +805,7 @@ const Index = () => {
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
             <div className="flex gap-4">
-              <ToggleBox label="type" options={["selfie", "photo"]} value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
+              <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
               <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
             </div>
 
