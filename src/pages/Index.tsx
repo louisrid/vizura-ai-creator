@@ -395,6 +395,7 @@ const Index = () => {
     setResultImage(null);
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
+    try { sessionStorage.removeItem("vizura_photo_result"); sessionStorage.removeItem("vizura_photo_overlay"); } catch {}
 
     toast("1 gem used");
     const userPrompt = prompt;
