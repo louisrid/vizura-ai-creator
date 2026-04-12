@@ -15,7 +15,7 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "POV shot, camera held in right-hand at arms-length, left-arm not in frame, close-up above-eye-level, f/11 deep-focus";
+const SELFIE_PREFIX = "close-up portrait shot from slightly above, face and upper-chest only, tight crop, f/11 deep-focus, detailed-background";
 
 const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus sharp-background";
 
