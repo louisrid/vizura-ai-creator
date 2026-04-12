@@ -15,9 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "selfie pose, one arm extended forward taking photo, close-up above-eye-level, sharp-focus";
+const SELFIE_PREFIX = "POV from one-hand held forward, close-up, slightly above eye-level";
 
-const PHOTO_PREFIX = "third-person natural-photography, sharp-focus on entire-image, sharp detailed-background, no-bokeh, no-blur";
+const PHOTO_PREFIX = "candid third-person shot, full-scene sharp-focus, detailed-background";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -239,10 +239,7 @@ function buildFinalPrompt(
   bodyType?: string,
   expression?: string,
 ): string {
-  const typeLabel = photoType === "selfie" ? "SELFIE" : "PHOTO";
   const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
-
-  const charName = characterTraits?.match(/^(\d+\s+year\s+old\s+woman)/)?.[0] || "the woman";
 
   const EXPRESSION_MAP: Record<string, string> = {
     "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
@@ -250,25 +247,33 @@ function buildFinalPrompt(
     "big smile": "big open-mouth smile showing teeth, happy joyful energy",
     "pout": "duck face pout, lips pushed forward, playful pouty expression",
   };
-  const exprStr = expression ? `, ${EXPRESSION_MAP[expression] || expression}` : "";
+  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "";
 
   const parts: string[] = [];
 
-  // Scene MUST be first — Grok prioritises early tokens
+  // Scene FIRST — highest priority
   parts.push(scenePrompt);
 
+  // Perspective and framing
+  parts.push(perspective);
+
+  // Character
   if (characterTraits) {
-    parts.push(`a realistic casual iPhone-style ${typeLabel} of ${charName} shown in the reference images`);
-    parts.push(`very attractive${exprStr}`);
-    parts.push(`IMPORTANT: the outfit described in the scene description MUST override any clothing from reference images. She must wear exactly what is described above, NOT the clothing from reference photos`);
-    parts.push(`She has: ${characterTraits}`);
+    parts.push(`attractive woman matching reference photos, ${exprStr}, ${characterTraits}`);
   } else {
-    parts.push(`a realistic casual iPhone-style ${typeLabel} of a woman`);
-    parts.push(`very attractive${exprStr}`);
+    parts.push(`attractive woman, ${exprStr}`);
   }
 
-  parts.push("direct-eye-contact, sharp-focus entire-image no-bokeh no-blur sharp-background, natural-framing, matte-skin, visible-pores, fine-texture, no-shine, smooth-midsection");
-  parts.push(perspective);
+  // Skin and quality — end of prompt for reinforcement
+  parts.push("matte-skin with visible-pores and skin-texture, no-shine");
+  parts.push("entire-image sharp-focus, sharp detailed-background, no-bokeh, no-depth-of-field");
+  parts.push("direct-eye-contact");
+
+  if (photoType === "selfie") {
+    parts.push("only one arm visible reaching toward camera, other arm not visible");
+  }
+
+  parts.push("smooth-midsection, no visible ribs");
 
   if (bodyType) {
     const bKey = normalizeBodyType(bodyType.toLowerCase());

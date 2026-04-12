@@ -252,6 +252,7 @@ const Index = () => {
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
   const [prompt, setPrompt] = useState(() => sessionStorage.getItem("vizura_photo_prompt") || "");
+  const manualPromptRef = useRef(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => sessionStorage.getItem("vizura_photo_result") || null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
@@ -312,6 +313,35 @@ const Index = () => {
   useEffect(() => {
     if (searchParams.get("upgrade") === "true") setShowPaywall(true);
   }, [searchParams]);
+
+  // Listen for copied prompts from Storage page
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === "vizura_copied_prompt" && e.newValue) {
+        setPrompt(e.newValue);
+        try { sessionStorage.setItem("vizura_photo_prompt", e.newValue); } catch {}
+      }
+    };
+    // Also check on focus (same-tab clipboard copy)
+    const focusHandler = () => {
+      const copied = localStorage.getItem("vizura_copied_prompt_ts");
+      const copiedPrompt = localStorage.getItem("vizura_copied_prompt");
+      if (copied && copiedPrompt) {
+        const ts = parseInt(copied, 10);
+        if (Date.now() - ts < 10000) {
+          setPrompt(copiedPrompt);
+          try { sessionStorage.setItem("vizura_photo_prompt", copiedPrompt); } catch {}
+          localStorage.removeItem("vizura_copied_prompt_ts");
+        }
+      }
+    };
+    window.addEventListener("storage", handler);
+    window.addEventListener("focus", focusHandler);
+    return () => {
+      window.removeEventListener("storage", handler);
+      window.removeEventListener("focus", focusHandler);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchCharacters = async () => {
@@ -538,7 +568,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[120px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[105px] md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
