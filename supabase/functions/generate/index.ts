@@ -15,7 +15,7 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "POV shot, camera held in right-hand at arms-length, left-arm not in frame, close-up above-eye-level, f/11 deep-focus";
+const SELFIE_PREFIX = "close-up portrait shot from slightly above, face and upper-chest only, tight crop, f/11 deep-focus, detailed-background";
 
 const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus sharp-background";
 
@@ -255,8 +255,6 @@ function buildFinalPrompt(
   parts.push(scenePrompt);
 
   // Perspective and framing
-
-  // Perspective and framing
   parts.push(perspective);
 
   // Character
@@ -268,12 +266,8 @@ function buildFinalPrompt(
 
   // Skin and quality — end of prompt for reinforcement
   parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  parts.push("everything in-focus f/11 deep-focus photography, sharp-background no-bokeh no-blur no depth-of-field");
+  parts.push("everything in-focus f/11 deep-focus photography, detailed-background, sharp-background no-bokeh no-blur no depth-of-field");
   parts.push("direct-eye-contact");
-
-  if (photoType === "selfie") {
-    parts.push("only one arm visible reaching toward camera, other arm not visible");
-  }
 
   parts.push("smooth-midsection, no visible ribs");
 
@@ -283,7 +277,9 @@ function buildFinalPrompt(
     if (modifier) parts.push(modifier);
   }
 
-  return parts.join(". ");
+  const finalPrompt = parts.join(". ");
+  console.log("FINAL PROMPT:", finalPrompt);
+  return finalPrompt;
 }
 
 /* ── check for content policy errors ───────────────────── */
