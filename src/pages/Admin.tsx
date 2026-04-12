@@ -404,7 +404,7 @@ const Admin = () => {
                       <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
                         <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
                         <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
-                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>{label}</span>
+                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>{label}</span>
                       </div>
                     ))}
                   </div>
@@ -479,7 +479,7 @@ const Admin = () => {
                         {rejected.map((r: any, i: number) => (
                           <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
                             <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-white leading-snug">{r.prompt_text}</p>
-                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>
+                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>
                               {r.user_email} · {fmtDate(r.rejected_at)}
                             </p>
                           </div>
