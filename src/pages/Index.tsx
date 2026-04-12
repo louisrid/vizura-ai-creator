@@ -446,10 +446,12 @@ const Index = () => {
         throw new Error(data.error);
       }
 
-      const generatedUrl = (data.images || [])[0] || null;
-      if (!generatedUrl) {
+      const rawUrl = (data.images || [])[0] || null;
+      if (!rawUrl) {
         throw new Error("no image returned — the AI may have rejected this prompt");
       }
+      // Append cache-buster to prevent browser from showing a stale cached image
+      const generatedUrl = rawUrl + (rawUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
 
       setPhotoOverlayResult(generatedUrl);
       setPhotoOverlayPhase("success");
