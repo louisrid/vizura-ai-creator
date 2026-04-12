@@ -15,9 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "POV from one-hand held forward, close-up, slightly above eye-level";
+const SELFIE_PREFIX = "POV from one-hand held forward, close-up, slightly above eye-level, f/11 deep-focus";
 
-const PHOTO_PREFIX = "candid third-person shot, full-scene sharp-focus, detailed-background";
+const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus, sharp-background";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -254,6 +254,9 @@ function buildFinalPrompt(
   // Scene FIRST — highest priority
   parts.push(scenePrompt);
 
+  // Clothing enforcement
+  parts.push("IMPORTANT: she must be wearing exactly the clothing described above, fully clothed");
+
   // Perspective and framing
   parts.push(perspective);
 
@@ -266,7 +269,7 @@ function buildFinalPrompt(
 
   // Skin and quality — end of prompt for reinforcement
   parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  parts.push("entire-image sharp-focus, sharp detailed-background, no-bokeh, no-depth-of-field");
+  parts.push("everything in-focus f/11 deep-focus photography, background same sharpness as subject, no-bokeh, no-blur, no depth-of-field");
   parts.push("direct-eye-contact");
 
   if (photoType === "selfie") {
