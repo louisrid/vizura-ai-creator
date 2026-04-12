@@ -44,7 +44,7 @@ const TopUps = () => {
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      await refetch();
+      refetch();
       toast.success(`+${pack.gems} gems added`);
     } catch (err: any) {
       toast.error(err.message || "purchase failed");
@@ -104,12 +104,17 @@ const TopUps = () => {
               {/* Right side — price + buy */}
               <button
                 disabled={buying !== null}
-                onClick={() => handleBuy(pack)}
-                className="relative z-[1] flex flex-col items-center justify-center gap-3 min-w-[90px] disabled:opacity-60 transition-all active:scale-95"
+                onClick={(e) => {
+                  const btn = e.currentTarget.querySelector('.cart-btn') as HTMLElement;
+                  if (btn) { btn.style.backgroundColor = '#c4b000'; setTimeout(() => { btn.style.backgroundColor = ''; }, 150); }
+                  handleBuy(pack);
+                }}
+                className="relative z-[1] flex flex-col items-center justify-center gap-3 min-w-[90px] active:scale-95"
+                style={{ opacity: buying === pack.id ? 0.6 : 1 }}
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="rounded-[14px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
+                  className="cart-btn rounded-[14px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
                   <ShoppingCart size={22} strokeWidth={3} />
                 </span>

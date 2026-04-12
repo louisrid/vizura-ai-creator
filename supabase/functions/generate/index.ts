@@ -287,6 +287,10 @@ function buildFinalPrompt(
     if (modifier) parts.push(modifier);
   }
 
+  // Append random seed to ensure unique generations
+  const seed = Math.floor(Math.random() * 999999);
+  parts.push(`seed:${seed}`);
+
   const finalPrompt = parts.join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
   return finalPrompt;

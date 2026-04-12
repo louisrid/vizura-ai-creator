@@ -31,7 +31,7 @@ const fmtDate = (iso: string) => {
 
 /* ── Standardised admin loading spinner ── */
 const AdminLoader = () => (
-  <div className="flex items-center justify-center py-24">
+  <div className="flex items-center justify-center" style={{ minHeight: "calc(100vh - 140px)" }}>
     <Loader2 className="animate-spin" size={24} style={{ color: "#ffffff" }} strokeWidth={3} />
   </div>
 );
@@ -102,9 +102,9 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: "#1a1a1a" }}
+          style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <ArrowLeft size={16} strokeWidth={2.5} color="#fff" />
+          <ArrowLeft size={14} strokeWidth={2.5} color="#000" />
         </button>
         <PageTitle className="mb-0">character</PageTitle>
       </div>
@@ -184,9 +184,9 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: "#1a1a1a" }}
+          style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <ArrowLeft size={16} strokeWidth={2.5} color="#fff" />
+          <ArrowLeft size={14} strokeWidth={2.5} color="#000" />
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>
@@ -454,7 +454,7 @@ const Admin = () => {
                         {activeUsers.map((u: any, i: number) => (
                           <button
                             key={i}
-                            onClick={() => setViewingUserId(u.user_id)}
+                            onClick={() => { setViewingUserId(u.user_id); window.scrollTo(0, 0); }}
                             className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20 active:scale-[0.98]"
                             style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
                           >
