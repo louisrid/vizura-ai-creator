@@ -371,7 +371,7 @@ const CharacterDetail = () => {
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 10 }} />
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.15)", borderRadius: 10 }} />
                 <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 10, backgroundColor: "#ffe603" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000" />}
                 </button>
@@ -392,7 +392,7 @@ const CharacterDetail = () => {
           </div>
           {/* Latest photos section */}
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
-            <h3 className="text-[15px] font-[900] lowercase text-white mb-3">latest photos</h3>
+            <h3 className="text-lg font-[900] lowercase text-white mb-3">latest photos</h3>
             <div className="grid grid-cols-3 gap-2">
               {Array.from({ length: 3 }).map((_, i) => {
                 const photo = latestPhotos[i];
@@ -457,7 +457,7 @@ const CharacterDetail = () => {
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.2)", borderRadius: 10 }} />
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.15)", borderRadius: 10 }} />
                   <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 10, backgroundColor: "#ffe603" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000" />}
                   </button>
@@ -478,7 +478,7 @@ const CharacterDetail = () => {
             </div>
             {/* Latest photos — desktop */}
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5 mt-5">
-              <h3 className="text-base font-[900] lowercase text-white mb-3">latest photos</h3>
+              <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
               <div className="grid grid-cols-3 gap-3">
                 {Array.from({ length: 6 }).map((_, i) => {
                   const photo = latestPhotos[i];

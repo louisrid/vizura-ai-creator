@@ -127,7 +127,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
         return (
           <Fragment key={opt}>
             {i > 0 && (
-              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.12)" }} />
+              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
             )}
             <button
               type="button"
