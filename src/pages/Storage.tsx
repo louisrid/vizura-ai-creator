@@ -18,6 +18,7 @@ interface StorageImage {
   url: string;
   prompt: string;
   created_at: string;
+  characterName?: string;
 }
 
 const Storage = () => {
@@ -36,11 +37,20 @@ const Storage = () => {
   useEffect(() => {
     const fetchAll = async () => {
       if (!user) return;
-      const { data } = await supabase
-        .from("generations")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      const [{ data }, { data: chars }] = await Promise.all([
+        supabase
+          .from("generations")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("characters")
+          .select("id, name")
+          .eq("user_id", user.id),
+      ]);
+
+      const charMap = new Map<string, string>();
+      (chars || []).forEach((c: any) => { if (c.name) charMap.set(c.id, c.name); });
 
       const allImages: StorageImage[] = [];
       (data || []).forEach((gen: any) => {
@@ -52,6 +62,7 @@ const Storage = () => {
             url,
             prompt: gen.prompt || "",
             created_at: gen.created_at,
+            characterName: gen.character_id ? charMap.get(gen.character_id) : undefined,
           });
         });
       });
@@ -113,7 +124,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-24">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
@@ -186,6 +197,14 @@ const Storage = () => {
         url={expanded?.url ?? null}
         onClose={() => setExpanded(null)}
         showDownload={false}
+        imageOverlay={expanded?.characterName ? (
+          <div
+            className="absolute bottom-2 left-2 px-3 py-1.5 text-[10px] font-[900] lowercase text-black"
+            style={{ backgroundColor: "#ffe603", borderRadius: 8 }}
+          >
+            {expanded.characterName}
+          </div>
+        ) : undefined}
         footer={expanded ? (
           <>
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
