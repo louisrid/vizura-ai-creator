@@ -125,8 +125,8 @@ const Auth = () => {
           </div>
           <div className="w-full space-y-3 p-5" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
             <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#111" }} />
-            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#222" }} />
-            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#222" }} />
+            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#111" }} />
+            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#111" }} />
             <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#111" }} />
           </div>
         </main>
@@ -195,7 +195,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
+              style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -207,7 +207,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
+              style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
 
