@@ -45,7 +45,7 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
-          className="fixed inset-0 z-[100000] flex items-center justify-center p-5 md:p-6"
+          className="fixed inset-0 z-[100000] flex items-center justify-center p-5 md:p-6 pt-[52%] md:pt-[51%]"
           onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
           style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", isolation: "isolate" }}
         >
