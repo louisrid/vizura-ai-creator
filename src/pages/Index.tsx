@@ -65,7 +65,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
             >
               {RATIO_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
-                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                  {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
                   <button
                     type="button"
                     onClick={() => { onChange(opt.value); setOpen(false); }}
@@ -127,7 +127,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
         return (
           <Fragment key={opt}>
             {i > 0 && (
-              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.12)" }} />
+              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
             )}
             <button
               type="button"
