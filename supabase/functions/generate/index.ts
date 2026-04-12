@@ -1351,6 +1351,7 @@ serve(async (req) => {
         user_id: userId,
         prompt: rawPrompt,
         image_urls: imageUrls,
+        character_id: characterId || null,
       });
     }
 
