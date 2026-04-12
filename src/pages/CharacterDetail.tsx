@@ -56,6 +56,43 @@ const CharacterDetail = () => {
   const [revealingBody, setRevealingBody] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  // Latest photos for this character
+  const [latestPhotos, setLatestPhotos] = useState<{ id: string; url: string; created_at: string }[]>([]);
+  const MAX_LATEST = 6;
+
+  const fetchLatestPhotos = useCallback(async () => {
+    if (!user || !id) return;
+    const { data } = await supabase
+      .from("generations")
+      .select("id, image_urls, created_at")
+      .eq("user_id", user.id)
+      .eq("character_id", id)
+      .order("created_at", { ascending: false })
+      .limit(20);
+    if (!data) return;
+    const photos: { id: string; url: string; created_at: string }[] = [];
+    for (const gen of data) {
+      for (let i = 0; i < (gen.image_urls || []).length; i++) {
+        const url = gen.image_urls[i];
+        if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) continue;
+        photos.push({ id: `${gen.id}-${i}`, url, created_at: gen.created_at });
+        if (photos.length >= MAX_LATEST) break;
+      }
+      if (photos.length >= MAX_LATEST) break;
+    }
+    setLatestPhotos(photos);
+  }, [user, id]);
+
+  useEffect(() => { fetchLatestPhotos(); }, [fetchLatestPhotos]);
+
+  useEffect(() => {
+    const refresh = () => { fetchLatestPhotos(); };
+    const handleVis = () => { if (document.visibilityState === "visible") refresh(); };
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", handleVis);
+    return () => { window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", handleVis); };
+  }, [fetchLatestPhotos]);
+
   useEffect(() => {
     if (!authLoading && !user) {
       navigate(`/auth?redirect=${encodeURIComponent(`/characters/${id}`)}`, { replace: true });
