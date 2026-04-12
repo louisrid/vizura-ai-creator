@@ -15,9 +15,13 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "a selfie, close-up, slightly above eye-level";
+const SELFIE_PREFIX = "a candid close-up selfie taken slightly above eye-level with an iPhone";
 
-const PHOTO_PREFIX = "a photo, candid third-person shot";
+const PHOTO_PREFIX = "a candid third-person phone snapshot";
+
+const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural skin texture, subtle imperfections, peach fuzz, matte finish, realistic subsurface scattering, no plastic, no airbrushed, no overly smooth or doll-like skin";
+
+const IPHONE_REALISM = "authentic casual iPhone 16 Pro photo posted on Instagram by an influencer, sharp focus on the entire image with deep depth of field, everything in crisp focus including the detailed background, NO background blur, NO bokeh, NO shallow depth of field, NO portrait mode, natural smartphone lighting and slight handheld grain with typical iPhone JPEG compression artifacts, not polished, not studio, not DSLR, not 4K cinematic";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -245,7 +249,7 @@ function buildFinalPrompt(
     "big smile": "big open-mouth smile showing teeth, happy joyful energy",
     "pout": "duck face pout, lips pushed forward, playful pouty expression",
   };
-  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "";
+  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "natural relaxed expression, eye contact with camera";
 
   const revealingKeywords = [
     "lingerie", "bikini", "underwear", "bra", "swimsuit",
@@ -256,44 +260,36 @@ function buildFinalPrompt(
     kw => scenePrompt.toLowerCase().includes(kw)
   );
 
+  const cameraPrefix = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
+
+  const bodyMod = bodyType
+    ? (BODY_PROMPT_MODIFIER?.[normalizeBodyType(bodyType.toLowerCase())] || BODY_PROMPT_MODIFIER?.["regular"])
+    : "";
+
   const parts: string[] = [];
 
+  parts.push(IPHONE_REALISM);
   parts.push(scenePrompt);
+  parts.push(cameraPrefix);
 
-  if (photoType === "selfie") {
-    parts.push("realistic casual iPhone 15 Pro selfie, front camera, amateur influencer style, natural lighting");
-  } else {
-    parts.push("realistic casual iPhone 15 Pro photo, natural angle, amateur influencer style, natural lighting");
-  }
+  if (characterTraits) parts.push(characterTraits);
+  if (bodyMod) parts.push(bodyMod);
 
-  if (characterTraits) {
-    parts.push(`a woman matching reference photos exactly, ${characterTraits}`);
-    if (exprStr) parts.push(exprStr);
-  }
+  if (photoType === "selfie") parts.push("her left arm behind her back");
 
-  if (bodyType) {
-    const bKey = normalizeBodyType((bodyType || "regular").toLowerCase());
-    const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
-    if (modifier) parts.push(modifier);
-  }
-
-  if (photoType === "selfie") {
-    parts.push("her left arm behind her back");
-  }
-
-  parts.push("realistic skin with visible pores, natural skin texture, matte skin, no shine");
-  parts.push("direct eye contact with camera");
+  parts.push(SKIN_QUALITY);
+  parts.push(exprStr);
   parts.push("smooth midsection, no visible ribs");
-  parts.push("sharp focus throughout entire image, deep depth of field, everything in focus, detailed background fully sharp, no bokeh, no blur, f/8 aperture");
 
-  if (!isRevealing) {
-    parts.push("fully clothed");
-  }
+  if (!isRevealing) parts.push("fully clothed");
+
+  parts.push("maintaining exact same face, body proportions, and identity as in the three reference photos");
+  parts.push(IPHONE_REALISM);
 
   const seed = Math.floor(Math.random() * 999999);
   parts.push(`seed:${seed}`);
 
-  const finalPrompt = parts.join(". ");
+  const finalPrompt = parts.filter(Boolean).join(", ");
   console.log("FINAL PROMPT:", finalPrompt);
   return finalPrompt;
 }
