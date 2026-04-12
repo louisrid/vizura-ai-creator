@@ -777,8 +777,7 @@ const Index = () => {
 
             <motion.section
               layout
-              className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 10, border: "2px solid hsl(0 0% 30%)", backgroundColor: "#1a1a1a" }}
+              className="relative flex w-full items-center justify-center overflow-hidden rounded-[10px] border-2 border-input bg-card"
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
@@ -869,8 +868,7 @@ const Index = () => {
 
             <motion.section
               layout
-              className="flex items-center justify-center overflow-hidden w-full"
-              style={{ borderRadius: 10, border: "2px solid hsl(0 0% 30%)", backgroundColor: "#1a1a1a" }}
+              className="relative flex w-full items-center justify-center overflow-hidden rounded-[10px] border-2 border-input bg-card"
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
               <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
