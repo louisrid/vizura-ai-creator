@@ -392,6 +392,7 @@ const Index = () => {
 
     setIsGenerating(true);
     setError("");
+    setResultImage(null);
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
 
