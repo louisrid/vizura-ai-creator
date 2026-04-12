@@ -254,17 +254,16 @@ function buildFinalPrompt(
   // Scene FIRST — highest priority
   parts.push(scenePrompt);
 
-  // Clothing enforcement
-  parts.push("IMPORTANT: she must be wearing exactly the clothing described above, fully clothed");
+  // Perspective and framing
 
   // Perspective and framing
   parts.push(perspective);
 
   // Character
   if (characterTraits) {
-    parts.push(`attractive woman matching reference photos, ${exprStr}, ${characterTraits}`);
+    parts.push(`attractive woman matching reference photos, ${exprStr}, ${characterTraits}, fully-clothed`);
   } else {
-    parts.push(`attractive woman, ${exprStr}`);
+    parts.push(`attractive woman, ${exprStr}, fully-clothed`);
   }
 
   // Skin and quality — end of prompt for reinforcement
