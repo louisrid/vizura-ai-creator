@@ -392,7 +392,7 @@ const CharacterDetail = () => {
           </div>
           {/* Latest photos section */}
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
-            <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">latest photos</h3>
+            <h3 className="text-sm font-[900] lowercase text-white mb-3">latest photos</h3>
             <div className="grid grid-cols-3 gap-2">
               {Array.from({ length: 3 }).map((_, i) => {
                 const photo = latestPhotos[i];
@@ -403,22 +403,20 @@ const CharacterDetail = () => {
                     style={{ borderRadius: 10, backgroundColor: "#000" }}
                     onClick={() => { if (photo) setZoomedUrl(photo.url); }}
                   >
-                    {photo ? (
+                    {photo && (
                       <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
-                    ) : (
-                      <User size={18} strokeWidth={3} style={{ color: "rgba(255,255,255,0.15)" }} />
                     )}
                   </div>
                 );
               })}
             </div>
           </div>
-          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
-            <div className="grid grid-cols-4 gap-1.5">
+          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-3 py-2">
+            <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
-                <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
-                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                  <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
+                <div key={t.label} className="rounded-[10px] py-1 text-center" style={{ backgroundColor: "#1a1a1a" }}>
+                  <span className="block font-[800] uppercase leading-none mb-1 text-[7px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                  <span className="inline-block font-[800] lowercase text-white leading-none text-[10px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -480,7 +478,7 @@ const CharacterDetail = () => {
             </div>
             {/* Latest photos — desktop */}
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5 mt-5">
-              <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">latest photos</h3>
+              <h3 className="text-sm font-[900] lowercase text-white mb-3">latest photos</h3>
               <div className="grid grid-cols-3 gap-3">
                 {Array.from({ length: 6 }).map((_, i) => {
                   const photo = latestPhotos[i];
@@ -491,10 +489,8 @@ const CharacterDetail = () => {
                       style={{ borderRadius: 10, backgroundColor: "#000" }}
                       onClick={() => { if (photo) setZoomedUrl(photo.url); }}
                     >
-                      {photo ? (
+                      {photo && (
                         <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
-                      ) : (
-                        <User size={18} strokeWidth={3} style={{ color: "rgba(255,255,255,0.15)" }} />
                       )}
                     </div>
                   );
