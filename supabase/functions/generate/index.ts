@@ -312,19 +312,30 @@ function buildFluxPrompt(
   };
   const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "";
 
+  const revealingKeywords = [
+    "lingerie", "bikini", "underwear", "bra", "swimsuit",
+    "swimwear", "nightwear", "negligee", "corset", "bodysuit",
+    "crop top", "sports bra",
+  ];
+  const isRevealing = revealingKeywords.some(
+    kw => scenePrompt.toLowerCase().includes(kw)
+  );
+
   const parts: string[] = [];
+
+  parts.push("Same woman from image 1, image 2, and image 3. Exact facial identity from image 1. Exact body shape, proportions, bust size, and cleavage level from image 3");
 
   parts.push(scenePrompt);
 
   if (photoType === "selfie") {
-    parts.push("iPhone selfie, front camera, casual angle, natural lighting");
+    parts.push("Authentic casual iPhone selfie, front camera, slight grain, amateur influencer Instagram style, not studio, not professional photography");
   } else {
-    parts.push("Casual candid iPhone photo, natural lighting, amateur influencer style");
+    parts.push("Casual candid iPhone photo, natural lighting, slight grain, amateur influencer Instagram style, not studio, not professional photography");
   }
 
   if (characterTraits) {
-    parts.push(`The woman from @image1 with exact face from @image1 and body shape and proportions from @image3. ${exprStr}`);
     parts.push(characterTraits);
+    if (exprStr) parts.push(exprStr);
   }
 
   if (bodyType) {
@@ -337,13 +348,13 @@ function buildFluxPrompt(
     parts.push("Her left arm behind her back");
   }
 
-  parts.push("Realistic skin with visible pores and natural texture, everything in sharp focus, detailed surroundings visible behind her");
-  parts.push("direct eye contact with camera");
-  parts.push("smooth midsection, no visible ribs");
-  parts.push("fully clothed");
+  parts.push("Realistic skin with visible pores and natural texture, smooth midsection, no visible ribs");
+  parts.push("Direct eye contact with camera");
+  parts.push("Deep focus, sharp focus across foreground subject and background, detailed surroundings clearly visible, not portrait mode, no shallow depth of field");
 
-  const seed = Math.floor(Math.random() * 999999);
-  parts.push(`variation ${seed}`);
+  if (!isRevealing) {
+    parts.push("Fully clothed");
+  }
 
   const finalPrompt = parts.join(". ");
   console.log("FLUX FINAL PROMPT:", finalPrompt);
@@ -714,6 +725,7 @@ async function generateWithFlux(
       safety_tolerance: "5",
       enable_safety_checker: false,
       output_format: "jpeg",
+      seed: Math.floor(Math.random() * 999999),
     }),
   });
 
