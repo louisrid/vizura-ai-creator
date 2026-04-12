@@ -15,9 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "a selfie with a fully-detailed-background and completely-sharp-focus-everywhere, close-up, slightly above eye-level";
+const SELFIE_PREFIX = "a selfie, close-up, slightly above eye-level";
 
-const PHOTO_PREFIX = "a photo with a fully-detailed-background and completely-sharp-focus-everywhere, candid third-person shot";
+const PHOTO_PREFIX = "a photo, candid third-person shot";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -256,6 +256,9 @@ function buildFinalPrompt(
 
   // Perspective and framing
   parts.push(perspective);
+
+  // Surroundings detail
+  parts.push("surroundings behind her rendered in full detail with visible objects and textures");
 
   // Character
   if (characterTraits) {
