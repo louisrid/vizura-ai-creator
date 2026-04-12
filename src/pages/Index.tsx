@@ -479,6 +479,9 @@ const Index = () => {
         if (!Number.isFinite(copiedTs) || copiedTs <= appliedTs) return;
 
         setPrompt(copiedPrompt);
+        setResultImage(null);
+        setPhotoOverlayResult(null);
+        try { sessionStorage.removeItem("vizura_photo_result"); sessionStorage.removeItem("vizura_photo_overlay"); } catch {}
         sessionStorage.setItem("vizura_photo_prompt", copiedPrompt);
         sessionStorage.setItem("vizura_applied_copied_prompt_ts", String(copiedTs));
       } catch {}
