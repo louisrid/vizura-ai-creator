@@ -658,7 +658,6 @@ async function generateAngleAndBody(
 
       if (bodyAnchorMode === "a") {
         const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage, tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. MATTE skin with clearly visible pores, peach fuzz, subtle natural imperfections, realistic skin texture, NO glossy, NO shiny skin. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
-        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage, tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. MATTE skin with clearly visible pores, peach fuzz, subtle natural imperfections, realistic skin texture, NO glossy, NO shiny skin. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
         console.log("Body anchor mode A (full):", bodyPrompt.slice(0, 200));
         const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
         if (bodyResult) {
@@ -1030,7 +1029,7 @@ serve(async (req) => {
         }
         await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, false, e?.message || "unknown");
         return new Response(
-          JSON.stringify({ error: "regeneration failed, please try again" }),
+          JSON.stringify({ error: "generation error" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -1192,7 +1191,7 @@ serve(async (req) => {
         if (e?.status === 429 || e?.status === 402) {
           await logGeneration(adminClient, userId, null, prompt, "face", 0, false, `status_${e.status}`);
           return new Response(
-            JSON.stringify({ error: "generation failed, please try again" }),
+            JSON.stringify({ error: "generation error" }),
             { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
@@ -1320,14 +1319,14 @@ serve(async (req) => {
       if (e?.status === 429 || e?.status === 402) {
         await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, `status_${e.status}`);
         return new Response(
-          JSON.stringify({ error: "generation failed, please try again" }),
+          JSON.stringify({ error: "generation error" }),
           { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       console.error("Generation error:", e);
       await logGeneration(adminClient, userId, characterId, prompt, genType, 1, false, e?.message || "unknown");
       return new Response(
-        JSON.stringify({ error: "generation failed, please try again" }),
+        JSON.stringify({ error: "generation error" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -1341,7 +1340,7 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
       return new Response(
-        JSON.stringify({ error: "generation failed, please try again" }),
+        JSON.stringify({ error: "generation error" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -1367,7 +1366,7 @@ serve(async (req) => {
   } catch (e) {
     console.error("generate error:", e);
     return new Response(
-      JSON.stringify({ error: "generation failed, please try again" }),
+      JSON.stringify({ error: "generation error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
