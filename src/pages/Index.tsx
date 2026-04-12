@@ -784,12 +784,12 @@ const Index = () => {
             </motion.section>
           </div>
 
+          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
+
           <div className="flex gap-3">
             <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
             <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
           </div>
-
-          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
           <div className="relative">
             <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
@@ -878,12 +878,12 @@ const Index = () => {
 
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
+            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
+
             <div className="flex gap-4">
               <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
               <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
             </div>
-
-            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
 
             <div className="relative">
               <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
