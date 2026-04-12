@@ -157,6 +157,7 @@ export type Database = {
       }
       generations: {
         Row: {
+          character_id: string | null
           created_at: string
           id: string
           image_urls: string[]
@@ -164,6 +165,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          character_id?: string | null
           created_at?: string
           id?: string
           image_urls?: string[]
@@ -171,6 +173,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          character_id?: string | null
           created_at?: string
           id?: string
           image_urls?: string[]
