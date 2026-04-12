@@ -47,7 +47,7 @@ const CharacterDetail = () => {
   const [deleting, setDeleting] = useState(false);
   const [regeneratingAngle, setRegeneratingAngle] = useState(false);
   const [regeneratingBody, setRegeneratingBody] = useState(false);
-  const [regenTarget, setRegenTarget] = useState<"angle" | "body" | null>(null);
+  const [regenTarget, setRegenTarget] = useState<"angle" | "body" | "both" | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [editName, setEditName] = useState("");
   const [savingName, setSavingName] = useState(false);
