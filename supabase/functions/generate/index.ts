@@ -21,7 +21,7 @@ const PHOTO_PREFIX = "a candid third-person phone snapshot";
 
 const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural skin texture, subtle imperfections, peach fuzz, matte finish, realistic subsurface scattering, no plastic, no airbrushed, no overly smooth or doll-like skin";
 
-const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard camera mode (explicitly NOT portrait mode), posted on Instagram by an influencer, entire image in razor-sharp focus with maximum depth of field, every single detail from foreground to farthest background is crystal clear and perfectly in focus including furniture, walls, bedding, and objects, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
+const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard PHOTO MODE with the main rear camera (explicitly NOT portrait mode, NOT front-camera selfie processing, and NOT any artificial depth effect), posted on Instagram by an influencer, the ENTIRE image in razor-sharp tack-sharp focus with maximum depth of field, every single detail from the subject to the farthest background including furniture, walls, bedding, lamps, and objects is crystal clear and perfectly in focus, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening or artificial blur applied, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -276,10 +276,11 @@ function buildFinalPrompt(
   if (bodyMod) parts.push(bodyMod);
 
   if (photoType === "selfie") {
-    parts.push("natural authentic selfie pose: right hand holding the iPhone extended forward toward the camera, left arm relaxed naturally at her side or gently posed, realistic arm anatomy, no extra arms, no stiff or awkward positioning");
+    parts.push("authentic one-handed selfie only: right hand holding the iPhone extended forward toward the camera at full arm's length, left arm completely relaxed naturally at her side or lightly resting on the bed next to her thigh without extending forward or supporting her body weight symmetrically, realistic single-arm selfie anatomy with no duplicated arms or awkward two-handed pose");
   }
 
   parts.push(SKIN_QUALITY);
+  parts.push("highly detailed skin texture with clearly visible pores, peach fuzz, subtle natural imperfections visible even in soft bedroom lighting");
   parts.push(exprStr);
   parts.push("smooth midsection, no visible ribs");
 
