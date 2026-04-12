@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Lock, RefreshCw, Camera, Check } from "lucide-react";
+import { Loader2, Trash2, Lock, RefreshCw, Camera, Check, User } from "lucide-react";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { Input } from "@/components/ui/input";
