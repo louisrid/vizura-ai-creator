@@ -15,13 +15,13 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "a candid close-up selfie taken slightly above eye-level with an iPhone";
+const SELFIE_PREFIX = "a candid close-up selfie taken slightly above eye-level with an iPhone in her right hand extended forward";
 
 const PHOTO_PREFIX = "a candid third-person phone snapshot";
 
 const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural skin texture, subtle imperfections, peach fuzz, matte finish, realistic subsurface scattering, no plastic, no airbrushed, no overly smooth or doll-like skin";
 
-const IPHONE_REALISM = "authentic casual iPhone 16 Pro photo posted on Instagram by an influencer, sharp focus on the entire image with deep depth of field, everything in crisp focus including the detailed background, NO background blur, NO bokeh, NO shallow depth of field, NO portrait mode, natural smartphone lighting and slight handheld grain with typical iPhone JPEG compression artifacts, not polished, not studio, not DSLR, not 4K cinematic";
+const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard camera mode (explicitly NOT portrait mode), posted on Instagram by an influencer, entire image in razor-sharp focus with maximum depth of field, every single detail from foreground to farthest background is crystal clear and perfectly in focus including furniture, walls, bedding, and objects, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -275,7 +275,9 @@ function buildFinalPrompt(
   if (characterTraits) parts.push(characterTraits);
   if (bodyMod) parts.push(bodyMod);
 
-  if (photoType === "selfie") parts.push("her left arm behind her back");
+  if (photoType === "selfie") {
+    parts.push("natural authentic selfie pose: right hand holding the iPhone extended forward toward the camera, left arm relaxed naturally at her side or gently posed, realistic arm anatomy, no extra arms, no stiff or awkward positioning");
+  }
 
   parts.push(SKIN_QUALITY);
   parts.push(exprStr);
@@ -284,7 +286,6 @@ function buildFinalPrompt(
   if (!isRevealing) parts.push("fully clothed");
 
   parts.push("maintaining exact same face, body proportions, and identity as in the three reference photos");
-  parts.push(IPHONE_REALISM);
 
   const seed = Math.floor(Math.random() * 999999);
   parts.push(`seed:${seed}`);
