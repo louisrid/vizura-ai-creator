@@ -18,6 +18,7 @@ interface StorageImage {
   url: string;
   prompt: string;
   created_at: string;
+  characterName?: string;
 }
 
 const Storage = () => {
