@@ -712,7 +712,7 @@ const Index = () => {
 
           <div className="flex gap-3">
             <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
-            <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
+            <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
           </div>
 
           <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
@@ -806,7 +806,7 @@ const Index = () => {
           <div className="col-span-7 flex flex-col gap-6">
             <div className="flex gap-4">
               <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
-              <ToggleBox label="ratio" options={["3:4", "9:16"]} value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
+              <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
             </div>
 
             <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
