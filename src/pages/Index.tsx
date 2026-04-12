@@ -777,10 +777,10 @@ const Index = () => {
 
             <motion.section
               layout
-              className="relative flex w-full items-center justify-center overflow-hidden rounded-[10px] border-2 border-input bg-card"
+              className="relative flex w-full items-center justify-center rounded-[10px] border-2 border-input bg-card p-[2px]"
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
-              <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+              <motion.div layout className="w-full overflow-hidden rounded-[8px] bg-card" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -868,10 +868,10 @@ const Index = () => {
 
             <motion.section
               layout
-              className="relative flex w-full items-center justify-center overflow-hidden rounded-[10px] border-2 border-input bg-card"
+              className="relative flex w-full items-center justify-center rounded-[10px] border-2 border-input bg-card p-[2px]"
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             >
-              <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+              <motion.div layout className="w-full overflow-hidden rounded-[8px] bg-card" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
