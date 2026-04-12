@@ -511,7 +511,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
-                  className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
+                  className="flex w-full items-center gap-3 px-4 py-3"
                   style={{
                     backgroundColor: isSelected ? "rgba(255,255,255,0.07)" : "transparent",
                     borderRadius,
