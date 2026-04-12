@@ -732,9 +732,9 @@ async function generateWithFlux(
   }
   console.log("FLUX queued, request_id:", requestId);
 
-  // Step 2: Poll status until COMPLETED (each poll is a short HTTP call)
-  const STATUS_URL = `${FAL_BASE}/requests/${requestId}/status`;
-  const RESULT_URL = `${FAL_BASE}/requests/${requestId}`;
+  // Use the URLs returned by fal.ai (they handle the path encoding correctly)
+  const STATUS_URL = submitData?.status_url || `https://queue.fal.run/fal-ai/flux-2-pro--edit/requests/${requestId}/status`;
+  const RESULT_URL = submitData?.response_url || `https://queue.fal.run/fal-ai/flux-2-pro--edit/requests/${requestId}`;
   const MAX_POLLS = 30; // 30 × 2s = 60s max polling
   const POLL_INTERVAL_MS = 2000;
 
