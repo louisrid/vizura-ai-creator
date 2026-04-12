@@ -255,8 +255,6 @@ function buildFinalPrompt(
   parts.push(scenePrompt);
 
   // Perspective and framing
-
-  // Perspective and framing
   parts.push(perspective);
 
   // Character
@@ -268,12 +266,8 @@ function buildFinalPrompt(
 
   // Skin and quality — end of prompt for reinforcement
   parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  parts.push("everything in-focus f/11 deep-focus photography, sharp-background no-bokeh no-blur no depth-of-field");
+  parts.push("everything in-focus f/11 deep-focus photography, detailed-background, sharp-background no-bokeh no-blur no depth-of-field");
   parts.push("direct-eye-contact");
-
-  if (photoType === "selfie") {
-    parts.push("only one arm visible reaching toward camera, other arm not visible");
-  }
 
   parts.push("smooth-midsection, no visible ribs");
 
@@ -283,7 +277,9 @@ function buildFinalPrompt(
     if (modifier) parts.push(modifier);
   }
 
-  return parts.join(". ");
+  const finalPrompt = parts.join(". ");
+  console.log("FINAL PROMPT:", finalPrompt);
+  return finalPrompt;
 }
 
 /* ── check for content policy errors ───────────────────── */
