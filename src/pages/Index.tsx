@@ -775,12 +775,13 @@ const Index = () => {
               {charDropdownContent}
             </div>
 
-            <motion.section
-              layout
-              className="relative flex w-full items-center justify-center rounded-[10px] border-2 border-input bg-card p-[2px]"
-              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-            >
-              <motion.div layout className="w-full overflow-hidden rounded-[8px] bg-card" style={{ aspectRatio: previewAspect }}>
+            <div className="relative rounded-[10px] border-2 border-input bg-card overflow-hidden">
+              <motion.section
+                layout
+                className="relative flex w-full items-center justify-center bg-card"
+                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -795,8 +796,9 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-              </motion.div>
-            </motion.section>
+                </motion.div>
+              </motion.section>
+            </div>
           </div>
 
           <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
@@ -866,12 +868,13 @@ const Index = () => {
               {charDropdownContent}
             </div>
 
-            <motion.section
-              layout
-              className="relative flex w-full items-center justify-center rounded-[10px] border-2 border-input bg-card p-[2px]"
-              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-            >
-              <motion.div layout className="w-full overflow-hidden rounded-[8px] bg-card" style={{ aspectRatio: previewAspect }}>
+            <div className="relative rounded-[10px] border-2 border-input bg-card overflow-hidden">
+              <motion.section
+                layout
+                className="relative flex w-full items-center justify-center bg-card"
+                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -886,8 +889,9 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-              </motion.div>
-            </motion.section>
+                </motion.div>
+              </motion.section>
+            </div>
           </div>
 
           {/* Right: controls */}
