@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo, Fragment } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2, ChevronDown, Gem, User } from "lucide-react";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
