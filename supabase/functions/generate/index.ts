@@ -1029,7 +1029,7 @@ serve(async (req) => {
         }
         await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, false, e?.message || "unknown");
         return new Response(
-          JSON.stringify({ error: "regeneration failed, please try again" }),
+          JSON.stringify({ error: "generation error" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -1191,7 +1191,7 @@ serve(async (req) => {
         if (e?.status === 429 || e?.status === 402) {
           await logGeneration(adminClient, userId, null, prompt, "face", 0, false, `status_${e.status}`);
           return new Response(
-            JSON.stringify({ error: "generation failed, please try again" }),
+            JSON.stringify({ error: "generation error" }),
             { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
@@ -1319,14 +1319,14 @@ serve(async (req) => {
       if (e?.status === 429 || e?.status === 402) {
         await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, `status_${e.status}`);
         return new Response(
-          JSON.stringify({ error: "generation failed, please try again" }),
+          JSON.stringify({ error: "generation error" }),
           { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       console.error("Generation error:", e);
       await logGeneration(adminClient, userId, characterId, prompt, genType, 1, false, e?.message || "unknown");
       return new Response(
-        JSON.stringify({ error: "generation failed, please try again" }),
+        JSON.stringify({ error: "generation error" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -1340,7 +1340,7 @@ serve(async (req) => {
         })
         .eq("user_id", userId);
       return new Response(
-        JSON.stringify({ error: "generation failed, please try again" }),
+        JSON.stringify({ error: "generation error" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -1366,7 +1366,7 @@ serve(async (req) => {
   } catch (e) {
     console.error("generate error:", e);
     return new Response(
-      JSON.stringify({ error: "generation failed, please try again" }),
+      JSON.stringify({ error: "generation error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
