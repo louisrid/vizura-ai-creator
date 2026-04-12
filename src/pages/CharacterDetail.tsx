@@ -478,6 +478,29 @@ const CharacterDetail = () => {
                 {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"), revealingBody)}
               </div>
             </div>
+            {/* Latest photos — desktop */}
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5 mt-5">
+              <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">latest photos</h3>
+              <div className="grid grid-cols-3 gap-3">
+                {Array.from({ length: 6 }).map((_, i) => {
+                  const photo = latestPhotos[i];
+                  return (
+                    <div
+                      key={photo?.id ?? `dplaceholder-${i}`}
+                      className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
+                      style={{ borderRadius: 10, backgroundColor: "#000" }}
+                      onClick={() => { if (photo) setZoomedUrl(photo.url); }}
+                    >
+                      {photo ? (
+                        <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
+                      ) : (
+                        <User size={18} strokeWidth={3} style={{ color: "rgba(255,255,255,0.15)" }} />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
           {/* Right: details + actions */}
           <div className="col-span-5 flex flex-col gap-5">
