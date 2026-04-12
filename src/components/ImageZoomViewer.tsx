@@ -55,7 +55,7 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             className="relative w-full max-w-[345px] md:max-w-[580px]"
-            style={{ marginTop: 16 }}
+            style={{ marginTop: 28 }}
           >
             <ModalCloseButton onClick={onClose} />
 

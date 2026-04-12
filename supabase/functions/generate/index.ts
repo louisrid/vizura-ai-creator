@@ -15,9 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "selfie, close-up, slightly above eye-level, detailed-background, deep-focus";
+const SELFIE_PREFIX = "a selfie with a fully-detailed-background and completely-sharp-focus-everywhere, close-up, slightly above eye-level";
 
-const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus sharp-background";
+const PHOTO_PREFIX = "a photo with a fully-detailed-background and completely-sharp-focus-everywhere, candid third-person shot";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -265,12 +265,12 @@ function buildFinalPrompt(
   }
 
   if (photoType === "selfie") {
-    parts.push("her left-arm resting casually by her side");
+    parts.push("her left-arm behind her back");
   }
 
   // Skin and quality — end of prompt for reinforcement
   parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  parts.push("everything in-focus f/11 deep-focus photography, detailed-background, sharp-background no-blur no depth-of-field");
+  // Quality reinforcement (no blur/focus keywords per user request)
   parts.push("direct-eye-contact");
 
   parts.push("smooth-midsection, no visible ribs");

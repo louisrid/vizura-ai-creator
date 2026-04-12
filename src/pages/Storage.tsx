@@ -189,23 +189,23 @@ const Storage = () => {
         footer={expanded ? (
           <>
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-              <div className="px-3 md:px-4 pt-2" style={{ backgroundColor: "#1a1a1a" }}>
+              <div className="px-3 md:px-4 pt-3 pb-1" style={{ backgroundColor: "#1a1a1a" }}>
                 <button
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    try {
-                      await navigator.clipboard.writeText(expanded.prompt);
-                      try {
-                        localStorage.setItem("vizura_copied_prompt", expanded.prompt);
-                        localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
-                      } catch {}
-                      toast.success("copied!");
-                    } catch { toast.error("failed to copy"); }
-                  }}
-                  className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
+                   onClick={async (e) => {
+                     e.stopPropagation();
+                     try {
+                       await navigator.clipboard.writeText(expanded!.prompt);
+                       try {
+                         localStorage.setItem("vizura_copied_prompt", expanded!.prompt);
+                         localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
+                       } catch {}
+                       toast.success("copied!");
+                     } catch { toast.error("failed to copy"); }
+                   }}
+                   className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
                   style={{ backgroundColor: "#000" }}
                 >
-                  <span className="truncate">{expanded.prompt}</span>
+                  <span className="truncate">{expanded!.prompt}</span>
                   <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
                 </button>
               </div>
