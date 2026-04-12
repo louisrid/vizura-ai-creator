@@ -43,9 +43,9 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-foreground">{selected.label}</span>
+          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
             size={18}
             strokeWidth={2.5}
