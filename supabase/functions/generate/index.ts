@@ -251,14 +251,14 @@ function buildFinalPrompt(
 
   const parts: string[] = [];
 
-  // Scene FIRST — highest priority
+  // Surroundings detail — absolute first
+  parts.push("sharp-detailed surroundings behind her with visible objects and textures");
+
+  // Scene
   parts.push(scenePrompt);
 
   // Perspective and framing
   parts.push(perspective);
-
-  // Surroundings detail
-  parts.push("surroundings behind her rendered in full detail with visible objects and textures");
 
   // Character
   if (characterTraits) {
