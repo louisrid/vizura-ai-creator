@@ -47,7 +47,7 @@ const CharacterDetail = () => {
   const [deleting, setDeleting] = useState(false);
   const [regeneratingAngle, setRegeneratingAngle] = useState(false);
   const [regeneratingBody, setRegeneratingBody] = useState(false);
-  const [regenTarget, setRegenTarget] = useState<"angle" | "body" | "both" | null>(null);
+  const [regenTarget, setRegenTarget] = useState<"angle" | "body" | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [editName, setEditName] = useState("");
   const [savingName, setSavingName] = useState(false);
@@ -116,57 +116,46 @@ const CharacterDetail = () => {
     const target = regenTarget;
     setRegenTarget(null);
 
-    const targets: ("angle" | "body")[] = target === "both" ? ["angle", "body"] : [target as "angle" | "body"];
-
-    for (const t of targets) {
-      if (t === "angle") {
-        setRegeneratingAngle(true);
-        sessionStorage.setItem(`vizura_regen_angle_${character.id}`, "1");
-      } else {
-        setRegeneratingBody(true);
-        sessionStorage.setItem(`vizura_regen_body_${character.id}`, "1");
-      }
+    if (target === "angle") {
+      setRegeneratingAngle(true);
+      sessionStorage.setItem(`vizura_regen_angle_${character.id}`, "1");
+    } else {
+      setRegeneratingBody(true);
+      sessionStorage.setItem(`vizura_regen_body_${character.id}`, "1");
     }
 
-    const regenOne = async (t: "angle" | "body") => {
-      try {
-        const { data, error } = await supabase.functions.invoke("generate", {
-          body: { regenerate_single: t, character_id: character.id },
-        });
+    try {
+      const { data, error } = await supabase.functions.invoke("generate", {
+        body: { regenerate_single: target, character_id: character.id },
+      });
 
-        if (error) throw error;
-        if (data?.code === "CONTENT_POLICY") {
-          toast("prompt not allowed");
-          return;
-        }
-        if (data?.error) throw new Error(data.error);
-
-        setCharacter((prev) => {
-          if (!prev) return prev;
-          if (t === "angle" && data?.angle_url) return { ...prev, face_angle_url: data.angle_url };
-          if (t === "body" && data?.body_anchor_url) return { ...prev, body_anchor_url: data.body_anchor_url };
-          return prev;
-        });
-
-        sessionStorage.removeItem(`vizura_regen_${t}_${character.id}`);
-      } catch (err) {
-        console.error(`Regenerate ${t} error:`, err);
-        sessionStorage.removeItem(`vizura_regen_${t}_${character.id}`);
-        toast.error("generation error");
-      } finally {
-        if (t === "angle") setRegeneratingAngle(false);
-        else setRegeneratingBody(false);
+      if (error) throw error;
+      if (data?.code === "CONTENT_POLICY") {
+        toast("prompt not allowed");
+        await refetchGems();
+        return;
       }
-    };
+      if (data?.error) throw new Error(data.error);
 
-    if (target === "both") {
-      await Promise.all([regenOne("angle"), regenOne("body")]);
+      setCharacter((prev) => {
+        if (!prev) return prev;
+        if (target === "angle" && data?.angle_url) return { ...prev, face_angle_url: data.angle_url };
+        if (target === "body" && data?.body_anchor_url) return { ...prev, body_anchor_url: data.body_anchor_url };
+        return prev;
+      });
+
       await refetchGems();
-      toast("2 gems used");
-    } else {
-      await regenOne(targets[0]);
-      await refetchGems();
+      if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
+      else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
       toast("1 gem used");
+    } catch (err) {
+      console.error("Regenerate error:", err);
+      if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
+      else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
+      toast.error("regeneration failed, please try again");
+    } finally {
+      setRegeneratingAngle(false);
+      setRegeneratingBody(false);
     }
   };
 
