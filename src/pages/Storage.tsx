@@ -217,6 +217,10 @@ const Storage = () => {
                         e.stopPropagation();
                         try {
                           await navigator.clipboard.writeText(expanded.prompt);
+                          try {
+                            localStorage.setItem("vizura_copied_prompt", expanded.prompt);
+                            localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
+                          } catch {}
                           toast.success("copied!");
                         } catch { toast.error("failed to copy"); }
                       }}
