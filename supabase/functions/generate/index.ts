@@ -613,8 +613,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full rounded C-cup breasts, prominent chest",
-  large: "heavy prominent realistic DD-cup breasts with natural weight and cleavage, large but proportionate chest",
+  regular: "full rounded C cup breasts, prominent noticeable chest",
+  large: "large DD cup breasts, heavy prominent chest, deep cleavage",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -636,7 +636,7 @@ async function generateAngleAndBody(
       console.log("Generating 3/4 angle...");
       const angleBustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}, visible cleavage. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Matte skin with visible pores. Relaxed neutral expression, lips together. Hair colour and face must be identical to reference photo.`;
+      const anglePrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}, clearly visible prominent cleavage showing above the neckline of the top, chest filling the top tightly. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Matte skin with visible pores. Relaxed neutral expression, lips together. Hair colour and face must be identical to reference photo.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -657,7 +657,7 @@ async function generateAngleAndBody(
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
       if (bodyAnchorMode === "a") {
-        const bodyPrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh. Hair colour and face must be identical to reference photo.`;
+        const bodyPrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh. Hair colour and face must be identical to reference photo.`;
         console.log("Body anchor mode A (full):", bodyPrompt.slice(0, 200));
         const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
         if (bodyResult) {
