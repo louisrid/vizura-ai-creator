@@ -722,8 +722,19 @@ async function generateWithFlux(
   }
 
   const result = await response.json();
-  const url = result?.images?.[0]?.url || null;
-  if (!url) return null;
+  const url = result?.images?.[0]?.url
+    || result?.data?.images?.[0]?.url
+    || result?.data?.[0]?.url
+    || result?.output?.images?.[0]?.url
+    || result?.output?.[0]?.url
+    || result?.image?.url
+    || result?.data?.image?.url
+    || null;
+
+  if (!url) {
+    console.error("FLUX response missing image URL:", JSON.stringify(result).slice(0, 1500));
+    throw new Error("FLUX response missing image URL");
+  }
 
   const permanentUrl = await storeImagePermanently(url, userId, adminClient, "photo");
   return permanentUrl;
