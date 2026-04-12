@@ -124,7 +124,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
             )}
 
             <motion.p
-              className="text-[13px] font-[900] lowercase text-white/40 mt-5"
+              className="text-[15px] font-[900] lowercase text-white mt-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, y: [0, -5, 0] }}
               transition={{ opacity: { duration: 0.4, delay: 0.9 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 } }}

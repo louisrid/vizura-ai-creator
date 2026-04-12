@@ -26,8 +26,7 @@ const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural s
 const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard camera mode (explicitly NOT portrait mode and NOT any artificial depth effect), posted on Instagram by an influencer, the ENTIRE image in razor-sharp focus with maximum depth of field, every single detail from the subject to the farthest background including furniture, walls, bedding, lamps, and objects is crystal clear and perfectly in focus, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
 
 /* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY =
-  "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, MATTE skin with clearly visible pores, peach fuzz, subtle natural imperfections, realistic skin texture, NO glossy, NO shiny, NO oily, NO plastic skin";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -288,7 +287,9 @@ function buildFinalPrompt(
   parts.push(exprStr);
   parts.push("smooth midsection, no visible ribs");
 
-  if (!isRevealing) {
+  if (isRevealing) {
+    parts.push("exactly wearing the outfit described in the scene prompt, highly detailed realistic clothing with visible fabric texture, proper coverage of breasts and body, no missing clothing, no nudity");
+  } else {
     parts.push("fully clothed");
   }
 
@@ -612,8 +613,8 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full rounded C cup breasts, prominent chest",
-  large: "huge DD cup breasts, very heavy prominent chest, large cleavage",
+  regular: "full rounded C-cup breasts, prominent chest",
+  large: "heavy prominent realistic DD-cup breasts with natural weight and cleavage, large but proportionate chest",
 };
 
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
@@ -635,7 +636,7 @@ async function generateAngleAndBody(
       console.log("Generating 3/4 angle...");
       const angleBustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}, visible cleavage. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Matte skin with visible pores. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc} with visible cleavage. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. MATTE skin with clearly visible pores, peach fuzz, subtle natural imperfections, realistic skin texture, NO glossy, NO shiny skin. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -656,8 +657,8 @@ async function generateAngleAndBody(
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
       if (bodyAnchorMode === "a") {
-        const bustPromptSegment = bustDesc ? `tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage` : "tight white v-neck top tucked into leggings, cleavage visible";
-        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. ${bustPromptSegment}. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage, tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. MATTE skin with clearly visible pores, peach fuzz, subtle natural imperfections, realistic skin texture, NO glossy, NO shiny skin. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc} with visible cleavage, tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. MATTE skin with clearly visible pores, peach fuzz, subtle natural imperfections, realistic skin texture, NO glossy, NO shiny skin. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
         console.log("Body anchor mode A (full):", bodyPrompt.slice(0, 200));
         const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
         if (bodyResult) {
