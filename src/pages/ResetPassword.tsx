@@ -82,7 +82,7 @@ const ResetPassword = () => {
                       required
                       minLength={6}
                       className="w-full border-2 border-[rgba(255,255,255,0.15)] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
-                      style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
+                      style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
                       placeholder="••••••••"
                     />
                   </div>
@@ -99,7 +99,7 @@ const ResetPassword = () => {
                       required
                       minLength={6}
                       className="w-full border-2 border-[rgba(255,255,255,0.15)] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
-                      style={{ backgroundColor: "#2a2a2a", borderRadius: 10 }}
+                      style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
                       placeholder="••••••••"
                     />
                   </div>
