@@ -296,6 +296,60 @@ function buildFinalPrompt(
   return finalPrompt;
 }
 
+/* ── build FLUX-style prompt ───────────────────────────── */
+function buildFluxPrompt(
+  scenePrompt: string,
+  photoType: string,
+  characterTraits: string | null,
+  bodyType?: string,
+  expression?: string,
+): string {
+  const EXPRESSION_MAP: Record<string, string> = {
+    "casual smile": "gentle casual closed-mouth smile",
+    "straight face": "serious straight face, no smile, lips together",
+    "big smile": "big open-mouth smile showing teeth, happy energy",
+    "pout": "duck face pout, lips pushed forward",
+  };
+  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "";
+
+  const parts: string[] = [];
+
+  parts.push(scenePrompt);
+
+  if (photoType === "selfie") {
+    parts.push("iPhone selfie, front camera, casual angle, natural lighting");
+  } else {
+    parts.push("Casual candid iPhone photo, natural lighting, amateur influencer style");
+  }
+
+  if (characterTraits) {
+    parts.push(`The woman from @image1 with exact face from @image1 and body shape and proportions from @image3. ${exprStr}`);
+    parts.push(characterTraits);
+  }
+
+  if (bodyType) {
+    const bKey = normalizeBodyType((bodyType || "regular").toLowerCase());
+    const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
+    if (modifier) parts.push(modifier);
+  }
+
+  if (photoType === "selfie") {
+    parts.push("Her left arm behind her back");
+  }
+
+  parts.push("Realistic skin with visible pores and natural texture, everything in sharp focus, detailed surroundings visible behind her");
+  parts.push("direct eye contact with camera");
+  parts.push("smooth midsection, no visible ribs");
+  parts.push("fully clothed");
+
+  const seed = Math.floor(Math.random() * 999999);
+  parts.push(`variation ${seed}`);
+
+  const finalPrompt = parts.join(". ");
+  console.log("FLUX FINAL PROMPT:", finalPrompt);
+  return finalPrompt;
+}
+
 /* ── check for content policy errors ───────────────────── */
 function isContentPolicyError(status: number, text: string): boolean {
   if (status !== 400) return false;
@@ -622,6 +676,57 @@ async function generatePhoto(
     return await xaiImageEdit(fullPrompt, faceImageUrls, apiKey, safeRatio);
   }
   return await xaiTextToImage(finalPrompt, apiKey);
+}
+
+/* ── FLUX 2 Pro Edit provider ─────────────────────────── */
+async function generateWithFlux(
+  prompt: string,
+  imageUrls: string[],
+  aspectRatio: string,
+  adminClient: any,
+  userId: string,
+): Promise<string | null> {
+  const FAL_KEY = Deno.env.get("FAL_KEY");
+  if (!FAL_KEY) throw new Error("FAL_KEY is not configured");
+
+  const imageSize = aspectRatio === "9:16"
+    ? { width: 1080, height: 1920 }
+    : { width: 1024, height: 1536 };
+
+  console.log("FLUX generateWithFlux calling with", imageUrls.length, "references");
+  console.log("FLUX prompt:", prompt.slice(0, 300));
+
+  const response = await fetch("https://queue.fal.run/fal-ai/flux-2-pro/edit", {
+    method: "POST",
+    signal: AbortSignal.timeout(120000),
+    headers: {
+      "Authorization": `Key ${FAL_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt,
+      image_urls: imageUrls,
+      image_size: imageSize,
+      safety_tolerance: "5",
+      enable_safety_checker: false,
+      output_format: "jpeg",
+      sync_mode: true,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error("FLUX generation error:", response.status, errText);
+    if (response.status === 429) throw { status: 429 };
+    throw new Error("FLUX generation failed: " + response.status + " " + errText);
+  }
+
+  const result = await response.json();
+  const url = result?.images?.[0]?.url || null;
+  if (!url) return null;
+
+  const permanentUrl = await storeImagePermanently(url, userId, adminClient, "photo");
+  return permanentUrl;
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -1072,15 +1177,25 @@ serve(async (req) => {
       if (isFaceRegen) {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
       } else {
-        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
-        console.log("Final prompt:", finalPrompt.slice(0, 200));
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
-        const result = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
+        const provider = Deno.env.get("PHOTO_PROVIDER") || "grok";
+
+        let result: string | null;
+        if (provider === "flux" && faceImageUrls.length > 0) {
+          const fluxPrompt = buildFluxPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
+          console.log("Using FLUX provider");
+          result = await generateWithFlux(fluxPrompt, faceImageUrls, aspectRatio, adminClient, userId);
+        } else {
+          const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
+          console.log("Using Grok provider");
+          const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
+          result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
+        }
+
         if (result) {
-          const permanentUrl = await storeImagePermanently(result, userId, adminClient, "photo");
-          imageUrls = [permanentUrl];
+          imageUrls = [result];
         } else {
           imageUrls = [];
         }
