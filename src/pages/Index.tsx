@@ -401,7 +401,7 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
-  const [prompt, setPrompt] = useState(() => sessionStorage.getItem("vizura_photo_prompt") || "");
+  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("vizura_photo_prompt") || ""));
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => sessionStorage.getItem("vizura_photo_result") || null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
@@ -499,32 +499,45 @@ const Index = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchCharacters = async () => {
-      if (!user) return;
-      const { data } = await supabase
-        .from("characters")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      if (data && data.length > 0) {
-        setCharacters(data as Character[]);
-        // Priority: preselected > last used (persisted) > most recent
-        const persisted = sessionStorage.getItem("vizura_last_selected_character_id") ?? "";
-        const validPersisted = data.some((c: any) => c.id === persisted);
-        const pickId = preselectedCharacterId && data.some((c: any) => c.id === preselectedCharacterId)
-          ? preselectedCharacterId
-          : validPersisted
-            ? persisted
-            : data[0].id;
-        setSelectedCharId(pickId);
-        sessionStorage.setItem("vizura_last_selected_character_id", pickId);
-      } else if (data) {
-        setCharacters([]);
-      }
-    };
-    fetchCharacters();
+  const fetchCharacters = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("characters")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+    if (data && data.length > 0) {
+      setCharacters(data as Character[]);
+      // Priority: preselected > last used (persisted) > most recent
+      const persisted = sessionStorage.getItem("vizura_last_selected_character_id") ?? "";
+      const validPersisted = data.some((c: any) => c.id === persisted);
+      const pickId = preselectedCharacterId && data.some((c: any) => c.id === preselectedCharacterId)
+        ? preselectedCharacterId
+        : validPersisted
+          ? persisted
+          : data[0].id;
+      setSelectedCharId(pickId);
+      sessionStorage.setItem("vizura_last_selected_character_id", pickId);
+    } else if (data) {
+      setCharacters([]);
+    }
   }, [user, preselectedCharacterId]);
+
+  useEffect(() => {
+    fetchCharacters();
+  }, [fetchCharacters]);
+
+  // Refresh character list on focus/visibility so newly created characters appear
+  useEffect(() => {
+    const refresh = () => { void fetchCharacters(); };
+    const handleVisibility = () => { if (document.visibilityState === "visible") refresh(); };
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [fetchCharacters]);
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
