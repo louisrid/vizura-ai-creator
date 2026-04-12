@@ -91,6 +91,7 @@ const ChooseFace = () => {
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
+  const [regeneratingFaces, setRegeneratingFaces] = useState(false);
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
 
@@ -305,13 +306,9 @@ const ChooseFace = () => {
     }
     if (!user) return;
 
-    // Go back to loading bar, regenerate from scratch
-    setFaces([]);
+    // Stay on screen, show spinners on face cards
+    setRegeneratingFaces(true);
     setSelectedIndex(null);
-    setLoading(true);
-    setApiDone(false);
-    setBarComplete(false);
-    setCardsRevealed(false);
     setGenerationError(null);
 
     try {
@@ -365,12 +362,12 @@ const ChooseFace = () => {
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
-      setApiDone(true);
       await refetchGems();
       toast("1 gem used");
     } catch (err: any) {
       toast.error("generation failed, please try again");
-      setLoading(false);
+    } finally {
+      setRegeneratingFaces(false);
     }
   };
 
