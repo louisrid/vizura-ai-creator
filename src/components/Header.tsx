@@ -153,7 +153,7 @@ const Header = () => {
                     : "0";
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
                     <button
                       onClick={() => {
                         if (checkNavGuard()) { setOpen(false); return; }
@@ -189,7 +189,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2.5 md:gap-3.5"
