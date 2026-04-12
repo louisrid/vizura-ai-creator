@@ -49,7 +49,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-foreground/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
