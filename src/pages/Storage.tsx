@@ -191,16 +191,37 @@ const Storage = () => {
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
               <div className="px-3 md:px-4 pt-3 pb-1" style={{ backgroundColor: "#1a1a1a" }}>
                 <button
-                   onClick={async (e) => {
+                   onClick={(e) => {
                      e.stopPropagation();
-                     try {
-                       await navigator.clipboard.writeText(expanded!.prompt);
+                     e.preventDefault();
+                     const text = expanded!.prompt;
+                     const copyFallback = () => {
                        try {
-                         localStorage.setItem("vizura_copied_prompt", expanded!.prompt);
+                         const ta = document.createElement("textarea");
+                         ta.value = text;
+                         ta.style.position = "fixed";
+                         ta.style.left = "-9999px";
+                         document.body.appendChild(ta);
+                         ta.select();
+                         document.execCommand("copy");
+                         document.body.removeChild(ta);
+                         return true;
+                       } catch { return false; }
+                     };
+                     const done = () => {
+                       try {
+                         localStorage.setItem("vizura_copied_prompt", text);
                          localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
                        } catch {}
                        toast.success("copied!");
-                     } catch { toast.error("failed to copy"); }
+                     };
+                     if (navigator.clipboard?.writeText) {
+                       navigator.clipboard.writeText(text).then(done).catch(() => {
+                         if (copyFallback()) done(); else toast.error("failed to copy");
+                       });
+                     } else {
+                       if (copyFallback()) done(); else toast.error("failed to copy");
+                     }
                    }}
                    className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
                   style={{ backgroundColor: "#000" }}
