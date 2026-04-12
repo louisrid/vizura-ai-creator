@@ -195,8 +195,9 @@ const Storage = () => {
                      e.stopPropagation();
                      e.preventDefault();
                      const btn = e.currentTarget;
-                     btn.style.backgroundColor = "#222";
-                     setTimeout(() => { btn.style.backgroundColor = "#000"; }, 600);
+                      btn.style.transition = "background-color 0.08s ease";
+                      btn.style.backgroundColor = "#222";
+                      setTimeout(() => { btn.style.transition = "background-color 0.25s ease"; btn.style.backgroundColor = "#000"; }, 150);
                      const text = expanded!.prompt;
                      const copyFallback = () => {
                        try {
