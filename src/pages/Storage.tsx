@@ -194,6 +194,9 @@ const Storage = () => {
                    onClick={(e) => {
                      e.stopPropagation();
                      e.preventDefault();
+                     const btn = e.currentTarget;
+                     btn.style.backgroundColor = "#222";
+                     setTimeout(() => { btn.style.backgroundColor = "#000"; }, 600);
                      const text = expanded!.prompt;
                      const copyFallback = () => {
                        try {
@@ -223,7 +226,7 @@ const Storage = () => {
                        if (copyFallback()) done(); else toast.error("failed to copy");
                      }
                    }}
-                   className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
+                   className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] transition-colors duration-300"
                   style={{ backgroundColor: "#000" }}
                 >
                   <span className="truncate">{expanded!.prompt}</span>
