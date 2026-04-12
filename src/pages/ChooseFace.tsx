@@ -732,8 +732,12 @@ const ChooseFace = () => {
                           overflow: "hidden",
                         }}
                       >
-                        <div className="w-full h-full overflow-hidden" style={{ borderRadius: 10 }}>
-                          <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover block" />
+                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 10, backgroundColor: "#000" }}>
+                          {regeneratingFaces ? (
+                            <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
+                          ) : (
+                            <img src={url} alt={`face ${i + 1}`} className="h-full w-full object-cover block" />
+                          )}
                         </div>
                       </motion.button>
                     </div>
