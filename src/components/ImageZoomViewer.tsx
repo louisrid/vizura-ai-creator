@@ -61,8 +61,8 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
 
             <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
               <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
-              <div className="px-3 overflow-hidden" style={{ borderRadius: 10 }}>
-                <img src={url} alt="" className="w-full object-contain max-h-[58vh] md:max-h-[70vh] block" style={{ borderRadius: 10 }} />
+              <div className="px-3 overflow-hidden">
+                <img src={url} alt="" className="w-full object-contain max-h-[58vh] md:max-h-[70vh] block" style={{ borderRadius: 8 }} />
               </div>
               {footer ?? (showDownload && (
                 <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
