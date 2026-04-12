@@ -43,7 +43,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid rgba(255,255,255,0.15)" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>{selected.label}</span>
           <ChevronDown
@@ -246,7 +246,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid rgba(255,255,255,0.15)" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>{selected.label}</span>
           <ChevronDown
@@ -323,7 +323,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+          style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid rgba(255,255,255,0.15)" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>{selected.label}</span>
           <ChevronDown
