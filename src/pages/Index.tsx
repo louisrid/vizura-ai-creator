@@ -314,6 +314,35 @@ const Index = () => {
     if (searchParams.get("upgrade") === "true") setShowPaywall(true);
   }, [searchParams]);
 
+  // Listen for copied prompts from Storage page
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === "vizura_copied_prompt" && e.newValue) {
+        setPrompt(e.newValue);
+        try { sessionStorage.setItem("vizura_photo_prompt", e.newValue); } catch {}
+      }
+    };
+    // Also check on focus (same-tab clipboard copy)
+    const focusHandler = () => {
+      const copied = localStorage.getItem("vizura_copied_prompt_ts");
+      const copiedPrompt = localStorage.getItem("vizura_copied_prompt");
+      if (copied && copiedPrompt) {
+        const ts = parseInt(copied, 10);
+        if (Date.now() - ts < 10000) {
+          setPrompt(copiedPrompt);
+          try { sessionStorage.setItem("vizura_photo_prompt", copiedPrompt); } catch {}
+          localStorage.removeItem("vizura_copied_prompt_ts");
+        }
+      }
+    };
+    window.addEventListener("storage", handler);
+    window.addEventListener("focus", focusHandler);
+    return () => {
+      window.removeEventListener("storage", handler);
+      window.removeEventListener("focus", focusHandler);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchCharacters = async () => {
       if (!user) return;
