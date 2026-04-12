@@ -1267,7 +1267,7 @@ serve(async (req) => {
         if (provider === "flux" && faceImageUrls.length > 0) {
           const fluxPrompt = buildFluxPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
           console.log("Using FLUX provider");
-          result = await generateWithFlux(fluxPrompt, faceImageUrls, aspectRatio, adminClient, userId);
+          result = await generateWithFlux(fluxPrompt, [faceImageUrls[0]], aspectRatio, adminClient, userId);
         } else {
           const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
           console.log("Using Grok provider");
