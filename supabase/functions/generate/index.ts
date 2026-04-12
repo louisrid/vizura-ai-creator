@@ -239,8 +239,6 @@ function buildFinalPrompt(
   bodyType?: string,
   expression?: string,
 ): string {
-  const perspective = photoType === "selfie" ? SELFIE_PREFIX : PHOTO_PREFIX;
-
   const EXPRESSION_MAP: Record<string, string> = {
     "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
     "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
@@ -249,45 +247,49 @@ function buildFinalPrompt(
   };
   const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "";
 
+  const revealingKeywords = [
+    "lingerie", "bikini", "underwear", "bra", "swimsuit",
+    "swimwear", "nightwear", "negligee", "corset", "bodysuit",
+    "crop top", "sports bra",
+  ];
+  const isRevealing = revealingKeywords.some(
+    kw => scenePrompt.toLowerCase().includes(kw)
+  );
+
   const parts: string[] = [];
 
-  // Anti-blur directive — absolute first
-  parts.push("zero-background-blur, completely-even-sharp-focus-across-image");
-
-  // Surroundings detail — second
-  parts.push("sharp-detailed surroundings behind her with visible objects and textures");
-
-  // Scene
   parts.push(scenePrompt);
 
-  // Perspective and framing
-  parts.push(perspective);
-
-  // Character
-  if (characterTraits) {
-    parts.push(["attractive woman matching reference photos", characterTraits, exprStr, "fully-clothed"].filter(Boolean).join(", "));
-  } else {
-    parts.push(["attractive woman", exprStr, "fully-clothed"].filter(Boolean).join(", "));
-  }
-
   if (photoType === "selfie") {
-    parts.push("her left-arm behind her back");
+    parts.push("realistic casual iPhone 15 Pro selfie, front camera, amateur influencer style, natural lighting");
+  } else {
+    parts.push("realistic casual iPhone 15 Pro photo, natural angle, amateur influencer style, natural lighting");
   }
 
-  // Skin and quality — end of prompt for reinforcement
-  parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  // Quality reinforcement (no blur/focus keywords per user request)
-  parts.push("direct-eye-contact");
-
-  parts.push("smooth-midsection, no visible ribs");
+  if (characterTraits) {
+    parts.push(`a woman matching reference photos exactly, ${characterTraits}`);
+    if (exprStr) parts.push(exprStr);
+  }
 
   if (bodyType) {
-    const bKey = normalizeBodyType(bodyType.toLowerCase());
+    const bKey = normalizeBodyType((bodyType || "regular").toLowerCase());
     const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
     if (modifier) parts.push(modifier);
   }
 
-  // Append random seed to ensure unique generations
+  if (photoType === "selfie") {
+    parts.push("her left arm behind her back");
+  }
+
+  parts.push("realistic skin with visible pores, natural skin texture, matte skin, no shine");
+  parts.push("direct eye contact with camera");
+  parts.push("smooth midsection, no visible ribs");
+  parts.push("sharp focus throughout entire image, deep depth of field, everything in focus, detailed background fully sharp, no bokeh, no blur, f/8 aperture");
+
+  if (!isRevealing) {
+    parts.push("fully clothed");
+  }
+
   const seed = Math.floor(Math.random() * 999999);
   parts.push(`seed:${seed}`);
 
