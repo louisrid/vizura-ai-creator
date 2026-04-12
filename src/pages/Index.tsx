@@ -252,6 +252,7 @@ const Index = () => {
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
   const [prompt, setPrompt] = useState(() => sessionStorage.getItem("vizura_photo_prompt") || "");
+  const manualPromptRef = useRef(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => sessionStorage.getItem("vizura_photo_result") || null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
