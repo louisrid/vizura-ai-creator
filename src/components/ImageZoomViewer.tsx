@@ -11,6 +11,7 @@ interface ImageZoomViewerProps {
   showDownload?: boolean;
   downloadFilename?: string;
   footer?: ReactNode;
+  imageOverlay?: ReactNode;
 }
 
 const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename = "facefox-photo.png", footer }: ImageZoomViewerProps) => {
