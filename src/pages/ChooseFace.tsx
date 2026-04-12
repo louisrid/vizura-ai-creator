@@ -727,12 +727,11 @@ const ChooseFace = () => {
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
                           borderRadius: 10,
-                          border: selectedIndex === i ? "3px solid #ffe603" : "none",
-                          padding: selectedIndex === i ? 0 : 3,
+                          border: selectedIndex === i ? "3px solid #ffe603" : "3px solid transparent",
                           overflow: "hidden",
                         }}
                       >
-                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ borderRadius: 10, backgroundColor: "#000" }}>
+                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: "#000" }}>
                           {regeneratingFaces ? (
                             <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
                           ) : (
