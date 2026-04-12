@@ -37,11 +37,20 @@ const Storage = () => {
   useEffect(() => {
     const fetchAll = async () => {
       if (!user) return;
-      const { data } = await supabase
-        .from("generations")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      const [{ data }, { data: chars }] = await Promise.all([
+        supabase
+          .from("generations")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("characters")
+          .select("id, name")
+          .eq("user_id", user.id),
+      ]);
+
+      const charMap = new Map<string, string>();
+      (chars || []).forEach((c: any) => { if (c.name) charMap.set(c.id, c.name); });
 
       const allImages: StorageImage[] = [];
       (data || []).forEach((gen: any) => {
@@ -53,6 +62,7 @@ const Storage = () => {
             url,
             prompt: gen.prompt || "",
             created_at: gen.created_at,
+            characterName: gen.character_id ? charMap.get(gen.character_id) : undefined,
           });
         });
       });
