@@ -15,7 +15,7 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "close-up portrait shot from slightly above, face and upper-chest only, tight crop, f/11 deep-focus, detailed-background";
+const SELFIE_PREFIX = "selfie, close-up, slightly above eye-level, detailed-background, deep-focus";
 
 const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus sharp-background";
 
@@ -264,9 +264,13 @@ function buildFinalPrompt(
     parts.push(["attractive woman", exprStr, "fully-clothed"].filter(Boolean).join(", "));
   }
 
+  if (photoType === "selfie") {
+    parts.push("her left-arm resting casually by her side");
+  }
+
   // Skin and quality — end of prompt for reinforcement
   parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  parts.push("everything in-focus f/11 deep-focus photography, detailed-background, sharp-background no-bokeh no-blur no depth-of-field");
+  parts.push("everything in-focus f/11 deep-focus photography, detailed-background, sharp-background no-blur no depth-of-field");
   parts.push("direct-eye-contact");
 
   parts.push("smooth-midsection, no visible ribs");
