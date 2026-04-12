@@ -197,14 +197,6 @@ const Storage = () => {
         url={expanded?.url ?? null}
         onClose={() => setExpanded(null)}
         showDownload={false}
-        imageOverlay={expanded?.characterName ? (
-          <div
-            className="absolute bottom-2 left-2 px-3 py-1.5 text-[10px] font-[900] lowercase text-black"
-            style={{ backgroundColor: "#ffe603", borderRadius: 8 }}
-          >
-            {expanded.characterName}
-          </div>
-        ) : undefined}
         footer={expanded ? (
           <>
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
