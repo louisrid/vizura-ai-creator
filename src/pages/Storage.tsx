@@ -1,17 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Trash2, Wand2, Copy } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
-import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
+import ImageZoomViewer from "@/components/ImageZoomViewer";
 
 interface StorageImage {
   id: string;
@@ -183,73 +182,51 @@ const Storage = () => {
         )}
       </main>
 
-      {/* Expanded view */}
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center px-5 pb-6"
-            onClick={(e) => { if (e.target === e.currentTarget) setExpanded(null); }}
-            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[370px] md:max-w-[620px]"
-            >
-              <ModalCloseButton onClick={() => setExpanded(null)} />
-
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
-                <div className="pt-3" style={{ backgroundColor: "#1a1a1a" }} />
-                <div className="px-3 overflow-hidden" style={{ borderRadius: 10 }}>
-                  <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh] block" style={{ borderRadius: 10 }} />
-                </div>
-                {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                  <div className="px-3 md:px-4 pt-2" style={{ backgroundColor: "#1a1a1a" }}>
-                    <button
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        try {
-                          await navigator.clipboard.writeText(expanded.prompt);
-                          try {
-                            localStorage.setItem("vizura_copied_prompt", expanded.prompt);
-                            localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
-                          } catch {}
-                          toast.success("copied!");
-                        } catch { toast.error("failed to copy"); }
-                      }}
-                      className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
-                      style={{ backgroundColor: "#000" }}
-                    >
-                      <span className="truncate">{expanded.prompt}</span>
-                      <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
-                    </button>
-                  </div>
-                )}
-                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
-                  <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                    <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
-                      download <Download size={12} strokeWidth={2.5} />
-                    </Button>
-                  </a>
-                  <Button
-                    variant="outline"
-                    className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                    onClick={() => handleDelete(expanded)}
-                  >
-                    <Trash2 size={12} strokeWidth={2.5} />
-                  </Button>
-                </div>
+      <ImageZoomViewer
+        url={expanded?.url ?? null}
+        onClose={() => setExpanded(null)}
+        showDownload={false}
+        footer={expanded ? (
+          <>
+            {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
+              <div className="px-3 md:px-4 pt-2" style={{ backgroundColor: "#1a1a1a" }}>
+                <button
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    try {
+                      await navigator.clipboard.writeText(expanded.prompt);
+                      try {
+                        localStorage.setItem("vizura_copied_prompt", expanded.prompt);
+                        localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
+                      } catch {}
+                      toast.success("copied!");
+                    } catch { toast.error("failed to copy"); }
+                  }}
+                  className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px] hover:opacity-80 transition-opacity"
+                  style={{ backgroundColor: "#000" }}
+                >
+                  <span className="truncate">{expanded.prompt}</span>
+                  <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
+                </button>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            )}
+            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
+              <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
+                <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
+                  download <Download size={12} strokeWidth={2.5} />
+                </Button>
+              </a>
+              <Button
+                variant="outline"
+                className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                onClick={() => handleDelete(expanded)}
+              >
+                <Trash2 size={12} strokeWidth={2.5} />
+              </Button>
+            </div>
+          </>
+        ) : undefined}
+      />
     </div>
   );
 };

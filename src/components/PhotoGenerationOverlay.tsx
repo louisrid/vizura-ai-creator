@@ -102,9 +102,9 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           onPointerDown={dismissOverlay}
           style={{ touchAction: "manipulation", cursor: "pointer" }}
         >
-          <div className="relative z-10 flex w-full max-w-xs md:max-w-md flex-col items-center gap-2">
+          <div className="relative z-10 flex w-full max-w-xs md:max-w-md flex-col items-center gap-1.5">
             <motion.p
-              className="text-center text-[2.2rem] font-[900] lowercase text-white mb-1"
+              className="text-center text-[2.2rem] font-[900] lowercase text-white mt-1"
               initial={{ opacity: 0, y: 16, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.34, delay: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
@@ -117,7 +117,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                className="rounded-[10px] border-2 border-[rgba(255,255,255,0.15)] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}
+                className="rounded-[10px] border-2 border-[rgba(255,255,255,0.15)] overflow-hidden mt-0.5" style={{ backgroundColor: "#1a1a1a" }}
               >
                 <img src={resultImageUrl} alt="generated" className="w-[20rem] md:w-[28rem] h-auto object-contain" />
               </motion.div>

@@ -15,9 +15,9 @@ const corsHeaders = {
 };
 
 /* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "POV from one-hand held forward, close-up, slightly above eye-level, f/11 deep-focus";
+const SELFIE_PREFIX = "POV shot, camera held in right-hand at arms-length, left-arm not in frame, close-up above-eye-level, f/11 deep-focus";
 
-const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus, sharp-background";
+const PHOTO_PREFIX = "candid third-person shot, f/11 deep-focus sharp-background";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY =
@@ -261,14 +261,14 @@ function buildFinalPrompt(
 
   // Character
   if (characterTraits) {
-    parts.push(`attractive woman matching reference photos, ${exprStr}, ${characterTraits}, fully-clothed`);
+    parts.push(["attractive woman matching reference photos", characterTraits, exprStr, "fully-clothed"].filter(Boolean).join(", "));
   } else {
-    parts.push(`attractive woman, ${exprStr}, fully-clothed`);
+    parts.push(["attractive woman", exprStr, "fully-clothed"].filter(Boolean).join(", "));
   }
 
   // Skin and quality — end of prompt for reinforcement
   parts.push("matte-skin with visible-pores and skin-texture, no-shine");
-  parts.push("everything in-focus f/11 deep-focus photography, background same sharpness as subject, no-bokeh, no-blur, no depth-of-field");
+  parts.push("everything in-focus f/11 deep-focus photography, sharp-background no-bokeh no-blur no depth-of-field");
   parts.push("direct-eye-contact");
 
   if (photoType === "selfie") {
@@ -531,7 +531,7 @@ const BODY_PROMPT_MODIFIER: Record<string, string> = {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "natural B cup breasts",
+  regular: "full rounded C cup breasts, prominent chest",
   large: "huge DD cup breasts, very heavy prominent chest, large cleavage",
 };
 
@@ -1126,7 +1126,7 @@ serve(async (req) => {
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,
-        prompt: rawPrompt.trim().slice(0, 1000),
+        prompt: rawPrompt,
         image_urls: imageUrls,
       });
     }
