@@ -251,7 +251,10 @@ function buildFinalPrompt(
 
   const parts: string[] = [];
 
-  // Surroundings detail — absolute first
+  // Anti-blur directive — absolute first
+  parts.push("zero-background-blur, completely-even-sharp-focus-across-image");
+
+  // Surroundings detail — second
   parts.push("sharp-detailed surroundings behind her with visible objects and textures");
 
   // Scene
