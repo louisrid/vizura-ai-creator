@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { Loader2, Zap, Sparkles, ChevronDown, Gem, User, Download } from "lucide-react";
+import { Loader2, ChevronDown, Gem, User } from "lucide-react";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
