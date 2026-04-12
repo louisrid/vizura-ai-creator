@@ -253,7 +253,6 @@ const Index = () => {
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
   const [prompt, setPrompt] = useState(() => sessionStorage.getItem("vizura_photo_prompt") || "");
-  const manualPromptRef = useRef(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => sessionStorage.getItem("vizura_photo_result") || null);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
@@ -317,30 +316,37 @@ const Index = () => {
 
   // Listen for copied prompts from Storage page
   useEffect(() => {
+    const syncCopiedPrompt = () => {
+      try {
+        const copiedPrompt = localStorage.getItem("vizura_copied_prompt");
+        const copiedTsRaw = localStorage.getItem("vizura_copied_prompt_ts");
+        const appliedTsRaw = sessionStorage.getItem("vizura_applied_copied_prompt_ts");
+
+        if (!copiedPrompt || !copiedTsRaw) return;
+
+        const copiedTs = Number(copiedTsRaw);
+        const appliedTs = Number(appliedTsRaw || "0");
+
+        if (!Number.isFinite(copiedTs) || copiedTs <= appliedTs) return;
+
+        setPrompt(copiedPrompt);
+        sessionStorage.setItem("vizura_photo_prompt", copiedPrompt);
+        sessionStorage.setItem("vizura_applied_copied_prompt_ts", String(copiedTs));
+      } catch {}
+    };
+
     const handler = (e: StorageEvent) => {
-      if (e.key === "vizura_copied_prompt" && e.newValue) {
-        setPrompt(e.newValue);
-        try { sessionStorage.setItem("vizura_photo_prompt", e.newValue); } catch {}
+      if (e.key === "vizura_copied_prompt" || e.key === "vizura_copied_prompt_ts") {
+        syncCopiedPrompt();
       }
     };
-    // Also check on focus (same-tab clipboard copy)
-    const focusHandler = () => {
-      const copied = localStorage.getItem("vizura_copied_prompt_ts");
-      const copiedPrompt = localStorage.getItem("vizura_copied_prompt");
-      if (copied && copiedPrompt) {
-        const ts = parseInt(copied, 10);
-        if (Date.now() - ts < 10000) {
-          setPrompt(copiedPrompt);
-          try { sessionStorage.setItem("vizura_photo_prompt", copiedPrompt); } catch {}
-          localStorage.removeItem("vizura_copied_prompt_ts");
-        }
-      }
-    };
+
+    syncCopiedPrompt();
     window.addEventListener("storage", handler);
-    window.addEventListener("focus", focusHandler);
+    window.addEventListener("focus", syncCopiedPrompt);
     return () => {
       window.removeEventListener("storage", handler);
-      window.removeEventListener("focus", focusHandler);
+      window.removeEventListener("focus", syncCopiedPrompt);
     };
   }, []);
 
@@ -390,7 +396,7 @@ const Index = () => {
     setPhotoOverlayResult(null);
 
     toast("1 gem used");
-    const userPrompt = prompt.trim();
+    const userPrompt = prompt;
 
     try {
       const controller = new AbortController();
