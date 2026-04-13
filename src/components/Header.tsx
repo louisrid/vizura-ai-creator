@@ -212,12 +212,10 @@ const Header = () => {
                       </button>
                       {isLocked && (
                         <div
-                          className="absolute inset-0 flex items-center justify-center pointer-events-auto"
-                          style={{ backgroundColor: "rgba(0,0,0,0.30)", zIndex: 10 }}
+                          className="absolute pointer-events-auto"
+                          style={{ inset: -2, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: isFirst ? "10px 10px 0 0" : isLast ? "0 0 10px 10px" : 0, zIndex: 10 }}
                           onClick={(e) => e.stopPropagation()}
-                        >
-                          <span style={{ fontSize: isDesktop ? 16 : 13 }} className="leading-none">🔒</span>
-                        </div>
+                        />
                       )}
                     </div>
                   </div>
@@ -284,8 +282,8 @@ const Header = () => {
                   className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
                   style={{
                     borderRadius: "50%",
-                    backgroundColor: "hsl(var(--card))",
-                    border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "rgba(255,255,255,0.25)"}`,
+                    backgroundColor: "#000000",
+                    border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "rgba(255,255,255,0.15)"}`,
                   }}
                   aria-label="my account"
                 >
@@ -315,7 +313,7 @@ const Header = () => {
                 style={{
                   borderRadius: 10,
                   backgroundColor: "#000",
-                  border: "2px solid #ffffff",
+                  border: "2px solid rgba(255,255,255,0.15)",
                 }}
                 aria-label="open menu"
               >
