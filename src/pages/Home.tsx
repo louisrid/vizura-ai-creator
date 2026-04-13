@@ -13,8 +13,9 @@ import { supabase } from "@/integrations/supabase/client";
 /* Bouncing finger emoji for onboarding */
 const BouncingFinger = () => (
   <motion.span
-    className="inline-block text-[20px] md:text-[24px] ml-1"
-    animate={{ y: [0, -8, 0] }}
+    className="absolute right-2 md:right-3 pointer-events-none text-[44px] md:text-[56px]"
+    style={{ bottom: 0, transform: "translateY(50%)" }}
+    animate={{ y: [0, -10, 0] }}
     transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
     aria-hidden="true"
   >
@@ -296,7 +297,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex items-center justify-between active:scale-[0.98] transition-transform"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -306,11 +307,12 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character{showBounceOnCreate && <BouncingFinger />}</span>
+              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
+              {showBounceOnCreate && <BouncingFinger />}
             </button>
 
             {/* Create Photo - matches see all / manage style */}
@@ -320,7 +322,7 @@ const Home = () => {
                 if (!user) { navigate("/auth?redirect=/create"); return; }
                 navigate("/create");
               }}
-              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-hidden"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -332,11 +334,12 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo{showBounceOnPhoto && <BouncingFinger />}</span>
+              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
               <svg className="relative z-[1]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
+              {showBounceOnPhoto && <BouncingFinger />}
             </button>
           </div>
 
@@ -487,7 +490,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex items-center justify-between active:scale-[0.98] transition-transform hover-lift"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform hover-lift overflow-visible"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -496,16 +499,17 @@ const Home = () => {
                 borderRadius: 10,
               }}
             >
-              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character{showBounceOnCreate && <BouncingFinger />}</span>
+              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
+              {showBounceOnCreate && <BouncingFinger />}
             </button>
             <button
               type="button"
               onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
-              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-hidden hover-lift"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible hover-lift"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -516,11 +520,12 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo{showBounceOnPhoto && <BouncingFinger />}</span>
+              <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
               <svg className="relative z-[1]" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
+              {showBounceOnPhoto && <BouncingFinger />}
             </button>
           </div>
 
