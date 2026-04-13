@@ -379,6 +379,7 @@ const ChooseFace = () => {
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       await refetchGems();
+      if (!onboardingComplete) setFaceRegensUsed((p) => p + 1);
       toast("30 gems used");
     } catch (err: any) {
       toast.error("generation failed, please try again");
