@@ -302,7 +302,7 @@ const ChooseFace = () => {
 
   const handleRegenerate = async () => {
     if (isFreeUser) {
-      toast("please add gems");
+      navigate("/top-ups");
       return;
     }
     if (!user) return;
