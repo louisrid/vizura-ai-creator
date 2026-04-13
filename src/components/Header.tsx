@@ -42,11 +42,11 @@ const Header = () => {
   // Onboarding lock state for menu
   const [showMenuLocks, setShowMenuLocks] = useState(false);
 
+  // Default false — only set true after BOTH queries confirm no onboarding + no chars
   useEffect(() => {
     if (!user) { setShowMenuLocks(false); return; }
     let cancelled = false;
     (async () => {
-      // Fetch profile + character count in parallel
       const [profileRes, charsRes] = await Promise.all([
         supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).single(),
         supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -54,6 +54,7 @@ const Header = () => {
       if (cancelled) return;
       const onboardingDone = !!profileRes.data?.onboarding_complete;
       const hasChars = (charsRes.count ?? 0) > 0;
+      // Only show locks when both conditions confirmed — never flash
       setShowMenuLocks(!onboardingDone && !hasChars);
     })();
     return () => { cancelled = true; };
