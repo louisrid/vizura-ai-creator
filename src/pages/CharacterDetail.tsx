@@ -208,7 +208,7 @@ const CharacterDetail = () => {
         sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
         if (!onboardingComplete) {
           setAngleRegensUsed((p) => p + 1);
-          toast("1/1 used");
+          // No toast on first regen — "1/1 used" shows on second press
         } else {
           toast("10 gems used");
         }
@@ -216,7 +216,6 @@ const CharacterDetail = () => {
         sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
         if (!onboardingComplete) {
           setBodyRegensUsed((p) => p + 1);
-          toast("1/1 used");
         } else {
           toast("10 gems used");
         }
