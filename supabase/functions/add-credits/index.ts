@@ -51,6 +51,15 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Check if user is still in onboarding — if so, this is their first purchase
+    const { data: profile } = await adminClient
+      .from("profiles")
+      .select("onboarding_complete")
+      .eq("user_id", userId)
+      .single();
+
+    const wasOnboarding = profile && !profile.onboarding_complete;
+
     const { data: creditRow } = await adminClient
       .from("credits")
       .select("balance")
@@ -65,12 +74,25 @@ Deno.serve(async (req) => {
         .insert({ user_id: userId, balance: newBalance });
       if (insertErr) throw insertErr;
     } else {
-      newBalance = creditRow.balance + amount;
+      if (wasOnboarding) {
+        // First purchase: wipe hidden onboarding gems, start fresh with purchased amount
+        newBalance = amount;
+      } else {
+        newBalance = creditRow.balance + amount;
+      }
       const { error: updateErr } = await adminClient
         .from("credits")
         .update({ balance: newBalance, updated_at: new Date().toISOString() })
         .eq("user_id", userId);
       if (updateErr) throw updateErr;
+    }
+
+    // Mark onboarding as complete on first purchase
+    if (wasOnboarding) {
+      await adminClient
+        .from("profiles")
+        .update({ onboarding_complete: true, updated_at: new Date().toISOString() })
+        .eq("user_id", userId);
     }
 
     return new Response(
