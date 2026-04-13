@@ -186,10 +186,7 @@ input[type="range"]::-moz-range-thumb {
 
 /* Global button press state + desktop hover */
 button, a[role="button"], [role="button"] {
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-}
-button:active, a[role="button"]:active, [role="button"]:active {
-  opacity: 0.85;
+  transition: transform 0.1s ease-out;
 }
 
 /* Desktop hover effects for interactive elements */
@@ -198,8 +195,7 @@ button:active, a[role="button"]:active, [role="button"]:active {
     opacity: 0.92;
   }
   button:active, a[role="button"]:active, [role="button"]:active {
-    opacity: 0.8;
-    transform: scale(0.98);
+    opacity: 0.85;
   }
 
   /* Card hover lift */

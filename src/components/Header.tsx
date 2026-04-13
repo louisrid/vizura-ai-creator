@@ -48,7 +48,7 @@ const Header = () => {
     let cancelled = false;
     (async () => {
       const [profileRes, charsRes] = await Promise.all([
-        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).single(),
+        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
         supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       ]);
       if (cancelled) return;

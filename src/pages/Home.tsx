@@ -150,21 +150,15 @@ const Home = () => {
     let cancelled = false;
 
     const fetchAll = async () => {
-      const [, charsData, profileRes] = await Promise.all([
+      const [, , profileRes] = await Promise.all([
         fetchLatestPhotos(),
         fetchCharacters(),
-        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).single(),
+        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
       ]);
       if (cancelled) return;
       const isOnboardingComplete = !!profileRes.data?.onboarding_complete;
       setOnboardingComplete(isOnboardingComplete);
       setLockStateResolved(true);
-
-      // Auto-open creator for new authenticated users with no characters
-      if (!isOnboardingComplete && characters.length === 0 && !sessionStorage.getItem(DISMISSED_KEY)) {
-        setSkipWelcome(true);
-        setShowGuided(true);
-      }
     };
 
     void fetchAll();
