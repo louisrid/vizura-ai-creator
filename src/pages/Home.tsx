@@ -134,11 +134,21 @@ const Home = () => {
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, openCreatorRequested, user]);
 
-  // Fetch data in parallel
+  // Fetch all data in parallel
   useEffect(() => {
-    void fetchLatestPhotos();
-    void fetchCharacters();
-    const refresh = () => { void fetchLatestPhotos(); void fetchCharacters(); };
+    const fetchProfile = async () => {
+      if (!user) return;
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_complete")
+        .eq("user_id", user.id)
+        .single();
+      if (data) setOnboardingComplete(!!data.onboarding_complete);
+    };
+
+    void Promise.all([fetchLatestPhotos(), fetchCharacters(), fetchProfile()]);
+
+    const refresh = () => { void Promise.all([fetchLatestPhotos(), fetchCharacters()]); };
     const handleVisibility = () => { if (document.visibilityState === "visible") refresh(); };
     window.addEventListener("focus", refresh);
     window.addEventListener("pageshow", refresh);
@@ -148,20 +158,7 @@ const Home = () => {
       window.removeEventListener("pageshow", refresh);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [fetchLatestPhotos, fetchCharacters]);
-
-  // Fetch onboarding_complete flag
-  useEffect(() => {
-    if (!user) return;
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("onboarding_complete")
-        .eq("user_id", user.id)
-        .single();
-      if (data) setOnboardingComplete(!!data.onboarding_complete);
-    })();
-  }, [user]);
+  }, [fetchLatestPhotos, fetchCharacters, user]);
 
   function handleOpenCreator() {
     sessionStorage.removeItem(DISMISSED_KEY);
