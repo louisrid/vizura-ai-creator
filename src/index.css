@@ -9,7 +9,7 @@
     --foreground: 0 0% 100%;
 
     /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
-    --card: 0 0% 10%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 100%;
 
     --popover: 0 0% 10%;
