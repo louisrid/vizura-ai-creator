@@ -94,6 +94,7 @@ const ChooseFace = () => {
   const [regeneratingFaces, setRegeneratingFaces] = useState(false);
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
+  const hasShownGreatChoiceRef = useRef(false);
 
   // Second loading phase: angle + body generation
   const [angleLoading, setAngleLoading] = useState(false);
@@ -267,7 +268,7 @@ const ChooseFace = () => {
           return;
         }
         if (result.code === "NO_GEMS") {
-          setShowPaywall(true);
+          navigate("/top-ups");
           setLoading(false);
           return;
         }
@@ -374,7 +375,10 @@ const ChooseFace = () => {
   const handleFaceClick = (i: number) => {
     setSelectedIndex(i);
     setPulseIndex(i);
-    toast("great choice!");
+    if (!hasShownGreatChoiceRef.current) {
+      toast("great choice!");
+      hasShownGreatChoiceRef.current = true;
+    }
     window.setTimeout(() => setPulseIndex((current) => (current === i ? null : current)), 360);
   };
 
