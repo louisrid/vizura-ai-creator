@@ -142,8 +142,7 @@ const Header = () => {
               }}
             >
               {menuItems.map((item, idx) => {
-                const locked = isItemLocked(item.label);
-                const isActive = !locked && location.pathname === item.path && !item.state;
+                const isActive = location.pathname === item.path && !item.state;
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
@@ -156,7 +155,6 @@ const Header = () => {
                     {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
                     <button
                       onClick={() => {
-                        if (locked) return;
                         if (checkNavGuard()) { setOpen(false); return; }
                         setOpen(false);
                         if (item.auth && !user) {
@@ -175,19 +173,14 @@ const Header = () => {
                         fontSize: isDesktop ? 16 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
-                        color: locked ? "rgba(255,255,255,0.3)" : isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
+                        color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
                         backgroundColor: "transparent",
                         borderRadius,
-                        cursor: locked ? "default" : "pointer",
                       }}
-                      onMouseEnter={(e) => { if (!locked) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)"; }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                      {locked ? (
-                        <Lock size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "rgba(255,255,255,0.3)" }} />
-                      ) : (
-                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
-                      )}
+                      <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                       {item.label}
                     </button>
                   </div>
