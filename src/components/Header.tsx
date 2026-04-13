@@ -213,7 +213,7 @@ const Header = () => {
                       {isLocked && (
                         <div
                           className="absolute pointer-events-auto"
-                          style={{ inset: -2, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: isFirst ? "10px 10px 0 0" : isLast ? "0 0 10px 10px" : 0, zIndex: 10 }}
+                          style={{ inset: 0, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: isFirst ? "8px 8px 0 0" : isLast ? "0 0 8px 8px" : 0, zIndex: 10 }}
                           onClick={(e) => e.stopPropagation()}
                         />
                       )}
