@@ -345,7 +345,7 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative">
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
                   onClick={() => { if (showLocks) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform"
@@ -410,7 +410,7 @@ const Home = () => {
           <section className="mt-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <div className="relative">
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button onClick={() => { if (showLocks) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
