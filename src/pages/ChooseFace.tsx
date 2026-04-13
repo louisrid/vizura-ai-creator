@@ -601,7 +601,7 @@ const ChooseFace = () => {
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
         <AnimatePresence>
-          {(loading || angleLoading) && (
+          {loading && (
             <motion.div
               key="black-underlay"
               className="fixed inset-0 z-[10000] bg-black"
@@ -630,28 +630,6 @@ const ChooseFace = () => {
                   phraseInterval={5000}
                   completeNow={apiDone}
                   onComplete={() => setBarComplete(true)}
-                />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {angleLoading && (
-            <motion.div
-              key="angle-loader"
-              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black"
-              style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-            >
-                <ProgressBarLoader
-                  duration={30000}
-                  phrases={ANGLE_GEN_PHRASES}
-                  phraseInterval={5000}
-                  completeNow={angleApiDone}
-                  onComplete={handleAngleTapContinue}
                 />
             </motion.div>
           )}
