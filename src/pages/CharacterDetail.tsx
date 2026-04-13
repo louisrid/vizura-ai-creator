@@ -556,7 +556,7 @@ const CharacterDetail = () => {
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-sm md:max-w-md"
-              style={{ backgroundColor: "#000000", borderRadius: 10, border: "2px solid hsl(var(--card))", padding: "28px 24px 24px" }}
+              style={{ backgroundColor: "#000000", borderRadius: 10, border: "2px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
             >
               <ModalCloseButton onClick={() => setShowDelete(false)} />
 

@@ -72,6 +72,7 @@ const Home = () => {
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(true);
+  const [lockStateResolved, setLockStateResolved] = useState(false);
   const openCreatorRequested = Boolean((location.state as any)?.openCreator);
 
   const fetchLatestPhotos = useCallback(async () => {
@@ -138,19 +139,28 @@ const Home = () => {
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, openCreatorRequested, user]);
 
-  // Fetch all data in parallel
+  // Fetch all data in parallel — resolve lock state atomically
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user) return;
-      const { data } = await supabase
-        .from("profiles")
-        .select("onboarding_complete")
-        .eq("user_id", user.id)
-        .single();
-      if (data) setOnboardingComplete(!!data.onboarding_complete);
+    if (!user) {
+      setLockStateResolved(false);
+      void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
+      return;
+    }
+
+    let cancelled = false;
+
+    const fetchAll = async () => {
+      const [, , profileRes] = await Promise.all([
+        fetchLatestPhotos(),
+        fetchCharacters(),
+        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).single(),
+      ]);
+      if (cancelled) return;
+      if (profileRes.data) setOnboardingComplete(!!profileRes.data.onboarding_complete);
+      setLockStateResolved(true);
     };
 
-    void Promise.all([fetchLatestPhotos(), fetchCharacters(), fetchProfile()]);
+    void fetchAll();
 
     const refresh = () => { void Promise.all([fetchLatestPhotos(), fetchCharacters()]); };
     const handleVisibility = () => { if (document.visibilityState === "visible") refresh(); };
@@ -158,6 +168,7 @@ const Home = () => {
     window.addEventListener("pageshow", refresh);
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
+      cancelled = true;
       window.removeEventListener("focus", refresh);
       window.removeEventListener("pageshow", refresh);
       document.removeEventListener("visibilitychange", handleVisibility);
@@ -231,8 +242,8 @@ const Home = () => {
     return slots;
   }, [characters]);
 
-  // Lock conditions: show locks when onboarding not complete AND no characters
-  const showLocks = !onboardingComplete && characters.length === 0;
+  // Lock conditions: only show locks after state is confirmed — never flash for users with characters
+  const showLocks = lockStateResolved && !onboardingComplete && characters.length === 0;
 
   const pageHidden = showGuided || (!autoOpenEvaluated && !user);
 

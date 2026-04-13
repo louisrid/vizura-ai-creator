@@ -251,7 +251,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 10, backgroundColor: "#2a2a2a" }}
+            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
           <button className="h-14 w-full bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2" style={{ borderRadius: 10 }} onClick={handleEmailAuth} disabled={submitting || googleLoading}>
