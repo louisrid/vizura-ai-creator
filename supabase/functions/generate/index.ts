@@ -1050,7 +1050,10 @@ serve(async (req) => {
     const gemCost = isFaceRegen ? GEM_COST_FACE_REGEN : GEM_COST_PHOTO;
 
     /* ── onboarding face regen limit check / first-press lock ── */
-    if (isFaceRegen) {
+    // Only enforce the limit on actual regens (when previous_faces is provided),
+    // not on the initial face generation.
+    const isActualRegen = isFaceRegen && Array.isArray(body?.previous_faces) && body.previous_faces.length > 0;
+    if (isActualRegen) {
       const onboarding = await isOnboardingUser(adminClient, userId);
       if (onboarding) {
         const { data: profile } = await adminClient
