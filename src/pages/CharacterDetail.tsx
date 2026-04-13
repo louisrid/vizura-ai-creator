@@ -563,7 +563,7 @@ const CharacterDetail = () => {
               <h2 className="text-lg md:text-xl font-[900] lowercase text-white leading-[1.1] mb-2 text-center">
                 delete this character?
               </h2>
-              <p className="text-sm md:text-base font-[900] lowercase mb-6 text-center" style={{ color: "hsl(var(--border-mid))" }}>
+              <p className="text-sm md:text-base font-[900] lowercase mb-6 text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
                 {character.name || "unnamed"}
               </p>
               <div className="flex gap-3 w-full">
