@@ -8,6 +8,12 @@ const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const XAI_REQUEST_TIMEOUT_MS = 120_000;
 
+/* ── gem costs ─────────────────────────────────────────── */
+const GEM_COST_PHOTO = 10;
+const GEM_COST_FACE_REGEN = 30;
+const GEM_COST_SINGLE_REGEN = 10;
+const GEM_COST_CHARACTER = 50;
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -925,7 +931,7 @@ serve(async (req) => {
           .single();
         creditData = cd;
 
-        if (!isBetaUser && (!creditData || creditData.balance <= 0)) {
+      if (!isBetaUser && (!creditData || creditData.balance < GEM_COST_SINGLE_REGEN)) {
           return new Response(
             JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -935,7 +941,7 @@ serve(async (req) => {
         if (creditData) {
           await adminClient
             .from("credits")
-            .update({ balance: creditData.balance - 1, updated_at: new Date().toISOString() })
+            .update({ balance: creditData.balance - GEM_COST_SINGLE_REGEN, updated_at: new Date().toISOString() })
             .eq("user_id", userId);
         }
       }
@@ -1006,13 +1012,13 @@ serve(async (req) => {
           });
         }
 
-        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, true);
+        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, GEM_COST_SINGLE_REGEN, true);
 
         return new Response(
           JSON.stringify({
             angle_url: angleUrl,
             body_anchor_url: bodyAnchorUrl,
-            gems_remaining: creditData ? creditData.balance - 1 : undefined,
+            gems_remaining: creditData ? creditData.balance - GEM_COST_SINGLE_REGEN : undefined,
           }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
@@ -1027,7 +1033,7 @@ serve(async (req) => {
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
-        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 1, false, e?.message || "unknown");
+        await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, 0, false, e?.message || "unknown");
         return new Response(
           JSON.stringify({ error: "generation error" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -1228,6 +1234,9 @@ serve(async (req) => {
     }
 
     /* ── STANDARD GEM-BASED FLOW ── */
+    const isFaceRegen = body?.face_regen === true;
+    const gemCost = isFaceRegen ? GEM_COST_FACE_REGEN : GEM_COST_PHOTO;
+
     let creditData: { balance: number } | null = null;
     {
       const { data: cd } = await adminClient
@@ -1237,7 +1246,7 @@ serve(async (req) => {
         .single();
       creditData = cd;
 
-      if (!isBetaUser && (!creditData || creditData.balance <= 0)) {
+      if (!isBetaUser && (!creditData || creditData.balance < gemCost)) {
         const { data: subData } = await adminClient
           .from("subscriptions")
           .select("status")
@@ -1258,7 +1267,7 @@ serve(async (req) => {
         await adminClient
           .from("credits")
           .update({
-            balance: creditData.balance - 1,
+            balance: creditData.balance - gemCost,
             updated_at: new Date().toISOString(),
           })
           .eq("user_id", userId);
@@ -1267,8 +1276,6 @@ serve(async (req) => {
 
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
-
-    const isFaceRegen = body?.face_regen === true;
 
     let imageUrls: string[];
     try {
@@ -1324,7 +1331,7 @@ serve(async (req) => {
         );
       }
       console.error("Generation error:", e);
-      await logGeneration(adminClient, userId, characterId, prompt, genType, 1, false, e?.message || "unknown");
+      await logGeneration(adminClient, userId, characterId, prompt, genType, 0, false, e?.message || "unknown");
       return new Response(
         JSON.stringify({ error: "generation error" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -1355,12 +1362,12 @@ serve(async (req) => {
       });
     }
 
-    await logGeneration(adminClient, userId, characterId, prompt, genType, 1, true);
+    await logGeneration(adminClient, userId, characterId, prompt, genType, gemCost, true);
 
     return new Response(
       JSON.stringify({
         images: imageUrls,
-        gems_remaining: creditData ? creditData.balance - 1 : undefined,
+        gems_remaining: creditData ? creditData.balance - gemCost : undefined,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
