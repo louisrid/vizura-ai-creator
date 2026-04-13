@@ -118,7 +118,7 @@ const Auth = () => {
         await signIn(email.trim(), password);
       }
     } catch (err: any) {
-      toast.error(err.message || "something went wrong");
+      toast.error("try again");
       setSubmitting(false);
     }
   };
@@ -136,7 +136,7 @@ const Auth = () => {
       });
       if (result?.error) {
         sessionStorage.removeItem("vizura_post_auth_home");
-        toast.error("google sign in failed");
+        toast.error("sign in error");
         setGoogleLoading(false);
         return;
       }
@@ -145,7 +145,7 @@ const Auth = () => {
       }
     } catch (err: any) {
       sessionStorage.removeItem("vizura_post_auth_home");
-      toast.error(err.message || "google sign in failed");
+      toast.error("sign in error");
       setGoogleLoading(false);
     }
   };
