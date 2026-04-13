@@ -288,7 +288,7 @@ const ChooseFace = () => {
           return;
         }
         if (result.code === "CONTENT_POLICY") {
-          toast("prompt not allowed");
+          toast("not allowed");
           setLoading(false);
           return;
         }
@@ -309,7 +309,7 @@ const ChooseFace = () => {
         setShowPaywall(true);
       } else {
         setGenerationError("generation failed");
-        toast.error("generation failed, please try again");
+        toast.error("gen error");
       }
       setLoading(false);
     }
@@ -382,7 +382,7 @@ const ChooseFace = () => {
       if (!onboardingComplete) setFaceRegensUsed((p) => p + 1);
       toast("30 gems used");
     } catch (err: any) {
-      toast.error("generation failed, please try again");
+      toast.error("regen error");
     } finally {
       setRegeneratingFaces(false);
     }
@@ -392,7 +392,7 @@ const ChooseFace = () => {
     setSelectedIndex(i);
     setPulseIndex(i);
     if (!hasShownGreatChoiceRef.current) {
-      toast("great choice!");
+      toast("great choice");
       hasShownGreatChoiceRef.current = true;
     }
     window.setTimeout(() => setPulseIndex((current) => (current === i ? null : current)), 360);
@@ -430,13 +430,13 @@ const ChooseFace = () => {
   const doFinalSave = async (forcedFaceIdx?: number) => {
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
-      toast.error("not signed in");
+      toast.error("sign in first");
       return false;
     }
 
     const faceIdx = forcedFaceIdx ?? selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
     if (faceIdx < 0) {
-      toast.error("pick a face first");
+      toast.error("pick a face");
       return false;
     }
 
@@ -456,7 +456,7 @@ const ChooseFace = () => {
 
     if (!cId) {
       if (!draft) {
-        toast.error("failed to load character details");
+        toast.error("load error");
         return false;
       }
 
@@ -482,7 +482,7 @@ const ChooseFace = () => {
           .select("id")
           .single();
         if (insertError) {
-          toast.error("failed to save character");
+          toast.error("save error");
           return false;
         }
         if (inserted) {
@@ -493,7 +493,7 @@ const ChooseFace = () => {
           mergeCachedOnboardingState(currentUser.id, { characterCount: 1, onboardingComplete: true });
         }
       } catch (err) {
-        toast.error("failed to save character");
+        toast.error("save error");
         return false;
       }
     } else {
@@ -518,7 +518,7 @@ const ChooseFace = () => {
           .eq("user_id", currentUser.id);
         if (updateError) throw updateError;
       } catch (err) {
-        toast.error("failed to save selected face");
+        toast.error("save error");
         return false;
       }
     }
@@ -575,7 +575,7 @@ const ChooseFace = () => {
     sessionStorage.removeItem(AUTH_RESUME_KEY);
     setPendingAuthSave(false);
     setShowSignIn(false);
-    toast.success("character added!");
+    toast.success("char created");
     navigate(`/characters/${cId}`, { replace: true });
     return true;
   };
@@ -737,7 +737,7 @@ const ChooseFace = () => {
                     <button
                       onClick={() => {
                         if (isFreeUser) {
-                          toast("please add gems");
+                          toast("need gems");
                           return;
                         }
                         setShowRegenConfirm(true);

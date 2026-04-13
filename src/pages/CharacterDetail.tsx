@@ -190,7 +190,7 @@ const CharacterDetail = () => {
 
       if (error) throw error;
       if (data?.code === "CONTENT_POLICY") {
-        toast("prompt not allowed");
+        toast("not allowed");
         await refetchGems();
         return;
       }
@@ -216,7 +216,7 @@ const CharacterDetail = () => {
       console.error("Regenerate error:", err);
       if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
       else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
-      toast.error("regeneration failed, please try again");
+      toast.error("regen error");
     } finally {
       setRegeneratingAngle(false);
       setRegeneratingBody(false);
@@ -247,12 +247,12 @@ const CharacterDetail = () => {
 
     const { error } = await supabase.from("characters").delete().eq("id", character.id);
     if (error) {
-      toast.error("failed to delete character");
+      toast.error("delete error");
       setDeleting(false);
       setShowDelete(false);
       return;
     }
-    toast.success("character deleted");
+    toast.success("char deleted");
     const previous = readCachedOnboardingState(user!.id);
     mergeCachedOnboardingState(user!.id, {
       characterCount: Math.max((previous?.characterCount ?? 1) - 1, 0),
@@ -345,8 +345,8 @@ const CharacterDetail = () => {
     if (!trimmed) { setEditingName(false); return; }
     setSavingName(true);
     const { error } = await supabase.from("characters").update({ name: trimmed }).eq("id", character.id);
-    if (error) { toast.error("failed to save name"); }
-    else { setCharacter((prev) => prev ? { ...prev, name: trimmed } : prev); toast.success("name updated"); }
+    if (error) { toast.error("save error"); }
+    else { setCharacter((prev) => prev ? { ...prev, name: trimmed } : prev); toast.success("name saved"); }
     setSavingName(false);
     setEditingName(false);
   };

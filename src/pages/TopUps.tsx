@@ -62,9 +62,9 @@ const TopUps = () => {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       refetch();
-      toast.success(`+${pack.gems} gems added`);
+      toast.success("gems added!");
     } catch (err: any) {
-      toast.error(err.message || "purchase failed");
+      toast.error("buy error");
     } finally {
       setBuying(null);
     }
@@ -79,9 +79,9 @@ const TopUps = () => {
       if (data?.error) throw new Error(data.error);
       refetch();
       setCanClaimFree(false);
-      toast.success("🎉 +5 free gems claimed!");
+      toast.success("gems added!");
     } catch (err: any) {
-      toast.error(err.message || "failed to claim");
+      toast.error("claim error");
     } finally {
       setClaiming(false);
     }

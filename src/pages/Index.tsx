@@ -553,7 +553,7 @@ const Index = () => {
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
     if (credits <= 0) { navigate("/top-ups"); return; }
-    if (!selectedCharId || !prompt.trim()) { toast.error("please fill all boxes"); return; }
+    if (!selectedCharId || !prompt.trim()) { toast.error("fill all info"); return; }
 
     setIsGenerating(true);
     setError("");
@@ -562,7 +562,7 @@ const Index = () => {
     setPhotoOverlayResult(null);
     try { sessionStorage.removeItem("vizura_photo_result"); sessionStorage.removeItem("vizura_photo_overlay"); } catch {}
 
-    toast("1 gem used");
+    toast("10 gems used");
     const userPrompt = prompt;
 
     try {
@@ -594,7 +594,7 @@ const Index = () => {
       }
       if (data?.error) {
         if (data?.code === "CONTENT_POLICY") {
-          toast("prompt not allowed — try a different description");
+          toast("not allowed");
           setPhotoOverlayPhase("hidden");
           await refetchCredits();
           return;
@@ -605,7 +605,7 @@ const Index = () => {
           return;
         }
         if (data?.code === "RATE_LIMITED") {
-          toast.error("too many requests — wait a moment and try again");
+          toast.error("too fast");
           setPhotoOverlayPhase("hidden");
           return;
         }
@@ -638,13 +638,13 @@ const Index = () => {
       if (msg.includes("No gems") || msg.includes("402")) {
         navigate("/top-ups");
       } else if (msg.includes("abort") || msg.includes("AbortError")) {
-        toast.error("request timed out — please try again");
+        toast.error("gen error");
       } else if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("network")) {
-        toast.error("network error — check your connection and try again");
+        toast.error("gen error");
       } else if (msg.includes("content policy") || msg.includes("safety") || msg.includes("blocked")) {
-        toast.error("prompt not allowed — try a different description");
+        toast.error("not allowed");
       } else {
-        toast.error("server error, please try again");
+        toast.error("gen error");
       }
     } finally {
       setIsGenerating(false);

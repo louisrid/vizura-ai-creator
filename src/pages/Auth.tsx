@@ -93,12 +93,12 @@ const Auth = () => {
       if (!isSignUp && !email.trim() && !password.trim()) {
         sessionStorage.setItem("vizura_post_auth_home", "1");
         await signInPreview();
-        toast.success("signed into preview account");
+        toast.success("signed in");
         return;
       }
 
       if (!email.trim() || !password.trim()) {
-        toast.error("please enter email and password");
+        toast.error("fill details");
         setSubmitting(false);
         return;
       }
@@ -106,7 +106,7 @@ const Auth = () => {
       if (isSignUp) {
         try {
           await signUp(email.trim(), password);
-          toast.success("check your email to confirm your account");
+          toast.success("check email");
         } catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
             await signIn(email.trim(), password);
