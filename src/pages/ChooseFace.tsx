@@ -97,10 +97,7 @@ const ChooseFace = () => {
   const isFreeUser = !subscribed && gems <= 0;
   const hasShownGreatChoiceRef = useRef(false);
 
-  // Second loading phase: angle + body generation
-  const [angleLoading, setAngleLoading] = useState(false);
-  const [angleApiDone, setAngleApiDone] = useState(false);
-  const [angleBarComplete, setAngleBarComplete] = useState(false);
+  // Angle/body generation — runs in background, no overlay
   const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
 
   const hasInitRef = useRef(false);
