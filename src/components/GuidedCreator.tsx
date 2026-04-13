@@ -14,7 +14,7 @@ const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.75;
 
 /* ── Name toast ── */
-const getRandomNameToast = () => "great choice!";
+const getRandomNameToast = () => "great choice";
 
 /*
  * SCREEN ORDER (11 screens, internalStep 0-10):
@@ -729,29 +729,29 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       });
       if (result?.error) {
         sessionStorage.removeItem("vizura_post_auth_home");
-        toast.error("google sign in failed");
+        toast.error("sign in error");
         setGoogleLoading(false);
         return;
       }
     } catch (err: any) {
       sessionStorage.removeItem("vizura_post_auth_home");
-      toast.error(err.message || "sign in failed");
+      toast.error("sign in error");
       setGoogleLoading(false);
     }
   };
 
   const handleEmailAuth = async () => {
-    if (!email.trim() || !password.trim()) { toast.error("enter email and password"); return; }
+    if (!email.trim() || !password.trim()) { toast.error("fill details"); return; }
     setEmailLoading(true);
     try {
       if (isSignUp) {
-        try { await signUp(email.trim(), password); toast.success("check your email to confirm"); }
+        try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) await signIn(email.trim(), password);
           else throw err;
         }
       } else { await signIn(email.trim(), password); }
-    } catch (err: any) { toast.error(err.message || "sign in failed"); setEmailLoading(false); }
+    } catch (err: any) { toast.error("try again"); setEmailLoading(false); }
   };
 
   if (!visible) return null;
@@ -839,9 +839,9 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               sessionStorage.setItem("vizura_post_auth_home", "1");
               try {
                 await signInPreview();
-                toast.success("signed into preview account");
+                toast.success("signed in");
               } catch (err: any) {
-                toast.error(err.message || "preview sign in failed");
+                toast.error("try again");
                 setEmailLoading(false);
               }
             }}
