@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
 import { checkNavGuard } from "@/lib/navGuard";
+import { supabase } from "@/integrations/supabase/client";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -37,6 +38,26 @@ const Header = () => {
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
+
+  // Onboarding lock state for menu
+  const [showMenuLocks, setShowMenuLocks] = useState(false);
+
+  useEffect(() => {
+    if (!user) { setShowMenuLocks(false); return; }
+    let cancelled = false;
+    (async () => {
+      // Fetch profile + character count in parallel
+      const [profileRes, charsRes] = await Promise.all([
+        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).single(),
+        supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      ]);
+      if (cancelled) return;
+      const onboardingDone = !!profileRes.data?.onboarding_complete;
+      const hasChars = (charsRes.count ?? 0) > 0;
+      setShowMenuLocks(!onboardingDone && !hasChars);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   // Position dropdown relative to hamburger button
   const updateDropdownPos = useCallback(() => {
@@ -97,6 +118,9 @@ const Header = () => {
     navigate("/");
   };
 
+  // Items that get locked when showMenuLocks is true
+  const lockedLabels = new Set(["create photo", "storage"]);
+
   const menuItems = [
     { label: "home", path: "/", icon: Home, auth: false },
     { label: "create character", path: "/", icon: UserPlus, state: { openCreator: true }, auth: false },
@@ -150,39 +174,52 @@ const Header = () => {
                   : isLast
                     ? "0 0 10px 10px"
                     : "0";
+                const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
                     {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
-                    <button
-                      onClick={() => {
-                        if (checkNavGuard()) { setOpen(false); return; }
-                        setOpen(false);
-                        if (item.auth && !user) {
-                          navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
-                          return;
-                        }
-                        if (item.state) {
-                          navigate(item.path, { state: item.state });
-                        } else {
-                          handleNav(item.path);
-                        }
-                      }}
-                      className="w-full text-left flex items-center gap-2 md:gap-3"
-                      style={{
-                        padding: isDesktop ? "15px 20px" : "11px 12px",
-                        fontSize: isDesktop ? 16 : 13,
-                        fontWeight: 700,
-                        textTransform: "lowercase",
-                        color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                        backgroundColor: "transparent",
-                        borderRadius,
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                    >
-                      <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
-                      {item.label}
-                    </button>
+                    <div className="relative">
+                      <button
+                        onClick={() => {
+                          if (isLocked) return;
+                          if (checkNavGuard()) { setOpen(false); return; }
+                          setOpen(false);
+                          if (item.auth && !user) {
+                            navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+                            return;
+                          }
+                          if (item.state) {
+                            navigate(item.path, { state: item.state });
+                          } else {
+                            handleNav(item.path);
+                          }
+                        }}
+                        className="w-full text-left flex items-center gap-2 md:gap-3"
+                        style={{
+                          padding: isDesktop ? "15px 20px" : "11px 12px",
+                          fontSize: isDesktop ? 16 : 13,
+                          fontWeight: 700,
+                          textTransform: "lowercase",
+                          color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
+                          backgroundColor: "transparent",
+                          borderRadius,
+                        }}
+                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)"; }}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                      >
+                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
+                        {item.label}
+                      </button>
+                      {isLocked && (
+                        <div
+                          className="absolute inset-0 flex items-center justify-center pointer-events-auto"
+                          style={{ backgroundColor: "rgba(0,0,0,0.30)", zIndex: 10 }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span style={{ fontSize: isDesktop ? 16 : 13 }} className="leading-none">🔒</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
