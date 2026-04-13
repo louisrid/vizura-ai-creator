@@ -502,13 +502,17 @@ const ChooseFace = () => {
 
     const faceUrl = faces[faceIdx] || null;
     let cId = characterId;
-    let draft: Record<string, string> | null = null;
+    // Use the cached draft (captured in state on mount) as the primary source.
+    // sessionStorage may have been cleared by test resets or other cleanup.
+    let draft: Record<string, string> | null = cachedDraft;
 
-    try {
-      const raw = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(DRAFT_BACKUP_KEY);
-      draft = raw ? JSON.parse(raw) : cachedDraft;
-    } catch {
-      draft = cachedDraft;
+    if (!draft) {
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(DRAFT_BACKUP_KEY);
+        draft = raw ? JSON.parse(raw) : null;
+      } catch {
+        draft = null;
+      }
     }
 
     const draftBodyType = normaliseDraftBodyType(draft?.bodyType);
