@@ -316,7 +316,7 @@ const ChooseFace = () => {
   };
 
   const handleRegenerate = async () => {
-    if (isFreeUser) {
+    if (onboardingComplete && isFreeUser) {
       navigate("/top-ups");
       return;
     }
@@ -825,8 +825,8 @@ const ChooseFace = () => {
           }}
           onCancel={() => setShowRegenConfirm(false)}
           message="regenerate all faces?"
-          confirmLabel="yes • 30"
-          gemCost
+          confirmLabel={!onboardingComplete ? "yes, regenerate" : "yes • 30"}
+          gemCost={onboardingComplete}
         />
 
         <RegenerateConfirmDialog
