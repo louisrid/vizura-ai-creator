@@ -4,6 +4,7 @@ import type { User } from "@supabase/supabase-js";
 import { clearSpecialAccountCache, syncSpecialAccountCache } from "@/lib/specialAccount";
 import { getPreviewAccountCredentials } from "@/lib/previewAuth";
 import { clearCachedOnboardingState, fetchAndCacheOnboardingState } from "@/lib/onboardingState";
+import { maybeResetTestAccount } from "@/lib/testAccountReset";
 
 interface AuthContextType {
   user: User | null;
@@ -53,6 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         syncSpecialAccountCache(freshUser);
       }
       void fetchAndCacheOnboardingState(freshUser.id);
+      void maybeResetTestAccount(freshUser);
       return freshUser;
     } catch {
       return seedUser;

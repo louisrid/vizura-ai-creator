@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const STEPS = [0, 13, 27, 41, 58, 73, 89, 96, 100];
-const PHRASE_FADE_IN_DURATION = 0.95;
-const PHRASE_FADE_OUT_DURATION = 0.65;
-const PHRASE_GAP_MS = 650;
+const STEPS = [0, 5, 12, 20, 30, 42, 55, 68, 78, 86, 92, 96, 98, 100];
 const ACCEL_DURATION_MS = 600;
 const FIXED_CONTENT_WIDTH = "min(24rem, calc(100vw - 5rem))";
 
@@ -38,7 +35,6 @@ const ProgressBarLoader = ({
   const [pct, setPctState] = useState(0);
   const highWaterRef = useRef(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
-  const [phraseVisible, setPhraseVisible] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
   const completedRef = useRef(false);
   const continuedRef = useRef(false);
@@ -47,7 +43,6 @@ const ProgressBarLoader = ({
   const animationFrameRef = useRef<number | null>(null);
   const accelStartRef = useRef<number | null>(null);
   const accelStartPctRef = useRef(0);
-  /** Track elapsed time across visibility changes to avoid jumps */
   const pausedAtRef = useRef<number | null>(null);
   const totalPausedRef = useRef(0);
   const isControlled = typeof progressOverride === "number";
@@ -87,7 +82,6 @@ const ProgressBarLoader = ({
 
   const tick = useCallback(() => {
     if (completedRef.current) return;
-    // Don't update while hidden
     if (document.hidden) return;
 
     let nextPct = highWaterRef.current;
@@ -107,7 +101,7 @@ const ProgressBarLoader = ({
     if (nextPct >= 100) finish();
   }, [duration, finish, getElapsed, setPct]);
 
-  const loop = useCallback((ts: number) => {
+  const loop = useCallback((_ts: number) => {
     tick();
     if (!completedRef.current) {
       animationFrameRef.current = requestAnimationFrame(loop);
@@ -120,22 +114,18 @@ const ProgressBarLoader = ({
 
     const onVisChange = () => {
       if (document.hidden) {
-        // Entering background — record when we paused
         pausedAtRef.current = Date.now();
-        // Cancel rAF while hidden
         if (animationFrameRef.current !== null) {
           cancelAnimationFrame(animationFrameRef.current);
           animationFrameRef.current = null;
         }
       } else {
-        // Coming back — accumulate paused duration
         if (pausedAtRef.current !== null) {
           totalPausedRef.current += Date.now() - pausedAtRef.current;
           pausedAtRef.current = null;
         }
-        // Resume loop
         if (!completedRef.current && animationFrameRef.current === null) {
-          tick(); // immediate update
+          tick();
           animationFrameRef.current = requestAnimationFrame(loop);
         }
       }
@@ -157,7 +147,6 @@ const ProgressBarLoader = ({
     pausedAtRef.current = null;
     setPctState(0);
     setPhraseIndex(0);
-    setPhraseVisible(true);
     setIsComplete(false);
 
     if (isControlled) return;
@@ -171,7 +160,6 @@ const ProgressBarLoader = ({
         animationFrameRef.current = null;
       }
     };
-    // Only re-run on mount or when isControlled changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isControlled]);
 
@@ -188,21 +176,14 @@ const ProgressBarLoader = ({
     accelStartPctRef.current = highWaterRef.current;
   }, [completeNow]);
 
+  // Phrase cycling — always visible, just swap text
   useEffect(() => {
-    if (isComplete || safePhrases.length <= 1) {
-      setPhraseVisible(true);
-      return;
-    }
-    setPhraseVisible(true);
-    const fadeOutTimer = window.setTimeout(() => setPhraseVisible(false), effectivePhraseInterval);
-    const nextPhraseTimer = window.setTimeout(() => {
+    if (isComplete || safePhrases.length <= 1) return;
+    const interval = window.setInterval(() => {
       setPhraseIndex((i) => (i + 1) % safePhrases.length);
-    }, effectivePhraseInterval + Math.round(PHRASE_FADE_OUT_DURATION * 1000) + PHRASE_GAP_MS);
-    return () => {
-      window.clearTimeout(fadeOutTimer);
-      window.clearTimeout(nextPhraseTimer);
-    };
-  }, [effectivePhraseInterval, isComplete, phraseIndex, safePhrases.length]);
+    }, effectivePhraseInterval);
+    return () => window.clearInterval(interval);
+  }, [effectivePhraseInterval, isComplete, safePhrases.length]);
 
   return (
     <div
@@ -251,30 +232,19 @@ const ProgressBarLoader = ({
         transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
       >
         <AnimatePresence mode="wait">
-          {phraseVisible ? (
-            <motion.p
-              key={safePhrases[phraseIndex]}
-              className="text-center text-[1.3rem] font-[900] lowercase text-white"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, y: [0, -4, 0] }}
-              exit={{ opacity: 0 }}
-              transition={{
-                opacity: { duration: PHRASE_FADE_IN_DURATION, delay: 0, ease: "easeInOut" },
-                y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-              }}
-            >
-              {safePhrases[phraseIndex]}
-            </motion.p>
-          ) : (
-            <motion.div
-              key={`phrase-gap-${phraseIndex}`}
-              className="h-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: PHRASE_FADE_OUT_DURATION, ease: "easeInOut" }}
-            />
-          )}
+          <motion.p
+            key={safePhrases[phraseIndex]}
+            className="text-center text-[1.3rem] font-[900] lowercase text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, y: [0, -4, 0] }}
+            exit={{ opacity: 0 }}
+            transition={{
+              opacity: { duration: 0.5, ease: "easeInOut" },
+              y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
+            }}
+          >
+            {safePhrases[phraseIndex]}
+          </motion.p>
         </AnimatePresence>
       </motion.div>
     </div>
