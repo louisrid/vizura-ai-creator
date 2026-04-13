@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-const ONBOARDING_STATE_KEY = "vizura_onboarding_state";
+const ONBOARDING_STATE_KEY = "facefox_onboarding_state";
 
 export type CachedOnboardingState = {
   userId: string;

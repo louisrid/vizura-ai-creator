@@ -60,9 +60,9 @@ const MyCharacters = () => {
           (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
         );
         setCharacters(complete.slice(0, 12) as Character[]);
-        const pendingNew = sessionStorage.getItem("vizura_new_char_highlight");
+        const pendingNew = sessionStorage.getItem("facefox_new_char_highlight");
         if (pendingNew) {
-          sessionStorage.removeItem("vizura_new_char_highlight");
+          sessionStorage.removeItem("facefox_new_char_highlight");
           setNewCharId(pendingNew);
           if (data.length === 1) {
             setIsFirstCharacter(true);
@@ -80,8 +80,8 @@ const MyCharacters = () => {
   if (!authLoading && !user) return null;
 
   const handleCreateCharacter = () => {
-    sessionStorage.removeItem("vizura_creator_dismissed");
-    sessionStorage.setItem("vizura_internal_nav", "1");
+    sessionStorage.removeItem("facefox_creator_dismissed");
+    sessionStorage.setItem("facefox_internal_nav", "1");
     navigate("/", { state: { openCreator: true } });
   };
 

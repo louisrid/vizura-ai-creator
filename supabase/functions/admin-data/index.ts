@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const ADMIN_EMAIL = "louisjridland@gmail.com";
-const EXCLUDED_PATTERNS = ["preview.", "@preview.vizura.app", "@vizura.app"];
+const EXCLUDED_PATTERNS = ["preview.", "@preview.facefox.app", "@facefox.app"];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

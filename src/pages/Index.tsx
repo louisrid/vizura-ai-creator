@@ -400,23 +400,23 @@ const Index = () => {
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
-  const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("vizura_last_selected_character_id") ?? "" : "";
-  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("vizura_photo_prompt") || ""));
+  const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "";
+  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || ""));
   const [isGenerating, setIsGenerating] = useState(false);
-  const [resultImage, setResultImage] = useState<string | null>(() => preselectedCharacterId ? null : (sessionStorage.getItem("vizura_photo_result") || null));
+  const [resultImage, setResultImage] = useState<string | null>(() => preselectedCharacterId ? null : (sessionStorage.getItem("facefox_photo_result") || null));
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharId, setSelectedCharId] = useState(preselectedCharacterId || persistedCharacterId || "");
-  const cachedOverlay = preselectedCharacterId ? null : sessionStorage.getItem("vizura_photo_overlay");
+  const cachedOverlay = preselectedCharacterId ? null : sessionStorage.getItem("facefox_photo_overlay");
   const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">(cachedOverlay === "success" ? "success" : "hidden");
-  const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(() => cachedOverlay === "success" ? sessionStorage.getItem("vizura_photo_result") : null);
+  const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(() => cachedOverlay === "success" ? sessionStorage.getItem("facefox_photo_result") : null);
   const [fadingBack, setFadingBack] = useState(false);
 
-  const [photoType, setPhotoType] = useState(() => sessionStorage.getItem("vizura_photo_type") || "selfie");
-  const [photoRatio, setPhotoRatio] = useState(() => sessionStorage.getItem("vizura_photo_ratio") || "3:4");
-  const [expression, setExpression] = useState(() => sessionStorage.getItem("vizura_photo_expression") || "casual smile");
+  const [photoType, setPhotoType] = useState(() => sessionStorage.getItem("facefox_photo_type") || "selfie");
+  const [photoRatio, setPhotoRatio] = useState(() => sessionStorage.getItem("facefox_photo_ratio") || "3:4");
+  const [expression, setExpression] = useState(() => sessionStorage.getItem("facefox_photo_expression") || "casual smile");
 
   const [charDropdownOpen, setCharDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -450,7 +450,7 @@ const Index = () => {
       setFadingBack(false);
       // Clear cached overlay state
       try {
-        sessionStorage.removeItem("vizura_photo_overlay");
+        sessionStorage.removeItem("facefox_photo_overlay");
       } catch {}
       // Scroll to top of the page where the new image sits
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -467,9 +467,9 @@ const Index = () => {
   useEffect(() => {
     const syncCopiedPrompt = () => {
       try {
-        const copiedPrompt = localStorage.getItem("vizura_copied_prompt");
-        const copiedTsRaw = localStorage.getItem("vizura_copied_prompt_ts");
-        const appliedTsRaw = sessionStorage.getItem("vizura_applied_copied_prompt_ts");
+        const copiedPrompt = localStorage.getItem("facefox_copied_prompt");
+        const copiedTsRaw = localStorage.getItem("facefox_copied_prompt_ts");
+        const appliedTsRaw = sessionStorage.getItem("facefox_applied_copied_prompt_ts");
 
         if (!copiedPrompt || !copiedTsRaw) return;
 
@@ -481,14 +481,14 @@ const Index = () => {
         setPrompt(copiedPrompt);
         setResultImage(null);
         setPhotoOverlayResult(null);
-        try { sessionStorage.removeItem("vizura_photo_result"); sessionStorage.removeItem("vizura_photo_overlay"); } catch {}
-        sessionStorage.setItem("vizura_photo_prompt", copiedPrompt);
-        sessionStorage.setItem("vizura_applied_copied_prompt_ts", String(copiedTs));
+        try { sessionStorage.removeItem("facefox_photo_result"); sessionStorage.removeItem("facefox_photo_overlay"); } catch {}
+        sessionStorage.setItem("facefox_photo_prompt", copiedPrompt);
+        sessionStorage.setItem("facefox_applied_copied_prompt_ts", String(copiedTs));
       } catch {}
     };
 
     const handler = (e: StorageEvent) => {
-      if (e.key === "vizura_copied_prompt" || e.key === "vizura_copied_prompt_ts") {
+      if (e.key === "facefox_copied_prompt" || e.key === "facefox_copied_prompt_ts") {
         syncCopiedPrompt();
       }
     };
@@ -512,7 +512,7 @@ const Index = () => {
     if (data && data.length > 0) {
       setCharacters(data as Character[]);
       // Priority: preselected > last used (persisted) > most recent
-      const persisted = sessionStorage.getItem("vizura_last_selected_character_id") ?? "";
+      const persisted = sessionStorage.getItem("facefox_last_selected_character_id") ?? "";
       const validPersisted = data.some((c: any) => c.id === persisted);
       const pickId = preselectedCharacterId && data.some((c: any) => c.id === preselectedCharacterId)
         ? preselectedCharacterId
@@ -520,7 +520,7 @@ const Index = () => {
           ? persisted
           : data[0].id;
       setSelectedCharId(pickId);
-      sessionStorage.setItem("vizura_last_selected_character_id", pickId);
+      sessionStorage.setItem("facefox_last_selected_character_id", pickId);
     } else if (data) {
       setCharacters([]);
     }
@@ -544,7 +544,7 @@ const Index = () => {
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
-    sessionStorage.setItem("vizura_last_selected_character_id", charId);
+    sessionStorage.setItem("facefox_last_selected_character_id", charId);
     setPrompt("");
   };
 
@@ -560,7 +560,7 @@ const Index = () => {
     setResultImage(null);
     setPhotoOverlayPhase("loading");
     setPhotoOverlayResult(null);
-    try { sessionStorage.removeItem("vizura_photo_result"); sessionStorage.removeItem("vizura_photo_overlay"); } catch {}
+    try { sessionStorage.removeItem("facefox_photo_result"); sessionStorage.removeItem("facefox_photo_overlay"); } catch {}
 
     toast("10 gems used");
     const userPrompt = prompt;
@@ -624,9 +624,9 @@ const Index = () => {
       setResultImage(generatedUrl);
       // Cache for refresh persistence
       try {
-        sessionStorage.setItem("vizura_photo_result", generatedUrl);
-        sessionStorage.setItem("vizura_photo_overlay", "success");
-        sessionStorage.setItem("vizura_photo_prompt", prompt);
+        sessionStorage.setItem("facefox_photo_result", generatedUrl);
+        sessionStorage.setItem("facefox_photo_overlay", "success");
+        sessionStorage.setItem("facefox_photo_prompt", prompt);
       } catch {}
 
       await refetchCredits();
@@ -709,8 +709,8 @@ const Index = () => {
                 type="button"
                 onClick={() => {
                   setCharDropdownOpen(false);
-                  sessionStorage.removeItem("vizura_creator_dismissed");
-                  sessionStorage.removeItem("vizura_guided_flow_state");
+                  sessionStorage.removeItem("facefox_creator_dismissed");
+                  sessionStorage.removeItem("facefox_guided_flow_state");
                   navigate("/", { state: { openCreator: true } });
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
@@ -801,11 +801,11 @@ const Index = () => {
             </div>
           </div>
 
-          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
+          <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("facefox_photo_expression", v); }} />
 
           <div className="flex gap-3">
-            <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
-            <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
+            <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
+            <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); }} />
           </div>
 
           <div className="relative">
@@ -814,7 +814,7 @@ const Index = () => {
               value={prompt}
               onChange={(v) => {
                 setPrompt(v);
-                try { sessionStorage.setItem("vizura_photo_prompt", v); } catch {}
+                try { sessionStorage.setItem("facefox_photo_prompt", v); } catch {}
               }}
               charName={selectedChar?.name || ""}
               placeholder={
@@ -896,11 +896,11 @@ const Index = () => {
 
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
-            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("vizura_photo_expression", v); }} />
+            <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("facefox_photo_expression", v); }} />
 
             <div className="flex gap-4">
-              <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("vizura_photo_type", v); }} />
-              <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("vizura_photo_ratio", v); }} />
+              <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
+              <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); }} />
             </div>
 
             <div className="relative">
@@ -909,7 +909,7 @@ const Index = () => {
                 value={prompt}
                 onChange={(v) => {
                   setPrompt(v);
-                  try { sessionStorage.setItem("vizura_photo_prompt", v); } catch {}
+                  try { sessionStorage.setItem("facefox_photo_prompt", v); } catch {}
                 }}
                 charName={selectedChar?.name || ""}
                 placeholder={

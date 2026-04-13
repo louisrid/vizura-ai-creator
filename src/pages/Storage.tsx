@@ -118,7 +118,7 @@ const Storage = () => {
       console.error("Failed to delete from storage:", e);
     }
 
-    try { sessionStorage.removeItem("vizura_latest_photos"); } catch {}
+    try { sessionStorage.removeItem("facefox_latest_photos"); } catch {}
   };
 
   return (
@@ -224,8 +224,8 @@ const Storage = () => {
                      };
                      const done = () => {
                        try {
-                         localStorage.setItem("vizura_copied_prompt", text);
-                         localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
+                         localStorage.setItem("facefox_copied_prompt", text);
+                         localStorage.setItem("facefox_copied_prompt_ts", String(Date.now()));
                        } catch {}
                         toast.success("copied");
                       };
@@ -246,7 +246,7 @@ const Storage = () => {
               </div>
             )}
             <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
-              <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
+              <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="flex-1">
                 <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />
                 </Button>

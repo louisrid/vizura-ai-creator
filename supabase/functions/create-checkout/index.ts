@@ -55,7 +55,7 @@ serve(async (req) => {
       }
 
       const userId = claimsData.claims.sub;
-      const origin = req.headers.get("origin") || "https://vizura.lovable.app";
+      const origin = req.headers.get("origin") || "https://facefox.lovable.app";
       const { type } = await req.json();
 
       if (type === "membership") {
@@ -160,7 +160,7 @@ serve(async (req) => {
       );
     }
 
-    const origin = req.headers.get("origin") || "https://vizura.lovable.app";
+    const origin = req.headers.get("origin") || "https://facefox.lovable.app";
     let params: URLSearchParams;
 
     if (type === "membership") {

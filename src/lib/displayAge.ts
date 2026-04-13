@@ -4,7 +4,7 @@
  * so it stays consistent across all pages and sessions.
  */
 
-const STORAGE_KEY = "vizura_display_ages";
+const STORAGE_KEY = "facefox_display_ages";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;

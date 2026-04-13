@@ -105,7 +105,7 @@ const Header = () => {
       navigate(`/auth?redirect=${encodeURIComponent(path)}`);
       return;
     }
-    if (path === "/") sessionStorage.removeItem("vizura_internal_nav");
+    if (path === "/") sessionStorage.removeItem("facefox_internal_nav");
     navigate(path);
   };
 

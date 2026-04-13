@@ -1,8 +1,8 @@
 import type { User } from "@supabase/supabase-js";
 
 export const SPECIAL_ACCOUNT_EMAIL = "louisjridland@gmail.com";
-const SPECIAL_ACCOUNT_CACHE_KEY = "vizura_special_account_email";
-const SPECIAL_ACCOUNT_USER_ID_KEY = "vizura_special_account_user_id";
+const SPECIAL_ACCOUNT_CACHE_KEY = "facefox_special_account_email";
+const SPECIAL_ACCOUNT_USER_ID_KEY = "facefox_special_account_user_id";
 
 const normaliseEmail = (value: unknown) =>
   typeof value === "string" ? value.trim().toLowerCase() : "";

@@ -21,9 +21,9 @@ import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { sanitiseText } from "@/lib/sanitise";
 
-const STORAGE_KEY = "vizura_character_draft";
-const FACE_STORAGE_KEY = "vizura_face_options";
-const AUTH_RESUME_KEY = "vizura_resume_after_auth";
+const STORAGE_KEY = "facefox_character_draft";
+const FACE_STORAGE_KEY = "facefox_face_options";
+const AUTH_RESUME_KEY = "facefox_resume_after_auth";
 
 const FACE_GEN_PHRASES = [
   "generating faces…",
@@ -68,8 +68,8 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const prompt = statePrompt || sessionStorage.getItem("vizura_guided_prompt") || undefined;
-  const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("vizura_pending_char_id") || undefined);
+  const prompt = statePrompt || sessionStorage.getItem("facefox_guided_prompt") || undefined;
+  const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("facefox_pending_char_id") || undefined);
 
   const [faces, setFaces] = useState<string[]>(() => {
     if (isFreshCreation) return [];
@@ -121,8 +121,8 @@ const ChooseFace = () => {
   // Re-fetch after test account reset
   useEffect(() => {
     const handler = () => fetchProfileData();
-    window.addEventListener("vizura:test-reset-complete", handler);
-    return () => window.removeEventListener("vizura:test-reset-complete", handler);
+    window.addEventListener("facefox:test-reset-complete", handler);
+    return () => window.removeEventListener("facefox:test-reset-complete", handler);
   }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
@@ -133,7 +133,7 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (authLoading) return;
-    window.dispatchEvent(new CustomEvent("vizura:blackout:end"));
+    window.dispatchEvent(new CustomEvent("facefox:blackout:end"));
   }, [authLoading, showSignIn, loading]);
 
   useEffect(() => {
@@ -179,7 +179,7 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (showSignIn || !user || sessionStorage.getItem(AUTH_RESUME_KEY) !== "1") return;
-    const storedFace = Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
+    const storedFace = Number(sessionStorage.getItem("facefox_selected_face") ?? "-1");
     if (storedFace < 0) return;
     setPendingAuthSave(true);
     setSelectedIndex(storedFace);
@@ -409,7 +409,7 @@ const ChooseFace = () => {
     setSelectedIndex(faceIndex);
 
     if (!user) {
-      sessionStorage.setItem("vizura_selected_face", String(faceIndex));
+      sessionStorage.setItem("facefox_selected_face", String(faceIndex));
       sessionStorage.setItem(AUTH_RESUME_KEY, "1");
       setShowSignIn(true);
       return;
@@ -441,7 +441,7 @@ const ChooseFace = () => {
       return false;
     }
 
-    const faceIdx = forcedFaceIdx ?? selectedIndex ?? Number(sessionStorage.getItem("vizura_selected_face") ?? "-1");
+    const faceIdx = forcedFaceIdx ?? selectedIndex ?? Number(sessionStorage.getItem("facefox_selected_face") ?? "-1");
     if (faceIdx < 0) {
       toast.error("pick a face");
       return false;
@@ -495,7 +495,7 @@ const ChooseFace = () => {
         if (inserted) {
           cId = inserted.id;
           setCharacterId(cId);
-          sessionStorage.setItem("vizura_pending_char_id", cId);
+          sessionStorage.setItem("facefox_pending_char_id", cId);
           // Update onboarding cache so redirect gate won't block
           mergeCachedOnboardingState(currentUser.id, { characterCount: 1, onboardingComplete: true });
         }
@@ -573,11 +573,11 @@ const ChooseFace = () => {
     }
 
     // Navigate immediately — character detail page polls for angle/body updates
-    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
-    sessionStorage.removeItem("vizura_selected_face");
-    sessionStorage.removeItem("vizura_guided_prompt");
+    if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
+    sessionStorage.removeItem("facefox_selected_face");
+    sessionStorage.removeItem("facefox_guided_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
-    sessionStorage.removeItem("vizura_pending_char_id");
+    sessionStorage.removeItem("facefox_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
     setPendingAuthSave(false);
@@ -778,7 +778,7 @@ const ChooseFace = () => {
                 {/* Traits summary */}
                 {(() => {
                   try {
-                    const raw = sessionStorage.getItem("vizura_character_draft");
+                    const raw = sessionStorage.getItem("facefox_character_draft");
                     if (!raw) return null;
                     const draft = JSON.parse(raw);
                     const traitItems = [
@@ -849,11 +849,11 @@ const ChooseFace = () => {
             setShowBackConfirm(false);
             sessionStorage.removeItem(FACE_STORAGE_KEY);
             sessionStorage.removeItem(STORAGE_KEY);
-            sessionStorage.removeItem("vizura_selected_face");
-            sessionStorage.removeItem("vizura_guided_prompt");
-            sessionStorage.removeItem("vizura_pending_char_id");
+            sessionStorage.removeItem("facefox_selected_face");
+            sessionStorage.removeItem("facefox_guided_prompt");
+            sessionStorage.removeItem("facefox_pending_char_id");
             sessionStorage.removeItem(AUTH_RESUME_KEY);
-            sessionStorage.removeItem("vizura_guided_flow_state");
+            sessionStorage.removeItem("facefox_guided_flow_state");
             navigate("/", { replace: true });
             if (characterId && user) {
               supabase.from("characters").delete().eq("id", characterId).eq("user_id", user.id).then(() => {});

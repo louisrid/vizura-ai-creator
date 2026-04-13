@@ -29,7 +29,7 @@ import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/generate-face", "/admin"];
-const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
+const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
   EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "?"));
@@ -47,14 +47,14 @@ const FreshLoadRedirect = () => {
     const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
 
     if (!user && !pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
-      sessionStorage.removeItem("vizura_auto_opened");
-      sessionStorage.removeItem("vizura_creator_dismissed");
+      sessionStorage.removeItem("facefox_auto_opened");
+      sessionStorage.removeItem("facefox_creator_dismissed");
       navigate("/", { replace: true });
     }
 
     if (!user && location.pathname === "/" && !pendingPostAuthHome) {
-      sessionStorage.removeItem("vizura_auto_opened");
-      sessionStorage.removeItem("vizura_creator_dismissed");
+      sessionStorage.removeItem("facefox_auto_opened");
+      sessionStorage.removeItem("facefox_creator_dismissed");
     }
   }, [loading, location.pathname, navigate, user]);
 
@@ -72,10 +72,10 @@ const PostAuthHomeRedirect = () => {
 
     // Auth page now handles its own redirect with onboarding check,
     // so only handle the resume-url case here
-    const resumeUrl = sessionStorage.getItem("vizura_resume_url");
+    const resumeUrl = sessionStorage.getItem("facefox_resume_url");
     sessionStorage.removeItem(POST_AUTH_HOME_KEY);
     if (resumeUrl) {
-      sessionStorage.removeItem("vizura_resume_url");
+      sessionStorage.removeItem("facefox_resume_url");
       navigate(resumeUrl, { replace: true });
       return;
     }
@@ -84,10 +84,10 @@ const PostAuthHomeRedirect = () => {
     // If we're already on auth, it will navigate us. If not, do nothing.
     if (location.pathname === "/auth") return;
 
-    sessionStorage.removeItem("vizura_auto_opened");
-    sessionStorage.removeItem("vizura_creator_dismissed");
-    sessionStorage.removeItem("vizura_guided_flow_state");
-    sessionStorage.removeItem("vizura_resume_after_auth");
+    sessionStorage.removeItem("facefox_auto_opened");
+    sessionStorage.removeItem("facefox_creator_dismissed");
+    sessionStorage.removeItem("facefox_guided_flow_state");
+    sessionStorage.removeItem("facefox_resume_after_auth");
   }, [loading, user, navigate, location.key, location.pathname]);
 
   return null;
@@ -198,12 +198,12 @@ const AppRoutes = () => {
     const start = () => setBlackoutActive(true);
     const end = () => setBlackoutActive(false);
 
-    window.addEventListener("vizura:blackout:start", start);
-    window.addEventListener("vizura:blackout:end", end);
+    window.addEventListener("facefox:blackout:start", start);
+    window.addEventListener("facefox:blackout:end", end);
 
     return () => {
-      window.removeEventListener("vizura:blackout:start", start);
-      window.removeEventListener("vizura:blackout:end", end);
+      window.removeEventListener("facefox:blackout:start", start);
+      window.removeEventListener("facefox:blackout:end", end);
     };
   }, []);
 

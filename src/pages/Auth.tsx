@@ -33,11 +33,11 @@ const Auth = () => {
 
     let cancelled = false;
 
-    sessionStorage.removeItem("vizura_resume_after_auth");
-    sessionStorage.removeItem("vizura_auto_opened");
-    sessionStorage.removeItem("vizura_creator_dismissed");
-    sessionStorage.removeItem("vizura_guided_flow_state");
-    sessionStorage.removeItem("vizura_post_auth_home");
+    sessionStorage.removeItem("facefox_resume_after_auth");
+    sessionStorage.removeItem("facefox_auto_opened");
+    sessionStorage.removeItem("facefox_creator_dismissed");
+    sessionStorage.removeItem("facefox_guided_flow_state");
+    sessionStorage.removeItem("facefox_post_auth_home");
 
     const cachedState = readCachedOnboardingState(user.id);
     if (needsOnboardingRedirect(cachedState)) {
@@ -82,7 +82,7 @@ const Auth = () => {
     const search = window.location.search;
     const hasOAuthReturn = hash.includes("access_token") || search.includes("code=");
     if (hasOAuthReturn) {
-      sessionStorage.setItem("vizura_post_auth_home", "1");
+      sessionStorage.setItem("facefox_post_auth_home", "1");
       setSubmitting(true);
     }
   }, []);
@@ -91,7 +91,7 @@ const Auth = () => {
     setSubmitting(true);
     try {
       if (!isSignUp && !email.trim() && !password.trim()) {
-        sessionStorage.setItem("vizura_post_auth_home", "1");
+        sessionStorage.setItem("facefox_post_auth_home", "1");
         await signInPreview();
         toast.success("signed in");
         return;
@@ -125,8 +125,8 @@ const Auth = () => {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    sessionStorage.setItem("vizura_post_auth_home", "1");
-    sessionStorage.removeItem("vizura_resume_after_auth");
+    sessionStorage.setItem("facefox_post_auth_home", "1");
+    sessionStorage.removeItem("facefox_resume_after_auth");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin + "/auth",
@@ -135,7 +135,7 @@ const Auth = () => {
         },
       });
       if (result?.error) {
-        sessionStorage.removeItem("vizura_post_auth_home");
+        sessionStorage.removeItem("facefox_post_auth_home");
         toast.error("sign in error");
         setGoogleLoading(false);
         return;
@@ -144,7 +144,7 @@ const Auth = () => {
         // Session already set — Auth page useEffect will handle redirect
       }
     } catch (err: any) {
-      sessionStorage.removeItem("vizura_post_auth_home");
+      sessionStorage.removeItem("facefox_post_auth_home");
       toast.error("sign in error");
       setGoogleLoading(false);
     }

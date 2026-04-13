@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
-const VizuraLogo = ({ className = "" }: { className?: string }) => (
+const FacefoxLogo = ({ className = "" }: { className?: string }) => (
   <Link
     to="/"
     className={`inline-block font-extrabold lowercase tracking-tight text-nav-foreground ${className}`}
   >
-    vizura
+    facefox
   </Link>
 );
 
-export default VizuraLogo;
+export default FacefoxLogo;
