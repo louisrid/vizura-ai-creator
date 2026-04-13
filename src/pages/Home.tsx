@@ -70,8 +70,9 @@ const Home = () => {
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
-  const [showGuided, setShowGuided] = useState(() => !!user && needsOnboardingRedirect(cachedOnboardingState));
-  const [skipWelcome, setSkipWelcome] = useState(false);
+  const isOnboardingUser = !!user && needsOnboardingRedirect(cachedOnboardingState);
+  const [showGuided, setShowGuided] = useState(() => isOnboardingUser);
+  const [skipWelcome, setSkipWelcome] = useState(() => isOnboardingUser);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(() => cachedOnboardingState?.onboardingComplete ?? true);
@@ -126,7 +127,8 @@ const Home = () => {
 
     const pendingPostAuthHome = sessionStorage.getItem("vizura_post_auth_home") === "1";
     if (user || pendingPostAuthHome) {
-      if (!openCreatorRequested) setShowGuided(false);
+      if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
+      if (isOnboardingUser) setSkipWelcome(true);
       setAutoOpenEvaluated(true);
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
       return;
@@ -189,9 +191,10 @@ const Home = () => {
     };
   }, [fetchLatestPhotos, fetchCharacters, user]);
 
-  function handleOpenCreator(forceFullFlow = false) {
+  function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
+    const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
     sessionStorage.removeItem(DISMISSED_KEY);
-    setSkipWelcome(forceFullFlow ? false : !!user);
+    setSkipWelcome(isFull ? false : !!user);
     setShowGuided(true);
   }
 
