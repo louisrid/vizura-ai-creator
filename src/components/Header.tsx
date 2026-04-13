@@ -160,7 +160,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid rgba(255,255,255,0.15)",
+                border: "2px solid hsl(var(--border-mid))",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -177,7 +177,7 @@ const Header = () => {
                 const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
                     <div className="relative">
                       <button
                         onClick={() => {
@@ -223,7 +223,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"
@@ -283,7 +283,7 @@ const Header = () => {
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
-                    border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "rgba(255,255,255,0.15)"}`,
+                    border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "hsl(var(--border-mid))"}`,
                   }}
                   aria-label="my account"
                 >
@@ -313,7 +313,7 @@ const Header = () => {
                 style={{
                   borderRadius: 10,
                   backgroundColor: "#000",
-                  border: "2px solid rgba(255,255,255,0.15)",
+                  border: "2px solid hsl(var(--border-mid))",
                 }}
                 aria-label="open menu"
               >

@@ -141,7 +141,7 @@ const Storage = () => {
             ))}
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[rgba(255,255,255,0.15)] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -169,7 +169,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => setExpanded(img)}
-                  className="group relative rounded-t-[10px] border-[2px] border-b-0 border-[rgba(255,255,255,0.15)] overflow-hidden bg-card text-left"
+                  className="group relative rounded-t-[10px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img src={img.url} alt="" className="h-full w-full object-cover" onError={() => { handleDelete(img); }} />
@@ -180,7 +180,7 @@ const Storage = () => {
                   download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#000", color: "#ffffff", border: "2px solid rgba(255,255,255,0.15)", borderTop: "none" }}
+                  style={{ backgroundColor: "#000", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
@@ -237,7 +237,7 @@ const Storage = () => {
                        if (copyFallback()) done(); else toast.error("failed to copy");
                      }
                    }}
-                   className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
+                   className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
                   style={{ backgroundColor: "#000" }}
                 >
                   <span className="truncate">{expanded!.prompt}</span>
@@ -247,7 +247,7 @@ const Storage = () => {
             )}
             <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
               <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
-                <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
+                <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />
                 </Button>
               </a>

@@ -151,7 +151,7 @@ const TopUps = () => {
               className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000",
-                border: "2px solid rgba(255,255,255,0.15)",
+                border: "2px solid hsl(var(--border-mid))",
                 minHeight: 170,
               }}
             >

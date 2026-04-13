@@ -97,7 +97,7 @@ const History = () => {
         {loading ? (
           <div className="space-y-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:space-y-0">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}>
+              <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}>
                 <div className="w-full aspect-[4/3]" style={{ backgroundColor: "#111" }} />
                 <div className="p-4 space-y-2">
                   <div className="h-3 w-3/4" style={{ borderRadius: 4, backgroundColor: "#111" }} />
@@ -107,7 +107,7 @@ const History = () => {
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}>
+          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}>
             <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -125,7 +125,7 @@ const History = () => {
                 key={item.id}
                 onClick={() => setExpanded(item)}
                 className="w-full text-left rounded-[10px] overflow-hidden transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
-                style={{ backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+                style={{ backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={() => setItems((prev) => prev.filter((x) => x.id !== item.id))} />
                 <div className="p-4 space-y-2">
@@ -169,7 +169,7 @@ const History = () => {
               className="relative w-full max-w-sm md:max-w-lg"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <div className="relative">
                   <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 </div>
@@ -190,7 +190,7 @@ const History = () => {
                     </div>
                   </div>
                   <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
-                    <Button variant="outline" className="w-full h-12 md:h-14 border-[2px] border-[rgba(255,255,255,0.15)] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
+                    <Button variant="outline" className="w-full h-12 md:h-14 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
                       download <Download size={14} strokeWidth={2.5} />
                     </Button>
                   </a>

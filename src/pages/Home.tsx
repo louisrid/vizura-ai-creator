@@ -258,7 +258,7 @@ const Home = () => {
               className="relative w-full max-w-[280px] md:max-w-[400px]"
             >
               <ModalCloseButton onClick={() => setSelectedImage(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
                 {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
                   <div className="px-3 pt-2.5 pb-3">
@@ -378,7 +378,7 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: isPlaceholder ? "none" : "2px solid rgba(255,255,255,0.15)",
+                        border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
                         backgroundColor: "#1a1a1a",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
@@ -456,7 +456,7 @@ const Home = () => {
                       className="relative overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: "2px solid rgba(255,255,255,0.15)",
+                        border: "2px solid hsl(var(--border-mid))",
                         backgroundColor: "#1a1a1a",
                       }}
                     >
@@ -465,7 +465,7 @@ const Home = () => {
                           <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center">
-                            <User size={28} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                            <User size={28} strokeWidth={2.5} style={{ color: "hsl(var(--border-mid))" }} />
                           </div>
                         )}
                       </AspectRatio>
@@ -578,7 +578,7 @@ const Home = () => {
                       className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
                       style={{
                         borderRadius: 10,
-                        border: isPlaceholder ? "none" : "2px solid rgba(255,255,255,0.15)",
+                        border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
                         backgroundColor: "#1a1a1a",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
@@ -653,7 +653,7 @@ const Home = () => {
                       className="relative overflow-hidden hover-lift"
                       style={{
                         borderRadius: 10,
-                        border: "2px solid rgba(255,255,255,0.15)",
+                        border: "2px solid hsl(var(--border-mid))",
                         backgroundColor: "#1a1a1a",
                       }}
                     >
@@ -662,7 +662,7 @@ const Home = () => {
                           <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center">
-                            <User size={32} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                            <User size={32} strokeWidth={2.5} style={{ color: "hsl(var(--border-mid))" }} />
                           </div>
                         )}
                       </AspectRatio>

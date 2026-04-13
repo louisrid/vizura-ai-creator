@@ -84,6 +84,9 @@
 
     --surface-strong: 0 0% 7%;
     --destructive-surface: 0 48% 12%;
+
+    /* mid-grey border — slightly lighter than old 0.15 white */
+    --border-mid: 0 0% 22%;
   }
 }
 
