@@ -728,27 +728,33 @@ const ChooseFace = () => {
                     {selectedIndex !== null ? "use this face →" : "use this face →"}
                   </button>
 
-                  <button
-                    onClick={() => {
-                      if (isFreeUser) {
-                        toast("please add gems");
-                        return;
-                      }
-                      setShowRegenConfirm(true);
-                    }}
-                    disabled={isFreeUser}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
-                    style={{
-                      borderRadius: 10,
-                      backgroundColor: "#050a10",
-                      border: "2px solid #00e0ff",
-                      color: "#ffffff",
-                    }}
-                  >
-                    <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                    regenerate all <span style={{ color: "#00e0ff" }}>•</span> 1
-                    <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                  </button>
+                  {!onboardingComplete && faceRegensUsed >= 1 ? (
+                    <div className="flex h-14 md:h-16 w-full items-center justify-center text-[11px] font-[800] lowercase text-white/50">
+                      1/1 used
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        if (isFreeUser) {
+                          toast("please add gems");
+                          return;
+                        }
+                        setShowRegenConfirm(true);
+                      }}
+                      disabled={isFreeUser}
+                      className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor: "#050a10",
+                        border: "2px solid #00e0ff",
+                        color: "#ffffff",
+                      }}
+                    >
+                      <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                      regenerate all <span style={{ color: "#00e0ff" }}>•</span> 1
+                      <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                    </button>
+                  )}
                 </div>
 
                 {/* Traits summary */}
