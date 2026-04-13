@@ -15,7 +15,7 @@ interface SubscriptionContextType {
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 const ACTIVE_STATUSES = new Set(["active", "trialing"]);
-const SUBSCRIPTION_CACHE_PREFIX = "vizura_subscription_status:";
+const SUBSCRIPTION_CACHE_PREFIX = "facefox_subscription_status:";
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();

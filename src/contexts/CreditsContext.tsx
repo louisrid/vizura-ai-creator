@@ -12,7 +12,7 @@ interface GemsContextType {
 }
 
 const GemsContext = createContext<GemsContextType | undefined>(undefined);
-const GEMS_CACHE_PREFIX = "vizura_gems_balance:";
+const GEMS_CACHE_PREFIX = "facefox_gems_balance:";
 
 export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();

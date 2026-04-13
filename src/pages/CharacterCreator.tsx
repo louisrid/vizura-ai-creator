@@ -20,8 +20,8 @@ const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;
 const ageOptions = ["18-24", "24+"] as const;
 
-const STORAGE_KEY = "vizura_character_draft";
-const FLOW_STATE_KEY = "vizura_guided_flow_state";
+const STORAGE_KEY = "facefox_character_draft";
+const FLOW_STATE_KEY = "facefox_guided_flow_state";
 
 const PillGroup = ({
   label, options, value, onChange,
@@ -81,8 +81,8 @@ const CharacterCreator = () => {
   useEffect(() => {
     if (!guidedReady || isEditing) return;
     // Only skip welcome slides when user navigated here internally (flag set by menu/button)
-    const internalNav = sessionStorage.getItem("vizura_internal_nav") === "1";
-    sessionStorage.removeItem("vizura_internal_nav"); // consume the flag
+    const internalNav = sessionStorage.getItem("facefox_internal_nav") === "1";
+    sessionStorage.removeItem("facefox_internal_nav"); // consume the flag
     const shouldSkip = internalNav && !!user && (characterCount ?? 0) > 0;
     setSkipWelcome(shouldSkip);
     if (shouldSkip) {
@@ -123,7 +123,7 @@ const CharacterCreator = () => {
   useEffect(() => {
     const navEntry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     if (navEntry?.type !== "reload") return;
-    [STORAGE_KEY, FLOW_STATE_KEY, "vizura_guided_prompt", "vizura_selected_face", "vizura_face_options", "vizura_pending_char_id"].forEach((k) => sessionStorage.removeItem(k));
+    [STORAGE_KEY, FLOW_STATE_KEY, "facefox_guided_prompt", "facefox_selected_face", "facefox_face_options", "facefox_pending_char_id"].forEach((k) => sessionStorage.removeItem(k));
   }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,7 +209,7 @@ const CharacterCreator = () => {
     const charId = await saveCharacter();
     setIsSaving(false);
     if (!charId) return;
-    sessionStorage.setItem("vizura_pending_char_id", charId);
+    sessionStorage.setItem("facefox_pending_char_id", charId);
   };
 
   // Called when GuidedCreator cooking phase completes
@@ -236,11 +236,11 @@ const CharacterCreator = () => {
     const ag = selections.age === "18-24" ? "18" : selections.age === "24+" ? "24" : selections.age || "18";
     const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes`;
 
-    sessionStorage.setItem("vizura_guided_prompt", prompt);
+    sessionStorage.setItem("facefox_guided_prompt", prompt);
 
     // Navigate immediately — ChooseFace will create the character from the draft in sessionStorage
-    sessionStorage.removeItem("vizura_face_options");
-    sessionStorage.removeItem("vizura_pending_char_id");
+    sessionStorage.removeItem("facefox_face_options");
+    sessionStorage.removeItem("facefox_pending_char_id");
     navigate("/choose-face", { state: { prompt, freshCreation: true } });
 
     // Close guided overlay after navigation is queued

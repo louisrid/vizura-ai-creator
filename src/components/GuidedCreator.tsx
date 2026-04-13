@@ -9,7 +9,7 @@ import { toast } from "@/components/ui/sonner";
 
 /* ── Constants ── */
 const Y = "#ffe603";
-const FLOW_STATE_KEY = "vizura_guided_flow_state";
+const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.75;
 
@@ -364,7 +364,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      window.dispatchEvent(new CustomEvent("vizura:blackout:start"));
+      window.dispatchEvent(new CustomEvent("facefox:blackout:start"));
       setExitFade(true);
       window.setTimeout(() => {
         completeCookingFlow();
@@ -714,27 +714,27 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
 
   useEffect(() => {
     if (!visible) return;
-    const timer = window.setTimeout(() => { window.dispatchEvent(new CustomEvent("vizura:blackout:end")); }, 320);
+    const timer = window.setTimeout(() => { window.dispatchEvent(new CustomEvent("facefox:blackout:end")); }, 320);
     return () => window.clearTimeout(timer);
   }, [visible]);
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
-    sessionStorage.setItem("vizura_post_auth_home", "1");
-    sessionStorage.setItem("vizura_resume_url", window.location.pathname);
+    sessionStorage.setItem("facefox_post_auth_home", "1");
+    sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
         extraParams: { prompt: "select_account" },
       });
       if (result?.error) {
-        sessionStorage.removeItem("vizura_post_auth_home");
+        sessionStorage.removeItem("facefox_post_auth_home");
         toast.error("sign in error");
         setGoogleLoading(false);
         return;
       }
     } catch (err: any) {
-      sessionStorage.removeItem("vizura_post_auth_home");
+      sessionStorage.removeItem("facefox_post_auth_home");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
@@ -836,7 +836,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             type="button"
             onClick={async () => {
               setEmailLoading(true);
-              sessionStorage.setItem("vizura_post_auth_home", "1");
+              sessionStorage.setItem("facefox_post_auth_home", "1");
               try {
                 await signInPreview();
                 toast.success("signed in");

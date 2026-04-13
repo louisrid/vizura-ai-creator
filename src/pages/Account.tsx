@@ -178,20 +178,20 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    sessionStorage.setItem("vizura_post_auth_home", "1");
-    sessionStorage.removeItem("vizura_resume_after_auth");
+    sessionStorage.setItem("facefox_post_auth_home", "1");
+    sessionStorage.removeItem("facefox_resume_after_auth");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
         extraParams: { prompt: "select_account" },
       });
       if (result?.error) {
-        sessionStorage.removeItem("vizura_post_auth_home");
+        sessionStorage.removeItem("facefox_post_auth_home");
         toast.error("sign in error");
         setGoogleLoading(false);
       }
     } catch (err: any) {
-      sessionStorage.removeItem("vizura_post_auth_home");
+      sessionStorage.removeItem("facefox_post_auth_home");
       toast.error("sign in error");
       setGoogleLoading(false);
     }

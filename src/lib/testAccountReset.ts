@@ -4,7 +4,7 @@ import { writeCachedOnboardingState } from "@/lib/onboardingState";
 import type { User } from "@supabase/supabase-js";
 
 const TEST_ACCOUNT_EMAIL = "carlsonistrader@gmail.com";
-const RESET_SESSION_KEY = "vizura_test_reset_done";
+const RESET_SESSION_KEY = "facefox_test_reset_done";
 
 export const isTestResetAccount = (user?: User | null) => {
   if (!user) return false;
@@ -34,10 +34,10 @@ export const maybeResetTestAccount = async (user: User) => {
     });
 
     // Clear gems cache so it refetches
-    window.sessionStorage.removeItem(`vizura_gems_balance:${user.id}`);
+    window.sessionStorage.removeItem(`facefox_gems_balance:${user.id}`);
 
     // Notify components to re-fetch profile data
-    window.dispatchEvent(new CustomEvent("vizura:test-reset-complete"));
+    window.dispatchEvent(new CustomEvent("facefox:test-reset-complete"));
   } catch (err) {
     console.error("Test account reset failed:", err);
   }

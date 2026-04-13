@@ -14,9 +14,9 @@ import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboar
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
-const STORAGE_KEY = "vizura_character_draft";
-const FLOW_STATE_KEY = "vizura_guided_flow_state";
-const DISMISSED_KEY = "vizura_creator_dismissed";
+const STORAGE_KEY = "facefox_character_draft";
+const FLOW_STATE_KEY = "facefox_guided_flow_state";
+const DISMISSED_KEY = "facefox_creator_dismissed";
 
 type LatestImage = {
   id: string;
@@ -62,7 +62,7 @@ const Home = () => {
   const cachedOnboardingState = readCachedOnboardingState(user?.id);
   const [images, setImages] = useState<LatestImage[]>(() => {
     try {
-      const cached = sessionStorage.getItem("vizura_latest_photos");
+      const cached = sessionStorage.getItem("facefox_latest_photos");
       if (cached) return JSON.parse(cached) as LatestImage[];
     } catch {}
     return [];
@@ -102,7 +102,7 @@ const Home = () => {
       .slice(0, 8);
     setImages(latest);
     setPhotosLoaded(true);
-    try { sessionStorage.setItem("vizura_latest_photos", JSON.stringify(latest)); } catch {}
+    try { sessionStorage.setItem("facefox_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
   const fetchCharacters = useCallback(async () => {
@@ -125,7 +125,7 @@ const Home = () => {
   useEffect(() => {
     if (authLoading) return;
 
-    const pendingPostAuthHome = sessionStorage.getItem("vizura_post_auth_home") === "1";
+    const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
     if (user || pendingPostAuthHome) {
       if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
       if (isOnboardingUser) setSkipWelcome(true);
@@ -134,10 +134,10 @@ const Home = () => {
       return;
     }
 
-    const alreadyOpened = sessionStorage.getItem("vizura_auto_opened");
+    const alreadyOpened = sessionStorage.getItem("facefox_auto_opened");
     const dismissed = sessionStorage.getItem(DISMISSED_KEY);
     if (!alreadyOpened && !dismissed) {
-      sessionStorage.setItem("vizura_auto_opened", "1");
+      sessionStorage.setItem("facefox_auto_opened", "1");
       sessionStorage.removeItem(FLOW_STATE_KEY);
       setSkipWelcome(false);
       setShowGuided(true);
@@ -236,9 +236,9 @@ const Home = () => {
     const ag = selections.age === "18-24" ? "18" : selections.age === "24+" ? "24" : selections.age || "18";
     const prompt = `${ag} year old woman, ${sk} skin, ${hs} ${hc} hair, ${ey} eyes`;
 
-    sessionStorage.setItem("vizura_guided_prompt", prompt);
-    sessionStorage.removeItem("vizura_face_options");
-    sessionStorage.removeItem("vizura_pending_char_id");
+    sessionStorage.setItem("facefox_guided_prompt", prompt);
+    sessionStorage.removeItem("facefox_face_options");
+    sessionStorage.removeItem("facefox_pending_char_id");
     navigate("/choose-face", { state: { prompt, freshCreation: true } });
 
     sessionStorage.removeItem(FLOW_STATE_KEY);

@@ -21,7 +21,7 @@ Credits rebranded to "gems" across entire app. DB table stays `credits` but all 
 - Single angle/body regen: 10 gems
 
 ## Wizard (Guided Creator)
-- First slide: Hero screen with animated rotating yellow rings (#facc15), emoji 👩‍🎤, "vizura" title, yellow "get started" button, dark "login" button (guest only). Rings animation is ONLY on this screen.
+- First slide: Hero screen with animated rotating yellow rings (#facc15), emoji 👩‍🎤, "facefox" title, yellow "get started" button, dark "login" button (guest only). Rings animation is ONLY on this screen.
 - All subsequent slides: clean layout with emoji, title, interactive pills. Navigation arrows (62x62, #111 bg, #222 border, white icon) at bottom with yellow progress dots.
 - All overlays/flows unified: black backgrounds, 12px radius buttons, #111/#222 for secondary elements, yellow for primary actions.
 

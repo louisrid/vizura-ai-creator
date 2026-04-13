@@ -83,8 +83,8 @@ const CharacterDetail = () => {
   // Re-fetch after test account reset
   useEffect(() => {
     const handler = () => fetchProfileData();
-    window.addEventListener("vizura:test-reset-complete", handler);
-    return () => window.removeEventListener("vizura:test-reset-complete", handler);
+    window.addEventListener("facefox:test-reset-complete", handler);
+    return () => window.removeEventListener("facefox:test-reset-complete", handler);
   }, [fetchProfileData]);
 
   // Latest photos for this character
@@ -141,15 +141,15 @@ const CharacterDetail = () => {
         .single();
       if (data) {
         // Check if angle/body were regenerated while away
-        const regenAngle = sessionStorage.getItem(`vizura_regen_angle_${id}`);
-        const regenBody = sessionStorage.getItem(`vizura_regen_body_${id}`);
+        const regenAngle = sessionStorage.getItem(`facefox_regen_angle_${id}`);
+        const regenBody = sessionStorage.getItem(`facefox_regen_body_${id}`);
         if (regenAngle && data.face_angle_url) {
-          sessionStorage.removeItem(`vizura_regen_angle_${id}`);
+          sessionStorage.removeItem(`facefox_regen_angle_${id}`);
           setRevealingAngle(true);
           setTimeout(() => setRevealingAngle(false), 1200);
         }
         if (regenBody && data.body_anchor_url) {
-          sessionStorage.removeItem(`vizura_regen_body_${id}`);
+          sessionStorage.removeItem(`facefox_regen_body_${id}`);
           setRevealingBody(true);
           setTimeout(() => setRevealingBody(false), 1200);
         }
@@ -186,10 +186,10 @@ const CharacterDetail = () => {
 
     if (target === "angle") {
       setRegeneratingAngle(true);
-      sessionStorage.setItem(`vizura_regen_angle_${character.id}`, "1");
+      sessionStorage.setItem(`facefox_regen_angle_${character.id}`, "1");
     } else {
       setRegeneratingBody(true);
-      sessionStorage.setItem(`vizura_regen_body_${character.id}`, "1");
+      sessionStorage.setItem(`facefox_regen_body_${character.id}`, "1");
     }
 
     try {
@@ -214,7 +214,7 @@ const CharacterDetail = () => {
 
       await refetchGems();
       if (target === "angle") {
-        sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
+        sessionStorage.removeItem(`facefox_regen_angle_${character.id}`);
         if (!onboardingComplete) {
           setAngleRegensUsed((p) => p + 1);
           // No toast on first regen — "1/1 used" shows on second press
@@ -222,7 +222,7 @@ const CharacterDetail = () => {
           toast("10 gems used");
         }
       } else {
-        sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
+        sessionStorage.removeItem(`facefox_regen_body_${character.id}`);
         if (!onboardingComplete) {
           setBodyRegensUsed((p) => p + 1);
         } else {
@@ -231,8 +231,8 @@ const CharacterDetail = () => {
       }
     } catch (err) {
       console.error("Regenerate error:", err);
-      if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
-      else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
+      if (target === "angle") sessionStorage.removeItem(`facefox_regen_angle_${character.id}`);
+      else sessionStorage.removeItem(`facefox_regen_body_${character.id}`);
       toast.error("regen error");
     } finally {
       setRegeneratingAngle(false);

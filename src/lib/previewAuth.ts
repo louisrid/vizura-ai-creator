@@ -1,6 +1,6 @@
-const PREVIEW_DEVICE_KEY = "vizura_preview_device_key";
-const PREVIEW_EMAIL_DOMAIN = "preview.vizura.app";
-const PREVIEW_PASSWORD_PREFIX = "VizuraPreview!";
+const PREVIEW_DEVICE_KEY = "facefox_preview_device_key";
+const PREVIEW_EMAIL_DOMAIN = "preview.facefox.app";
+const PREVIEW_PASSWORD_PREFIX = "FacefoxPreview!";
 
 const createDeviceKey = () => {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {

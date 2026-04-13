@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(() => {
     try {
-      const cached = localStorage.getItem("vizura_cached_user");
+      const cached = localStorage.getItem("facefox_cached_user");
       return cached ? JSON.parse(cached) : null;
     } catch { return null; }
   });
@@ -98,9 +98,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     try {
       if (user) {
-        localStorage.setItem("vizura_cached_user", JSON.stringify(user));
+        localStorage.setItem("facefox_cached_user", JSON.stringify(user));
       } else if (!loading) {
-        localStorage.removeItem("vizura_cached_user");
+        localStorage.removeItem("facefox_cached_user");
       }
     } catch {}
   }, [user, loading]);

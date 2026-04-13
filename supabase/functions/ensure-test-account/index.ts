@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const PREVIEW_EMAIL_DOMAIN = "@preview.vizura.app";
+const PREVIEW_EMAIL_DOMAIN = "@preview.facefox.app";
 const DEFAULT_PASSWORD = "Testing123!";
 const PLACEHOLDER_IMAGE_URL = "/placeholder.svg";
 
