@@ -297,7 +297,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="flex items-center justify-between active:scale-[0.98] transition-transform"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -307,11 +307,12 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character{showBounceOnCreate && <BouncingFinger />}</span>
+              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
+              {showBounceOnCreate && <BouncingFinger />}
             </button>
 
             {/* Create Photo - matches see all / manage style */}
