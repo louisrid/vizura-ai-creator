@@ -191,6 +191,7 @@ export type Database = {
           has_seen_welcome: boolean
           has_used_free_gen: boolean
           id: string
+          onboarding_complete: boolean
           updated_at: string
           user_id: string
         }
@@ -202,6 +203,7 @@ export type Database = {
           has_seen_welcome?: boolean
           has_used_free_gen?: boolean
           id?: string
+          onboarding_complete?: boolean
           updated_at?: string
           user_id: string
         }
@@ -213,6 +215,7 @@ export type Database = {
           has_seen_welcome?: boolean
           has_used_free_gen?: boolean
           id?: string
+          onboarding_complete?: boolean
           updated_at?: string
           user_id?: string
         }

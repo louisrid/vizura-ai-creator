@@ -2,13 +2,13 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, User } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, User, Lock } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import ModalCloseButton from "@/components/ModalCloseButton";
 import TopGradientBar from "@/components/TopGradientBar";
 import { checkNavGuard } from "@/lib/navGuard";
+import { supabase } from "@/integrations/supabase/client";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -27,6 +27,8 @@ function useScrollGradientOpacity() {
   return opacity;
 }
 
+const LOCKED_LABELS = new Set(["storage", "my characters", "gems"]);
+
 const Header = () => {
   const gradientOpacity = useScrollGradientOpacity();
   const navigate = useNavigate();
@@ -38,6 +40,34 @@ const Header = () => {
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
+  const [onboardingComplete, setOnboardingComplete] = useState(true); // default true = unlocked
+  const [hasCharacters, setHasCharacters] = useState(true); // default true = unlocked
+
+  // Fetch onboarding state
+  useEffect(() => {
+    if (!user) return;
+    const fetch = async () => {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("onboarding_complete")
+        .eq("user_id", user.id)
+        .single();
+      if (profile) setOnboardingComplete(!!profile.onboarding_complete);
+
+      const { count } = await supabase
+        .from("characters")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      setHasCharacters((count ?? 0) > 0);
+    };
+    fetch();
+  }, [user, location.pathname]);
+
+  const isItemLocked = (label: string): boolean => {
+    if (onboardingComplete) return false;
+    if (label === "create photo" && !hasCharacters) return true;
+    return LOCKED_LABELS.has(label);
+  };
 
   // Position dropdown relative to hamburger button
   const updateDropdownPos = useCallback(() => {
@@ -137,13 +167,14 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid rgba(255,255,255,0.15)",
+                border: "2px solid #ffffff",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
               {menuItems.map((item, idx) => {
-                const isActive = location.pathname === item.path && !item.state;
+                const locked = isItemLocked(item.label);
+                const isActive = !locked && location.pathname === item.path && !item.state;
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
@@ -153,9 +184,10 @@ const Header = () => {
                     : "0";
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#ffffff", margin: "0" }} />}
                     <button
                       onClick={() => {
+                        if (locked) return;
                         if (checkNavGuard()) { setOpen(false); return; }
                         setOpen(false);
                         if (item.auth && !user) {
@@ -174,14 +206,19 @@ const Header = () => {
                         fontSize: isDesktop ? 16 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
-                        color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
+                        color: locked ? "rgba(255,255,255,0.3)" : isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
                         backgroundColor: "transparent",
                         borderRadius,
+                        cursor: locked ? "default" : "pointer",
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                      onMouseEnter={(e) => { if (!locked) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)"; }}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                      <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
+                      {locked ? (
+                        <Lock size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "rgba(255,255,255,0.3)" }} />
+                      ) : (
+                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
+                      )}
                       {item.label}
                     </button>
                   </div>
@@ -189,7 +226,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "#ffffff", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"

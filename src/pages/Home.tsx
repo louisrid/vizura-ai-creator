@@ -10,6 +10,18 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
+/* Bouncing finger emoji for onboarding */
+const BouncingFinger = () => (
+  <motion.span
+    className="inline-block text-[20px] md:text-[24px] ml-1"
+    animate={{ y: [0, -8, 0] }}
+    transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+    aria-hidden="true"
+  >
+    👆
+  </motion.span>
+);
+
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
@@ -57,6 +69,7 @@ const Home = () => {
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(true);
   const openCreatorRequested = Boolean((location.state as any)?.openCreator);
 
   const fetchLatestPhotos = useCallback(async () => {
@@ -139,6 +152,19 @@ const Home = () => {
     };
   }, [fetchLatestPhotos, fetchCharacters]);
 
+  // Fetch onboarding_complete flag
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_complete")
+        .eq("user_id", user.id)
+        .single();
+      if (data) setOnboardingComplete(!!data.onboarding_complete);
+    })();
+  }, [user]);
+
   function handleOpenCreator() {
     sessionStorage.removeItem(DISMISSED_KEY);
     setSkipWelcome(!!user);
@@ -205,6 +231,9 @@ const Home = () => {
     }
     return slots;
   }, [characters]);
+
+  const showBounceOnCreate = !onboardingComplete && characters.length === 0;
+  const showBounceOnPhoto = !onboardingComplete && characters.length > 0;
 
   const pageHidden = showGuided || (!autoOpenEvaluated && !user);
 
@@ -277,7 +306,7 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character{showBounceOnCreate && <BouncingFinger />}</span>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
@@ -303,7 +332,7 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo{showBounceOnPhoto && <BouncingFinger />}</span>
               <svg className="relative z-[1]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
@@ -467,7 +496,7 @@ const Home = () => {
                 borderRadius: 10,
               }}
             >
-              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character{showBounceOnCreate && <BouncingFinger />}</span>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
@@ -487,7 +516,7 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo{showBounceOnPhoto && <BouncingFinger />}</span>
               <svg className="relative z-[1]" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
