@@ -10,19 +10,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
-/* Bouncing finger emoji for onboarding */
-const BouncingFinger = () => (
-  <motion.span
-    className="absolute pointer-events-none text-[40px] md:text-[50px]"
-    style={{ bottom: -4, right: -6, transform: "translate(0, 50%)", zIndex: 9999 }}
-    animate={{ y: [0, -8, 0] }}
-    transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
-    aria-hidden="true"
-  >
-    👆
-  </motion.span>
-);
-
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
@@ -50,6 +37,16 @@ const isValidImageUrl = (url: string): boolean => {
   if (url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return false;
   return true;
 };
+
+/* Lock overlay — 30% black with centred 🔒 */
+const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
+  <div
+    className="pointer-events-auto absolute inset-0 flex items-center justify-center"
+    style={{ backgroundColor: "rgba(0,0,0,0.30)", borderRadius, zIndex: 20 }}
+  >
+    <span className="text-[13px] md:text-[16px] leading-none">🔒</span>
+  </div>
+);
 
 const Home = () => {
   const navigate = useNavigate();
@@ -106,7 +103,6 @@ const Home = () => {
       .order("created_at", { ascending: false })
       .limit(20);
     if (data) {
-      // Only show fully complete characters (all 3 reference photos)
       const complete = (data as any[]).filter(
         (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
       );
@@ -138,6 +134,7 @@ const Home = () => {
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, openCreatorRequested, user]);
 
+  // Fetch data in parallel
   useEffect(() => {
     void fetchLatestPhotos();
     void fetchCharacters();
@@ -233,8 +230,8 @@ const Home = () => {
     return slots;
   }, [characters]);
 
-  const showBounceOnCreate = !onboardingComplete && characters.length === 0;
-  const showBounceOnPhoto = !onboardingComplete && characters.length > 0;
+  // Lock conditions: show locks when onboarding not complete AND no characters
+  const showLocks = !onboardingComplete && characters.length === 0;
 
   const pageHidden = showGuided || (!autoOpenEvaluated && !user);
 
@@ -297,7 +294,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -312,17 +309,17 @@ const Home = () => {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
-              {showBounceOnCreate && <BouncingFinger />}
             </button>
 
-            {/* Create Photo - matches see all / manage style */}
+            {/* Create Photo */}
             <button
               type="button"
               onClick={() => {
+                if (showLocks) return;
                 if (!user) { navigate("/auth?redirect=/create"); return; }
                 navigate("/create");
               }}
-              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -332,6 +329,7 @@ const Home = () => {
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
+                overflow: "hidden",
               }}
             >
               <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -339,7 +337,7 @@ const Home = () => {
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
-              {showBounceOnPhoto && <BouncingFinger />}
+              {showLocks && <LockOverlay borderRadius={8} />}
             </button>
           </div>
 
@@ -347,9 +345,16 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <button onClick={() => navigate("/storage")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
-                see all →
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => { if (showLocks) return; navigate("/storage"); }}
+                  className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform"
+                  style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
+                >
+                  see all →
+                </button>
+                {showLocks && <LockOverlay borderRadius={10} />}
+              </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
@@ -478,7 +483,7 @@ const Home = () => {
           </section>
         </main>
 
-        {/* Desktop layout — matches mobile structure, scaled up */}
+        {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-14 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
@@ -490,7 +495,7 @@ const Home = () => {
             <button
               type="button"
               onClick={handleOpenCreator}
-              className="relative flex items-center justify-between active:scale-[0.98] transition-transform hover-lift overflow-visible"
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform hover-lift"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -504,12 +509,15 @@ const Home = () => {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
-              {showBounceOnCreate && <BouncingFinger />}
             </button>
             <button
               type="button"
-              onClick={() => { if (!user) { navigate("/auth?redirect=/create"); return; } navigate("/create"); }}
-              className="relative flex items-center justify-between active:scale-[0.98] transition-transform overflow-visible hover-lift"
+              onClick={() => {
+                if (showLocks) return;
+                if (!user) { navigate("/auth?redirect=/create"); return; }
+                navigate("/create");
+              }}
+              className="relative flex items-center justify-between active:scale-[0.98] transition-transform hover-lift"
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
@@ -518,6 +526,7 @@ const Home = () => {
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
+                overflow: "hidden",
               }}
             >
               <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -525,7 +534,7 @@ const Home = () => {
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
-              {showBounceOnPhoto && <BouncingFinger />}
+              {showLocks && <LockOverlay borderRadius={8} />}
             </button>
           </div>
 
@@ -533,9 +542,16 @@ const Home = () => {
           <section className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <button onClick={() => navigate("/storage")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
-                see all →
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => { if (showLocks) return; navigate("/storage"); }}
+                  className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow"
+                  style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
+                >
+                  see all →
+                </button>
+                {showLocks && <LockOverlay borderRadius={10} />}
+              </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
               {!photosLoaded && images.length === 0 ? (
