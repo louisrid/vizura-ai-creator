@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Gem } from "lucide-react";
 import ModalCloseButton from "@/components/ModalCloseButton";
