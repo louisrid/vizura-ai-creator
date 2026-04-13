@@ -253,8 +253,8 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <TooltipProvider>
         <CreditsProvider>
           <SubscriptionProvider>
             <BrowserRouter>
@@ -268,8 +268,8 @@ const App = () => (
             </BrowserRouter>
           </SubscriptionProvider>
         </CreditsProvider>
-      </AuthProvider>
-    </TooltipProvider>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
