@@ -89,7 +89,7 @@ const Account = () => {
             <div className="flex items-center gap-2">
               <span
                 className="text-xs font-[800] lowercase"
-                style={{ color: subscribed ? "#12e62b" : "hsl(var(--border-mid))" }}
+                style={{ color: subscribed ? "#12e62b" : "#ffffff" }}
               >
                 {subscribed ? "active" : "inactive"}
               </span>
@@ -133,8 +133,8 @@ const Account = () => {
         <div className="pt-6">
           <Link
             to="/info"
-            className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-muted-foreground"
-            style={{ color: "hsl(var(--border-mid))" }}
+            className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-white/70"
+            style={{ color: "#ffffff" }}
           >
             terms &amp; privacy
           </Link>
@@ -228,7 +228,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           </button>
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px] bg-border" />
-            <span className="text-[10px] font-extrabold lowercase text-muted-foreground">or use email</span>
+            <span className="text-[10px] font-extrabold lowercase text-white">or use email</span>
             <div className="flex-1 h-[2px] bg-border" />
           </div>
           <input
@@ -239,7 +239,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 10, backgroundColor: "#2a2a2a" }}
+            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
           <input

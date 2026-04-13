@@ -268,7 +268,7 @@ const Home = () => {
                 <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
                 {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
                   <div className="px-3 pt-2.5 pb-3">
-                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "hsl(var(--border-mid))" }}>
+                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
                       {selectedImage.prompt}
                     </p>
                   </div>
@@ -470,13 +470,13 @@ const Home = () => {
                           <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center">
-                            <User size={28} strokeWidth={2.5} style={{ color: "hsl(var(--border-mid))" }} />
+                            <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
                           </div>
                         )}
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
                         <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(char.id, char.age)}</span>
+                        <span className="block text-[9px] font-[800] lowercase text-white/70">age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );
@@ -669,13 +669,13 @@ const Home = () => {
                           <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center">
-                            <User size={32} strokeWidth={2.5} style={{ color: "hsl(var(--border-mid))" }} />
+                            <User size={32} strokeWidth={2.5} style={{ color: "#ffffff" }} />
                           </div>
                         )}
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
                         <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(char.id, char.age)}</span>
+                        <span className="block text-[10px] font-[800] lowercase text-white/70">age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );

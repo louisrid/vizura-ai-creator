@@ -6,29 +6,29 @@
   :root {
     --radius: 10px;
     --background: 0 0% 0%;
-    --foreground: 0 0% 96%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 96%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 8.2%;
-    --popover-foreground: 0 0% 96%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 0 0% 96%;
+    --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 13%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 0 0% 7%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 25%;
+    --muted: 0 0% 7%;
+    --muted-foreground: 0 0% 100%;
 
     --accent: 54 100% 51%;
     --accent-foreground: 0 0% 0%;
 
-    --border: 0 0% 10%;
-    --input: 0 0% 30%;
-    --ring: 0 0% 96%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
@@ -63,20 +63,20 @@
     --loader-blue: 210 100% 55%;
 
     --sidebar-background: 0 0% 4%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 0 0% 98%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 5%;
     --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 13.3%;
-    --sidebar-ring: 0 0% 98%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 0 0% 100%;
 
     /* custom tokens */
     --nav: 0 0% 0%;
     --page-bg: 0 0% 0%;
-    --nav-foreground: 0 0% 98%;
+    --nav-foreground: 0 0% 100%;
     --surface-dark: 0 0% 2%;
-    --surface-dark-foreground: 0 0% 98%;
+    --surface-dark-foreground: 0 0% 100%;
     --surface-elevated: 0 0% 18%;
 
     /* wizard bg */
@@ -85,8 +85,8 @@
     --surface-strong: 0 0% 7%;
     --destructive-surface: 0 48% 12%;
 
-    /* mid-grey — borders, dividers, muted text */
-    --border-mid: 0 0% 25%;
+    /* mid-grey — borders, dividers only (NOT text) */
+    --border-mid: 0 0% 18%;
   }
 }
 
