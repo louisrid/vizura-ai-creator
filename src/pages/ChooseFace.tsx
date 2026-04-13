@@ -529,32 +529,25 @@ const ChooseFace = () => {
         if (charRecord?.bust_size) bustSize = charRecord.bust_size;
       } catch {}
 
-      setAngleLoading(true);
-      setAngleApiDone(false);
-      setAngleBarComplete(false);
-      setPendingNavCharId(angleCharacterId);
-
-      try {
-        const { data, error } = await supabase.functions.invoke("generate", {
-          body: {
-            prompt: anglePrompt,
-            generate_angles: true,
-            selected_face_url: faceUrl,
-            body_type: bodyType,
-            bust_size: bustSize,
-            angle_character_id: angleCharacterId,
-          },
-        });
+      // Fire angle+body generation in background — don't block UI
+      supabase.functions.invoke("generate", {
+        body: {
+          prompt: anglePrompt,
+          generate_angles: true,
+          selected_face_url: faceUrl,
+          body_type: bodyType,
+          bust_size: bustSize,
+          angle_character_id: angleCharacterId,
+        },
+      }).then(({ data, error }) => {
         if (error) console.error("Angle + body generation failed:", error);
         else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
-      } catch (e) {
+      }).catch((e) => {
         console.error("Angle + body generation failed:", e);
-      }
-
-      setAngleApiDone(true);
-      return true;
+      });
     }
 
+    // Navigate immediately — character detail page polls for angle/body updates
     if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
@@ -569,29 +562,6 @@ const ChooseFace = () => {
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
-
-  const handleAngleBarComplete = useCallback(() => {
-    setAngleBarComplete(true);
-  }, []);
-
-  const handleAngleTapContinue = useCallback(() => {
-    const cId = pendingNavCharId;
-    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
-    sessionStorage.removeItem("vizura_selected_face");
-    sessionStorage.removeItem("vizura_guided_prompt");
-    sessionStorage.removeItem(STORAGE_KEY);
-    sessionStorage.removeItem("vizura_pending_char_id");
-    sessionStorage.removeItem(FACE_STORAGE_KEY);
-    sessionStorage.removeItem(AUTH_RESUME_KEY);
-    setPendingAuthSave(false);
-    setShowSignIn(false);
-    // Start fade-out, then navigate after animation completes
-    setAngleLoading(false);
-    setTimeout(() => {
-      toast.success("character added!");
-      navigate(`/characters/${cId}`, { replace: true });
-    }, 550);
-  }, [pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
