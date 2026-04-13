@@ -757,7 +757,7 @@ const ChooseFace = () => {
                     style={{
                       borderRadius: 10,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
-                      color: selectedIndex !== null ? "#000" : "hsl(var(--border-mid))",
+                      color: selectedIndex !== null ? "#000" : "#ffffff",
                     }}
                   >
                     {selectedIndex !== null ? "use this face →" : "use this face →"}
@@ -807,7 +807,7 @@ const ChooseFace = () => {
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                              <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
+                              <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
                               <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
@@ -824,7 +824,7 @@ const ChooseFace = () => {
         {!loading && faces.length === 0 && !showSignIn && (
           <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
             <div className="mt-16 flex flex-col items-center gap-4">
-              <p className="text-sm font-[900] lowercase" style={{ color: "hsl(var(--border-mid))" }}>{generationError || "no faces generated yet"}</p>
+              <p className="text-sm font-[900] lowercase text-white">{generationError || "no faces generated yet"}</p>
               {generationError && (
                 <button
                   type="button"

@@ -270,7 +270,7 @@ const CharacterDetail = () => {
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
-          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "hsl(var(--border-mid))" }}>
+          <p className="text-sm font-[900] lowercase text-center mt-16 text-white">
             character not found
           </p>
         </main>
@@ -338,7 +338,7 @@ const CharacterDetail = () => {
       ) : isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "hsl(var(--border-mid))" }}>no photo</span>
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase text-white">no photo</span>
       )}
       {overlay === "lock" && (
         <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
@@ -415,7 +415,7 @@ const CharacterDetail = () => {
             <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
+                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px] text-white">{t.label}</span>
                   <span className="inline-block font-[800] lowercase text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]" style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
@@ -501,11 +501,11 @@ const CharacterDetail = () => {
           {/* Right: details + actions */}
           <div className="col-span-5 flex flex-col gap-5">
             <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
-              <h3 className="text-sm font-[900] lowercase text-muted-foreground mb-3">traits</h3>
+              <h3 className="text-sm font-[900] lowercase text-white mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
                   <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))" }}>
-                    <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
+                    <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px] text-white">{t.label}</span>
                     <span className="inline-block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
                   </div>
                 ))}

@@ -690,7 +690,7 @@ const Index = () => {
                     </div>
                   ) : (
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                      <User size={16} strokeWidth={3} style={{ color: "hsl(var(--border-mid))" }} />
+                      <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
                     </div>
                   )}
                   <span

@@ -181,7 +181,7 @@ const Auth = () => {
 
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-[2px] bg-border" />
-                  <span className="text-[11px] font-extrabold lowercase text-muted-foreground">or use email</span>
+                  <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
                   <div className="flex-1 h-[2px] bg-border" />
                 </div>
               </>
@@ -228,7 +228,7 @@ const Auth = () => {
             <button
               type="button"
               onClick={() => setIsSignUp((v) => !v)}
-              className="w-full text-center text-[11px] md:text-[13px] font-extrabold lowercase text-muted-foreground hover:text-muted-foreground transition-colors"
+              className="w-full text-center text-[11px] md:text-[13px] font-extrabold lowercase text-white hover:text-white/80 transition-colors"
             >
               {isSignUp ? "already have an account? " : "no account? "}
               <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>

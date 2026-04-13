@@ -330,7 +330,7 @@ const CharacterCreator = () => {
                 className="h-full w-full rounded-[10px] object-cover"
               />
             ) : (
-              <Upload size={28} strokeWidth={2.5} className="text-muted-foreground" />
+              <Upload size={28} strokeWidth={2.5} className="text-white" />
             )}
           </button>
         </section>

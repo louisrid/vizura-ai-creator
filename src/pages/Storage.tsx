@@ -142,7 +142,7 @@ const Storage = () => {
           </div>
         ) : images.length === 0 ? (
           <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))" }}>
-            <Wand2 size={32} className="text-muted-foreground mx-auto mb-4 md:w-10 md:h-10" />
+            <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}

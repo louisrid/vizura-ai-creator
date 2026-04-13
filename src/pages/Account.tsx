@@ -89,7 +89,7 @@ const Account = () => {
             <div className="flex items-center gap-2">
               <span
                 className="text-xs font-[800] lowercase"
-                style={{ color: subscribed ? "#12e62b" : "hsl(var(--border-mid))" }}
+                style={{ color: subscribed ? "#12e62b" : "#ffffff" }}
               >
                 {subscribed ? "active" : "inactive"}
               </span>

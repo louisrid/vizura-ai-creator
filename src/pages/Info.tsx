@@ -10,7 +10,7 @@ const Info = () => (
         <BackButton />
         <PageTitle className="mb-0">info</PageTitle>
       </div>
-      <p className="text-sm font-extrabold lowercase" style={{ color: "hsl(var(--border-mid))" }}>
+      <p className="text-sm font-extrabold lowercase text-white">
         terms &amp; privacy — coming soon
       </p>
     </main>

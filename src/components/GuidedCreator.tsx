@@ -458,7 +458,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <motion.p
           className="mt-5 text-[13px] md:text-[15px] font-[800] lowercase"
-          style={{ color: "hsl(var(--border-mid))" }}
+          style={{ color: "#ffffff" }}
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >tap → to continue</motion.p>
