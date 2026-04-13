@@ -496,7 +496,7 @@ const Home = () => {
                 borderRadius: 10,
               }}
             >
-              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character{showBounceOnCreate && <BouncingFinger />}</span>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
