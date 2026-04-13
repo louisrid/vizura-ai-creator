@@ -137,7 +137,7 @@ const TopUps = () => {
                     </button>
                   </div>
                   <div className="flex items-center justify-center w-16 h-16 rounded-full"
-                    style={{ background: "hsl(var(--border-mid))", backdropFilter: "blur(8px)" }}>
+                    style={{ background: "rgba(255,255,255,0.1)", backdropFilter: "blur(8px)" }}>
                     <Gem size={28} strokeWidth={2.5} className="text-white" />
                   </div>
                 </div>
