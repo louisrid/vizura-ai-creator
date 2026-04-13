@@ -4,7 +4,7 @@ import { writeCachedOnboardingState } from "@/lib/onboardingState";
 import type { User } from "@supabase/supabase-js";
 
 const TEST_ACCOUNT_EMAIL = "carlsonistrader@gmail.com";
-const RESET_SESSION_KEY = "facefox_test_reset_done";
+const RESET_LOAD_KEY = "facefox_test_reset_done_for_page_load";
 
 export const isTestResetAccount = (user?: User | null) => {
   if (!user) return false;
@@ -14,16 +14,20 @@ export const isTestResetAccount = (user?: User | null) => {
 export const maybeResetTestAccount = async (user: User) => {
   if (!isTestResetAccount(user)) return;
 
-  // Only reset once per page load / session
-  const sessionFlag = window.sessionStorage.getItem(RESET_SESSION_KEY);
+  // Only reset once per actual page load. sessionStorage survives refreshes,
+  // so use a window-scoped flag instead to ensure refresh triggers a new reset.
+  const pageFlags = window as typeof window & { [RESET_LOAD_KEY]?: string };
+  const sessionFlag = pageFlags[RESET_LOAD_KEY];
   if (sessionFlag === user.id) return;
-  window.sessionStorage.setItem(RESET_SESSION_KEY, user.id);
+  pageFlags[RESET_LOAD_KEY] = user.id;
 
   try {
     // Reset via edge function (service role needed for updates)
-    await supabase.functions.invoke("add-credits", {
+    const { error, data } = await supabase.functions.invoke("add-credits", {
       body: { user_id: user.id, action: "test_reset" },
     });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
 
     // Update local onboarding cache to reflect fresh state
     writeCachedOnboardingState({
