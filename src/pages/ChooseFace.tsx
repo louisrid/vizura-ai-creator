@@ -331,6 +331,10 @@ const ChooseFace = () => {
       return;
     }
     if (!user) return;
+    if (!prompt) {
+      toast.error("regen error");
+      return;
+    }
 
     // Stay on screen, show spinners on face cards
     setRegeneratingFaces(true);
