@@ -553,8 +553,8 @@ const ChooseFace = () => {
           cId = inserted.id;
           setCharacterId(cId);
           sessionStorage.setItem("facefox_pending_char_id", cId);
-          // Update onboarding cache so redirect gate won't block
-          mergeCachedOnboardingState(currentUser.id, { characterCount: 1, onboardingComplete: true });
+          // Update onboarding cache so redirect gate won't block (onboardingComplete stays false until first gem purchase)
+          mergeCachedOnboardingState(currentUser.id, { characterCount: 1 });
         }
       } catch (err) {
         toast.error("save error");
