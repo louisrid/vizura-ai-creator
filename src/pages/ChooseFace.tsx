@@ -138,15 +138,18 @@ const ChooseFace = () => {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!prompt) { navigate("/"); return; }
-    if (hasInitRef.current) return;
-    hasInitRef.current = true;
-    if (faces.length > 0) {
+    // If we already have cached faces, just show them — no prompt or generation needed
+    if (faces.length > 0 && !isFreshCreation) {
+      if (hasInitRef.current) return;
+      hasInitRef.current = true;
       setApiDone(true);
       setBarComplete(true);
       setLoading(false);
       return;
     }
+    if (!prompt) { navigate("/"); return; }
+    if (hasInitRef.current) return;
+    hasInitRef.current = true;
     void generateFaces();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
