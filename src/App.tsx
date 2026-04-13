@@ -28,7 +28,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/admin"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/generate-face", "/admin"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
@@ -167,7 +167,7 @@ const OnboardingRedirectGate = () => {
   const navigate = useNavigate();
   const hasRedirected = useRef(false);
   const cachedState = readCachedOnboardingState(user?.id);
-  const shouldRedirect = !!user && needsOnboardingRedirect(cachedState) && location.pathname !== "/";
+  const shouldRedirect = !!user && needsOnboardingRedirect(cachedState) && location.pathname !== "/" && !isExemptRoute(location.pathname);
 
   useEffect(() => {
     if (!shouldRedirect || hasRedirected.current) return;
