@@ -385,19 +385,21 @@ const CharacterDetail = () => {
             <Lock size={14} strokeWidth={3} color="#000" fill="none" />
           </div>
         )}
-        {overlay === "regenerate" && !regenUsed && (
+        {overlay === "regenerate" && (
           <button
-            onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (regenUsed) {
+                toast("1/1 used");
+                return;
+              }
+              onRegenClick?.();
+            }}
             className="absolute flex items-center justify-center transition-transform active:scale-90"
             style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
           >
             <RefreshCw size={13} strokeWidth={3} color="#fff" />
           </button>
-        )}
-        {regenUsed && (
-          <span className="absolute text-[8px] font-[800] lowercase text-white/50" style={{ top: -14, right: -2 }}>
-            1/1 used
-          </span>
         )}
       </div>
     );
