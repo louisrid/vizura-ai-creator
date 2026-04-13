@@ -191,7 +191,10 @@ export type Database = {
           has_seen_welcome: boolean
           has_used_free_gen: boolean
           id: string
+          onboarding_angle_regens_used: number
+          onboarding_body_regens_used: number
           onboarding_complete: boolean
+          onboarding_face_regens_used: number
           updated_at: string
           user_id: string
         }
@@ -203,7 +206,10 @@ export type Database = {
           has_seen_welcome?: boolean
           has_used_free_gen?: boolean
           id?: string
+          onboarding_angle_regens_used?: number
+          onboarding_body_regens_used?: number
           onboarding_complete?: boolean
+          onboarding_face_regens_used?: number
           updated_at?: string
           user_id: string
         }
@@ -215,7 +221,10 @@ export type Database = {
           has_seen_welcome?: boolean
           has_used_free_gen?: boolean
           id?: string
+          onboarding_angle_regens_used?: number
+          onboarding_body_regens_used?: number
           onboarding_complete?: boolean
+          onboarding_face_regens_used?: number
           updated_at?: string
           user_id?: string
         }

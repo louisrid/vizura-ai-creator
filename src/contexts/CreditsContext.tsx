@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect, useCallback 
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { hasSpecialAccountOverride } from "@/lib/specialAccount";
+import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 interface GemsContextType {
   gems: number;
@@ -15,7 +16,7 @@ const GEMS_CACHE_PREFIX = "vizura_gems_balance:";
 
 export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [gems, setGems] = useState(0);
+  const [rawGems, setRawGems] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const getCacheKey = useCallback((userId: string) => `${GEMS_CACHE_PREFIX}${userId}`, []);
@@ -42,7 +43,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchGems = useCallback(async () => {
     if (!user) {
-      setGems(0);
+      setRawGems(0);
       setLoading(false);
       return;
     }
@@ -54,15 +55,15 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
         .single();
       if (error) {
         console.error("Failed to fetch gems:", error);
-        setGems(0);
+        setRawGems(0);
       } else {
         const balance = data?.balance ?? 0;
         writeCachedGems(user.id, balance);
-        setGems(balance);
+        setRawGems(balance);
       }
     } catch (e) {
       console.error("Gems fetch error:", e);
-      setGems(0);
+      setRawGems(0);
     } finally {
       setLoading(false);
     }
@@ -70,18 +71,24 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!user) {
-      setGems(0);
+      setRawGems(0);
       setLoading(false);
       return;
     }
 
     const cachedGems = readCachedGems(user.id);
     if (cachedGems !== null) {
-      setGems(cachedGems);
+      setRawGems(cachedGems);
     }
     setLoading(true);
     fetchGems();
   }, [fetchGems, readCachedGems, user]);
+
+  // During onboarding (onboarding_complete = false), show 0 gems to user
+  // The real gems exist in DB and are spent normally, just hidden from display
+  const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
+  const isOnboarding = cachedOnboarding ? !cachedOnboarding.onboardingComplete : false;
+  const gems = isOnboarding ? 0 : rawGems;
 
   return (
     <GemsContext.Provider value={{ gems, credits: gems, loading, refetch: fetchGems }}>

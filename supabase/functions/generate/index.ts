@@ -10,9 +10,12 @@ const XAI_REQUEST_TIMEOUT_MS = 120_000;
 
 /* ── gem costs ─────────────────────────────────────────── */
 const GEM_COST_PHOTO = 10;
+const GEM_COST_FACE_GEN = 30;
 const GEM_COST_FACE_REGEN = 30;
 const GEM_COST_SINGLE_REGEN = 10;
 const GEM_COST_CHARACTER = 50;
+const GEM_COST_ANGLE = 10;
+const GEM_COST_BODY = 10;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -736,7 +739,6 @@ async function generateWithFlux(
     "Content-Type": "application/json",
   };
 
-  // Step 1: Submit to queue (returns immediately with request_id)
   const submitRes = await fetch(FAL_BASE, {
     method: "POST",
     signal: AbortSignal.timeout(15000),
@@ -767,10 +769,9 @@ async function generateWithFlux(
   }
   console.log("FLUX queued, request_id:", requestId);
 
-  // Use the URLs returned by fal.ai (they handle the path encoding correctly)
   const STATUS_URL = submitData?.status_url || `https://queue.fal.run/fal-ai/flux-2-pro--edit/requests/${requestId}/status`;
   const RESULT_URL = submitData?.response_url || `https://queue.fal.run/fal-ai/flux-2-pro--edit/requests/${requestId}`;
-  const MAX_POLLS = 30; // 30 × 2s = 60s max polling
+  const MAX_POLLS = 30;
   const POLL_INTERVAL_MS = 2000;
 
   for (let i = 0; i < MAX_POLLS; i++) {
@@ -785,7 +786,6 @@ async function generateWithFlux(
     if (!statusRes.ok) {
       const errText = await statusRes.text();
       console.error("FLUX status poll error:", statusRes.status, errText);
-      // Consume and retry on transient errors
       continue;
     }
 
@@ -800,10 +800,8 @@ async function generateWithFlux(
       console.error("FLUX job failed:", JSON.stringify(statusData).slice(0, 500));
       throw new Error("FLUX generation failed on server");
     }
-    // IN_QUEUE or IN_PROGRESS — keep polling
   }
 
-  // Step 3: Fetch result
   const resultRes = await fetch(RESULT_URL, {
     method: "GET",
     signal: AbortSignal.timeout(10000),
@@ -841,6 +839,16 @@ const BANNED_WORDS = [
   "fuck", "porn",
 ];
 const BANNED_RE = new RegExp(`\\b(${BANNED_WORDS.join("|")})\\b`, "i");
+
+/* ── helper: check if user is in onboarding (not yet completed) ── */
+async function isOnboardingUser(adminClient: any, userId: string): Promise<boolean> {
+  const { data: profile } = await adminClient
+    .from("profiles")
+    .select("onboarding_complete")
+    .eq("user_id", userId)
+    .single();
+  return profile ? !profile.onboarding_complete : true;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS")
@@ -882,7 +890,6 @@ serve(async (req) => {
 
     const body = await req.json();
     const rawPrompt = body?.prompt;
-    const isFreeGen = body?.free_gen === true;
     const characterId = body?.character_id || null;
     const photoType = body?.photo_type || "selfie";
     const aspectRatio = body?.aspect_ratio || "3:4";
@@ -907,7 +914,7 @@ serve(async (req) => {
       );
     }
 
-    /* ── SINGLE PHOTO REGENERATION FLOW (1 gem) ── */
+    /* ── SINGLE PHOTO REGENERATION FLOW (angle or body) ── */
     if (regenerateSingle && (regenerateSingle === "angle" || regenerateSingle === "body")) {
       const singleCharId = body?.character_id;
 
@@ -921,6 +928,31 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
+
+      /* ── onboarding regen limit check ── */
+      const onboarding = await isOnboardingUser(adminClient, userId);
+      if (onboarding) {
+        const { data: profile } = await adminClient
+          .from("profiles")
+          .select("onboarding_angle_regens_used, onboarding_body_regens_used")
+          .eq("user_id", userId)
+          .single();
+
+        if (profile) {
+          if (regenerateSingle === "angle" && (profile.onboarding_angle_regens_used ?? 0) >= 1) {
+            return new Response(
+              JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
+              { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
+          if (regenerateSingle === "body" && (profile.onboarding_body_regens_used ?? 0) >= 1) {
+            return new Response(
+              JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
+              { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
+        }
+      }
 
       let creditData: { balance: number } | null = null;
       {
@@ -961,7 +993,6 @@ serve(async (req) => {
         });
       }
 
-      // Capture the old URL so we can delete the old file after success
       const oldUrl = regenerateSingle === "angle" ? charData.face_angle_url : charData.body_anchor_url;
 
       const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
@@ -971,7 +1002,6 @@ serve(async (req) => {
       const dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
       const dbBustSize = (charData.bust_size || "regular").toLowerCase();
 
-      // Use the fresh face_image_url from DB, not the client-provided one
       const freshFaceUrl = charData.face_image_url;
       console.log(`=== SINGLE REGENERATION: ${regenerateSingle} (using fresh DB face URL) ===`);
 
@@ -1010,6 +1040,24 @@ serve(async (req) => {
             prompt: "character references",
             image_urls: [resultUrl],
           });
+        }
+
+        /* ── increment onboarding regen counter ── */
+        if (onboarding) {
+          const col = regenerateSingle === "angle" ? "onboarding_angle_regens_used" : "onboarding_body_regens_used";
+          await adminClient.rpc("update_profile_safe", {}); // can't use rpc for this
+          // Direct update via service role
+          const { data: currentProfile } = await adminClient
+            .from("profiles")
+            .select(col)
+            .eq("user_id", userId)
+            .single();
+          if (currentProfile) {
+            await adminClient
+              .from("profiles")
+              .update({ [col]: (currentProfile[col] ?? 0) + 1, updated_at: new Date().toISOString() })
+              .eq("user_id", userId);
+          }
         }
 
         await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, GEM_COST_SINGLE_REGEN, true);
@@ -1064,6 +1112,36 @@ serve(async (req) => {
     if (generateAngles && selectedFaceUrl) {
       console.log("=== ANGLE + BODY GENERATION ===");
       console.log("Face URL:", selectedFaceUrl.slice(0, 80));
+
+      /* ── deduct gems for angle + body ── */
+      let angleCost = 0;
+      if (regenerateTarget === "angle") angleCost = GEM_COST_ANGLE;
+      else if (regenerateTarget === "body") angleCost = GEM_COST_BODY;
+      else angleCost = GEM_COST_ANGLE + GEM_COST_BODY; // both
+
+      let creditData: { balance: number } | null = null;
+      {
+        const { data: cd } = await adminClient
+          .from("credits")
+          .select("balance")
+          .eq("user_id", userId)
+          .single();
+        creditData = cd;
+
+        if (!isBetaUser && (!creditData || creditData.balance < angleCost)) {
+          return new Response(
+            JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        if (creditData) {
+          await adminClient
+            .from("credits")
+            .update({ balance: creditData.balance - angleCost, updated_at: new Date().toISOString() })
+            .eq("user_id", userId);
+        }
+      }
 
       let dbBodyType = "regular";
       let dbBustSize = "regular";
@@ -1148,94 +1226,38 @@ serve(async (req) => {
       faceImageUrls.push(vibeReferenceUrl);
     }
 
-    /* ── FREE GENERATION FLOW (face creation — no gem cost) ── */
-    if (isFreeGen) {
-      const { data: profile } = await adminClient
-        .from("profiles")
-        .select("has_used_free_gen")
-        .eq("user_id", userId)
-        .single();
+    /* ── STANDARD GEM-BASED FLOW (faces + photos) ── */
+    const isFaceRegen = body?.face_regen === true;
+    const gemCost = isFaceRegen ? GEM_COST_FACE_REGEN : GEM_COST_PHOTO;
 
-      if (profile?.has_used_free_gen) {
+    /* ── onboarding face regen limit check ── */
+    if (isFaceRegen) {
+      const onboarding = await isOnboardingUser(adminClient, userId);
+      if (onboarding) {
+        const { data: profile } = await adminClient
+          .from("profiles")
+          .select("onboarding_face_regens_used")
+          .eq("user_id", userId)
+          .single();
+        if (profile && (profile.onboarding_face_regens_used ?? 0) >= 1) {
+          return new Response(
+            JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      }
+    }
+
+    /* ── onboarding: block photo generation (only faces/angles/body allowed) ── */
+    if (!isFaceRegen && !generateAngles) {
+      const onboarding = await isOnboardingUser(adminClient, userId);
+      if (onboarding) {
         return new Response(
-          JSON.stringify({ error: "Free generation already used", code: "FREE_GEN_USED" }),
+          JSON.stringify({ error: "Complete onboarding first", code: "ONBOARDING_BLOCKED" }),
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-
-      const clientIp = getClientIp(req);
-      if (clientIp !== "unknown") {
-        const { data: existingIp } = await adminClient
-          .from("free_gen_ips")
-          .select("id")
-          .eq("ip_address", clientIp)
-          .maybeSingle();
-
-        if (existingIp) {
-          return new Response(
-            JSON.stringify({ error: "Free generation already used from this network", code: "IP_USED" }),
-            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-      }
-
-      const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
-      if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
-
-      let imageUrls: string[];
-      try {
-        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
-      } catch (e: any) {
-        if (e?.contentPolicy) {
-          await logRejectedPrompt(adminClient, userId, prompt);
-          await logGeneration(adminClient, userId, null, prompt, "face", 0, false, "content_policy");
-          return new Response(
-            JSON.stringify({ error: "prompt not allowed", code: "CONTENT_POLICY" }),
-            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-        if (e?.status === 429 || e?.status === 402) {
-          await logGeneration(adminClient, userId, null, prompt, "face", 0, false, `status_${e.status}`);
-          return new Response(
-            JSON.stringify({ error: "generation error" }),
-            { status: e.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-        throw e;
-      }
-
-      if (imageUrls.length === 0) throw new Error("No images generated");
-
-      const { error: profileUpdateError } = await adminClient
-        .from("profiles")
-        .update({ has_used_free_gen: true })
-        .eq("user_id", userId);
-
-      if (profileUpdateError) {
-        console.warn("Failed to mark free generation usage:", profileUpdateError);
-      }
-
-      if (clientIp !== "unknown") {
-        const { error: ipInsertError } = await adminClient
-          .from("free_gen_ips")
-          .insert({ ip_address: clientIp, user_id: userId });
-
-        if (ipInsertError) {
-          console.warn("Failed to record free generation IP:", ipInsertError);
-        }
-      }
-
-      await logGeneration(adminClient, userId, null, prompt, "face", 0, true);
-
-      return new Response(
-        JSON.stringify({ images: imageUrls, free_gen: true }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
     }
-
-    /* ── STANDARD GEM-BASED FLOW ── */
-    const isFaceRegen = body?.face_regen === true;
-    const gemCost = isFaceRegen ? GEM_COST_FACE_REGEN : GEM_COST_PHOTO;
 
     let creditData: { balance: number } | null = null;
     {
@@ -1353,6 +1375,25 @@ serve(async (req) => {
     }
 
     const genType = isFaceRegen ? "face" : "photo";
+
+    /* ── increment onboarding face regen counter ── */
+    if (isFaceRegen) {
+      const onboarding = await isOnboardingUser(adminClient, userId);
+      if (onboarding) {
+        const { data: currentProfile } = await adminClient
+          .from("profiles")
+          .select("onboarding_face_regens_used")
+          .eq("user_id", userId)
+          .single();
+        if (currentProfile) {
+          await adminClient
+            .from("profiles")
+            .update({ onboarding_face_regens_used: (currentProfile.onboarding_face_regens_used ?? 0) + 1, updated_at: new Date().toISOString() })
+            .eq("user_id", userId);
+        }
+      }
+    }
+
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
         user_id: userId,

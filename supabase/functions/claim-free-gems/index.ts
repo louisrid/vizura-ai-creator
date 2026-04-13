@@ -56,17 +56,10 @@ serve(async (req) => {
       );
     }
 
-    // Add gems
-    const { data: creditData } = await adminClient
-      .from("credits")
-      .select("balance")
-      .eq("user_id", userId)
-      .single();
-
-    const currentBalance = creditData?.balance ?? 0;
+    // Wipe whatever hidden onboarding gems remain and set balance to exactly 5
     await adminClient
       .from("credits")
-      .update({ balance: currentBalance + FREE_GEMS_AMOUNT, updated_at: new Date().toISOString() })
+      .update({ balance: FREE_GEMS_AMOUNT, updated_at: new Date().toISOString() })
       .eq("user_id", userId);
 
     // Mark as claimed
@@ -76,7 +69,7 @@ serve(async (req) => {
       .eq("user_id", userId);
 
     return new Response(
-      JSON.stringify({ success: true, gems_added: FREE_GEMS_AMOUNT, new_balance: currentBalance + FREE_GEMS_AMOUNT }),
+      JSON.stringify({ success: true, gems_added: FREE_GEMS_AMOUNT, new_balance: FREE_GEMS_AMOUNT }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {

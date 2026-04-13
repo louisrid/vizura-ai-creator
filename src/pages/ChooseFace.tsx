@@ -97,10 +97,7 @@ const ChooseFace = () => {
   const isFreeUser = !subscribed && gems <= 0;
   const hasShownGreatChoiceRef = useRef(false);
 
-  // Second loading phase: angle + body generation
-  const [angleLoading, setAngleLoading] = useState(false);
-  const [angleApiDone, setAngleApiDone] = useState(false);
-  const [angleBarComplete, setAngleBarComplete] = useState(false);
+  // Angle/body generation — runs in background, no overlay
   const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
 
   const hasInitRef = useRef(false);
@@ -255,9 +252,9 @@ const ChooseFace = () => {
         }
       };
 
-      let result = await invokeAndParse({ prompt, free_gen: true });
+      let result = await invokeAndParse({ prompt, face_regen: true });
 
-      if (result?.error && (result.code === "FREE_GEN_USED" || result.code === "IP_USED")) {
+      if (result?.error && result.code === "FREE_GEN_USED") {
         result = await invokeAndParse({ prompt, face_regen: true });
       }
 
@@ -532,32 +529,25 @@ const ChooseFace = () => {
         if (charRecord?.bust_size) bustSize = charRecord.bust_size;
       } catch {}
 
-      setAngleLoading(true);
-      setAngleApiDone(false);
-      setAngleBarComplete(false);
-      setPendingNavCharId(angleCharacterId);
-
-      try {
-        const { data, error } = await supabase.functions.invoke("generate", {
-          body: {
-            prompt: anglePrompt,
-            generate_angles: true,
-            selected_face_url: faceUrl,
-            body_type: bodyType,
-            bust_size: bustSize,
-            angle_character_id: angleCharacterId,
-          },
-        });
+      // Fire angle+body generation in background — don't block UI
+      supabase.functions.invoke("generate", {
+        body: {
+          prompt: anglePrompt,
+          generate_angles: true,
+          selected_face_url: faceUrl,
+          body_type: bodyType,
+          bust_size: bustSize,
+          angle_character_id: angleCharacterId,
+        },
+      }).then(({ data, error }) => {
         if (error) console.error("Angle + body generation failed:", error);
         else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
-      } catch (e) {
+      }).catch((e) => {
         console.error("Angle + body generation failed:", e);
-      }
-
-      setAngleApiDone(true);
-      return true;
+      });
     }
 
+    // Navigate immediately — character detail page polls for angle/body updates
     if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
     sessionStorage.removeItem("vizura_selected_face");
     sessionStorage.removeItem("vizura_guided_prompt");
@@ -572,29 +562,6 @@ const ChooseFace = () => {
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
-
-  const handleAngleBarComplete = useCallback(() => {
-    setAngleBarComplete(true);
-  }, []);
-
-  const handleAngleTapContinue = useCallback(() => {
-    const cId = pendingNavCharId;
-    if (cId) sessionStorage.setItem("vizura_new_char_highlight", cId);
-    sessionStorage.removeItem("vizura_selected_face");
-    sessionStorage.removeItem("vizura_guided_prompt");
-    sessionStorage.removeItem(STORAGE_KEY);
-    sessionStorage.removeItem("vizura_pending_char_id");
-    sessionStorage.removeItem(FACE_STORAGE_KEY);
-    sessionStorage.removeItem(AUTH_RESUME_KEY);
-    setPendingAuthSave(false);
-    setShowSignIn(false);
-    // Start fade-out, then navigate after animation completes
-    setAngleLoading(false);
-    setTimeout(() => {
-      toast.success("character added!");
-      navigate(`/characters/${cId}`, { replace: true });
-    }, 550);
-  }, [pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
@@ -634,7 +601,7 @@ const ChooseFace = () => {
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
         <AnimatePresence>
-          {(loading || angleLoading) && (
+          {loading && (
             <motion.div
               key="black-underlay"
               className="fixed inset-0 z-[10000] bg-black"
@@ -663,28 +630,6 @@ const ChooseFace = () => {
                   phraseInterval={5000}
                   completeNow={apiDone}
                   onComplete={() => setBarComplete(true)}
-                />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {angleLoading && (
-            <motion.div
-              key="angle-loader"
-              className="fixed inset-0 z-[10001] flex flex-col items-center justify-center bg-black"
-              style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-            >
-                <ProgressBarLoader
-                  duration={30000}
-                  phrases={ANGLE_GEN_PHRASES}
-                  phraseInterval={5000}
-                  completeNow={angleApiDone}
-                  onComplete={handleAngleTapContinue}
                 />
             </motion.div>
           )}
