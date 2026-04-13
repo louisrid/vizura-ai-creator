@@ -68,7 +68,9 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const prompt = statePrompt || sessionStorage.getItem("facefox_guided_prompt") || undefined;
+  const [prompt, setPrompt] = useState<string | undefined>(
+    statePrompt || sessionStorage.getItem("facefox_guided_prompt") || sessionStorage.getItem("facefox_face_prompt") || undefined
+  );
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("facefox_pending_char_id") || undefined);
 
   const [faces, setFaces] = useState<string[]>(() => {
