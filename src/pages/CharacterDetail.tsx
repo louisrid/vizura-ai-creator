@@ -58,7 +58,7 @@ const CharacterDetail = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   // Onboarding regen limits
-  const [onboardingComplete, setOnboardingComplete] = useState(true);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
   const [angleRegensUsed, setAngleRegensUsed] = useState(0);
   const [bodyRegensUsed, setBodyRegensUsed] = useState(0);
 
