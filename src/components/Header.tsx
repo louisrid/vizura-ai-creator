@@ -282,7 +282,6 @@ const Header = () => {
                   className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
                   style={{
                     borderRadius: "50%",
-                    backgroundColor: "hsl(var(--card))",
                     backgroundColor: "#000000",
                     border: `2px solid ${subscribed ? "hsl(130, 85%, 49%)" : "rgba(255,255,255,0.15)"}`,
                   }}
