@@ -735,13 +735,12 @@ const ChooseFace = () => {
                           toast("1/1 used");
                           return;
                         }
-                        if (isFreeUser) {
+                        if (onboardingComplete && isFreeUser) {
                           toast("need gems");
                           return;
                         }
                         setShowRegenConfirm(true);
                       }}
-                      disabled={isFreeUser && (onboardingComplete || faceRegensUsed < 1)}
                       className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 active:scale-[0.99]"
                       style={{
                         borderRadius: 10,
@@ -750,9 +749,18 @@ const ChooseFace = () => {
                         color: "#ffffff",
                       }}
                     >
-                      <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                      regenerate all <span style={{ color: "#00e0ff" }}>•</span> 1
-                      <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                      {!onboardingComplete ? (
+                        <>
+                          <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                          regenerate all
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw size={16} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                          regenerate all <span style={{ color: "#00e0ff" }}>•</span> 30
+                          <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+                        </>
+                      )}
                     </button>
                 </div>
 
