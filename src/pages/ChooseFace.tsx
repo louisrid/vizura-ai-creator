@@ -252,9 +252,9 @@ const ChooseFace = () => {
         }
       };
 
-      let result = await invokeAndParse({ prompt, free_gen: true });
+      let result = await invokeAndParse({ prompt, face_regen: true });
 
-      if (result?.error && (result.code === "FREE_GEN_USED" || result.code === "IP_USED")) {
+      if (result?.error && result.code === "FREE_GEN_USED") {
         result = await invokeAndParse({ prompt, face_regen: true });
       }
 
