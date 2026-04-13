@@ -263,7 +263,9 @@ const Home = () => {
   const showLocks = lockStateResolved && !onboardingComplete && characterCount === 0;
   const forceOnboarding = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
 
-  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || (forceOnboarding && !showGuided);
+  // Hide the entire page until we know the user's onboarding state — prevents home screen flash
+  const awaitingLockResolution = !!user && !lockStateResolved;
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || (forceOnboarding && !showGuided) || awaitingLockResolution || authLoading;
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
