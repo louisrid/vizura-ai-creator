@@ -27,14 +27,28 @@ const Auth = () => {
   const inWebView = useMemo(() => isInAppWebView(), []);
 
   useEffect(() => {
-    if (user) {
-      sessionStorage.removeItem("vizura_resume_after_auth");
-      sessionStorage.removeItem("vizura_auto_opened");
-      sessionStorage.removeItem("vizura_creator_dismissed");
-      sessionStorage.removeItem("vizura_guided_flow_state");
-      sessionStorage.removeItem("vizura_post_auth_home");
-      navigate(redirectTo, { replace: true });
-    }
+    if (!user) return;
+
+    sessionStorage.removeItem("vizura_resume_after_auth");
+    sessionStorage.removeItem("vizura_auto_opened");
+    sessionStorage.removeItem("vizura_creator_dismissed");
+    sessionStorage.removeItem("vizura_guided_flow_state");
+    sessionStorage.removeItem("vizura_post_auth_home");
+
+    // For new accounts, always go to Home with the onboarding creator open
+    const checkNewAccount = async () => {
+      const [profileRes, charsRes] = await Promise.all([
+        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
+        supabase.from("characters").select("id").eq("user_id", user.id).limit(1),
+      ]);
+      const isNew = !profileRes.data?.onboarding_complete && (!charsRes.data || charsRes.data.length === 0);
+      if (isNew) {
+        navigate("/", { replace: true, state: { openCreator: true } });
+      } else {
+        navigate(redirectTo, { replace: true });
+      }
+    };
+    checkNewAccount();
   }, [user, navigate, redirectTo]);
 
   useEffect(() => {
