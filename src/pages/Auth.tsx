@@ -36,16 +36,20 @@ const Auth = () => {
     sessionStorage.removeItem("vizura_guided_flow_state");
     sessionStorage.removeItem("vizura_post_auth_home");
 
-    // For new accounts, always go to Home with the onboarding creator open
+    // Check new account status immediately — do NOT render Home until we know
     const checkNewAccount = async () => {
-      const [profileRes, charsRes] = await Promise.all([
-        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
-        supabase.from("characters").select("id").eq("user_id", user.id).limit(1),
-      ]);
-      const isNew = !profileRes.data?.onboarding_complete && (!charsRes.data || charsRes.data.length === 0);
-      if (isNew) {
-        navigate("/", { replace: true, state: { openCreator: true } });
-      } else {
+      try {
+        const [profileRes, charsRes] = await Promise.all([
+          supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
+          supabase.from("characters").select("id").eq("user_id", user.id).limit(1),
+        ]);
+        const isNew = !profileRes.data?.onboarding_complete && (!charsRes.data || charsRes.data.length === 0);
+        if (isNew) {
+          navigate("/", { replace: true, state: { openCreator: true } });
+        } else {
+          navigate(redirectTo, { replace: true });
+        }
+      } catch {
         navigate(redirectTo, { replace: true });
       }
     };

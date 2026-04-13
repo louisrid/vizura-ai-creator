@@ -69,22 +69,25 @@ const PostAuthHomeRedirect = () => {
     if (loading || !user) return;
     if (sessionStorage.getItem(POST_AUTH_HOME_KEY) !== "1") return;
 
-    sessionStorage.removeItem(POST_AUTH_HOME_KEY);
-
+    // Auth page now handles its own redirect with onboarding check,
+    // so only handle the resume-url case here
     const resumeUrl = sessionStorage.getItem("vizura_resume_url");
+    sessionStorage.removeItem(POST_AUTH_HOME_KEY);
     if (resumeUrl) {
       sessionStorage.removeItem("vizura_resume_url");
       navigate(resumeUrl, { replace: true });
       return;
     }
 
+    // Don't redirect here — let Auth page handle the new-account check + redirect
+    // If we're already on auth, it will navigate us. If not, do nothing.
+    if (location.pathname === "/auth") return;
+
     sessionStorage.removeItem("vizura_auto_opened");
     sessionStorage.removeItem("vizura_creator_dismissed");
     sessionStorage.removeItem("vizura_guided_flow_state");
     sessionStorage.removeItem("vizura_resume_after_auth");
-
-    navigate("/", { replace: true, state: {} });
-  }, [loading, user, navigate, location.key]);
+  }, [loading, user, navigate, location.key, location.pathname]);
 
   return null;
 };
