@@ -102,6 +102,7 @@ const ChooseFace = () => {
   const isFreeUser = !subscribed && gems <= 0;
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const lastFacesRef = useRef<string[]>([]);
 
   const hasOnboardingFaceRegenLocked = !onboardingComplete && faceRegensUsed >= 1;
 
@@ -347,6 +348,9 @@ const ChooseFace = () => {
       setFaceRegensUsed(1);
     }
 
+    const previousFaces = faces;
+    lastFacesRef.current = previousFaces;
+
     // Stay on screen, show spinners on face cards
     setRegeneratingFaces(true);
     setSelectedIndex(null);
@@ -396,7 +400,11 @@ const ChooseFace = () => {
         }
       };
 
-      const result = await invokeAndParse({ prompt, face_regen: true });
+      const result = await invokeAndParse({
+        prompt,
+        face_regen: true,
+        previous_faces: previousFaces,
+      });
       if (result?.code === "ONBOARDING_REGEN_LIMIT") {
         toast("1/1 used");
         return;
@@ -404,6 +412,8 @@ const ChooseFace = () => {
       if (result?.error) throw new Error(result.error);
       const nextFaces = (result.images || []).slice(0, 3);
       if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
+      const sameFaces = nextFaces.length === previousFaces.length && nextFaces.every((url, index) => url === previousFaces[index]);
+      if (sameFaces) throw new Error("generation returned existing faces");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);

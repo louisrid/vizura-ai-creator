@@ -62,6 +62,7 @@ export const Toaster = () => {
   const showToast = useCallback((message: string, tone: ToastTone = "default") => {
     if (!message.trim()) return;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setToasts([]);
     toastId += 1;
     const newToast: ToastItem = { id: toastId, message, tone };
     // Slight delay before showing for smooth feel

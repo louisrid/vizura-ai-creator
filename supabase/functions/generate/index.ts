@@ -464,7 +464,8 @@ async function generateFaceImages(
   count: number,
   apiKey: string,
   adminClient: any,
-  userId: string
+  userId: string,
+  previousFaces: string[] = []
 ): Promise<string[]> {
   const variations = [
     "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
@@ -482,6 +483,7 @@ async function generateFaceImages(
 
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
+  const previousSet = new Set(previousFaces.filter(Boolean));
 
   for (let i = 0; i < targetCount; i++) {
     const variation = variations[i] || variations[0];
@@ -510,7 +512,8 @@ async function generateFaceImages(
       }
     }
 
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
+    const regenDiscriminator = `variation token ${crypto.randomUUID().slice(0, 8)}, distinct facial micro-choices, clearly different option set from previous generated faces while preserving same identity`;
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}, ${regenDiscriminator}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -524,6 +527,14 @@ async function generateFaceImages(
           break;
         }
         const permanentUrl = await storeImagePermanently(url, userId, adminClient, `face_${i + 1}`);
+        if (previousSet.has(permanentUrl)) {
+          console.warn(`Face ${i + 1} matched previous stored URL, retrying...`);
+          if (retries < maxRetries) {
+            retries++;
+            await new Promise(r => setTimeout(r, 700));
+            continue;
+          }
+        }
         imageUrls.push(permanentUrl);
         console.log(`Face ${i + 1} done: ${permanentUrl.slice(0, 80)}`);
         break;
@@ -707,6 +718,9 @@ serve(async (req) => {
     const vibeReferenceUrl = body?.vibe_reference_url || null;
     const regenerateTarget = body?.regenerate_target || "both";
     const regenerateSingle = body?.regenerate_single || null;
+    const previousFaces = Array.isArray(body?.previous_faces)
+      ? body.previous_faces.filter((value: unknown): value is string => typeof value === "string" && value.length > 0)
+      : [];
 
     /* ── banned words check ── */
     if (rawPrompt && BANNED_RE.test(rawPrompt)) {
@@ -1112,7 +1126,7 @@ serve(async (req) => {
     let imageUrls: string[];
     try {
       if (isFaceRegen) {
-        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId);
+        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId, previousFaces);
       } else {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
