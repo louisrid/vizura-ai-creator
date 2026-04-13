@@ -112,9 +112,9 @@ const MyCharacters = () => {
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+              <div key={`skel-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                 <AspectRatio ratio={3 / 4}>
-                  <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                  <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                 </AspectRatio>
               </div>
             ))}
@@ -124,7 +124,7 @@ const MyCharacters = () => {
             <button
               onClick={handleCreateCharacter}
               className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
-              style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}
+              style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
@@ -144,7 +144,7 @@ const MyCharacters = () => {
                     style={{
                       borderRadius: 10,
                       border: isNew ? "3px solid #ffe603" : "2px solid hsl(var(--border-mid))",
-                      backgroundColor: "#1a1a1a",
+                      backgroundColor: "hsl(var(--card))",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
@@ -156,7 +156,7 @@ const MyCharacters = () => {
                           onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
+                        <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                           <svg width="28" height="28" viewBox="0 0 24 24" fill="hsl(var(--border-mid))">
                             <circle cx="12" cy="8" r="5" />
                             <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
@@ -168,7 +168,7 @@ const MyCharacters = () => {
                       <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-tight truncate">
                         {char.name || "unnamed"}
                       </span>
-                      <span className="block text-[9px] md:text-[11px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+                      <span className="block text-[9px] md:text-[11px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>
                         age {displayAge(char.id, char.age)}
                       </span>
                     </div>

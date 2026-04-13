@@ -39,7 +39,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[12px] md:text-[14px] font-[800] lowercase" + " " + "text-white/40";
+const HELPER_CLASS = "text-[12px] md:text-[14px] font-[800] lowercase" + " " + "text-muted-foreground";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
@@ -155,7 +155,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "#1a1a1a", color: "#fff", border: "2px solid hsl(var(--border-mid))" }
+        : { backgroundColor: "hsl(var(--card))", color: "#fff", border: "2px solid hsl(var(--border-mid))" }
       ),
     }}
   >
@@ -458,7 +458,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
         <motion.p
           className="mt-5 text-[13px] md:text-[15px] font-[800] lowercase"
-          style={{ color: "rgba(255,255,255,0.4)" }}
+          style={{ color: "hsl(var(--border-mid))" }}
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >tap → to continue</motion.p>
@@ -480,7 +480,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
             className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#1a1a1a" }}
+            style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
           />
           <motion.button
             type="button"
@@ -769,7 +769,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
           </h2>
-          <div className="mt-8 w-full rounded-[10px] border-2 border-[#1a1a1a] p-5 space-y-3" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--card))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
@@ -825,7 +825,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             <button
               type="button"
               onClick={() => setIsSignUp((v) => !v)}
-              className="w-full text-center text-[11px] font-extrabold lowercase text-white/30 hover:text-white/50 transition-colors duration-150"
+              className="w-full text-center text-[11px] font-extrabold lowercase text-white/30 hover:text-muted-foreground transition-colors duration-150"
             >
               {isSignUp ? "already have an account? " : "no account? "}
               <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>
@@ -846,7 +846,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               }
             }}
             disabled={emailLoading || googleLoading}
-            className="mt-3 w-full text-center text-[11px] font-extrabold lowercase text-white/25 hover:text-white/50 transition-colors duration-150 disabled:opacity-50"
+            className="mt-3 w-full text-center text-[11px] font-extrabold lowercase text-white/25 hover:text-muted-foreground transition-colors duration-150 disabled:opacity-50"
           >
             just browsing? <span className="underline">preview without account</span>
           </button>

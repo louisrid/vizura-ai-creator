@@ -292,7 +292,7 @@ const CharacterCreator = () => {
             value={characterName}
             onChange={(e) => setCharacterName(e.target.value)}
             placeholder="give your character a name..."
-            className="h-12 w-full rounded-[10px] border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="h-12 w-full rounded-[10px] border-[2px] border-border bg-card px-4 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 
@@ -330,7 +330,7 @@ const CharacterCreator = () => {
                 className="h-full w-full rounded-[10px] object-cover"
               />
             ) : (
-              <Upload size={28} strokeWidth={2.5} className="text-foreground/30" />
+              <Upload size={28} strokeWidth={2.5} className="text-muted-foreground" />
             )}
           </button>
         </section>
@@ -344,7 +344,7 @@ const CharacterCreator = () => {
             onChange={(event) => setDescription(event.target.value)}
             placeholder="add any details you want to see"
             rows={8}
-            className="min-h-52 w-full resize-none rounded-[10px] border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-foreground/30 focus:border-foreground focus:outline-none transition-colors"
+            className="min-h-52 w-full resize-none rounded-[10px] border-[2px] border-border bg-card px-4 py-3 text-sm font-extrabold lowercase text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none transition-colors"
           />
         </section>
 

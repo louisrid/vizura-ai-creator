@@ -70,7 +70,7 @@ const RegenerateConfirmDialog = ({
                 onClick={onCancel}
                 disabled={loading}
                 className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
-                style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
+                style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
               >
                 no
               </button>

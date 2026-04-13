@@ -29,7 +29,7 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
     style={{
       borderRadius: 10,
       border: active ? `2px solid ${Y}` : "2px solid hsl(var(--border-mid))",
-      backgroundColor: active ? "#000000" : "#1a1a1a",
+      backgroundColor: active ? "#000000" : "hsl(var(--card))",
       color: active ? "#fff" : "rgba(255,255,255,0.7)",
     }}
   >
@@ -53,8 +53,8 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
         style={{
           borderRadius: 10,
           border: value === opt ? `2px solid ${Y}` : "2px solid hsl(var(--border-mid))",
-          backgroundColor: value === opt ? Y : "#1a1a1a",
-          color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
+          backgroundColor: value === opt ? Y : "hsl(var(--card))",
+          color: value === opt ? "#000" : "hsl(var(--border-mid))",
         }}
       >
         {opt}
@@ -173,7 +173,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
                   className="min-h-[100px] w-full resize-none px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors"
-                  style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#1a1a1a" }}
+                  style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
                 />
               </div>
             </div>

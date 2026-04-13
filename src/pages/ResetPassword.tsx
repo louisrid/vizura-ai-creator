@@ -81,8 +81,8 @@ const ResetPassword = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
-                      style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
+                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
+                      style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                       placeholder="••••••••"
                     />
                   </div>
@@ -98,8 +98,8 @@ const ResetPassword = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-foreground/30 focus:outline-none focus:border-neon-yellow transition-colors"
-                      style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
+                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
+                      style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                       placeholder="••••••••"
                     />
                   </div>

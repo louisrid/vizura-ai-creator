@@ -38,11 +38,17 @@ const isValidImageUrl = (url: string): boolean => {
   return true;
 };
 
-/* Lock overlay — 80% black, covers entire element including border */
-const LockOverlay = ({ borderRadius = 10, spread = 4 }: { borderRadius?: number; spread?: number }) => (
+/* Lock overlay — 80% black, clips to button shape including border */
+const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
   <div
     className="pointer-events-auto absolute"
-    style={{ inset: -spread, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: borderRadius + 2, zIndex: 20 }}
+    style={{
+      inset: 0,
+      backgroundColor: "rgba(0,0,0,0.80)",
+      borderRadius: Math.max(borderRadius - 2, 0),
+      boxShadow: "0 0 0 4px rgba(0,0,0,0.80)",
+      zIndex: 20,
+    }}
   />
 );
 
@@ -258,11 +264,11 @@ const Home = () => {
               className="relative w-full max-w-[280px] md:max-w-[400px]"
             >
               <ModalCloseButton onClick={() => setSelectedImage(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
                 {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
                   <div className="px-3 pt-2.5 pb-3">
-                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "hsl(var(--border-mid))" }}>
                       {selectedImage.prompt}
                     </p>
                   </div>
@@ -324,7 +330,6 @@ const Home = () => {
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
-                overflow: "hidden",
               }}
             >
               <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -340,7 +345,7 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative">
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
                   onClick={() => { if (showLocks) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform"
@@ -354,9 +359,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -379,7 +384,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -405,7 +410,7 @@ const Home = () => {
           <section className="mt-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <div className="relative">
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button onClick={() => { if (showLocks) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
@@ -415,9 +420,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -433,7 +438,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "#1a1a1a",
+                          backgroundColor: "hsl(var(--card))",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
@@ -457,7 +462,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -471,7 +476,7 @@ const Home = () => {
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
                         <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.id, char.age)}</span>
+                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );
@@ -524,7 +529,6 @@ const Home = () => {
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
-                overflow: "hidden",
               }}
             >
               <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -540,7 +544,7 @@ const Home = () => {
           <section className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative">
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
                   onClick={() => { if (showLocks) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow"
@@ -554,9 +558,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -579,7 +583,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -605,16 +609,19 @@ const Home = () => {
           <section className="mt-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
-                manage →
-              </button>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
+                <button onClick={() => navigate("/characters")} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
+                  manage →
+                </button>
+                {showLocks && <LockOverlay borderRadius={10} />}
+              </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -630,7 +637,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "#1a1a1a",
+                          backgroundColor: "hsl(var(--card))",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
@@ -654,7 +661,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -668,7 +675,7 @@ const Home = () => {
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
                         <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.id, char.age)}</span>
+                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );

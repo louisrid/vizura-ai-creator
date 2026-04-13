@@ -108,7 +108,7 @@ const TopUps = () => {
                 className="relative rounded-[10px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
-                  border: "2px solid rgba(255,255,255,0.25)",
+                  border: "2px solid hsl(var(--border-mid))",
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -137,7 +137,7 @@ const TopUps = () => {
                     </button>
                   </div>
                   <div className="flex items-center justify-center w-16 h-16 rounded-full"
-                    style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)" }}>
+                    style={{ background: "hsl(var(--border-mid))", backdropFilter: "blur(8px)" }}>
                     <Gem size={28} strokeWidth={2.5} className="text-white" />
                   </div>
                 </div>

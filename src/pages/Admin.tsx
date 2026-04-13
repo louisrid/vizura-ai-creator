@@ -44,7 +44,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
         <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" />
         <div className="mt-4 space-y-1.5">
           <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
-          <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "hsl(var(--border-mid))" }}>
             {photo.user_email}
             {photo.character_name && ` · ${photo.character_name}`}
             {` · ${fmtDate(photo.created_at)}`}
@@ -91,7 +91,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
       {isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
       ) : (
-        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "hsl(var(--border-mid))" }}>no photo</span>
       )}
     </div>
   );
@@ -110,7 +110,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
       </div>
 
       <div className="flex flex-col gap-3 max-w-lg">
-        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
+        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
           <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
             {displayName}, {ageDisplay}
           </h1>
@@ -120,11 +120,11 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
             {imgSlot(character.body_anchor_url, "full body")}
           </div>
         </div>
-        <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
+        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-4 py-3">
           <div className="grid grid-cols-4 gap-1.5">
             {traits.map((t) => (
-              <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
-                <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+              <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
                 <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
               </div>
             ))}
@@ -206,7 +206,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                     key={c.id}
                     onClick={() => setViewingCharacter(c)}
                     className="relative overflow-hidden hover-lift active:scale-[0.97] transition-transform text-left"
-                    style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
+                    style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
                   >
                     {c.face_image_url ? (
                       <AspectRatio ratio={3 / 4}>
@@ -221,7 +221,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                     )}
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
                       <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{c.name || "unnamed"}</span>
-                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(c.id, c.age)}</span>
+                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(c.id, c.age)}</span>
                     </div>
                   </button>
                 ))}
@@ -233,7 +233,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
           <div className="mb-8">
             <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">photos ({images.length})</h2>
             {images.length === 0 ? (
-              <p className="text-[11px] font-extrabold lowercase text-foreground/30 py-6 text-center">no photos</p>
+              <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no photos</p>
             ) : (
               <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
                 {images.map((img) => (
@@ -251,7 +251,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                       download={`facefox-${img.id}.png`}
                       target="_blank"
                       className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                      style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
+                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                     >
                       download
                       <Download size={12} strokeWidth={2.5} />
@@ -283,11 +283,11 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
-                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "hsl(var(--border-mid))" }}>
                       {expanded.prompt}
                     </p>
                   </div>
@@ -358,13 +358,13 @@ const Admin = () => {
         <DotDecal />
         <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-20">
           <div className="flex items-center gap-3 mb-7">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
-            <div className="h-7 w-20" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-7 w-20" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="grid grid-cols-3 gap-2.5 mb-8">
             {[0,1,2].map(i => (
-              <div key={i} className="py-6" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
-                <div className="h-8 w-16 mx-auto" style={{ borderRadius: 6, backgroundColor: "#111" }} />
+              <div key={i} className="py-6" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
+                <div className="h-8 w-16 mx-auto" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
               </div>
             ))}
           </div>
@@ -401,10 +401,10 @@ const Admin = () => {
                       { label: "characters", value: overview?.characters ?? 0, icon: Sparkles },
                       { label: "photos", value: overview?.photos ?? 0, icon: ImageIcon },
                     ].map(({ label, value, icon: Icon }) => (
-                      <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
+                      <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
                         <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
                         <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
-                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>{label}</span>
+                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "hsl(var(--border-mid))" }}>{label}</span>
                       </div>
                     ))}
                   </div>
@@ -417,18 +417,18 @@ const Admin = () => {
                         {photos.map((p: any, i: number) => {
                           const { label, type } = formatPhotoLabel(p.prompt);
                           return (
-                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 10, backgroundColor: "#1a1a1a", overflow: "hidden" }}>
+                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", overflow: "hidden" }}>
                               <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
-                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.4)" }}>
+                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "hsl(var(--border-mid))" }}>
                                     {label}
                                   </span>
                                 ) : (
                                   <p className="text-[10px] md:text-[11px] font-extrabold lowercase text-white truncate leading-tight">{label}</p>
                                 )}
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "rgba(255,255,255,0.3)" }}>{p.user_email}</p>
+                                  <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "hsl(var(--border-mid))" }}>{p.user_email}</p>
                                   {p.character_name && (
                                     <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
                                   )}
@@ -439,7 +439,7 @@ const Admin = () => {
                         })}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-extrabold lowercase text-foreground/30 py-6 text-center">no photos yet</p>
+                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no photos yet</p>
                     )}
                   </div>
                 </div>
@@ -456,18 +456,18 @@ const Admin = () => {
                             key={i}
                             onClick={() => { setViewingUserId(u.user_id); window.scrollTo(0, 0); }}
                             className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20 active:scale-[0.98]"
-                            style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}
+                            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
                           >
                             <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
                             <div className="flex items-center gap-3 shrink-0">
-                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.5)" }}>{u.photos_this_week} photos</span>
+                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "hsl(var(--border-mid))" }}>{u.photos_this_week} photos</span>
                               <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "#00e0ff" }}>{u.gems_remaining}💎</span>
                             </div>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-extrabold lowercase text-foreground/30 py-6 text-center">no recent activity</p>
+                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no recent activity</p>
                     )}
                   </div>
 
@@ -477,16 +477,16 @@ const Admin = () => {
                     {rejected.length > 0 ? (
                       <div className="space-y-1.5">
                         {rejected.map((r: any, i: number) => (
-                          <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
+                          <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
                             <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-white leading-snug">{r.prompt_text}</p>
-                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>
+                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "hsl(var(--border-mid))" }}>
                               {r.user_email} · {fmtDate(r.rejected_at)}
                             </p>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-extrabold lowercase text-foreground/30 py-6 text-center">no rejected prompts</p>
+                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no rejected prompts</p>
                     )}
                   </div>
                 </div>
