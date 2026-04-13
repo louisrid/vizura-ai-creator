@@ -497,9 +497,9 @@ const ChooseFace = () => {
 
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
-      draft = raw ? JSON.parse(raw) : null;
+      draft = raw ? JSON.parse(raw) : cachedDraft;
     } catch {
-      draft = null;
+      draft = cachedDraft;
     }
 
     const draftBodyType = normaliseDraftBodyType(draft?.bodyType);
