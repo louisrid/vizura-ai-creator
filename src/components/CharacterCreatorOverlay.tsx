@@ -54,7 +54,7 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
           borderRadius: 10,
           border: value === opt ? `2px solid ${Y}` : "2px solid hsl(var(--border-mid))",
           backgroundColor: value === opt ? Y : "hsl(var(--card))",
-          color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
+          color: value === opt ? "#000" : "hsl(var(--border-mid))",
         }}
       >
         {opt}

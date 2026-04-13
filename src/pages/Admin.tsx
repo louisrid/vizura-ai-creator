@@ -421,7 +421,7 @@ const Admin = () => {
                               <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
-                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "rgba(255,255,255,0.06)", color: "hsl(var(--border-mid))" }}>
+                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "hsl(var(--border-mid))" }}>
                                     {label}
                                   </span>
                                 ) : (
@@ -460,7 +460,7 @@ const Admin = () => {
                           >
                             <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
                             <div className="flex items-center gap-3 shrink-0">
-                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.5)" }}>{u.photos_this_week} photos</span>
+                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "hsl(var(--border-mid))" }}>{u.photos_this_week} photos</span>
                               <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "#00e0ff" }}>{u.gems_remaining}💎</span>
                             </div>
                           </button>
