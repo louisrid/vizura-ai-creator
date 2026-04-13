@@ -68,7 +68,9 @@ const ChooseFace = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const prompt = statePrompt || sessionStorage.getItem("facefox_guided_prompt") || undefined;
+  const [prompt, setPrompt] = useState<string | undefined>(
+    statePrompt || sessionStorage.getItem("facefox_guided_prompt") || sessionStorage.getItem("facefox_face_prompt") || undefined
+  );
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("facefox_pending_char_id") || undefined);
 
   const [faces, setFaces] = useState<string[]>(() => {
@@ -306,6 +308,8 @@ const ChooseFace = () => {
       if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
+      // Persist prompt so regen works after refresh
+      if (prompt) sessionStorage.setItem("facefox_face_prompt", prompt);
       setSelectedIndex(null);
       setApiDone(true);
     } catch (err: any) {
@@ -327,6 +331,10 @@ const ChooseFace = () => {
       return;
     }
     if (!user) return;
+    if (!prompt) {
+      toast.error("regen error");
+      return;
+    }
 
     // Stay on screen, show spinners on face cards
     setRegeneratingFaces(true);
@@ -579,6 +587,7 @@ const ChooseFace = () => {
     if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
     sessionStorage.removeItem("facefox_selected_face");
     sessionStorage.removeItem("facefox_guided_prompt");
+    sessionStorage.removeItem("facefox_face_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
     sessionStorage.removeItem("facefox_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
@@ -854,6 +863,7 @@ const ChooseFace = () => {
             sessionStorage.removeItem(STORAGE_KEY);
             sessionStorage.removeItem("facefox_selected_face");
             sessionStorage.removeItem("facefox_guided_prompt");
+            sessionStorage.removeItem("facefox_face_prompt");
             sessionStorage.removeItem("facefox_pending_char_id");
             sessionStorage.removeItem(AUTH_RESUME_KEY);
             sessionStorage.removeItem("facefox_guided_flow_state");
