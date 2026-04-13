@@ -70,8 +70,9 @@ const Home = () => {
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
-  const [showGuided, setShowGuided] = useState(() => !!user && needsOnboardingRedirect(cachedOnboardingState));
-  const [skipWelcome, setSkipWelcome] = useState(false);
+  const isOnboardingUser = !!user && needsOnboardingRedirect(cachedOnboardingState);
+  const [showGuided, setShowGuided] = useState(() => isOnboardingUser);
+  const [skipWelcome, setSkipWelcome] = useState(() => isOnboardingUser);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(() => cachedOnboardingState?.onboardingComplete ?? true);
