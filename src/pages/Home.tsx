@@ -38,14 +38,12 @@ const isValidImageUrl = (url: string): boolean => {
   return true;
 };
 
-/* Lock overlay — 30% black with centred 🔒 */
-const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
+/* Lock overlay — 80% black, covers entire element including border */
+const LockOverlay = ({ borderRadius = 10, spread = 4 }: { borderRadius?: number; spread?: number }) => (
   <div
-    className="pointer-events-auto absolute inset-0 flex items-center justify-center"
-    style={{ backgroundColor: "rgba(0,0,0,0.30)", borderRadius, zIndex: 20 }}
-  >
-    <span className="text-[13px] md:text-[16px] leading-none">🔒</span>
-  </div>
+    className="pointer-events-auto absolute"
+    style={{ inset: -spread, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: borderRadius + 2, zIndex: 20 }}
+  />
 );
 
 const Home = () => {
@@ -407,9 +405,12 @@ const Home = () => {
           <section className="mt-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <button onClick={() => navigate("/characters")} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
-                manage →
-              </button>
+              <div className="relative">
+                <button onClick={() => { if (showLocks) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
+                  manage →
+                </button>
+                {showLocks && <LockOverlay borderRadius={10} />}
+              </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
