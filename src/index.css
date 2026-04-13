@@ -12,16 +12,16 @@
     --card: 0 0% 8%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 10%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 10%;
+    --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 10%;
+    --muted: 0 0% 8%;
     --muted-foreground: 0 0% 100%;
 
     --accent: 54 100% 51%;
@@ -68,7 +68,7 @@
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent: 0 0% 8%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 14%;
     --sidebar-ring: 0 0% 100%;
@@ -79,12 +79,12 @@
     --nav-foreground: 0 0% 100%;
     --surface-dark: 0 0% 2%;
     --surface-dark-foreground: 0 0% 100%;
-    --surface-elevated: 0 0% 10%;
+    --surface-elevated: 0 0% 8%;
 
     /* wizard bg */
     --wizard-bg: 0 0% 2%;
 
-    --surface-strong: 0 0% 10%;
+    --surface-strong: 0 0% 8%;
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
