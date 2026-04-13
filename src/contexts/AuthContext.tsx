@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         syncSpecialAccountCache(freshUser);
       }
       void fetchAndCacheOnboardingState(freshUser.id);
-      void maybeResetTestAccount(freshUser);
       return freshUser;
     } catch {
       return seedUser;
@@ -124,6 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           syncSpecialAccountCache(nextUser);
           void fetchAndCacheOnboardingState(nextUser.id);
           void hydrateUser(nextUser);
+          if (event === "SIGNED_IN") void maybeResetTestAccount(nextUser);
         }
       });
       subscriptionRef.current = sub.subscription;
@@ -133,7 +133,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { data, error } = await supabase.auth.getSession();
         if (error) throw error;
         if (cancelled) return;
-        await hydrateUser(data.session?.user ?? null, cancelled);
+        const hydratedUser = await hydrateUser(data.session?.user ?? null, cancelled);
+        if (hydratedUser) await maybeResetTestAccount(hydratedUser);
       } finally {
         if (cancelled) return;
         setLoading(false);
