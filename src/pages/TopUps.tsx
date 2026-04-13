@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Gem, ShoppingCart } from "lucide-react";
+import { Gem, ShoppingCart, Gift, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useGems } from "@/contexts/CreditsContext";
@@ -15,14 +16,15 @@ const packs = [
   { id: "elite", name: "elite", gems: 600, price: 40, badge: "33% off!" },
 ] as const;
 
-
-
 const TopUps = () => {
   const { refetch } = useGems();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [buying, setBuying] = useState<string | null>(null);
+  const [canClaimFree, setCanClaimFree] = useState(false);
+  const [claiming, setClaiming] = useState(false);
+  const [claimChecked, setClaimChecked] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -32,6 +34,21 @@ const TopUps = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("checkout") === "success") refetch();
   }, [location.search, refetch]);
+
+  // Check if user can claim free gems
+  useEffect(() => {
+    if (!user) return;
+    const check = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("has_claimed_free_gems")
+        .eq("user_id", user.id)
+        .single();
+      setCanClaimFree(data ? !data.has_claimed_free_gems : false);
+      setClaimChecked(true);
+    };
+    check();
+  }, [user]);
 
   if (!loading && !user) return null;
 
@@ -53,6 +70,23 @@ const TopUps = () => {
     }
   };
 
+  const handleClaimFree = async () => {
+    if (claiming) return;
+    setClaiming(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("claim-free-gems");
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      refetch();
+      setCanClaimFree(false);
+      toast.success("🎉 +5 free gems claimed!");
+    } catch (err: any) {
+      toast.error(err.message || "failed to claim");
+    } finally {
+      setClaiming(false);
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
@@ -63,6 +97,54 @@ const TopUps = () => {
         </div>
 
         <div className="flex flex-col gap-5">
+          {/* Free gems claim */}
+          <AnimatePresence>
+            {claimChecked && canClaimFree && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95, height: 0, marginBottom: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="relative rounded-[10px] overflow-hidden p-5"
+                style={{
+                  background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
+                  border: "2px solid rgba(255,255,255,0.25)",
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Gift size={20} strokeWidth={2.5} className="text-white" />
+                      <span className="text-lg font-[900] lowercase text-white">welcome gift!</span>
+                    </div>
+                    <p className="text-[13px] font-[700] lowercase text-white/80 leading-tight mb-3">
+                      claim your free gems to get started
+                    </p>
+                    <button
+                      onClick={handleClaimFree}
+                      disabled={claiming}
+                      className="flex items-center gap-2 rounded-[10px] px-5 py-3 text-sm font-[900] lowercase transition-all active:scale-95 disabled:opacity-60"
+                      style={{ backgroundColor: "#fff", color: "#000" }}
+                    >
+                      {claiming ? (
+                        "claiming..."
+                      ) : (
+                        <>
+                          <Sparkles size={16} strokeWidth={2.5} />
+                          claim 5 free gems
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-center w-16 h-16 rounded-full"
+                    style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)" }}>
+                    <Gem size={28} strokeWidth={2.5} className="text-white" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {packs.map((pack) => (
             <div
               key={pack.id}
