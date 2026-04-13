@@ -167,7 +167,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid #ffffff",
+                border: "2px solid rgba(255,255,255,0.15)",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -184,7 +184,7 @@ const Header = () => {
                     : "0";
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#ffffff", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />}
                     <button
                       onClick={() => {
                         if (locked) return;
@@ -226,7 +226,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 2, backgroundColor: "#ffffff", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "rgba(255,255,255,0.15)", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"
