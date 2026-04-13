@@ -382,8 +382,12 @@ const ChooseFace = () => {
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       await refetchGems();
-      if (!onboardingComplete) setFaceRegensUsed((p) => p + 1);
-      toast("30 gems used");
+      if (!onboardingComplete) {
+        setFaceRegensUsed((p) => p + 1);
+        toast("1/1 used");
+      } else {
+        toast("30 gems used");
+      }
     } catch (err: any) {
       toast.error("regen error");
     } finally {
@@ -740,6 +744,10 @@ const ChooseFace = () => {
                         }
                         if (onboardingComplete && isFreeUser) {
                           toast("need gems");
+                          return;
+                        }
+                        if (!onboardingComplete) {
+                          handleRegenerate();
                           return;
                         }
                         setShowRegenConfirm(true);
