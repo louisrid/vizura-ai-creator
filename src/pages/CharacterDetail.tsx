@@ -57,6 +57,27 @@ const CharacterDetail = () => {
   const [revealingBody, setRevealingBody] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  // Onboarding regen limits
+  const [onboardingComplete, setOnboardingComplete] = useState(true);
+  const [angleRegensUsed, setAngleRegensUsed] = useState(0);
+  const [bodyRegensUsed, setBodyRegensUsed] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("onboarding_complete, onboarding_angle_regens_used, onboarding_body_regens_used")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setOnboardingComplete(!!data.onboarding_complete);
+          setAngleRegensUsed(data.onboarding_angle_regens_used ?? 0);
+          setBodyRegensUsed(data.onboarding_body_regens_used ?? 0);
+        }
+      });
+  }, [user]);
+
   // Latest photos for this character
   const [latestPhotos, setLatestPhotos] = useState<{ id: string; url: string; created_at: string }[]>([]);
   const MAX_LATEST = 6;
