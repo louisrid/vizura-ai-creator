@@ -25,16 +25,6 @@ const RegenerateConfirmDialog = ({
   cancelLabel = "no",
   gemCost = true,
 }: RegenerateConfirmDialogProps) => {
-  // Dismiss on swipe-back gesture
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: Event) => {
-      e.preventDefault();
-      onCancel();
-    };
-    window.addEventListener("vizura:swipe-back", handler);
-    return () => window.removeEventListener("vizura:swipe-back", handler);
-  }, [open, onCancel]);
 
   return (
     <AnimatePresence>

@@ -99,7 +99,7 @@ const ChooseFace = () => {
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
-  const [onboardingComplete, setOnboardingComplete] = useState(true);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -164,15 +164,6 @@ const ChooseFace = () => {
     });
   }, []);
 
-  // Intercept swipe-back gesture and show confirmation dialog instead
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setShowBackConfirm(true);
-    };
-    window.addEventListener("vizura:swipe-back", handler);
-    return () => window.removeEventListener("vizura:swipe-back", handler);
-  }, []);
 
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");
   const doFinalSaveRef = useRef<(forcedFaceIdx?: number) => Promise<boolean>>(async () => false);
@@ -384,7 +375,7 @@ const ChooseFace = () => {
       await refetchGems();
       if (!onboardingComplete) {
         setFaceRegensUsed((p) => p + 1);
-        toast("1/1 used");
+        // No toast on first regen during onboarding — "1/1 used" shows on second press
       } else {
         toast("30 gems used");
       }
