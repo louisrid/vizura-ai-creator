@@ -120,14 +120,14 @@ const Auth = () => {
         <DotDecal />
         <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-10 w-full">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
-            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
           </div>
-          <div className="w-full space-y-3 p-5" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#111" }} />
-            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#111" }} />
-            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "#111" }} />
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#111" }} />
+          <div className="w-full space-y-3 p-5" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
           </div>
         </main>
       </div>
@@ -152,7 +152,7 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             {!inWebView && (
               <>
                 <button
@@ -181,7 +181,7 @@ const Auth = () => {
 
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-[2px] bg-border" />
-                  <span className="text-[11px] font-extrabold lowercase text-foreground/40">or use email</span>
+                  <span className="text-[11px] font-extrabold lowercase text-muted-foreground">or use email</span>
                   <div className="flex-1 h-[2px] bg-border" />
                 </div>
               </>
@@ -194,8 +194,8 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -206,8 +206,8 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
 
@@ -228,7 +228,7 @@ const Auth = () => {
             <button
               type="button"
               onClick={() => setIsSignUp((v) => !v)}
-              className="w-full text-center text-[11px] md:text-[13px] font-extrabold lowercase text-foreground/40 hover:text-foreground/60 transition-colors"
+              className="w-full text-center text-[11px] md:text-[13px] font-extrabold lowercase text-muted-foreground hover:text-muted-foreground transition-colors"
             >
               {isSignUp ? "already have an account? " : "no account? "}
               <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>

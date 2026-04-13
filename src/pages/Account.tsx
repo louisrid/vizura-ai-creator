@@ -35,16 +35,16 @@ const Account = () => {
         <DotDecal />
         <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-10 w-full">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
-            <div className="h-7 w-28" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-7 w-28" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="flex flex-col items-center mb-8 mt-4">
-            <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "#1a1a1a" }} />
-            <div className="h-4 w-40" style={{ borderRadius: 6, backgroundColor: "#1a1a1a" }} />
+            <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-4 w-40" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="w-full flex flex-col gap-3">
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
           </div>
         </main>
       </div>
@@ -81,7 +81,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             style={{ backgroundColor: "#000" }}
             onClick={() => toast("coming soon")}
           >
@@ -89,7 +89,7 @@ const Account = () => {
             <div className="flex items-center gap-2">
               <span
                 className="text-xs font-[800] lowercase"
-                style={{ color: subscribed ? "#12e62b" : "rgba(255,255,255,0.4)" }}
+                style={{ color: subscribed ? "#12e62b" : "hsl(var(--border-mid))" }}
               >
                 {subscribed ? "active" : "inactive"}
               </span>
@@ -98,7 +98,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             style={{ backgroundColor: "#000" }}
             onClick={() => toast("coming soon")}
           >
@@ -111,7 +111,7 @@ const Account = () => {
         {user?.email === "louisjridland@gmail.com" && (
           <div className="w-full pt-3">
             <button
-              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-[#111]"
+              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               style={{ backgroundColor: "#000" }}
               onClick={() => navigate("/admin")}
             >
@@ -133,8 +133,8 @@ const Account = () => {
         <div className="pt-6">
           <Link
             to="/info"
-            className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-foreground/60"
-            style={{ color: "rgba(255,255,255,0.4)" }}
+            className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-muted-foreground"
+            style={{ color: "hsl(var(--border-mid))" }}
           >
             terms &amp; privacy
           </Link>
@@ -205,7 +205,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="w-full border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
+        <div className="w-full border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -228,7 +228,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           </button>
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px] bg-border" />
-            <span className="text-[10px] font-extrabold lowercase text-foreground/40">or use email</span>
+            <span className="text-[10px] font-extrabold lowercase text-muted-foreground">or use email</span>
             <div className="flex-1 h-[2px] bg-border" />
           </div>
           <input
@@ -238,7 +238,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 10, backgroundColor: "#2a2a2a" }}
             disabled={submitting || googleLoading}
           />
@@ -250,7 +250,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 10, backgroundColor: "#2a2a2a" }}
             disabled={submitting || googleLoading}
           />
@@ -260,7 +260,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <button
             type="button"
             onClick={() => setIsSignUpMode((v) => !v)}
-            className="w-full text-center text-[11px] font-extrabold lowercase text-foreground/40 hover:text-foreground/60 transition-colors"
+            className="w-full text-center text-[11px] font-extrabold lowercase text-muted-foreground hover:text-muted-foreground transition-colors"
           >
             {isSignUpMode ? "already have an account? sign in" : "no account? sign up"}
           </button>

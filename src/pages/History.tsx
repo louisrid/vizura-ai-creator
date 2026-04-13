@@ -97,18 +97,18 @@ const History = () => {
         {loading ? (
           <div className="space-y-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:space-y-0">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}>
-                <div className="w-full aspect-[4/3]" style={{ backgroundColor: "#111" }} />
+              <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+                <div className="w-full aspect-[4/3]" style={{ backgroundColor: "hsl(var(--card))" }} />
                 <div className="p-4 space-y-2">
-                  <div className="h-3 w-3/4" style={{ borderRadius: 4, backgroundColor: "#111" }} />
-                  <div className="h-3 w-1/2" style={{ borderRadius: 4, backgroundColor: "#111" }} />
+                  <div className="h-3 w-3/4" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }} />
+                  <div className="h-3 w-1/2" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }} />
                 </div>
               </div>
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}>
-            <Wand2 size={32} className="text-foreground/30 mx-auto mb-4" />
+          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+            <Wand2 size={32} className="text-muted-foreground mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
@@ -125,11 +125,11 @@ const History = () => {
                 key={item.id}
                 onClick={() => setExpanded(item)}
                 className="w-full text-left rounded-[10px] overflow-hidden transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
-                style={{ backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}
+                style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={() => setItems((prev) => prev.filter((x) => x.id !== item.id))} />
                 <div className="p-4 space-y-2">
-                  <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-foreground/60 line-clamp-2 leading-relaxed">
+                  <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-muted-foreground line-clamp-2 leading-relaxed">
                     {item.prompt || "no prompt"}
                   </p>
                   <div className="flex items-center justify-between">
@@ -139,7 +139,7 @@ const History = () => {
                         {item.characterName}
                       </div>
                     )}
-                    <div className={`flex items-center gap-1 text-[10px] font-extrabold lowercase text-foreground/30 ${!item.characterName ? "ml-auto" : ""}`}>
+                    <div className={`flex items-center gap-1 text-[10px] font-extrabold lowercase text-muted-foreground ${!item.characterName ? "ml-auto" : ""}`}>
                       <Calendar size={10} strokeWidth={2.5} />
                       {formatDate(item.created_at)}
                     </div>
@@ -169,12 +169,12 @@ const History = () => {
               className="relative w-full max-w-sm md:max-w-lg"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <div className="relative">
                   <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 </div>
                 <div className="p-4 md:p-5 space-y-3">
-                  <p className="text-[10px] md:text-[12px] font-extrabold lowercase text-foreground/60 leading-relaxed">
+                  <p className="text-[10px] md:text-[12px] font-extrabold lowercase text-muted-foreground leading-relaxed">
                     {expanded.prompt || "no prompt"}
                   </p>
                   <div className="flex items-center gap-3">
@@ -184,7 +184,7 @@ const History = () => {
                         {expanded.characterName}
                       </div>
                     )}
-                    <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-extrabold lowercase text-foreground/30">
+                    <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-extrabold lowercase text-muted-foreground">
                       <Calendar size={10} strokeWidth={2.5} />
                       {formatDate(expanded.created_at)}
                     </div>

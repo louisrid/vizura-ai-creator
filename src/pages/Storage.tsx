@@ -133,16 +133,16 @@ const Storage = () => {
         {loading ? (
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
             {Array.from({ length: 12 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+              <div key={`skel-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                 <AspectRatio ratio={3 / 4}>
-                  <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                  <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                 </AspectRatio>
               </div>
             ))}
           </div>
         ) : images.length === 0 ? (
-          <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "#1a1a1a" }}>
-            <Wand2 size={32} className="text-foreground/30 mx-auto mb-4 md:w-10 md:h-10" />
+          <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))" }}>
+            <Wand2 size={32} className="text-muted-foreground mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
@@ -200,13 +200,13 @@ const Storage = () => {
         footer={expanded ? (
           <>
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-              <div className="px-3 md:px-4 pt-3 pb-1" style={{ backgroundColor: "#1a1a1a" }}>
+              <div className="px-3 md:px-4 pt-3 pb-1" style={{ backgroundColor: "hsl(var(--card))" }}>
                 <button
                    onClick={(e) => {
                      e.stopPropagation();
                      e.preventDefault();
                       const btn = e.currentTarget;
-                       btn.style.backgroundColor = "#1a1a1a";
+                       btn.style.backgroundColor = "hsl(var(--card))";
                        setTimeout(() => { btn.style.backgroundColor = "#000"; }, 150);
                      const text = expanded!.prompt;
                      const copyFallback = () => {
@@ -245,7 +245,7 @@ const Storage = () => {
                 </button>
               </div>
             )}
-            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "#1a1a1a", borderRadius: "0 0 10px 10px" }}>
+            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
               <a href={expanded.url} download={`vizura-${expanded.id}.png`} target="_blank" className="flex-1">
                 <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />

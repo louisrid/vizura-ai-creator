@@ -65,17 +65,17 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
             >
               {RATIO_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
-                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                  {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--card))", margin: "0" }} />}
                   <button
                     type="button"
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
+                      backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(var(--card))" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -119,7 +119,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[10px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
+    <div className="flex items-stretch rounded-[10px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -268,17 +268,17 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
             >
               {PHOTO_TYPE_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
-                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                  {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--card))", margin: "0" }} />}
                   <button
                     type="button"
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
+                      backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(var(--card))" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -345,17 +345,17 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
-                  {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                  {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--card))", margin: "0" }} />}
                   <button
                     type="button"
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: value === opt.value ? "rgba(255,255,255,0.07)" : "transparent",
+                      backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "rgba(255,255,255,0.07)" : "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(var(--card))" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -672,25 +672,25 @@ const Index = () => {
             const borderRadius = isFirst && isLast ? "10px" : isFirst ? "10px 10px 0 0" : isLast ? "0 0 10px 10px" : "0";
             return (
               <Fragment key={c.id}>
-                {idx > 0 && <div style={{ height: 1, backgroundColor: "#1a1a1a", margin: "0" }} />}
+                {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--card))", margin: "0" }} />}
                 <button
                   type="button"
                   onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
                   className="flex w-full items-center gap-3 px-4 py-3"
                   style={{
-                    backgroundColor: isSelected ? "rgba(255,255,255,0.07)" : "transparent",
+                    backgroundColor: isSelected ? "hsl(var(--card))" : "transparent",
                     borderRadius,
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? "rgba(255,255,255,0.07)" : "transparent")}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? "hsl(var(--card))" : "transparent")}
                 >
                   {c.face_image_url ? (
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/10">
                       <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
                     </div>
                   ) : (
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
-                      <User size={16} strokeWidth={3} style={{ color: "rgba(255,255,255,0.3)" }} />
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                      <User size={16} strokeWidth={3} style={{ color: "hsl(var(--border-mid))" }} />
                     </div>
                   )}
                   <span
@@ -715,7 +715,7 @@ const Index = () => {
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
                 style={{ borderRadius: "10px" }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
                 <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
@@ -819,7 +819,7 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <span className="text-2xl font-extrabold lowercase text-foreground/30">{placeholderText}</span>
+                  <span className="text-2xl font-extrabold lowercase text-muted-foreground">{placeholderText}</span>
                 </div>
               }
             />
@@ -914,7 +914,7 @@ const Index = () => {
                 charName={selectedChar?.name || ""}
                 placeholder={
                   <div className="pointer-events-none absolute left-4 top-3 right-4">
-                    <span className="text-2xl font-extrabold lowercase text-foreground/30">{placeholderText}</span>
+                    <span className="text-2xl font-extrabold lowercase text-muted-foreground">{placeholderText}</span>
                   </div>
                 }
               />

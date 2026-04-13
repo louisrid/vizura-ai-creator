@@ -204,7 +204,7 @@ const Header = () => {
                           backgroundColor: "transparent",
                           borderRadius,
                         }}
-                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)"; }}
+                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(var(--card))"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
@@ -235,7 +235,7 @@ const Header = () => {
                       textTransform: "lowercase",
                       borderRadius: "0 0 10px 10px",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                   >
                     <LogOut size={isDesktop ? 18 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />

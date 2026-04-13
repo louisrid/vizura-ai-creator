@@ -235,24 +235,24 @@ const CharacterDetail = () => {
         <DotDecal />
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[280px] md:hidden">
           <div className="flex items-center gap-3 mb-7">
-            <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px]" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }} />
-            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "#1a1a1a" }} />
+            <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="flex flex-col gap-3">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
-              <div className="h-9 w-48 mb-5" style={{ borderRadius: 8, backgroundColor: "#111" }} />
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
+              <div className="h-9 w-48 mb-5" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
               <div className="grid grid-cols-3 gap-2">
                 {[0,1,2].map(i => (
-                  <div key={i} className="aspect-[3/4] w-full" style={{ borderRadius: 10, backgroundColor: "#111" }} />
+                  <div key={i} className="aspect-[3/4] w-full" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
                 ))}
               </div>
             </div>
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-4 py-3">
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-4 py-3">
               <div className="grid grid-cols-4 gap-1.5">
                 {[0,1,2,3,4,5,6].map(i => (
                   <div key={i} className="rounded-[10px] py-2 flex flex-col items-center gap-1.5">
-                    <div className="h-2 w-8" style={{ borderRadius: 4, backgroundColor: "#111" }} />
-                    <div className="h-6 w-12" style={{ borderRadius: 8, backgroundColor: "#111" }} />
+                    <div className="h-2 w-8" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }} />
+                    <div className="h-6 w-12" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
                   </div>
                 ))}
               </div>
@@ -270,7 +270,7 @@ const CharacterDetail = () => {
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
-          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <p className="text-sm font-[900] lowercase text-center mt-16" style={{ color: "hsl(var(--border-mid))" }}>
             character not found
           </p>
         </main>
@@ -338,7 +338,7 @@ const CharacterDetail = () => {
       ) : isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>no photo</span>
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "hsl(var(--border-mid))" }}>no photo</span>
       )}
       {overlay === "lock" && (
         <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
@@ -368,7 +368,7 @@ const CharacterDetail = () => {
           <PageTitle className="mb-0">details</PageTitle>
         </div>
         <div className="flex flex-col gap-3">
-          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
+          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
                 <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
@@ -391,7 +391,7 @@ const CharacterDetail = () => {
             </div>
           </div>
           {/* Latest photos section */}
-          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
+          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
             <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
             <div className="grid grid-cols-3 gap-2">
               {Array.from({ length: 3 }).map((_, i) => {
@@ -411,11 +411,11 @@ const CharacterDetail = () => {
               })}
             </div>
           </div>
-          <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="px-3 py-2">
+          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-3 py-2">
             <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
-                <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
-                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
                   <span className="inline-block font-[800] lowercase text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]" style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
@@ -454,7 +454,7 @@ const CharacterDetail = () => {
         <div className="grid grid-cols-12 gap-8">
           {/* Left: photos */}
           <div className="col-span-7">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-6">
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
                   <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
@@ -477,7 +477,7 @@ const CharacterDetail = () => {
               </div>
             </div>
             {/* Latest photos — desktop */}
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5 mt-5">
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5 mt-5">
               <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
               <div className="grid grid-cols-3 gap-3">
                 {Array.from({ length: 6 }).map((_, i) => {
@@ -500,12 +500,12 @@ const CharacterDetail = () => {
           </div>
           {/* Right: details + actions */}
           <div className="col-span-5 flex flex-col gap-5">
-            <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
-              <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">traits</h3>
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
+              <h3 className="text-sm font-[900] lowercase text-muted-foreground mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
                   <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))" }}>
-                    <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
+                    <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
                     <span className="inline-block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
                   </div>
                 ))}
@@ -556,14 +556,14 @@ const CharacterDetail = () => {
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-sm md:max-w-md"
-              style={{ backgroundColor: "#000000", borderRadius: 10, border: "2px solid #1a1a1a", padding: "28px 24px 24px" }}
+              style={{ backgroundColor: "#000000", borderRadius: 10, border: "2px solid hsl(var(--card))", padding: "28px 24px 24px" }}
             >
               <ModalCloseButton onClick={() => setShowDelete(false)} />
 
               <h2 className="text-lg md:text-xl font-[900] lowercase text-white leading-[1.1] mb-2 text-center">
                 delete this character?
               </h2>
-              <p className="text-sm md:text-base font-[900] lowercase mb-6 text-center" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <p className="text-sm md:text-base font-[900] lowercase mb-6 text-center" style={{ color: "hsl(var(--border-mid))" }}>
                 {character.name || "unnamed"}
               </p>
               <div className="flex gap-3 w-full">
@@ -571,7 +571,7 @@ const CharacterDetail = () => {
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
                   className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
-                  style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
+                  style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                 >
                   no
                 </button>

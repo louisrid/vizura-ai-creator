@@ -108,7 +108,7 @@ const TopUps = () => {
                 className="relative rounded-[10px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
-                  border: "2px solid rgba(255,255,255,0.25)",
+                  border: "2px solid hsl(var(--border-mid))",
                 }}
               >
                 <div className="flex items-center gap-4">

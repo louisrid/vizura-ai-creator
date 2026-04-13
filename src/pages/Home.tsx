@@ -258,11 +258,11 @@ const Home = () => {
               className="relative w-full max-w-[280px] md:max-w-[400px]"
             >
               <ModalCloseButton onClick={() => setSelectedImage(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
                 {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
                   <div className="px-3 pt-2.5 pb-3">
-                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "hsl(var(--border-mid))" }}>
                       {selectedImage.prompt}
                     </p>
                   </div>
@@ -354,9 +354,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -379,7 +379,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -415,9 +415,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -433,7 +433,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "#1a1a1a",
+                          backgroundColor: "hsl(var(--card))",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
@@ -457,7 +457,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -471,7 +471,7 @@ const Home = () => {
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
                         <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.id, char.age)}</span>
+                        <span className="block text-[9px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );
@@ -554,9 +554,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -579,7 +579,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -612,9 +612,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#1a1a1a" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "#1a1a1a" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -630,7 +630,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "#1a1a1a",
+                          backgroundColor: "hsl(var(--card))",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
@@ -654,7 +654,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "2px solid hsl(var(--border-mid))",
-                        backgroundColor: "#1a1a1a",
+                        backgroundColor: "hsl(var(--card))",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -668,7 +668,7 @@ const Home = () => {
                       </AspectRatio>
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
                         <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "rgba(255,255,255,0.4)" }}>age {displayAge(char.id, char.age)}</span>
+                        <span className="block text-[10px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(char.id, char.age)}</span>
                       </div>
                     </button>
                   );
