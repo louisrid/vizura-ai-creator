@@ -71,7 +71,6 @@ const Home = () => {
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(true);
   const openCreatorRequested = Boolean((location.state as any)?.openCreator);
-  const openCreatorRequested = Boolean((location.state as any)?.openCreator);
 
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); setPhotosLoaded(true); return; }
