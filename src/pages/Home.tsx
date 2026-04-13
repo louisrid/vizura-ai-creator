@@ -146,6 +146,16 @@ const Home = () => {
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, openCreatorRequested, user]);
 
+  // When lock state resolves and user needs onboarding, force guided creator open
+  useEffect(() => {
+    if (!lockStateResolved || !user) return;
+    if (!onboardingComplete && characterCount === 0) {
+      setShowGuided(true);
+      setSkipWelcome(true);
+      setAutoOpenEvaluated(true);
+    }
+  }, [lockStateResolved, user, onboardingComplete, characterCount]);
+
   // Fetch all data in parallel — resolve lock state atomically
   useEffect(() => {
     if (!user) {
