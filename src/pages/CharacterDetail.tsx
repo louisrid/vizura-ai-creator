@@ -62,7 +62,7 @@ const CharacterDetail = () => {
   const [angleRegensUsed, setAngleRegensUsed] = useState(0);
   const [bodyRegensUsed, setBodyRegensUsed] = useState(0);
 
-  useEffect(() => {
+  const fetchProfileData = useCallback(() => {
     if (!user) return;
     supabase
       .from("profiles")
@@ -77,6 +77,15 @@ const CharacterDetail = () => {
         }
       });
   }, [user]);
+
+  useEffect(() => { fetchProfileData(); }, [fetchProfileData]);
+
+  // Re-fetch after test account reset
+  useEffect(() => {
+    const handler = () => fetchProfileData();
+    window.addEventListener("vizura:test-reset-complete", handler);
+    return () => window.removeEventListener("vizura:test-reset-complete", handler);
+  }, [fetchProfileData]);
 
   // Latest photos for this character
   const [latestPhotos, setLatestPhotos] = useState<{ id: string; url: string; created_at: string }[]>([]);

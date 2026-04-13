@@ -101,7 +101,7 @@ const ChooseFace = () => {
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
 
-  useEffect(() => {
+  const fetchProfileData = useCallback(() => {
     if (!user) return;
     supabase
       .from("profiles")
@@ -115,6 +115,15 @@ const ChooseFace = () => {
         }
       });
   }, [user]);
+
+  useEffect(() => { fetchProfileData(); }, [fetchProfileData]);
+
+  // Re-fetch after test account reset
+  useEffect(() => {
+    const handler = () => fetchProfileData();
+    window.addEventListener("vizura:test-reset-complete", handler);
+    return () => window.removeEventListener("vizura:test-reset-complete", handler);
+  }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
   // Angle/body generation — runs in background, no overlay
