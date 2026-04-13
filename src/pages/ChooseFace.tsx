@@ -114,19 +114,20 @@ const ChooseFace = () => {
 
   const hasOnboardingFaceRegenLocked = !onboardingComplete && faceRegensUsed >= 1;
 
-  const fetchProfileData = useCallback(() => {
-    if (!user) return;
-    supabase
+  const fetchProfileData = useCallback(async () => {
+    if (!user) return null;
+    const { data, error } = await supabase
       .from("profiles")
       .select("onboarding_complete, onboarding_face_regens_used")
       .eq("user_id", user.id)
-      .single()
-      .then(({ data }) => {
-        if (data) {
-          setOnboardingComplete(!!data.onboarding_complete);
-          setFaceRegensUsed(data.onboarding_face_regens_used ?? 0);
-        }
-      });
+      .single();
+
+    if (!error && data) {
+      setOnboardingComplete(!!data.onboarding_complete);
+      setFaceRegensUsed(data.onboarding_face_regens_used ?? 0);
+    }
+
+    return data ?? null;
   }, [user]);
 
   useEffect(() => { fetchProfileData(); }, [fetchProfileData]);
@@ -346,7 +347,9 @@ const ChooseFace = () => {
       toast.error("regen error");
       return;
     }
-    if (!onboardingComplete && faceRegensUsed >= 1) {
+    const latestProfile = !onboardingComplete ? await fetchProfileData() : null;
+    const dbLocked = !onboardingComplete && (latestProfile?.onboarding_face_regens_used ?? faceRegensUsed) >= 1;
+    if (dbLocked) {
       toast("1/1 used");
       return;
     }

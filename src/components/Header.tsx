@@ -136,6 +136,7 @@ const Header = () => {
 
   const isLoggedIn = !!user?.id;
   const isAuthPage = location.pathname === "/auth" || location.pathname === "/reset-password";
+  const hideOnboardingFaceFlowActions = location.pathname === "/choose-face" && showMenuLocks;
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
@@ -296,7 +297,7 @@ const Header = () => {
               )}
             </div>
 
-            {!isAuthPage && (
+            {!isAuthPage && !hideOnboardingFaceFlowActions && (
               <div className="flex items-center gap-3 md:gap-5">
                 <button
                   onClick={() => navigate("/top-ups")}
