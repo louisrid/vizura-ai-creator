@@ -127,7 +127,8 @@ const Home = () => {
 
     const pendingPostAuthHome = sessionStorage.getItem("vizura_post_auth_home") === "1";
     if (user || pendingPostAuthHome) {
-      if (!openCreatorRequested) setShowGuided(false);
+      if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
+      if (isOnboardingUser) setSkipWelcome(true);
       setAutoOpenEvaluated(true);
       requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
       return;
@@ -190,9 +191,10 @@ const Home = () => {
     };
   }, [fetchLatestPhotos, fetchCharacters, user]);
 
-  function handleOpenCreator(forceFullFlow = false) {
+  function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
+    const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
     sessionStorage.removeItem(DISMISSED_KEY);
-    setSkipWelcome(forceFullFlow ? false : !!user);
+    setSkipWelcome(isFull ? false : !!user);
     setShowGuided(true);
   }
 
