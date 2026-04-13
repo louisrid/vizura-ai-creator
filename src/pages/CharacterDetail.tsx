@@ -170,9 +170,9 @@ const CharacterDetail = () => {
     return () => clearInterval(interval);
   }, [user, id, character?.face_angle_url, character?.body_anchor_url]);
 
-  const handleRegenerate = async () => {
-    if (!character || !character.face_image_url || !user || !regenTarget) return;
-    const target = regenTarget;
+  const handleRegenerate = async (directTarget?: "angle" | "body") => {
+    const target = directTarget || regenTarget;
+    if (!character || !character.face_image_url || !user || !target) return;
     setRegenTarget(null);
 
     if (target === "angle") {
@@ -400,6 +400,11 @@ const CharacterDetail = () => {
               e.stopPropagation();
               if (regenUsed) {
                 toast("1/1 used");
+                return;
+              }
+              if (!onboardingComplete) {
+                const directTarget = label === "3/4 angle" ? "angle" as const : "body" as const;
+                handleRegenerate(directTarget);
                 return;
               }
               onRegenClick?.();
