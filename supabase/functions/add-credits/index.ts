@@ -38,7 +38,49 @@ Deno.serve(async (req) => {
     }
     const userId = user.id;
 
-    const { amount } = await req.json();
+    const body = await req.json();
+    const { amount, action } = body;
+
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    // Test account reset
+    if (action === "test_reset") {
+      const TEST_EMAIL = "carlsonistrader@gmail.com";
+      if (user.email?.toLowerCase() !== TEST_EMAIL) {
+        return new Response(JSON.stringify({ error: "Not authorized" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Reset balance to 100 hidden gems
+      await adminClient
+        .from("credits")
+        .update({ balance: 100, updated_at: new Date().toISOString() })
+        .eq("user_id", userId);
+
+      // Reset onboarding state
+      await adminClient
+        .from("profiles")
+        .update({
+          onboarding_complete: false,
+          has_claimed_free_gems: false,
+          onboarding_face_regens_used: 0,
+          onboarding_angle_regens_used: 0,
+          onboarding_body_regens_used: 0,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId);
+
+      return new Response(
+        JSON.stringify({ success: true, action: "test_reset" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     if (!amount || typeof amount !== "number" || amount <= 0 || amount > 10000) {
       return new Response(JSON.stringify({ error: "Invalid amount" }), {
         status: 400,
