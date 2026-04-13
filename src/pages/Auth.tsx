@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
