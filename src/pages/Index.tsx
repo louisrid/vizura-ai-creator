@@ -552,7 +552,7 @@ const Index = () => {
 
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
-    if (credits <= 0) { setShowPaywall(true); return; }
+    if (credits <= 0) { navigate("/top-ups"); return; }
     if (!selectedCharId || !prompt.trim()) { toast.error("please fill all boxes"); return; }
 
     setIsGenerating(true);
@@ -601,7 +601,7 @@ const Index = () => {
         }
         if (data?.code === "NO_GEMS") {
           setPhotoOverlayPhase("hidden");
-          setShowPaywall(true);
+          navigate("/top-ups");
           return;
         }
         if (data?.code === "RATE_LIMITED") {
@@ -636,7 +636,7 @@ const Index = () => {
 
       const msg = e?.message || String(e);
       if (msg.includes("No gems") || msg.includes("402")) {
-        setShowPaywall(true);
+        navigate("/top-ups");
       } else if (msg.includes("abort") || msg.includes("AbortError")) {
         toast.error("request timed out — please try again");
       } else if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("network")) {

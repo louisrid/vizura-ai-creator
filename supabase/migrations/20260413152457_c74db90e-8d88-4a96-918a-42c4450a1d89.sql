@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN has_claimed_free_gems boolean NOT NULL DEFAULT false;
