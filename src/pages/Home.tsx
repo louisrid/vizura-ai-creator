@@ -13,8 +13,8 @@ import { supabase } from "@/integrations/supabase/client";
 /* Bouncing finger emoji for onboarding */
 const BouncingFinger = () => (
   <motion.span
-    className="pointer-events-none absolute left-1/2 z-[9999] text-[28px] leading-none md:text-[34px]"
-    style={{ top: "calc(100% - 12px)", transform: "translateX(-50%)" }}
+    className="pointer-events-none absolute z-[9999] text-[24px] leading-none md:text-[30px]"
+    style={{ bottom: 0, right: "28%", transform: "translate(50%, 55%)" }}
     animate={{ y: [0, -6, 0] }}
     transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
     aria-hidden="true"
