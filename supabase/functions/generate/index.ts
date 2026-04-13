@@ -176,6 +176,12 @@ function stripFacePromptBodyLanguage(prompt: string): string {
     .replace(/^,|,$/g, "");
 }
 
+/* ── bust size descriptor ── */
+const BUST_SIZE_MAP: Record<string, string> = {
+  regular: "full rounded C cup breasts, prominent noticeable chest",
+  large: "large DD cup breasts, heavy prominent chest, deep cleavage",
+};
+
 /* ── build character trait string from DB record ───────── */
 function buildCharacterTraits(char: any): string {
   const parts: string[] = [];
@@ -245,6 +251,15 @@ function buildCharacterTraits(char: any): string {
   return parts.join(", ");
 }
 
+/* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
+const BODY_PROMPT_MODIFIER: Record<string, string> = {
+  thin: "petite frame, toned stomach, narrow hips",
+  regular: "hourglass figure, defined waist, feminine hips",
+  average: "hourglass figure, defined waist, feminine hips",
+  curvy: "voluptuous, wider hips, natural curves, soft thighs",
+  thick: "voluptuous, wider hips, natural curves, soft thighs",
+};
+
 /* ── build final prompt with structured format ─────────── */
 function buildFinalPrompt(
   scenePrompt: string,
@@ -309,71 +324,6 @@ function buildFinalPrompt(
 
   const finalPrompt = parts.filter(Boolean).join(", ");
   console.log("FINAL PROMPT:", finalPrompt);
-  return finalPrompt;
-}
-
-/* ── build FLUX-style prompt ───────────────────────────── */
-function buildFluxPrompt(
-  scenePrompt: string,
-  photoType: string,
-  characterTraits: string | null,
-  bodyType?: string,
-  expression?: string,
-): string {
-  const EXPRESSION_MAP: Record<string, string> = {
-    "casual smile": "gentle casual closed-mouth smile",
-    "straight face": "serious straight face, no smile, lips together",
-    "big smile": "big open-mouth smile showing teeth, happy energy",
-    "pout": "duck face pout, lips pushed forward",
-  };
-  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "";
-
-  const revealingKeywords = [
-    "lingerie", "bikini", "underwear", "bra", "swimsuit",
-    "swimwear", "nightwear", "negligee", "corset", "bodysuit",
-    "crop top", "sports bra",
-  ];
-  const isRevealing = revealingKeywords.some(
-    kw => scenePrompt.toLowerCase().includes(kw)
-  );
-
-  const parts: string[] = [];
-
-  parts.push("Same woman from image 1, image 2, and image 3. Exact facial identity from image 1. Exact body shape, proportions, bust size, and cleavage level from image 3. Completely replace all clothing from reference images with the outfit described below");
-
-  parts.push(scenePrompt);
-
-  if (photoType === "selfie") {
-    parts.push("Authentic casual iPhone selfie, front camera, natural lighting, amateur influencer Instagram style");
-  } else {
-    parts.push("Casual candid iPhone photo, natural lighting, amateur influencer Instagram style");
-  }
-
-  if (characterTraits) {
-    parts.push(characterTraits);
-    if (exprStr) parts.push(exprStr);
-  }
-
-  if (bodyType) {
-    const bKey = normalizeBodyType((bodyType || "regular").toLowerCase());
-    const modifier = BODY_PROMPT_MODIFIER?.[bKey] || BODY_PROMPT_MODIFIER?.["regular"];
-    if (modifier) parts.push(modifier);
-  }
-
-  if (photoType === "selfie") {
-    parts.push("Her left arm behind her back");
-  }
-
-  parts.push("Realistic skin with visible pores and natural texture, smooth midsection, no visible ribs");
-  parts.push("Direct eye contact with camera");
-  parts.push("Deep focus, sharp focus across foreground subject and background, detailed surroundings clearly visible, not portrait mode, no shallow depth of field");
-
-  if (!isRevealing) {
-    parts.push("Fully clothed");
-  }
-
-  const finalPrompt = parts.join(". ");
-  console.log("FLUX FINAL PROMPT:", finalPrompt);
   return finalPrompt;
 }
 
@@ -610,22 +560,6 @@ const BODY_ANCHOR_MAP: Record<string, string> = {
   thick: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
 };
 
-
-/* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
-const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  thin: "petite frame, toned stomach, narrow hips",
-  regular: "hourglass figure, defined waist, feminine hips",
-  average: "hourglass figure, defined waist, feminine hips",
-  curvy: "voluptuous, wider hips, natural curves, soft thighs",
-  thick: "voluptuous, wider hips, natural curves, soft thighs",
-};
-
-/* ── bust size descriptor ── */
-const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full rounded C cup breasts, prominent noticeable chest",
-  large: "large DD cup breasts, heavy prominent chest, deep cleavage",
-};
-
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
 async function generateAngleAndBody(
   faceUrl: string,
@@ -659,26 +593,16 @@ async function generateAngleAndBody(
   if (target === "body" || target === "both") {
     try {
       console.log("Generating full-body anchor...");
-      const bodyAnchorMode = Deno.env.get("BODY_ANCHOR_MODE") || "a";
       const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
       const bustKey = (bustSize || "regular").toLowerCase();
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
-      if (bodyAnchorMode === "a") {
-        const bodyPrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh. Hair colour and face must be identical to reference photo.`;
-        console.log("Body anchor mode A (full):", bodyPrompt.slice(0, 200));
-        const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
-        if (bodyResult) {
-          bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
-        }
-      } else {
-        const bodyPrompt = `A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Plain nude-tone strapless bodysuit, same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
-        console.log("Body anchor mode B (minimal):", bodyPrompt.slice(0, 200));
-        const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
-        if (bodyResult) {
-          bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
-        }
+      const bodyPrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh. Hair colour and face must be identical to reference photo.`;
+      console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
+      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+      if (bodyResult) {
+        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
       }
       console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
     } catch (e) {
@@ -709,126 +633,9 @@ async function generatePhoto(
 ): Promise<string | null> {
   const safeRatio = mapAspectRatio(aspectRatio);
   if (faceImageUrls.length > 0) {
-    const fullPrompt = finalPrompt;
-    return await xaiImageEdit(fullPrompt, faceImageUrls, apiKey, safeRatio);
+    return await xaiImageEdit(finalPrompt, faceImageUrls, apiKey, safeRatio);
   }
   return await xaiTextToImage(finalPrompt, apiKey);
-}
-
-/* ── FLUX 2 Pro Edit provider (async queue + polling) ── */
-async function generateWithFlux(
-  prompt: string,
-  imageUrls: string[],
-  aspectRatio: string,
-  adminClient: any,
-  userId: string,
-): Promise<string | null> {
-  const FAL_KEY = Deno.env.get("FAL_KEY");
-  if (!FAL_KEY) throw new Error("FAL_KEY is not configured");
-
-  const imageSize = aspectRatio === "9:16"
-    ? { width: 1080, height: 1920 }
-    : { width: 1024, height: 1536 };
-
-  console.log("FLUX generateWithFlux calling with", imageUrls.length, "references");
-  console.log("FLUX prompt:", prompt.slice(0, 300));
-
-  const FAL_BASE = "https://queue.fal.run/fal-ai/flux-2-pro/edit";
-  const authHeaders = {
-    "Authorization": `Key ${FAL_KEY}`,
-    "Content-Type": "application/json",
-  };
-
-  const submitRes = await fetch(FAL_BASE, {
-    method: "POST",
-    signal: AbortSignal.timeout(15000),
-    headers: authHeaders,
-    body: JSON.stringify({
-      prompt,
-      image_urls: imageUrls,
-      image_size: imageSize,
-      safety_tolerance: "5",
-      enable_safety_checker: false,
-      output_format: "jpeg",
-      seed: Math.floor(Math.random() * 999999),
-    }),
-  });
-
-  if (!submitRes.ok) {
-    const errText = await submitRes.text();
-    console.error("FLUX queue submit error:", submitRes.status, errText);
-    if (submitRes.status === 429) throw { status: 429 };
-    throw new Error("FLUX submit failed: " + submitRes.status + " " + errText);
-  }
-
-  const submitData = await submitRes.json();
-  const requestId = submitData?.request_id;
-  if (!requestId) {
-    console.error("FLUX submit missing request_id:", JSON.stringify(submitData).slice(0, 500));
-    throw new Error("FLUX submit missing request_id");
-  }
-  console.log("FLUX queued, request_id:", requestId);
-
-  const STATUS_URL = submitData?.status_url || `https://queue.fal.run/fal-ai/flux-2-pro--edit/requests/${requestId}/status`;
-  const RESULT_URL = submitData?.response_url || `https://queue.fal.run/fal-ai/flux-2-pro--edit/requests/${requestId}`;
-  const MAX_POLLS = 30;
-  const POLL_INTERVAL_MS = 2000;
-
-  for (let i = 0; i < MAX_POLLS; i++) {
-    await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
-
-    const statusRes = await fetch(STATUS_URL, {
-      method: "GET",
-      signal: AbortSignal.timeout(10000),
-      headers: { "Authorization": `Key ${FAL_KEY}` },
-    });
-
-    if (!statusRes.ok) {
-      const errText = await statusRes.text();
-      console.error("FLUX status poll error:", statusRes.status, errText);
-      continue;
-    }
-
-    const statusData = await statusRes.json();
-    const status = statusData?.status;
-    console.log(`FLUX poll ${i + 1}/${MAX_POLLS}: status=${status}`);
-
-    if (status === "COMPLETED") {
-      break;
-    }
-    if (status === "FAILED") {
-      console.error("FLUX job failed:", JSON.stringify(statusData).slice(0, 500));
-      throw new Error("FLUX generation failed on server");
-    }
-  }
-
-  const resultRes = await fetch(RESULT_URL, {
-    method: "GET",
-    signal: AbortSignal.timeout(10000),
-    headers: { "Authorization": `Key ${FAL_KEY}` },
-  });
-
-  if (!resultRes.ok) {
-    const errText = await resultRes.text();
-    console.error("FLUX result fetch error:", resultRes.status, errText);
-    throw new Error("FLUX result fetch failed: " + resultRes.status);
-  }
-
-  const result = await resultRes.json();
-  const url = result?.images?.[0]?.url
-    || result?.data?.images?.[0]?.url
-    || result?.output?.images?.[0]?.url
-    || result?.image?.url
-    || null;
-
-  if (!url) {
-    console.error("FLUX response missing image URL:", JSON.stringify(result).slice(0, 1500));
-    throw new Error("FLUX response missing image URL");
-  }
-
-  console.log("FLUX image URL received:", url.slice(0, 80));
-  const permanentUrl = await storeImagePermanently(url, userId, adminClient, "photo");
-  return permanentUrl;
 }
 
 /* ── handler ───────────────────────────────────────────── */
@@ -1045,8 +852,6 @@ serve(async (req) => {
         /* ── increment onboarding regen counter ── */
         if (onboarding) {
           const col = regenerateSingle === "angle" ? "onboarding_angle_regens_used" : "onboarding_body_regens_used";
-          await adminClient.rpc("update_profile_safe", {}); // can't use rpc for this
-          // Direct update via service role
           const { data: currentProfile } = await adminClient
             .from("profiles")
             .select(col)
@@ -1307,19 +1112,9 @@ serve(async (req) => {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
-        const provider = Deno.env.get("PHOTO_PROVIDER") || "grok";
-
-        let result: string | null;
-        if (provider === "flux" && faceImageUrls.length > 0) {
-          const fluxPrompt = buildFluxPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
-          console.log("Using FLUX provider");
-          result = await generateWithFlux(fluxPrompt, faceImageUrls, aspectRatio, adminClient, userId);
-        } else {
-          const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
-          console.log("Using Grok provider");
-          const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
-          result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
-        }
+        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
+        const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
+        const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
         if (result) {
           imageUrls = [result];
