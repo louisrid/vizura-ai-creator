@@ -134,7 +134,7 @@ const Header = () => {
     { label: "my account", path: "/account", icon: Settings, auth: false },
   ];
 
-  const isLoggedIn = !loading && !!user?.id;
+  const isLoggedIn = !!user?.id;
   const isAuthPage = location.pathname === "/auth" || location.pathname === "/reset-password";
 
   // Detect desktop

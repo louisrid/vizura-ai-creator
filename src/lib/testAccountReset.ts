@@ -35,6 +35,9 @@ export const maybeResetTestAccount = async (user: User) => {
 
     // Clear gems cache so it refetches
     window.sessionStorage.removeItem(`vizura_gems_balance:${user.id}`);
+
+    // Notify components to re-fetch profile data
+    window.dispatchEvent(new CustomEvent("vizura:test-reset-complete"));
   } catch (err) {
     console.error("Test account reset failed:", err);
   }
