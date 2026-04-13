@@ -232,6 +232,9 @@ const Home = () => {
     return slots;
   }, [characters]);
 
+  const showBounceOnCreate = !onboardingComplete && characters.length === 0;
+  const showBounceOnPhoto = !onboardingComplete && characters.length > 0;
+
   const pageHidden = showGuided || (!autoOpenEvaluated && !user);
 
   return (
