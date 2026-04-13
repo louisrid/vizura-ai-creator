@@ -9,19 +9,19 @@
     --foreground: 0 0% 100%;
 
     /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
-    --card: 0 0% 8%;
+    --card: 0 0% 6%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 8%;
+    --popover: 0 0% 6%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 8%;
+    --secondary: 0 0% 6%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 8%;
+    --muted: 0 0% 6%;
     --muted-foreground: 0 0% 100%;
 
     --accent: 54 100% 51%;
@@ -68,7 +68,7 @@
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent: 0 0% 6%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 28%;
     --sidebar-ring: 0 0% 100%;
@@ -79,12 +79,12 @@
     --nav-foreground: 0 0% 100%;
     --surface-dark: 0 0% 2%;
     --surface-dark-foreground: 0 0% 100%;
-    --surface-elevated: 0 0% 8%;
+    --surface-elevated: 0 0% 6%;
 
     /* wizard bg */
     --wizard-bg: 0 0% 2%;
 
-    --surface-strong: 0 0% 8%;
+    --surface-strong: 0 0% 6%;
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
