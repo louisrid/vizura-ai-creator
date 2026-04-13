@@ -14,6 +14,9 @@ export const isTestResetAccount = (user?: User | null) => {
 export const maybeResetTestAccount = async (user: User) => {
   if (!isTestResetAccount(user)) return;
 
+  // Don't reset while user is mid-onboarding flow (e.g. choosing a face)
+  if (typeof window !== "undefined" && window.location.pathname === "/choose-face") return;
+
   // Only reset once per actual page load. sessionStorage survives refreshes,
   // so use a window-scoped flag instead to ensure refresh triggers a new reset.
   const pageFlags = window as typeof window & { [RESET_LOAD_KEY]?: string };
