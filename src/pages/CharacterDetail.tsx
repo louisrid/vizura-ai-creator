@@ -184,7 +184,7 @@ const CharacterDetail = () => {
       await refetchGems();
       if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
       else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
-      toast("1 gem used");
+      toast("10 gems used");
     } catch (err) {
       console.error("Regenerate error:", err);
       if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
@@ -535,7 +535,7 @@ const CharacterDetail = () => {
         onConfirm={handleRegenerate}
         onCancel={() => setRegenTarget(null)}
         message="regenerate this photo?"
-        confirmLabel="yes • 1"
+        confirmLabel="yes • 10"
         gemCost
       />
 
