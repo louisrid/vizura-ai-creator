@@ -308,6 +308,8 @@ const ChooseFace = () => {
       if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
       setFaces(nextFaces);
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
+      // Persist prompt so regen works after refresh
+      if (prompt) sessionStorage.setItem("facefox_face_prompt", prompt);
       setSelectedIndex(null);
       setApiDone(true);
     } catch (err: any) {
