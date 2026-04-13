@@ -95,6 +95,23 @@ const ChooseFace = () => {
   const [regeneratingFaces, setRegeneratingFaces] = useState(false);
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
+  const [faceRegensUsed, setFaceRegensUsed] = useState(0);
+  const [onboardingComplete, setOnboardingComplete] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("onboarding_complete, onboarding_face_regens_used")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setOnboardingComplete(!!data.onboarding_complete);
+          setFaceRegensUsed(data.onboarding_face_regens_used ?? 0);
+        }
+      });
+  }, [user]);
   const hasShownGreatChoiceRef = useRef(false);
 
   // Angle/body generation — runs in background, no overlay
