@@ -165,22 +165,24 @@ const OnboardingRedirectGate = () => {
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const locationState = (location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null;
+  const hasRedirected = useRef(false);
   const cachedState = readCachedOnboardingState(user?.id);
-  const shouldRedirect = !!user && needsOnboardingRedirect(cachedState) && (location.pathname !== "/" || !locationState?.openCreator);
+  const shouldRedirect = !!user && needsOnboardingRedirect(cachedState) && location.pathname !== "/";
 
   useEffect(() => {
-    if (!shouldRedirect) return;
+    if (!shouldRedirect || hasRedirected.current) return;
+    hasRedirected.current = true;
 
     navigate("/", {
       replace: true,
-      state: {
-        ...(locationState ?? {}),
-        openCreator: true,
-        onboardingRedirect: true,
-      },
+      state: { openCreator: true, onboardingRedirect: true },
     });
-  }, [locationState, navigate, shouldRedirect]);
+  }, [navigate, shouldRedirect]);
+
+  // Reset ref when user changes (sign out / sign in)
+  useEffect(() => {
+    hasRedirected.current = false;
+  }, [user?.id]);
 
   if (!shouldRedirect) return null;
 
