@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import PageTitle from "@/components/PageTitle";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
+import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 function isInAppWebView(): boolean {
   if (typeof navigator === "undefined") return false;
@@ -30,30 +31,50 @@ const Auth = () => {
   useEffect(() => {
     if (!user) return;
 
+    let cancelled = false;
+
     sessionStorage.removeItem("vizura_resume_after_auth");
     sessionStorage.removeItem("vizura_auto_opened");
     sessionStorage.removeItem("vizura_creator_dismissed");
     sessionStorage.removeItem("vizura_guided_flow_state");
     sessionStorage.removeItem("vizura_post_auth_home");
 
-    // Check new account status immediately — do NOT render Home until we know
+    const cachedState = readCachedOnboardingState(user.id);
+    if (needsOnboardingRedirect(cachedState)) {
+      navigate("/", { replace: true, state: { openCreator: true, onboardingRedirect: true } });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    if (cachedState) {
+      navigate(redirectTo, { replace: true });
+      return () => {
+        cancelled = true;
+      };
+    }
+
     const checkNewAccount = async () => {
       try {
-        const [profileRes, charsRes] = await Promise.all([
-          supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
-          supabase.from("characters").select("id").eq("user_id", user.id).limit(1),
-        ]);
-        const isNew = !profileRes.data?.onboarding_complete && (!charsRes.data || charsRes.data.length === 0);
-        if (isNew) {
-          navigate("/", { replace: true, state: { openCreator: true } });
-        } else {
-          navigate(redirectTo, { replace: true });
+        const resolvedState = await fetchAndCacheOnboardingState(user.id);
+        if (cancelled) return;
+
+        if (needsOnboardingRedirect(resolvedState)) {
+          navigate("/", { replace: true, state: { openCreator: true, onboardingRedirect: true } });
+          return;
         }
-      } catch {
+
         navigate(redirectTo, { replace: true });
+      } catch {
+        if (!cancelled) navigate(redirectTo, { replace: true });
       }
     };
-    checkNewAccount();
+
+    void checkNewAccount();
+
+    return () => {
+      cancelled = true;
+    };
   }, [user, navigate, redirectTo]);
 
   useEffect(() => {
