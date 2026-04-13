@@ -80,15 +80,18 @@ const ChooseFace = () => {
       return [];
     }
   });
-  const [loading, setLoading] = useState(true);
-  const [apiDone, setApiDone] = useState(false);
-  const [barComplete, setBarComplete] = useState(false);
+  const hasCachedFaces = !isFreshCreation && (() => {
+    try { return !!(sessionStorage.getItem(FACE_STORAGE_KEY) && JSON.parse(sessionStorage.getItem(FACE_STORAGE_KEY)!).length > 0); } catch { return false; }
+  })();
+  const [loading, setLoading] = useState(!hasCachedFaces);
+  const [apiDone, setApiDone] = useState(hasCachedFaces);
+  const [barComplete, setBarComplete] = useState(hasCachedFaces);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   
-  const [cardsRevealed, setCardsRevealed] = useState(false);
+  const [cardsRevealed, setCardsRevealed] = useState(hasCachedFaces);
   const [pulseIndex, setPulseIndex] = useState<number | null>(null);
   const [showRegenConfirm, setShowRegenConfirm] = useState(false);
   const [showBackConfirm, setShowBackConfirm] = useState(false);
