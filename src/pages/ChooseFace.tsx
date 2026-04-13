@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { mergeCachedOnboardingState } from "@/lib/onboardingState";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { registerNavGuard } from "@/lib/navGuard";
@@ -473,6 +474,8 @@ const ChooseFace = () => {
           cId = inserted.id;
           setCharacterId(cId);
           sessionStorage.setItem("vizura_pending_char_id", cId);
+          // Update onboarding cache so redirect gate won't block
+          mergeCachedOnboardingState(currentUser.id, { characterCount: 1, onboardingComplete: true });
         }
       } catch (err) {
         toast.error("failed to save character");
