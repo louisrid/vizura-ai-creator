@@ -129,7 +129,7 @@ const Auth = () => {
     sessionStorage.removeItem("vizura_resume_after_auth");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: window.location.origin + "/auth",
         extraParams: {
           prompt: "select_account",
         },
@@ -141,7 +141,7 @@ const Auth = () => {
         return;
       }
       if (!result?.redirected) {
-        navigate("/", { replace: true });
+        // Session already set — Auth page useEffect will handle redirect
       }
     } catch (err: any) {
       sessionStorage.removeItem("vizura_post_auth_home");
@@ -151,7 +151,12 @@ const Auth = () => {
   };
 
   const handleBack = () => {
-    navigate("/");
+    // Go back to the start/hero screen — use history if available, otherwise home
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
   };
 
   if (authLoading || user) {
@@ -198,8 +203,8 @@ const Auth = () => {
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
-                  className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                  style={{ borderRadius: 10 }}
+                  className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-extrabold lowercase disabled:opacity-50 flex items-center justify-center gap-2"
+                  style={{ borderRadius: 10, transition: "transform 0.1s ease-out", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
