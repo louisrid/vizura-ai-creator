@@ -152,6 +152,19 @@ const Home = () => {
     };
   }, [fetchLatestPhotos, fetchCharacters]);
 
+  // Fetch onboarding_complete flag
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_complete")
+        .eq("user_id", user.id)
+        .single();
+      if (data) setOnboardingComplete(!!data.onboarding_complete);
+    })();
+  }, [user]);
+
   function handleOpenCreator() {
     sessionStorage.removeItem(DISMISSED_KEY);
     setSkipWelcome(!!user);
