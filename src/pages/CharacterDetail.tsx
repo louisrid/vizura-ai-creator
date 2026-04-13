@@ -204,8 +204,13 @@ const CharacterDetail = () => {
       });
 
       await refetchGems();
-      if (target === "angle") sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
-      else sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
+      if (target === "angle") {
+        sessionStorage.removeItem(`vizura_regen_angle_${character.id}`);
+        if (!onboardingComplete) setAngleRegensUsed((p) => p + 1);
+      } else {
+        sessionStorage.removeItem(`vizura_regen_body_${character.id}`);
+        if (!onboardingComplete) setBodyRegensUsed((p) => p + 1);
+      }
       toast("10 gems used");
     } catch (err) {
       console.error("Regenerate error:", err);
