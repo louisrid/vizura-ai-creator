@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 
 const packs = [
-  { id: "starter", name: "starter", gems: 15, price: 9, badge: null },
-  { id: "pro", name: "pro", gems: 35, price: 20, badge: "15% off!" },
-  { id: "elite", name: "elite", gems: 80, price: 40, badge: "20% off!" },
+  { id: "standard", name: "standard", gems: 120, price: 12, badge: null },
+  { id: "plus", name: "plus", gems: 300, price: 25, badge: "17% off!" },
+  { id: "elite", name: "elite", gems: 600, price: 40, badge: "33% off!" },
 ] as const;
 
 

@@ -363,7 +363,7 @@ const ChooseFace = () => {
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       await refetchGems();
-      toast("1 gem used");
+      toast("30 gems used");
     } catch (err: any) {
       toast.error("generation failed, please try again");
     } finally {
@@ -374,6 +374,7 @@ const ChooseFace = () => {
   const handleFaceClick = (i: number) => {
     setSelectedIndex(i);
     setPulseIndex(i);
+    toast("great choice!");
     window.setTimeout(() => setPulseIndex((current) => (current === i ? null : current)), 360);
   };
 
@@ -842,7 +843,7 @@ const ChooseFace = () => {
           }}
           onCancel={() => setShowRegenConfirm(false)}
           message="regenerate all faces?"
-          confirmLabel="yes • 1"
+          confirmLabel="yes • 30"
           gemCost
         />
 

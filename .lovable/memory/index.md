@@ -14,10 +14,11 @@ Credits rebranded to "gems" across entire app. DB table stays `credits` but all 
 
 ## Pricing
 - Subscription: $7 first month, $20/month after, 50 gems each month
-- Top-ups: 15 gems/$9, 35 gems/$20, 80 gems/$40
-- Character creation: 30 gems
-- Photo generation: 1 gem
-- Face regeneration: 1 gem
+- Top-ups: 120 gems/$12, 300 gems/$25, 600 gems/$40
+- Character creation: 50 gems
+- Photo generation: 10 gems
+- Face regeneration: 30 gems
+- Single angle/body regen: 10 gems
 
 ## Wizard (Guided Creator)
 - First slide: Hero screen with animated rotating yellow rings (#facc15), emoji 👩‍🎤, "vizura" title, yellow "get started" button, dark "login" button (guest only). Rings animation is ONLY on this screen.

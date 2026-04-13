@@ -370,7 +370,7 @@ const CharacterCreator = () => {
             ) : (
               <>
                 <Zap size={18} strokeWidth={2.5} />
-                {isEditing ? "update" : "create • 1"}
+                {isEditing ? "update" : "create • 50"}
                 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
               </>
             )}

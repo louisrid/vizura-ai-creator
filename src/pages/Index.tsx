@@ -382,7 +382,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create <span style={{ color: "#00e0ff" }}>·</span> 1 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
+      <>create <span style={{ color: "#00e0ff" }}>·</span> 10 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
     )}
   </button>
 );
