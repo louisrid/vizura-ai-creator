@@ -346,6 +346,13 @@ const CharacterDetail = () => {
     setEditingName(false);
   };
 
+  const isOnboardingRegenUsed = (slotLabel: string) => {
+    if (onboardingComplete) return false;
+    if (slotLabel === "3/4 angle") return angleRegensUsed >= 1;
+    if (slotLabel === "full body") return bodyRegensUsed >= 1;
+    return false;
+  };
+
   const imgSlot = (
     url: string | null | undefined,
     label: string,
@@ -353,35 +360,43 @@ const CharacterDetail = () => {
     showSpinner = false,
     onRegenClick?: () => void,
     isRevealing = false,
-  ) => (
-    <div
-      className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift cursor-pointer"
-      style={{ borderRadius: 10, backgroundColor: "#000000" }}
-      onClick={() => { if (isValidImg(url) && !showSpinner && !isRevealing) setZoomedUrl(url!); }}
-    >
-      {showSpinner || isRevealing ? (
-        <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
-      ) : isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-      ) : (
-        <span className="text-[9px] md:text-[11px] font-[900] lowercase text-white">no photo</span>
-      )}
-      {overlay === "lock" && (
-        <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
-          <Lock size={14} strokeWidth={3} color="#000" fill="none" />
-        </div>
-      )}
-      {overlay === "regenerate" && (
-        <button
-          onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
-          className="absolute flex items-center justify-center transition-transform active:scale-90"
-          style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
-        >
-          <RefreshCw size={13} strokeWidth={3} color="#fff" />
-        </button>
-      )}
-    </div>
-  );
+  ) => {
+    const regenUsed = overlay === "regenerate" && isOnboardingRegenUsed(label);
+    return (
+      <div
+        className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift cursor-pointer"
+        style={{ borderRadius: 10, backgroundColor: "#000000" }}
+        onClick={() => { if (isValidImg(url) && !showSpinner && !isRevealing) setZoomedUrl(url!); }}
+      >
+        {showSpinner || isRevealing ? (
+          <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
+        ) : isValidImg(url) ? (
+          <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        ) : (
+          <span className="text-[9px] md:text-[11px] font-[900] lowercase text-white">no photo</span>
+        )}
+        {overlay === "lock" && (
+          <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
+            <Lock size={14} strokeWidth={3} color="#000" fill="none" />
+          </div>
+        )}
+        {overlay === "regenerate" && !regenUsed && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onRegenClick?.(); }}
+            className="absolute flex items-center justify-center transition-transform active:scale-90"
+            style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
+          >
+            <RefreshCw size={13} strokeWidth={3} color="#fff" />
+          </button>
+        )}
+        {regenUsed && (
+          <span className="absolute text-[8px] font-[800] lowercase text-white/50" style={{ top: -14, right: -2 }}>
+            1/1 used
+          </span>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
