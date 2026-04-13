@@ -15,6 +15,7 @@ import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
 const STORAGE_KEY = "facefox_character_draft";
+const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const DISMISSED_KEY = "facefox_creator_dismissed";
 

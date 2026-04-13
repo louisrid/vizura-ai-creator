@@ -21,6 +21,7 @@ const eyeOptions = ["blue", "brown", "green", "grey"] as const;
 const ageOptions = ["18-24", "24+"] as const;
 
 const STORAGE_KEY = "facefox_character_draft";
+const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 
 const PillGroup = ({
