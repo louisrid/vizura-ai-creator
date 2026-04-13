@@ -859,6 +859,7 @@ const ChooseFace = () => {
             sessionStorage.removeItem(STORAGE_KEY);
             sessionStorage.removeItem("facefox_selected_face");
             sessionStorage.removeItem("facefox_guided_prompt");
+            sessionStorage.removeItem("facefox_face_prompt");
             sessionStorage.removeItem("facefox_pending_char_id");
             sessionStorage.removeItem(AUTH_RESUME_KEY);
             sessionStorage.removeItem("facefox_guided_flow_state");
