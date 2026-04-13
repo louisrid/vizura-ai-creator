@@ -26,8 +26,6 @@ function useScrollGradientOpacity() {
   return opacity;
 }
 
-const LOCKED_LABELS = new Set(["storage", "my characters", "gems"]);
-
 const Header = () => {
   const gradientOpacity = useScrollGradientOpacity();
   const navigate = useNavigate();
@@ -39,34 +37,6 @@ const Header = () => {
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
-  const [onboardingComplete, setOnboardingComplete] = useState(true); // default true = unlocked
-  const [hasCharacters, setHasCharacters] = useState(true); // default true = unlocked
-
-  // Fetch onboarding state
-  useEffect(() => {
-    if (!user) return;
-    const fetch = async () => {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("onboarding_complete")
-        .eq("user_id", user.id)
-        .single();
-      if (profile) setOnboardingComplete(!!profile.onboarding_complete);
-
-      const { count } = await supabase
-        .from("characters")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", user.id);
-      setHasCharacters((count ?? 0) > 0);
-    };
-    fetch();
-  }, [user, location.pathname]);
-
-  const isItemLocked = (label: string): boolean => {
-    if (onboardingComplete) return false;
-    if (label === "create photo" && !hasCharacters) return true;
-    return LOCKED_LABELS.has(label);
-  };
 
   // Position dropdown relative to hamburger button
   const updateDropdownPos = useCallback(() => {
