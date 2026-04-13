@@ -31,7 +31,7 @@ const fmtDate = (iso: string) => {
 
 /* ── Standardised admin loading spinner ── */
 const AdminLoader = () => (
-  <div className="flex items-center justify-center" style={{ minHeight: "calc(100vh - 140px)" }}>
+  <div className="flex items-center justify-center" style={{ minHeight: "calc(100vh - 220px)" }}>
     <Loader2 className="animate-spin" size={24} style={{ color: "#ffffff" }} strokeWidth={3} />
   </div>
 );

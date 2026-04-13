@@ -392,7 +392,7 @@ const CharacterDetail = () => {
           </div>
           {/* Latest photos section */}
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
-            <h3 className="text-lg font-[900] lowercase text-white mb-3">latest photos</h3>
+            <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
             <div className="grid grid-cols-3 gap-2">
               {Array.from({ length: 3 }).map((_, i) => {
                 const photo = latestPhotos[i];
