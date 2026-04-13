@@ -93,11 +93,16 @@ serve(async (req) => {
         const metadata = session.metadata || {};
         const customerId = session.customer;
 
-        if (metadata.type === "topup") {
+      if (metadata.type === "topup") {
           const gems = parseInt(metadata.credits || "0");
           const userId = metadata.user_id;
           if (gems > 0 && userId) {
             await addGems(userId, gems);
+            // Mark onboarding complete on first gem purchase
+            await adminClient
+              .from("profiles")
+              .update({ onboarding_complete: true })
+              .eq("user_id", userId);
           }
         } else if (metadata.type === "membership") {
           const userId = metadata.user_id;
