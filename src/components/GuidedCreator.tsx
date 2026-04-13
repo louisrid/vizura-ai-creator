@@ -516,7 +516,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       onClick={() => setTrait(trait.key, opt)}
                     />
                     {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                      <span className={`${HELPER_CLASS} mt-1.5`}>(recommended)</span>
                     )}
                   </div>
                 ))}
@@ -532,7 +532,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       onClick={() => setTrait(trait.key, opt)}
                     />
                     {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                      <span className={`${HELPER_CLASS} mt-1.5`}>(recommended)</span>
                     )}
                   </div>
                 ))}
@@ -553,7 +553,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     onClick={() => setTrait(trait.key, opt)}
                   />
                   {"defaultOption" in trait && trait.defaultOption === opt && (
-                    <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                    <span className={`${HELPER_CLASS} mt-1.5`}>(recommended)</span>
                   )}
                 </div>
               ))}
