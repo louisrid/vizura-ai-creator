@@ -61,7 +61,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {RATIO_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -119,7 +119,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[10px] border-2 border-[rgba(255,255,255,0.15)] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
+    <div className="flex items-stretch rounded-[10px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "#1a1a1a" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -127,7 +127,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
         return (
           <Fragment key={opt}>
             {i > 0 && (
-              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
+              <div aria-hidden className="w-px shrink-0 self-stretch" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
             )}
             <button
               type="button"
@@ -264,7 +264,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {PHOTO_TYPE_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -341,7 +341,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -663,7 +663,7 @@ const Index = () => {
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+          style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
         >
           {characters.map((c, idx) => {
             const isFirst = idx === 0;

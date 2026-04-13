@@ -28,7 +28,7 @@ const SelectionBox = ({ value, active, onClick }: { value: string | null; active
     className="flex h-[52px] w-full items-center justify-center text-sm font-[900] lowercase tracking-tight transition-colors"
     style={{
       borderRadius: 10,
-      border: active ? `2px solid ${Y}` : "2px solid rgba(255,255,255,0.15)",
+      border: active ? `2px solid ${Y}` : "2px solid hsl(var(--border-mid))",
       backgroundColor: active ? "#000000" : "#1a1a1a",
       color: active ? "#fff" : "rgba(255,255,255,0.7)",
     }}
@@ -52,7 +52,7 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
         className="px-4 py-2 text-xs font-[900] lowercase transition-all"
         style={{
           borderRadius: 10,
-          border: value === opt ? `2px solid ${Y}` : "2px solid rgba(255,255,255,0.15)",
+          border: value === opt ? `2px solid ${Y}` : "2px solid hsl(var(--border-mid))",
           backgroundColor: value === opt ? Y : "#1a1a1a",
           color: value === opt ? "#000" : "rgba(255,255,255,0.55)",
         }}
@@ -173,7 +173,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
                 <span className="mb-3 block text-sm font-[900] lowercase tracking-tight text-white">details</span>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="face shape, hairstyle, outfit, pose, mood..." rows={3}
                   className="min-h-[100px] w-full resize-none px-4 py-3 text-sm font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors"
-                  style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)", backgroundColor: "#1a1a1a" }}
+                  style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#1a1a1a" }}
                 />
               </div>
             </div>

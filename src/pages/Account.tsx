@@ -81,7 +81,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full rounded-[10px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
             style={{ backgroundColor: "#000" }}
             onClick={() => toast("coming soon")}
           >
@@ -98,7 +98,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#111]"
             style={{ backgroundColor: "#000" }}
             onClick={() => toast("coming soon")}
           >
@@ -111,7 +111,7 @@ const Account = () => {
         {user?.email === "louisjridland@gmail.com" && (
           <div className="w-full pt-3">
             <button
-              className="w-full rounded-[10px] border-[2px] border-[rgba(255,255,255,0.15)] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-[#111]"
+              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-[#111]"
               style={{ backgroundColor: "#000" }}
               onClick={() => navigate("/admin")}
             >
@@ -205,7 +205,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">my account</PageTitle>
         </div>
-        <div className="w-full border-2 border-[rgba(255,255,255,0.15)] p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
+        <div className="w-full border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "#1a1a1a" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -238,7 +238,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 10, backgroundColor: "#2a2a2a" }}
             disabled={submitting || googleLoading}
           />
@@ -250,7 +250,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 10, backgroundColor: "#2a2a2a" }}
             disabled={submitting || googleLoading}
           />

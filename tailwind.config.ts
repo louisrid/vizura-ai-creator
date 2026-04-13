@@ -85,6 +85,9 @@ export default {
         'member-green': {
           DEFAULT: "hsl(var(--member-green))",
         },
+        'border-mid': {
+          DEFAULT: "hsl(var(--border-mid))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

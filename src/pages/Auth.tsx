@@ -152,7 +152,7 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[10px] border-2 border-[rgba(255,255,255,0.15)] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
+          <div className="rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "#1a1a1a" }}>
             {!inWebView && (
               <>
                 <button
@@ -194,7 +194,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
@@ -206,7 +206,7 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[rgba(255,255,255,0.15)] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-foreground/30 outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />

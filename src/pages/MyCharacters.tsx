@@ -124,7 +124,7 @@ const MyCharacters = () => {
             <button
               onClick={handleCreateCharacter}
               className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
-              style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid rgba(255,255,255,0.15)" }}
+              style={{ borderRadius: 10, backgroundColor: "#1a1a1a", border: "2px solid hsl(var(--border-mid))" }}
             >
               <AspectRatio ratio={3 / 4}>
                 <div className="flex h-full w-full items-center justify-center">
@@ -143,7 +143,7 @@ const MyCharacters = () => {
                     className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
                     style={{
                       borderRadius: 10,
-                      border: isNew ? "3px solid #ffe603" : "2px solid rgba(255,255,255,0.15)",
+                      border: isNew ? "3px solid #ffe603" : "2px solid hsl(var(--border-mid))",
                       backgroundColor: "#1a1a1a",
                     }}
                   >
@@ -157,7 +157,7 @@ const MyCharacters = () => {
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "#1a1a1a" }}>
-                          <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)">
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="hsl(var(--border-mid))">
                             <circle cx="12" cy="8" r="5" />
                             <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
                           </svg>

@@ -215,7 +215,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                     ) : (
                       <AspectRatio ratio={3 / 4}>
                         <div className="flex h-full w-full items-center justify-center">
-                          <User size={24} strokeWidth={2.5} style={{ color: "rgba(255,255,255,0.15)" }} />
+                          <User size={24} strokeWidth={2.5} style={{ color: "hsl(var(--border-mid))" }} />
                         </div>
                       </AspectRatio>
                     )}
@@ -251,7 +251,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
                       download={`facefox-${img.id}.png`}
                       target="_blank"
                       className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                      style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid rgba(255,255,255,0.15)", borderTop: "none" }}
+                      style={{ backgroundColor: "#1a1a1a", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                     >
                       download
                       <Download size={12} strokeWidth={2.5} />
@@ -283,7 +283,7 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid rgba(255,255,255,0.15)" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">

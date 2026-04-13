@@ -371,7 +371,7 @@ const CharacterDetail = () => {
           <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.15)", borderRadius: 10 }} />
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
                 <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 10, backgroundColor: "#ffe603" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000" />}
                 </button>
@@ -416,7 +416,7 @@ const CharacterDetail = () => {
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "#1a1a1a" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
-                  <span className="inline-block font-[800] lowercase text-white leading-none text-[10px] border-[2px] border-[rgba(255,255,255,0.15)] rounded-[10px]" style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
+                  <span className="inline-block font-[800] lowercase text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]" style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -457,7 +457,7 @@ const CharacterDetail = () => {
             <div style={{ backgroundColor: "#1a1a1a", borderRadius: 10 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.15)", borderRadius: 10 }} />
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
                   <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 10, backgroundColor: "#ffe603" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000" />}
                   </button>
@@ -504,7 +504,7 @@ const CharacterDetail = () => {
               <h3 className="text-sm font-[900] lowercase text-white/50 mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
-                  <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid rgba(255,255,255,0.15)" }}>
+                  <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>{t.label}</span>
                     <span className="inline-block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
                   </div>
