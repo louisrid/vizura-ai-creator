@@ -22,6 +22,7 @@ import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { sanitiseText } from "@/lib/sanitise";
 
 const STORAGE_KEY = "facefox_character_draft";
+const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
 const FACE_STORAGE_KEY = "facefox_face_options";
 const AUTH_RESUME_KEY = "facefox_resume_after_auth";
 
@@ -73,12 +74,17 @@ const ChooseFace = () => {
   );
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("facefox_pending_char_id") || undefined);
 
-  // Cache draft on mount so it survives any mid-flow sessionStorage clearing
+  // Cache draft on mount so it survives any mid-flow storage clearing
   const [cachedDraft] = useState<Record<string, string> | null>(() => {
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
+      const sessionDraft = sessionStorage.getItem(STORAGE_KEY);
+      if (sessionDraft) return JSON.parse(sessionDraft);
+
+      const backupDraft = localStorage.getItem(DRAFT_BACKUP_KEY);
+      return backupDraft ? JSON.parse(backupDraft) : null;
+    } catch {
+      return null;
+    }
   });
 
   const [faces, setFaces] = useState<string[]>(() => {
@@ -499,7 +505,7 @@ const ChooseFace = () => {
     let draft: Record<string, string> | null = null;
 
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+      const raw = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(DRAFT_BACKUP_KEY);
       draft = raw ? JSON.parse(raw) : cachedDraft;
     } catch {
       draft = cachedDraft;
@@ -625,6 +631,7 @@ const ChooseFace = () => {
     sessionStorage.removeItem("facefox_guided_prompt");
     sessionStorage.removeItem("facefox_face_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(DRAFT_BACKUP_KEY);
     sessionStorage.removeItem("facefox_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
@@ -902,6 +909,7 @@ const ChooseFace = () => {
             setShowBackConfirm(false);
             sessionStorage.removeItem(FACE_STORAGE_KEY);
             sessionStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(DRAFT_BACKUP_KEY);
             sessionStorage.removeItem("facefox_selected_face");
             sessionStorage.removeItem("facefox_guided_prompt");
             sessionStorage.removeItem("facefox_face_prompt");

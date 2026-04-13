@@ -21,6 +21,7 @@ const eyeOptions = ["blue", "brown", "green", "grey"] as const;
 const ageOptions = ["18-24", "24+"] as const;
 
 const STORAGE_KEY = "facefox_character_draft";
+const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 
 const PillGroup = ({
@@ -214,7 +215,7 @@ const CharacterCreator = () => {
 
   // Called when GuidedCreator cooking phase completes
   const handleGuidedComplete = useCallback(async (selections: GuidedSelections) => {
-    // Save draft to sessionStorage for ChooseFace to read
+    // Save draft to storage for ChooseFace to read
     const draft = {
       characterName: selections.characterName,
       skin: selections.skin || "tan",
@@ -227,6 +228,7 @@ const CharacterCreator = () => {
       description: selections.description || "",
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+    localStorage.setItem(DRAFT_BACKUP_KEY, JSON.stringify(draft));
     console.log("[CharacterCreator] Draft saved with bustSize:", draft.bustSize);
     const sk = selections.skin || "tan";
     const bt = selections.bodyType || "regular";
