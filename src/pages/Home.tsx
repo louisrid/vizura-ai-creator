@@ -229,6 +229,7 @@ const Home = () => {
       description: selections.description || "",
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+    localStorage.setItem(DRAFT_BACKUP_KEY, JSON.stringify(draft));
 
     const sk = selections.skin || "tan";
     const hs = selections.hairStyle || "long straight";

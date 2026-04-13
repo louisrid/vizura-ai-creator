@@ -505,7 +505,7 @@ const ChooseFace = () => {
     let draft: Record<string, string> | null = null;
 
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+      const raw = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(DRAFT_BACKUP_KEY);
       draft = raw ? JSON.parse(raw) : cachedDraft;
     } catch {
       draft = cachedDraft;
@@ -631,6 +631,7 @@ const ChooseFace = () => {
     sessionStorage.removeItem("facefox_guided_prompt");
     sessionStorage.removeItem("facefox_face_prompt");
     sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(DRAFT_BACKUP_KEY);
     sessionStorage.removeItem("facefox_pending_char_id");
     sessionStorage.removeItem(FACE_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_RESUME_KEY);
@@ -908,6 +909,7 @@ const ChooseFace = () => {
             setShowBackConfirm(false);
             sessionStorage.removeItem(FACE_STORAGE_KEY);
             sessionStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(DRAFT_BACKUP_KEY);
             sessionStorage.removeItem("facefox_selected_face");
             sessionStorage.removeItem("facefox_guided_prompt");
             sessionStorage.removeItem("facefox_face_prompt");
