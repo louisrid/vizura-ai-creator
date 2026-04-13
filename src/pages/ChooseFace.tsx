@@ -103,6 +103,8 @@ const ChooseFace = () => {
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
 
+  const hasOnboardingFaceRegenLocked = !onboardingComplete && faceRegensUsed >= 1;
+
   const fetchProfileData = useCallback(() => {
     if (!user) return;
     supabase
@@ -335,6 +337,15 @@ const ChooseFace = () => {
       toast.error("regen error");
       return;
     }
+    if (!onboardingComplete && faceRegensUsed >= 1) {
+      toast("1/1 used");
+      return;
+    }
+
+    const shouldLockOnPress = !onboardingComplete;
+    if (shouldLockOnPress) {
+      setFaceRegensUsed(1);
+    }
 
     // Stay on screen, show spinners on face cards
     setRegeneratingFaces(true);
@@ -386,6 +397,10 @@ const ChooseFace = () => {
       };
 
       const result = await invokeAndParse({ prompt, face_regen: true });
+      if (result?.code === "ONBOARDING_REGEN_LIMIT") {
+        toast("1/1 used");
+        return;
+      }
       if (result?.error) throw new Error(result.error);
       const nextFaces = (result.images || []).slice(0, 3);
       if (nextFaces.length === 0) throw new Error("generation failed — no faces returned");
@@ -393,13 +408,13 @@ const ChooseFace = () => {
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       setSelectedIndex(null);
       await refetchGems();
-      if (!onboardingComplete) {
-        setFaceRegensUsed((p) => p + 1);
-        // No toast on first regen during onboarding — "1/1 used" shows on second press
-      } else {
+      if (onboardingComplete) {
         toast("30 gems used");
       }
     } catch (err: any) {
+      if (shouldLockOnPress) {
+        fetchProfileData();
+      }
       toast.error("regen error");
     } finally {
       setRegeneratingFaces(false);
@@ -750,7 +765,11 @@ const ChooseFace = () => {
 
                   <button
                       onClick={() => {
-                        if (!onboardingComplete && faceRegensUsed >= 1) {
+                        if (regeneratingFaces && !onboardingComplete) {
+                          toast("1/1 used");
+                          return;
+                        }
+                        if (hasOnboardingFaceRegenLocked) {
                           toast("1/1 used");
                           return;
                         }
@@ -765,6 +784,7 @@ const ChooseFace = () => {
                         setShowRegenConfirm(true);
                       }}
                       className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 active:scale-[0.99]"
+                      disabled={regeneratingFaces && onboardingComplete}
                       style={{
                         borderRadius: 10,
                         backgroundColor: "#050a10",

@@ -1035,7 +1035,7 @@ serve(async (req) => {
     const isFaceRegen = body?.face_regen === true;
     const gemCost = isFaceRegen ? GEM_COST_FACE_REGEN : GEM_COST_PHOTO;
 
-    /* ── onboarding face regen limit check ── */
+    /* ── onboarding face regen limit check / first-press lock ── */
     if (isFaceRegen) {
       const onboarding = await isOnboardingUser(adminClient, userId);
       if (onboarding) {
@@ -1050,6 +1050,11 @@ serve(async (req) => {
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
+
+        await adminClient
+          .from("profiles")
+          .update({ onboarding_face_regens_used: 1, updated_at: new Date().toISOString() })
+          .eq("user_id", userId);
       }
     }
 
@@ -1170,24 +1175,6 @@ serve(async (req) => {
     }
 
     const genType = isFaceRegen ? "face" : "photo";
-
-    /* ── increment onboarding face regen counter ── */
-    if (isFaceRegen) {
-      const onboarding = await isOnboardingUser(adminClient, userId);
-      if (onboarding) {
-        const { data: currentProfile } = await adminClient
-          .from("profiles")
-          .select("onboarding_face_regens_used")
-          .eq("user_id", userId)
-          .single();
-        if (currentProfile) {
-          await adminClient
-            .from("profiles")
-            .update({ onboarding_face_regens_used: (currentProfile.onboarding_face_regens_used ?? 0) + 1, updated_at: new Date().toISOString() })
-            .eq("user_id", userId);
-        }
-      }
-    }
 
     if (!isFaceRegen) {
       await adminClient.from("generations").insert({
