@@ -9,6 +9,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
 import { checkNavGuard } from "@/lib/navGuard";
 import { supabase } from "@/integrations/supabase/client";
+import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -40,23 +41,24 @@ const Header = () => {
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
 
   // Onboarding lock state for menu
-  const [showMenuLocks, setShowMenuLocks] = useState(false);
+  const [showMenuLocks, setShowMenuLocks] = useState(() => needsOnboardingRedirect(readCachedOnboardingState(user?.id)));
 
-  // Default false — only set true after BOTH queries confirm no onboarding + no chars
   useEffect(() => {
     if (!user) { setShowMenuLocks(false); return; }
+
+    const cachedState = readCachedOnboardingState(user.id);
+    if (cachedState) {
+      setShowMenuLocks(needsOnboardingRedirect(cachedState));
+    }
+
     let cancelled = false;
+
     (async () => {
-      const [profileRes, charsRes] = await Promise.all([
-        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
-        supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      ]);
+      const resolvedState = await fetchAndCacheOnboardingState(user.id);
       if (cancelled) return;
-      const onboardingDone = !!profileRes.data?.onboarding_complete;
-      const hasChars = (charsRes.count ?? 0) > 0;
-      // Only show locks when both conditions confirmed — never flash
-      setShowMenuLocks(!onboardingDone && !hasChars);
+      setShowMenuLocks(needsOnboardingRedirect(resolvedState));
     })();
+
     return () => { cancelled = true; };
   }, [user]);
 

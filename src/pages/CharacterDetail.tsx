@@ -14,6 +14,7 @@ import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { displayAge } from "@/lib/displayAge";
+import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
 
 interface Character {
   id: string;
@@ -226,6 +227,10 @@ const CharacterDetail = () => {
       return;
     }
     toast.success("character deleted");
+    const previous = readCachedOnboardingState(user!.id);
+    mergeCachedOnboardingState(user!.id, {
+      characterCount: Math.max((previous?.characterCount ?? 1) - 1, 0),
+    });
     navigate("/characters", { replace: true });
   };
 

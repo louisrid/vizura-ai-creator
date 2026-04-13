@@ -11,6 +11,7 @@ import { useCredits } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitiseText } from "@/lib/sanitise";
+import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
 
 const skinOptions = ["white", "tan", "asian", "black"] as const;
 const bodyOptions = ["thin", "regular", "curvy"] as const;
@@ -176,6 +177,10 @@ const CharacterCreator = () => {
           .select("id")
           .single();
         if (insertError) throw insertError;
+        const previous = readCachedOnboardingState(user.id);
+        mergeCachedOnboardingState(user.id, {
+          characterCount: Math.max(1, (previous?.characterCount ?? 0) + 1),
+        });
         return inserted?.id || null;
       }
     } catch (err: any) {

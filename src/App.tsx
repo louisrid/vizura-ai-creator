@@ -26,6 +26,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
+import { needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/admin"];
 const POST_AUTH_HOME_KEY = "vizura_post_auth_home";
@@ -160,6 +161,32 @@ const TopOverscrollGuard = () => {
   return null;
 };
 
+const OnboardingRedirectGate = () => {
+  const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const locationState = (location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null;
+  const cachedState = readCachedOnboardingState(user?.id);
+  const shouldRedirect = !!user && needsOnboardingRedirect(cachedState) && (location.pathname !== "/" || !locationState?.openCreator);
+
+  useEffect(() => {
+    if (!shouldRedirect) return;
+
+    navigate("/", {
+      replace: true,
+      state: {
+        ...(locationState ?? {}),
+        openCreator: true,
+        onboardingRedirect: true,
+      },
+    });
+  }, [locationState, navigate, shouldRedirect]);
+
+  if (!shouldRedirect) return null;
+
+  return <div className="fixed inset-0 z-[9999] bg-background" />;
+};
+
 const AppRoutes = () => {
   const location = useLocation();
   const [blackoutActive, setBlackoutActive] = useState(false);
@@ -234,6 +261,7 @@ const App = () => (
               <FreshLoadRedirect />
               <ScrollToTop />
               <TopOverscrollGuard />
+              <OnboardingRedirectGate />
               <AppRoutes />
             </BrowserRouter>
           </SubscriptionProvider>

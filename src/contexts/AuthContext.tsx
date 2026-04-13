@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { clearSpecialAccountCache, syncSpecialAccountCache } from "@/lib/specialAccount";
 import { getPreviewAccountCredentials } from "@/lib/previewAuth";
+import { clearCachedOnboardingState, fetchAndCacheOnboardingState } from "@/lib/onboardingState";
 
 interface AuthContextType {
   user: User | null;
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!cancelled) {
         setUser(null);
         clearSpecialAccountCache();
+        clearCachedOnboardingState();
       }
       return null;
     }
@@ -50,6 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(freshUser);
         syncSpecialAccountCache(freshUser);
       }
+      void fetchAndCacheOnboardingState(freshUser.id);
       return freshUser;
     } catch {
       return seedUser;
@@ -110,12 +113,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (event === "SIGNED_OUT" || !nextUser) {
           setUser(null);
           clearSpecialAccountCache();
+          clearCachedOnboardingState();
           return;
         }
 
         if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
           setUser(nextUser);
           syncSpecialAccountCache(nextUser);
+          void fetchAndCacheOnboardingState(nextUser.id);
           void hydrateUser(nextUser);
         }
       });

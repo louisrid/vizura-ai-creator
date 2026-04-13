@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
+import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
@@ -57,6 +58,8 @@ const Home = () => {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
+  const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
+  const cachedOnboardingState = readCachedOnboardingState(user?.id);
   const [images, setImages] = useState<LatestImage[]>(() => {
     try {
       const cached = sessionStorage.getItem("vizura_latest_photos");
@@ -67,13 +70,15 @@ const Home = () => {
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
-  const [showGuided, setShowGuided] = useState(false);
+  const [showGuided, setShowGuided] = useState(() => !!user && needsOnboardingRedirect(cachedOnboardingState));
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
-  const [onboardingComplete, setOnboardingComplete] = useState(true);
-  const [lockStateResolved, setLockStateResolved] = useState(false);
-  const openCreatorRequested = Boolean((location.state as any)?.openCreator);
+  const [onboardingComplete, setOnboardingComplete] = useState(() => cachedOnboardingState?.onboardingComplete ?? true);
+  const [lockStateResolved, setLockStateResolved] = useState(() => !user || !!cachedOnboardingState);
+  const [characterCount, setCharacterCount] = useState(() => cachedOnboardingState?.characterCount ?? 0);
+  const openCreatorRequested = Boolean(locationState?.openCreator);
+  const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
 
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); setPhotosLoaded(true); return; }
@@ -142,22 +147,30 @@ const Home = () => {
   // Fetch all data in parallel — resolve lock state atomically
   useEffect(() => {
     if (!user) {
+      setOnboardingComplete(true);
       setLockStateResolved(false);
+      setCharacterCount(0);
       void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
       return;
+    }
+
+    if (cachedOnboardingState) {
+      setOnboardingComplete(cachedOnboardingState.onboardingComplete);
+      setCharacterCount(cachedOnboardingState.characterCount);
+      setLockStateResolved(true);
     }
 
     let cancelled = false;
 
     const fetchAll = async () => {
-      const [, , profileRes] = await Promise.all([
+      const [, , resolvedState] = await Promise.all([
         fetchLatestPhotos(),
         fetchCharacters(),
-        supabase.from("profiles").select("onboarding_complete").eq("user_id", user.id).maybeSingle(),
+        fetchAndCacheOnboardingState(user.id),
       ]);
       if (cancelled) return;
-      const isOnboardingComplete = !!profileRes.data?.onboarding_complete;
-      setOnboardingComplete(isOnboardingComplete);
+      setOnboardingComplete(resolvedState.onboardingComplete);
+      setCharacterCount(resolvedState.characterCount);
       setLockStateResolved(true);
     };
 
@@ -176,18 +189,18 @@ const Home = () => {
     };
   }, [fetchLatestPhotos, fetchCharacters, user]);
 
-  function handleOpenCreator() {
+  function handleOpenCreator(forceFullFlow = false) {
     sessionStorage.removeItem(DISMISSED_KEY);
-    setSkipWelcome(!!user);
+    setSkipWelcome(forceFullFlow ? false : !!user);
     setShowGuided(true);
   }
 
   useEffect(() => {
     if (openCreatorRequested) {
       navigate(location.pathname, { replace: true, state: {} });
-      handleOpenCreator();
+      handleOpenCreator(onboardingRedirectRequested);
     }
-  }, [location.pathname, navigate, openCreatorRequested, user]);
+  }, [location.pathname, navigate, onboardingRedirectRequested, openCreatorRequested, user]);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
@@ -244,9 +257,10 @@ const Home = () => {
   }, [characters]);
 
   // Lock conditions: only show locks after state is confirmed — never flash for users with characters
-  const showLocks = lockStateResolved && !onboardingComplete && characters.length === 0;
+  const showLocks = lockStateResolved && !onboardingComplete && characterCount === 0;
+  const forceOnboarding = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
 
-  const pageHidden = showGuided || (!autoOpenEvaluated && !user);
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || (forceOnboarding && !showGuided);
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
