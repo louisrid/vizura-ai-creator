@@ -10,6 +10,18 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
+/* Bouncing finger emoji for onboarding */
+const BouncingFinger = () => (
+  <motion.span
+    className="inline-block text-[20px] md:text-[24px] ml-1"
+    animate={{ y: [0, -8, 0] }}
+    transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+    aria-hidden="true"
+  >
+    👆
+  </motion.span>
+);
+
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
