@@ -146,6 +146,16 @@ const Home = () => {
     requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
   }, [authLoading, openCreatorRequested, user]);
 
+  // When lock state resolves and user needs onboarding, force guided creator open
+  useEffect(() => {
+    if (!lockStateResolved || !user) return;
+    if (!onboardingComplete && characterCount === 0) {
+      setShowGuided(true);
+      setSkipWelcome(true);
+      setAutoOpenEvaluated(true);
+    }
+  }, [lockStateResolved, user, onboardingComplete, characterCount]);
+
   // Fetch all data in parallel — resolve lock state atomically
   useEffect(() => {
     if (!user) {
@@ -263,7 +273,9 @@ const Home = () => {
   const showLocks = lockStateResolved && !onboardingComplete && characterCount === 0;
   const forceOnboarding = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
 
-  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || (forceOnboarding && !showGuided);
+  // Hide the entire page until we know the user's onboarding state — prevents home screen flash
+  const awaitingLockResolution = !!user && !lockStateResolved;
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || (forceOnboarding && !showGuided) || awaitingLockResolution || authLoading;
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
