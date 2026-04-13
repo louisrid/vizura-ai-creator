@@ -171,7 +171,7 @@ const Header = () => {
                       className="w-full text-left flex items-center gap-2 md:gap-3"
                       style={{
                         padding: isDesktop ? "15px 20px" : "11px 12px",
-                        fontSize: isDesktop ? 15 : 12,
+                        fontSize: isDesktop ? 16 : 13,
                         fontWeight: 700,
                         textTransform: "lowercase",
                         color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
@@ -181,7 +181,7 @@ const Header = () => {
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                     >
-                      <item.icon size={isDesktop ? 18 : 15} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
+                      <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                       {item.label}
                     </button>
                   </div>
@@ -196,7 +196,7 @@ const Header = () => {
                     style={{
                       color: "#ff4444",
                       padding: isDesktop ? "15px 20px" : "11px 12px",
-                      fontSize: isDesktop ? 15 : 12,
+                      fontSize: isDesktop ? 16 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
                       borderRadius: "0 0 10px 10px",
@@ -204,7 +204,7 @@ const Header = () => {
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.07)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                   >
-                    <LogOut size={isDesktop ? 17 : 15} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
+                    <LogOut size={isDesktop ? 18 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                     log out
                   </button>
                 </>
