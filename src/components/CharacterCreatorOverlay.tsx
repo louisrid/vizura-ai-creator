@@ -132,7 +132,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       onClose();
       navigate("/choose-face", { state: { prompt: buildPrompt(), characterId: inserted.id, freshCreation: true } });
     } catch (err: any) {
-      toast.error(err.message || "failed to save character");
+      toast.error("save error");
     } finally {
       setIsSaving(false);
     }

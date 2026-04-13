@@ -153,7 +153,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) {
-      toast.error("please enter email and password");
+      toast.error("fill details");
       return;
     }
     setSubmitting(true);
@@ -161,7 +161,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
       if (isSignUpMode) {
         try {
           await signUp(email.trim(), password);
-          toast.success("check your email to confirm");
+          toast.success("check email");
         } catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
             await signIn(email.trim(), password);
@@ -171,7 +171,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
         await signIn(email.trim(), password);
       }
     } catch (err: any) {
-      toast.error(err.message || "something went wrong");
+      toast.error("try again");
       setSubmitting(false);
     }
   };
@@ -187,12 +187,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
       });
       if (result?.error) {
         sessionStorage.removeItem("vizura_post_auth_home");
-        toast.error("google sign in failed");
+        toast.error("sign in error");
         setGoogleLoading(false);
       }
     } catch (err: any) {
       sessionStorage.removeItem("vizura_post_auth_home");
-      toast.error(err.message || "google sign in failed");
+      toast.error("sign in error");
       setGoogleLoading(false);
     }
   };

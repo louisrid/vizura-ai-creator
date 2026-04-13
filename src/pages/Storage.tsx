@@ -227,14 +227,14 @@ const Storage = () => {
                          localStorage.setItem("vizura_copied_prompt", text);
                          localStorage.setItem("vizura_copied_prompt_ts", String(Date.now()));
                        } catch {}
-                       toast.success("copied!");
-                     };
-                     if (navigator.clipboard?.writeText) {
-                       navigator.clipboard.writeText(text).then(done).catch(() => {
-                         if (copyFallback()) done(); else toast.error("failed to copy");
-                       });
-                     } else {
-                       if (copyFallback()) done(); else toast.error("failed to copy");
+                        toast.success("copied");
+                      };
+                      if (navigator.clipboard?.writeText) {
+                        navigator.clipboard.writeText(text).then(done).catch(() => {
+                          if (copyFallback()) done(); else toast.error("copy error");
+                        });
+                      } else {
+                        if (copyFallback()) done(); else toast.error("copy error");
                      }
                    }}
                    className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"

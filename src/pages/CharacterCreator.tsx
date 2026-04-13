@@ -168,7 +168,7 @@ const CharacterCreator = () => {
           .update(charData)
           .eq("id", editId);
         if (updateError) throw updateError;
-        toast.success("character updated");
+        toast.success("char created");
         return editId;
       } else {
         const { data: inserted, error: insertError } = await supabase
@@ -184,7 +184,7 @@ const CharacterCreator = () => {
         return inserted?.id || null;
       }
     } catch (err: any) {
-      toast.error(err.message || "failed to save character");
+      toast.error("save error");
       return null;
     }
   };
@@ -193,8 +193,8 @@ const CharacterCreator = () => {
     const missingName = !characterName.trim();
     const missingAge = !age;
     if (missingName || missingAge) {
-      if (missingName) toast.error("name is required");
-      if (missingAge) toast.error("age is required");
+      if (missingName) toast.error("name needed");
+      if (missingAge) toast.error("age needed");
       return;
     }
     if (!user) {

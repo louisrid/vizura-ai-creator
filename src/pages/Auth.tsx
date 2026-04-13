@@ -93,12 +93,12 @@ const Auth = () => {
       if (!isSignUp && !email.trim() && !password.trim()) {
         sessionStorage.setItem("vizura_post_auth_home", "1");
         await signInPreview();
-        toast.success("signed into preview account");
+        toast.success("signed in");
         return;
       }
 
       if (!email.trim() || !password.trim()) {
-        toast.error("please enter email and password");
+        toast.error("fill details");
         setSubmitting(false);
         return;
       }
@@ -106,7 +106,7 @@ const Auth = () => {
       if (isSignUp) {
         try {
           await signUp(email.trim(), password);
-          toast.success("check your email to confirm your account");
+          toast.success("check email");
         } catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
             await signIn(email.trim(), password);
@@ -118,7 +118,7 @@ const Auth = () => {
         await signIn(email.trim(), password);
       }
     } catch (err: any) {
-      toast.error(err.message || "something went wrong");
+      toast.error("try again");
       setSubmitting(false);
     }
   };
@@ -136,7 +136,7 @@ const Auth = () => {
       });
       if (result?.error) {
         sessionStorage.removeItem("vizura_post_auth_home");
-        toast.error("google sign in failed");
+        toast.error("sign in error");
         setGoogleLoading(false);
         return;
       }
@@ -145,7 +145,7 @@ const Auth = () => {
       }
     } catch (err: any) {
       sessionStorage.removeItem("vizura_post_auth_home");
-      toast.error(err.message || "google sign in failed");
+      toast.error("sign in error");
       setGoogleLoading(false);
     }
   };
