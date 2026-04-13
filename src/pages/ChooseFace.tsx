@@ -73,6 +73,14 @@ const ChooseFace = () => {
   );
   const [characterId, setCharacterId] = useState<string | undefined>(stateCharId || sessionStorage.getItem("facefox_pending_char_id") || undefined);
 
+  // Cache draft on mount so it survives any mid-flow sessionStorage clearing
+  const [cachedDraft] = useState<Record<string, string> | null>(() => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  });
+
   const [faces, setFaces] = useState<string[]>(() => {
     if (isFreshCreation) return [];
     try {
