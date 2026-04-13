@@ -9,27 +9,27 @@
     --foreground: 0 0% 100%;
 
     /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
-    --card: 0 0% 5%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 5%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 5%;
+    --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 5%;
+    --muted: 0 0% 8%;
     --muted-foreground: 0 0% 100%;
 
     --accent: 54 100% 51%;
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
+    --border: 0 0% 28%;
+    --input: 0 0% 28%;
     --ring: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -68,9 +68,9 @@
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 5%;
+    --sidebar-accent: 0 0% 8%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 18%;
+    --sidebar-border: 0 0% 28%;
     --sidebar-ring: 0 0% 100%;
 
     /* custom tokens */
@@ -79,16 +79,16 @@
     --nav-foreground: 0 0% 100%;
     --surface-dark: 0 0% 2%;
     --surface-dark-foreground: 0 0% 100%;
-    --surface-elevated: 0 0% 5%;
+    --surface-elevated: 0 0% 8%;
 
     /* wizard bg */
     --wizard-bg: 0 0% 2%;
 
-    --surface-strong: 0 0% 5%;
+    --surface-strong: 0 0% 8%;
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 18%;
+    --border-mid: 0 0% 28%;
   }
 }
 
