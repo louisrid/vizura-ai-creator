@@ -229,8 +229,32 @@ const OnboardingRedirectGate = () => {
   return <div className="fixed inset-0 z-[9999] bg-nav" />;
 };
 
+const LoadingScreen = () => (
+  <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-6">
+    <h1 className="text-2xl font-[900] lowercase text-white tracking-tight">loading...</h1>
+    <div className="w-48 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+      <div
+        className="h-full rounded-full"
+        style={{
+          backgroundColor: "#ffe603",
+          animation: "facefox-loading-bar 1.2s ease-in-out infinite",
+          width: "60%",
+        }}
+      />
+    </div>
+    <style>{`
+      @keyframes facefox-loading-bar {
+        0% { transform: translateX(-100%); }
+        50% { transform: translateX(80%); }
+        100% { transform: translateX(200%); }
+      }
+    `}</style>
+  </div>
+);
+
 const AppRoutes = () => {
   const location = useLocation();
+  const { loading: authLoading } = useAuth();
   const [blackoutActive, setBlackoutActive] = useState(false);
   useSwipeNavigation();
 
@@ -246,6 +270,11 @@ const AppRoutes = () => {
       window.removeEventListener("facefox:blackout:end", end);
     };
   }, []);
+
+  // Universal loading gate — nothing renders until auth is resolved
+  if (authLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
