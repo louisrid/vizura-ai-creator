@@ -417,10 +417,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* SVG sharpen filter */}
         <svg width="0" height="0" style={{ position: 'absolute' }}>
           <filter id="sharpen-fox">
-            <feConvolveMatrix order="3" kernelMatrix="0 -0.25 0 -0.25 2 -0.25 0 -0.25 0" />
+            <feConvolveMatrix order="3" kernelMatrix="0 -0.12 0 -0.12 1.48 -0.12 0 -0.12 0" />
           </filter>
         </svg>
-        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
+        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, marginTop: -10 }}>
           {[
             { size: 288, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 255, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
@@ -451,7 +451,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 width: 115,
                 height: 115,
                 imageRendering: '-webkit-optimize-contrast' as any,
-                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.04)' : 'none',
+                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.02)' : 'none',
                 transition: 'filter 1.2s ease',
               }}
             />
