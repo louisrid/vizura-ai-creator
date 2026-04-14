@@ -51,13 +51,9 @@ const FreshLoadRedirect = () => {
 
     const resolveInitialRoute = async () => {
       if (user) {
-        // Logged-in users stay on whatever page they loaded.
-        // Only redirect to "/" if they're on a page that doesn't make sense
-        // (e.g. stuck on /auth). Otherwise, let them be.
         if (location.pathname === "/auth") {
           navigate("/", { replace: true });
         }
-        // Still warm up onboarding cache in background
         const cachedState = readCachedOnboardingState(user.id);
         if (!cachedState || cachedState.characterCount === 0) {
           void fetchAndCacheOnboardingState(user.id);
@@ -88,8 +84,6 @@ const PostAuthHomeRedirect = () => {
     if (loading || !user) return;
     if (sessionStorage.getItem(POST_AUTH_HOME_KEY) !== "1") return;
 
-    // Auth page now handles its own redirect with onboarding check,
-    // so only handle the resume-url case here
     const resumeUrl = sessionStorage.getItem("facefox_resume_url");
     sessionStorage.removeItem(POST_AUTH_HOME_KEY);
     if (resumeUrl) {
@@ -98,8 +92,6 @@ const PostAuthHomeRedirect = () => {
       return;
     }
 
-    // Don't redirect here — let Auth page handle the new-account check + redirect
-    // If we're already on auth, it will navigate us. If not, do nothing.
     if (location.pathname === "/auth") return;
 
     sessionStorage.removeItem("facefox_auto_opened");
@@ -276,15 +268,18 @@ const AppRoutes = () => {
 
   return (
     <>
-      {/* Yellow gradient bar — NEVER fades, always visible */}
+      {/* Yellow gradient bar — ABOVE animated wrapper, never fades */}
       <TopGradientBar />
-      <HeaderTransition blackoutActive={blackoutActive} />
+
+      {/* Blackout overlay for TYPE A transitions */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
         animate={{ opacity: blackoutActive ? 1 : 0 }}
         transition={blackoutActive ? { duration: 0 } : { duration: 0.6, ease: "easeInOut" }}
       />
+
+      {/* Header + page content in ONE animated wrapper — they fade together */}
       <AnimatePresence mode="sync" initial={false}>
         <motion.div
           key={location.key}
@@ -293,6 +288,8 @@ const AppRoutes = () => {
           exit={{ opacity: blackoutActive ? 1 : 0 }}
           transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
         >
+          {/* Header inside animated wrapper — fades with page content */}
+          <HeaderTransition />
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/generate-face" element={<ChooseFace />} />

@@ -1,10 +1,6 @@
-import { createPortal } from "react-dom";
-
-/** Top yellow accent bar — flush at very top, perfectly straight with horizontal opacity fade. */
+/** Top yellow accent bar — normal document flow, never fades, always visible. */
 const TopGradientBar = () => {
-  if (typeof document === "undefined") return null;
-
-  return createPortal(
+  return (
     <div
       className="pointer-events-none fixed top-0 left-0 right-0 h-[5px] overflow-hidden"
       style={{ zIndex: 2147483646 }}
@@ -26,8 +22,7 @@ const TopGradientBar = () => {
         </defs>
         <rect x="0" y="0" width="100" height="5" fill="url(#header-top-bar-gradient)" />
       </svg>
-    </div>,
-    document.body,
+    </div>
   );
 };
 
