@@ -313,14 +313,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => clearInterval(check);
   }, [isHeroSlide, splashGone]);
 
-  /* Hero phased entrance — only starts after splash is gone */
+  /* Hero phased entrance — only starts after splash is gone; skip on return */
   useEffect(() => {
     if (!isHeroSlide || !splashGone) return;
+    if (heroVisited.current) {
+      // Returning to hero — show everything instantly
+      setHeroPhase(3);
+      return;
+    }
     setHeroPhase(0);
     const ts = [
       setTimeout(() => setHeroPhase(1), 300),
       setTimeout(() => setHeroPhase(2), 650),
-      setTimeout(() => setHeroPhase(3), 1800),
+      setTimeout(() => { setHeroPhase(3); heroVisited.current = true; }, 1800),
     ];
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide, splashGone]);
