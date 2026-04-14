@@ -280,7 +280,6 @@ const AppRoutes = () => {
         animate={{ opacity: blackoutActive ? 1 : 0 }}
         transition={blackoutActive ? { duration: 0 } : { duration: 0.6, ease: "easeInOut" }}
       />
-      <Header />
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -289,6 +288,7 @@ const AppRoutes = () => {
           exit={{ opacity: blackoutActive ? 1 : 0 }}
           transition={blackoutActive ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         >
+          <Header />
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/generate-face" element={<ChooseFace />} />

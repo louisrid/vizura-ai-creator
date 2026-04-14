@@ -477,7 +477,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {!isLoggedIn && (
-            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLoginExiting(true); setTimeout(() => navigateTo(`/auth${window.location.search}`), 400); }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            <button type="button" onClick={(e) => {
+              e.preventDefault(); e.stopPropagation();
+              setLoginExiting(true);
+              // Hide the portal content, then navigate after a brief fade
+              setTimeout(() => {
+                setVisible(false);
+                navigateTo(`/auth${window.location.search}`);
+              }, 350);
+            }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -619,7 +627,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
+    <div
+      className="fixed inset-0 z-[9999] flex flex-col"
+      style={{
+        background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
+        opacity: loginExiting ? 0 : 1,
+        transition: "opacity 0.35s ease-in-out",
+      }}
+    >
       {(isHeroSlide || heroExiting) && <TopLine visible={heroPhase >= 1} />}
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
@@ -627,13 +642,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         initial={{ opacity: 0 }}
         animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
         transition={{ duration: heroExiting ? 0.35 : 0.6, ease: "easeInOut" }}
-      />
-      {/* Login crossfade overlay */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-50 bg-black"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: loginExiting ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
