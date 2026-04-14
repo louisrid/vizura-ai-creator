@@ -620,24 +620,24 @@ const ChooseFace = () => {
       setAngleBodyBarComplete(false);
       setPendingNavCharId(angleCharacterId);
 
-      // Fire angle+body generation
-      supabase.functions.invoke("generate", {
-        body: {
-          prompt: anglePrompt,
-          generate_angles: true,
-          selected_face_url: faceUrl,
-          body_type: bodyType,
-          bust_size: bustSize,
-          angle_character_id: angleCharacterId,
-        },
-      }).then(({ data, error }) => {
+      // Await angle+body generation — do NOT navigate until complete
+      try {
+        const { data, error } = await supabase.functions.invoke("generate", {
+          body: {
+            prompt: anglePrompt,
+            generate_angles: true,
+            selected_face_url: faceUrl,
+            body_type: bodyType,
+            bust_size: bustSize,
+            angle_character_id: angleCharacterId,
+          },
+        });
         if (error) console.error("Angle + body generation failed:", error);
         else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
-        setAngleBodyApiDone(true);
-      }).catch((e) => {
+      } catch (e) {
         console.error("Angle + body generation failed:", e);
-        setAngleBodyApiDone(true);
-      });
+      }
+      setAngleBodyApiDone(true);
     } else {
       // No angle/body to generate — navigate directly
       if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
