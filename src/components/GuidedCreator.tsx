@@ -12,7 +12,7 @@ import { readCachedOnboardingState } from "@/lib/onboardingState";
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.2;
-const OVERLAY_FADE_DURATION = 0.75;
+const OVERLAY_FADE_DURATION = 0.3;
 
 /* ── Name toast ── */
 const getRandomNameToast = () => "great choice";
