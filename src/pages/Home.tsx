@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { displayAge } from "@/lib/displayAge";
 import { User, Loader2 } from "lucide-react";
@@ -92,14 +92,19 @@ const Home = () => {
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
 
+  const photoFetchRef = useRef(0);
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); setPhotosLoaded(true); return; }
+    const fetchId = ++photoFetchRef.current;
     const { data } = await supabase
       .from("generations")
       .select("id, image_urls, prompt, created_at")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(8);
+
+    // Only apply if this is still the latest fetch (prevents race conditions)
+    if (fetchId !== photoFetchRef.current) return;
 
     const latest = (data ?? [])
       .flatMap((g: any) =>
@@ -116,14 +121,17 @@ const Home = () => {
     try { sessionStorage.setItem("facefox_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
+  const charFetchRef = useRef(0);
   const fetchCharacters = useCallback(async () => {
     if (!user) { setCharacters([]); setCharsLoaded(true); return; }
+    const fetchId = ++charFetchRef.current;
     const { data } = await supabase
       .from("characters")
       .select("id, name, age, face_image_url, face_angle_url, body_anchor_url")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(20);
+    if (fetchId !== charFetchRef.current) return;
     if (data) {
       const complete = (data as any[]).filter(
         (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
@@ -211,18 +219,26 @@ const Home = () => {
 
     void refreshAll();
 
-    const refreshMedia = () => { void Promise.all([fetchLatestPhotos(), fetchCharacters()]); };
-    const handleVisibility = () => { if (document.visibilityState === "visible") refreshMedia(); };
+    // Debounced refresh to prevent focus + visibilitychange + pageshow from triple-firing
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const debouncedRefreshMedia = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => {
+        void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
+      }, 300);
+    };
+    const handleVisibility = () => { if (document.visibilityState === "visible") debouncedRefreshMedia(); };
     const handleTestReset = () => { void refreshAll(); };
 
-    window.addEventListener("focus", refreshMedia);
-    window.addEventListener("pageshow", refreshMedia);
+    window.addEventListener("focus", debouncedRefreshMedia);
+    window.addEventListener("pageshow", debouncedRefreshMedia);
     window.addEventListener("facefox:test-reset-complete", handleTestReset);
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       cancelled = true;
-      window.removeEventListener("focus", refreshMedia);
-      window.removeEventListener("pageshow", refreshMedia);
+      if (refreshTimer) clearTimeout(refreshTimer);
+      window.removeEventListener("focus", debouncedRefreshMedia);
+      window.removeEventListener("pageshow", debouncedRefreshMedia);
       window.removeEventListener("facefox:test-reset-complete", handleTestReset);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
