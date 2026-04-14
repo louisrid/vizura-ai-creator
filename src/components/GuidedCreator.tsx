@@ -449,7 +449,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             />
           </div>
         </div>
-        <div style={{ fontSize: 61, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 2, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ fontSize: 61, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, <div style={{ fontSize: 61, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 14, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div> ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
         <div style={{ width: 156, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 8, marginBottom: 21, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 148, padding: '10px 0', fontSize: 19, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
