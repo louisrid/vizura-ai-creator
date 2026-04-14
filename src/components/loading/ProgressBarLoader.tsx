@@ -192,12 +192,9 @@ const ProgressBarLoader = ({
     >
       <motion.span
         className="text-[3.5rem] inline-block select-none"
-        initial={{ opacity: 0, y: 0 }}
-        animate={{ opacity: 1, y: [0, -5, 0] }}
-        transition={{
-          opacity: { duration: 0.7, delay: 0.1, ease: "easeOut" },
-          y: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 },
-        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
       >
         🦊
       </motion.span>
@@ -236,12 +233,9 @@ const ProgressBarLoader = ({
             key={safePhrases[phraseIndex]}
             className="text-center text-[1.3rem] font-[900] lowercase text-white"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, -4, 0] }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{
-              opacity: { duration: 0.5, ease: "easeInOut" },
-              y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
-            }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
           >
             {safePhrases[phraseIndex]}
           </motion.p>

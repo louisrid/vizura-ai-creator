@@ -80,9 +80,9 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
           {phase === "success" && (
             <div className="flex min-h-[18rem] flex-col items-center justify-center px-6 text-center">
               <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.85 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: "easeInOut" }}
               >
                 <p className="text-center text-[3rem] font-[900] lowercase leading-[1.05] text-black">
                   <span className="block">character</span>
