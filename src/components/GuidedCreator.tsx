@@ -393,23 +393,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     heroVisited.current = true; markHeroSeen();
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
 
-    // Going back to hero slide → TYPE A (fade-black-fade), matching the forward transition
+    // ALL back transitions → TYPE B (fast crossfade), including back to hero
     const goingBackToHero = !skipWelcome && step === 1;
     if (goingBackToHero) {
-      animating.current = true;
-      setHeroExiting(true); // reuse the black overlay for fade-to-black
-      setTimeout(() => {
-        setHeroPhase(3);
-        setStep(0);
-        requestAnimationFrame(() => {
-          setHeroExiting(false);
-          setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
-        });
-      }, SLOW_FADE_MS + BLACK_HOLD_MS);
-      return;
+      setHeroPhase(3); // ensure hero renders in final state immediately
     }
 
-    // All other back transitions → TYPE B (fast crossfade)
     animating.current = true;
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, FAST_CROSSFADE_MS);

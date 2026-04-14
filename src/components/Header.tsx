@@ -27,15 +27,11 @@ function useScrollGradientOpacity() {
   return opacity;
 }
 
-interface HeaderProps {
-  pathnameOverride?: string;
-}
-
-const Header = ({ pathnameOverride }: HeaderProps) => {
+const Header = () => {
   const gradientOpacity = useScrollGradientOpacity();
   const navigate = useNavigate();
   const location = useLocation();
-  const pathname = pathnameOverride ?? location.pathname;
+  const pathname = location.pathname;
   const { user, loading, signOut } = useAuth();
   const { gems } = useGems();
   const { subscribed } = useSubscription();
