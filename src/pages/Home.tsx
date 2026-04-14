@@ -61,14 +61,17 @@ const Home = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
+  const openCreatorRequested = Boolean(locationState?.openCreator);
+  const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
+  const shouldOpenGuidedOnMount = openCreatorRequested || (!user && !authLoading);
   const [images, setImages] = useState<LatestImage[]>([]);
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
-  const [showGuided, setShowGuided] = useState(false);
+  const [showGuided, setShowGuided] = useState(() => shouldOpenGuidedOnMount);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
-  const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
+  const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(() => shouldOpenGuidedOnMount);
   const [onboardingComplete, setOnboardingComplete] = useState(() => {
     const c = readCachedOnboardingState(user?.id);
     return c?.onboardingComplete ?? true;
@@ -83,8 +86,6 @@ const Home = () => {
     return c?.characterCount ?? 0;
   });
   const isOnboardingUser = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
-  const openCreatorRequested = Boolean(locationState?.openCreator);
-  const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
 
   const areSameLatestImages = (a: LatestImage[], b: LatestImage[]) =>
     a.length === b.length && a.every((img, index) => img.id === b[index]?.id && img.url === b[index]?.url);
