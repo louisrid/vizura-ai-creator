@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const packs = [
   { id: "standard", name: "standard", gems: 120, price: 12, badge: null },
@@ -56,6 +57,7 @@ const TopUps = () => {
   }, [user]);
 
   if (!loading && !user) return null;
+  if (user && !claimChecked) return <LoadingScreen />;
 
   const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;

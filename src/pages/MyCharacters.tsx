@@ -5,6 +5,7 @@ import { Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
+import LoadingScreen from "@/components/LoadingScreen";
 import PageTitle from "@/components/PageTitle";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
@@ -78,6 +79,7 @@ const MyCharacters = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
+  if (loading) return <LoadingScreen />;
 
   const handleCreateCharacter = () => {
     sessionStorage.removeItem("facefox_creator_dismissed");

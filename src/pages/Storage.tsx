@@ -5,6 +5,7 @@ import { Download, Trash2, Wand2, Copy } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
+import LoadingScreen from "@/components/LoadingScreen";
 import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
@@ -81,6 +82,7 @@ const Storage = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
+  if (loading) return <LoadingScreen />;
 
   const handleDelete = async (img: StorageImage) => {
     setImages((prev) => prev.filter((i) => i.id !== img.id));

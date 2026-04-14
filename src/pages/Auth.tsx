@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import PageTitle from "@/components/PageTitle";
+import LoadingScreen from "@/components/LoadingScreen";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
@@ -17,7 +18,7 @@ function isInAppWebView(): boolean {
 }
 
 const Auth = () => {
-  const { user, loading: authLoading, signIn, signUp, signInPreview } = useAuth();
+  const { user, signIn, signUp, signInPreview } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const redirectTo = useMemo(() => new URLSearchParams(location.search).get("redirect") || "/", [location.search]);
@@ -165,28 +166,7 @@ const Auth = () => {
   // If user is logged in, the useEffect above handles redirect.
   // Show a minimal loading state while redirect is in progress.
   if (user) {
-    return (
-      <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-6">
-        <h1 className="text-2xl font-[900] lowercase text-white tracking-tight">loading...</h1>
-        <div className="w-48 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
-          <div
-            className="h-full rounded-full"
-            style={{
-              backgroundColor: "#ffe603",
-              animation: "facefox-loading-bar 1.2s ease-in-out infinite",
-              width: "60%",
-            }}
-          />
-        </div>
-        <style>{`
-          @keyframes facefox-loading-bar {
-            0% { transform: translateX(-100%); }
-            50% { transform: translateX(80%); }
-            100% { transform: translateX(200%); }
-          }
-        `}</style>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

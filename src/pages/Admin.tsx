@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, Lock, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
+import LoadingScreen from "@/components/LoadingScreen";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
@@ -353,25 +354,10 @@ const Admin = () => {
   }, [user, loadAll]);
 
   if (authLoading || !user || user.email !== ADMIN_EMAIL) {
-    return (
-      <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
-        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-20">
-          <div className="flex items-center gap-3 mb-7">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-            <div className="h-7 w-20" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
-          </div>
-          <div className="grid grid-cols-3 gap-2.5 mb-8">
-            {[0,1,2].map(i => (
-              <div key={i} className="py-6" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
-                <div className="h-8 w-16 mx-auto" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
-              </div>
-            ))}
-          </div>
-        </main>
-      </div>
-    );
+    return <LoadingScreen />;
   }
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">

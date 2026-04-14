@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import DotDecal from "@/components/DotDecal";
+import LoadingScreen from "@/components/LoadingScreen";
 
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -418,6 +419,7 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [error, setError] = useState("");
   const [characters, setCharacters] = useState<Character[]>([]);
+  const [charactersLoaded, setCharactersLoaded] = useState(false);
   const [selectedCharId, setSelectedCharId] = useState(preselectedCharacterId || persistedCharacterId || "");
   const cachedOverlay = preselectedCharacterId ? null : sessionStorage.getItem("facefox_photo_overlay");
   const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">(cachedOverlay === "success" ? "success" : "hidden");
@@ -513,7 +515,13 @@ const Index = () => {
   }, []);
 
   const fetchCharacters = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setCharacters([]);
+      setCharactersLoaded(true);
+      return;
+    }
+
+    setCharactersLoaded(false);
     const { data } = await supabase
       .from("characters")
       .select("*")
@@ -534,11 +542,14 @@ const Index = () => {
     } else if (data) {
       setCharacters([]);
     }
+    setCharactersLoaded(true);
   }, [user, preselectedCharacterId]);
 
   useEffect(() => {
     fetchCharacters();
   }, [fetchCharacters]);
+
+  if (authLoading || (!!user && !charactersLoaded)) return <LoadingScreen />;
 
   // Refresh character list on focus/visibility so newly created characters appear
   useEffect(() => {
