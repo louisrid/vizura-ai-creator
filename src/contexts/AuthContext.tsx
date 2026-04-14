@@ -194,6 +194,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
+    // Clear cached state immediately to prevent stale UI flashes
+    try {
+      // Clear all facefox session data
+      const keysToRemove = Object.keys(sessionStorage).filter(k => k.startsWith("facefox_"));
+      keysToRemove.forEach(k => sessionStorage.removeItem(k));
+    } catch {}
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   };
