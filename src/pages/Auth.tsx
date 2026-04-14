@@ -154,12 +154,8 @@ const Auth = () => {
   };
 
   const handleBack = () => {
-    // Go back to the start/hero screen — use history if available, otherwise home
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate("/");
-    }
+    // Always go to the hero/start-now screen — never navigate(-1) to avoid stale page flashes
+    navigate("/", { replace: true });
   };
 
   // Auth is already resolved by the App-level gate.

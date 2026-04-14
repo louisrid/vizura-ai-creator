@@ -183,8 +183,10 @@ const Home = () => {
       return;
     }
 
-    // No user and not pending auth → redirect to sign in. No guest mode.
-    navigate("/auth", { replace: true });
+    // No user → show the hero/start-now screen (GuidedCreator step 0)
+    setShowGuided(true);
+    setSkipWelcome(false);
+    setAutoOpenEvaluated(true);
   }, [authLoading, openCreatorRequested, user, navigate]);
 
   // When lock state resolves and user needs onboarding, force guided creator open
