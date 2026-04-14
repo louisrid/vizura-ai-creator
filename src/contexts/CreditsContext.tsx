@@ -88,6 +88,11 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     }
     setLoading(true);
     fetchGems();
+
+    // Re-fetch after test account reset
+    const onReset = () => { fetchGems(); };
+    window.addEventListener("facefox:test-reset-complete", onReset);
+    return () => window.removeEventListener("facefox:test-reset-complete", onReset);
   }, [fetchGems, readCachedGems, user]);
 
   // During onboarding (onboarding_complete = false), show 0 gems to user
