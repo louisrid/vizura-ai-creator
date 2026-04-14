@@ -18,7 +18,7 @@ export const maybeResetTestAccount = async (user: User) => {
   if (!isTestResetAccount(user)) return;
 
   // Don't reset while user is mid-onboarding flow
-  if (typeof window !== "undefined" && PROTECTED_ROUTES.includes(window.location.pathname)) return;
+  if (typeof window !== "undefined" && PROTECTED_ROUTES.some((r) => window.location.pathname === r || window.location.pathname.startsWith(r))) return;
 
   // Only reset once per actual page load. Window-scoped flag survives tab switches.
   const pageFlags = window as typeof window & { [RESET_LOAD_KEY]?: string };
