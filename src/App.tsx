@@ -234,7 +234,7 @@ const AppRoutes = () => {
   const location = useLocation();
   const { loading: authLoading, user } = useAuth();
   const [blackoutActive, setBlackoutActive] = useState(false);
-  const [loadingDismissed, setLoadingDismissed] = useState(false);
+  const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
   useSwipeNavigation();
 
   useEffect(() => {
@@ -250,27 +250,30 @@ const AppRoutes = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const eventName = getBlockingLoadersEventName();
+    const handleBlockingLoaders = (event: Event) => {
+      const customEvent = event as CustomEvent<number>;
+      setBlockingLoaders(typeof customEvent.detail === "number" ? customEvent.detail : getBlockingLoaderCount());
+    };
+
+    window.addEventListener(eventName, handleBlockingLoaders as EventListener);
+    return () => window.removeEventListener(eventName, handleBlockingLoaders as EventListener);
+  }, []);
+
   const stillResolving =
     authLoading ||
     (!authLoading && !user && !isExemptRoute(location.pathname)) ||
     (!authLoading && !!user && location.pathname === "/auth");
 
-  // Reset dismissed state if we go back to resolving (e.g. sign-out)
   useEffect(() => {
-    if (stillResolving) setLoadingDismissed(false);
-  }, [stillResolving]);
-
-  const showLoading = !loadingDismissed && (stillResolving || !loadingDismissed);
-  const fadingOut = !stillResolving && !loadingDismissed;
+    if (stillResolving || blockingLoaders > 0) return;
+    const frame = requestAnimationFrame(() => hideStartupSplash());
+    return () => cancelAnimationFrame(frame);
+  }, [stillResolving, blockingLoaders, location.key]);
 
   return (
     <>
-      {showLoading && (
-        <LoadingScreen
-          fadingOut={fadingOut}
-          onFadeComplete={() => setLoadingDismissed(true)}
-        />
-      )}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
