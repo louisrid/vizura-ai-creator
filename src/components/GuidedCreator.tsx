@@ -202,6 +202,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [heroPhase, setHeroPhase] = useState(0);
 
   const [exitFade, setExitFade] = useState(false);
+  const [heroExiting, setHeroExiting] = useState(false);
+  const [loginExiting, setLoginExiting] = useState(false);
 
   /* Ring animation timer — uses rAF for smooth 60fps */
   useEffect(() => {
