@@ -401,7 +401,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center" style={{ paddingTop: '5vh', paddingBottom: '3vh' }}>
-        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 38 }}>
+        {/* SVG sharpen filter */}
+        <svg width="0" height="0" style={{ position: 'absolute' }}>
+          <filter id="sharpen-fox">
+            <feConvolveMatrix order="3" kernelMatrix="0 -0.5 0 -0.5 3 -0.5 0 -0.5 0" />
+          </filter>
+        </svg>
+        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
           {[
             { size: 288, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 255, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
@@ -419,11 +425,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <img src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png" alt="fox" width={115} height={115} style={{ display: 'block', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }} />
+          <img src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png" alt="fox" width={115} height={115} style={{ display: 'block', opacity: heroPhase >= 1 ? 1 : 0, filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.05)' : 'none', transition: 'opacity 1.2s ease, filter 1.2s ease' }} />
         </div>
-        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease' }}>facefox</div>
-        <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease 0.1s' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease' }}>
+        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {!isLoggedIn && (
             <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
