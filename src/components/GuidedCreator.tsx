@@ -200,6 +200,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
   const [heroPhase, setHeroPhase] = useState(0);
+  const heroVisited = useRef(false);
 
   const [exitFade, setExitFade] = useState(false);
   const [heroExiting, setHeroExiting] = useState(false);
