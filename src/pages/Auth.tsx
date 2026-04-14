@@ -41,6 +41,7 @@ const Auth = () => {
 
     const cachedState = readCachedOnboardingState(user.id);
     if (needsOnboardingRedirect(cachedState)) {
+      window.dispatchEvent(new Event("facefox:blackout:start"));
       navigate("/", { replace: true, state: { openCreator: true, onboardingRedirect: true } });
       return () => {
         cancelled = true;
@@ -60,6 +61,7 @@ const Auth = () => {
         if (cancelled) return;
 
         if (needsOnboardingRedirect(resolvedState)) {
+          window.dispatchEvent(new Event("facefox:blackout:start"));
           navigate("/", { replace: true, state: { openCreator: true, onboardingRedirect: true } });
           return;
         }

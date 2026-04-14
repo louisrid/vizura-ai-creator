@@ -186,7 +186,7 @@ const OnboardingRedirectGate = () => {
 
   if (!shouldRedirect) return null;
 
-  return <div className="fixed inset-0 z-[9999] bg-background" />;
+  return <div className="fixed inset-0 z-[9999] bg-nav" />;
 };
 
 const AppRoutes = () => {

@@ -220,8 +220,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const mounted = typeof document !== "undefined";
-  const [visible, setVisible] = useState(false);
-  const [initialFadeIn, setInitialFadeIn] = useState(true);
+  const [visible, setVisible] = useState(open);
+  const [initialFadeIn, setInitialFadeIn] = useState(!open);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
   const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
