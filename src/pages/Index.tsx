@@ -207,12 +207,22 @@ const HighlightedPromptArea = ({
             overlayRef.current.scrollLeft = e.currentTarget.scrollLeft;
           }
         }}
+        onFocus={(e) => {
+          const ph = e.currentTarget.parentElement?.querySelector('[data-placeholder]') as HTMLElement | null;
+          if (ph) ph.style.display = 'none';
+        }}
+        onBlur={(e) => {
+          if (!value) {
+            const ph = e.currentTarget.parentElement?.querySelector('[data-placeholder]') as HTMLElement | null;
+            if (ph) ph.style.display = '';
+          }
+        }}
         spellCheck={false}
         autoCorrect="off"
         className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
         style={{ caretColor: "hsl(var(--foreground))", WebkitTextFillColor: "transparent" }}
       />
-      {!value && placeholder}
+      {!value && <div data-placeholder>{placeholder}</div>}
     </div>
   );
 };
@@ -382,7 +392,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : (
-      <>create <span style={{ color: "#00e0ff" }}>·</span> 10 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
+      <>create photo <span style={{ color: "#00e0ff" }}>·</span> 10 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
     )}
   </button>
 );

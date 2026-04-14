@@ -125,7 +125,7 @@ const Header = () => {
   };
 
   // Items that get locked when showMenuLocks is true
-  const lockedLabels = new Set(["create photo", "storage"]);
+  const lockedLabels = new Set(["create character", "storage"]);
 
   const menuItems = [
     { label: "home", path: "/", icon: Home, auth: false },
