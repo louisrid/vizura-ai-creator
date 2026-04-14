@@ -449,12 +449,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             />
           </div>
         </div>
-        <div style={{ fontSize: 61, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 14, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
-        <div style={{ width: 156, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 8, marginBottom: 21, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 148, padding: '10px 0', fontSize: 19, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+        <div style={{ fontSize: 66, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 28, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ width: 168, height: 11, background: '#ffe603', borderRadius: 5, marginTop: 9, marginBottom: 23, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 160, padding: '11px 0', fontSize: 21, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 11, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {!isLoggedIn && (
-            <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 148, padding: '8px 0', fontSize: 19, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 160, padding: '9px 0', fontSize: 21, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 11, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
