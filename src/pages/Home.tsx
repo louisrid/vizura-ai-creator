@@ -563,7 +563,7 @@ const Home = () => {
                   const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={char.id}
+                      key={`char-slot-${i}`}
                       type="button"
                       onClick={() => navigate(`/characters/${char.id}`)}
                       className="relative overflow-hidden"
@@ -762,7 +762,7 @@ const Home = () => {
                   const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={char.id}
+                      key={`char-slot-desktop-${i}`}
                       type="button"
                       onClick={() => navigate(`/characters/${char.id}`)}
                       className="relative overflow-hidden hover-lift"
