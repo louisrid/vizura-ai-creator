@@ -28,7 +28,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/generate-face", "/admin"];
+const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/generate-face", "/admin", "/top-ups", "/history", "/help", "/info", "/storage", "/create", "/index"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
