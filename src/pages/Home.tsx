@@ -61,7 +61,6 @@ const Home = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
-  const cachedOnboardingState = readCachedOnboardingState(user?.id);
   const [images, setImages] = useState<LatestImage[]>(() => {
     try {
       const cached = sessionStorage.getItem("facefox_latest_photos");
@@ -72,14 +71,23 @@ const Home = () => {
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
-  const cachedStateNeedsVerification = !!user && !!cachedOnboardingState && needsOnboardingRedirect(cachedOnboardingState);
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
-  const [onboardingComplete, setOnboardingComplete] = useState(() => cachedOnboardingState?.onboardingComplete ?? true);
-  const [lockStateResolved, setLockStateResolved] = useState(() => !user || (!!cachedOnboardingState && !cachedStateNeedsVerification));
-  const [characterCount, setCharacterCount] = useState(() => cachedOnboardingState?.characterCount ?? 0);
+  const [onboardingComplete, setOnboardingComplete] = useState(() => {
+    const c = readCachedOnboardingState(user?.id);
+    return c?.onboardingComplete ?? true;
+  });
+  const [lockStateResolved, setLockStateResolved] = useState(() => {
+    if (!user) return false;
+    const c = readCachedOnboardingState(user?.id);
+    return !!c && !needsOnboardingRedirect(c);
+  });
+  const [characterCount, setCharacterCount] = useState(() => {
+    const c = readCachedOnboardingState(user?.id);
+    return c?.characterCount ?? 0;
+  });
   const isOnboardingUser = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
@@ -190,9 +198,10 @@ const Home = () => {
       }
     };
 
-    if (cachedOnboardingState && !needsOnboardingRedirect(cachedOnboardingState)) {
-      setOnboardingComplete(cachedOnboardingState.onboardingComplete);
-      setCharacterCount(cachedOnboardingState.characterCount);
+    const cached = readCachedOnboardingState(user.id);
+    if (cached && !needsOnboardingRedirect(cached)) {
+      setOnboardingComplete(cached.onboardingComplete);
+      setCharacterCount(cached.characterCount);
       setLockStateResolved(true);
     } else {
       setLockStateResolved(false);
@@ -226,7 +235,7 @@ const Home = () => {
       window.removeEventListener("facefox:test-reset-complete", handleTestReset);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [cachedOnboardingState, fetchLatestPhotos, fetchCharacters, openCreatorRequested, user]);
+  }, [fetchLatestPhotos, fetchCharacters, openCreatorRequested, user]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
