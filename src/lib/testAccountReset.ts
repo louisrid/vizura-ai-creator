@@ -34,11 +34,16 @@ export const maybeResetTestAccount = async (user: User) => {
     if (error) throw error;
     if (data?.error) throw new Error(data.error);
 
-    // Update local onboarding cache to reflect fresh state
+    // Fetch actual character count so cache matches reality
+    const { count } = await supabase
+      .from("characters")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id);
+
     writeCachedOnboardingState({
       userId: user.id,
       onboardingComplete: false,
-      characterCount: 0,
+      characterCount: count ?? 0,
       resolvedAt: Date.now(),
     });
 
