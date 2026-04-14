@@ -9,7 +9,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
 import { checkNavGuard } from "@/lib/navGuard";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
