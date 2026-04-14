@@ -438,7 +438,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
-      <div className="flex w-full flex-col items-center">
+      <div className="flex w-full flex-col items-center" style={{ paddingTop: 10 }}>
         {/* Fox emoji — no sharpening */}
         <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
           {[
