@@ -46,16 +46,33 @@ const FreshLoadRedirect = () => {
 
     const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
 
-    if (!user && !pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
-      sessionStorage.removeItem("facefox_auto_opened");
-      sessionStorage.removeItem("facefox_creator_dismissed");
-      navigate("/", { replace: true });
-    }
+    const resolveInitialRoute = async () => {
+      if (user) {
+        const cachedState = readCachedOnboardingState(user.id);
+        const resolvedState = cachedState?.characterCount && cachedState.characterCount > 0
+          ? cachedState
+          : await fetchAndCacheOnboardingState(user.id);
 
-    if (!user && location.pathname === "/" && !pendingPostAuthHome) {
-      sessionStorage.removeItem("facefox_auto_opened");
-      sessionStorage.removeItem("facefox_creator_dismissed");
-    }
+        if (resolvedState.characterCount > 0 && location.pathname !== "/") {
+          navigate("/", { replace: true });
+        }
+        return;
+      }
+
+      if (!pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
+        sessionStorage.removeItem("facefox_auto_opened");
+        sessionStorage.removeItem("facefox_creator_dismissed");
+        navigate("/", { replace: true });
+        return;
+      }
+
+      if (location.pathname === "/" && !pendingPostAuthHome) {
+        sessionStorage.removeItem("facefox_auto_opened");
+        sessionStorage.removeItem("facefox_creator_dismissed");
+      }
+    };
+
+    void resolveInitialRoute();
   }, [loading, location.pathname, navigate, user]);
 
   return null;
