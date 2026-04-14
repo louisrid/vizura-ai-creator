@@ -364,7 +364,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
 
   const advance = useCallback(() => {
-    if (animating.current) return;
+    if (animating.current || heroExiting) return;
     toast.dismiss();
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
@@ -379,16 +379,31 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       }, 600);
       return;
     }
+    // Hero → first slide: fade to black, hold, then reveal next slide
+    if (isHeroSlide) {
+      animating.current = true;
+      heroVisited.current = true;
+      setHeroExiting(true);
+      setTimeout(() => {
+        setSlideDirection(1);
+        setStep(step + 1);
+        // Hold on black briefly, then fade in
+        setTimeout(() => {
+          setHeroExiting(false);
+          setTimeout(() => { animating.current = false; }, 350);
+        }, 150);
+      }, 400);
+      return;
+    }
     animating.current = true;
     setSlideDirection(1);
     const nextStep = step + 1;
     if (nextStep >= TOTAL) return;
-    // Delay step change slightly so layout doesn't jump before exit animation
     requestAnimationFrame(() => {
       setStep(nextStep);
       setTimeout(() => { animating.current = false; }, 250);
     });
-  }, [step, isNameSlide, isCreateSlide, currentTraitIndex, TOTAL, completeCookingFlow]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, heroExiting, currentTraitIndex, TOTAL, completeCookingFlow]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
