@@ -61,27 +61,9 @@ const Home = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
-  const [images, setImages] = useState<LatestImage[]>(() => {
-    try {
-      const cached = sessionStorage.getItem("facefox_latest_photos");
-      if (cached) {
-        const parsed = JSON.parse(cached) as LatestImage[];
-        if (parsed.length > 0) return parsed;
-      }
-    } catch {}
-    return [];
-  });
+  const [images, setImages] = useState<LatestImage[]>([]);
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
-  const [photosLoaded, setPhotosLoaded] = useState(() => {
-    try {
-      const cached = sessionStorage.getItem("facefox_latest_photos");
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        return Array.isArray(parsed); // treat cache as "loaded" so we skip skeleton
-      }
-    } catch {}
-    return false;
-  });
+  const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
@@ -104,6 +86,32 @@ const Home = () => {
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
 
+  const areSameLatestImages = (a: LatestImage[], b: LatestImage[]) =>
+    a.length === b.length && a.every((img, index) => img.id === b[index]?.id && img.url === b[index]?.url);
+
+  const preloadImage = (url: string) =>
+    new Promise<boolean>((resolve) => {
+      const img = new Image();
+      let settled = false;
+      const timeout = window.setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        resolve(false);
+      }, 3500);
+
+      const finish = (loaded: boolean) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        resolve(loaded);
+      };
+
+      img.onload = () => finish(true);
+      img.onerror = () => finish(false);
+      img.decoding = "async";
+      img.src = url;
+    });
+
   const photoFetchRef = useRef(0);
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); setPhotosLoaded(true); return; }
@@ -113,12 +121,12 @@ const Home = () => {
       .select("id, image_urls, prompt, created_at")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
-      .limit(8);
+      .order("id", { ascending: false })
+      .limit(24);
 
-    // Only apply if this is still the latest fetch (prevents race conditions)
     if (fetchId !== photoFetchRef.current) return;
 
-    const latest = (data ?? [])
+    const candidates = (data ?? [])
       .flatMap((g: any) =>
         (g.image_urls ?? []).filter(isValidImageUrl).slice(0, 1).map((url: string, i: number) => ({
           id: `${g.id}-${i}`,
@@ -128,9 +136,20 @@ const Home = () => {
         })),
       )
       .slice(0, 8);
-    setImages(latest);
+
+    const settledResults = await Promise.all(
+      candidates.map(async (photo) => ({ photo, loaded: await preloadImage(photo.url) })),
+    );
+
+    if (fetchId !== photoFetchRef.current) return;
+
+    const nextImages = settledResults
+      .filter((result) => result.loaded)
+      .map((result) => result.photo)
+      .slice(0, 8);
+
+    setImages((prev) => (areSameLatestImages(prev, nextImages) ? prev : nextImages));
     setPhotosLoaded(true);
-    try { sessionStorage.setItem("facefox_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
   const charFetchRef = useRef(0);
@@ -231,28 +250,11 @@ const Home = () => {
 
     void refreshAll();
 
-    // Debounced refresh to prevent focus + visibilitychange + pageshow from triple-firing
-    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
-    const debouncedRefreshMedia = () => {
-      if (refreshTimer) clearTimeout(refreshTimer);
-      refreshTimer = setTimeout(() => {
-        void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
-      }, 300);
-    };
-    const handleVisibility = () => { if (document.visibilityState === "visible") debouncedRefreshMedia(); };
     const handleTestReset = () => { void refreshAll(); };
-
-    window.addEventListener("focus", debouncedRefreshMedia);
-    window.addEventListener("pageshow", debouncedRefreshMedia);
     window.addEventListener("facefox:test-reset-complete", handleTestReset);
-    document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       cancelled = true;
-      if (refreshTimer) clearTimeout(refreshTimer);
-      window.removeEventListener("focus", debouncedRefreshMedia);
-      window.removeEventListener("pageshow", debouncedRefreshMedia);
       window.removeEventListener("facefox:test-reset-complete", handleTestReset);
-      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [fetchLatestPhotos, fetchCharacters, openCreatorRequested, user]);
 
