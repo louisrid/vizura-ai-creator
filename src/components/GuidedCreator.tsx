@@ -6,6 +6,7 @@ import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
+import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 /* ── Constants ── */
 const Y = "#ffe603";
