@@ -678,7 +678,7 @@ const Home = () => {
                   const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
                   return (
                     <button
-                      key={photo.id}
+                      key={`photo-slot-desktop-${i}`}
                       type="button"
                       onClick={() => {
                         if (!isPlaceholder) setSelectedImage(photo);
@@ -703,7 +703,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
                         )}
                       </AspectRatio>
                     </button>
