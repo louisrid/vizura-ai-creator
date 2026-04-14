@@ -145,17 +145,9 @@ const Home = () => {
       return;
     }
 
-    const alreadyOpened = sessionStorage.getItem("facefox_auto_opened");
-    const dismissed = sessionStorage.getItem(DISMISSED_KEY);
-    if (!alreadyOpened && !dismissed) {
-      sessionStorage.setItem("facefox_auto_opened", "1");
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      setSkipWelcome(false);
-      setShowGuided(true);
-    }
-    setAutoOpenEvaluated(true);
-    requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
-  }, [authLoading, openCreatorRequested, user]);
+    // No user and not pending auth → redirect to sign in. No guest mode.
+    navigate("/auth", { replace: true });
+  }, [authLoading, openCreatorRequested, user, navigate]);
 
   // When lock state resolves and user needs onboarding, force guided creator open
   useEffect(() => {

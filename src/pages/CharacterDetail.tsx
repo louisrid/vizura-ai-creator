@@ -509,7 +509,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
-            style={{ height: 56, color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
+            style={{ height: 56, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
           >
             <Camera size={18} strokeWidth={2.5} /> create photo
           </button>
@@ -595,7 +595,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
-              style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
+              style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
             >
               <Camera size={18} strokeWidth={2.5} /> create photo
             </button>
