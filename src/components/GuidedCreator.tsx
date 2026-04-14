@@ -200,8 +200,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
   const [heroPhase, setHeroPhase] = useState(0);
+  const heroVisited = useRef(false);
 
   const [exitFade, setExitFade] = useState(false);
+  const [heroExiting, setHeroExiting] = useState(false);
+  const [loginExiting, setLoginExiting] = useState(false);
 
   /* Ring animation timer — uses rAF for smooth 60fps */
   useEffect(() => {
@@ -253,6 +256,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = false;
       setNameToastShown(false);
       setExitFade(false);
+      setHeroExiting(false);
+      setLoginExiting(false);
       setSlideDirection(1);
       setBackArrowShaking(false);
     }
@@ -308,14 +313,19 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => clearInterval(check);
   }, [isHeroSlide, splashGone]);
 
-  /* Hero phased entrance — only starts after splash is gone */
+  /* Hero phased entrance — only starts after splash is gone; skip on return */
   useEffect(() => {
     if (!isHeroSlide || !splashGone) return;
+    if (heroVisited.current) {
+      // Returning to hero — show everything instantly
+      setHeroPhase(3);
+      return;
+    }
     setHeroPhase(0);
     const ts = [
       setTimeout(() => setHeroPhase(1), 300),
       setTimeout(() => setHeroPhase(2), 650),
-      setTimeout(() => setHeroPhase(3), 1800),
+      setTimeout(() => { setHeroPhase(3); heroVisited.current = true; }, 1800),
     ];
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide, splashGone]);
@@ -354,7 +364,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
 
   const advance = useCallback(() => {
-    if (animating.current) return;
+    if (animating.current || heroExiting) return;
     toast.dismiss();
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
@@ -369,16 +379,31 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       }, 600);
       return;
     }
+    // Hero → first slide: fade to black, hold, then reveal next slide
+    if (isHeroSlide) {
+      animating.current = true;
+      heroVisited.current = true;
+      setHeroExiting(true);
+      setTimeout(() => {
+        setSlideDirection(1);
+        setStep(step + 1);
+        // Hold on black briefly, then fade in
+        setTimeout(() => {
+          setHeroExiting(false);
+          setTimeout(() => { animating.current = false; }, 350);
+        }, 150);
+      }, 400);
+      return;
+    }
     animating.current = true;
     setSlideDirection(1);
     const nextStep = step + 1;
     if (nextStep >= TOTAL) return;
-    // Delay step change slightly so layout doesn't jump before exit animation
     requestAnimationFrame(() => {
       setStep(nextStep);
       setTimeout(() => { animating.current = false; }, 250);
     });
-  }, [step, isNameSlide, isCreateSlide, currentTraitIndex, TOTAL, completeCookingFlow]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, heroExiting, currentTraitIndex, TOTAL, completeCookingFlow]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
@@ -452,7 +477,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {!isLoggedIn && (
-            <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLoginExiting(true); setTimeout(() => navigateTo(`/auth${window.location.search}`), 400); }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -595,13 +620,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
-      {isHeroSlide && <TopLine visible={heroPhase >= 1} />}
+      {(isHeroSlide || heroExiting) && <TopLine visible={heroPhase >= 1} />}
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
-        animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
+        animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
+        transition={{ duration: heroExiting ? 0.35 : 0.6, ease: "easeInOut" }}
+      />
+      {/* Login crossfade overlay */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-50 bg-black"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loginExiting ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
