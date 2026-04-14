@@ -40,6 +40,14 @@ export const hideStartupSplash = () => {
 
   if (splash.dataset.state === "fading") return;
 
+  const elapsed = (typeof performance !== "undefined" ? performance.now() : Date.now()) - splashShownAt;
+  const remaining = MIN_SPLASH_MS - elapsed;
+
+  if (remaining > 0) {
+    setTimeout(() => hideStartupSplash(), remaining);
+    return;
+  }
+
   splash.dataset.state = "fading";
   splash.style.opacity = "0";
   splash.style.pointerEvents = "none";
