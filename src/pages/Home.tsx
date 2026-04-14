@@ -72,13 +72,14 @@ const Home = () => {
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
-  const isOnboardingUser = !!user && needsOnboardingRedirect(cachedOnboardingState);
-  const [showGuided, setShowGuided] = useState(() => isOnboardingUser);
-  const [skipWelcome, setSkipWelcome] = useState(() => isOnboardingUser);
+  const cachedStateNeedsVerification = !!user && !!cachedOnboardingState && needsOnboardingRedirect(cachedOnboardingState);
+  const isOnboardingUser = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
+  const [showGuided, setShowGuided] = useState(false);
+  const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(() => cachedOnboardingState?.onboardingComplete ?? true);
-  const [lockStateResolved, setLockStateResolved] = useState(() => !user || !!cachedOnboardingState);
+  const [lockStateResolved, setLockStateResolved] = useState(() => !user || (!!cachedOnboardingState && !cachedStateNeedsVerification));
   const [characterCount, setCharacterCount] = useState(() => cachedOnboardingState?.characterCount ?? 0);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
@@ -178,40 +179,54 @@ const Home = () => {
       return;
     }
 
-    if (cachedOnboardingState) {
+    const applyResolvedState = (resolvedState: { onboardingComplete: boolean; characterCount: number }) => {
+      if (cancelled) return;
+      setOnboardingComplete(resolvedState.onboardingComplete);
+      setCharacterCount(resolvedState.characterCount);
+      setLockStateResolved(true);
+
+      if (resolvedState.characterCount > 0 && !openCreatorRequested) {
+        setShowGuided(false);
+      }
+    };
+
+    if (cachedOnboardingState && !needsOnboardingRedirect(cachedOnboardingState)) {
       setOnboardingComplete(cachedOnboardingState.onboardingComplete);
       setCharacterCount(cachedOnboardingState.characterCount);
       setLockStateResolved(true);
+    } else {
+      setLockStateResolved(false);
     }
 
     let cancelled = false;
 
-    const fetchAll = async () => {
+    const refreshAll = async () => {
       const [, , resolvedState] = await Promise.all([
         fetchLatestPhotos(),
         fetchCharacters(),
         fetchAndCacheOnboardingState(user.id),
       ]);
-      if (cancelled) return;
-      setOnboardingComplete(resolvedState.onboardingComplete);
-      setCharacterCount(resolvedState.characterCount);
-      setLockStateResolved(true);
+      applyResolvedState(resolvedState);
     };
 
-    void fetchAll();
+    void refreshAll();
 
-    const refresh = () => { void Promise.all([fetchLatestPhotos(), fetchCharacters()]); };
-    const handleVisibility = () => { if (document.visibilityState === "visible") refresh(); };
-    window.addEventListener("focus", refresh);
-    window.addEventListener("pageshow", refresh);
+    const refreshMedia = () => { void Promise.all([fetchLatestPhotos(), fetchCharacters()]); };
+    const handleVisibility = () => { if (document.visibilityState === "visible") refreshMedia(); };
+    const handleTestReset = () => { void refreshAll(); };
+
+    window.addEventListener("focus", refreshMedia);
+    window.addEventListener("pageshow", refreshMedia);
+    window.addEventListener("facefox:test-reset-complete", handleTestReset);
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       cancelled = true;
-      window.removeEventListener("focus", refresh);
-      window.removeEventListener("pageshow", refresh);
+      window.removeEventListener("focus", refreshMedia);
+      window.removeEventListener("pageshow", refreshMedia);
+      window.removeEventListener("facefox:test-reset-complete", handleTestReset);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [fetchLatestPhotos, fetchCharacters, user]);
+  }, [cachedOnboardingState, fetchLatestPhotos, fetchCharacters, openCreatorRequested, user]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;

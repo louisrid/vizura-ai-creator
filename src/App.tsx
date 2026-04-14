@@ -26,7 +26,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
-import { needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/generate-face", "/admin"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
@@ -166,8 +166,34 @@ const OnboardingRedirectGate = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const hasRedirected = useRef(false);
-  const cachedState = readCachedOnboardingState(user?.id);
-  const shouldRedirect = !!user && needsOnboardingRedirect(cachedState) && location.pathname !== "/" && !isExemptRoute(location.pathname);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const resolveRedirect = async () => {
+      if (!user || location.pathname === "/" || isExemptRoute(location.pathname)) {
+        setShouldRedirect(false);
+        return;
+      }
+
+      const cachedState = readCachedOnboardingState(user.id);
+      if (cachedState && !needsOnboardingRedirect(cachedState)) {
+        setShouldRedirect(false);
+        return;
+      }
+
+      const resolvedState = await fetchAndCacheOnboardingState(user.id);
+      if (cancelled) return;
+      setShouldRedirect(needsOnboardingRedirect(resolvedState));
+    };
+
+    void resolveRedirect();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [location.pathname, user?.id]);
 
   useEffect(() => {
     if (!shouldRedirect || hasRedirected.current) return;
@@ -179,10 +205,9 @@ const OnboardingRedirectGate = () => {
     });
   }, [navigate, shouldRedirect]);
 
-  // Reset ref when user changes (sign out / sign in)
   useEffect(() => {
     hasRedirected.current = false;
-  }, [user?.id]);
+  }, [user?.id, location.pathname]);
 
   if (!shouldRedirect) return null;
 
