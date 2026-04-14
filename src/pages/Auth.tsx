@@ -161,22 +161,30 @@ const Auth = () => {
     }
   };
 
-  if (authLoading || user) {
+  // Auth is already resolved by the App-level gate.
+  // If user is logged in, the useEffect above handles redirect.
+  // Show a minimal loading state while redirect is in progress.
+  if (user) {
     return (
-      <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] flex flex-col items-center">
-          <div className="flex items-center gap-3 mb-10 w-full">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
-          </div>
-          <div className="w-full space-y-3 p-5" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-            <div className="w-full h-12" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-          </div>
-        </main>
+      <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-6">
+        <h1 className="text-2xl font-[900] lowercase text-white tracking-tight">loading...</h1>
+        <div className="w-48 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div
+            className="h-full rounded-full"
+            style={{
+              backgroundColor: "#ffe603",
+              animation: "facefox-loading-bar 1.2s ease-in-out infinite",
+              width: "60%",
+            }}
+          />
+        </div>
+        <style>{`
+          @keyframes facefox-loading-bar {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(80%); }
+            100% { transform: translateX(200%); }
+          }
+        `}</style>
       </div>
     );
   }
