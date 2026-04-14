@@ -48,13 +48,16 @@ const FreshLoadRedirect = () => {
 
     const resolveInitialRoute = async () => {
       if (user) {
-        const cachedState = readCachedOnboardingState(user.id);
-        const resolvedState = cachedState?.characterCount && cachedState.characterCount > 0
-          ? cachedState
-          : await fetchAndCacheOnboardingState(user.id);
-
-        if (resolvedState.characterCount > 0 && location.pathname !== "/") {
+        // Logged-in users stay on whatever page they loaded.
+        // Only redirect to "/" if they're on a page that doesn't make sense
+        // (e.g. stuck on /auth). Otherwise, let them be.
+        if (location.pathname === "/auth") {
           navigate("/", { replace: true });
+        }
+        // Still warm up onboarding cache in background
+        const cachedState = readCachedOnboardingState(user.id);
+        if (!cachedState || cachedState.characterCount === 0) {
+          void fetchAndCacheOnboardingState(user.id);
         }
         return;
       }
