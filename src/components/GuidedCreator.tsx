@@ -40,7 +40,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[10px] md:text-[12px] font-[800] lowercase" + " " + "text-muted-foreground";
+const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = () => (
@@ -517,7 +517,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       onClick={() => setTrait(trait.key, opt)}
                     />
                     {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                      <span className={`${HELPER_CLASS} mt-1`}>(recommended)</span>
                     )}
                   </div>
                 ))}
@@ -533,7 +533,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       onClick={() => setTrait(trait.key, opt)}
                     />
                     {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                      <span className={`${HELPER_CLASS} mt-1`}>(recommended)</span>
                     )}
                   </div>
                 ))}
@@ -554,7 +554,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     onClick={() => setTrait(trait.key, opt)}
                   />
                   {"defaultOption" in trait && trait.defaultOption === opt && (
-                    <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
+                    <span className={`${HELPER_CLASS} mt-1`}>(recommended)</span>
                   )}
                 </div>
               ))}
@@ -582,7 +582,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
             disabled={exitFade}
             className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
-            style={{ backgroundColor: isOnboarding ? "#ffe603" : "#050a10", color: isOnboarding ? "#000" : "#ffffff", borderRadius: 10, border: isOnboarding ? "none" : "2px solid #00e0ff" }}
+            style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
             {isOnboarding ? "create" : (<>create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
           </button>

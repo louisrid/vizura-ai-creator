@@ -399,12 +399,12 @@ const CharacterDetail = () => {
         ) : (
           <span className="text-[9px] md:text-[11px] font-[900] lowercase text-white">no photo</span>
         )}
-        {overlay === "lock" && (
+        {overlay === "lock" && isValidImg(url) && (
           <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
             <Lock size={14} strokeWidth={3} color="#000" fill="none" />
           </div>
         )}
-        {overlay === "regenerate" && (
+        {overlay === "regenerate" && isValidImg(url) && (
           <button
             onClick={(e) => {
               e.stopPropagation();
