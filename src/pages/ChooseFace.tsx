@@ -620,20 +620,62 @@ const ChooseFace = () => {
       setAngleBodyBarComplete(false);
       setPendingNavCharId(angleCharacterId);
 
-      // Await angle+body generation — do NOT navigate until complete
+      // Use raw fetch (not supabase.functions.invoke) to avoid default timeouts
+      // that cause the loading bar to complete before generation finishes
+      const invokeAngleBody = async (retriesLeft = 2): Promise<{ angle_url?: string; body_anchor_url?: string } | null> => {
+        const { data: sessionData } = await supabase.auth.getSession();
+        let token = sessionData?.session?.access_token;
+        if (!token) {
+          const { data: refreshed } = await supabase.auth.refreshSession();
+          token = refreshed?.session?.access_token;
+        }
+        if (!token) return null;
+
+        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            },
+            body: JSON.stringify({
+              prompt: anglePrompt,
+              generate_angles: true,
+              selected_face_url: faceUrl,
+              body_type: bodyType,
+              bust_size: bustSize,
+              angle_character_id: angleCharacterId,
+            }),
+          });
+          return await response.json();
+        } catch (networkErr: any) {
+          if (retriesLeft > 0 && (networkErr?.name === "TypeError" || networkErr?.message?.includes("fetch"))) {
+            await new Promise<void>((resolve) => {
+              if (document.visibilityState === "visible") setTimeout(resolve, 1000);
+              else {
+                const onVisible = () => {
+                  if (document.visibilityState === "visible") {
+                    document.removeEventListener("visibilitychange", onVisible);
+                    setTimeout(resolve, 500);
+                  }
+                };
+                document.addEventListener("visibilitychange", onVisible);
+              }
+            });
+            await supabase.auth.refreshSession();
+            return invokeAngleBody(retriesLeft - 1);
+          }
+          throw networkErr;
+        }
+      };
+
       try {
-        const { data, error } = await supabase.functions.invoke("generate", {
-          body: {
-            prompt: anglePrompt,
-            generate_angles: true,
-            selected_face_url: faceUrl,
-            body_type: bodyType,
-            bust_size: bustSize,
-            angle_character_id: angleCharacterId,
-          },
-        });
-        if (error) console.error("Angle + body generation failed:", error);
-        else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
+        const result = await invokeAngleBody();
+        console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: result?.angle_url, body: result?.body_anchor_url });
       } catch (e) {
         console.error("Angle + body generation failed:", e);
       }
