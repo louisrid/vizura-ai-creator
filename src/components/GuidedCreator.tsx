@@ -255,6 +255,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = false;
       setNameToastShown(false);
       setExitFade(false);
+      setHeroExiting(false);
+      setLoginExiting(false);
       setSlideDirection(1);
       setBackArrowShaking(false);
     }
