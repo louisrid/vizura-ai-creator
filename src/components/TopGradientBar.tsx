@@ -1,6 +1,6 @@
 /** Top yellow accent bar — flush at very top, perfectly straight with horizontal opacity fade. */
 const TopGradientBar = () => (
-  <div className="pointer-events-none fixed inset-x-0 top-0 z-[99999] h-[5px] overflow-hidden">
+  <div className="pointer-events-none h-[5px] w-full overflow-hidden" style={{ zIndex: 99999 }}>
     <svg
       aria-hidden="true"
       className="block h-full w-full"

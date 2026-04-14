@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, forwardRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -47,13 +47,11 @@ const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "t
 /* AnimatedRings removed — rings now inline in renderHero */
 
 /* ── Nav arrow (cyan/blue style) ── */
-const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }>(
-  ({ direction, onClick, disabled, colorOverride }, ref) => {
+const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {
     const isForward = direction === "right";
     const fillColor = colorOverride || "#ffe603";
     return (
       <button
-        ref={ref}
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
         disabled={disabled}
@@ -79,9 +77,7 @@ const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; on
         )}
       </button>
     );
-  }
-);
-NavArrow.displayName = "NavArrow";
+};
 
 /* ── Interactive pill ── */
 const InteractivePill = ({ label, selected, shaking, onClick }: {
@@ -362,10 +358,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = true;
       heroVisited.current = true;
       setHeroExiting(true);
+      // Fade out hero content (SLOW_FADE_MS), then hold on pure black (BLACK_HOLD_MS),
+      // then set step so new slide fades in
       setTimeout(() => {
         setStep(step + 1);
-        setHeroExiting(false);
-        setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
+        // Brief frame delay so AnimatePresence mounts the new slide, then release the black overlay
+        requestAnimationFrame(() => {
+          setHeroExiting(false);
+          setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
+        });
       }, SLOW_FADE_MS + BLACK_HOLD_MS);
       return;
     }

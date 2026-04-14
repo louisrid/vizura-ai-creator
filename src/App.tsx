@@ -284,39 +284,36 @@ const AppRoutes = () => {
         animate={{ opacity: blackoutActive ? 1 : 0 }}
         transition={blackoutActive ? { duration: 0 } : { duration: 0.6, ease: "easeInOut" }}
       />
-      <div className="relative grid">
-        <AnimatePresence mode="sync" initial={false}>
-          <motion.div
-            key={location.key}
-            className="[grid-area:1/1]"
-            initial={{ opacity: blackoutActive ? 1 : 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: blackoutActive ? 1 : 0 }}
-            transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
-          >
-            <Header />
-            <Routes location={location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/generate-face" element={<ChooseFace />} />
-              <Route path="/choose-face" element={<ChooseFace />} />
-              <Route path="/create" element={<Index />} />
-              <Route path="/index" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/characters" element={<MyCharacters />} />
-              <Route path="/characters/:id" element={<CharacterDetail />} />
-              <Route path="/storage" element={<Storage />} />
-              <Route path="/top-ups" element={<TopUps />} />
-              <Route path="/account" element={<Account />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/history" element={<History />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/info" element={<Info />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.div
+          key={location.key}
+          initial={{ opacity: blackoutActive ? 1 : 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: blackoutActive ? 1 : 0 }}
+          transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
+        >
+          <Header />
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/generate-face" element={<ChooseFace />} />
+            <Route path="/choose-face" element={<ChooseFace />} />
+            <Route path="/create" element={<Index />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/characters/:id" element={<CharacterDetail />} />
+            <Route path="/storage" element={<Storage />} />
+            <Route path="/top-ups" element={<TopUps />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/info" element={<Info />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 };
