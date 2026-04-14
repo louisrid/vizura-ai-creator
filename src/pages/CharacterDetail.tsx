@@ -448,11 +448,18 @@ const CharacterDetail = () => {
                 </button>
               </div>
             ) : (
-              <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-5">
                 <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px]">
                   {displayName}, {ageDisplay}
                 </h1>
-                <button onClick={startEditName} className="active:scale-90 transition-transform shrink-0 ml-2" style={{ fontSize: 16 }}>✏️</button>
+                <div className="flex items-center gap-2 shrink-0 ml-2">
+                  <button onClick={startEditName} className="active:scale-90 transition-transform" style={{ fontSize: 16 }}>✏️</button>
+                  {onboardingComplete && (
+                    <button onClick={() => setShowDelete(true)} className="active:scale-90 transition-transform">
+                      <Trash2 size={18} strokeWidth={3} color="#ff4444" />
+                    </button>
+                  )}
+                </div>
               </div>
             )}
             <div className="grid grid-cols-3 gap-2" style={{ overflow: "visible" }}>
@@ -461,27 +468,29 @@ const CharacterDetail = () => {
               {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"), revealingBody)}
             </div>
           </div>
-          {/* Latest photos section */}
-          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
-            <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
-            <div className="grid grid-cols-3 gap-2">
-              {Array.from({ length: 3 }).map((_, i) => {
-                const photo = latestPhotos[i];
-                return (
-                  <div
-                    key={photo?.id ?? `placeholder-${i}`}
-                    className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                    style={{ borderRadius: 10, backgroundColor: "#000" }}
-                    onClick={() => { if (photo) setZoomedUrl(photo.url); }}
-                  >
-                    {photo && (
-                      <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
-                    )}
-                  </div>
-                );
-              })}
+          {/* Latest photos section — only show if there are photos */}
+          {latestPhotos.length > 0 && (
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
+              <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
+              <div className="grid grid-cols-3 gap-2">
+                {Array.from({ length: 3 }).map((_, i) => {
+                  const photo = latestPhotos[i];
+                  return (
+                    <div
+                      key={photo?.id ?? `placeholder-${i}`}
+                      className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
+                      style={{ borderRadius: 10, backgroundColor: "#000" }}
+                      onClick={() => { if (photo) setZoomedUrl(photo.url); }}
+                    >
+                      {photo && (
+                        <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
           <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-3 py-2">
             <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
@@ -497,28 +506,13 @@ const CharacterDetail = () => {
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
         <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-10 text-xs"
-              style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
-            >
-              create photo <Camera size={16} strokeWidth={2.5} />
-            </button>
-            <div className="relative">
-              {!onboardingComplete && (
-                <div className="absolute inset-0 z-10 rounded-[10px]" style={{ backgroundColor: "rgba(0,0,0,0.8)" }} />
-              )}
-              <button
-                onClick={() => { if (onboardingComplete) setShowDelete(true); }}
-                disabled={!onboardingComplete}
-                className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-10 text-xs"
-                style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
-              >
-                delete character <Trash2 size={14} strokeWidth={2.5} />
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
+            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
+            style={{ height: 56, color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
+          >
+            <Camera size={18} strokeWidth={2.5} /> create photo
+          </button>
         </div>
       </div>
 
@@ -540,11 +534,18 @@ const CharacterDetail = () => {
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-6">
                   <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[40px]">
                     {displayName}, {ageDisplay}
                   </h1>
-                  <button onClick={startEditName} className="active:scale-90 transition-transform shrink-0 ml-2" style={{ fontSize: 18 }}>✏️</button>
+                  <div className="flex items-center gap-2 shrink-0 ml-2">
+                    <button onClick={startEditName} className="active:scale-90 transition-transform" style={{ fontSize: 18 }}>✏️</button>
+                    {onboardingComplete && (
+                      <button onClick={() => setShowDelete(true)} className="active:scale-90 transition-transform">
+                        <Trash2 size={20} strokeWidth={3} color="#ff4444" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
               <div className="grid grid-cols-3 gap-4" style={{ overflow: "visible" }}>
@@ -553,27 +554,29 @@ const CharacterDetail = () => {
                 {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"), revealingBody)}
               </div>
             </div>
-            {/* Latest photos — desktop */}
-            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5 mt-5">
-              <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
-              <div className="grid grid-cols-3 gap-3">
-                {Array.from({ length: 6 }).map((_, i) => {
-                  const photo = latestPhotos[i];
-                  return (
-                    <div
-                      key={photo?.id ?? `dplaceholder-${i}`}
-                      className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                      style={{ borderRadius: 10, backgroundColor: "#000" }}
-                      onClick={() => { if (photo) setZoomedUrl(photo.url); }}
-                    >
-                      {photo && (
-                        <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
-                      )}
-                    </div>
-                  );
-                })}
+            {/* Latest photos — desktop — only show if there are photos */}
+            {latestPhotos.length > 0 && (
+              <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5 mt-5">
+                <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
+                <div className="grid grid-cols-3 gap-3">
+                  {Array.from({ length: 6 }).map((_, i) => {
+                    const photo = latestPhotos[i];
+                    return (
+                      <div
+                        key={photo?.id ?? `dplaceholder-${i}`}
+                        className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
+                        style={{ borderRadius: 10, backgroundColor: "#000" }}
+                        onClick={() => { if (photo) setZoomedUrl(photo.url); }}
+                      >
+                        {photo && (
+                          <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           {/* Right: details + actions */}
           <div className="col-span-5 flex flex-col gap-5">
@@ -591,24 +594,11 @@ const CharacterDetail = () => {
             <div className="flex-1" />
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-12 text-sm"
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
               style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
-              create photo <Camera size={18} strokeWidth={2.5} />
+              <Camera size={18} strokeWidth={2.5} /> create photo
             </button>
-            <div className="relative">
-              {!onboardingComplete && (
-                <div className="absolute inset-0 z-10 rounded-[10px]" style={{ backgroundColor: "rgba(0,0,0,0.8)" }} />
-              )}
-              <button
-                onClick={() => { if (onboardingComplete) setShowDelete(true); }}
-                disabled={!onboardingComplete}
-                className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-12 text-sm"
-                style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
-              >
-                delete character <Trash2 size={14} strokeWidth={2.5} />
-              </button>
-            </div>
           </div>
         </div>
       </main>
