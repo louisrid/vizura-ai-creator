@@ -318,13 +318,13 @@ const Home = () => {
             className="h-full rounded-full"
             style={{
               backgroundColor: "#ffe603",
-              animation: "loading-bar 1.2s ease-in-out infinite",
+              animation: "facefox-loading-bar 1.2s ease-in-out infinite",
               width: "60%",
             }}
           />
         </div>
         <style>{`
-          @keyframes loading-bar {
+          @keyframes facefox-loading-bar {
             0% { transform: translateX(-100%); }
             50% { transform: translateX(80%); }
             100% { transform: translateX(200%); }
