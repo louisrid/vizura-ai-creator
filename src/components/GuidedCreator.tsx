@@ -11,11 +11,16 @@ import { readCachedOnboardingState } from "@/lib/onboardingState";
 /* ── Constants ── */
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
+const HERO_SEEN_KEY = "facefox_hero_seen";
 const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.3;
 const FAST_CROSSFADE_MS = 500;
 const SLOW_FADE_MS = 500;
 const BLACK_HOLD_MS = 1000;
+
+const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
+const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
+const markHeroSeen = () => { if (typeof window !== "undefined") sessionStorage.setItem(HERO_SEEN_KEY, "1"); };
 
 /* ── Name toast ── */
 const getRandomNameToast = () => "great choice";
@@ -174,8 +179,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const animating = useRef(false);
   
   const [ringT, setRingT] = useState(0);
-  const [heroPhase, setHeroPhase] = useState(0);
-  const heroVisited = useRef(false);
+  const [heroPhase, setHeroPhase] = useState(() => isHeroSeen() ? 3 : 0);
+  const heroVisited = useRef(isHeroSeen());
 
   const [exitFade, setExitFade] = useState(false);
   const [heroExiting, setHeroExiting] = useState(false);
@@ -184,8 +189,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* Ring animation timer — uses rAF for smooth 60fps */
   useEffect(() => {
     let raf: number;
-    const tick = () => { setRingT((v) => v + 0.62); raf = requestAnimationFrame(tick); };
-    raf = requestAnimationFrame(tick);
+    const tick = () => {
+      const elapsed = (typeof performance !== "undefined" ? performance.now() : Date.now()) - RING_EPOCH;
+      setRingT(elapsed * 0.037);
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
     return () => cancelAnimationFrame(raf);
   }, []);
 
@@ -290,8 +299,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* Hero phased entrance — only starts after splash is gone; skip on return */
   useEffect(() => {
     if (!isHeroSlide || !splashGone) return;
-    if (heroVisited.current) {
-      // Returning to hero — show everything instantly
+    if (heroVisited.current || isHeroSeen()) {
+      heroVisited.current = true;
       setHeroPhase(3);
       return;
     }
@@ -299,7 +308,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     const ts = [
       setTimeout(() => setHeroPhase(1), 300),
       setTimeout(() => setHeroPhase(2), 650),
-      setTimeout(() => { setHeroPhase(3); heroVisited.current = true; }, 1800),
+      setTimeout(() => { setHeroPhase(3); heroVisited.current = true; markHeroSeen(); }, 1800),
     ];
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide, splashGone]);
@@ -356,7 +365,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     // Hero → first slide: fade to black, hold, then reveal next slide
     if (isHeroSlide) {
       animating.current = true;
-      heroVisited.current = true;
+      heroVisited.current = true; markHeroSeen();
       setHeroExiting(true);
       // Fade out hero content (SLOW_FADE_MS), then hold on pure black (BLACK_HOLD_MS),
       // then set step so new slide fades in
@@ -381,6 +390,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const goBack = useCallback(() => {
     if (animating.current) return;
+    heroVisited.current = true; markHeroSeen();
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
 
     // Going back to hero slide → TYPE A (fade-black-fade), matching the forward transition
@@ -389,6 +399,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       animating.current = true;
       setHeroExiting(true); // reuse the black overlay for fade-to-black
       setTimeout(() => {
+        setHeroPhase(3);
         setStep(0);
         requestAnimationFrame(() => {
           setHeroExiting(false);
@@ -469,6 +480,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           {!isLoggedIn && (
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
+              heroVisited.current = true; markHeroSeen();
               setLoginExiting(true);
               navigateTo(`/auth${window.location.search}`);
               setTimeout(() => {
