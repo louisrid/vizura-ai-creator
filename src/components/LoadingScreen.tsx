@@ -1,38 +1,13 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
-interface LoadingScreenProps {
-  /** When true, begin fading out. Removes from DOM after fade completes. */
-  fadingOut?: boolean;
-  onFadeComplete?: () => void;
-}
-
-const LoadingScreen = ({ fadingOut = false, onFadeComplete }: LoadingScreenProps) => {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    document.getElementById("splash-screen")?.remove();
-  }, []);
-
-  useEffect(() => {
-    if (!fadingOut) return;
-    const timer = setTimeout(() => {
-      setVisible(false);
-      onFadeComplete?.();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [fadingOut, onFadeComplete]);
-
-  if (!visible) return null;
+const LoadingScreen = () => {
+  useLayoutEffect(() => registerBlockingLoader(), []);
 
   return (
     <div
       className="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-background"
-      style={{
-        zIndex: 999999,
-        opacity: fadingOut ? 0 : 1,
-        transition: "opacity 0.5s ease-in-out",
-        pointerEvents: fadingOut ? "none" : "auto",
-      }}
+      style={{ zIndex: 999999 }}
       role="status"
       aria-live="polite"
       aria-label="loading"
@@ -46,3 +21,4 @@ const LoadingScreen = ({ fadingOut = false, onFadeComplete }: LoadingScreenProps
 };
 
 export default LoadingScreen;
+

@@ -141,7 +141,6 @@ const Home = () => {
       if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
       if (isOnboardingUser) setSkipWelcome(true);
       setAutoOpenEvaluated(true);
-      requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
       return;
     }
 

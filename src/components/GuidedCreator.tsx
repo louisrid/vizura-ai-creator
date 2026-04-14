@@ -282,7 +282,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(false);
       setSlideDirection(1);
       setBackArrowShaking(false);
-      requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
     }
   }, [open, restoreSavedFlow]);
 
