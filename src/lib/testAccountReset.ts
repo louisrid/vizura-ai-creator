@@ -6,8 +6,8 @@ import type { User } from "@supabase/supabase-js";
 const TEST_ACCOUNT_EMAIL = "carlsonistrader@gmail.com";
 const RESET_LOAD_KEY = "facefox_test_reset_done_for_page_load";
 
-/** Keys that must survive mid-flow (e.g. while on /choose-face) */
-const PROTECTED_ROUTES = ["/choose-face"];
+/** Keys that must survive mid-flow (e.g. while on /choose-face or viewing a character) */
+const PROTECTED_ROUTES = ["/choose-face", "/characters/"];
 
 export const isTestResetAccount = (user?: User | null) => {
   if (!user) return false;
