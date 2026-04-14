@@ -56,24 +56,6 @@ Deno.serve(async (req) => {
         });
       }
 
-      // Delete all characters belonging to this user
-      await adminClient
-        .from("characters")
-        .delete()
-        .eq("user_id", userId);
-
-      // Delete all generations belonging to this user
-      await adminClient
-        .from("generations")
-        .delete()
-        .eq("user_id", userId);
-
-      // Delete all generation logs belonging to this user
-      await adminClient
-        .from("generation_logs")
-        .delete()
-        .eq("user_id", userId);
-
       // Reset balance to 100 hidden gems
       await adminClient
         .from("credits")
