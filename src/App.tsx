@@ -234,6 +234,7 @@ const AppRoutes = () => {
   const location = useLocation();
   const { loading: authLoading, user } = useAuth();
   const [blackoutActive, setBlackoutActive] = useState(false);
+  const [loadingDismissed, setLoadingDismissed] = useState(false);
   useSwipeNavigation();
 
   useEffect(() => {
@@ -249,13 +250,18 @@ const AppRoutes = () => {
     };
   }, []);
 
-  const waitingForRouteResolution =
+  const stillResolving =
+    authLoading ||
     (!authLoading && !user && !isExemptRoute(location.pathname)) ||
     (!authLoading && !!user && location.pathname === "/auth");
 
-  if (authLoading || waitingForRouteResolution) {
-    return <LoadingScreen />;
-  }
+  // Reset dismissed state if we go back to resolving (e.g. sign-out)
+  useEffect(() => {
+    if (stillResolving) setLoadingDismissed(false);
+  }, [stillResolving]);
+
+  const showLoading = !loadingDismissed && (stillResolving || !loadingDismissed);
+  const fadingOut = !stillResolving && !loadingDismissed;
 
   return (
     <>
