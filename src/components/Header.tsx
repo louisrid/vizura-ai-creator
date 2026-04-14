@@ -300,7 +300,7 @@ const Header = () => {
               )}
             </div>
 
-            {!isAuthPage && !hideOnboardingFaceFlowActions && (
+            {isLoggedIn && !isAuthPage && !hideOnboardingFaceFlowActions && (
               <div className="flex items-center gap-3 md:gap-5">
                 <button
                   onClick={() => navigate("/top-ups")}
