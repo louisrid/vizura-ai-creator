@@ -451,7 +451,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 width: 115,
                 height: 115,
                 imageRendering: '-webkit-optimize-contrast' as any,
-                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.08)' : 'none',
+                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.04)' : 'none',
                 transition: 'filter 1.2s ease',
               }}
             />
