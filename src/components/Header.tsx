@@ -6,7 +6,6 @@ import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, Use
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import TopGradientBar from "@/components/TopGradientBar";
 import { checkNavGuard } from "@/lib/navGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
@@ -267,7 +266,6 @@ const Header = () => {
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
       >
-        <TopGradientBar />
         {/* Full header gradient — smooth multi-stop fade */}
         <div
           className="pointer-events-none absolute inset-x-0 top-0 transition-opacity duration-200"

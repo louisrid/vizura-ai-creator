@@ -188,28 +188,30 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col bg-black cursor-pointer"
           initial={{ opacity: 1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.65, ease: [0, 0, 0.2, 1] }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
           onClick={() => advance()}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
             <div className="relative flex-1 overflow-hidden">
-              <div className="absolute inset-x-0 flex items-center justify-center px-8" style={{ top: "50%", transform: "translateY(-50%)" }}>
+              <div className="absolute inset-0 flex items-center justify-center px-8">
                 <div className="mx-auto flex w-full max-w-xs flex-col items-center">
-                  <AnimatePresence mode="wait">
+                  <div className="grid w-full">
+                  <AnimatePresence mode="sync" initial={false}>
                     <motion.div
                       key={step}
-                      className="w-full"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      className="w-full [grid-area:1/1]"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.45, ease: "easeInOut" }}
                     >
                       {children(step)}
                     </motion.div>
                   </AnimatePresence>
+                  </div>
                 </div>
               </div>
 
