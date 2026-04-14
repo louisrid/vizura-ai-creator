@@ -43,7 +43,7 @@ const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "t
 
 /* ── Top yellow line (used on hero only) ── */
 const TopLine = forwardRef<HTMLDivElement, { visible: boolean }>(({ visible }, ref) => (
-  <div ref={ref} className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[5px] overflow-hidden" style={{ opacity: visible ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+  <div ref={ref} className="pointer-events-none absolute inset-x-0 top-0 z-[99999] h-[5px] overflow-hidden" style={{ opacity: visible ? 1 : 0, transition: 'opacity 1.2s ease' }}>
     <svg
       aria-hidden="true"
       className="block h-full w-full"
@@ -480,11 +480,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               setLoginExiting(true);
-              // Hide the portal content, then navigate after a brief fade
+              // Slow fade matching "start" timing, then navigate
               setTimeout(() => {
                 setVisible(false);
                 navigateTo(`/auth${window.location.search}`);
-              }, 350);
+              }, 600);
             }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
@@ -632,7 +632,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       style={{
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
         opacity: loginExiting ? 0 : 1,
-        transition: "opacity 0.35s ease-in-out",
+        transition: "opacity 0.55s ease-in-out",
       }}
     >
       {(isHeroSlide || heroExiting) && <TopLine visible={heroPhase >= 1} />}

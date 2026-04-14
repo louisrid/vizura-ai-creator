@@ -9,6 +9,7 @@ import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
+import TopGradientBar from "@/components/TopGradientBar";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import CharacterDetail from "./pages/CharacterDetail";
@@ -274,6 +275,8 @@ const AppRoutes = () => {
 
   return (
     <>
+      {/* Yellow gradient bar — NEVER fades, always visible */}
+      <TopGradientBar />
       <motion.div
         className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
