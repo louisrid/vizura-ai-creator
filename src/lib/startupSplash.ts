@@ -1,10 +1,12 @@
 const SPLASH_ID = "splash-screen";
 const BLOCKING_LOADERS_EVENT = "facefox:blocking-loaders";
 const SPLASH_FADE_MS = 500;
+const MIN_SPLASH_MS = 2000;
 
 let blockingLoaders = 0;
 let splashRemoved = false;
 let splashRemoveTimer: number | null = null;
+let splashShownAt: number = typeof performance !== "undefined" ? performance.now() : Date.now();
 
 const dispatchBlockingLoaders = () => {
   if (typeof window === "undefined") return;
