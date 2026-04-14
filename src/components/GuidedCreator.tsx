@@ -413,7 +413,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
-      <div className="flex w-full flex-col items-center" style={{ paddingTop: '5vh', paddingBottom: '3vh' }}>
+      <div className="flex w-full flex-col items-center" style={{ paddingTop: '3.5vh', paddingBottom: '3vh' }}>
         {/* SVG sharpen filter */}
         <svg width="0" height="0" style={{ position: 'absolute' }}>
           <filter id="sharpen-fox">
@@ -438,7 +438,24 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <img src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png" alt="fox" width={115} height={115} draggable={false} style={{ display: 'block', opacity: heroPhase >= 1 ? 1 : 0, filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.08)' : 'none', transition: 'opacity 1.2s ease, filter 1.2s ease', imageRendering: 'auto', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', transform: 'translateZ(0) scale(1)', WebkitTransform: 'translateZ(0) scale(1)' }} />
+          {/* 2x oversampled fox for sharpness: render 230px image in 115px container */}
+          <div style={{ width: 115, height: 115, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', isolation: 'isolate' }}>
+            <img
+              src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
+              alt="fox"
+              width={230}
+              height={230}
+              draggable={false}
+              style={{
+                display: 'block',
+                width: 115,
+                height: 115,
+                imageRendering: '-webkit-optimize-contrast' as any,
+                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.08)' : 'none',
+                transition: 'filter 1.2s ease',
+              }}
+            />
+          </div>
         </div>
         <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
         <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
