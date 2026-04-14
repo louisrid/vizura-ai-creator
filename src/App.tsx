@@ -265,6 +265,12 @@ const AppRoutes = () => {
 
   return (
     <>
+      {showLoading && (
+        <LoadingScreen
+          fadingOut={fadingOut}
+          onFadeComplete={() => setLoadingDismissed(true)}
+        />
+      )}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
