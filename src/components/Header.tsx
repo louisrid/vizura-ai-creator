@@ -40,15 +40,18 @@ const Header = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
 
-  // Onboarding lock state for menu
-  const [showMenuLocks, setShowMenuLocks] = useState(() => needsOnboardingRedirect(readCachedOnboardingState(user?.id)));
+  // Onboarding lock state for menu — hide controls whenever onboarding is incomplete
+  const isOnboarding = (state: CachedOnboardingState | null | undefined) =>
+    !!state && !state.onboardingComplete;
+
+  const [showMenuLocks, setShowMenuLocks] = useState(() => isOnboarding(readCachedOnboardingState(user?.id)));
 
   useEffect(() => {
     if (!user) { setShowMenuLocks(false); return; }
 
     const cachedState = readCachedOnboardingState(user.id);
     if (cachedState) {
-      setShowMenuLocks(needsOnboardingRedirect(cachedState));
+      setShowMenuLocks(isOnboarding(cachedState));
     }
 
     let cancelled = false;
@@ -56,7 +59,7 @@ const Header = () => {
     (async () => {
       const resolvedState = await fetchAndCacheOnboardingState(user.id);
       if (cancelled) return;
-      setShowMenuLocks(needsOnboardingRedirect(resolvedState));
+      setShowMenuLocks(isOnboarding(resolvedState));
     })();
 
     return () => { cancelled = true; };
