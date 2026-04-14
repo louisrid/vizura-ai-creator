@@ -92,14 +92,19 @@ const Home = () => {
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
 
+  const photoFetchRef = useRef(0);
   const fetchLatestPhotos = useCallback(async () => {
     if (!user) { setImages([]); setPhotosLoaded(true); return; }
+    const fetchId = ++photoFetchRef.current;
     const { data } = await supabase
       .from("generations")
       .select("id, image_urls, prompt, created_at")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(8);
+
+    // Only apply if this is still the latest fetch (prevents race conditions)
+    if (fetchId !== photoFetchRef.current) return;
 
     const latest = (data ?? [])
       .flatMap((g: any) =>
