@@ -386,6 +386,7 @@ const CharacterDetail = () => {
     isRevealing = false,
   ) => {
     const regenUsed = overlay === "regenerate" && isOnboardingRegenUsed(label);
+    const isFaceSlot = label === "face";
     return (
       <div
         className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift cursor-pointer"
@@ -396,15 +397,13 @@ const CharacterDetail = () => {
           <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
         ) : isValidImg(url) ? (
           <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-        ) : (
-          <span className="text-[9px] md:text-[11px] font-[900] lowercase text-white">no photo</span>
-        )}
+        ) : null}
         {overlay === "lock" && isValidImg(url) && (
           <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
             <Lock size={14} strokeWidth={3} color="#000" fill="none" />
           </div>
         )}
-        {overlay === "regenerate" && isValidImg(url) && (
+        {overlay === "regenerate" && (
           <button
             onClick={(e) => {
               e.stopPropagation();
