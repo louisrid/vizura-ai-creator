@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -310,28 +310,7 @@ const Home = () => {
 
   // Show loading bar while data loads (post-auth)
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
-    return (
-      <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-6">
-        <h1 className="text-2xl font-[900] lowercase text-white tracking-tight">loading...</h1>
-        <div className="w-48 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
-          <div
-            className="h-full rounded-full"
-            style={{
-              backgroundColor: "#ffe603",
-              animation: "facefox-loading-bar 1.2s ease-in-out infinite",
-              width: "60%",
-            }}
-          />
-        </div>
-        <style>{`
-          @keyframes facefox-loading-bar {
-            0% { transform: translateX(-100%); }
-            50% { transform: translateX(80%); }
-            100% { transform: translateX(200%); }
-          }
-        `}</style>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

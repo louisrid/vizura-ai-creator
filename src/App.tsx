@@ -9,6 +9,7 @@ import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
+import LoadingScreen from "@/components/LoadingScreen";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import CharacterDetail from "./pages/CharacterDetail";
@@ -28,7 +29,7 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
-const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/choose-face", "/generate-face", "/admin", "/top-ups", "/history", "/help", "/info", "/storage", "/create", "/index"];
+const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
@@ -229,32 +230,9 @@ const OnboardingRedirectGate = () => {
   return <div className="fixed inset-0 z-[9999] bg-nav" />;
 };
 
-const LoadingScreen = () => (
-  <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-6">
-    <h1 className="text-2xl font-[900] lowercase text-white tracking-tight">loading...</h1>
-    <div className="w-48 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
-      <div
-        className="h-full rounded-full"
-        style={{
-          backgroundColor: "#ffe603",
-          animation: "facefox-loading-bar 1.2s ease-in-out infinite",
-          width: "60%",
-        }}
-      />
-    </div>
-    <style>{`
-      @keyframes facefox-loading-bar {
-        0% { transform: translateX(-100%); }
-        50% { transform: translateX(80%); }
-        100% { transform: translateX(200%); }
-      }
-    `}</style>
-  </div>
-);
-
 const AppRoutes = () => {
   const location = useLocation();
-  const { loading: authLoading } = useAuth();
+  const { loading: authLoading, user } = useAuth();
   const [blackoutActive, setBlackoutActive] = useState(false);
   useSwipeNavigation();
 
@@ -271,8 +249,11 @@ const AppRoutes = () => {
     };
   }, []);
 
-  // Universal loading gate — nothing renders until auth is resolved
-  if (authLoading) {
+  const waitingForRouteResolution =
+    (!authLoading && !user && !isExemptRoute(location.pathname)) ||
+    (!authLoading && !!user && location.pathname === "/auth");
+
+  if (authLoading || waitingForRouteResolution) {
     return <LoadingScreen />;
   }
 

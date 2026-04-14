@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Calendar, Wand2, User, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
+import LoadingScreen from "@/components/LoadingScreen";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
@@ -79,6 +80,7 @@ const History = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
+  if (loading) return <LoadingScreen />;
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);

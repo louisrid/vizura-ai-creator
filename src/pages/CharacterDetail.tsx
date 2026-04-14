@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Loader2, Trash2, Lock, RefreshCw, Camera, Check, User } from "lucide-react";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
+import LoadingScreen from "@/components/LoadingScreen";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -280,37 +281,7 @@ const CharacterDetail = () => {
   };
 
   if (loading || authLoading) {
-    return (
-      <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[280px] md:hidden">
-          <div className="flex items-center gap-3 mb-7">
-            <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-            <div className="h-7 w-24" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
-          </div>
-          <div className="flex flex-col gap-3">
-            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
-              <div className="h-9 w-48 mb-5" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
-              <div className="grid grid-cols-3 gap-2">
-                {[0,1,2].map(i => (
-                  <div key={i} className="aspect-[3/4] w-full" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
-                ))}
-              </div>
-            </div>
-            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-4 py-3">
-              <div className="grid grid-cols-4 gap-1.5">
-                {[0,1,2,3,4,5,6].map(i => (
-                  <div key={i} className="rounded-[10px] py-2 flex flex-col items-center gap-1.5">
-                    <div className="h-2 w-8" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }} />
-                    <div className="h-6 w-12" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!character) {
