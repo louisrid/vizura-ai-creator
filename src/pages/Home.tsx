@@ -216,18 +216,26 @@ const Home = () => {
 
     void refreshAll();
 
-    const refreshMedia = () => { void Promise.all([fetchLatestPhotos(), fetchCharacters()]); };
-    const handleVisibility = () => { if (document.visibilityState === "visible") refreshMedia(); };
+    // Debounced refresh to prevent focus + visibilitychange + pageshow from triple-firing
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const debouncedRefreshMedia = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => {
+        void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
+      }, 300);
+    };
+    const handleVisibility = () => { if (document.visibilityState === "visible") debouncedRefreshMedia(); };
     const handleTestReset = () => { void refreshAll(); };
 
-    window.addEventListener("focus", refreshMedia);
-    window.addEventListener("pageshow", refreshMedia);
+    window.addEventListener("focus", debouncedRefreshMedia);
+    window.addEventListener("pageshow", debouncedRefreshMedia);
     window.addEventListener("facefox:test-reset-complete", handleTestReset);
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       cancelled = true;
-      window.removeEventListener("focus", refreshMedia);
-      window.removeEventListener("pageshow", refreshMedia);
+      if (refreshTimer) clearTimeout(refreshTimer);
+      window.removeEventListener("focus", debouncedRefreshMedia);
+      window.removeEventListener("pageshow", debouncedRefreshMedia);
       window.removeEventListener("facefox:test-reset-complete", handleTestReset);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
