@@ -146,8 +146,11 @@ const ChooseFace = () => {
   }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
-  // Angle/body generation — runs in background, no overlay
+  // Angle/body generation state
   const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
+  const [angleBodyLoading, setAngleBodyLoading] = useState(false);
+  const [angleBodyApiDone, setAngleBodyApiDone] = useState(false);
+  const [angleBodyBarComplete, setAngleBodyBarComplete] = useState(false);
 
   const hasInitRef = useRef(false);
 
@@ -611,7 +614,13 @@ const ChooseFace = () => {
         if (charRecord?.bust_size) bustSize = charRecord.bust_size;
       } catch {}
 
-      // Fire angle+body generation in background — don't block UI
+      // Show angle/body loading bar
+      setAngleBodyLoading(true);
+      setAngleBodyApiDone(false);
+      setAngleBodyBarComplete(false);
+      setPendingNavCharId(angleCharacterId);
+
+      // Fire angle+body generation
       supabase.functions.invoke("generate", {
         body: {
           prompt: anglePrompt,
@@ -624,28 +633,51 @@ const ChooseFace = () => {
       }).then(({ data, error }) => {
         if (error) console.error("Angle + body generation failed:", error);
         else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
+        setAngleBodyApiDone(true);
       }).catch((e) => {
         console.error("Angle + body generation failed:", e);
+        setAngleBodyApiDone(true);
       });
+    } else {
+      // No angle/body to generate — navigate directly
+      if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
+      sessionStorage.removeItem("facefox_selected_face");
+      sessionStorage.removeItem("facefox_guided_prompt");
+      sessionStorage.removeItem("facefox_face_prompt");
+      sessionStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(DRAFT_BACKUP_KEY);
+      sessionStorage.removeItem("facefox_pending_char_id");
+      sessionStorage.removeItem(FACE_STORAGE_KEY);
+      sessionStorage.removeItem(AUTH_RESUME_KEY);
+      setPendingAuthSave(false);
+      setShowSignIn(false);
+      toast.success("char created");
+      navigate(`/characters/${cId}`, { replace: true });
     }
 
-    // Navigate immediately — character detail page polls for angle/body updates
-    if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
-    sessionStorage.removeItem("facefox_selected_face");
-    sessionStorage.removeItem("facefox_guided_prompt");
-    sessionStorage.removeItem("facefox_face_prompt");
-    sessionStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(DRAFT_BACKUP_KEY);
-    sessionStorage.removeItem("facefox_pending_char_id");
-    sessionStorage.removeItem(FACE_STORAGE_KEY);
-    sessionStorage.removeItem(AUTH_RESUME_KEY);
-    setPendingAuthSave(false);
-    setShowSignIn(false);
-    toast.success("char created");
-    navigate(`/characters/${cId}`, { replace: true });
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
+
+  // When angle/body loading bar completes, navigate to character detail
+  useEffect(() => {
+    if (angleBodyBarComplete && pendingNavCharId) {
+      const cId = pendingNavCharId;
+      sessionStorage.setItem("facefox_new_char_highlight", cId);
+      sessionStorage.removeItem("facefox_selected_face");
+      sessionStorage.removeItem("facefox_guided_prompt");
+      sessionStorage.removeItem("facefox_face_prompt");
+      sessionStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(DRAFT_BACKUP_KEY);
+      sessionStorage.removeItem("facefox_pending_char_id");
+      sessionStorage.removeItem(FACE_STORAGE_KEY);
+      sessionStorage.removeItem(AUTH_RESUME_KEY);
+      setPendingAuthSave(false);
+      setShowSignIn(false);
+      toast.success("char created");
+      navigate(`/characters/${cId}`, { replace: true });
+    }
+  }, [angleBodyBarComplete, pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
@@ -673,8 +705,22 @@ const ChooseFace = () => {
     );
   }
 
-  if (pendingAuthSave) {
-    return <div className="fixed inset-0 bg-black z-[9999]" />;
+  if (pendingAuthSave || angleBodyLoading) {
+    return (
+      <div className="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center">
+        {angleBodyLoading && (
+          <ProgressBarLoader
+            duration={45000}
+            phrases={ANGLE_GEN_PHRASES}
+            phraseInterval={5200}
+            completeNow={angleBodyApiDone}
+            onComplete={() => {
+              setTimeout(() => setAngleBodyBarComplete(true), 400);
+            }}
+          />
+        )}
+      </div>
+    );
   }
 
   const cardDelays = [0, 0.2, 0.4];

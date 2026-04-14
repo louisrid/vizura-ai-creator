@@ -517,7 +517,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       onClick={() => setTrait(trait.key, opt)}
                     />
                     {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-1.5`}>(recommended)</span>
+                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                     )}
                   </div>
                 ))}
@@ -533,7 +533,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       onClick={() => setTrait(trait.key, opt)}
                     />
                     {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-1.5`}>(recommended)</span>
+                      <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                     )}
                   </div>
                 ))}
@@ -554,7 +554,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     onClick={() => setTrait(trait.key, opt)}
                   />
                   {"defaultOption" in trait && trait.defaultOption === opt && (
-                    <span className={`${HELPER_CLASS} mt-1.5`}>(recommended)</span>
+                    <span className={`${HELPER_CLASS} mt-0.5`}>(recommended)</span>
                   )}
                 </div>
               ))}
@@ -567,6 +567,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Create slide */
     if (isCreateSlide) {
+      const cachedState = readCachedOnboardingState(user?.id);
+      const isOnboarding = isLoggedIn && cachedState && !cachedState.onboardingComplete;
       return (
         <div className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <h2
@@ -580,9 +582,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
             disabled={exitFade}
             className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
-            style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
+            style={{ backgroundColor: isOnboarding ? "#ffe603" : "#050a10", color: isOnboarding ? "#000" : "#ffffff", borderRadius: 10, border: isOnboarding ? "none" : "2px solid #00e0ff" }}
           >
-            create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
+            {isOnboarding ? "create" : (<>create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
           </button>
         </div>
       );
