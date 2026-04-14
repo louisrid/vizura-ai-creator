@@ -6,8 +6,8 @@ import type { User } from "@supabase/supabase-js";
 const TEST_ACCOUNT_EMAIL = "carlsonistrader@gmail.com";
 const RESET_LOAD_KEY = "facefox_test_reset_done_for_page_load";
 
-/** Keys that must survive mid-flow (e.g. while on /choose-face) */
-const PROTECTED_ROUTES = ["/choose-face"];
+/** Keys that must survive mid-flow (e.g. while on /choose-face or viewing a character) */
+const PROTECTED_ROUTES = ["/choose-face", "/characters/"];
 
 export const isTestResetAccount = (user?: User | null) => {
   if (!user) return false;
@@ -18,7 +18,7 @@ export const maybeResetTestAccount = async (user: User) => {
   if (!isTestResetAccount(user)) return;
 
   // Don't reset while user is mid-onboarding flow
-  if (typeof window !== "undefined" && PROTECTED_ROUTES.includes(window.location.pathname)) return;
+  if (typeof window !== "undefined" && PROTECTED_ROUTES.some((r) => window.location.pathname === r || window.location.pathname.startsWith(r))) return;
 
   // Only reset once per actual page load. Window-scoped flag survives tab switches.
   const pageFlags = window as typeof window & { [RESET_LOAD_KEY]?: string };

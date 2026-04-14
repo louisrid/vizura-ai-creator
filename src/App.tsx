@@ -32,7 +32,7 @@ const EXEMPT_ROUTES = ["/account", "/auth", "/reset-password", "/characters", "/
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
 
 const isExemptRoute = (pathname: string) =>
-  EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "?"));
+  EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
 
 const FreshLoadRedirect = () => {
   const location = useLocation();
