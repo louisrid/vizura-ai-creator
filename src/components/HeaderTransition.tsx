@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "@/components/Header";
 
 const HEADER_CROSSFADE_MS = 450;
+const HEADER_HALF_FADE_MS = HEADER_CROSSFADE_MS / 2;
 
 interface HeaderTransitionProps {
   blackoutActive?: boolean;
@@ -11,6 +12,7 @@ interface HeaderTransitionProps {
 const HeaderTransition = ({ blackoutActive = false }: HeaderTransitionProps) => {
   const location = useLocation();
   const [displayPathname, setDisplayPathname] = useState(location.pathname);
+  const [opacity, setOpacity] = useState(1);
   const previousLocationKeyRef = useRef(location.key);
   const transitionTimerRef = useRef<number | null>(null);
 
@@ -22,7 +24,7 @@ const HeaderTransition = ({ blackoutActive = false }: HeaderTransitionProps) => 
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (previousLocationKeyRef.current === location.key) return;
     previousLocationKeyRef.current = location.key;
 
@@ -31,17 +33,30 @@ const HeaderTransition = ({ blackoutActive = false }: HeaderTransitionProps) => 
       transitionTimerRef.current = null;
     }
 
-    // Swap header state at the midpoint of the route crossfade so controls
-    // (gems, menu visibility) update in sync. No opacity fade — the header
-    // is a single persistent element that never fades independently.
-    const delay = blackoutActive ? 0 : HEADER_CROSSFADE_MS / 2;
+    if (blackoutActive) {
+      setDisplayPathname(location.pathname);
+      setOpacity(1);
+      return;
+    }
+
+    setOpacity(0);
     transitionTimerRef.current = window.setTimeout(() => {
       setDisplayPathname(location.pathname);
+      requestAnimationFrame(() => setOpacity(1));
       transitionTimerRef.current = null;
-    }, delay);
+    }, HEADER_HALF_FADE_MS);
   }, [blackoutActive, location.key, location.pathname]);
 
-  return <Header pathnameOverride={displayPathname} />;
+  return (
+    <div
+      style={{
+        opacity,
+        transition: blackoutActive ? "none" : `opacity ${HEADER_HALF_FADE_MS}ms ease-in-out`,
+      }}
+    >
+      <Header pathnameOverride={displayPathname} />
+    </div>
+  );
 };
 
 export default HeaderTransition;
