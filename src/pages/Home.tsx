@@ -281,7 +281,7 @@ const Home = () => {
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
-      {pageHidden && <div className="fixed inset-0 z-[9997] bg-nav" />}
+      {pageHidden && <div className="fixed inset-0 bg-nav" style={{ zIndex: 9995 }} />}
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
