@@ -43,8 +43,8 @@ const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] low
 const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
 
 /* ── Top yellow line (used on hero only) ── */
-const TopLine = () => (
-  <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[5px] overflow-hidden">
+const TopLine = ({ visible }: { visible: boolean }) => (
+  <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[5px] overflow-hidden" style={{ opacity: visible ? 1 : 0, transition: 'opacity 1.2s ease' }}>
     <svg
       aria-hidden="true"
       className="block h-full w-full"
@@ -401,7 +401,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center" style={{ paddingTop: '5vh', paddingBottom: '3vh' }}>
-        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 38 }}>
           {[
             { size: 288, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 255, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
@@ -419,7 +419,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <span style={{ fontSize: 115, lineHeight: '115px', display: 'block', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>🦊</span>
+          <img src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png" alt="fox" width={115} height={115} style={{ display: 'block', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }} />
         </div>
         <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease' }}>facefox</div>
         <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease 0.1s' }} />
@@ -583,7 +583,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
-      {isHeroSlide && <TopLine />}
+      {isHeroSlide && <TopLine visible={heroPhase >= 1} />}
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
