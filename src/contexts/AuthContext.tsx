@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (error) throw error;
         if (cancelled) return;
         const hydratedUser = await hydrateUser(data.session?.user ?? null, cancelled);
-        if (hydratedUser) await maybeResetTestAccount(hydratedUser);
+        if (hydratedUser) void maybeResetTestAccount(hydratedUser);
       } finally {
         if (cancelled) return;
         setLoading(false);
