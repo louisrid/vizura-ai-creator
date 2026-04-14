@@ -121,14 +121,17 @@ const Home = () => {
     try { sessionStorage.setItem("facefox_latest_photos", JSON.stringify(latest)); } catch {}
   }, [user]);
 
+  const charFetchRef = useRef(0);
   const fetchCharacters = useCallback(async () => {
     if (!user) { setCharacters([]); setCharsLoaded(true); return; }
+    const fetchId = ++charFetchRef.current;
     const { data } = await supabase
       .from("characters")
       .select("id, name, age, face_image_url, face_angle_url, body_anchor_url")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(20);
+    if (fetchId !== charFetchRef.current) return;
     if (data) {
       const complete = (data as any[]).filter(
         (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
