@@ -64,36 +64,7 @@ const TopLine = () => (
   </div>
 );
 
-/* ── Animated rings (hero only) ── */
-const AnimatedRings = ({ t }: { t: number }) => (
-  <div className="relative flex items-center justify-center w-[280px] h-[280px] md:w-[380px] md:h-[380px] mb-[18px] md:mb-[24px]">
-    {/* Inner ring */}
-    <div className="absolute w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-full" style={{
-      border: `2px solid ${Y}`, borderLeftColor: "transparent",
-      transform: `rotate(${t * 1.2}deg)`,
-      top: "50%", left: "50%", translate: "-50% -50%",
-    }} />
-    {/* Mid ring */}
-    <div className="absolute w-[200px] h-[200px] md:w-[270px] md:h-[270px] rounded-full" style={{
-      border: `8px solid ${Y}`, borderTopColor: "transparent", borderRightColor: "transparent",
-      transform: `rotate(${t * -0.8}deg)`,
-      top: "50%", left: "50%", translate: "-50% -50%",
-    }} />
-    {/* Outer ring */}
-    <div className="absolute w-[245px] h-[245px] md:w-[330px] md:h-[330px] rounded-full" style={{
-      border: `3px solid ${Y}`, borderBottomColor: "transparent", borderLeftColor: "transparent",
-      transform: `rotate(${t * 0.6}deg)`,
-      top: "50%", left: "50%", translate: "-50% -50%",
-    }} />
-    {/* Dashed ring */}
-    <div className="absolute w-[278px] h-[278px] md:w-[375px] md:h-[375px] rounded-full" style={{
-      border: `2px dashed ${Y}`,
-      transform: `rotate(${t * -0.4}deg)`,
-      top: "50%", left: "50%", translate: "-50% -50%",
-    }} />
-    <span className="text-[82px] md:text-[110px] relative z-[1]">🦊</span>
-  </div>
-);
+/* AnimatedRings removed — rings now inline in renderHero */
 
 /* ── Nav arrow (cyan/blue style) ── */
 const NavArrow = forwardRef<HTMLButtonElement, { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }>(
@@ -228,16 +199,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
+  const [heroPhase, setHeroPhase] = useState(0);
 
   const [exitFade, setExitFade] = useState(false);
 
   /* Ring animation timer — uses rAF for smooth 60fps */
   useEffect(() => {
     let raf: number;
-    const tick = () => { setRingT((v) => v + 1); raf = requestAnimationFrame(tick); };
+    const tick = () => { setRingT((v) => v + 0.62); raf = requestAnimationFrame(tick); };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, []);
+
 
   const restoreSavedFlow = useCallback(() => {
     try {
@@ -323,7 +296,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isNameSlide = internalStep === 2;
   const isCreateSlide = internalStep === 10;
 
+  /* Hero phased entrance */
+  useEffect(() => {
+    if (!isHeroSlide) return;
+    setHeroPhase(0);
+    const ts = [
+      setTimeout(() => setHeroPhase(1), 300),
+      setTimeout(() => setHeroPhase(2), 650),
+      setTimeout(() => setHeroPhase(3), 1800),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, [isHeroSlide]);
+
   const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
+
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
@@ -411,41 +397,41 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   };
 
   /* ── HERO SLIDE (new first screen) ── */
-  const renderHero = () => (
-    <div className="flex w-full flex-col items-center" style={{ marginTop: 0 }}>
-      <AnimatedRings t={ringT} />
-      <div className="text-[60px] md:text-[80px]" style={{ fontWeight: 900, color: "#fff", textTransform: "lowercase" as const, letterSpacing: "-0.03em", lineHeight: 1 }}>facefox</div>
-      <div className="w-[40px] md:w-[56px] h-[4px] md:h-[5px]" style={{ background: Y, marginTop: 8, marginBottom: 0, borderRadius: 3 }} />
-      <div className="flex flex-col items-center mt-5 md:mt-7 gap-2 md:gap-3">
-        <button
-          type="button"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-          className="w-[168px] md:w-[220px] py-[10px] md:py-[14px] text-[22px] md:text-[26px]"
-          style={{
-            background: Y, border: "none", borderRadius: 10,
-            fontWeight: 900, color: "#000", textTransform: "lowercase" as const,
-            cursor: "pointer",
-          }}
-        >
-          start now
-        </button>
-        {!isLoggedIn && (
-          <button
-            type="button"
-            onClick={() => navigateTo(`/auth${window.location.search}`)}
-            className="w-[168px] md:w-[220px] py-[8px] md:py-[12px] text-[22px] md:text-[26px]"
-            style={{
-              background: "#000000", border: "2px solid #ffe603",
-              borderRadius: 10, fontWeight: 900, color: "#ffffff",
-              textTransform: "lowercase" as const, cursor: "pointer",
-            }}
-          >
-            login
-          </button>
-        )}
+  const renderHero = () => {
+    const on = heroPhase >= 2;
+    return (
+      <div className="flex w-full flex-col items-center" style={{ paddingTop: '5vh', paddingBottom: '3vh' }}>
+        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+          {[
+            { size: 288, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 255, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 222, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 192, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+          ].map((r, i) => (
+            <div key={i} style={{
+              position: 'absolute', borderRadius: '50%',
+              width: on ? r.size : 80, height: on ? r.size : 80,
+              border: `${r.w}px ${r.dash ? 'dashed' : 'solid'} #ffe603`,
+              [r.seg]: 'transparent',
+              transform: `rotate(${ringT * r.spd}deg)`,
+              opacity: on ? 1 : 0,
+              transition: `width 0.7s cubic-bezier(0.34,1.56,0.64,1) ${r.del}s, height 0.7s cubic-bezier(0.34,1.56,0.64,1) ${r.del}s, opacity 0.35s ease ${r.del}s`,
+              top: '50%', left: '50%', translate: '-50% -50%',
+            }} />
+          ))}
+          <span style={{ fontSize: 115, lineHeight: '115px', display: 'block', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>🦊</span>
+        </div>
+        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease' }}>facefox</div>
+        <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease 0.1s' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.6s ease' }}>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          {!isLoggedIn && (
+            <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   /* ── Slide renderer ── */
   const renderSlide = () => {
