@@ -123,8 +123,8 @@ export default {
           to: { transform: "rotate(360deg)" },
         },
         "fade-in-up": {
-          from: { opacity: "0", transform: "translateY(8px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
         "ambient-drift-1": {
           "0%": { transform: "translate(0, 0) scale(1)" },
