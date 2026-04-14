@@ -620,7 +620,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
-      {isHeroSlide && <TopLine visible={heroPhase >= 1} />}
+      {(isHeroSlide || heroExiting) && <TopLine visible={heroPhase >= 1} />}
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
