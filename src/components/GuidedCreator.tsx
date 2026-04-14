@@ -414,18 +414,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center" style={{ paddingTop: '3.5vh', paddingBottom: '3vh' }}>
-        {/* SVG sharpen filter */}
+        {/* SVG sharpen filter — minimum intensity */}
         <svg width="0" height="0" style={{ position: 'absolute' }}>
           <filter id="sharpen-fox">
-            <feConvolveMatrix order="3" kernelMatrix="0 -0.12 0 -0.12 1.48 -0.12 0 -0.12 0" />
+            <feConvolveMatrix order="3" kernelMatrix="0 -0.06 0 -0.06 1.24 -0.06 0 -0.06 0" />
           </filter>
         </svg>
-        <div style={{ position: 'relative', width: 290, height: 290, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, marginTop: -10 }}>
+        <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8, marginTop: -10 }}>
           {[
-            { size: 288, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
-            { size: 255, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
-            { size: 222, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 192, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+            { size: 318, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 282, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 246, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 213, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
@@ -451,13 +451,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 width: 115,
                 height: 115,
                 imageRendering: '-webkit-optimize-contrast' as any,
-                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.02)' : 'none',
+                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.01)' : 'none',
                 transition: 'filter 1.2s ease',
               }}
             />
           </div>
         </div>
-        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
         <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
