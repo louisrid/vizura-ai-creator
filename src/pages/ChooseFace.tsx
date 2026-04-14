@@ -1008,7 +1008,7 @@ const ChooseFace = () => {
             sessionStorage.removeItem("facefox_pending_char_id");
             sessionStorage.removeItem(AUTH_RESUME_KEY);
             sessionStorage.removeItem("facefox_guided_flow_state");
-            navigate("/", { replace: true });
+            navigate("/", { replace: true, state: { openCreator: true } });
             if (characterId && user) {
               supabase.from("characters").delete().eq("id", characterId).eq("user_id", user.id).then(() => {});
             }

@@ -11,6 +11,8 @@ import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
+const BACK_FADE_MS = 500;
+
 function isInAppWebView(): boolean {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent || "";
@@ -28,6 +30,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const inWebView = useMemo(() => isInAppWebView(), []);
+  const [backFading, setBackFading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -154,8 +157,11 @@ const Auth = () => {
   };
 
   const handleBack = () => {
-    // Always go to the hero/start-now screen — never navigate(-1) to avoid stale page flashes
-    navigate("/", { replace: true });
+    if (backFading) return;
+    setBackFading(true);
+    setTimeout(() => {
+      navigate("/", { replace: true, state: { openCreator: true } });
+    }, BACK_FADE_MS);
   };
 
   // Auth is already resolved by the App-level gate.
@@ -166,7 +172,10 @@ const Auth = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div
+      className="relative min-h-screen bg-background overflow-hidden transition-opacity ease-in-out"
+      style={{ opacity: backFading ? 0 : 1, transitionDuration: `${BACK_FADE_MS}ms` }}
+    >
       <DotDecal />
       {/* Desktop: centered card layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0 md:max-w-2xl">
