@@ -18,6 +18,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [rawGems, setRawGems] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [hasClaimedFreeGems, setHasClaimedFreeGems] = useState(false);
 
   const getCacheKey = useCallback((userId: string) => `${GEMS_CACHE_PREFIX}${userId}`, []);
 
@@ -44,23 +45,27 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const fetchGems = useCallback(async () => {
     if (!user) {
       setRawGems(0);
+      setHasClaimedFreeGems(false);
       setLoading(false);
       return;
     }
     try {
-      const { data, error } = await supabase
-        .from("credits")
-        .select("balance")
-        .eq("user_id", user.id)
-        .single();
-      if (error) {
-        console.error("Failed to fetch gems:", error);
+      // Fetch credits and profile in parallel
+      const [creditsRes, profileRes] = await Promise.all([
+        supabase.from("credits").select("balance").eq("user_id", user.id).single(),
+        supabase.from("profiles").select("has_claimed_free_gems, onboarding_complete").eq("user_id", user.id).single(),
+      ]);
+
+      if (creditsRes.error) {
+        console.error("Failed to fetch gems:", creditsRes.error);
         setRawGems(0);
       } else {
-        const balance = data?.balance ?? 0;
+        const balance = creditsRes.data?.balance ?? 0;
         writeCachedGems(user.id, balance);
         setRawGems(balance);
       }
+
+      setHasClaimedFreeGems(!!profileRes.data?.has_claimed_free_gems);
     } catch (e) {
       console.error("Gems fetch error:", e);
       setRawGems(0);
@@ -72,6 +77,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!user) {
       setRawGems(0);
+      setHasClaimedFreeGems(false);
       setLoading(false);
       return;
     }
@@ -85,10 +91,11 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchGems, readCachedGems, user]);
 
   // During onboarding (onboarding_complete = false), show 0 gems to user
-  // The real gems exist in DB and are spent normally, just hidden from display
+  // UNLESS they have already claimed free gems — then show real balance
   const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
   const isOnboarding = cachedOnboarding ? !cachedOnboarding.onboardingComplete : false;
-  const gems = isOnboarding ? 0 : rawGems;
+  const shouldMask = isOnboarding && !hasClaimedFreeGems;
+  const gems = shouldMask ? 0 : rawGems;
 
   return (
     <GemsContext.Provider value={{ gems, credits: gems, loading, refetch: fetchGems }}>
