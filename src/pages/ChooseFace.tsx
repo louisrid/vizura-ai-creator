@@ -705,8 +705,22 @@ const ChooseFace = () => {
     );
   }
 
-  if (pendingAuthSave) {
-    return <div className="fixed inset-0 bg-black z-[9999]" />;
+  if (pendingAuthSave || angleBodyLoading) {
+    return (
+      <div className="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center">
+        {angleBodyLoading && (
+          <ProgressBarLoader
+            duration={45000}
+            phrases={ANGLE_GEN_PHRASES}
+            phraseInterval={5200}
+            completeNow={angleBodyApiDone}
+            onComplete={() => {
+              setTimeout(() => setAngleBodyBarComplete(true), 400);
+            }}
+          />
+        )}
+      </div>
+    );
   }
 
   const cardDelays = [0, 0.2, 0.4];
