@@ -25,7 +25,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return cached ? JSON.parse(cached) : null;
     } catch { return null; }
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    // If we have a cached user, start as not-loading for instant render
+    try {
+      return !localStorage.getItem("facefox_cached_user");
+    } catch { return true; }
+  });
   const subscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>["data"]["subscription"] | null>(null);
   const oauthResolvedRef = useRef(false);
 

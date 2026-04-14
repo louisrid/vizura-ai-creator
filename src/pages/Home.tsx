@@ -61,7 +61,6 @@ const Home = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
-  const cachedOnboardingState = readCachedOnboardingState(user?.id);
   const [images, setImages] = useState<LatestImage[]>(() => {
     try {
       const cached = sessionStorage.getItem("facefox_latest_photos");
