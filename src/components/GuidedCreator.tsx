@@ -43,8 +43,8 @@ const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] low
 const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
 
 /* ── Top yellow line (used on hero only) ── */
-const TopLine = ({ visible }: { visible: boolean }) => (
-  <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[5px] overflow-hidden" style={{ opacity: visible ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+const TopLine = forwardRef<HTMLDivElement, { visible: boolean }>(({ visible }, ref) => (
+  <div ref={ref} className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[5px] overflow-hidden" style={{ opacity: visible ? 1 : 0, transition: 'opacity 1.2s ease' }}>
     <svg
       aria-hidden="true"
       className="block h-full w-full"
@@ -62,7 +62,8 @@ const TopLine = ({ visible }: { visible: boolean }) => (
       <rect x="0" y="0" width="100" height="5" fill="url(#guided-top-line-gradient)" />
     </svg>
   </div>
-);
+));
+TopLine.displayName = "TopLine";
 
 /* AnimatedRings removed — rings now inline in renderHero */
 
@@ -791,7 +792,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
           </h2>
-          <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--card))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
@@ -812,9 +813,9 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-[2px] bg-white/10" />
-              <span className="text-[11px] font-extrabold lowercase text-white/30">or use email</span>
-              <div className="flex-1 h-[2px] bg-white/10" />
+              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
+              <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
+              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
             </div>
 
             <input
@@ -822,7 +823,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onChange={(e) => setEmail(e.target.value)}
               onClick={(e) => e.stopPropagation()}
               className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-              style={{ borderRadius: 10, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+              style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
             <input
@@ -831,7 +832,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-              style={{ borderRadius: 10, border: "2px solid #2a2a2a", backgroundColor: "#2a2a2a" }}
+              style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
 
@@ -847,7 +848,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             <button
               type="button"
               onClick={() => setIsSignUp((v) => !v)}
-              className="w-full text-center text-[11px] font-extrabold lowercase text-white/30 hover:text-muted-foreground transition-colors duration-150"
+              className="w-full text-center text-[11px] font-extrabold lowercase text-white hover:opacity-80 transition-colors duration-150"
             >
               {isSignUp ? "already have an account? " : "no account? "}
               <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>
@@ -868,7 +869,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               }
             }}
             disabled={emailLoading || googleLoading}
-            className="mt-3 w-full text-center text-[11px] font-extrabold lowercase text-white/25 hover:text-muted-foreground transition-colors duration-150 disabled:opacity-50"
+            className="mt-3 w-full text-center text-[11px] font-extrabold lowercase text-white hover:opacity-80 transition-colors duration-150 disabled:opacity-50"
           >
             just browsing? <span className="underline">preview without account</span>
           </button>
