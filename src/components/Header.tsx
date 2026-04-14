@@ -27,10 +27,15 @@ function useScrollGradientOpacity() {
   return opacity;
 }
 
-const Header = () => {
+interface HeaderProps {
+  pathnameOverride?: string;
+}
+
+const Header = ({ pathnameOverride }: HeaderProps) => {
   const gradientOpacity = useScrollGradientOpacity();
   const navigate = useNavigate();
   const location = useLocation();
+  const pathname = pathnameOverride ?? location.pathname;
   const { user, loading, signOut } = useAuth();
   const { gems } = useGems();
   const { subscribed } = useSubscription();
@@ -98,7 +103,7 @@ const Header = () => {
   }, [open]);
 
   // Close on route change
-  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
@@ -137,8 +142,8 @@ const Header = () => {
   ];
 
   const isLoggedIn = !!user?.id;
-  const isAuthPage = location.pathname === "/auth" || location.pathname === "/reset-password";
-  const hideOnboardingFaceFlowActions = location.pathname === "/choose-face" && showMenuLocks;
+  const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
+  const hideOnboardingFaceFlowActions = pathname === "/choose-face" && showMenuLocks;
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
@@ -173,7 +178,7 @@ const Header = () => {
               }}
             >
               {menuItems.map((item, idx) => {
-                const isActive = location.pathname === item.path && !item.state;
+                const isActive = pathname === item.path && !item.state;
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst

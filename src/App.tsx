@@ -8,7 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { useAuth } from "@/contexts/AuthContext";
-import Header from "@/components/Header";
+import HeaderTransition from "@/components/HeaderTransition";
 import TopGradientBar from "@/components/TopGradientBar";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
@@ -278,6 +278,7 @@ const AppRoutes = () => {
     <>
       {/* Yellow gradient bar — NEVER fades, always visible */}
       <TopGradientBar />
+      <HeaderTransition blackoutActive={blackoutActive} />
       <motion.div
         className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
@@ -292,7 +293,6 @@ const AppRoutes = () => {
           exit={{ opacity: blackoutActive ? 1 : 0 }}
           transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
         >
-          <Header />
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/generate-face" element={<ChooseFace />} />
