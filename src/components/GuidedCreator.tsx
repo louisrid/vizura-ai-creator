@@ -18,12 +18,11 @@ const OVERLAY_FADE_DURATION = 0.3;
 const getRandomNameToast = () => "great choice";
 
 /*
- * SCREEN ORDER (11 screens, internalStep 0-10):
+ * SCREEN ORDER (10 screens, internalStep 0-9):
  *  0: Hero (new first screen with rings)
- *  1: Intro
- *  2: Name input
- *  3-9: Traits (skin, body type, bust size, age, hair colour, hairstyle, eyes)
- *  10: Create
+ *  1: Name input
+ *  2-8: Traits (skin, body type, bust size, age, hair colour, hairstyle, eyes)
+ *  9: Create
  */
 
 const TRAITS = [
@@ -159,7 +158,7 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 11;
+const TOTAL_FULL = 10;
 const TOTAL_SKIP = 9;
 
 const ageRangeToNumber = (range: string): string => {
@@ -186,7 +185,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
-  const offset = skipWelcome ? 2 : 0;
+  const offset = skipWelcome ? 1 : 0;
 
   const [step, setStep] = useState(0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
@@ -293,9 +292,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const internalStep = step + offset;
   const isHeroSlide = internalStep === 0 && !skipWelcome;
-  const isIntroSlide = internalStep === 1 && !skipWelcome;
-  const isNameSlide = internalStep === 2;
-  const isCreateSlide = internalStep === 10;
+  const isNameSlide = internalStep === 1;
+  const isCreateSlide = internalStep === 9;
 
   /* Wait for splash screen to be fully removed before starting hero animation */
   const [splashGone, setSplashGone] = useState(() => !document.getElementById("splash-screen"));
@@ -322,7 +320,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide, splashGone]);
 
-  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
+  const currentTraitIndex = internalStep >= 2 && internalStep <= 8 ? internalStep - 2 : -1;
 
 
   const getCurrentTraitKey = (): TraitKey | null => {
@@ -400,7 +398,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isIntroSlide || isNameSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   if (!mounted || !visible) return null;
 
@@ -464,20 +462,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Slide renderer ── */
   const renderSlide = () => {
     if (isHeroSlide) return renderHero();
-
-    /* Intro */
-    if (isIntroSlide) return (
-      <div className="flex w-full flex-col items-center">
-        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -8, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>💫</motion.span>
-        <h2 className={SLIDE_TITLE_CLASS}>time to create your<br />first character!</h2>
-        <motion.p
-          className="mt-5 text-[13px] md:text-[15px] font-[800] lowercase"
-          style={{ color: "#ffffff" }}
-          animate={{ y: [0, -4, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        >tap → to continue</motion.p>
-      </div>
-    );
 
     /* Name */
     if (isNameSlide) return (
@@ -630,8 +614,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Content area */}
         <div
-          className={`absolute inset-x-0 flex items-center justify-center px-6 md:px-12 ${showNavigation ? "top-20 bottom-44 md:top-24 md:bottom-40" : "inset-y-0"}`}
-          style={{ paddingTop: isHeroSlide ? "5%" : undefined }}
+          className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
+          style={{
+            top: isHeroSlide ? 0 : 48,
+            bottom: isHeroSlide ? 0 : 160,
+            transition: "top 0.35s ease, bottom 0.35s ease",
+          }}
         >
           <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[2vh]">
             <AnimatePresence mode="wait">
@@ -677,25 +665,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               </motion.div>
               <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
             </div>
-            {/* Home exit icon — hidden for first-time onboarding users on all slides */}
-            {(() => {
-              const cachedState = readCachedOnboardingState(user?.id);
-              const isFirstTimeUser = isLoggedIn && cachedState && !cachedState.onboardingComplete;
-              if (isFirstTimeUser) return null;
-              return (
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="mt-10 flex items-center justify-center active:opacity-70 transition-opacity duration-150"
-                  aria-label="go home"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 10.5L12 3l9 7.5" />
-                    <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1V9.5" />
-                  </svg>
-                </button>
-              );
-            })()}
           </div>
         )}
       </motion.div>
