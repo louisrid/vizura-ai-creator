@@ -13,6 +13,9 @@ const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const SLIDE_FADE_DURATION = 0.2;
 const OVERLAY_FADE_DURATION = 0.3;
+const FAST_CROSSFADE_MS = 500;
+const SLOW_FADE_MS = 500;
+const BLACK_HOLD_MS = 1000;
 
 /* ── Name toast ── */
 const getRandomNameToast = () => "great choice";
@@ -40,29 +43,6 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
 const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
-
-/* ── Top yellow line (used on hero only) ── */
-const TopLine = forwardRef<HTMLDivElement, { visible: boolean }>(({ visible }, ref) => (
-  <div ref={ref} className="pointer-events-none absolute inset-x-0 top-0 z-[99999] h-[5px] overflow-hidden" style={{ opacity: visible ? 1 : 0, transition: 'opacity 1.2s ease' }}>
-    <svg
-      aria-hidden="true"
-      className="block h-full w-full"
-      preserveAspectRatio="none"
-      viewBox="0 0 100 5"
-    >
-      <defs>
-        <linearGradient id="guided-top-line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 1 }} />
-          <stop offset="20%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 1 }} />
-          <stop offset="50%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 0.3 }} />
-          <stop offset="80%" style={{ stopColor: "hsl(var(--neon-yellow))", stopOpacity: 0 }} />
-        </linearGradient>
-      </defs>
-      <rect x="0" y="0" width="100" height="5" fill="url(#guided-top-line-gradient)" />
-    </svg>
-  </div>
-));
-TopLine.displayName = "TopLine";
 
 /* AnimatedRings removed — rings now inline in renderHero */
 
@@ -197,7 +177,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
   
-  const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [ringT, setRingT] = useState(0);
   const [heroPhase, setHeroPhase] = useState(0);
   const heroVisited = useRef(false);
@@ -258,7 +237,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setExitFade(false);
       setHeroExiting(false);
       setLoginExiting(false);
-      setSlideDirection(1);
       setBackArrowShaking(false);
     }
   }, [open, restoreSavedFlow]);
@@ -385,23 +363,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       heroVisited.current = true;
       setHeroExiting(true);
       setTimeout(() => {
-        setSlideDirection(1);
         setStep(step + 1);
-        // Hold on black briefly, then fade in
-        setTimeout(() => {
-          setHeroExiting(false);
-          setTimeout(() => { animating.current = false; }, 350);
-        }, 150);
-      }, 400);
+        setHeroExiting(false);
+        setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
+      }, SLOW_FADE_MS + BLACK_HOLD_MS);
       return;
     }
     animating.current = true;
-    setSlideDirection(1);
     const nextStep = step + 1;
     if (nextStep >= TOTAL) return;
     requestAnimationFrame(() => {
       setStep(nextStep);
-      setTimeout(() => { animating.current = false; }, 250);
+      setTimeout(() => { animating.current = false; }, FAST_CROSSFADE_MS);
     });
   }, [step, isNameSlide, isCreateSlide, isHeroSlide, heroExiting, currentTraitIndex, TOTAL, completeCookingFlow]);
 
@@ -409,9 +382,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (animating.current) return;
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
     animating.current = true;
-    setSlideDirection(-1);
     setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, 200);
+    setTimeout(() => { animating.current = false; }, FAST_CROSSFADE_MS);
   }, [step]);
 
   const handleClose = () => {
@@ -480,11 +452,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               setLoginExiting(true);
-              // Slow fade matching "start" timing, then navigate
+              navigateTo(`/auth${window.location.search}`);
               setTimeout(() => {
                 setVisible(false);
-                navigateTo(`/auth${window.location.search}`);
-              }, 600);
+              }, FAST_CROSSFADE_MS + 50);
             }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
@@ -632,16 +603,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       style={{
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
         opacity: loginExiting ? 0 : 1,
-        transition: "opacity 0.55s ease-in-out",
+        transition: `opacity ${FAST_CROSSFADE_MS}ms ease-in-out`,
       }}
     >
-      {(isHeroSlide || heroExiting) && <TopLine visible={heroPhase >= 1} />}
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
-        transition={{ duration: heroExiting ? 0.35 : 0.6, ease: "easeInOut" }}
+        transition={{ duration: heroExiting ? SLOW_FADE_MS / 1000 : 0.6, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
@@ -658,17 +628,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           style={{
             top: isHeroSlide ? 0 : 48,
             bottom: isHeroSlide ? 0 : 160,
-            transition: "top 0.35s ease, bottom 0.35s ease",
           }}
         >
-          <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[2vh]">
-            <AnimatePresence mode="wait">
+          <div className="grid w-full max-w-sm md:max-w-lg mx-auto">
+            <AnimatePresence mode="sync" initial={false}>
               <motion.div
                 key={step}
-                className="w-full"
+                className="w-full [grid-area:1/1]"
                 variants={slideVariants}
                 initial="enter" animate="center" exit="exit"
-                transition={{ duration: isCreateSlide ? 0.5 : 0.35, ease: "easeInOut" }}
+                transition={{ duration: isCreateSlide || heroExiting ? 0.5 : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
               >
                 {renderSlide()}
               </motion.div>

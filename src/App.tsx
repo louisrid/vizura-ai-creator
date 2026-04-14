@@ -32,6 +32,7 @@ import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash 
 
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
+const FAST_CROSSFADE_DURATION = 0.45;
 
 const isExemptRoute = (pathname: string) =>
   pathname === "/" || EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
@@ -283,36 +284,39 @@ const AppRoutes = () => {
         animate={{ opacity: blackoutActive ? 1 : 0 }}
         transition={blackoutActive ? { duration: 0 } : { duration: 0.6, ease: "easeInOut" }}
       />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          initial={{ opacity: blackoutActive ? 1 : 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: blackoutActive ? 1 : 0 }}
-          transition={blackoutActive ? { duration: 0 } : { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <Header />
-          <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/generate-face" element={<ChooseFace />} />
-            <Route path="/choose-face" element={<ChooseFace />} />
-            <Route path="/create" element={<Index />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/characters" element={<MyCharacters />} />
-            <Route path="/characters/:id" element={<CharacterDetail />} />
-            <Route path="/storage" element={<Storage />} />
-            <Route path="/top-ups" element={<TopUps />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/info" element={<Info />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
+      <div className="relative grid">
+        <AnimatePresence mode="sync" initial={false}>
+          <motion.div
+            key={location.key}
+            className="[grid-area:1/1]"
+            initial={{ opacity: blackoutActive ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: blackoutActive ? 1 : 0 }}
+            transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
+          >
+            <Header />
+            <Routes location={location}>
+              <Route path="/" element={<Home />} />
+              <Route path="/generate-face" element={<ChooseFace />} />
+              <Route path="/choose-face" element={<ChooseFace />} />
+              <Route path="/create" element={<Index />} />
+              <Route path="/index" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/characters" element={<MyCharacters />} />
+              <Route path="/characters/:id" element={<CharacterDetail />} />
+              <Route path="/storage" element={<Storage />} />
+              <Route path="/top-ups" element={<TopUps />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/info" element={<Info />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </>
   );
 };
