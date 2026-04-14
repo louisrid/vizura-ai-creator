@@ -414,18 +414,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
-      <div className="flex w-full flex-col items-center" style={{ paddingTop: '3.5vh', paddingBottom: '3vh' }}>
-        {/* Fox emoji comment preserved for label — sharpening removed */}
-        <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8, marginTop: -10 }}>
+      <div className="flex w-full flex-col items-center justify-center" style={{ flex: 1, minHeight: 0 }}>
+        {/* Fox + rings container — scaled down 20% */}
+        <div style={{ position: 'relative', width: 256, height: 256, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 6 }}>
           {[
-            { size: 318, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
-            { size: 282, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
-            { size: 246, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 213, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+            { size: 254, w: 5, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 226, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 197, w: 6, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 170, w: 2, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
-              width: on ? r.size : 80, height: on ? r.size : 80,
+              width: on ? r.size : 64, height: on ? r.size : 64,
               border: `${r.w}px ${r.dash ? 'dashed' : 'solid'} #ffe603`,
               [r.seg]: 'transparent',
               transform: `rotate(${ringT * r.spd}deg)`,
@@ -434,27 +434,27 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 115, height: 115, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 92, height: 92, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
-              width={230}
-              height={230}
+              width={184}
+              height={184}
               draggable={false}
               style={{
                 display: 'block',
-                width: 115,
-                height: 115,
+                width: 92,
+                height: 92,
               }}
             />
           </div>
         </div>
-        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
-        <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+        <div style={{ fontSize: 61, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 2, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ width: 156, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 8, marginBottom: 21, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 148, padding: '10px 0', fontSize: 19, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {!isLoggedIn && (
-            <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            <button type="button" onClick={() => navigateTo(`/auth${window.location.search}`)} style={{ width: 148, padding: '8px 0', fontSize: 19, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -630,10 +630,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Content area */}
         <div
-          className={`absolute inset-x-0 flex items-center justify-center px-6 md:px-12 ${showNavigation ? "top-20 bottom-44 md:top-24 md:bottom-40" : "inset-y-0"}`}
-          style={{ paddingTop: isHeroSlide ? "5%" : undefined }}
+          className={`absolute inset-x-0 flex flex-col items-center justify-center px-6 md:px-12 ${showNavigation ? "top-20 bottom-44 md:top-24 md:bottom-40" : "inset-y-0"}`}
+          style={{ paddingTop: isHeroSlide ? 5 : undefined }}
         >
-          <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[2vh]">
+          <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center md:-translate-y-[2vh]" style={isHeroSlide ? { flex: 1, justifyContent: 'center', minHeight: 0 } : undefined}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={step}
