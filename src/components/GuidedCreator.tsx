@@ -211,6 +211,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => cancelAnimationFrame(raf);
   }, []);
 
+  /* Hero phased entrance */
+  useEffect(() => {
+    if (!isHeroSlide) return;
+    const ts = [
+      setTimeout(() => setHeroPhase(1), 300),
+      setTimeout(() => setHeroPhase(2), 650),
+      setTimeout(() => setHeroPhase(3), 1800),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, [isHeroSlide]);
+
   const restoreSavedFlow = useCallback(() => {
     try {
       const raw = sessionStorage.getItem(FLOW_STATE_KEY);
