@@ -549,8 +549,6 @@ const Index = () => {
     fetchCharacters();
   }, [fetchCharacters]);
 
-  if (authLoading || (!!user && !charactersLoaded)) return <LoadingScreen />;
-
   // Refresh character list on focus/visibility so newly created characters appear
   useEffect(() => {
     const refresh = () => { void fetchCharacters(); };
@@ -562,6 +560,8 @@ const Index = () => {
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [fetchCharacters]);
+
+  if (authLoading || (!!user && !charactersLoaded)) return <LoadingScreen />;
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
