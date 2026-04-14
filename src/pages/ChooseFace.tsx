@@ -146,8 +146,11 @@ const ChooseFace = () => {
   }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
-  // Angle/body generation — runs in background, no overlay
+  // Angle/body generation state
   const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
+  const [angleBodyLoading, setAngleBodyLoading] = useState(false);
+  const [angleBodyApiDone, setAngleBodyApiDone] = useState(false);
+  const [angleBodyBarComplete, setAngleBodyBarComplete] = useState(false);
 
   const hasInitRef = useRef(false);
 
