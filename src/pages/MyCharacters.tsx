@@ -170,7 +170,7 @@ const MyCharacters = () => {
                       <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-tight truncate">
                         {char.name || "unnamed"}
                       </span>
-                      <span className="block text-[9px] md:text-[11px] font-[800] lowercase text-white/70">
+                      <span className="block text-[9px] md:text-[11px] font-[800] lowercase text-white">
                         age {displayAge(char.id, char.age)}
                       </span>
                     </div>
