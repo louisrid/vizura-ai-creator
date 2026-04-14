@@ -382,10 +382,27 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const goBack = useCallback(() => {
     if (animating.current) return;
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
+
+    // Going back to hero slide → TYPE A (fade-black-fade), matching the forward transition
+    const goingBackToHero = !skipWelcome && step === 1;
+    if (goingBackToHero) {
+      animating.current = true;
+      setHeroExiting(true); // reuse the black overlay for fade-to-black
+      setTimeout(() => {
+        setStep(0);
+        requestAnimationFrame(() => {
+          setHeroExiting(false);
+          setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
+        });
+      }, SLOW_FADE_MS + BLACK_HOLD_MS);
+      return;
+    }
+
+    // All other back transitions → TYPE B (fast crossfade)
     animating.current = true;
     setStep((s) => s - 1);
     setTimeout(() => { animating.current = false; }, FAST_CROSSFADE_MS);
-  }, [step]);
+  }, [step, skipWelcome]);
 
   const handleClose = () => {
     // User left before completing — clear all progress so next open starts fresh
