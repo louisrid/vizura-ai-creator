@@ -296,9 +296,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isNameSlide = internalStep === 2;
   const isCreateSlide = internalStep === 10;
 
-  /* Hero phased entrance */
+  /* Wait for splash screen to be fully removed before starting hero animation */
+  const [splashGone, setSplashGone] = useState(() => !document.getElementById("splash-screen"));
   useEffect(() => {
-    if (!isHeroSlide) return;
+    if (splashGone || !isHeroSlide) return;
+    const check = setInterval(() => {
+      if (!document.getElementById("splash-screen")) {
+        setSplashGone(true);
+        clearInterval(check);
+      }
+    }, 100);
+    return () => clearInterval(check);
+  }, [isHeroSlide, splashGone]);
+
+  /* Hero phased entrance — only starts after splash is gone */
+  useEffect(() => {
+    if (!isHeroSlide || !splashGone) return;
     setHeroPhase(0);
     const ts = [
       setTimeout(() => setHeroPhase(1), 300),
@@ -306,7 +319,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       setTimeout(() => setHeroPhase(3), 1800),
     ];
     return () => ts.forEach(clearTimeout);
-  }, [isHeroSlide]);
+  }, [isHeroSlide, splashGone]);
 
   const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
 
@@ -425,7 +438,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <img src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png" alt="fox" width={115} height={115} style={{ display: 'block', opacity: heroPhase >= 1 ? 1 : 0, filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.05)' : 'none', transition: 'opacity 1.2s ease, filter 1.2s ease' }} />
+          <img src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png" alt="fox" width={115} height={115} draggable={false} style={{ display: 'block', opacity: heroPhase >= 1 ? 1 : 0, filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.08)' : 'none', transition: 'opacity 1.2s ease, filter 1.2s ease', imageRendering: 'auto', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden', transform: 'translateZ(0) scale(1)', WebkitTransform: 'translateZ(0) scale(1)' }} />
         </div>
         <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
         <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
