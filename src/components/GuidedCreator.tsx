@@ -308,6 +308,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide]);
 
+  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
+
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
