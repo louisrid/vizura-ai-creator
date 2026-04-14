@@ -56,6 +56,24 @@ Deno.serve(async (req) => {
         });
       }
 
+      // Delete all characters belonging to this user
+      await adminClient
+        .from("characters")
+        .delete()
+        .eq("user_id", userId);
+
+      // Delete all generations belonging to this user
+      await adminClient
+        .from("generations")
+        .delete()
+        .eq("user_id", userId);
+
+      // Delete all generation logs belonging to this user
+      await adminClient
+        .from("generation_logs")
+        .delete()
+        .eq("user_id", userId);
+
       // Reset balance to 100 hidden gems
       await adminClient
         .from("credits")
@@ -68,6 +86,9 @@ Deno.serve(async (req) => {
         .update({
           onboarding_complete: false,
           has_claimed_free_gems: false,
+          has_used_free_gen: false,
+          has_seen_welcome: false,
+          has_seen_onboarding: false,
           onboarding_face_regens_used: 0,
           onboarding_angle_regens_used: 0,
           onboarding_body_regens_used: 0,
