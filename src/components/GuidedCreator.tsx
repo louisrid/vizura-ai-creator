@@ -211,16 +211,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  /* Hero phased entrance */
-  useEffect(() => {
-    if (!isHeroSlide) return;
-    const ts = [
-      setTimeout(() => setHeroPhase(1), 300),
-      setTimeout(() => setHeroPhase(2), 650),
-      setTimeout(() => setHeroPhase(3), 1800),
-    ];
-    return () => ts.forEach(clearTimeout);
-  }, [isHeroSlide]);
 
   const restoreSavedFlow = useCallback(() => {
     try {
@@ -306,7 +296,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isNameSlide = internalStep === 2;
   const isCreateSlide = internalStep === 10;
 
-  const currentTraitIndex = internalStep >= 3 && internalStep <= 9 ? internalStep - 3 : -1;
+  /* Hero phased entrance */
+  useEffect(() => {
+    if (!isHeroSlide) return;
+    setHeroPhase(0);
+    const ts = [
+      setTimeout(() => setHeroPhase(1), 300),
+      setTimeout(() => setHeroPhase(2), 650),
+      setTimeout(() => setHeroPhase(3), 1800),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, [isHeroSlide]);
+
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
