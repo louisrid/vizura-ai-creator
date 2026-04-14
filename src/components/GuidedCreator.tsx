@@ -414,12 +414,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center" style={{ paddingTop: '3.5vh', paddingBottom: '3vh' }}>
-        {/* SVG sharpen filter — minimum intensity */}
-        <svg width="0" height="0" style={{ position: 'absolute' }}>
-          <filter id="sharpen-fox">
-            <feConvolveMatrix order="3" kernelMatrix="0 -0.06 0 -0.06 1.24 -0.06 0 -0.06 0" />
-          </filter>
-        </svg>
+        {/* Fox emoji comment preserved for label — sharpening removed */}
         <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8, marginTop: -10 }}>
           {[
             { size: 318, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
@@ -438,8 +433,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          {/* 2x oversampled fox for sharpness: render 230px image in 115px container */}
-          <div style={{ width: 115, height: 115, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', isolation: 'isolate' }}>
+          <div style={{ width: 115, height: 115, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
@@ -450,9 +444,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 display: 'block',
                 width: 115,
                 height: 115,
-                imageRendering: '-webkit-optimize-contrast' as any,
-                filter: heroPhase >= 1 ? 'url(#sharpen-fox) contrast(1.01)' : 'none',
-                transition: 'filter 1.2s ease',
               }}
             />
           </div>
