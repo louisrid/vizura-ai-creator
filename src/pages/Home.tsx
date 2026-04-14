@@ -64,12 +64,24 @@ const Home = () => {
   const [images, setImages] = useState<LatestImage[]>(() => {
     try {
       const cached = sessionStorage.getItem("facefox_latest_photos");
-      if (cached) return JSON.parse(cached) as LatestImage[];
+      if (cached) {
+        const parsed = JSON.parse(cached) as LatestImage[];
+        if (parsed.length > 0) return parsed;
+      }
     } catch {}
     return [];
   });
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
-  const [photosLoaded, setPhotosLoaded] = useState(false);
+  const [photosLoaded, setPhotosLoaded] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem("facefox_latest_photos");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        return Array.isArray(parsed); // treat cache as "loaded" so we skip skeleton
+      }
+    } catch {}
+    return false;
+  });
   const [charsLoaded, setCharsLoaded] = useState(false);
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
@@ -467,7 +479,7 @@ const Home = () => {
                   const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
                   return (
                     <button
-                      key={photo.id}
+                      key={`photo-slot-${i}`}
                       type="button"
                       onClick={() => {
                         if (!isPlaceholder) setSelectedImage(photo);
@@ -492,7 +504,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
                         )}
                       </AspectRatio>
                     </button>
@@ -551,7 +563,7 @@ const Home = () => {
                   const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={char.id}
+                      key={`char-slot-${i}`}
                       type="button"
                       onClick={() => navigate(`/characters/${char.id}`)}
                       className="relative overflow-hidden"
@@ -666,7 +678,7 @@ const Home = () => {
                   const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
                   return (
                     <button
-                      key={photo.id}
+                      key={`photo-slot-desktop-${i}`}
                       type="button"
                       onClick={() => {
                         if (!isPlaceholder) setSelectedImage(photo);
@@ -691,7 +703,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
                         )}
                       </AspectRatio>
                     </button>
@@ -750,7 +762,7 @@ const Home = () => {
                   const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
                   return (
                     <button
-                      key={char.id}
+                      key={`char-slot-desktop-${i}`}
                       type="button"
                       onClick={() => navigate(`/characters/${char.id}`)}
                       className="relative overflow-hidden hover-lift"
