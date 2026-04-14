@@ -627,7 +627,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}>
+    <div
+      className="fixed inset-0 z-[9999] flex flex-col"
+      style={{
+        background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
+        opacity: loginExiting ? 0 : 1,
+        transition: "opacity 0.35s ease-in-out",
+      }}
+    >
       {(isHeroSlide || heroExiting) && <TopLine visible={heroPhase >= 1} />}
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
@@ -635,13 +642,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         initial={{ opacity: 0 }}
         animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
         transition={{ duration: heroExiting ? 0.35 : 0.6, ease: "easeInOut" }}
-      />
-      {/* Login crossfade overlay */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-50 bg-black"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: loginExiting ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
