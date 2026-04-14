@@ -73,7 +73,6 @@ const Home = () => {
   const [photosLoaded, setPhotosLoaded] = useState(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
   const cachedStateNeedsVerification = !!user && !!cachedOnboardingState && needsOnboardingRedirect(cachedOnboardingState);
-  const isOnboardingUser = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
@@ -81,6 +80,7 @@ const Home = () => {
   const [onboardingComplete, setOnboardingComplete] = useState(() => cachedOnboardingState?.onboardingComplete ?? true);
   const [lockStateResolved, setLockStateResolved] = useState(() => !user || (!!cachedOnboardingState && !cachedStateNeedsVerification));
   const [characterCount, setCharacterCount] = useState(() => cachedOnboardingState?.characterCount ?? 0);
+  const isOnboardingUser = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
 
