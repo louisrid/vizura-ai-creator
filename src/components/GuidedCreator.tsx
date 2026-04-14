@@ -412,9 +412,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
-      <div className="flex w-full flex-col items-center" style={{ paddingTop: '3.5vh', paddingBottom: '3vh' }}>
-        {/* Fox emoji comment preserved for label — sharpening removed */}
-        <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8, marginTop: -10 }}>
+      <div className="flex w-full flex-col items-center">
+        {/* Fox emoji — no sharpening */}
+        <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
           {[
             { size: 318, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 282, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
