@@ -62,16 +62,11 @@ const FreshLoadRedirect = () => {
         return;
       }
 
-      if (!pendingPostAuthHome && location.pathname !== "/" && !isExemptRoute(location.pathname)) {
+      if (!pendingPostAuthHome && !isExemptRoute(location.pathname)) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
-        navigate("/", { replace: true });
+        navigate("/auth", { replace: true });
         return;
-      }
-
-      if (location.pathname === "/" && !pendingPostAuthHome) {
-        sessionStorage.removeItem("facefox_auto_opened");
-        sessionStorage.removeItem("facefox_creator_dismissed");
       }
     };
 

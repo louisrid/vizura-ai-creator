@@ -145,17 +145,9 @@ const Home = () => {
       return;
     }
 
-    const alreadyOpened = sessionStorage.getItem("facefox_auto_opened");
-    const dismissed = sessionStorage.getItem(DISMISSED_KEY);
-    if (!alreadyOpened && !dismissed) {
-      sessionStorage.setItem("facefox_auto_opened", "1");
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      setSkipWelcome(false);
-      setShowGuided(true);
-    }
-    setAutoOpenEvaluated(true);
-    requestAnimationFrame(() => document.getElementById("splash-screen")?.remove());
-  }, [authLoading, openCreatorRequested, user]);
+    // No user and not pending auth → redirect to sign in. No guest mode.
+    navigate("/auth", { replace: true });
+  }, [authLoading, openCreatorRequested, user, navigate]);
 
   // When lock state resolves and user needs onboarding, force guided creator open
   useEffect(() => {
@@ -310,8 +302,37 @@ const Home = () => {
   const showLocks = lockStateResolved && !onboardingComplete && characterCount === 0;
   const forceOnboarding = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
 
+  // Post-auth loading: user is signed in but data hasn't finished loading yet
+  const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
+
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
+
+  // Show loading bar while data loads (post-auth)
+  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
+    return (
+      <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center gap-6">
+        <h1 className="text-2xl font-[900] lowercase text-white tracking-tight">loading...</h1>
+        <div className="w-48 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div
+            className="h-full rounded-full"
+            style={{
+              backgroundColor: "#ffe603",
+              animation: "loading-bar 1.2s ease-in-out infinite",
+              width: "60%",
+            }}
+          />
+        </div>
+        <style>{`
+          @keyframes loading-bar {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(80%); }
+            100% { transform: translateX(200%); }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
