@@ -625,8 +625,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
-        animate={{ opacity: exitFade ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
+        animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
+        transition={{ duration: heroExiting ? 0.35 : 0.6, ease: "easeInOut" }}
+      />
+      {/* Login crossfade overlay */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-50 bg-black"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loginExiting ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
