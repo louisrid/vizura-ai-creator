@@ -64,12 +64,24 @@ const Home = () => {
   const [images, setImages] = useState<LatestImage[]>(() => {
     try {
       const cached = sessionStorage.getItem("facefox_latest_photos");
-      if (cached) return JSON.parse(cached) as LatestImage[];
+      if (cached) {
+        const parsed = JSON.parse(cached) as LatestImage[];
+        if (parsed.length > 0) return parsed;
+      }
     } catch {}
     return [];
   });
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
-  const [photosLoaded, setPhotosLoaded] = useState(false);
+  const [photosLoaded, setPhotosLoaded] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem("facefox_latest_photos");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        return Array.isArray(parsed); // treat cache as "loaded" so we skip skeleton
+      }
+    } catch {}
+    return false;
+  });
   const [charsLoaded, setCharsLoaded] = useState(false);
   const [showGuided, setShowGuided] = useState(false);
   const [skipWelcome, setSkipWelcome] = useState(false);
