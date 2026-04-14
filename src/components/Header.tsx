@@ -136,7 +136,7 @@ const Header = () => {
 
   const isLoggedIn = !!user?.id;
   const isAuthPage = location.pathname === "/auth" || location.pathname === "/reset-password";
-  const hideOnboardingFaceFlowActions = location.pathname === "/choose-face" && showMenuLocks;
+  const hideOnboardingFaceFlowActions = (location.pathname === "/choose-face" || location.pathname === "/") && showMenuLocks;
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
