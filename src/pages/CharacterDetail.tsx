@@ -205,12 +205,14 @@ const CharacterDetail = () => {
       }
       if (data?.error) throw new Error(data.error);
 
-      setCharacter((prev) => {
-        if (!prev) return prev;
-        if (target === "angle" && data?.angle_url) return { ...prev, face_angle_url: data.angle_url };
-        if (target === "body" && data?.body_anchor_url) return { ...prev, body_anchor_url: data.body_anchor_url };
-        return prev;
-      });
+      // Re-fetch character from DB to get the actual stored URL
+      const { data: freshChar } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("id", character.id)
+        .eq("user_id", user.id)
+        .single();
+      if (freshChar) setCharacter(freshChar as unknown as Character);
 
       await refetchGems();
       if (target === "angle") {
@@ -504,13 +506,19 @@ const CharacterDetail = () => {
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
-            <button
-              onClick={() => setShowDelete(true)}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-10 text-xs"
-              style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
-            >
-              delete character <Trash2 size={14} strokeWidth={2.5} />
-            </button>
+            <div className="relative">
+              {!onboardingComplete && (
+                <div className="absolute inset-0 z-10 rounded-[10px]" style={{ backgroundColor: "rgba(0,0,0,0.8)" }} />
+              )}
+              <button
+                onClick={() => { if (onboardingComplete) setShowDelete(true); }}
+                disabled={!onboardingComplete}
+                className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-10 text-xs"
+                style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
+              >
+                delete character <Trash2 size={14} strokeWidth={2.5} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -589,13 +597,19 @@ const CharacterDetail = () => {
             >
               create photo <Camera size={18} strokeWidth={2.5} />
             </button>
-            <button
-              onClick={() => setShowDelete(true)}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-12 text-sm"
-              style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
-            >
-              delete character <Trash2 size={14} strokeWidth={2.5} />
-            </button>
+            <div className="relative">
+              {!onboardingComplete && (
+                <div className="absolute inset-0 z-10 rounded-[10px]" style={{ backgroundColor: "rgba(0,0,0,0.8)" }} />
+              )}
+              <button
+                onClick={() => { if (onboardingComplete) setShowDelete(true); }}
+                disabled={!onboardingComplete}
+                className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-colors active:scale-[0.98] h-12 text-sm"
+                style={{ color: "#ff4444", borderRadius: 10, backgroundColor: "#100505", border: "2px solid #ff4444" }}
+              >
+                delete character <Trash2 size={14} strokeWidth={2.5} />
+              </button>
+            </div>
           </div>
         </div>
       </main>
