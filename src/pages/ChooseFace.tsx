@@ -614,7 +614,13 @@ const ChooseFace = () => {
         if (charRecord?.bust_size) bustSize = charRecord.bust_size;
       } catch {}
 
-      // Fire angle+body generation in background — don't block UI
+      // Show angle/body loading bar
+      setAngleBodyLoading(true);
+      setAngleBodyApiDone(false);
+      setAngleBodyBarComplete(false);
+      setPendingNavCharId(angleCharacterId);
+
+      // Fire angle+body generation
       supabase.functions.invoke("generate", {
         body: {
           prompt: anglePrompt,
@@ -627,28 +633,51 @@ const ChooseFace = () => {
       }).then(({ data, error }) => {
         if (error) console.error("Angle + body generation failed:", error);
         else console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: data?.angle_url, body: data?.body_anchor_url, bustSize });
+        setAngleBodyApiDone(true);
       }).catch((e) => {
         console.error("Angle + body generation failed:", e);
+        setAngleBodyApiDone(true);
       });
+    } else {
+      // No angle/body to generate — navigate directly
+      if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
+      sessionStorage.removeItem("facefox_selected_face");
+      sessionStorage.removeItem("facefox_guided_prompt");
+      sessionStorage.removeItem("facefox_face_prompt");
+      sessionStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(DRAFT_BACKUP_KEY);
+      sessionStorage.removeItem("facefox_pending_char_id");
+      sessionStorage.removeItem(FACE_STORAGE_KEY);
+      sessionStorage.removeItem(AUTH_RESUME_KEY);
+      setPendingAuthSave(false);
+      setShowSignIn(false);
+      toast.success("char created");
+      navigate(`/characters/${cId}`, { replace: true });
     }
 
-    // Navigate immediately — character detail page polls for angle/body updates
-    if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
-    sessionStorage.removeItem("facefox_selected_face");
-    sessionStorage.removeItem("facefox_guided_prompt");
-    sessionStorage.removeItem("facefox_face_prompt");
-    sessionStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(DRAFT_BACKUP_KEY);
-    sessionStorage.removeItem("facefox_pending_char_id");
-    sessionStorage.removeItem(FACE_STORAGE_KEY);
-    sessionStorage.removeItem(AUTH_RESUME_KEY);
-    setPendingAuthSave(false);
-    setShowSignIn(false);
-    toast.success("char created");
-    navigate(`/characters/${cId}`, { replace: true });
     return true;
   };
   doFinalSaveRef.current = doFinalSave;
+
+  // When angle/body loading bar completes, navigate to character detail
+  useEffect(() => {
+    if (angleBodyBarComplete && pendingNavCharId) {
+      const cId = pendingNavCharId;
+      sessionStorage.setItem("facefox_new_char_highlight", cId);
+      sessionStorage.removeItem("facefox_selected_face");
+      sessionStorage.removeItem("facefox_guided_prompt");
+      sessionStorage.removeItem("facefox_face_prompt");
+      sessionStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(DRAFT_BACKUP_KEY);
+      sessionStorage.removeItem("facefox_pending_char_id");
+      sessionStorage.removeItem(FACE_STORAGE_KEY);
+      sessionStorage.removeItem(AUTH_RESUME_KEY);
+      setPendingAuthSave(false);
+      setShowSignIn(false);
+      toast.success("char created");
+      navigate(`/characters/${cId}`, { replace: true });
+    }
+  }, [angleBodyBarComplete, pendingNavCharId, navigate]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
