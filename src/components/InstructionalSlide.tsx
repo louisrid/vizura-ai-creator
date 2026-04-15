@@ -50,11 +50,12 @@ const ChatPill = ({
       transition={animate ? { duration: 0.7, delay, ease: "easeOut" } : undefined}
     >
       <div
-        className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
+        className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
         style={{
           borderRadius: 10,
-          backgroundColor: highlight ? "hsl(140 100% 15%)" : "hsl(0 0% 14%)",
-          border: highlight ? "2px solid hsl(140 100% 30%)" : "2px solid hsl(0 0% 22%)",
+          backgroundColor: highlight ? "#34C759" : "#fff",
+          color: "#000",
+          border: "none",
         }}
       >
         {text}
