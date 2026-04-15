@@ -218,7 +218,12 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
       if (isSignUpMode) {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
-          if (err.message?.toLowerCase().includes("already registered")) await signIn(email.trim(), password);
+          if (err.message?.toLowerCase().includes("already registered")) {
+            toast.error("account exists!");
+            setIsSignUpMode(false);
+            setEmailLoading(false);
+            return;
+          }
           else throw err;
         }
       } else { await signIn(email.trim(), password); }
@@ -234,8 +239,8 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
     >
       <div className="flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
         <span className="text-[64px] mb-5">🔐</span>
-        <h2 className="text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-          sign up to create her
+        <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          sign up to save her
         </h2>
 
         <div className="mt-8 w-full space-y-3">
@@ -319,8 +324,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   });
 
   const getTotal = () => {
-    if (isFirstTime && !skipWelcome && !isLoggedIn) return 12; // hero + slide1 + name + 7traits + slide2 + signup
-    if (isFirstTime && !skipWelcome) return 11; // hero + slide1 + name + 7traits + slide2 (logged in: complete from slide2)
+    if (isFirstTime && !skipWelcome && !isLoggedIn) return 11; // hero + slide1 + name + 7traits + signup
+    if (isFirstTime && !skipWelcome) return 10; // hero + slide1 + name + 7traits (logged in: complete from last trait)
     if (!skipWelcome) return 10; // hero + name + 7traits + create
     return 9; // name + 7traits + create
   };
@@ -340,7 +345,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   
   // Track which instructional slides have been visited this session
   const [seenSlide1, setSeenSlide1] = useState(false);
-  const [seenSlide2, setSeenSlide2] = useState(false);
 
   const [ringT, setRingT] = useState(0);
   const [heroPhase, setHeroPhase] = useState(() => isHeroSeen() ? 3 : 0);
