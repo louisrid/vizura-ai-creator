@@ -207,4 +207,3 @@ const InstructionalSlide = ({
 };
 
 export default InstructionalSlide;
-export type { SlideConfig };
