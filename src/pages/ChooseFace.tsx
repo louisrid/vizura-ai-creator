@@ -43,6 +43,16 @@ const ANGLE_GEN_PHRASES = [
   "finalising your character…",
 ];
 
+const SET2_SLIDE: SlideConfig = {
+  emoji: "⏳",
+  title: "let's see how she looks!",
+  pills: [
+    { text: "we're creating two more photos", side: "left" },
+    { text: "regenerate until you're happy", side: "right" },
+    { text: "then click create photo", side: "left" },
+  ],
+};
+
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
