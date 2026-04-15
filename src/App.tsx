@@ -356,13 +356,13 @@ const AppRoutes = () => {
 
       {/* Header + page content — no animation wrapper, overlay handles transitions */}
       <HeaderTransition />
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={location.pathname}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0.6 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.12, ease: "easeInOut" }}
+          exit={{ opacity: 0.6 }}
+          transition={{ duration: 0.1, ease: "easeOut" }}
         >
           <Routes location={location}>
             <Route path="/" element={<Home />} />
