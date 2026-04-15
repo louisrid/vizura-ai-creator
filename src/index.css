@@ -44,15 +44,15 @@
     --loader-bar-to: 189 100% 42%;
 
     /* neon green — subscription status */
-    --neon-green: 146 100% 69%;
-    --neon-green-foreground: 0 0% 0%;
+    --neon-green: 114 90% 45%;
+    --neon-green-foreground: 0 0% 100%;
 
     /* gem — cyan #00e0ff */
     --gem-green: 189 100% 50%;
     --gem-green-foreground: 0 0% 100%;
 
     /* member indicator */
-    --member-green: 146 100% 69%;
+    --member-green: 114 90% 45%;
 
     --ambient-blue-1: 222 86% 54%;
     --ambient-blue-2: 215 84% 44%;
@@ -60,7 +60,7 @@
 
     --loader-cyan: 189 100% 50%;
     --loader-gold: 54 100% 51%;
-    --loader-green: 146 100% 69%;
+    --loader-green: 114 90% 45%;
     --loader-pink: 330 80% 55%;
     --loader-blue: 210 100% 55%;
 
