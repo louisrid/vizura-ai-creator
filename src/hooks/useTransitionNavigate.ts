@@ -25,13 +25,21 @@ export const useTransitionNavigate = () => {
         ? { replace: options.replace, state: options.state, preventScrollReset: options.preventScrollReset }
         : undefined;
 
-      startPageTransition(speed, () => {
+      if (speed === "slow") {
+        startPageTransition(speed, () => {
+          if (typeof to === "number") {
+            navigate(to);
+          } else {
+            navigate(to, navOptions);
+          }
+        });
+      } else {
         if (typeof to === "number") {
           navigate(to);
         } else {
           navigate(to, navOptions);
         }
-      });
+      }
     },
     [navigate]
   );
