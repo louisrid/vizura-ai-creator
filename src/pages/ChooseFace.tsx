@@ -48,9 +48,10 @@ const SET2_SLIDE: SlideConfig = {
   title: "let's see how she looks!",
   pills: [
     { text: "we're creating two more photos", side: "left" },
-    { text: "regenerate until you're happy", side: "right" },
+    { text: "regenerate until you're happy", side: "right", highlight: true },
     { text: "then click create photo", side: "left" },
   ],
+  hideDashes: true,
 };
 
 const ChooseFace = () => {
@@ -737,7 +738,7 @@ const ChooseFace = () => {
       sessionStorage.removeItem(AUTH_RESUME_KEY);
       setPendingAuthSave(false);
       setShowSignIn(false);
-      toast.success("char created");
+      toast.success("created!");
       navigate(`/characters/${cId}`, { replace: true });
     }
 
@@ -760,7 +761,7 @@ const ChooseFace = () => {
       sessionStorage.removeItem(AUTH_RESUME_KEY);
       setPendingAuthSave(false);
       setShowSignIn(false);
-      toast.success("char created");
+      toast.success("created!");
       navigate(`/characters/${cId}`, { replace: true });
     }
   }, [angleBodyBarComplete, pendingNavCharId, navigate]);
