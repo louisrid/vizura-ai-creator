@@ -7,6 +7,11 @@ const LoadingScreen = () => {
     return unregister;
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dataset.guidedCreatorOpen = "1";
+    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
+  }, []);
+
   return (
     <div
       className="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-background"
