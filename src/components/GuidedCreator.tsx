@@ -705,11 +705,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderSlide = () => {
     if (isHeroSlide) return renderHero();
 
-    /* Instructional slides rendered inline so arrows/dashes stay visible */
-    if (isSet1Slide1 || isSet1Slide2) {
-      const slide = isSet1Slide1 ? SET1_SLIDE1 : SET1_SLIDE2;
-      const alreadySeen = isSet1Slide1 ? seenSlide1 : seenSlide2;
-      const shouldAnim = !alreadySeen;
+    /* Instructional slide rendered inline so arrows/dashes stay visible */
+    if (isSet1Slide1) {
+      const slide = SET1_SLIDE1;
+      const shouldAnim = !seenSlide1;
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
@@ -717,9 +716,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {slide.emoji}
           </motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{slide.title}</h2>
-          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-2.5">
+          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
+              const isHighlight = !!(pill as any).highlight;
               return (
                 <motion.div
                   key={i}
@@ -729,7 +729,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   transition={shouldAnim ? { duration: 0.7, delay: i * 0.9 + 0.5, ease: "easeOut" } : undefined}
                 >
                   <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
-                    style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 14%)", border: "2px solid hsl(0 0% 22%)" }}>
+                    style={{
+                      borderRadius: 10,
+                      backgroundColor: isHighlight ? "hsl(170 100% 20%)" : "hsl(0 0% 14%)",
+                      border: isHighlight ? "2px solid hsl(170 100% 50%)" : "2px solid hsl(0 0% 22%)",
+                    }}>
                     {pill.text}
                   </div>
                 </motion.div>
