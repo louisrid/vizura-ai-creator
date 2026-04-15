@@ -71,7 +71,7 @@ const FreshLoadRedirect = () => {
     const resolveInitialRoute = async () => {
       if (user) {
         if (location.pathname === "/auth") {
-          navigate("/", { replace: true });
+          if (acquireRedirectLock()) navigate("/", { replace: true });
         }
         const cachedState = readCachedOnboardingState(user.id);
         if (!cachedState || cachedState.characterCount === 0) {
@@ -83,7 +83,7 @@ const FreshLoadRedirect = () => {
       if (!pendingPostAuthHome && !isExemptRoute(location.pathname)) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
-        navigate("/", { replace: true });
+        if (acquireRedirectLock()) navigate("/", { replace: true });
         return;
       }
     };
@@ -107,7 +107,7 @@ const PostAuthHomeRedirect = () => {
     sessionStorage.removeItem(POST_AUTH_HOME_KEY);
     if (resumeUrl) {
       sessionStorage.removeItem("facefox_resume_url");
-      navigate(resumeUrl, { replace: true });
+      if (acquireRedirectLock()) navigate(resumeUrl, { replace: true });
       return;
     }
 
@@ -228,10 +228,12 @@ const OnboardingRedirectGate = () => {
     if (!shouldRedirect || hasRedirected.current) return;
     hasRedirected.current = true;
 
-    navigate("/", {
-      replace: true,
-      state: { openCreator: true, onboardingRedirect: true },
-    });
+    if (acquireRedirectLock()) {
+      navigate("/", {
+        replace: true,
+        state: { openCreator: true, onboardingRedirect: true },
+      });
+    }
   }, [navigate, shouldRedirect]);
 
   if (!shouldRedirect) return null;
