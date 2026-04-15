@@ -430,7 +430,8 @@ const Home = () => {
     if (document.getElementById("splash-screen")) {
       return <LoadingScreen />;
     }
-    return <div className="min-h-screen bg-background" />;
+    // Render empty shell so transition overlay doesn't reveal a black void
+    return null;
   }
 
   return (
