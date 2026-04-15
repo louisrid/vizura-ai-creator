@@ -33,20 +33,13 @@ export const useTransitionNavigate = () => {
             navigate(to, navOptions);
           }
         });
-      } else {
-        document.body.style.transition = "opacity 60ms ease";
-        document.body.style.opacity = "0.92";
-        setTimeout(() => {
-          if (typeof to === "number") {
-            navigate(to);
-          } else {
-            navigate(to, navOptions);
-          }
-          requestAnimationFrame(() => {
-            document.body.style.opacity = "1";
-          });
-        }, 60);
-      }
+} else {
+  if (typeof to === "number") {
+    navigate(to);
+  } else {
+    navigate(to, navOptions);
+  }
+}
     },
     [navigate]
   );
