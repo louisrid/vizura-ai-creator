@@ -313,9 +313,9 @@ const ContentFlashOverlay = ({ locationKey }: { locationKey: string }) => (
     key={locationKey}
     className="pointer-events-none fixed inset-x-0 bottom-0 bg-background"
     style={{ top: "calc(env(safe-area-inset-top) + 144px)", zIndex: 9970 }}
-    initial={{ opacity: 0.08 }}
+    initial={{ opacity: 0.25 }}
     animate={{ opacity: 0 }}
-    transition={{ duration: 0.12, ease: "easeOut" }}
+    transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
   />
 );
 
