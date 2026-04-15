@@ -129,6 +129,7 @@ const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps
       };
       const { data: inserted, error: insertError } = await supabase.from("characters").insert(charData).select("id").single();
       if (insertError) throw insertError;
+      window.dispatchEvent(new CustomEvent("facefox:characters-changed"));
       onClose();
       navigate("/choose-face", { state: { prompt: buildPrompt(), characterId: inserted.id, freshCreation: true } });
     } catch (err: any) {

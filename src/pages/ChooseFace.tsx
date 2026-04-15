@@ -700,6 +700,7 @@ const ChooseFace = () => {
         prompt: prompt || "face generation",
         image_urls: [faceUrl],
       });
+      window.dispatchEvent(new CustomEvent("facefox:generations-changed"));
     }
 
     if (faceUrl && cId) {
