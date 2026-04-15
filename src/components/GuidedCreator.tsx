@@ -932,6 +932,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     sessionStorage.setItem("facefox_signup_gate_active", "1");
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
+    localStorage.setItem("facefox_pending_creation", JSON.stringify(selections));
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
