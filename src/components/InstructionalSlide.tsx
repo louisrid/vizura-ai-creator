@@ -183,6 +183,7 @@ const InstructionalSlide = ({
                 side={isSinglePill ? "left" : pill.side}
                 delay={shouldAnimate ? i * 0.9 + 0.5 : 0}
                 animate={shouldAnimate}
+                highlight={pill.highlight}
               />
             ))}
           </div>
