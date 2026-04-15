@@ -13,10 +13,10 @@ const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
 const SLIDE_FADE_DURATION = 0.2;
-const OVERLAY_FADE_DURATION = 0.3;
-const FAST_CROSSFADE_MS = 500;
-const SLOW_FADE_MS = 500;
-const BLACK_HOLD_MS = 1000;
+const OVERLAY_FADE_DURATION = 0.2;
+const FAST_CROSSFADE_MS = 250;
+const SLOW_FADE_MS = 300;
+const BLACK_HOLD_MS = 600;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";

@@ -154,7 +154,7 @@ const Auth = () => {
   };
 
   const handleBack = () => {
-    navigate("/", { replace: true });
+    navigate("/");
   };
 
   // Auth is already resolved by the App-level gate.

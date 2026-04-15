@@ -32,7 +32,7 @@ import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash 
 
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
-const FAST_CROSSFADE_DURATION = 0.45;
+const FAST_CROSSFADE_DURATION = 0.25;
 
 const isExemptRoute = (pathname: string) =>
   pathname === "/" || EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
