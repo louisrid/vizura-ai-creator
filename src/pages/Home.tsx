@@ -216,25 +216,7 @@ const Home = () => {
       } catch {}
     }
 
-    // Resume to character page if user has an incomplete character from a previous session
-    if (user && !onboardingComplete && characterCount > 0) {
-      setRedirectingToCharacter(true);
-      supabase
-        .from("characters")
-        .select("id")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle()
-        .then(({ data: latestChar }) => {
-          if (latestChar?.id) {
-            navigate(`/characters/${latestChar.id}`, { replace: true });
-          } else {
-            setRedirectingToCharacter(false);
-          }
-        });
-      return;
-    }
+
 
     const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
     const signupGateActive = sessionStorage.getItem("facefox_signup_gate_active") === "1";
