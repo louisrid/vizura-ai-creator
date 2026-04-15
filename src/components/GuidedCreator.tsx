@@ -835,20 +835,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   };
 
   const showNavigation = !isHeroSlide && !isSignupScreen;
-    const prevStep = prevStepRef.current;
-    prevStepRef.current = step;
-    const prevType = (flowSteps[prevStep] ?? flowSteps[flowSteps.length - 1]).type;
-    const curType = stepType;
-    if (curType === "hero") {
-      setShowNav(false);
-      return;
-    }
-    if (prevType === "hero" && curType !== "hero") {
-      const t = setTimeout(() => setShowNav(true), 450);
-      return () => clearTimeout(t);
-    }
-    setShowNav(showNavigation);
-  }, [step, stepType, showNavigation, flowSteps]);
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
