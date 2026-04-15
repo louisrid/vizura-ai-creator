@@ -74,10 +74,28 @@ const Home = () => {
     sessionStorage.getItem("facefox_signup_gate_active") === "1"
   );
   const shouldOpenGuidedOnMount = openCreatorRequested || ((!user && !authLoading && !pendingAuthResume) || isTestAccount);
-  const [images, setImages] = useState<LatestImage[]>([]);
-  const [characters, setCharacters] = useState<CharacterPreview[]>([]);
-  const [photosLoaded, setPhotosLoaded] = useState(false);
-  const [charsLoaded, setCharsLoaded] = useState(false);
+  // Derive images and characters from global cache
+  const images = useMemo(() => {
+    return cachedGens
+      .flatMap((g) =>
+        (g.image_urls ?? []).filter(isValidImageUrl).slice(0, 1).map((url, i) => ({
+          id: `${g.id}-${i}`,
+          url,
+          prompt: g.prompt ?? "",
+          created_at: g.created_at,
+        })),
+      )
+      .slice(0, 8);
+  }, [cachedGens]);
+
+  const characters = useMemo(() => {
+    return cachedChars
+      .filter((c) => c.face_image_url && c.face_angle_url && c.body_anchor_url)
+      .slice(0, 4) as CharacterPreview[];
+  }, [cachedChars]);
+
+  const photosLoaded = cachedGensLoaded;
+  const charsLoaded = cachedCharsLoaded;
   const [showGuided, setShowGuided] = useState(() => shouldOpenGuidedOnMount);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
