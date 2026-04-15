@@ -113,6 +113,7 @@ const Storage = () => {
     }
 
     try { sessionStorage.removeItem("facefox_latest_photos"); } catch {}
+    window.dispatchEvent(new CustomEvent("facefox:generations-changed"));
   };
 
   return (
