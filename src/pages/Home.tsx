@@ -217,11 +217,19 @@ const Home = () => {
 
     // Resume to character page if user has an incomplete character from a previous session
     if (user && !onboardingComplete && characterCount > 0) {
-      const pendingCharId = sessionStorage.getItem("facefox_pending_char_id");
-      if (pendingCharId) {
-        navigate(`/characters/${pendingCharId}`, { replace: true });
-        return;
-      }
+      supabase
+        .from("characters")
+        .select("id")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle()
+        .then(({ data: latestChar }) => {
+          if (latestChar?.id) {
+            navigate(`/characters/${latestChar.id}`, { replace: true });
+          }
+        });
+      return;
     }
 
     const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
