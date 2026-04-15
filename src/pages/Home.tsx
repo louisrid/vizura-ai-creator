@@ -201,15 +201,7 @@ const Home = () => {
     }
   }, [lockStateResolved, user, onboardingComplete, characterCount]);
 
-  // Clear blackout once GuidedCreator is open (covers auth→home transition)
-  useEffect(() => {
-    if (showGuided) {
-      // Small delay to ensure GuidedCreator portal has mounted
-      requestAnimationFrame(() => {
-        window.dispatchEvent(new Event("facefox:blackout:end"));
-      });
-    }
-  }, [showGuided]);
+  // blackout:end no longer needed — overlay system handles transitions
 
   // Fetch all data in parallel — resolve lock state atomically
   useEffect(() => {

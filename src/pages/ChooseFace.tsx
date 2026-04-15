@@ -155,10 +155,7 @@ const ChooseFace = () => {
 
   const hasInitRef = useRef(false);
 
-  useEffect(() => {
-    if (authLoading) return;
-    window.dispatchEvent(new CustomEvent("facefox:blackout:end"));
-  }, [authLoading, showSignIn, loading]);
+  // blackout:end no longer needed — overlay system handles transitions
 
   useEffect(() => {
     if (authLoading) return;
