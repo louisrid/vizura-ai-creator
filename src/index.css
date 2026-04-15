@@ -225,3 +225,12 @@ button, a[role="button"], [role="button"] {
     border-color: rgba(255, 230, 3, 0.4) !important;
   }
 }
+
+/* iOS zoom prevention */
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+input, textarea, select {
+  font-size: 16px !important;
+}
