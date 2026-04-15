@@ -908,23 +908,25 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       )}
 
       {/* Content area — fades between slides */}
-      <div
-        className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-        style={{ top: isHeroSlide ? 0 : 72, bottom: isHeroSlide ? 0 : 160 }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={isHeroSlide ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={isHeroSlide ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="w-full max-w-sm md:max-w-lg mx-auto"
-          >
-            {renderSlide()}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {!isSignupScreen && (
+        <div
+          className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
+          style={{ top: isHeroSlide ? 0 : 72, bottom: isHeroSlide ? 0 : 160 }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={isHeroSlide ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={isHeroSlide ? undefined : { opacity: 0 }}
+              transition={{ duration: 0.35 }}
+              className="w-full max-w-sm md:max-w-lg mx-auto"
+            >
+              {renderSlide()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Arrow buttons — static, never fade during transitions */}
       {showNavigation && (
