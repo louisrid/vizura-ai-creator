@@ -771,6 +771,7 @@ const ChooseFace = () => {
       setPendingAuthSave(false);
       setShowSignIn(false);
       toast.success("created!");
+      window.dispatchEvent(new CustomEvent("facefox:characters-changed"));
       navigate(`/characters/${cId}`, { replace: true });
     }
   }, [angleBodyBarComplete, pendingNavCharId, navigate]);
