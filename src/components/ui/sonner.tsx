@@ -50,6 +50,7 @@ const toast = Object.assign(
 );
 
 const TOAST_DURATION = 2800;
+const NAV_EVENTS = ["popstate", "page-transition:fade-in"];
 
 export const Toaster = () => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
@@ -72,6 +73,13 @@ export const Toaster = () => {
       timeoutRef.current = null;
     }, TOAST_DURATION + 80);
   }, []);
+
+  // Dismiss toasts on navigation events
+  useEffect(() => {
+    const handleNavDismiss = () => dismissAll();
+    NAV_EVENTS.forEach((evt) => window.addEventListener(evt, handleNavDismiss));
+    return () => NAV_EVENTS.forEach((evt) => window.removeEventListener(evt, handleNavDismiss));
+  }, [dismissAll]);
 
   useEffect(() => {
     externalShow = showToast;
