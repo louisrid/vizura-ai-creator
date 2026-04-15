@@ -55,7 +55,7 @@ const ChatPill = ({
         style={{
           borderRadius: 10,
           backgroundColor: highlight ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-          color: highlight ? "#fff" : "hsl(var(--background))",
+          color: "#000",
           border: "none",
         }}
       >

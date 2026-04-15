@@ -995,7 +995,7 @@ const ChooseFace = () => {
                     const traitItems = [
                       { label: "skin", value: draft.skin },
                       { label: "body", value: draft.bodyType },
-                      { label: "size", value: draft.bustSize || "regular" },
+                      { label: "size", value: (draft.bustSize || "regular") === "extra large" ? "XL" : (draft.bustSize || "regular") },
                       { label: "age", value: displayAge(draft.characterName || "draft", draft.age) },
                       { label: "hair colour", value: draft.hairColour },
                       { label: "hair style", value: draft.hairStyle },

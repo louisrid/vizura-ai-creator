@@ -161,9 +161,9 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
  *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Create, 11: Signup
  *   TOTAL=12, dashes=10 (exclude hero & signup), dashActive=step-1
  *
- * First-time, logged in:
- *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits
- *   TOTAL=10, dashes=9, dashActive=step-1
+ * First-time, logged in (NO set1slide1):
+ *   0: Hero, 1: Name, 2-8: Traits
+ *   TOTAL=9, dashes=8 (exclude hero), dashActive=step-1
  *   Advancing from last trait calls completeCookingFlow directly.
  *
  * Returning (not skipWelcome):
@@ -332,7 +332,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const getTotal = () => {
     if (isFirstTime && !skipWelcome && !isLoggedIn) return 12; // hero + slide1 + name + 7traits + create + signup
-    if (isFirstTime && !skipWelcome) return 10; // hero + slide1 + name + 7traits (logged in: complete from last trait)
+    if (isFirstTime && !skipWelcome) return 9; // hero + name + 7traits (logged in, no slide1, no create)
     if (!skipWelcome) return 10; // hero + name + 7traits + create
     return 9; // name + 7traits + create
   };
@@ -457,15 +457,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   // Map internalStep to logical meaning based on isFirstTime
   const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "signup" | "create" => {
-    if (isFirstTime && !skipWelcome) {
-      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:create, 11:signup (if not logged in)
+    if (isFirstTime && !skipWelcome && !isLoggedIn) {
+      // Not logged in: 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:create, 11:signup
       if (internalStep === 0) return "hero";
       if (internalStep === 1) return "set1slide1";
       if (internalStep === 2) return "name";
       if (internalStep >= 3 && internalStep <= 9) return "trait";
       if (internalStep === 10) return "create";
-      if (internalStep === 11 && !isLoggedIn) return "signup";
-      return "create"; // fallback
+      if (internalStep === 11) return "signup";
+      return "create";
+    }
+    if (isFirstTime && !skipWelcome && isLoggedIn) {
+      // Logged in first-time: 0:hero, 1:name, 2-8:traits (no slide1, no create)
+      if (internalStep === 0) return "hero";
+      if (internalStep === 1) return "name";
+      if (internalStep >= 2 && internalStep <= 8) return "trait";
+      return "trait"; // fallback
     }
     // Returning user
     if (internalStep === 0 && !skipWelcome) return "hero";
@@ -486,7 +493,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   // Trait index mapping
   const getTraitIndex = (): number => {
     if (stepType !== "trait") return -1;
-    if (isFirstTime && !skipWelcome) return internalStep - 3;
+    if (isFirstTime && !skipWelcome && !isLoggedIn) return internalStep - 3;
+    if (isFirstTime && !skipWelcome && isLoggedIn) return internalStep - 2;
     const traitStart = skipWelcome ? 1 : 2;
     return internalStep - traitStart;
   };
@@ -581,7 +589,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return;
     }
 
-    // First-time + logged in: advancing from last trait goes straight to face gen
+    // First-time + logged in (no create slide): advancing from last trait goes straight to face gen
     if (isFirstTime && isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
       completeCookingFlow();
       return;
@@ -656,9 +664,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   /* ── Dash calculations ── */
   const getDashInfo = () => {
-    if (isFirstTime && !skipWelcome) {
+    if (isFirstTime && !skipWelcome && !isLoggedIn) {
       // 10 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8) + create(9)
       return { count: 10, active: Math.min(step - 1, 9) };
+    }
+    if (isFirstTime && !skipWelcome && isLoggedIn) {
+      // 8 dashes (exclude hero): name(0) + 7traits(1-7)
+      return { count: 8, active: step - 1 };
     }
     if (!skipWelcome) {
       return { count: 9, active: step - 1 };
@@ -749,7 +761,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     style={{
                       borderRadius: 10,
                       backgroundColor: isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-                      color: isMiddle ? "#fff" : "hsl(var(--background))",
+                      color: "#000",
                       border: "none",
                     }}>
                     {pill.text}
