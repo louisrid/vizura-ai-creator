@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import PageTitle from "@/components/PageTitle";
-import LoadingScreen from "@/components/LoadingScreen";
+
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
@@ -166,7 +166,7 @@ const Auth = () => {
   // If user is logged in, the useEffect above handles redirect.
   // Show a minimal loading state while redirect is in progress.
   if (user) {
-    return <LoadingScreen />;
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (
