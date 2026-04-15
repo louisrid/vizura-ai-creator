@@ -436,7 +436,10 @@ const Home = () => {
 
   // Show loading bar while data loads (post-auth)
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
-    return <SilentLoader />;
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (
