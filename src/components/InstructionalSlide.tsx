@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export interface SlideConfig {
   emoji: string;
   title: string;
-  pills: { text: string; side: "left" | "right" }[];
+  pills: { text: string; side: "left" | "right"; highlight?: boolean }[];
 }
 
 export interface InstructionalSlideProps {
@@ -33,11 +33,13 @@ const ChatPill = ({
   side,
   delay,
   animate,
+  highlight,
 }: {
   text: string;
   side: "left" | "right";
   delay: number;
   animate: boolean;
+  highlight?: boolean;
 }) => {
   const isLeft = side === "left";
   return (
@@ -51,8 +53,8 @@ const ChatPill = ({
         className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
         style={{
           borderRadius: 10,
-          backgroundColor: "hsl(0 0% 14%)",
-          border: "2px solid hsl(0 0% 22%)",
+          backgroundColor: highlight ? "hsl(170 100% 20%)" : "hsl(0 0% 14%)",
+          border: highlight ? "2px solid hsl(170 100% 50%)" : "2px solid hsl(0 0% 22%)",
         }}
       >
         {text}
@@ -168,12 +170,12 @@ const InstructionalSlide = ({
           </motion.span>
 
           {/* Title */}
-          <h2 className="text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-2.5">
+          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}
@@ -181,6 +183,7 @@ const InstructionalSlide = ({
                 side={isSinglePill ? "left" : pill.side}
                 delay={shouldAnimate ? i * 0.9 + 0.5 : 0}
                 animate={shouldAnimate}
+                highlight={pill.highlight}
               />
             ))}
           </div>

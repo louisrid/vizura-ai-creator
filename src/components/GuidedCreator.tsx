@@ -25,18 +25,9 @@ const SET1_SLIDE1: SlideConfig = {
   emoji: "👩‍🔬",
   title: "let's build your ai influencer!",
   pills: [
-    { text: "customize her look", side: "left" },
-    { text: "pick her details", side: "right" },
-    { text: "make her yours", side: "left" },
-  ],
-};
-
-const SET1_SLIDE2: SlideConfig = {
-  emoji: "💛",
-  title: "pick the face you want",
-  pills: [
-    { text: "we'll generate three faces", side: "left" },
-    { text: "regenerate until you're happy!", side: "right" },
+    { text: "customize her look 🎨", side: "left" },
+    { text: "pick her details ✨", side: "right", highlight: true },
+    { text: "make her yours 💕", side: "left" },
   ],
 };
 
@@ -56,8 +47,8 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
+const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase text-white mt-2";
 
 /* ── Nav arrow ── */
 const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {
@@ -155,7 +146,7 @@ const ageRangeToNumber = (range: string): string => {
   }
 };
 
-const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
+const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","sara","rose","nora","kira","lexi","tara","zoey","emma","eva","gia","mila","vera","ayla","remi","kai","juno","suki","yuki","aya","nyx","rio","bree","cora","lux","viv","wren","demi","faye","kaia","raya","tia","zuri","piper","harlow","reign","indie","sage","blair","sloan","paris","briar","eden","storm","fleur","dahlia","elodie","maren"];
 
 const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<GuidedSelections> => ({
   ...partial,
@@ -165,18 +156,14 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
 /*
  * SCREEN ORDER depends on isFirstTime + login state:
  *
- * First-time, NOT logged in (isFirstTime=true, never skipWelcome):
- *   0: Hero
- *   1: Set1 Slide1 (instructional)
- *   2: Name
- *   3-9: Traits (skin, body, bust, age, hair colour, hairstyle, eyes)
- *   10: Set1 Slide2 (instructional)
- *   11: Signup gate (fullscreen auth, no dashes/arrows)
- *   TOTAL=12, dashes=10 (exclude hero & signup), dashActive=step-1
+ * First-time, NOT logged in:
+ *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Signup
+ *   TOTAL=11, dashes=9 (exclude hero & signup), dashActive=step-1
  *
  * First-time, logged in:
- *   Same steps 0-10, but advancing from Set1Slide2 calls completeCookingFlow directly.
- *   TOTAL=11, dashes=10, dashActive=step-1
+ *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits
+ *   TOTAL=10, dashes=9, dashActive=step-1
+ *   Advancing from last trait calls completeCookingFlow directly.
  *
  * Returning (not skipWelcome):
  *   0: Hero, 1: Name, 2-8: Traits, 9: Create
@@ -231,7 +218,12 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
       if (isSignUpMode) {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
-          if (err.message?.toLowerCase().includes("already registered")) await signIn(email.trim(), password);
+          if (err.message?.toLowerCase().includes("already registered")) {
+            toast.error("account exists!");
+            setIsSignUpMode(false);
+            setEmailLoading(false);
+            return;
+          }
           else throw err;
         }
       } else { await signIn(email.trim(), password); }
@@ -247,8 +239,8 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
     >
       <div className="flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
         <span className="text-[64px] mb-5">🔐</span>
-        <h2 className="text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-          sign up to create her
+        <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          sign up to save her
         </h2>
 
         <div className="mt-8 w-full space-y-3">
@@ -332,8 +324,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   });
 
   const getTotal = () => {
-    if (isFirstTime && !skipWelcome && !isLoggedIn) return 12; // hero + slide1 + name + 7traits + slide2 + signup
-    if (isFirstTime && !skipWelcome) return 11; // hero + slide1 + name + 7traits + slide2 (logged in: complete from slide2)
+    if (isFirstTime && !skipWelcome && !isLoggedIn) return 11; // hero + slide1 + name + 7traits + signup
+    if (isFirstTime && !skipWelcome) return 10; // hero + slide1 + name + 7traits (logged in: complete from last trait)
     if (!skipWelcome) return 10; // hero + name + 7traits + create
     return 9; // name + 7traits + create
   };
@@ -353,7 +345,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   
   // Track which instructional slides have been visited this session
   const [seenSlide1, setSeenSlide1] = useState(false);
-  const [seenSlide2, setSeenSlide2] = useState(false);
 
   const [ringT, setRingT] = useState(0);
   const [heroPhase, setHeroPhase] = useState(() => isHeroSeen() ? 3 : 0);
@@ -458,16 +449,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const internalStep = step + offset;
 
   // Map internalStep to logical meaning based on isFirstTime
-  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "set1slide2" | "signup" | "create" => {
+  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "signup" | "create" => {
     if (isFirstTime && !skipWelcome) {
-      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:set1slide2, 11:signup (if not logged in)
+      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:signup (if not logged in)
       if (internalStep === 0) return "hero";
       if (internalStep === 1) return "set1slide1";
       if (internalStep === 2) return "name";
       if (internalStep >= 3 && internalStep <= 9) return "trait";
-      if (internalStep === 10) return "set1slide2";
-      if (internalStep === 11 && !isLoggedIn) return "signup";
-      return "create"; // fallback (shouldn't reach for first-time)
+      if (internalStep === 10 && !isLoggedIn) return "signup";
+      return "create"; // fallback
     }
     // Returning user
     if (internalStep === 0 && !skipWelcome) return "hero";
@@ -481,7 +471,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const stepType = getStepType();
   const isHeroSlide = stepType === "hero";
   const isSet1Slide1 = stepType === "set1slide1";
-  const isSet1Slide2 = stepType === "set1slide2";
   const isNameSlide = stepType === "name";
   const isCreateSlide = stepType === "create";
   const isSignupScreen = stepType === "signup";
@@ -569,9 +558,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return;
     }
 
-    // First-time + logged in: advancing from Set1Slide2 goes straight to face gen
-    if (isSet1Slide2 && isLoggedIn && isFirstTime) {
-      setSeenSlide2(true);
+    // First-time + logged in: advancing from last trait goes straight to face gen
+    if (isFirstTime && isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
       completeCookingFlow();
       return;
     }
@@ -581,7 +569,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     // Mark instructional slides as seen when leaving them
     if (isSet1Slide1) setSeenSlide1(true);
-    if (isSet1Slide2) setSeenSlide2(true);
+
+    // First-time, not logged in: last trait → signup uses slow page transition
+    if (isFirstTime && !isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
+      animating.current = true;
+      startPageTransition("slow", () => {
+        setStep(nextStep);
+        window.setTimeout(() => { animating.current = false; }, 520);
+      });
+      return;
+    }
 
     if (isHeroSlide) {
       animating.current = true;
@@ -595,7 +592,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       // Local content fade only — arrows and dashes stay visible
       setStep(nextStep);
     }
-  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSet1Slide2, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
@@ -627,7 +624,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || isSet1Slide2 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   // When user signs up/logs in on the signup screen, complete the flow immediately
   const signupCompletedRef = useRef(false);
@@ -643,8 +640,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Dash calculations ── */
   const getDashInfo = () => {
     if (isFirstTime && !skipWelcome) {
-      // 10 dashes (exclude hero & signup): set1slide1(0) + name(1) + 7traits(2-8) + set1slide2(9)
-      return { count: 10, active: Math.min(step - 1, 9) };
+      // 9 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8)
+      return { count: 9, active: Math.min(step - 1, 8) };
     }
     if (!skipWelcome) {
       return { count: 9, active: step - 1 };
@@ -708,11 +705,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderSlide = () => {
     if (isHeroSlide) return renderHero();
 
-    /* Instructional slides rendered inline so arrows/dashes stay visible */
-    if (isSet1Slide1 || isSet1Slide2) {
-      const slide = isSet1Slide1 ? SET1_SLIDE1 : SET1_SLIDE2;
-      const alreadySeen = isSet1Slide1 ? seenSlide1 : seenSlide2;
-      const shouldAnim = !alreadySeen;
+    /* Instructional slide rendered inline so arrows/dashes stay visible */
+    if (isSet1Slide1) {
+      const slide = SET1_SLIDE1;
+      const shouldAnim = !seenSlide1;
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
@@ -720,9 +716,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {slide.emoji}
           </motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{slide.title}</h2>
-          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-2.5">
+          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
+              const isHighlight = !!(pill as any).highlight;
               return (
                 <motion.div
                   key={i}
@@ -732,7 +729,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   transition={shouldAnim ? { duration: 0.7, delay: i * 0.9 + 0.5, ease: "easeOut" } : undefined}
                 >
                   <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
-                    style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 14%)", border: "2px solid hsl(0 0% 22%)" }}>
+                    style={{
+                      borderRadius: 10,
+                      backgroundColor: isHighlight ? "hsl(170 100% 20%)" : "hsl(0 0% 14%)",
+                      border: isHighlight ? "2px solid hsl(170 100% 50%)" : "2px solid hsl(0 0% 22%)",
+                    }}>
                     {pill.text}
                   </div>
                 </motion.div>
@@ -904,7 +905,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             initial={isHeroSlide ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={isHeroSlide ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.35 }}
             className="w-full max-w-sm md:max-w-lg mx-auto"
           >
             {renderSlide()}
@@ -995,7 +996,12 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       if (isSignUp) {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
-          if (err.message?.toLowerCase().includes("already registered")) await signIn(email.trim(), password);
+          if (err.message?.toLowerCase().includes("already registered")) {
+            toast.error("account exists!");
+            setIsSignUp(false);
+            setEmailLoading(false);
+            return;
+          }
           else throw err;
         }
       } else { await signIn(email.trim(), password); }
