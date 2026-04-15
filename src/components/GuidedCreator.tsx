@@ -163,16 +163,20 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
 });
 
 /*
- * SCREEN ORDER depends on isFirstTime:
+ * SCREEN ORDER depends on isFirstTime + login state:
  *
- * First-time (isFirstTime=true, never skipWelcome):
+ * First-time, NOT logged in (isFirstTime=true, never skipWelcome):
  *   0: Hero
  *   1: Set1 Slide1 (instructional)
  *   2: Name
  *   3-9: Traits (skin, body, bust, age, hair colour, hairstyle, eyes)
  *   10: Set1 Slide2 (instructional)
- *   11: Create
- *   TOTAL=12, dashes=11 (exclude hero), dashActive=step-1
+ *   11: Signup gate (fullscreen auth, no dashes/arrows)
+ *   TOTAL=12, dashes=10 (exclude hero & signup), dashActive=step-1
+ *
+ * First-time, logged in:
+ *   Same steps 0-10, but advancing from Set1Slide2 calls completeCookingFlow directly.
+ *   TOTAL=11, dashes=10, dashActive=step-1
  *
  * Returning (not skipWelcome):
  *   0: Hero, 1: Name, 2-8: Traits, 9: Create
