@@ -17,6 +17,7 @@ import PageTitle from "@/components/PageTitle";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 
 const SET3_KEY = "facefox_set3_seen";
