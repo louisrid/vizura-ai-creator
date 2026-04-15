@@ -7,7 +7,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
-import { startPageTransition } from "@/lib/pageTransition";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import InstructionalSlide from "@/components/InstructionalSlide";
 import type { SlideConfig } from "@/components/InstructionalSlide";
@@ -139,6 +138,16 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
+type FlowStep =
+  | { type: "hero" }
+  | { type: "set1slide1" }
+  | { type: "name" }
+  | { type: "trait"; traitIndex: number }
+  | { type: "create" }
+  | { type: "signup" };
+
+type FlowVariant = "guest-onboarding" | "member-onboarding" | "returning-full" | "returning-skip";
+
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
     case "18-24": return "18";
@@ -153,27 +162,6 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
   ...partial,
   skin: partial.skin === "pale" ? "white" : partial.skin === "dark" ? "black" : partial.skin,
 });
-
-/*
- * SCREEN ORDER depends on isFirstTime + login state:
- *
- * First-time, NOT logged in:
- *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Create, 11: Signup
- *   TOTAL=12, dashes=10 (exclude hero & signup), dashActive=step-1
- *
- * First-time, logged in (NO set1slide1):
- *   0: Hero, 1: Name, 2-8: Traits
- *   TOTAL=9, dashes=8 (exclude hero), dashActive=step-1
- *   Advancing from last trait calls completeCookingFlow directly.
- *
- * Returning (not skipWelcome):
- *   0: Hero, 1: Name, 2-8: Traits, 9: Create
- *   TOTAL=10, dashes=9, dashActive=step-1
- *
- * Returning (skipWelcome):
- *   0: Name, 1-7: Traits, 8: Create
- *   TOTAL=9, dashes=9, dashActive=step
- */
 
 /* ══════════════════════════════════════════
    SIGNUP GATE (first-time, not logged in)
@@ -322,15 +310,32 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return !cached?.onboardingComplete;
   });
 
-  const getTotal = () => {
-    if (isFirstTime && !skipWelcome && !isLoggedIn) return 12; // hero + slide1 + name + 7traits + create + signup
-    if (isFirstTime && !skipWelcome) return 9; // hero + name + 7traits (logged in, no slide1, no create)
-    if (!skipWelcome) return 10; // hero + name + 7traits + create
-    return 9; // name + 7traits + create
-  };
+  const flowVariant: FlowVariant = !isLoggedIn && isFirstTime && !skipWelcome
+    ? "guest-onboarding"
+    : isLoggedIn && isFirstTime && !skipWelcome
+      ? "member-onboarding"
+      : skipWelcome
+        ? "returning-skip"
+        : "returning-full";
 
-  const TOTAL = getTotal();
-  const offset = skipWelcome ? 1 : 0;
+  const flowSteps: FlowStep[] = (() => {
+    const traitSteps = TRAITS.map((_, traitIndex) => ({ type: "trait", traitIndex } as const));
+
+    switch (flowVariant) {
+      case "guest-onboarding":
+        return [{ type: "hero" }, { type: "set1slide1" }, { type: "name" }, ...traitSteps, { type: "create" }, { type: "signup" }];
+      case "member-onboarding":
+        return [{ type: "hero" }, { type: "name" }, ...traitSteps];
+      case "returning-skip":
+        return [{ type: "name" }, ...traitSteps, { type: "create" }];
+      case "returning-full":
+      default:
+        return [{ type: "hero" }, { type: "name" }, ...traitSteps, { type: "create" }];
+    }
+  })();
+
+  const TOTAL = flowSteps.length;
+  const allowFlowResume = isLoggedIn || sessionStorage.getItem("facefox_signup_gate_active") === "1";
 
   const [step, setStep] = useState(0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
@@ -367,13 +372,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const restoreSavedFlow = useCallback(() => {
     try {
-      const raw = sessionStorage.getItem(FLOW_STATE_KEY);
-      if (!raw) return false;
-      const saved = JSON.parse(raw);
-      if (!!saved?.skipWelcome !== skipWelcome) {
+      if (!allowFlowResume) {
         sessionStorage.removeItem(FLOW_STATE_KEY);
         return false;
       }
+
+      const raw = sessionStorage.getItem(FLOW_STATE_KEY);
+      if (!raw) return false;
+      const saved = JSON.parse(raw);
+
+      if (saved?.flowVariant !== flowVariant) {
+        sessionStorage.removeItem(FLOW_STATE_KEY);
+        return false;
+      }
+
       setStep(Math.min(Math.max(saved?.step ?? 0, 0), TOTAL - 1));
       setSelections({ ...emptySelections, ...normaliseLegacySelections(saved?.selections ?? {}) });
       return true;
@@ -381,7 +393,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       sessionStorage.removeItem(FLOW_STATE_KEY);
       return false;
     }
-  }, [TOTAL, skipWelcome]);
+  }, [TOTAL, allowFlowResume, flowVariant]);
 
   const selectionsRef = useRef(selections);
   const stepRef = useRef(step);
@@ -390,8 +402,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const persistFlow = useCallback(() => {
     if (!visible) return;
-    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ step: stepRef.current, selections: selectionsRef.current, skipWelcome }));
-  }, [visible, skipWelcome]);
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({
+      step: stepRef.current,
+      selections: selectionsRef.current,
+      skipWelcome,
+      flowVariant,
+    }));
+  }, [visible, skipWelcome, flowVariant]);
 
   useEffect(() => {
     if (open) {
@@ -445,52 +462,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [onComplete]);
 
   /* ── Compute what the current step represents ── */
-  const internalStep = step + offset;
-
-  // Map internalStep to logical meaning based on isFirstTime
-  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "signup" | "create" => {
-    if (isFirstTime && !skipWelcome && !isLoggedIn) {
-      // Not logged in: 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:create, 11:signup
-      if (internalStep === 0) return "hero";
-      if (internalStep === 1) return "set1slide1";
-      if (internalStep === 2) return "name";
-      if (internalStep >= 3 && internalStep <= 9) return "trait";
-      if (internalStep === 10) return "create";
-      if (internalStep === 11) return "signup";
-      return "create";
-    }
-    if (isFirstTime && !skipWelcome && isLoggedIn) {
-      // Logged in first-time: 0:hero, 1:name, 2-8:traits (no slide1, no create)
-      if (internalStep === 0) return "hero";
-      if (internalStep === 1) return "name";
-      if (internalStep >= 2 && internalStep <= 8) return "trait";
-      return "trait"; // fallback
-    }
-    // Returning user
-    if (internalStep === 0 && !skipWelcome) return "hero";
-    if (internalStep === (skipWelcome ? 0 : 1)) return "name";
-    const traitStart = skipWelcome ? 1 : 2;
-    const traitEnd = traitStart + 6;
-    if (internalStep >= traitStart && internalStep <= traitEnd) return "trait";
-    return "create";
-  };
-
-  const stepType = getStepType();
+  const currentStep = flowSteps[step] ?? flowSteps[flowSteps.length - 1];
+  const stepType = currentStep.type;
   const isHeroSlide = stepType === "hero";
   const isSet1Slide1 = stepType === "set1slide1";
   const isNameSlide = stepType === "name";
   const isCreateSlide = stepType === "create";
   const isSignupScreen = stepType === "signup";
-
-  // Trait index mapping
-  const getTraitIndex = (): number => {
-    if (stepType !== "trait") return -1;
-    if (isFirstTime && !skipWelcome && !isLoggedIn) return internalStep - 3;
-    if (isFirstTime && !skipWelcome && isLoggedIn) return internalStep - 2;
-    const traitStart = skipWelcome ? 1 : 2;
-    return internalStep - traitStart;
-  };
-  const currentTraitIndex = getTraitIndex();
+  const currentTraitIndex = currentStep.type === "trait" ? currentStep.traitIndex : -1;
 
   /* Wait for splash screen to be fully removed before starting hero animation */
   const [splashGone, setSplashGone] = useState(() => !document.getElementById("splash-screen"));
@@ -552,11 +531,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [updateCharacterName]);
 
   const advance = useCallback(() => {
-    if (animating.current) {
-      // Safety: if stuck for too long, force-reset
-      window.setTimeout(() => { animating.current = false; }, 100);
-      return;
-    }
     toast.dismiss();
 
     // Validation for name and trait slides
@@ -566,23 +540,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      // First-time not logged in: create slide → slow fade to signup
-      if (isFirstTime && !isLoggedIn && !skipWelcome) {
+      if (flowVariant === "guest-onboarding") {
         const nextStep = Math.min(step + 1, TOTAL - 1);
         if (nextStep === step) return;
-        animating.current = true;
-        startPageTransition("slow", () => {
-          setStep(nextStep);
-          window.setTimeout(() => { animating.current = false; }, 520);
-        });
+        setStep(nextStep);
         return;
       }
       completeCookingFlow();
       return;
     }
 
-    // First-time + logged in (no create slide): advancing from last trait goes straight to face gen
-    if (isFirstTime && isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
+    if (flowVariant === "member-onboarding" && currentTraitIndex === TRAITS.length - 1) {
       completeCookingFlow();
       return;
     }
@@ -594,25 +562,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     if (isSet1Slide1) setSeenSlide1(true);
 
     if (isHeroSlide) {
-      animating.current = true;
       heroVisited.current = true;
       markHeroSeen();
-      startPageTransition("default", () => {
-        setStep(nextStep);
-        window.setTimeout(() => { animating.current = false; }, 520);
-      });
-    } else {
-      // Local content fade only — arrows and dashes stay visible
-      setStep(nextStep);
     }
-  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
+
+    setStep(nextStep);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, currentTraitIndex, TOTAL, completeCookingFlow, flowVariant]);
 
   const goBack = useCallback(() => {
-    if (animating.current) {
-      // Safety: if stuck for too long, force-reset
-      window.setTimeout(() => { animating.current = false; }, 100);
-      return;
-    }
     toast.dismiss();
     heroVisited.current = true;
     markHeroSeen();
@@ -623,19 +580,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     }
 
     const prevStep = step - 1;
-    const goingToHero = !skipWelcome && prevStep === 0;
-
-    if (goingToHero) {
-      animating.current = true;
+    if ((flowSteps[prevStep]?.type ?? null) === "hero") {
       setHeroPhase(3);
-      startPageTransition("default", () => {
-        setStep(prevStep);
-        window.setTimeout(() => { animating.current = false; }, 520);
-      });
-    } else {
-      setStep(prevStep);
     }
-  }, [step, skipWelcome]);
+
+    setStep(prevStep);
+  }, [step, flowSteps]);
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
@@ -659,21 +609,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   if (!mounted || !visible) return null;
 
   /* ── Dash calculations ── */
-  const getDashInfo = () => {
-    if (isFirstTime && !skipWelcome && !isLoggedIn) {
-      // 10 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8) + create(9)
-      return { count: 10, active: Math.min(step - 1, 9) };
-    }
-    if (isFirstTime && !skipWelcome && isLoggedIn) {
-      // 8 dashes (exclude hero): name(0) + 7traits(1-7)
-      return { count: 8, active: step - 1 };
-    }
-    if (!skipWelcome) {
-      return { count: 9, active: step - 1 };
-    }
-    return { count: 9, active: step };
-  };
-  const { count: dashCount, active: dashActive } = getDashInfo();
+  const dashSteps = flowSteps.filter((item) => item.type !== "hero" && item.type !== "signup");
+  const dashCount = dashSteps.length;
+  const dashActive = Math.max(-1, dashSteps.findIndex((_, index) => flowSteps.indexOf(dashSteps[index]) === step));
 
   /* ── HERO SLIDE ── */
   const renderHero = () => {
