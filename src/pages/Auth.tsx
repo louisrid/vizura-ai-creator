@@ -1,4 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
+
+const SilentLoader = () => {
+  useLayoutEffect(() => {
+    const unregister = registerBlockingLoader();
+    return unregister;
+  }, []);
+  return <div className="min-h-screen bg-background" />;
+};
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
@@ -166,7 +175,7 @@ const Auth = () => {
   // If user is logged in, the useEffect above handles redirect.
   // Show a minimal loading state while redirect is in progress.
   if (user) {
-    return <div className="min-h-screen bg-background" />;
+    return <SilentLoader />;
   }
 
   return (
