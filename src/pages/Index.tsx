@@ -19,7 +19,33 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
-/* ── Ratio dropdown ── */
+const SET3_KEY = "facefox_set3_seen";
+
+const SET3_SLIDES: SlideConfig[] = [
+  {
+    emoji: "🔥",
+    title: "want to generate her whole social media?",
+    pills: [{ text: "make any picture you want", side: "left" }],
+  },
+  {
+    emoji: "🦊",
+    title: "facefox is the #1 tool to",
+    pills: [
+      { text: "generate ai characters", side: "left" },
+      { text: "create any content you want", side: "right" },
+      { text: "build out a whole social media fast", side: "left" },
+    ],
+  },
+  {
+    emoji: "💎",
+    title: "let's get you some gems",
+    pills: [
+      { text: "10 gems = 1 photo", side: "left" },
+      { text: "we'll give you 5 for free!", side: "right" },
+    ],
+  },
+];
+
 const RATIO_OPTIONS = [
   { value: "3:4", label: "3:4" },
   { value: "9:16", label: "9:16" },
