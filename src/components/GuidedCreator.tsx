@@ -583,9 +583,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           </h2>
           <button
             type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
-            disabled={exitFade}
-            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
             style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
             {isOnboarding ? "create" : (<>create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
@@ -607,23 +606,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
       }}
     >
-      {/* Exit fade — smooth fade-out of content, black always behind */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-50 bg-black"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
-        transition={{ duration: SLOW_FADE_MS / 1000, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute inset-0 flex flex-col"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
-      >
-        {/* Close button removed — home icon below arrows is the only exit */}
-        {/* Skip button removed */}
-
-        {/* Content area */}
+      <div className="absolute inset-0 flex flex-col">
         <div
           className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
           style={{
@@ -632,19 +615,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           }}
         >
           <div className="grid w-full max-w-sm md:max-w-lg mx-auto">
-            <AnimatePresence mode={heroExiting ? "wait" : "sync"} initial={false}>
-              <motion.div
-                key={step}
-                className="w-full [grid-area:1/1]"
-                variants={slideVariants}
-                initial="enter"
-                animate={heroExiting && isHeroSlide ? "exit" : "center"}
-                exit="exit"
-                transition={{ duration: heroExiting ? SLOW_FADE_MS / 1000 : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
-              >
-                {renderSlide()}
-              </motion.div>
-            </AnimatePresence>
+            <div className="w-full [grid-area:1/1]">
+              {renderSlide()}
+            </div>
           </div>
         </div>
 

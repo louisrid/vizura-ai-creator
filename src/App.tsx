@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -28,12 +28,12 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import {
   isTransitioning,
   onOverlayOpaque,
   onOverlayTransparent,
   getDurations,
-  type TransitionSpeed,
 } from "@/lib/pageTransition";
 
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
@@ -46,7 +46,7 @@ const isExemptRoute = (pathname: string) =>
 
 const FreshLoadRedirect = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const { user, loading } = useAuth();
   const hasRedirected = useRef(false);
 
@@ -83,7 +83,7 @@ const FreshLoadRedirect = () => {
 };
 
 const PostAuthHomeRedirect = () => {
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading } = useAuth();
 
@@ -181,7 +181,7 @@ const TopOverscrollGuard = () => {
 const OnboardingRedirectGate = () => {
   const { user } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const hasRedirected = useRef(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
@@ -265,8 +265,7 @@ const PageTransitionOverlay = () => {
     const handleFadeIn = (e: Event) => {
       const el = overlayRef.current;
       if (!el) return;
-      const speed: TransitionSpeed = (e as CustomEvent).detail?.speed || "fast";
-      const dur = getDurations(speed).fadeIn;
+      const dur = getDurations().fadeIn;
 
       el.style.transition = `opacity ${dur}ms ease-in-out`;
       el.style.opacity = "1";
@@ -291,8 +290,7 @@ const PageTransitionOverlay = () => {
     const handleFadeOut = (e: Event) => {
       const el = overlayRef.current;
       if (!el) return;
-      const speed: TransitionSpeed = (e as CustomEvent).detail?.speed || "fast";
-      const dur = getDurations(speed).fadeOut;
+      const dur = getDurations().fadeOut;
 
       el.style.transition = `opacity ${dur}ms ease-in-out`;
       el.style.opacity = "0";
