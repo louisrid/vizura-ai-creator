@@ -460,12 +460,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   // Map internalStep to logical meaning based on isFirstTime
   const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "signup" | "create" => {
     if (isFirstTime && !skipWelcome) {
-      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:signup (if not logged in)
+      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:create, 11:signup (if not logged in)
       if (internalStep === 0) return "hero";
       if (internalStep === 1) return "set1slide1";
       if (internalStep === 2) return "name";
       if (internalStep >= 3 && internalStep <= 9) return "trait";
-      if (internalStep === 10 && !isLoggedIn) return "signup";
+      if (internalStep === 10) return "create";
+      if (internalStep === 11 && !isLoggedIn) return "signup";
       return "create"; // fallback
     }
     // Returning user
