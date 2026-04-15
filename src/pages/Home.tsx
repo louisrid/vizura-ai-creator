@@ -88,6 +88,7 @@ const Home = () => {
     const c = readCachedOnboardingState(user?.id);
     return !!c && !needsOnboardingRedirect(c);
   });
+  const [redirectingToCharacter, setRedirectingToCharacter] = useState(false);
   const [characterCount, setCharacterCount] = useState(() => {
     const c = readCachedOnboardingState(user?.id);
     return c?.characterCount ?? 0;
