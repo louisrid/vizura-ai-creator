@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import { displayAge } from "@/lib/displayAge";
@@ -13,8 +13,17 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import DotDecal from "@/components/DotDecal";
+
+const SilentLoader = () => {
+  useLayoutEffect(() => {
+    const unregister = registerBlockingLoader();
+    return unregister;
+  }, []);
+  return <div className="min-h-screen bg-background" />;
+};
 import ModalCloseButton from "@/components/ModalCloseButton";
 
 const STORAGE_KEY = "facefox_character_draft";
@@ -426,7 +435,7 @@ const Home = () => {
 
   // Show loading bar while data loads (post-auth)
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
-    return <div className="min-h-screen bg-background" />;
+    return <SilentLoader />;
   }
 
   return (
