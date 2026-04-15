@@ -159,6 +159,12 @@ const ChooseFace = () => {
   }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
+  // Set 2 instructional slide state
+  const [showSet2Slide, setShowSet2Slide] = useState(false);
+  const pendingAngleGenRef = useRef<{
+    charId: string; prompt: string; faceUrl: string; bodyType: string; bustSize: string;
+  } | null>(null);
+
   // Angle/body generation state
   const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
   const [angleBodyLoading, setAngleBodyLoading] = useState(false);
