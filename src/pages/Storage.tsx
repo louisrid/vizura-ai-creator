@@ -83,7 +83,12 @@ const Storage = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
-  if (loading) return <div className="min-h-screen bg-background" />;
+  if (loading) {
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
+  }
 
   const handleDelete = async (img: StorageImage) => {
     setImages((prev) => prev.filter((i) => i.id !== img.id));

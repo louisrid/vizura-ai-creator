@@ -81,7 +81,12 @@ const History = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
-  if (loading) return <div className="min-h-screen bg-background" />;
+  if (loading) {
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
+  }
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);

@@ -58,7 +58,12 @@ const TopUps = () => {
   }, [user]);
 
   if (!loading && !user) return null;
-  if (user && !claimChecked) return <div className="min-h-screen bg-background" />;
+  if (user && !claimChecked) {
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
+  }
 
   const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;
