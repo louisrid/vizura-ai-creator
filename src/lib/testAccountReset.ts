@@ -21,7 +21,6 @@ export const maybeResetTestAccount = async (user: User) => {
 
   // Skip reset if user just signed in through the signup gate
   if (typeof window !== "undefined" && sessionStorage.getItem("facefox_signup_gate_active") === "1") {
-    sessionStorage.removeItem("facefox_signup_gate_active");
     return;
   }
 
