@@ -174,15 +174,16 @@ const SignupGate = ({ onComplete, selections }: { onComplete: () => void; select
   const [password, setPassword] = useState("");
   const [isSignUpMode, setIsSignUpMode] = useState(true);
 
-  // When user authenticates (email signup with auto-confirm), complete the flow
+  // When user authenticates (email signup with auto-confirm), save state and signal Home
   useEffect(() => {
     if (user) {
       // Save flow state so Home.tsx can pick it up and navigate to choose-face
       sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
       sessionStorage.setItem("facefox_signup_gate_active", "1");
+      // Close the creator — Home.tsx will detect the flag and redirect
       onComplete();
     }
-  }, [user, onComplete, selections]);
+  }, [user]); // intentionally minimal deps — only fire when user changes
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
