@@ -203,7 +203,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   });
 
   const getTotal = () => {
-    if (isFirstTime && !skipWelcome) return 12; // hero + slide1 + name + 7traits + slide2 + create
+    if (isFirstTime && !skipWelcome && !isLoggedIn) return 12; // hero + slide1 + name + 7traits + slide2 + signup
+    if (isFirstTime && !skipWelcome) return 11; // hero + slide1 + name + 7traits + slide2 (logged in: complete from slide2)
     if (!skipWelcome) return 10; // hero + name + 7traits + create
     return 9; // name + 7traits + create
   };
