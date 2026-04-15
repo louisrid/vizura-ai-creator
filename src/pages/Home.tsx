@@ -92,7 +92,8 @@ const Home = () => {
     const c = readCachedOnboardingState(user?.id);
     return c?.characterCount ?? 0;
   });
-  const isOnboardingUser = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && !onboardingComplete && characterCount === 0;
 
   const areSameLatestImages = (a: LatestImage[], b: LatestImage[]) =>
     a.length === b.length && a.every((img, index) => img.id === b[index]?.id && img.url === b[index]?.url);
@@ -245,13 +246,13 @@ const Home = () => {
 
   // When lock state resolves and user needs onboarding, force guided creator open
   useEffect(() => {
-    if (!lockStateResolved || !user) return;
+    if (!initialLoadComplete || !lockStateResolved || !user) return;
     if (!onboardingComplete && characterCount === 0) {
       setShowGuided(true);
       setSkipWelcome(true);
       setAutoOpenEvaluated(true);
     }
-  }, [lockStateResolved, user, onboardingComplete, characterCount]);
+  }, [initialLoadComplete, lockStateResolved, user, onboardingComplete, characterCount]);
 
   // blackout:end no longer needed — overlay system handles transitions
 
@@ -270,6 +271,7 @@ const Home = () => {
       setOnboardingComplete(resolvedState.onboardingComplete);
       setCharacterCount(resolvedState.characterCount);
       setLockStateResolved(true);
+      setInitialLoadComplete(true);
 
       if (resolvedState.characterCount > 0 && !openCreatorRequested) {
         setShowGuided(false);
