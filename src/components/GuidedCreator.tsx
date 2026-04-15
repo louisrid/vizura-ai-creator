@@ -166,7 +166,7 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
 /* ══════════════════════════════════════════
    SIGNUP GATE (first-time, not logged in)
    ══════════════════════════════════════════ */
-const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
+const SignupGate = ({ onComplete, selections }: { onComplete: () => void; selections: GuidedSelections }) => {
   const { user, signIn, signUp, signInPreview } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
@@ -174,16 +174,24 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
   const [password, setPassword] = useState("");
   const [isSignUpMode, setIsSignUpMode] = useState(true);
 
-  // When user authenticates, complete the flow
+  // When user authenticates (email signup with auto-confirm), save state and signal Home
   useEffect(() => {
-    if (user) onComplete();
-  }, [user, onComplete]);
+    if (user) {
+      // Save flow state so Home.tsx can pick it up and navigate to choose-face
+      sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
+      sessionStorage.setItem("facefox_signup_gate_active", "1");
+      // Close the creator — Home.tsx will detect the flag and redirect
+      onComplete();
+    }
+  }, [user]); // intentionally minimal deps — only fire when user changes
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     sessionStorage.setItem("facefox_signup_gate_active", "1");
+    // Save current selections so Home.tsx can resume after OAuth redirect
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
@@ -597,14 +605,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
-  // When user signs up/logs in on the signup screen, complete the flow immediately
-  const signupCompletedRef = useRef(false);
-  useEffect(() => {
-    if (isSignupScreen && isLoggedIn && !signupCompletedRef.current) {
-      signupCompletedRef.current = true;
-      completeCookingFlow();
-    }
-  }, [isSignupScreen, isLoggedIn, completeCookingFlow]);
+  // When user signs up/logs in on the signup screen, the SignupGate component
+  // handles persisting selections and setting the flag. Home.tsx will read it
+  // and navigate to choose-face. No need for an effect here.
 
   if (!mounted || !visible) return null;
 
@@ -857,9 +860,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              initial={isHeroSlide ? false : { opacity: 0 }}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={isHeroSlide ? undefined : { opacity: 0 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.35 }}
               className="w-full max-w-sm md:max-w-lg mx-auto"
             >
@@ -885,6 +888,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {isSignupScreen && (
         <SignupGate
           onComplete={completeCookingFlow}
+          selections={selections}
         />
       )}
     </div>,

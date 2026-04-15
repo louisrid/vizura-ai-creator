@@ -43,16 +43,16 @@
     --loader-bar-from: 189 100% 50%;
     --loader-bar-to: 189 100% 42%;
 
-    /* neon green — #00B807 */
-    --neon-green: 122 100% 36%;
+    /* neon green — #00A600 */
+    --neon-green: 120 100% 33%;
     --neon-green-foreground: 0 0% 100%;
 
     /* gem — cyan #00e0ff */
     --gem-green: 189 100% 50%;
     --gem-green-foreground: 0 0% 100%;
 
-    /* member indicator — #00B807 */
-    --member-green: 122 100% 36%;
+    /* member indicator — #00A600 */
+    --member-green: 120 100% 33%;
 
     --ambient-blue-1: 222 86% 54%;
     --ambient-blue-2: 215 84% 44%;
