@@ -127,6 +127,10 @@ const CharacterDetail = () => {
   }, [fetchLatestPhotos]);
 
   useEffect(() => {
+    localStorage.setItem("facefox_visited_character", "1");
+  }, []);
+
+  useEffect(() => {
     if (!authLoading && !user) {
       navigate(`/auth?redirect=${encodeURIComponent(`/characters/${id}`)}`, { replace: true });
     }
