@@ -43,23 +43,43 @@ const ChatPill = ({
   highlight?: boolean;
 }) => {
   const isLeft = side === "left";
+  const bgColor = highlight ? "hsl(var(--neon-green))" : "hsl(var(--foreground))";
   return (
     <motion.div
       className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
-      initial={animate ? { opacity: 0, x: isLeft ? -60 : 60 } : false}
+      initial={animate ? { opacity: 0, x: isLeft ? -250 : 250 } : false}
       animate={{ opacity: 1, x: 0 }}
-      transition={animate ? { duration: 0.7, delay, ease: "easeOut" } : undefined}
+      transition={
+        animate
+          ? { duration: 0.5, delay, ease: [0.2, 0.8, 0.3, 1] }
+          : undefined
+      }
     >
-      <div
-        className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
-        style={{
-          borderRadius: 10,
-          backgroundColor: highlight ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-          color: highlight ? "#fff" : "#000",
-          border: "none",
-        }}
-      >
-        {text}
+      <div className="relative">
+        <div
+          className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+          style={{
+            borderRadius: 10,
+            backgroundColor: bgColor,
+            color: highlight ? "#fff" : "#000",
+            border: "none",
+          }}
+        >
+          {text}
+        </div>
+        {/* Message bubble triangle */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: -6,
+            ...(isLeft ? { left: 14 } : { right: 14 }),
+            width: 0,
+            height: 0,
+            borderLeft: isLeft ? "none" : "8px solid transparent",
+            borderRight: isLeft ? "8px solid transparent" : "none",
+            borderTop: `8px solid ${bgColor}`,
+          }}
+        />
       </div>
     </motion.div>
   );
@@ -191,13 +211,13 @@ const InstructionalSlide = ({
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-6 md:mt-8 w-full max-w-[20rem] md:max-w-[26rem] flex flex-col gap-4">
+          <div className="mt-6 md:mt-8 w-full max-w-[22rem] md:max-w-[28rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}
                 text={pill.text}
                 side={isSinglePill ? "left" : pill.side}
-                delay={shouldAnimate ? i * 0.9 + 0.5 : 0}
+                delay={shouldAnimate ? i * 0.8 + 0.6 : 0}
                 animate={shouldAnimate}
                 highlight={pill.highlight}
               />

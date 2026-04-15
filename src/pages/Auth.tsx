@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
@@ -78,6 +78,12 @@ const Auth = () => {
       cancelled = true;
     };
   }, [user, navigate, redirectTo]);
+
+  /* Hide TopGradientBar on auth page */
+  useEffect(() => {
+    document.documentElement.dataset.guidedCreatorOpen = "1";
+    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
+  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;
