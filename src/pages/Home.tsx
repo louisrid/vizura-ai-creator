@@ -227,15 +227,12 @@ const Home = () => {
     }
   }, [initialLoadComplete, lockStateResolved, user, onboardingComplete, characterCount]);
 
-  // blackout:end no longer needed — overlay system handles transitions
-
-  // Fetch all data in parallel — resolve lock state atomically
+  // Resolve onboarding lock state
   useEffect(() => {
     if (!user) {
       setOnboardingComplete(true);
       setLockStateResolved(false);
       setCharacterCount(0);
-      void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
       return;
     }
 
@@ -256,30 +253,19 @@ const Home = () => {
       setOnboardingComplete(cached.onboardingComplete);
       setCharacterCount(cached.characterCount);
       setLockStateResolved(true);
+      setInitialLoadComplete(true);
     } else {
       setLockStateResolved(false);
     }
 
     let cancelled = false;
 
-    const refreshAll = async () => {
-      const [, , resolvedState] = await Promise.all([
-        fetchLatestPhotos(),
-        fetchCharacters(),
-        fetchAndCacheOnboardingState(user.id),
-      ]);
+    void fetchAndCacheOnboardingState(user.id).then((resolvedState) => {
       applyResolvedState(resolvedState);
-    };
+    });
 
-    void refreshAll();
-
-    const handleTestReset = () => { void refreshAll(); };
-    window.addEventListener("facefox:test-reset-complete", handleTestReset);
-    return () => {
-      cancelled = true;
-      window.removeEventListener("facefox:test-reset-complete", handleTestReset);
-    };
-  }, [fetchLatestPhotos, fetchCharacters, openCreatorRequested, user]);
+    return () => { cancelled = true; };
+  }, [openCreatorRequested, user]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
