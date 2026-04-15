@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -54,8 +54,6 @@ const isExemptRoute = (pathname: string) =>
 
 const isOnboardingFlowRoute = (pathname: string) =>
   ONBOARDING_FLOW_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
-
-// ── Redirect helpers (unchanged) ──
 
 const FreshLoadRedirect = () => {
   const location = useLocation();
@@ -242,10 +240,6 @@ const OnboardingRedirectGate = () => {
   return <div className="fixed inset-0 z-[9999] bg-nav" />;
 };
 
-// ── Page Transition Overlay ──
-// A simple black div that fades in/out to cover page swaps.
-// z-index: below yellow gradient bar, above everything else.
-
 const PageTransitionOverlay = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const safetyTimerRef = useRef<number | null>(null);
@@ -259,7 +253,6 @@ const PageTransitionOverlay = () => {
       el.style.transition = `opacity ${dur}ms ease-in-out`;
       el.style.opacity = "1";
 
-      // Clear any existing safety timer
       if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
 
       const onEnd = () => {
@@ -269,7 +262,6 @@ const PageTransitionOverlay = () => {
       };
       el.addEventListener("transitionend", onEnd);
 
-      // Safety timeout in case transitionend doesn't fire
       safetyTimerRef.current = window.setTimeout(() => {
         el.removeEventListener("transitionend", onEnd);
         onOverlayOpaque();
@@ -316,7 +308,16 @@ const PageTransitionOverlay = () => {
   );
 };
 
-// ── App Routes ──
+const ContentFlashOverlay = ({ locationKey }: { locationKey: string }) => (
+  <motion.div
+    key={locationKey}
+    className="pointer-events-none fixed inset-x-0 bottom-0 bg-background"
+    style={{ top: "calc(env(safe-area-inset-top) + 144px)", zIndex: 9970 }}
+    initial={{ opacity: 0.08 }}
+    animate={{ opacity: 0 }}
+    transition={{ duration: 0.12, ease: "easeOut" }}
+  />
+);
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -348,43 +349,29 @@ const AppRoutes = () => {
 
   return (
     <>
-      {/* Yellow gradient bar — highest z-index, always visible */}
       <TopGradientBar />
-
-      {/* Page transition overlay — below yellow bar, above everything else */}
       <PageTransitionOverlay />
-
-      {/* Header + page content — no animation wrapper, overlay handles transitions */}
+      <ContentFlashOverlay locationKey={location.key} />
       <HeaderTransition />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={location.pathname}
-          initial={{ opacity: 0.6 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0.6 }}
-          transition={{ duration: 0.1, ease: "easeOut" }}
-        >
-          <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/generate-face" element={<ChooseFace />} />
-            <Route path="/choose-face" element={<ChooseFace />} />
-            <Route path="/create" element={<Index />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/characters" element={<MyCharacters />} />
-            <Route path="/characters/:id" element={<CharacterDetail />} />
-            <Route path="/storage" element={<Storage />} />
-            <Route path="/top-ups" element={<TopUps />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/info" element={<Info />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
+      <Routes location={location}>
+        <Route path="/" element={<Home />} />
+        <Route path="/generate-face" element={<ChooseFace />} />
+        <Route path="/choose-face" element={<ChooseFace />} />
+        <Route path="/create" element={<Index />} />
+        <Route path="/index" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/characters" element={<MyCharacters />} />
+        <Route path="/characters/:id" element={<CharacterDetail />} />
+        <Route path="/storage" element={<Storage />} />
+        <Route path="/top-ups" element={<TopUps />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 };
