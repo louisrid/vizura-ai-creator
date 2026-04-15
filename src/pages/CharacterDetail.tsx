@@ -503,7 +503,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
-            style={{ height: 56, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
+            style={{ height: 72, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px", marginTop: -8, marginBottom: -8 }}
           >
             <motion.span
               className="flex items-center justify-center gap-2"
@@ -519,7 +519,19 @@ const CharacterDetail = () => {
       {/* Desktop layout — two-column side by side */}
       <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-10 pb-10 min-h-screen">
         <div className="flex items-center gap-3 mb-8">
-          <BackButton />
+          {onboardingComplete ? <BackButton /> : (
+            <button
+              type="button"
+              className="flex items-center justify-center w-[48px] h-[48px] opacity-50"
+              style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+              aria-label="go back"
+            >
+              <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="7" x2="2" y2="7" />
+                <polyline points="7,2 2,7 7,12" />
+              </svg>
+            </button>
+          )}
           <PageTitle className="mb-0">your character</PageTitle>
         </div>
         <div className="grid grid-cols-12 gap-8">
