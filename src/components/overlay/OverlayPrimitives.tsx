@@ -6,7 +6,7 @@ const PURE_WHITE = "hsl(0 0% 100%)";
 
 export const dotColors = [
   "hsl(50 100% 50%)",
-  "hsl(140 100% 45%)",
+  "#34C759",
   "hsl(330 100% 50%)",
   "hsl(210 100% 50%)",
   "hsl(280 100% 55%)",
