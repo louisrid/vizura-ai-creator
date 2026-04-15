@@ -835,6 +835,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     shaking={shaking && selectedVal !== opt}
                     onClick={() => setTrait(trait.key, opt)}
                   />
+                </div>
               ))}
             </div>
           )}
