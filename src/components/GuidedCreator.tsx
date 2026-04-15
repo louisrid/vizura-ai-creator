@@ -928,7 +928,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     document.body.appendChild(_blackout);
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(undefined))));
     setGoogleLoading(true);
-    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
+    sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_signup_gate_active", "1");
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
