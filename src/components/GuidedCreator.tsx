@@ -218,25 +218,26 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) { toast.error("fill details"); return; }
     setEmailLoading(true);
+    sessionStorage.setItem("facefox_signup_gate_active", "1");
     try {
       if (isSignUpMode) {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
-            // Test account: just sign in directly instead of blocking
             if (email.trim().toLowerCase() === "carlsonistrader@gmail.com") {
               await signIn(email.trim(), password);
             } else {
               toast.error("account exists!");
               setIsSignUpMode(false);
               setEmailLoading(false);
+              sessionStorage.removeItem("facefox_signup_gate_active");
               return;
             }
           }
           else throw err;
         }
       } else { await signIn(email.trim(), password); }
-    } catch { toast.error("try again"); setEmailLoading(false); }
+    } catch { toast.error("try again"); setEmailLoading(false); sessionStorage.removeItem("facefox_signup_gate_active"); }
   };
 
   return (
@@ -742,10 +743,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
                     style={{
                       borderRadius: 10,
-                      ...(isMiddle
-                        ? { backgroundColor: "#34C759", color: "#fff", border: "2px solid #2DA44E" }
-                        : { backgroundColor: "#fff", color: "#000", border: "2px solid #fff" }
-                      ),
+                      backgroundColor: isMiddle ? "#34C759" : "#fff",
+                      color: "#000",
+                      border: "none",
                     }}>
                     {pill.text}
                   </div>
