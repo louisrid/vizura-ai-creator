@@ -75,7 +75,7 @@ const FreshLoadRedirect = () => {
       if (!pendingPostAuthHome && !isExemptRoute(location.pathname)) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
-        navigate("/auth", { replace: true });
+        navigate("/", { replace: true });
         return;
       }
     };
