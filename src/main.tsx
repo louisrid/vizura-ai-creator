@@ -2,6 +2,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
+// On every fresh page load (including refresh), clear the guided creator
+// flow state so the user always starts from the hero screen.
+sessionStorage.removeItem("facefox_guided_flow_state");
+
 const splash = document.getElementById("splash-screen");
 
 if (splash) {
