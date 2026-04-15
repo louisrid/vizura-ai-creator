@@ -1,5 +1,6 @@
 /** Top yellow accent bar — normal document flow, never fades, always visible. */
 const TopGradientBar = () => {
+  if (typeof document !== "undefined" && document.documentElement.dataset.guidedCreatorOpen === "1") return null;
   return (
     <div
       className="pointer-events-none fixed top-0 left-0 right-0 h-[5px] overflow-hidden"
