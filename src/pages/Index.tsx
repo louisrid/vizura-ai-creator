@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useMemo, useCallback, Fragment } from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, ChevronDown, Gem, User } from "lucide-react";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
@@ -401,7 +402,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 const Index = () => {
   const { user, loading: authLoading } = useAuth();
   const { credits, gems, refetch: refetchCredits } = useCredits();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
 
   useEffect(() => {

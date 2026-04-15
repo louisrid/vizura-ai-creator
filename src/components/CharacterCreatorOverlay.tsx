@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Zap, Gem } from "lucide-react";
@@ -66,7 +66,7 @@ const ToggleOptions = ({ options, value, onSelect }: { options: readonly string[
 interface CharacterCreatorOverlayProps { open: boolean; onClose: () => void; }
 
 const CharacterCreatorOverlay = ({ open, onClose }: CharacterCreatorOverlayProps) => {
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
 

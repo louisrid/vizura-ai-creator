@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import OverlayShell from "./overlay/OverlayShell";
@@ -19,7 +19,7 @@ interface PaywallOverlayProps {
 }
 
 const PaywallOverlay = ({ open, onClose, hasSubscription = false }: PaywallOverlayProps) => {
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const [loading, setLoading] = useState(false);
   const [burst, setBurst] = useState(false);
 

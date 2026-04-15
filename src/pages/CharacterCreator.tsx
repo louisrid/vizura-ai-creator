@@ -1,5 +1,6 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, Zap, Upload, Sparkles, Gem } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ const CharacterCreator = () => {
   const { credits, refetch: refetchCredits } = useCredits();
   const { subscribed } = useSubscription();
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const [searchParams] = useSearchParams();
 
   const editId = searchParams.get("editId");
@@ -240,14 +241,12 @@ const CharacterCreator = () => {
 
     sessionStorage.setItem("facefox_guided_prompt", prompt);
 
-    // Navigate immediately — ChooseFace will create the character from the draft in sessionStorage
     sessionStorage.removeItem("facefox_face_options");
     sessionStorage.removeItem("facefox_pending_char_id");
     navigate("/choose-face", { state: { prompt, freshCreation: true } });
 
-    // Close guided overlay after navigation is queued
     sessionStorage.removeItem(FLOW_STATE_KEY);
-    setShowGuided(false);
+    window.setTimeout(() => setShowGuided(false), 520);
   }, [user, navigate]);
 
   const handleGuidedExit = useCallback((partial: Partial<GuidedSelections>) => {

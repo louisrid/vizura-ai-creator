@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
+import { startPageTransition } from "@/lib/pageTransition";
 
 /* ── Constants ── */
 const Y = "#ffe603";
@@ -347,7 +348,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
 
   const advance = useCallback(() => {
-    if (animating.current || heroExiting) return;
+    if (animating.current) return;
     toast.dismiss();
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
@@ -358,45 +359,36 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       completeCookingFlow();
       return;
     }
-    // Hero → first slide: fade to black, hold, then reveal next slide
-    if (isHeroSlide) {
-      animating.current = true;
-      heroVisited.current = true; markHeroSeen();
-      setHeroExiting(true);
-      // Fade out hero content (SLOW_FADE_MS), then hold on pure black (BLACK_HOLD_MS),
-      // then set step so new slide fades in
-      setTimeout(() => {
-        setStep((currentStep) => Math.min(currentStep + 1, TOTAL - 1));
-        requestAnimationFrame(() => {
-          setHeroExiting(false);
-          setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
-        });
-      }, SLOW_FADE_MS + BLACK_HOLD_MS);
-      return;
-    }
+
+    const nextStep = Math.min(step + 1, TOTAL - 1);
+    if (nextStep === step) return;
+
     animating.current = true;
-    const nextStep = step + 1;
-    if (nextStep >= TOTAL) return;
-    requestAnimationFrame(() => {
+    if (isHeroSlide) {
+      heroVisited.current = true;
+      markHeroSeen();
+    }
+
+    startPageTransition("default", () => {
       setStep(nextStep);
-      setTimeout(() => { animating.current = false; }, FAST_CROSSFADE_MS);
+      if (!skipWelcome && nextStep === 0) setHeroPhase(3);
+      window.setTimeout(() => { animating.current = false; }, 520);
     });
-  }, [step, isNameSlide, isCreateSlide, isHeroSlide, heroExiting, currentTraitIndex, TOTAL, completeCookingFlow]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
-    heroVisited.current = true; markHeroSeen();
+    heroVisited.current = true;
+    markHeroSeen();
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
 
-    // ALL back transitions → TYPE B (fast crossfade), including back to hero
-    const goingBackToHero = !skipWelcome && step === 1;
-    if (goingBackToHero) {
-      setHeroPhase(3); // ensure hero renders in final state immediately
-    }
-
     animating.current = true;
-    setStep((s) => s - 1);
-    setTimeout(() => { animating.current = false; }, FAST_CROSSFADE_MS);
+    startPageTransition("default", () => {
+      const prevStep = step - 1;
+      if (!skipWelcome && prevStep === 0) setHeroPhase(3);
+      setStep(prevStep);
+      window.setTimeout(() => { animating.current = false; }, 520);
+    });
   }, [step, skipWelcome]);
 
   const handleClose = () => {
@@ -466,8 +458,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               e.preventDefault(); e.stopPropagation();
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
-              // The overlay transition will cover us; hide after navigate executes
-              setTimeout(() => { setVisible(false); }, 50);
+              window.setTimeout(() => { setVisible(false); }, 520);
             }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
@@ -592,9 +583,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           </h2>
           <button
             type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!exitFade) advance(); }}
-            disabled={exitFade}
-            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
             style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
             {isOnboarding ? "create" : (<>create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
@@ -616,23 +606,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
       }}
     >
-      {/* Exit fade — smooth fade-out of content, black always behind */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-50 bg-black"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
-        transition={{ duration: SLOW_FADE_MS / 1000, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute inset-0 flex flex-col"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
-      >
-        {/* Close button removed — home icon below arrows is the only exit */}
-        {/* Skip button removed */}
-
-        {/* Content area */}
+      <div className="absolute inset-0 flex flex-col">
         <div
           className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
           style={{
@@ -641,19 +615,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           }}
         >
           <div className="grid w-full max-w-sm md:max-w-lg mx-auto">
-            <AnimatePresence mode={heroExiting ? "wait" : "sync"} initial={false}>
-              <motion.div
-                key={step}
-                className="w-full [grid-area:1/1]"
-                variants={slideVariants}
-                initial="enter"
-                animate={heroExiting && isHeroSlide ? "exit" : "center"}
-                exit="exit"
-                transition={{ duration: heroExiting ? SLOW_FADE_MS / 1000 : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
-              >
-                {renderSlide()}
-              </motion.div>
-            </AnimatePresence>
+            <div className="w-full [grid-area:1/1]">
+              {renderSlide()}
+            </div>
           </div>
         </div>
 
@@ -688,7 +652,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           </div>
         )}
-      </motion.div>
+      </div>
     </div>,
     document.body,
   );

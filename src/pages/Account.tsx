@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { LogOut, ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
 
@@ -132,13 +132,14 @@ const Account = () => {
         </button>
 
         <div className="pt-6">
-          <Link
-            to="/info"
+          <button
+            type="button"
+            onClick={() => navigate("/info")}
             className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-white/70"
             style={{ color: "#ffffff" }}
           >
             terms &amp; privacy
-          </Link>
+          </button>
         </div>
       </main>
     </div>
