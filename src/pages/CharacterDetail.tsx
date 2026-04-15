@@ -504,8 +504,8 @@ const CharacterDetail = () => {
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
             style={{ height: 52, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
           >
             <span className="flex items-center justify-center gap-2">
               <Camera size={18} strokeWidth={2.5} /> create photo
@@ -606,8 +606,8 @@ const CharacterDetail = () => {
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
               style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
-              animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
             >
               <span className="flex items-center justify-center gap-2">
                 <Camera size={18} strokeWidth={2.5} /> create photo
