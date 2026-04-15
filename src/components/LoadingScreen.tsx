@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 const LoadingScreen = () => {

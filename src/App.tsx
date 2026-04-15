@@ -332,7 +332,7 @@ const PageTransitionOverlay = () => {
     <div
       ref={overlayRef}
       className="pointer-events-none fixed inset-0 bg-black"
-      style={{ opacity: 0, zIndex: 2147483640 }}
+      style={{ opacity: 0, zIndex: 9980 }}
     />
   );
 };

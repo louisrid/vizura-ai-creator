@@ -6,7 +6,7 @@
 
 export type TransitionSpeed = "fast" | "slow" | "default";
 
-const DURATION = { fadeIn: 500, hold: 0, fadeOut: 500 } as const;
+const DURATION = { fadeIn: 150, hold: 0, fadeOut: 200 } as const;
 
 let transitioning = false;
 let pendingCallback: (() => void) | null = null;

@@ -296,7 +296,7 @@ const CharacterDetail = () => {
   };
 
   if (loading || authLoading) {
-    return <LoadingScreen />;
+    return <div className="min-h-screen bg-background" />;
   }
 
   if (!character) {

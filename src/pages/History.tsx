@@ -81,7 +81,7 @@ const History = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
-  if (loading) return <LoadingScreen />;
+  if (loading) return <div className="min-h-screen bg-background" />;
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
