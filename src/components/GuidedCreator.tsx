@@ -8,31 +8,40 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
 import { startPageTransition } from "@/lib/pageTransition";
+import InstructionalSlide from "@/components/InstructionalSlide";
+import type { SlideConfig } from "@/components/InstructionalSlide";
 
 /* ── Constants ── */
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
-const SLIDE_FADE_DURATION = 0.2;
-const OVERLAY_FADE_DURATION = 0.4;
-const FAST_CROSSFADE_MS = 400;
-const SLOW_FADE_MS = 500;
-const BLACK_HOLD_MS = 100;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
 const markHeroSeen = () => { if (typeof window !== "undefined") sessionStorage.setItem(HERO_SEEN_KEY, "1"); };
 
+/* ── Set 1 slide configs ── */
+const SET1_SLIDE1: SlideConfig = {
+  emoji: "👩‍🔬",
+  title: "let's build your ai influencer",
+  pills: [
+    { text: "customize her look", side: "left" },
+    { text: "pick her details", side: "right" },
+    { text: "make her yours", side: "left" },
+  ],
+};
+
+const SET1_SLIDE2: SlideConfig = {
+  emoji: "💛",
+  title: "pick the face you want",
+  pills: [
+    { text: "we'll generate three faces", side: "left" },
+    { text: "regenerate until you're happy!", side: "right" },
+  ],
+};
+
 /* ── Name toast ── */
 const getRandomNameToast = () => "great choice";
-
-/*
- * SCREEN ORDER (10 screens, internalStep 0-9):
- *  0: Hero (new first screen with rings)
- *  1: Name input
- *  2-8: Traits (skin, body type, bust size, age, hair colour, hairstyle, eyes)
- *  9: Create
- */
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
@@ -50,9 +59,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
 const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
 
-/* AnimatedRings removed — rings now inline in renderHero */
-
-/* ── Nav arrow (cyan/blue style) ── */
+/* ── Nav arrow ── */
 const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {
     const isForward = direction === "right";
     const fillColor = colorOverride || "#ffe603";
@@ -140,9 +147,6 @@ interface GuidedCreatorProps {
   skipWelcome?: boolean;
 }
 
-const TOTAL_FULL = 10;
-const TOTAL_SKIP = 9;
-
 const ageRangeToNumber = (range: string): string => {
   switch (range) {
     case "18-24": return "18";
@@ -158,6 +162,27 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
   skin: partial.skin === "pale" ? "white" : partial.skin === "dark" ? "black" : partial.skin,
 });
 
+/*
+ * SCREEN ORDER depends on isFirstTime:
+ *
+ * First-time (isFirstTime=true, never skipWelcome):
+ *   0: Hero
+ *   1: Set1 Slide1 (instructional)
+ *   2: Name
+ *   3-9: Traits (skin, body, bust, age, hair colour, hairstyle, eyes)
+ *   10: Set1 Slide2 (instructional)
+ *   11: Create
+ *   TOTAL=12, dashes=11 (exclude hero), dashActive=step-1
+ *
+ * Returning (not skipWelcome):
+ *   0: Hero, 1: Name, 2-8: Traits, 9: Create
+ *   TOTAL=10, dashes=9, dashActive=step-1
+ *
+ * Returning (skipWelcome):
+ *   0: Name, 1-7: Traits, 8: Create
+ *   TOTAL=9, dashes=9, dashActive=step
+ */
+
 /* ══════════════════════════════════════════
    MAIN COMPONENT
    ══════════════════════════════════════════ */
@@ -166,7 +191,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const navigateTo = useTransitionNavigate();
   const isLoggedIn = !!user;
 
-  const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
+  // Determine if first-time user
+  const [isFirstTime] = useState(() => {
+    if (!user) return true; // unauthenticated users see instructional slides
+    const cached = readCachedOnboardingState(user.id);
+    return !cached?.onboardingComplete;
+  });
+
+  const getTotal = () => {
+    if (isFirstTime && !skipWelcome) return 12; // hero + slide1 + name + 7traits + slide2 + create
+    if (!skipWelcome) return 10; // hero + name + 7traits + create
+    return 9; // name + 7traits + create
+  };
+
+  const TOTAL = getTotal();
   const offset = skipWelcome ? 1 : 0;
 
   const [step, setStep] = useState(0);
@@ -179,6 +217,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [nameToastShown, setNameToastShown] = useState(false);
   const animating = useRef(false);
   
+  // Track which instructional slides have been visited this session
+  const [seenSlide1, setSeenSlide1] = useState(false);
+  const [seenSlide2, setSeenSlide2] = useState(false);
+
   const [ringT, setRingT] = useState(0);
   const [heroPhase, setHeroPhase] = useState(() => isHeroSeen() ? 3 : 0);
   const heroVisited = useRef(isHeroSeen());
@@ -187,7 +229,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const [heroExiting, setHeroExiting] = useState(false);
   const [loginExiting, setLoginExiting] = useState(false);
 
-  /* Ring animation timer — uses rAF for smooth 60fps */
+  /* Ring animation timer */
   useEffect(() => {
     let raf: number;
     const tick = () => {
@@ -198,7 +240,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     tick();
     return () => cancelAnimationFrame(raf);
   }, []);
-
 
   const restoreSavedFlow = useCallback(() => {
     try {
@@ -251,7 +292,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
-    const t = setTimeout(() => setInitialFadeIn(false), FAST_CROSSFADE_MS);
+    const t = setTimeout(() => setInitialFadeIn(false), 400);
     return () => clearTimeout(t);
   }, [visible, initialFadeIn]);
 
@@ -279,10 +320,44 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onComplete(final);
   }, [onComplete]);
 
+  /* ── Compute what the current step represents ── */
   const internalStep = step + offset;
-  const isHeroSlide = internalStep === 0 && !skipWelcome;
-  const isNameSlide = internalStep === 1;
-  const isCreateSlide = internalStep === 9;
+
+  // Map internalStep to logical meaning based on isFirstTime
+  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "set1slide2" | "create" => {
+    if (isFirstTime && !skipWelcome) {
+      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:set1slide2, 11:create
+      if (internalStep === 0) return "hero";
+      if (internalStep === 1) return "set1slide1";
+      if (internalStep === 2) return "name";
+      if (internalStep >= 3 && internalStep <= 9) return "trait";
+      if (internalStep === 10) return "set1slide2";
+      return "create";
+    }
+    // Returning user
+    if (internalStep === 0 && !skipWelcome) return "hero";
+    if (internalStep === (skipWelcome ? 0 : 1)) return "name";
+    const traitStart = skipWelcome ? 1 : 2;
+    const traitEnd = traitStart + 6;
+    if (internalStep >= traitStart && internalStep <= traitEnd) return "trait";
+    return "create";
+  };
+
+  const stepType = getStepType();
+  const isHeroSlide = stepType === "hero";
+  const isSet1Slide1 = stepType === "set1slide1";
+  const isSet1Slide2 = stepType === "set1slide2";
+  const isNameSlide = stepType === "name";
+  const isCreateSlide = stepType === "create";
+
+  // Trait index mapping
+  const getTraitIndex = (): number => {
+    if (stepType !== "trait") return -1;
+    if (isFirstTime && !skipWelcome) return internalStep - 3;
+    const traitStart = skipWelcome ? 1 : 2;
+    return internalStep - traitStart;
+  };
+  const currentTraitIndex = getTraitIndex();
 
   /* Wait for splash screen to be fully removed before starting hero animation */
   const [splashGone, setSplashGone] = useState(() => !document.getElementById("splash-screen"));
@@ -297,7 +372,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return () => clearInterval(check);
   }, [isHeroSlide, splashGone]);
 
-  /* Hero phased entrance — only starts after splash is gone; skip on return */
+  /* Hero phased entrance */
   useEffect(() => {
     if (!isHeroSlide || !splashGone) return;
     if (heroVisited.current || isHeroSeen()) {
@@ -313,9 +388,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     ];
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide, splashGone]);
-
-  const currentTraitIndex = internalStep >= 2 && internalStep <= 8 ? internalStep - 2 : -1;
-
 
   const getCurrentTraitKey = (): TraitKey | null => {
     if (currentTraitIndex < 0 || currentTraitIndex >= TRAITS.length) return null;
@@ -346,10 +418,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     updateCharacterName(RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)]);
   }, [updateCharacterName]);
 
-
   const advance = useCallback(() => {
     if (animating.current) return;
     toast.dismiss();
+
+    // Validation for name and trait slides
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
     if (currentTraitIndex >= 0 && currentTraitIndex < TRAITS.length) {
       const key = TRAITS[currentTraitIndex].key;
@@ -369,12 +442,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       markHeroSeen();
     }
 
+    // Mark instructional slides as seen when leaving them
+    if (isSet1Slide1) setSeenSlide1(true);
+    if (isSet1Slide2) setSeenSlide2(true);
+
     startPageTransition("default", () => {
       setStep(nextStep);
       if (!skipWelcome && nextStep === 0) setHeroPhase(3);
       window.setTimeout(() => { animating.current = false; }, 520);
     });
-  }, [step, isNameSlide, isCreateSlide, isHeroSlide, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSet1Slide2, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
@@ -392,7 +469,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, skipWelcome]);
 
   const handleClose = () => {
-    // User left before completing — clear all progress so next open starts fresh
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setStep(0);
     setSelections({ ...emptySelections });
@@ -400,22 +476,28 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || isSet1Slide2 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   if (!mounted || !visible) return null;
 
-  const slideVariants = {
-    enter: { opacity: 0 },
-    center: { opacity: 1 },
-    exit: { opacity: 0 },
+  /* ── Dash calculations ── */
+  const getDashInfo = () => {
+    if (isFirstTime && !skipWelcome) {
+      // 11 dashes (exclude hero): set1slide1(0) + name(1) + 7traits(2-8) + set1slide2(9) + create(10)
+      return { count: 11, active: step - 1 }; // step 0=hero (no dash), step 1=dash0, etc.
+    }
+    if (!skipWelcome) {
+      return { count: 9, active: step - 1 };
+    }
+    return { count: 9, active: step };
   };
+  const { count: dashCount, active: dashActive } = getDashInfo();
 
-  /* ── HERO SLIDE (new first screen) ── */
+  /* ── HERO SLIDE ── */
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center" style={{ paddingTop: 10 }}>
-        {/* Fox emoji — no sharpening */}
         <div style={{ position: 'relative', width: 320, height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
           {[
             { size: 318, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
@@ -441,11 +523,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               width={230}
               height={230}
               draggable={false}
-              style={{
-                display: 'block',
-                width: 115,
-                height: 115,
-              }}
+              style={{ display: 'block', width: 115, height: 115 }}
             />
           </div>
         </div>
@@ -469,6 +547,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Slide renderer ── */
   const renderSlide = () => {
     if (isHeroSlide) return renderHero();
+
+    /* Instructional Set 1 Slide 1 */
+    if (isSet1Slide1) return null; // rendered separately via InstructionalSlide
+
+    /* Instructional Set 1 Slide 2 */
+    if (isSet1Slide2) return null; // rendered separately via InstructionalSlide
 
     /* Name */
     if (isNameSlide) return (
@@ -510,7 +594,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
-              {/* Row 1: first 3 items centred */}
               <div className="flex justify-center gap-3.5 md:gap-4 mb-3.5 md:mb-4">
                 {trait.options.slice(0, 3).map((opt) => (
                   <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
@@ -526,7 +609,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   </div>
                 ))}
               </div>
-              {/* Row 2: last 2 items centred */}
               <div className="flex justify-center gap-3.5 md:gap-4">
                 {trait.options.slice(3).map((opt) => (
                   <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
@@ -568,7 +650,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
-
     /* Create slide */
     if (isCreateSlide) {
       const cachedState = readCachedOnboardingState(user?.id);
@@ -596,8 +677,41 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  const showNavigation = !isHeroSlide;
+  const showNavigation = !isHeroSlide && !isSet1Slide1 && !isSet1Slide2;
   const canExitFlow = skipWelcome && isLoggedIn;
+
+  /* ── Render instructional slides (Set 1) via dedicated component ── */
+  if (isSet1Slide1) {
+    return createPortal(
+      <InstructionalSlide
+        slide={SET1_SLIDE1}
+        alreadySeen={seenSlide1}
+        dashTotal={dashCount}
+        dashActive={dashActive}
+        showBack={true}
+        showForward={true}
+        onBack={goBack}
+        onForward={advance}
+      />,
+      document.body,
+    );
+  }
+
+  if (isSet1Slide2) {
+    return createPortal(
+      <InstructionalSlide
+        slide={SET1_SLIDE2}
+        alreadySeen={seenSlide2}
+        dashTotal={dashCount}
+        dashActive={dashActive}
+        showBack={true}
+        showForward={true}
+        onBack={goBack}
+        onForward={advance}
+      />,
+      document.body,
+    );
+  }
 
   return createPortal(
     <div
@@ -624,24 +738,18 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         {/* Bottom nav — only on non-hero slides */}
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 28px)" }}>
-            {(() => {
-              const dashCount = skipWelcome ? TOTAL : TOTAL - 1;
-              const activeIndex = skipWelcome ? step : step - 1;
-              return (
-                <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
-                  {Array.from({ length: dashCount }).map((_, i) => (
-                    <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
-                      flex: 1, borderRadius: 2,
-                      background: i <= activeIndex ? Y : "rgba(250,204,21,0.1)",
-                    }} />
-                  ))}
-                </div>
-              );
-            })()}
+            <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
+              {Array.from({ length: dashCount }).map((_, i) => (
+                <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
+                  flex: 1, borderRadius: 2,
+                  background: i <= dashActive ? Y : "rgba(250,204,21,0.1)",
+                }} />
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Arrow buttons + home icon — positioned below content */}
+        {/* Arrow buttons */}
         {showNavigation && (
           <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}>
             <div className="flex items-center justify-center gap-4 md:gap-6">
@@ -688,8 +796,6 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       if (root) root.style.overflow = prev.root;
     };
   }, [visible]);
-
-  // blackout:end no longer needed — overlay system handles transitions
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
