@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
@@ -10,7 +10,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { useAppData } from "@/contexts/AppDataContext";
 import DotDecal from "@/components/DotDecal";
 
 interface HistoryItem {
@@ -23,62 +23,43 @@ interface HistoryItem {
 
 const History = () => {
   const { user, loading: authLoading } = useAuth();
+  const { generations, characters: cachedChars, generationsLoaded, charactersLoaded } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
-  const [items, setItems] = useState<HistoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<HistoryItem | null>(null);
 
-  useEffect(() => {
-    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
-  }, [user, authLoading, navigate, location.pathname]);
+  // Derive history items from cached data
+  const items = useMemo(() => {
+    const charMap = new Map<string, string>();
+    cachedChars.forEach((c) => {
+      charMap.set(c.id, c.name || `${c.hair} ${c.eye} ${displayAge(c.id, c.age)}`);
+    });
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      if (!user) return;
-      const { data: generations } = await supabase
-        .from("generations")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      const { data: characters } = await supabase
-        .from("characters")
-        .select("id, name, hair, eye, age")
-        .eq("user_id", user.id);
-
-      const charMap = new Map<string, string>();
-      (characters || []).forEach((c: any) => {
-        charMap.set(c.id, c.name || `${c.hair} ${c.eye} ${displayAge(c.id, c.age)}`);
-      });
-
-      const allItems: HistoryItem[] = [];
-      (generations || []).forEach((gen: any) => {
-        let charName: string | null = null;
-        for (const [, name] of charMap) {
-          if (gen.prompt?.toLowerCase().includes(name.toLowerCase())) {
-            charName = name;
-            break;
-          }
+    const allItems: HistoryItem[] = [];
+    generations.forEach((gen) => {
+      let charName: string | null = null;
+      for (const [, name] of charMap) {
+        if (gen.prompt?.toLowerCase().includes(name.toLowerCase())) {
+          charName = name;
+          break;
         }
+      }
 
-        (gen.image_urls || []).forEach((url: string, i: number) => {
-          if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
-          allItems.push({
-            id: `${gen.id}-${i}`,
-            url,
-            prompt: gen.prompt || "",
-            characterName: charName,
-            created_at: gen.created_at,
-          });
+      (gen.image_urls || []).forEach((url: string, i: number) => {
+        if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
+        allItems.push({
+          id: `${gen.id}-${i}`,
+          url,
+          prompt: gen.prompt || "",
+          characterName: charName,
+          created_at: gen.created_at,
         });
       });
+    });
+    return allItems;
+  }, [generations, cachedChars]);
 
-      setItems(allItems);
-      setLoading(false);
-    };
-    if (user) fetchHistory();
-  }, [user]);
+  const loading = !generationsLoaded || !charactersLoaded;
 
   if (!authLoading && !user) return null;
 

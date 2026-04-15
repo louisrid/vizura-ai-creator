@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
@@ -25,62 +26,53 @@ interface StorageImage {
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
+  const { generations, characters: cachedChars, generationsLoaded, charactersLoaded, refreshGenerations } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
-  const [images, setImages] = useState<StorageImage[]>([]);
-  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
   const [newImageIds, setNewImageIds] = useState<Set<string>>(new Set());
+  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
   }, [user, authLoading, navigate, location.pathname]);
 
-  useEffect(() => {
-    const fetchAll = async () => {
-      if (!user) return;
-      const [{ data }, { data: chars }] = await Promise.all([
-        supabase
-          .from("generations")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("characters")
-          .select("id, name")
-          .eq("user_id", user.id),
-      ]);
+  // Derive images from cached data
+  const images = useMemo(() => {
+    const charMap = new Map<string, string>();
+    cachedChars.forEach((c) => { if (c.name) charMap.set(c.id, c.name); });
 
-      const charMap = new Map<string, string>();
-      (chars || []).forEach((c: any) => { if (c.name) charMap.set(c.id, c.name); });
-
-      const allImages: StorageImage[] = [];
-      (data || []).forEach((gen: any) => {
-        (gen.image_urls || []).forEach((url: string, i: number) => {
-          if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
-          allImages.push({
-            id: `${gen.id}-${i}`,
-            genId: gen.id,
-            url,
-            prompt: gen.prompt || "",
-            created_at: gen.created_at,
-            characterName: gen.character_id ? charMap.get(gen.character_id) : undefined,
-          });
+    const allImages: StorageImage[] = [];
+    generations.forEach((gen) => {
+      (gen.image_urls || []).forEach((url: string, i: number) => {
+        if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
+        const id = `${gen.id}-${i}`;
+        if (deletedIds.has(id)) return;
+        allImages.push({
+          id,
+          genId: gen.id,
+          url,
+          prompt: gen.prompt || "",
+          created_at: gen.created_at,
+          characterName: gen.character_id ? charMap.get(gen.character_id) : undefined,
         });
       });
-      if (allImages.length > 0) {
-        const newest = allImages[0];
-        const createdMs = new Date(newest.created_at).getTime();
-        if (Date.now() - createdMs < 30000) {
-          setNewImageIds(new Set([newest.id]));
-          setTimeout(() => setNewImageIds(new Set()), 1500);
-        }
+    });
+
+    // Check for new image highlight
+    if (allImages.length > 0) {
+      const newest = allImages[0];
+      const createdMs = new Date(newest.created_at).getTime();
+      if (Date.now() - createdMs < 30000) {
+        setNewImageIds(new Set([newest.id]));
+        setTimeout(() => setNewImageIds(new Set()), 1500);
       }
-      setImages(allImages);
-      setLoading(false);
-    };
-    if (user) fetchAll();
-  }, [user]);
+    }
+
+    return allImages;
+  }, [generations, cachedChars, deletedIds]);
+
+  const loading = !generationsLoaded || !charactersLoaded;
 
   if (!authLoading && !user) return null;
 
