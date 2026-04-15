@@ -158,8 +158,8 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
  * SCREEN ORDER depends on isFirstTime + login state:
  *
  * First-time, NOT logged in:
- *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Signup
- *   TOTAL=11, dashes=9 (exclude hero & signup), dashActive=step-1
+ *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Create, 11: Signup
+ *   TOTAL=12, dashes=10 (exclude hero & signup), dashActive=step-1
  *
  * First-time, logged in:
  *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits
@@ -195,6 +195,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
     setGoogleLoading(true);
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
+    sessionStorage.setItem("facefox_signup_gate_active", "1");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
@@ -202,11 +203,13 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
       });
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_signup_gate_active");
         toast.error("sign in error");
         setGoogleLoading(false);
       }
     } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_signup_gate_active");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
@@ -252,7 +255,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
         <div className="mt-8 w-full space-y-3">
           <button
             onClick={handleGoogle}
-            disabled={googleLoading || emailLoading}
+            disabled={googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
             style={{ background: Y, color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
@@ -281,7 +284,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
             onClick={(e) => e.stopPropagation()}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
-            disabled={emailLoading || googleLoading}
+            disabled={googleLoading}
           />
           <input
             type="password" placeholder="password" value={password}
@@ -290,12 +293,12 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
-            disabled={emailLoading || googleLoading}
+            disabled={googleLoading}
           />
 
           <button
             onClick={handleEmailAuth}
-            disabled={emailLoading || googleLoading}
+            disabled={emailLoading}
             className="w-full h-14 text-sm font-[900] lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all disabled:opacity-50 bg-neon-yellow hover:opacity-90"
             style={{ borderRadius: 10 }}
           >
@@ -893,7 +896,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                 flex: 1, borderRadius: 2,
-                background: i <= dashActive ? Y : "rgba(250,204,21,0.45)",
+                background: i <= dashActive ? Y : "rgba(250,204,21,0.30)",
               }} />
             ))}
           </div>
