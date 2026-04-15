@@ -188,6 +188,9 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   }, [persistSignupHandoff, user]);
 
   const handleGoogle = async () => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:#000;z-index:2147483645';
+    document.body.appendChild(overlay);
     setGoogleLoading(true);
     sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections, flowVariant: "guest-onboarding" }));
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
@@ -918,6 +921,9 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   }, [visible]);
 
   const handleGoogle = async () => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:#000;z-index:2147483645';
+    document.body.appendChild(overlay);
     setGoogleLoading(true);
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
