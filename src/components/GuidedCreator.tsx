@@ -613,6 +613,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       window.setTimeout(() => { animating.current = false; }, 100);
       return;
     }
+    toast.dismiss();
     heroVisited.current = true;
     markHeroSeen();
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
