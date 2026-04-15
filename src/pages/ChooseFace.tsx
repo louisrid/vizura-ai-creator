@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
+import InstructionalSlide from "@/components/InstructionalSlide";
+import type { SlideConfig } from "@/components/InstructionalSlide";
 import { mergeCachedOnboardingState } from "@/lib/onboardingState";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
