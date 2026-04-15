@@ -124,7 +124,7 @@ const InstructionalSlide = ({
       return;
     }
     // After all pills animate in, mark as seen
-    const totalDelay = slide.pills.length * 0.18 + 0.4;
+    const totalDelay = slide.pills.length * 0.6 + 0.3 + 0.5;
     timerRef.current = setTimeout(() => setHasAnimated(true), totalDelay * 1000);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
