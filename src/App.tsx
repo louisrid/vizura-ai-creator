@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -29,13 +28,21 @@ import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
+import {
+  isTransitioning,
+  onOverlayOpaque,
+  onOverlayTransparent,
+  getDurations,
+  type TransitionSpeed,
+} from "@/lib/pageTransition";
 
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
-const FAST_CROSSFADE_DURATION = 0.4;
 
 const isExemptRoute = (pathname: string) =>
   pathname === "/" || EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
+
+// ── Redirect helpers (unchanged) ──
 
 const FreshLoadRedirect = () => {
   const location = useLocation();
@@ -224,26 +231,111 @@ const OnboardingRedirectGate = () => {
   return <div className="fixed inset-0 z-[9999] bg-nav" />;
 };
 
-const AppRoutes = () => {
+// ── Page Transition Overlay ──
+// A simple black div that fades in/out to cover page swaps.
+// z-index: below yellow gradient bar, above everything else.
+
+const PageTransitionOverlay = () => {
+  const overlayRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const routeTransitionKey = `${location.pathname}${location.search}${location.hash}`;
-  const { loading: authLoading, user } = useAuth();
-  const [blackoutActive, setBlackoutActive] = useState(false);
-  const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
-  useSwipeNavigation();
+  const prevKeyRef = useRef(location.key);
+  const safetyTimerRef = useRef<number | null>(null);
+
+  // Detect un-transitioned route changes (browser back/forward)
+  // and apply snap-black + fade-out
+  useEffect(() => {
+    if (location.key === prevKeyRef.current) return;
+    prevKeyRef.current = location.key;
+
+    if (isTransitioning()) return; // handled by the transition system
+
+    const el = overlayRef.current;
+    if (!el) return;
+
+    // Snap to black instantly, then fade out
+    el.style.transition = "none";
+    el.style.opacity = "1";
+    // Force reflow
+    void el.offsetHeight;
+    el.style.transition = "opacity 300ms ease-in-out";
+    el.style.opacity = "0";
+  }, [location.key]);
 
   useEffect(() => {
-    const start = () => setBlackoutActive(true);
-    const end = () => setBlackoutActive(false);
+    const handleFadeIn = (e: Event) => {
+      const el = overlayRef.current;
+      if (!el) return;
+      const speed: TransitionSpeed = (e as CustomEvent).detail?.speed || "fast";
+      const dur = getDurations(speed).fadeIn;
 
-    window.addEventListener("facefox:blackout:start", start);
-    window.addEventListener("facefox:blackout:end", end);
+      el.style.transition = `opacity ${dur}ms ease-in-out`;
+      el.style.opacity = "1";
 
+      // Clear any existing safety timer
+      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+
+      const onEnd = () => {
+        el.removeEventListener("transitionend", onEnd);
+        if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+        onOverlayOpaque();
+      };
+      el.addEventListener("transitionend", onEnd);
+
+      // Safety timeout in case transitionend doesn't fire
+      safetyTimerRef.current = window.setTimeout(() => {
+        el.removeEventListener("transitionend", onEnd);
+        onOverlayOpaque();
+      }, dur + 50);
+    };
+
+    const handleFadeOut = (e: Event) => {
+      const el = overlayRef.current;
+      if (!el) return;
+      const speed: TransitionSpeed = (e as CustomEvent).detail?.speed || "fast";
+      const dur = getDurations(speed).fadeOut;
+
+      el.style.transition = `opacity ${dur}ms ease-in-out`;
+      el.style.opacity = "0";
+
+      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+
+      const onEnd = () => {
+        el.removeEventListener("transitionend", onEnd);
+        if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+        onOverlayTransparent();
+      };
+      el.addEventListener("transitionend", onEnd);
+
+      safetyTimerRef.current = window.setTimeout(() => {
+        el.removeEventListener("transitionend", onEnd);
+        onOverlayTransparent();
+      }, dur + 50);
+    };
+
+    window.addEventListener("page-transition:fade-in", handleFadeIn);
+    window.addEventListener("page-transition:fade-out", handleFadeOut);
     return () => {
-      window.removeEventListener("facefox:blackout:start", start);
-      window.removeEventListener("facefox:blackout:end", end);
+      window.removeEventListener("page-transition:fade-in", handleFadeIn);
+      window.removeEventListener("page-transition:fade-out", handleFadeOut);
     };
   }, []);
+
+  return (
+    <div
+      ref={overlayRef}
+      className="pointer-events-none fixed inset-0 bg-black"
+      style={{ opacity: 0, zIndex: 2147483640 }}
+    />
+  );
+};
+
+// ── App Routes ──
+
+const AppRoutes = () => {
+  const location = useLocation();
+  const { loading: authLoading, user } = useAuth();
+  const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
+  useSwipeNavigation();
 
   useEffect(() => {
     const eventName = getBlockingLoadersEventName();
@@ -269,49 +361,33 @@ const AppRoutes = () => {
 
   return (
     <>
-      {/* Yellow gradient bar — ABOVE animated wrapper, never fades */}
+      {/* Yellow gradient bar — highest z-index, always visible */}
       <TopGradientBar />
 
-      {/* Blackout overlay for TYPE A transitions */}
-      <motion.div
-        className="pointer-events-none fixed inset-0 z-[9998] bg-black"
-        initial={false}
-        animate={{ opacity: blackoutActive ? 1 : 0 }}
-        transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
-      />
+      {/* Page transition overlay — below yellow bar, above everything else */}
+      <PageTransitionOverlay />
 
-      {/* Header + page content in ONE animated wrapper — they fade together */}
-      <AnimatePresence mode="sync" initial={false}>
-        <motion.div
-          key={routeTransitionKey}
-          initial={{ opacity: blackoutActive ? 1 : 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: blackoutActive ? 1 : 0 }}
-          transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
-        >
-          {/* Header inside animated wrapper — fades with page content */}
-          <HeaderTransition />
-          <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/generate-face" element={<ChooseFace />} />
-            <Route path="/choose-face" element={<ChooseFace />} />
-            <Route path="/create" element={<Index />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/characters" element={<MyCharacters />} />
-            <Route path="/characters/:id" element={<CharacterDetail />} />
-            <Route path="/storage" element={<Storage />} />
-            <Route path="/top-ups" element={<TopUps />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/info" element={<Info />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
+      {/* Header + page content — no animation wrapper, overlay handles transitions */}
+      <HeaderTransition />
+      <Routes location={location}>
+        <Route path="/" element={<Home />} />
+        <Route path="/generate-face" element={<ChooseFace />} />
+        <Route path="/choose-face" element={<ChooseFace />} />
+        <Route path="/create" element={<Index />} />
+        <Route path="/index" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/characters" element={<MyCharacters />} />
+        <Route path="/characters/:id" element={<CharacterDetail />} />
+        <Route path="/storage" element={<Storage />} />
+        <Route path="/top-ups" element={<TopUps />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 };
