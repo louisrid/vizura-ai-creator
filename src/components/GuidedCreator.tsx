@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { forwardRef, useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
@@ -298,7 +298,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
 };
 
 
-const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
+const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, onComplete, onExit, skipWelcome = false }, _ref) => {
   const { user } = useAuth();
   const navigateTo = useTransitionNavigate();
   const isLoggedIn = !!user;
@@ -890,7 +890,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     </div>,
     document.body,
   );
-};
+});
+
+GuidedCreator.displayName = "GuidedCreator";
 
 /* ══════════════════════════════════════════
    SIGN-IN OVERLAY
