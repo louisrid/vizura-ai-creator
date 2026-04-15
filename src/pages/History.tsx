@@ -110,7 +110,7 @@ const History = () => {
                 className="w-full text-left rounded-[10px] overflow-hidden transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
                 style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
               >
-                <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={() => setItems((prev) => prev.filter((x) => x.id !== item.id))} />
+                <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
                 <div className="p-4 space-y-2">
                   <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-muted-foreground line-clamp-2 leading-relaxed">
                     {item.prompt || "no prompt"}
