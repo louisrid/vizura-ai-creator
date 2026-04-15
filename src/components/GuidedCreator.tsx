@@ -609,7 +609,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     }
 
     setStep(prevStep);
-  }, [step, flowSteps]);
+  }, [step, flowSteps, isLoggedIn, skipWelcome]);
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
