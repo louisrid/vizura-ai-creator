@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Test account reset
+    // Test account reset — allowed regardless of demo mode
     if (action === "test_reset") {
       const TEST_EMAIL = "carlsonistrader@gmail.com";
       if (user.email?.toLowerCase() !== TEST_EMAIL) {
@@ -82,6 +82,15 @@ Deno.serve(async (req) => {
         JSON.stringify({ success: true, action: "test_reset" }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    // In production (non-demo), reject direct credit additions.
+    // Credits should only be granted via stripe-webhook after payment verification.
+    if (!IS_DEMO_MODE) {
+      return new Response(JSON.stringify({ error: "Direct credit addition is disabled. Use Stripe checkout." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     if (!amount || typeof amount !== "number" || amount <= 0 || amount > 10000) {
