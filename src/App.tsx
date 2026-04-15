@@ -32,7 +32,7 @@ import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash 
 
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
-const FAST_CROSSFADE_DURATION = 0.25;
+const FAST_CROSSFADE_DURATION = 0.4;
 
 const isExemptRoute = (pathname: string) =>
   pathname === "/" || EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
@@ -226,6 +226,7 @@ const OnboardingRedirectGate = () => {
 
 const AppRoutes = () => {
   const location = useLocation();
+  const routeTransitionKey = `${location.pathname}${location.search}${location.hash}`;
   const { loading: authLoading, user } = useAuth();
   const [blackoutActive, setBlackoutActive] = useState(false);
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
@@ -276,13 +277,13 @@ const AppRoutes = () => {
         className="pointer-events-none fixed inset-0 z-[9998] bg-black"
         initial={false}
         animate={{ opacity: blackoutActive ? 1 : 0 }}
-        transition={blackoutActive ? { duration: 0 } : { duration: 0.6, ease: "easeInOut" }}
+        transition={blackoutActive ? { duration: 0 } : { duration: FAST_CROSSFADE_DURATION, ease: "easeInOut" }}
       />
 
       {/* Header + page content in ONE animated wrapper — they fade together */}
       <AnimatePresence mode="sync" initial={false}>
         <motion.div
-          key={location.key}
+          key={routeTransitionKey}
           initial={{ opacity: blackoutActive ? 1 : 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: blackoutActive ? 1 : 0 }}
