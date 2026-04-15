@@ -613,6 +613,14 @@ const Index = () => {
     if (credits <= 0) { navigate("/top-ups"); return; }
     if (!selectedCharId || !prompt.trim()) { toast.error("fill all info"); return; }
 
+    // Intercept with Set 3 for first-time users
+    if (!hasSeenSet3()) {
+      setShowSet3(true);
+      setSet3Step(0);
+      setSet3SeenSteps(new Set());
+      return;
+    }
+
     setIsGenerating(true);
     setError("");
     setResultImage(null);
