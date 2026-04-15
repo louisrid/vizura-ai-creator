@@ -184,6 +184,37 @@ const Home = () => {
   useEffect(() => {
     if (authLoading) return;
 
+    const pending = localStorage.getItem("facefox_pending_creation");
+    if (user && pending) {
+      localStorage.removeItem("facefox_pending_creation");
+      try {
+        const sel = JSON.parse(pending);
+        if (sel?.characterName) {
+          const draft = {
+            characterName: sel.characterName,
+            skin: sel.skin || "tan",
+            bodyType: sel.bodyType || "regular",
+            bustSize: sel.bustSize || "regular",
+            hairStyle: sel.hairStyle || "long straight",
+            hairColour: sel.hairColour || "brunette",
+            eye: sel.eye || "brown",
+            age: sel.age === "18-24" ? "18" : sel.age === "24+" ? "24" : sel.age || "18",
+            description: sel.description || "",
+          };
+          sessionStorage.setItem("facefox_character_draft", JSON.stringify(draft));
+          localStorage.setItem("facefox_draft_backup", JSON.stringify(draft));
+          const prompt = `${draft.age} year old woman, ${draft.skin} skin, ${draft.hairStyle} ${draft.hairColour} hair, ${draft.eye} eyes`;
+          sessionStorage.setItem("facefox_guided_prompt", prompt);
+          sessionStorage.removeItem("facefox_face_options");
+          sessionStorage.removeItem("facefox_pending_char_id");
+          sessionStorage.removeItem("facefox_guided_flow_state");
+          sessionStorage.setItem("facefox_guided_dismissed", "1");
+          navigate("/choose-face", { state: { prompt, freshCreation: true } });
+          return;
+        }
+      } catch {}
+    }
+
     const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
     const signupGateActive = sessionStorage.getItem("facefox_signup_gate_active") === "1";
     if (user || pendingPostAuthHome) {
