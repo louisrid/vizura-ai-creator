@@ -99,7 +99,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   // UNLESS they have already claimed free gems — then show real balance
   const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
   const isOnboarding = cachedOnboarding ? !cachedOnboarding.onboardingComplete : false;
-  const shouldMask = isOnboarding && !hasClaimedFreeGems;
+  const shouldMask = isOnboarding;
   const gems = shouldMask ? 0 : rawGems;
 
   return (
