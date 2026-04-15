@@ -53,8 +53,8 @@ const ChatPill = ({
         className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
         style={{
           borderRadius: 10,
-          backgroundColor: highlight ? "hsl(170 100% 20%)" : "hsl(0 0% 14%)",
-          border: highlight ? "2px solid hsl(170 100% 50%)" : "2px solid hsl(0 0% 22%)",
+          backgroundColor: highlight ? "hsl(140 100% 15%)" : "hsl(0 0% 14%)",
+          border: highlight ? "2px solid hsl(140 100% 30%)" : "2px solid hsl(0 0% 22%)",
         }}
       >
         {text}

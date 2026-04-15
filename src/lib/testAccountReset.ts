@@ -55,7 +55,9 @@ export const maybeResetTestAccount = async (user: User) => {
       try { window.localStorage.removeItem(key); } catch {}
     }
 
+    // Sign out so test account sees the full first-time flow including signup screen
     window.dispatchEvent(new CustomEvent("facefox:test-reset-complete"));
+    await supabase.auth.signOut();
   } catch (err) {
     console.error("Test account reset failed:", err);
   }
