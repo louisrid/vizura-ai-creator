@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
@@ -6,10 +6,10 @@ import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import BackButton from "@/components/BackButton";
 
 import PageTitle from "@/components/PageTitle";
-import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
