@@ -182,13 +182,17 @@ const Home = () => {
     const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
     const signupGateActive = sessionStorage.getItem("facefox_signup_gate_active") === "1";
     if (user || pendingPostAuthHome) {
-      // Logged-in users must NEVER see the hero screen
-      setSkipWelcome(true);
       if (signupGateActive) {
+        // Post-signup-gate: keep skipWelcome=false so flow state restores correctly
+        // (the saved flow state has skipWelcome=false from the onboarding flow)
+        sessionStorage.removeItem("facefox_signup_gate_active");
+        setSkipWelcome(false);
         setShowGuided(true);
         setAutoOpenEvaluated(true);
         return;
       }
+      // Logged-in users must NEVER see the hero screen
+      setSkipWelcome(true);
       if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
       setAutoOpenEvaluated(true);
       return;

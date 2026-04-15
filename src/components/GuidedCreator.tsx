@@ -303,14 +303,6 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing up...</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
           </button>
 
-          <button
-            type="button"
-            onClick={() => setIsSignUpMode((v) => !v)}
-            className="w-full text-center text-[11px] font-extrabold lowercase text-white hover:opacity-80 transition-colors duration-150"
-          >
-            {isSignUpMode ? "already have an account? " : "no account? "}
-            <span className="underline">{isSignUpMode ? "log in" : "sign up"}</span>
-          </button>
         </div>
       </div>
     </motion.div>
@@ -624,7 +616,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     toast.dismiss();
     heroVisited.current = true;
     markHeroSeen();
-    if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
+    if (step <= 0) {
+      setBackArrowShaking(true);
+      setTimeout(() => setBackArrowShaking(false), 500);
+      return;
+    }
 
     const prevStep = step - 1;
     const goingToHero = !skipWelcome && prevStep === 0;
@@ -761,7 +757,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     style={{
                       borderRadius: 10,
                       backgroundColor: isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-                      color: "#000",
+                      color: isMiddle ? "#fff" : "#000",
                       border: "none",
                     }}>
                     {pill.text}
