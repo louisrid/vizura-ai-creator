@@ -79,6 +79,12 @@ const Auth = () => {
     };
   }, [user, navigate, redirectTo]);
 
+  /* Hide TopGradientBar on auth page */
+  useEffect(() => {
+    document.documentElement.dataset.guidedCreatorOpen = "1";
+    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
+  }, []);
+
   useEffect(() => {
     const hash = window.location.hash;
     const search = window.location.search;
