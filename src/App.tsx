@@ -38,9 +38,13 @@ import {
 
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
+const ONBOARDING_FLOW_ROUTES = ["/choose-face", "/generate-face"];
 
 const isExemptRoute = (pathname: string) =>
   pathname === "/" || EXEMPT_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
+
+const isOnboardingFlowRoute = (pathname: string) =>
+  ONBOARDING_FLOW_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
 
 // ── Redirect helpers (unchanged) ──
 
@@ -189,7 +193,7 @@ const OnboardingRedirectGate = () => {
     let cancelled = false;
 
     const resolveRedirect = async () => {
-      if (!user || location.pathname === "/" || isExemptRoute(location.pathname)) {
+      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname)) {
         setShouldRedirect(false);
         return;
       }

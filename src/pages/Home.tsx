@@ -180,7 +180,13 @@ const Home = () => {
     if (authLoading) return;
 
     const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
+    const signupGateActive = sessionStorage.getItem("facefox_signup_gate_active") === "1";
     if (user || pendingPostAuthHome) {
+      if (signupGateActive) {
+        setShowGuided(true);
+        setAutoOpenEvaluated(true);
+        return;
+      }
       if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
       if (isOnboardingUser) setSkipWelcome(true);
       setAutoOpenEvaluated(true);
@@ -191,7 +197,7 @@ const Home = () => {
     setShowGuided(true);
     setSkipWelcome(false);
     setAutoOpenEvaluated(true);
-  }, [authLoading, openCreatorRequested, user, navigate]);
+  }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser]);
 
   // When lock state resolves and user needs onboarding, force guided creator open
   useEffect(() => {

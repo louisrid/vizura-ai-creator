@@ -159,6 +159,10 @@ const ChooseFace = () => {
   }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
+  useEffect(() => {
+    sessionStorage.removeItem("facefox_signup_gate_active");
+  }, []);
+
   // Set 2 instructional slide state
   const [showSet2Slide, setShowSet2Slide] = useState(false);
   const pendingAngleGenRef = useRef<{

@@ -126,7 +126,7 @@ const CreationLoadingOverlay = ({ open, onComplete }: CreationLoadingOverlayProp
               <motion.div
                 key="success"
                 className="fixed inset-0 flex flex-col items-center justify-center px-6 text-center"
-                style={{ backgroundColor: "#34C759" }}
+                style={{ backgroundColor: "hsl(var(--neon-green))" }}
                 initial={{ opacity: 1 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0 }}

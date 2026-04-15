@@ -27,7 +27,7 @@ const SET1_SLIDE1: SlideConfig = {
   title: "let's build your ai influencer!",
   pills: [
     { text: "customize her look 🎨", side: "left" },
-    { text: "pick her details ✨", side: "right", highlight: true },
+    { text: "pick her details ⚙️", side: "right", highlight: true },
     { text: "make her yours 💕", side: "left" },
   ],
 };
@@ -743,8 +743,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isMiddle ? "#34C759" : "#fff",
-                      color: "#000",
+                      backgroundColor: isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
+                      color: "hsl(var(--background))",
                       border: "none",
                     }}>
                     {pill.text}
@@ -855,15 +855,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     /* Create slide */
     if (isCreateSlide) {
-      const cachedState = readCachedOnboardingState(user?.id);
-      const isOnboarding = isLoggedIn && cachedState && !cachedState.onboardingComplete;
+      const showGemCost = !isFirstTime;
       return (
         <div className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <h2
             className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight mt-12"
           >
             <span className="block text-white">your character</span>
-            <span className="block"><span className="text-white">is </span><span className="text-gem-green">almost here!</span></span>
+            <span className="block"><span className="text-white">is </span><span className="text-neon-green">almost here!</span></span>
           </h2>
           <button
             type="button"
@@ -871,7 +870,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
             style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
-            {isOnboarding ? "create" : (<>create <span style={{ color: "#00e0ff" }}>•</span> 1 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>)}
+            {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create"}
           </button>
         </div>
       );
