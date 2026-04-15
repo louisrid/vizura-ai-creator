@@ -225,15 +225,11 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
-            if (email.trim().toLowerCase() === "carlsonistrader@gmail.com") {
-              await signIn(email.trim(), password);
-            } else {
-              toast.error("account exists!");
-              setIsSignUpMode(false);
-              setEmailLoading(false);
-              sessionStorage.removeItem("facefox_signup_gate_active");
-              return;
-            }
+            toast.error("account exists!");
+            setIsSignUpMode(false);
+            setEmailLoading(false);
+            sessionStorage.removeItem("facefox_signup_gate_active");
+            return;
           }
           else throw err;
         }
