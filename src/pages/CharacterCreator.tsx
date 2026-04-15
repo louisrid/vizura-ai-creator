@@ -15,7 +15,7 @@ import { sanitiseText } from "@/lib/sanitise";
 import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
 
 const skinOptions = ["white", "tan", "asian", "black"] as const;
-const bodyOptions = ["thin", "regular", "curvy"] as const;
+const bodyOptions = ["slim", "regular", "curvy"] as const;
 const hairStyleOptions = ["long straight", "long wavy", "fringe/bangs"] as const;
 const hairColourOptions = ["blonde", "brunette", "black", "pink"] as const;
 const eyeOptions = ["blue", "brown", "green", "grey"] as const;

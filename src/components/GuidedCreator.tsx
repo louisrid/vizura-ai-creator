@@ -37,8 +37,8 @@ const getRandomNameToast = () => "great choice";
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
-  { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["thin", "regular", "curvy"], defaultOption: "regular" },
-  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "large"], defaultOption: "regular" },
+  { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["slim", "regular", "curvy"], defaultOption: "regular" },
+  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "extra large"], defaultOption: "regular" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
@@ -217,6 +217,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
 
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) { toast.error("fill details"); return; }
+    if (password.length < 5) { toast.error("min. 5 chars"); return; }
     setEmailLoading(true);
     sessionStorage.setItem("facefox_signup_gate_active", "1");
     try {
@@ -744,7 +745,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     style={{
                       borderRadius: 10,
                       backgroundColor: isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-                      color: "hsl(var(--background))",
+                      color: isMiddle ? "#fff" : "hsl(var(--background))",
                       border: "none",
                     }}>
                     {pill.text}
@@ -806,9 +807,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       shaking={shaking && selectedVal !== opt}
                       onClick={() => setTrait(trait.key, opt)}
                     />
-                    {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-1`}>(recommended)</span>
-                    )}
                   </div>
                 ))}
               </div>
@@ -821,9 +819,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       shaking={shaking && selectedVal !== opt}
                       onClick={() => setTrait(trait.key, opt)}
                     />
-                    {"defaultOption" in trait && (trait as any).defaultOption === opt && (
-                      <span className={`${HELPER_CLASS} mt-1`}>(recommended)</span>
-                    )}
                   </div>
                 ))}
               </div>
@@ -842,9 +837,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     shaking={shaking && selectedVal !== opt}
                     onClick={() => setTrait(trait.key, opt)}
                   />
-                  {"defaultOption" in trait && trait.defaultOption === opt && (
-                    <span className={`${HELPER_CLASS} mt-1`}>(recommended)</span>
-                  )}
                 </div>
               ))}
             </div>
@@ -862,7 +854,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight mt-12"
           >
             <span className="block text-white">your character</span>
-            <span className="block"><span className="text-white">is </span><span className="text-neon-green">almost here!</span></span>
+            <span className="block"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></span>
           </h2>
           <button
             type="button"
@@ -1005,6 +997,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
 
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) { toast.error("fill details"); return; }
+    if (password.length < 5) { toast.error("min. 5 chars"); return; }
     setEmailLoading(true);
     try {
       if (isSignUp) {

@@ -502,13 +502,13 @@ const ChooseFace = () => {
 
   const normaliseDraftBodyType = (value?: string) => {
     const key = (value || "regular").toLowerCase();
-    if (key === "slim") return "thin";
+    if (key === "thin") return "slim";
     if (key === "average") return "regular";
-    if (key === "thin" || key === "curvy") return key;
+    if (key === "slim" || key === "curvy") return key;
     return "regular";
   };
 
-  const normaliseDraftBustSize = (value?: string) => (value === "large" ? "large" : "regular");
+  const normaliseDraftBustSize = (value?: string) => (value === "extra large" || value === "large" ? "extra large" : "regular");
 
   const startAngleBodyGen = useCallback(async (charId: string, anglePrompt: string, faceUrl: string, bodyType: string, bustSize: string) => {
     setShowSet2Slide(false);
