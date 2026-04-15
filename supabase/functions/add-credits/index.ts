@@ -84,6 +84,15 @@ Deno.serve(async (req) => {
       );
     }
 
+    // In production (non-demo), reject direct credit additions.
+    // Credits should only be granted via stripe-webhook after payment verification.
+    if (!IS_DEMO_MODE) {
+      return new Response(JSON.stringify({ error: "Direct credit addition is disabled. Use Stripe checkout." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (!amount || typeof amount !== "number" || amount <= 0 || amount > 10000) {
       return new Response(JSON.stringify({ error: "Invalid amount" }), {
         status: 400,
