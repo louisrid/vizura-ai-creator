@@ -77,7 +77,7 @@ const Storage = () => {
   if (!authLoading && !user) return null;
 
   const handleDelete = async (img: StorageImage) => {
-    setImages((prev) => prev.filter((i) => i.id !== img.id));
+    setDeletedIds((prev) => new Set([...prev, img.id]));
     if (expanded?.id === img.id) setExpanded(null);
 
     if (!user) return;
