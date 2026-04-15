@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 import { createPortal } from "react-dom";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import { displayAge } from "@/lib/displayAge";
@@ -435,7 +436,10 @@ const Home = () => {
 
   // Show loading bar while data loads (post-auth)
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
-    return <SilentLoader />;
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (
