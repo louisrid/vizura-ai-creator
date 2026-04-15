@@ -6,6 +6,7 @@ export interface SlideConfig {
   emoji: string;
   title: string;
   pills: { text: string; side: "left" | "right"; highlight?: boolean }[];
+  hideDashes?: boolean;
 }
 
 export interface InstructionalSlideProps {
@@ -139,21 +140,23 @@ const InstructionalSlide = ({
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none" }}>
       {/* Dashes at top */}
-      <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)" }}>
-        <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
-          {Array.from({ length: dashTotal }).map((_, i) => (
-            <div
-              key={i}
-              className="transition-all duration-300 h-[4px] md:h-[6px]"
-              style={{
-                flex: 1,
-                borderRadius: 2,
-                background: i <= dashActive ? Y : DASH_INACTIVE,
-              }}
-            />
-          ))}
+      {!slide.hideDashes && (
+        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)" }}>
+          <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
+            {Array.from({ length: dashTotal }).map((_, i) => (
+              <div
+                key={i}
+                className="transition-all duration-300 h-[4px] md:h-[6px]"
+                style={{
+                  flex: 1,
+                  borderRadius: 2,
+                  background: i <= dashActive ? Y : DASH_INACTIVE,
+                }}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Content area */}
       <div
