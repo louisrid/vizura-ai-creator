@@ -787,6 +787,20 @@ const ChooseFace = () => {
     );
   }
 
+  if (showSet2Slide) {
+    return (
+      <InstructionalSlide
+        slide={SET2_SLIDE}
+        alreadySeen={false}
+        dashTotal={1}
+        dashActive={0}
+        showBack={false}
+        showForward={true}
+        onForward={handleSet2Forward}
+      />
+    );
+  }
+
   if (pendingAuthSave || angleBodyLoading) {
     return (
       <div className="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center">
