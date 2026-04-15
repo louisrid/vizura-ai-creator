@@ -807,6 +807,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       shaking={shaking && selectedVal !== opt}
                       onClick={() => setTrait(trait.key, opt)}
                     />
+                  </div>
                 ))}
               </div>
               <div className="flex justify-center gap-3.5 md:gap-4">
@@ -818,8 +819,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                       shaking={shaking && selectedVal !== opt}
                       onClick={() => setTrait(trait.key, opt)}
                     />
+                  </div>
                 ))}
-              </div>
             </div>
           ) : (
             <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 mx-auto ${
