@@ -857,9 +857,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              initial={isHeroSlide ? false : { opacity: 0 }}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={isHeroSlide ? undefined : { opacity: 0 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.35 }}
               className="w-full max-w-sm md:max-w-lg mx-auto"
             >
