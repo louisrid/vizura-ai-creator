@@ -182,13 +182,14 @@ const Home = () => {
     const pendingPostAuthHome = sessionStorage.getItem("facefox_post_auth_home") === "1";
     const signupGateActive = sessionStorage.getItem("facefox_signup_gate_active") === "1";
     if (user || pendingPostAuthHome) {
+      // Logged-in users must NEVER see the hero screen
+      setSkipWelcome(true);
       if (signupGateActive) {
         setShowGuided(true);
         setAutoOpenEvaluated(true);
         return;
       }
       if (!openCreatorRequested && !isOnboardingUser) setShowGuided(false);
-      if (isOnboardingUser) setSkipWelcome(true);
       setAutoOpenEvaluated(true);
       return;
     }
