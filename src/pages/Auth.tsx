@@ -1,13 +1,5 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { registerBlockingLoader } from "@/lib/startupSplash";
-
-const SilentLoader = () => {
-  useLayoutEffect(() => {
-    const unregister = registerBlockingLoader();
-    return unregister;
-  }, []);
-  return <div className="min-h-screen bg-background" />;
-};
+import { useEffect, useMemo, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
