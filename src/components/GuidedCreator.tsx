@@ -552,7 +552,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [updateCharacterName]);
 
   const advance = useCallback(() => {
-    if (animating.current) return;
+    if (animating.current) {
+      // Safety: if stuck for too long, force-reset
+      window.setTimeout(() => { animating.current = false; }, 100);
+      return;
+    }
+    toast.dismiss();
 
     // Validation for name and trait slides
     if (isNameSlide && !selectionsRef.current.characterName.trim()) { triggerShake(); return; }
