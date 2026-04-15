@@ -598,7 +598,12 @@ const Index = () => {
     };
   }, [fetchCharacters]);
 
-  if (authLoading || (!!user && !charactersLoaded)) return <div className="min-h-screen bg-background" />;
+  if (authLoading || (!!user && !charactersLoaded)) {
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
+  }
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);

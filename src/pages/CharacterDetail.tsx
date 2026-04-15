@@ -296,7 +296,10 @@ const CharacterDetail = () => {
   };
 
   if (loading || authLoading) {
-    return <div className="min-h-screen bg-background" />;
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
   }
 
   if (!character) {

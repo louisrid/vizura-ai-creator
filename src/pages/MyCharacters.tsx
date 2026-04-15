@@ -1,14 +1,6 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { registerBlockingLoader } from "@/lib/startupSplash";
-
-const SilentLoader = () => {
-  useLayoutEffect(() => {
-    const unregister = registerBlockingLoader();
-    return unregister;
-  }, []);
-  return <div className="min-h-screen bg-background" />;
-};
+import { useEffect, useState } from "react";
 import { displayAge } from "@/lib/displayAge";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus, Loader2 } from "lucide-react";
@@ -89,7 +81,12 @@ const MyCharacters = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
-  if (loading) return <SilentLoader />;
+  if (loading) {
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
+  }
 
   const handleCreateCharacter = () => {
     sessionStorage.removeItem("facefox_creator_dismissed");
