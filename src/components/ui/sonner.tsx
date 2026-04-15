@@ -110,7 +110,7 @@ export const Toaster = () => {
                 role="status"
                 aria-live="polite"
               >
-                <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-left text-[13px] md:text-[16px] font-[900] lowercase leading-none" style={{ color: "#ffffff" }}>
+                <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-left text-[13px] md:text-[16px] font-[900] lowercase leading-none" style={{ color: "#000000" }}>
                   {t.message}
                 </span>
               </motion.div>

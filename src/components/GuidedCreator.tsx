@@ -761,7 +761,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     style={{
                       borderRadius: 10,
                       backgroundColor: isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-                      color: isMiddle ? "#fff" : "hsl(var(--background))",
+                      color: "#000",
                       border: "none",
                     }}>
                     {pill.text}
