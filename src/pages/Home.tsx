@@ -66,7 +66,11 @@ const Home = () => {
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
   const isTestAccount = isTestResetAccount(user);
-  const shouldOpenGuidedOnMount = openCreatorRequested || (!user && !authLoading) || isTestAccount;
+  const pendingAuthResume = typeof window !== "undefined" && (
+    sessionStorage.getItem("facefox_post_auth_home") === "1" ||
+    sessionStorage.getItem("facefox_signup_gate_active") === "1"
+  );
+  const shouldOpenGuidedOnMount = openCreatorRequested || ((!user && !authLoading && !pendingAuthResume) || isTestAccount);
   const [images, setImages] = useState<LatestImage[]>([]);
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
@@ -220,9 +224,9 @@ const Home = () => {
             }
           }
         } catch {}
-        // Fallback: no valid saved state, show creator normally
-        setSkipWelcome(false);
-        setShowGuided(true);
+        // Fallback: keep the auth resume path hidden instead of flashing the start screen
+        setSkipWelcome(true);
+        setShowGuided(false);
         setAutoOpenEvaluated(true);
         return;
       }
