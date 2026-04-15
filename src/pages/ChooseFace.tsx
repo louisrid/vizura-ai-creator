@@ -700,6 +700,7 @@ const ChooseFace = () => {
         prompt: prompt || "face generation",
         image_urls: [faceUrl],
       });
+      window.dispatchEvent(new CustomEvent("facefox:generations-changed"));
     }
 
     if (faceUrl && cId) {
@@ -770,6 +771,7 @@ const ChooseFace = () => {
       setPendingAuthSave(false);
       setShowSignIn(false);
       toast.success("created!");
+      window.dispatchEvent(new CustomEvent("facefox:characters-changed"));
       navigate(`/characters/${cId}`, { replace: true });
     }
   }, [angleBodyBarComplete, pendingNavCharId, navigate]);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { createPortal } from "react-dom";
 import { isTestResetAccount } from "@/lib/testAccountReset";
@@ -12,6 +12,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
@@ -63,6 +64,7 @@ const Home = () => {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
+  const { characters: cachedChars, generations: cachedGens, charactersLoaded: cachedCharsLoaded, generationsLoaded: cachedGensLoaded } = useAppData();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
@@ -72,10 +74,28 @@ const Home = () => {
     sessionStorage.getItem("facefox_signup_gate_active") === "1"
   );
   const shouldOpenGuidedOnMount = openCreatorRequested || ((!user && !authLoading && !pendingAuthResume) || isTestAccount);
-  const [images, setImages] = useState<LatestImage[]>([]);
-  const [characters, setCharacters] = useState<CharacterPreview[]>([]);
-  const [photosLoaded, setPhotosLoaded] = useState(false);
-  const [charsLoaded, setCharsLoaded] = useState(false);
+  // Derive images and characters from global cache
+  const images = useMemo(() => {
+    return cachedGens
+      .flatMap((g) =>
+        (g.image_urls ?? []).filter(isValidImageUrl).slice(0, 1).map((url, i) => ({
+          id: `${g.id}-${i}`,
+          url,
+          prompt: g.prompt ?? "",
+          created_at: g.created_at,
+        })),
+      )
+      .slice(0, 8);
+  }, [cachedGens]);
+
+  const characters = useMemo(() => {
+    return cachedChars
+      .filter((c) => c.face_image_url && c.face_angle_url && c.body_anchor_url)
+      .slice(0, 4) as CharacterPreview[];
+  }, [cachedChars]);
+
+  const photosLoaded = cachedGensLoaded;
+  const charsLoaded = cachedCharsLoaded;
   const [showGuided, setShowGuided] = useState(() => shouldOpenGuidedOnMount);
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
@@ -97,91 +117,6 @@ const Home = () => {
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && !onboardingComplete && characterCount === 0;
 
-  const areSameLatestImages = (a: LatestImage[], b: LatestImage[]) =>
-    a.length === b.length && a.every((img, index) => img.id === b[index]?.id && img.url === b[index]?.url);
-
-  const preloadImage = (url: string) =>
-    new Promise<boolean>((resolve) => {
-      const img = new Image();
-      let settled = false;
-      const timeout = window.setTimeout(() => {
-        if (settled) return;
-        settled = true;
-        resolve(false);
-      }, 3500);
-
-      const finish = (loaded: boolean) => {
-        if (settled) return;
-        settled = true;
-        window.clearTimeout(timeout);
-        resolve(loaded);
-      };
-
-      img.onload = () => finish(true);
-      img.onerror = () => finish(false);
-      img.decoding = "async";
-      img.src = url;
-    });
-
-  const photoFetchRef = useRef(0);
-  const fetchLatestPhotos = useCallback(async () => {
-    if (!user) { setImages([]); setPhotosLoaded(true); return; }
-    const fetchId = ++photoFetchRef.current;
-    const { data } = await supabase
-      .from("generations")
-      .select("id, image_urls, prompt, created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .order("id", { ascending: false })
-      .limit(24);
-
-    if (fetchId !== photoFetchRef.current) return;
-
-    const candidates = (data ?? [])
-      .flatMap((g: any) =>
-        (g.image_urls ?? []).filter(isValidImageUrl).slice(0, 1).map((url: string, i: number) => ({
-          id: `${g.id}-${i}`,
-          url,
-          prompt: g.prompt ?? "",
-          created_at: g.created_at,
-        })),
-      )
-      .slice(0, 8);
-
-    const settledResults = await Promise.all(
-      candidates.map(async (photo) => ({ photo, loaded: await preloadImage(photo.url) })),
-    );
-
-    if (fetchId !== photoFetchRef.current) return;
-
-    const nextImages = settledResults
-      .filter((result) => result.loaded)
-      .map((result) => result.photo)
-      .slice(0, 8);
-
-    setImages((prev) => (areSameLatestImages(prev, nextImages) ? prev : nextImages));
-    setPhotosLoaded(true);
-  }, [user]);
-
-  const charFetchRef = useRef(0);
-  const fetchCharacters = useCallback(async () => {
-    if (!user) { setCharacters([]); setCharsLoaded(true); return; }
-    const fetchId = ++charFetchRef.current;
-    const { data } = await supabase
-      .from("characters")
-      .select("id, name, age, face_image_url, face_angle_url, body_anchor_url")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(20);
-    if (fetchId !== charFetchRef.current) return;
-    if (data) {
-      const complete = (data as any[]).filter(
-        (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
-      );
-      setCharacters(complete.slice(0, 4) as CharacterPreview[]);
-    }
-    setCharsLoaded(true);
-  }, [user]);
 
   useEffect(() => {
     if (authLoading) return;
@@ -292,15 +227,12 @@ const Home = () => {
     }
   }, [initialLoadComplete, lockStateResolved, user, onboardingComplete, characterCount]);
 
-  // blackout:end no longer needed — overlay system handles transitions
-
-  // Fetch all data in parallel — resolve lock state atomically
+  // Resolve onboarding lock state
   useEffect(() => {
     if (!user) {
       setOnboardingComplete(true);
       setLockStateResolved(false);
       setCharacterCount(0);
-      void Promise.all([fetchLatestPhotos(), fetchCharacters()]);
       return;
     }
 
@@ -321,30 +253,19 @@ const Home = () => {
       setOnboardingComplete(cached.onboardingComplete);
       setCharacterCount(cached.characterCount);
       setLockStateResolved(true);
+      setInitialLoadComplete(true);
     } else {
       setLockStateResolved(false);
     }
 
     let cancelled = false;
 
-    const refreshAll = async () => {
-      const [, , resolvedState] = await Promise.all([
-        fetchLatestPhotos(),
-        fetchCharacters(),
-        fetchAndCacheOnboardingState(user.id),
-      ]);
+    void fetchAndCacheOnboardingState(user.id).then((resolvedState) => {
       applyResolvedState(resolvedState);
-    };
+    });
 
-    void refreshAll();
-
-    const handleTestReset = () => { void refreshAll(); };
-    window.addEventListener("facefox:test-reset-complete", handleTestReset);
-    return () => {
-      cancelled = true;
-      window.removeEventListener("facefox:test-reset-complete", handleTestReset);
-    };
-  }, [fetchLatestPhotos, fetchCharacters, openCreatorRequested, user]);
+    return () => { cancelled = true; };
+  }, [openCreatorRequested, user]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
@@ -594,7 +515,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
                         )}
                       </AspectRatio>
                     </button>
@@ -793,7 +714,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
                         )}
                       </AspectRatio>
                     </button>

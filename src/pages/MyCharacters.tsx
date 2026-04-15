@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
@@ -6,10 +6,10 @@ import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import BackButton from "@/components/BackButton";
 
 import PageTitle from "@/components/PageTitle";
-import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
@@ -28,10 +28,9 @@ interface Character {
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
+  const { characters: cachedChars, charactersLoaded, refreshCharacters } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [loading, setLoading] = useState(true);
   const [newCharId, setNewCharId] = useState<string | null>(null);
   const [isFirstCharacter, setIsFirstCharacter] = useState(false);
   const [bounceActive, setBounceActive] = useState(false);
@@ -40,45 +39,30 @@ const MyCharacters = () => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
   }, [user, authLoading, navigate, location.pathname]);
 
+  // Derive complete characters from cache
+  const characters = useMemo(() => {
+    return cachedChars
+      .filter((c) => c.face_image_url && c.face_angle_url && c.body_anchor_url)
+      .slice(0, 12) as Character[];
+  }, [cachedChars]);
+
+  const loading = !charactersLoaded;
+
+  // Handle new character highlight
   useEffect(() => {
-    const fetchCharacters = async () => {
-      if (!user) return;
-      const { data } = await supabase
-        .from("characters")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(50);
-      if (data) {
-        const allChars = data as (Character & { face_angle_url?: string | null; body_anchor_url?: string | null })[];
-        // Delete incomplete characters (missing any of the 3 reference photos)
-        const incomplete = allChars.filter(
-          (c) => !c.face_image_url || !c.face_angle_url || !c.body_anchor_url
-        );
-        if (incomplete.length > 0) {
-          const ids = incomplete.map((c) => c.id);
-          supabase.from("characters").delete().in("id", ids).then(() => {});
-        }
-        const complete = allChars.filter(
-          (c) => c.face_image_url && c.face_angle_url && c.body_anchor_url
-        );
-        setCharacters(complete.slice(0, 12) as Character[]);
-        const pendingNew = sessionStorage.getItem("facefox_new_char_highlight");
-        if (pendingNew) {
-          sessionStorage.removeItem("facefox_new_char_highlight");
-          setNewCharId(pendingNew);
-          if (data.length === 1) {
-            setIsFirstCharacter(true);
-            setBounceActive(true);
-            setTimeout(() => setBounceActive(false), 3500);
-          }
-          setTimeout(() => setNewCharId(null), 1500);
-        }
+    if (!charactersLoaded) return;
+    const pendingNew = sessionStorage.getItem("facefox_new_char_highlight");
+    if (pendingNew) {
+      sessionStorage.removeItem("facefox_new_char_highlight");
+      setNewCharId(pendingNew);
+      if (characters.length === 1) {
+        setIsFirstCharacter(true);
+        setBounceActive(true);
+        setTimeout(() => setBounceActive(false), 3500);
       }
-      setLoading(false);
-    };
-    if (user) fetchCharacters();
-  }, [user]);
+      setTimeout(() => setNewCharId(null), 1500);
+    }
+  }, [charactersLoaded, characters.length]);
 
   if (!authLoading && !user) return null;
 
