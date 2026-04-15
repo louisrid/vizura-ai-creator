@@ -58,12 +58,6 @@ const TopUps = () => {
   }, [user]);
 
   if (!loading && !user) return null;
-  if (user && !claimChecked) {
-    if (document.getElementById("splash-screen")) {
-      return <LoadingScreen />;
-    }
-    return null;
-  }
 
   const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;

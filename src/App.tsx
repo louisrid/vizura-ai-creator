@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -308,16 +308,6 @@ const PageTransitionOverlay = () => {
   );
 };
 
-const ContentFlashOverlay = ({ locationKey }: { locationKey: string }) => (
-  <motion.div
-    key={locationKey}
-    className="pointer-events-none fixed inset-x-0 bottom-0 bg-background"
-    style={{ top: "calc(env(safe-area-inset-top) + 144px)", zIndex: 9970 }}
-    initial={{ opacity: 0.25 }}
-    animate={{ opacity: 0 }}
-    transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-  />
-);
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -351,7 +341,7 @@ const AppRoutes = () => {
     <>
       <TopGradientBar />
       <PageTransitionOverlay />
-      <ContentFlashOverlay locationKey={location.key} />
+      
       <HeaderTransition />
       <Routes location={location}>
         <Route path="/" element={<Home />} />

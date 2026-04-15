@@ -598,12 +598,7 @@ const Index = () => {
     };
   }, [fetchCharacters]);
 
-  if (authLoading || (!!user && !charactersLoaded)) {
-    if (document.getElementById("splash-screen")) {
-      return <LoadingScreen />;
-    }
-    return null;
-  }
+  if (!user && !authLoading) return null;
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
