@@ -731,8 +731,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isHighlight ? "hsl(170 100% 20%)" : "hsl(0 0% 14%)",
-                      border: isHighlight ? "2px solid hsl(170 100% 50%)" : "2px solid hsl(0 0% 22%)",
+                      backgroundColor: isHighlight ? "hsl(140 100% 15%)" : "hsl(0 0% 14%)",
+                      border: isHighlight ? "2px solid hsl(140 100% 30%)" : "2px solid hsl(0 0% 22%)",
                     }}>
                     {pill.text}
                   </div>
