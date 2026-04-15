@@ -440,6 +440,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return;
     }
 
+    // First-time + logged in: advancing from Set1Slide2 goes straight to face gen
+    if (isSet1Slide2 && isLoggedIn && isFirstTime) {
+      setSeenSlide2(true);
+      completeCookingFlow();
+      return;
+    }
+
     const nextStep = Math.min(step + 1, TOTAL - 1);
     if (nextStep === step) return;
 
@@ -459,7 +466,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       // Local content fade only — arrows and dashes stay visible
       setStep(nextStep);
     }
-  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSet1Slide2, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSet1Slide2, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
