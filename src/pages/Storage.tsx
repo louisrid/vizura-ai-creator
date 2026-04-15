@@ -132,17 +132,7 @@ const Storage = () => {
           <PageTitle className="mb-0">storage</PageTitle>
         </div>
 
-        {(loading || authLoading) ? (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
-                <AspectRatio ratio={3 / 4}>
-                  <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
-                </AspectRatio>
-              </div>
-            ))}
-          </div>
-        ) : images.length === 0 ? (
+        {!loading && !authLoading && images.length === 0 ? (
           <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
