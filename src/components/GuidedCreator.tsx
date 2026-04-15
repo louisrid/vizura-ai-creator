@@ -359,7 +359,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       case "guest-onboarding":
         return [{ type: "hero" }, { type: "set1slide1" }, { type: "name" }, ...traitSteps, { type: "create" }, { type: "signup" }];
       case "member-onboarding":
-        return [{ type: "hero" }, { type: "name" }, ...traitSteps];
+        return [{ type: "hero" }, { type: "set1slide1" }, { type: "name" }, ...traitSteps, { type: "create" }];
       case "returning-skip":
         return [{ type: "name" }, ...traitSteps, { type: "create" }];
       case "returning-full":
@@ -567,10 +567,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return;
     }
 
-    if (flowVariant === "member-onboarding" && currentTraitIndex === TRAITS.length - 1) {
-      completeCookingFlow();
-      return;
-    }
 
     const nextStep = Math.min(step + 1, TOTAL - 1);
     if (nextStep === step) return;
