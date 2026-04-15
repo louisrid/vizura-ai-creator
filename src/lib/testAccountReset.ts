@@ -45,6 +45,8 @@ export const maybeResetTestAccount = async (user: User) => {
       "facefox_auto_opened",
       "facefox_creator_dismissed",
       "facefox_resume_after_auth",
+      "facefox_set3_seen",
+      "facefox_hero_seen",
       `facefox_gems_balance:${user.id}`,
     ];
 
