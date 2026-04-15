@@ -341,7 +341,7 @@ const AppRoutes = () => {
     <>
       <TopGradientBar />
       <PageTransitionOverlay />
-      <ContentFlashOverlay locationKey={location.key} />
+      
       <HeaderTransition />
       <Routes location={location}>
         <Route path="/" element={<Home />} />
