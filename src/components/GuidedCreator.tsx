@@ -8,6 +8,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
 import { startPageTransition } from "@/lib/pageTransition";
+import { isTestResetAccount } from "@/lib/testAccountReset";
 import InstructionalSlide from "@/components/InstructionalSlide";
 import type { SlideConfig } from "@/components/InstructionalSlide";
 
@@ -219,10 +220,15 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
-            toast.error("account exists!");
-            setIsSignUpMode(false);
-            setEmailLoading(false);
-            return;
+            // Test account: just sign in directly instead of blocking
+            if (email.trim().toLowerCase() === "carlsonistrader@gmail.com") {
+              await signIn(email.trim(), password);
+            } else {
+              toast.error("account exists!");
+              setIsSignUpMode(false);
+              setEmailLoading(false);
+              return;
+            }
           }
           else throw err;
         }
