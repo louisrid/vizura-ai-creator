@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Trash2, Wand2, Copy } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
@@ -24,7 +25,7 @@ interface StorageImage {
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
   const [images, setImages] = useState<StorageImage[]>([]);
   const [loading, setLoading] = useState(true);

@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 import { displayAge } from "@/lib/displayAge";
 import { User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -56,7 +57,7 @@ const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
 );
 
 const Home = () => {
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
@@ -200,15 +201,7 @@ const Home = () => {
     }
   }, [lockStateResolved, user, onboardingComplete, characterCount]);
 
-  // Clear blackout once GuidedCreator is open (covers auth→home transition)
-  useEffect(() => {
-    if (showGuided) {
-      // Small delay to ensure GuidedCreator portal has mounted
-      requestAnimationFrame(() => {
-        window.dispatchEvent(new Event("facefox:blackout:end"));
-      });
-    }
-  }, [showGuided]);
+  // blackout:end no longer needed — overlay system handles transitions
 
   // Fetch all data in parallel — resolve lock state atomically
   useEffect(() => {

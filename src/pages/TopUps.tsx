@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Gem, ShoppingCart, Gift, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
@@ -20,7 +21,7 @@ const packs = [
 const TopUps = () => {
   const { refetch } = useGems();
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
   const [buying, setBuying] = useState<string | null>(null);
   const [canClaimFree, setCanClaimFree] = useState(false);

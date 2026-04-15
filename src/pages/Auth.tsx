@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,7 +20,7 @@ function isInAppWebView(): boolean {
 
 const Auth = () => {
   const { user, signIn, signUp, signInPreview } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
   const redirectTo = useMemo(() => new URLSearchParams(location.search).get("redirect") || "/", [location.search]);
   const [submitting, setSubmitting] = useState(false);

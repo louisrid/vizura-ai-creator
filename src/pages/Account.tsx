@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { LogOut, ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
 
 import BackButton from "@/components/BackButton";
@@ -16,7 +17,7 @@ const Account = () => {
   const { subscribed, refetch: refetchSub } = useSubscription();
   const { refetch: refetchGems } = useGems();
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const searchParams = new URLSearchParams(location.search);
   const redirectTo = searchParams.get("redirect");
 

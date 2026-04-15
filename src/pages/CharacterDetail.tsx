@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, Trash2, Lock, RefreshCw, Camera, Check, User } from "lucide-react";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
@@ -42,7 +43,7 @@ const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDelete, setShowDelete] = useState(false);

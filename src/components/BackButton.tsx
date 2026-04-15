@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { getNavDepth } from "@/lib/navigation";
 
 const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
 
   const handleBack = () => {
     // If we have navigation history depth > 1, go back; otherwise go home

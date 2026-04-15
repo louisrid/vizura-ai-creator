@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { useNavigate } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -162,7 +162,7 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
    ══════════════════════════════════════════ */
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
-  const navigateTo = useNavigate();
+  const navigateTo = useTransitionNavigate();
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;
@@ -355,10 +355,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      setLoginExiting(true);
-      window.setTimeout(() => {
-        completeCookingFlow();
-      }, FAST_CROSSFADE_MS);
+      completeCookingFlow();
       return;
     }
     // Hero → first slide: fade to black, hold, then reveal next slide
@@ -468,11 +465,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               heroVisited.current = true; markHeroSeen();
-              setLoginExiting(true);
               navigateTo(`/auth${window.location.search}`);
-              setTimeout(() => {
-                setVisible(false);
-              }, FAST_CROSSFADE_MS);
+              // The overlay transition will cover us; hide after navigate executes
+              setTimeout(() => { setVisible(false); }, 50);
             }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
@@ -619,8 +614,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
-        opacity: loginExiting ? 0 : 1,
-        transition: `opacity ${FAST_CROSSFADE_MS}ms ease-in-out`,
       }}
     >
       {/* Exit fade — smooth fade-out of content, black always behind */}
@@ -732,11 +725,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     };
   }, [visible]);
 
-  useEffect(() => {
-    if (!visible) return;
-    const timer = window.setTimeout(() => { window.dispatchEvent(new CustomEvent("facefox:blackout:end")); }, 320);
-    return () => window.clearTimeout(timer);
-  }, [visible]);
+  // blackout:end no longer needed — overlay system handles transitions
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
