@@ -564,6 +564,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
+      // First-time not logged in: create slide → slow fade to signup
+      if (isFirstTime && !isLoggedIn && !skipWelcome) {
+        const nextStep = Math.min(step + 1, TOTAL - 1);
+        if (nextStep === step) return;
+        animating.current = true;
+        startPageTransition("slow", () => {
+          setStep(nextStep);
+          window.setTimeout(() => { animating.current = false; }, 520);
+        });
+        return;
+      }
       completeCookingFlow();
       return;
     }
@@ -579,16 +590,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     // Mark instructional slides as seen when leaving them
     if (isSet1Slide1) setSeenSlide1(true);
-
-    // First-time, not logged in: last trait → signup uses slow page transition
-    if (isFirstTime && !isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
-      animating.current = true;
-      startPageTransition("slow", () => {
-        setStep(nextStep);
-        window.setTimeout(() => { animating.current = false; }, 520);
-      });
-      return;
-    }
 
     if (isHeroSlide) {
       animating.current = true;
