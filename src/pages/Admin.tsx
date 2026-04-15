@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, Lock, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -314,7 +314,7 @@ const formatPhotoLabel = (prompt: string): { label: string; type: "prompt" | "sy
 /* ── Main Admin ── */
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
 
   const [overview, setOverview] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
