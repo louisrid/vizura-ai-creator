@@ -110,7 +110,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       ),
     }}
   >
-    <span className="block leading-none text-center whitespace-nowrap">{label}</span>
+    <span className="block leading-none text-center whitespace-nowrap">{label === "extra large" ? "extra XL" : label}</span>
   </motion.button>
 );
 

@@ -47,9 +47,9 @@ const SET2_SLIDE: SlideConfig = {
   emoji: "⏳",
   title: "let's see how she looks!",
   pills: [
-    { text: "we're creating two more photos", side: "left" },
-    { text: "regenerate until you're happy", side: "right", highlight: true },
-    { text: "then click create photo", side: "left" },
+    { text: "we're creating 2 more angles! 📸", side: "left" },
+    { text: "regenerate until you're happy! 🔄", side: "right", highlight: true },
+    { text: "then tap create photo 👇", side: "left" },
   ],
   hideDashes: true,
 };
@@ -579,6 +579,7 @@ const ChooseFace = () => {
   }, []);
 
   const handleSet2Forward = useCallback(() => {
+    toast.dismiss();
     const params = pendingAngleGenRef.current;
     if (params) {
       startAngleBodyGen(params.charId, params.prompt, params.faceUrl, params.bodyType, params.bustSize);
@@ -587,6 +588,7 @@ const ChooseFace = () => {
   }, [startAngleBodyGen]);
 
   const doFinalSave = async (forcedFaceIdx?: number) => {
+    toast.dismiss();
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
       toast.error("sign in first");
@@ -784,6 +786,14 @@ const ChooseFace = () => {
     }
   }, [faces.length, user]);
 
+  /* Hide TopGradientBar during loading screens */
+  useEffect(() => {
+    if (pendingAuthSave || angleBodyLoading) {
+      document.documentElement.dataset.guidedCreatorOpen = "1";
+      return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
+    }
+  }, [pendingAuthSave, angleBodyLoading]);
+
   if (showPaywall) {
     return (
       <div className="relative min-h-screen bg-background">
@@ -797,10 +807,11 @@ const ChooseFace = () => {
       <InstructionalSlide
         slide={SET2_SLIDE}
         alreadySeen={false}
-        dashTotal={1}
+        dashTotal={0}
         dashActive={0}
-        showBack={false}
+        showBack={true}
         showForward={true}
+        onBack={() => { setShowSet2Slide(false); }}
         onForward={handleSet2Forward}
       />
     );
