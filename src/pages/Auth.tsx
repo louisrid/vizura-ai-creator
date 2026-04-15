@@ -167,7 +167,10 @@ const Auth = () => {
   // If user is logged in, the useEffect above handles redirect.
   // Show a minimal loading state while redirect is in progress.
   if (user) {
-    return <SilentLoader />;
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
   }
 
   return (
