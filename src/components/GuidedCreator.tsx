@@ -329,15 +329,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const internalStep = step + offset;
 
   // Map internalStep to logical meaning based on isFirstTime
-  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "set1slide2" | "create" => {
+  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "set1slide2" | "signup" | "create" => {
     if (isFirstTime && !skipWelcome) {
-      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:set1slide2, 11:create
+      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:set1slide2, 11:signup (if not logged in)
       if (internalStep === 0) return "hero";
       if (internalStep === 1) return "set1slide1";
       if (internalStep === 2) return "name";
       if (internalStep >= 3 && internalStep <= 9) return "trait";
       if (internalStep === 10) return "set1slide2";
-      return "create";
+      if (internalStep === 11 && !isLoggedIn) return "signup";
+      return "create"; // fallback (shouldn't reach for first-time)
     }
     // Returning user
     if (internalStep === 0 && !skipWelcome) return "hero";
@@ -354,6 +355,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const isSet1Slide2 = stepType === "set1slide2";
   const isNameSlide = stepType === "name";
   const isCreateSlide = stepType === "create";
+  const isSignupScreen = stepType === "signup";
 
   // Trait index mapping
   const getTraitIndex = (): number => {
