@@ -821,6 +821,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                     />
                   </div>
                 ))}
+              </div>
             </div>
           ) : (
             <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 mx-auto ${
