@@ -996,7 +996,12 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       if (isSignUp) {
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
-          if (err.message?.toLowerCase().includes("already registered")) await signIn(email.trim(), password);
+          if (err.message?.toLowerCase().includes("already registered")) {
+            toast.error("account exists!");
+            setIsSignUp(false);
+            setEmailLoading(false);
+            return;
+          }
           else throw err;
         }
       } else { await signIn(email.trim(), password); }
