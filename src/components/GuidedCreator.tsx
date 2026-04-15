@@ -56,7 +56,7 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const SLIDE_TITLE_CLASS = "text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
 const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
 
 /* ── Nav arrow ── */
@@ -577,7 +577,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
                   initial={shouldAnim ? { opacity: 0, x: isLeft ? -60 : 60 } : false}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={shouldAnim ? { duration: 0.5, delay: i * 0.6 + 0.3, ease: "easeOut" } : undefined}
+                  transition={shouldAnim ? { duration: 0.7, delay: i * 0.9 + 0.5, ease: "easeOut" } : undefined}
                 >
                   <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
                     style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 14%)", border: "2px solid hsl(0 0% 22%)" }}>
@@ -724,12 +724,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     >
       {/* Progress dashes — static, never fade during transitions */}
       {showNavigation && (
-        <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 38px)" }}>
+        <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)" }}>
           <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                 flex: 1, borderRadius: 2,
-                background: i <= dashActive ? Y : "rgba(250,204,21,0.3)",
+                background: i <= dashActive ? Y : "rgba(250,204,21,0.45)",
               }} />
             ))}
           </div>
@@ -739,7 +739,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       {/* Content area — fades between slides */}
       <div
         className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-        style={{ top: isHeroSlide ? 0 : 58, bottom: isHeroSlide ? 0 : 160 }}
+        style={{ top: isHeroSlide ? 0 : 72, bottom: isHeroSlide ? 0 : 160 }}
       >
         <AnimatePresence mode="wait">
           <motion.div

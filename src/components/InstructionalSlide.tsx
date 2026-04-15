@@ -25,6 +25,7 @@ export interface InstructionalSlideProps {
 }
 
 const Y = "#ffe603";
+const DASH_INACTIVE = "rgba(250,204,21,0.45)";
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
@@ -44,7 +45,7 @@ const ChatPill = ({
       className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
       initial={animate ? { opacity: 0, x: isLeft ? -60 : 60 } : false}
       animate={{ opacity: 1, x: 0 }}
-      transition={animate ? { duration: 0.5, delay, ease: "easeOut" } : undefined}
+      transition={animate ? { duration: 0.7, delay, ease: "easeOut" } : undefined}
     >
       <div
         className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
@@ -114,7 +115,6 @@ const InstructionalSlide = ({
   onBack,
   onForward,
 }: InstructionalSlideProps) => {
-  // Track if pills have animated in this render
   const [hasAnimated, setHasAnimated] = useState(alreadySeen);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -123,8 +123,7 @@ const InstructionalSlide = ({
       setHasAnimated(true);
       return;
     }
-    // After all pills animate in, mark as seen
-    const totalDelay = slide.pills.length * 0.6 + 0.3 + 0.5;
+    const totalDelay = slide.pills.length * 0.9 + 0.5 + 0.7;
     timerRef.current = setTimeout(() => setHasAnimated(true), totalDelay * 1000);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -137,7 +136,7 @@ const InstructionalSlide = ({
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none" }}>
       {/* Dashes at top */}
-      <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 38px)" }}>
+      <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)" }}>
         <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
           {Array.from({ length: dashTotal }).map((_, i) => (
             <div
@@ -146,7 +145,7 @@ const InstructionalSlide = ({
               style={{
                 flex: 1,
                 borderRadius: 2,
-                background: i <= dashActive ? Y : "rgba(250,204,21,0.3)",
+                background: i <= dashActive ? Y : DASH_INACTIVE,
               }}
             />
           ))}
@@ -156,7 +155,7 @@ const InstructionalSlide = ({
       {/* Content area */}
       <div
         className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-        style={{ top: 58, bottom: 160 }}
+        style={{ top: 72, bottom: 160 }}
       >
         <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center">
           {/* Emoji */}
@@ -169,7 +168,7 @@ const InstructionalSlide = ({
           </motion.span>
 
           {/* Title */}
-          <h2 className="text-center text-[32px] md:text-[44px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
           </h2>
 
@@ -180,7 +179,7 @@ const InstructionalSlide = ({
                 key={i}
                 text={pill.text}
                 side={isSinglePill ? "left" : pill.side}
-                delay={shouldAnimate ? i * 0.6 + 0.3 : 0}
+                delay={shouldAnimate ? i * 0.9 + 0.5 : 0}
                 animate={shouldAnimate}
               />
             ))}
