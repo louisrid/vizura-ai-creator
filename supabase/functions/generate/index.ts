@@ -121,9 +121,14 @@ const SKIN_MAP: Record<string, string> = {
   dark: "rich dark skin with natural healthy glow",
 };
 
-const normalizeBodyType = (v: string) => v === "slim" ? "thin" : v;
+const normalizeBodyType = (v: string) => {
+  const k = v.toLowerCase();
+  if (k === "thin") return "slim";
+  return k;
+};
 
 const BODY_MAP: Record<string, string> = {
+  slim: "slim body, narrow waist",
   thin: "slim body, narrow waist",
   regular: "soft feminine body, defined waist",
   average: "soft feminine body, defined waist",
@@ -179,6 +184,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
   regular: "full rounded C cup breasts, prominent noticeable chest",
+  "extra large": "large DD cup breasts, heavy prominent chest, deep cleavage",
   large: "large DD cup breasts, heavy prominent chest, deep cleavage",
 };
 
@@ -206,7 +212,7 @@ function buildCharacterTraits(char: any): string {
   const bustDesc = BUST_SIZE_MAP[bustKey] || "";
   if (bustDesc) parts.push(bustDesc);
 
-  if (bodyKey === "thin") {
+  if (bodyKey === "slim" || bodyKey === "thin") {
     parts.push("lean angular face, no roundness or puffiness in face");
   } else if (bodyKey === "regular" || bodyKey === "average") {
     parts.push("soft face but not fat, no round chubby face");
@@ -253,6 +259,7 @@ function buildCharacterTraits(char: any): string {
 
 /* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
 const BODY_PROMPT_MODIFIER: Record<string, string> = {
+  slim: "petite frame, toned stomach, narrow hips",
   thin: "petite frame, toned stomach, narrow hips",
   regular: "hourglass figure, defined waist, feminine hips",
   average: "hourglass figure, defined waist, feminine hips",
