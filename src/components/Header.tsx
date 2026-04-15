@@ -140,7 +140,7 @@ const Header = () => {
 
   const isLoggedIn = !!user?.id;
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
-  const hideOnboardingFaceFlowActions = (pathname === "/choose-face" || pathname.startsWith("/characters/")) && showMenuLocks;
+  
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
@@ -281,12 +281,12 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-7 md:pt-9 pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { if (hideOnboardingFaceFlowActions) return; handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
               </button>
               {isLoggedIn && (
                 <button
-                  onClick={() => { if (hideOnboardingFaceFlowActions) return; navigate("/account"); }}
+                  onClick={() => { navigate("/account"); }}
                   className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
                   style={{
                     borderRadius: "50%",
@@ -300,7 +300,7 @@ const Header = () => {
               )}
             </div>
 
-            {isLoggedIn && !isAuthPage && !hideOnboardingFaceFlowActions && (
+            {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
                 <button
                   onClick={() => navigate("/top-ups")}
