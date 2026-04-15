@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Test account reset
+    // Test account reset — allowed regardless of demo mode
     if (action === "test_reset") {
       const TEST_EMAIL = "carlsonistrader@gmail.com";
       if (user.email?.toLowerCase() !== TEST_EMAIL) {
