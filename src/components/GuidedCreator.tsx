@@ -189,6 +189,8 @@ const SignupGate = ({ onComplete, selections }: { onComplete: () => void; select
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     sessionStorage.setItem("facefox_signup_gate_active", "1");
+    // Save current selections so Home.tsx can resume after OAuth redirect
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
