@@ -574,7 +574,7 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
+                        border: "none",
                         backgroundColor: "hsl(var(--card))",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
@@ -652,7 +652,7 @@ const Home = () => {
                       className="relative overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: "2px solid hsl(var(--border-mid))",
+                        border: "none",
                         backgroundColor: "hsl(var(--card))",
                       }}
                     >
@@ -773,7 +773,7 @@ const Home = () => {
                       className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
                       style={{
                         borderRadius: 10,
-                        border: isPlaceholder ? "none" : "2px solid hsl(var(--border-mid))",
+                        border: "none",
                         backgroundColor: "hsl(var(--card))",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
@@ -851,7 +851,7 @@ const Home = () => {
                       className="relative overflow-hidden hover-lift"
                       style={{
                         borderRadius: 10,
-                        border: "2px solid hsl(var(--border-mid))",
+                        border: "none",
                         backgroundColor: "hsl(var(--card))",
                       }}
                     >

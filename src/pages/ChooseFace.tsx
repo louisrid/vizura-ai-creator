@@ -943,14 +943,22 @@ const ChooseFace = () => {
                   <button
                     onClick={() => { if (selectedIndex !== null) handleSelectFace(selectedIndex); }}
                     disabled={selectedIndex === null}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-none active:scale-[0.99] disabled:cursor-not-allowed"
+                    className="flex w-full items-center justify-between text-[16px] md:text-[18px] font-[900] lowercase active:scale-[0.98] disabled:cursor-not-allowed"
                     style={{
+                      padding: "16px 14px",
                       borderRadius: 10,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
                       color: selectedIndex !== null ? "#000" : "#ffffff",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    {selectedIndex !== null ? "use this face →" : "select a face"}
+                    <span>{selectedIndex !== null ? "create photo" : "select a face"}</span>
+                    {selectedIndex !== null && (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                        <circle cx="12" cy="13" r="4" />
+                      </svg>
+                    )}
                   </button>
 
                   <button
