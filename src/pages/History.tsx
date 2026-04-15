@@ -96,9 +96,9 @@ const History = () => {
           <PageTitle className="mb-0">history</PageTitle>
         </div>
 
-        {loading ? (
+        {(loading || authLoading) ? (
           <div className="space-y-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:space-y-0">
-            {Array.from({ length: 8 }).map((_, i) => (
+            {Array.from({ length: 4 }).map((_, i) => (
               <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
                 <div className="w-full aspect-[4/3]" style={{ backgroundColor: "hsl(var(--card))" }} />
                 <div className="p-4 space-y-2">
