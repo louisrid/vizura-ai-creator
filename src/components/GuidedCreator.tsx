@@ -794,6 +794,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           </div>
         </div>
       )}
+
+      {/* Signup gate — fullscreen, no dashes/arrows */}
+      {isSignupScreen && (
+        <SignupGate
+          onComplete={completeCookingFlow}
+        />
+      )}
     </div>,
     document.body,
   );
