@@ -158,8 +158,8 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
  * SCREEN ORDER depends on isFirstTime + login state:
  *
  * First-time, NOT logged in:
- *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Signup
- *   TOTAL=11, dashes=9 (exclude hero & signup), dashActive=step-1
+ *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits, 10: Create, 11: Signup
+ *   TOTAL=12, dashes=10 (exclude hero & signup), dashActive=step-1
  *
  * First-time, logged in:
  *   0: Hero, 1: Set1Slide1, 2: Name, 3-9: Traits
@@ -195,6 +195,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
     setGoogleLoading(true);
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
+    sessionStorage.setItem("facefox_signup_gate_active", "1");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
@@ -202,11 +203,13 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
       });
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_signup_gate_active");
         toast.error("sign in error");
         setGoogleLoading(false);
       }
     } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_signup_gate_active");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
@@ -252,7 +255,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
         <div className="mt-8 w-full space-y-3">
           <button
             onClick={handleGoogle}
-            disabled={googleLoading || emailLoading}
+            disabled={googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
             style={{ background: Y, color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
@@ -281,7 +284,7 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
             onClick={(e) => e.stopPropagation()}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
-            disabled={emailLoading || googleLoading}
+            disabled={googleLoading}
           />
           <input
             type="password" placeholder="password" value={password}
@@ -290,12 +293,12 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
-            disabled={emailLoading || googleLoading}
+            disabled={googleLoading}
           />
 
           <button
             onClick={handleEmailAuth}
-            disabled={emailLoading || googleLoading}
+            disabled={emailLoading}
             className="w-full h-14 text-sm font-[900] lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all disabled:opacity-50 bg-neon-yellow hover:opacity-90"
             style={{ borderRadius: 10 }}
           >
@@ -330,7 +333,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   });
 
   const getTotal = () => {
-    if (isFirstTime && !skipWelcome && !isLoggedIn) return 11; // hero + slide1 + name + 7traits + signup
+    if (isFirstTime && !skipWelcome && !isLoggedIn) return 12; // hero + slide1 + name + 7traits + create + signup
     if (isFirstTime && !skipWelcome) return 10; // hero + slide1 + name + 7traits (logged in: complete from last trait)
     if (!skipWelcome) return 10; // hero + name + 7traits + create
     return 9; // name + 7traits + create
@@ -457,12 +460,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   // Map internalStep to logical meaning based on isFirstTime
   const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "signup" | "create" => {
     if (isFirstTime && !skipWelcome) {
-      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:signup (if not logged in)
+      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:create, 11:signup (if not logged in)
       if (internalStep === 0) return "hero";
       if (internalStep === 1) return "set1slide1";
       if (internalStep === 2) return "name";
       if (internalStep >= 3 && internalStep <= 9) return "trait";
-      if (internalStep === 10 && !isLoggedIn) return "signup";
+      if (internalStep === 10) return "create";
+      if (internalStep === 11 && !isLoggedIn) return "signup";
       return "create"; // fallback
     }
     // Returning user
@@ -560,6 +564,17 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
+      // First-time not logged in: create slide → slow fade to signup
+      if (isFirstTime && !isLoggedIn && !skipWelcome) {
+        const nextStep = Math.min(step + 1, TOTAL - 1);
+        if (nextStep === step) return;
+        animating.current = true;
+        startPageTransition("slow", () => {
+          setStep(nextStep);
+          window.setTimeout(() => { animating.current = false; }, 520);
+        });
+        return;
+      }
       completeCookingFlow();
       return;
     }
@@ -575,16 +590,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     // Mark instructional slides as seen when leaving them
     if (isSet1Slide1) setSeenSlide1(true);
-
-    // First-time, not logged in: last trait → signup uses slow page transition
-    if (isFirstTime && !isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
-      animating.current = true;
-      startPageTransition("slow", () => {
-        setStep(nextStep);
-        window.setTimeout(() => { animating.current = false; }, 520);
-      });
-      return;
-    }
 
     if (isHeroSlide) {
       animating.current = true;
@@ -646,8 +651,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Dash calculations ── */
   const getDashInfo = () => {
     if (isFirstTime && !skipWelcome) {
-      // 9 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8)
-      return { count: 9, active: Math.min(step - 1, 8) };
+      // 10 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8) + create(9)
+      return { count: 10, active: Math.min(step - 1, 9) };
     }
     if (!skipWelcome) {
       return { count: 9, active: step - 1 };
@@ -725,7 +730,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
-              const isHighlight = !!(pill as any).highlight;
+              const isMiddle = i === 1 && slide.pills.length === 3;
               return (
                 <motion.div
                   key={i}
@@ -734,11 +739,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   animate={{ opacity: 1, x: 0 }}
                   transition={shouldAnim ? { duration: 0.7, delay: i * 0.9 + 0.5, ease: "easeOut" } : undefined}
                 >
-                  <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
+                  <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isHighlight ? "hsl(140 100% 15%)" : "hsl(0 0% 14%)",
-                      border: isHighlight ? "2px solid hsl(140 100% 30%)" : "2px solid hsl(0 0% 22%)",
+                      ...(isMiddle
+                        ? { backgroundColor: "#34C759", color: "#fff", border: "2px solid #2DA44E" }
+                        : { backgroundColor: "#fff", color: "#000", border: "2px solid #fff" }
+                      ),
                     }}>
                     {pill.text}
                   </div>
@@ -893,7 +900,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
                 flex: 1, borderRadius: 2,
-                background: i <= dashActive ? Y : "rgba(250,204,21,0.45)",
+                background: i <= dashActive ? Y : "rgba(250,204,21,0.30)",
               }} />
             ))}
           </div>

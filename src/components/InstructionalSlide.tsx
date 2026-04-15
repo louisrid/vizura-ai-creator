@@ -25,7 +25,7 @@ export interface InstructionalSlideProps {
 }
 
 const Y = "#ffe603";
-const DASH_INACTIVE = "rgba(250,204,21,0.45)";
+const DASH_INACTIVE = "rgba(250,204,21,0.30)";
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
