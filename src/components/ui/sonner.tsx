@@ -106,7 +106,7 @@ export const Toaster = () => {
                 exit={{ opacity: 0, x: 60, scale: 0.95, transition: { duration: 0.35, ease: "easeIn" } }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="pointer-events-auto inline-flex items-center px-2.5 py-1.5 md:px-4 md:py-2.5"
-                style={{ backgroundColor: "#051a0a", border: "2px solid hsl(140, 100%, 50%)", borderRadius: 10 }}
+                style={{ backgroundColor: "#051a0a", border: "2px solid #00B807", borderRadius: 10 }}
                 role="status"
                 aria-live="polite"
               >
