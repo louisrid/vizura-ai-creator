@@ -786,6 +786,14 @@ const ChooseFace = () => {
     }
   }, [faces.length, user]);
 
+  /* Hide TopGradientBar during loading screens */
+  useEffect(() => {
+    if (pendingAuthSave || angleBodyLoading) {
+      document.documentElement.dataset.guidedCreatorOpen = "1";
+      return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
+    }
+  }, [pendingAuthSave, angleBodyLoading]);
+
   if (showPaywall) {
     return (
       <div className="relative min-h-screen bg-background">
@@ -808,13 +816,6 @@ const ChooseFace = () => {
       />
     );
   }
-
-  useEffect(() => {
-    if (pendingAuthSave || angleBodyLoading) {
-      document.documentElement.dataset.guidedCreatorOpen = "1";
-      return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
-    }
-  }, [pendingAuthSave, angleBodyLoading]);
 
   if (pendingAuthSave || angleBodyLoading) {
     return (
