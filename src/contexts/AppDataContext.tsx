@@ -122,12 +122,20 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     return () => { fetchIdRef.current = id + 1; };
   }, [authLoading, user?.id]);
 
-  // Listen for test-reset events
+  // Listen for test-reset and data-changed events
   useEffect(() => {
-    const handler = () => { void refreshAll(); };
-    window.addEventListener("facefox:test-reset-complete", handler);
-    return () => window.removeEventListener("facefox:test-reset-complete", handler);
-  }, [refreshAll]);
+    const handleReset = () => { void refreshAll(); };
+    const handleCharsChanged = () => { void refreshCharacters(); };
+    const handleGensChanged = () => { void refreshGenerations(); };
+    window.addEventListener("facefox:test-reset-complete", handleReset);
+    window.addEventListener("facefox:characters-changed", handleCharsChanged);
+    window.addEventListener("facefox:generations-changed", handleGensChanged);
+    return () => {
+      window.removeEventListener("facefox:test-reset-complete", handleReset);
+      window.removeEventListener("facefox:characters-changed", handleCharsChanged);
+      window.removeEventListener("facefox:generations-changed", handleGensChanged);
+    };
+  }, [refreshAll, refreshCharacters, refreshGenerations]);
 
   return (
     <AppDataContext.Provider
