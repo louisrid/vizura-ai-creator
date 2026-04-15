@@ -500,13 +500,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || isSet1Slide2 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
+  // When user signs up/logs in on the signup screen, complete the flow immediately
+  const signupCompletedRef = useRef(false);
+  useEffect(() => {
+    if (isSignupScreen && isLoggedIn && !signupCompletedRef.current) {
+      signupCompletedRef.current = true;
+      completeCookingFlow();
+    }
+  }, [isSignupScreen, isLoggedIn, completeCookingFlow]);
+
   if (!mounted || !visible) return null;
 
   /* ── Dash calculations ── */
   const getDashInfo = () => {
     if (isFirstTime && !skipWelcome) {
-      // 11 dashes (exclude hero): set1slide1(0) + name(1) + 7traits(2-8) + set1slide2(9) + create(10)
-      return { count: 11, active: step - 1 }; // step 0=hero (no dash), step 1=dash0, etc.
+      // 10 dashes (exclude hero & signup): set1slide1(0) + name(1) + 7traits(2-8) + set1slide2(9)
+      return { count: 10, active: Math.min(step - 1, 9) };
     }
     if (!skipWelcome) {
       return { count: 9, active: step - 1 };
