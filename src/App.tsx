@@ -36,6 +36,14 @@ import {
   getDurations,
 } from "@/lib/pageTransition";
 
+let redirectLock = false;
+const acquireRedirectLock = (): boolean => {
+  if (redirectLock) return false;
+  redirectLock = true;
+  setTimeout(() => { redirectLock = false; }, 1000);
+  return true;
+};
+
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
 const ONBOARDING_FLOW_ROUTES = ["/choose-face", "/generate-face"];
@@ -226,10 +234,6 @@ const OnboardingRedirectGate = () => {
     });
   }, [navigate, shouldRedirect]);
 
-  useEffect(() => {
-    hasRedirected.current = false;
-  }, [user?.id, location.pathname]);
-
   if (!shouldRedirect) return null;
 
   return <div className="fixed inset-0 z-[9999] bg-nav" />;
@@ -258,7 +262,7 @@ const PageTransitionOverlay = () => {
 
     // Fallback only for any route change that escaped the transition hook.
     // We still use the same sitewide fade-out timing.
-    el.style.transition = "none";
+    el.style.transition = "opacity 150ms ease-in-out";
     el.style.opacity = "1";
     void el.offsetHeight;
     el.style.transition = "opacity 500ms ease-in-out";

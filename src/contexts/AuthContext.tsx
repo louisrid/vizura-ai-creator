@@ -117,22 +117,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try { await supabase.auth.signOut(); } catch {}
       }
 
-      // If the tab was closed and reopened, sign out to force re-login.
-      // OAuth callbacks (with tokens/code in URL) bypass this so the flow completes.
-      const TAB_KEY = "facefox_tab_alive";
-      const isNewTab = !sessionStorage.getItem(TAB_KEY);
-      sessionStorage.setItem(TAB_KEY, "1");
-
-      const url = new URL(window.location.href);
-      const hashParams = new URLSearchParams(url.hash.startsWith("#") ? url.hash.slice(1) : url.hash);
-      const hasOAuthParams = !!(hashParams.get("access_token") || url.searchParams.get("access_token") || url.searchParams.get("code"));
-
-      if (isNewTab && !hasOAuthParams) {
-        // Clear persisted session so user lands on start page
-        localStorage.removeItem("facefox_cached_user");
-        await supabase.auth.signOut();
-      }
-
       const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
         const nextUser = session?.user ?? null;
 
