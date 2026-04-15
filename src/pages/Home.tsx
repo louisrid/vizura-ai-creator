@@ -515,7 +515,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
                         )}
                       </AspectRatio>
                     </button>
@@ -714,7 +714,7 @@ const Home = () => {
                             <div className="h-full w-full" />
                           )
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={() => { setImages((prev) => prev.filter((p) => p.id !== photo.id)); }} />
+                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
                         )}
                       </AspectRatio>
                     </button>
