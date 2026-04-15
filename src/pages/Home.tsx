@@ -217,6 +217,7 @@ const Home = () => {
 
     // Resume to character page if user has an incomplete character from a previous session
     if (user && !onboardingComplete && characterCount > 0) {
+      setRedirectingToCharacter(true);
       supabase
         .from("characters")
         .select("id")
@@ -227,6 +228,8 @@ const Home = () => {
         .then(({ data: latestChar }) => {
           if (latestChar?.id) {
             navigate(`/characters/${latestChar.id}`, { replace: true });
+          } else {
+            setRedirectingToCharacter(false);
           }
         });
       return;

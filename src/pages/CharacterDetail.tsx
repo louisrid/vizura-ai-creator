@@ -420,7 +420,7 @@ const CharacterDetail = () => {
           {onboardingComplete ? <BackButton /> : (
             <button
               type="button"
-              className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px] opacity-50"
+              className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
               style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
@@ -500,19 +500,17 @@ const CharacterDetail = () => {
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
         <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
-          <button
+          <motion.button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
-            style={{ height: 72, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px", marginTop: -8, marginBottom: -8 }}
+            style={{ height: 52, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           >
-            <motion.span
-              className="flex items-center justify-center gap-2"
-              animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            >
+            <span className="flex items-center justify-center gap-2">
               <Camera size={18} strokeWidth={2.5} /> create photo
-            </motion.span>
-          </button>
+            </span>
+          </motion.button>
         </div>
       </div>
 
@@ -522,7 +520,7 @@ const CharacterDetail = () => {
           {onboardingComplete ? <BackButton /> : (
             <button
               type="button"
-              className="flex items-center justify-center w-[48px] h-[48px] opacity-50"
+              className="flex items-center justify-center w-[48px] h-[48px]"
               style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
@@ -604,19 +602,17 @@ const CharacterDetail = () => {
               </div>
             </div>
             <div className="flex-1" />
-            <button
+            <motion.button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
               style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             >
-              <motion.span
-                className="flex items-center justify-center gap-2"
-                animate={{ y: [0, -3, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-              >
+              <span className="flex items-center justify-center gap-2">
                 <Camera size={18} strokeWidth={2.5} /> create photo
-              </motion.span>
-            </button>
+              </span>
+            </motion.button>
           </div>
         </div>
       </main>
