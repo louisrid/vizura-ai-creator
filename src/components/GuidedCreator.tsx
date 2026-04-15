@@ -619,7 +619,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
       }}
     >
-    >
       {/* Exit fade — smooth fade-out of content, black always behind */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-50 bg-black"
