@@ -189,10 +189,9 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
-    setHandoffLoading(true);
-    persistSignupHandoff();
-    sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     try {
+      persistSignupHandoff();
+      sessionStorage.setItem("facefox_resume_url", window.location.pathname);
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
         extraParams: { prompt: "select_account" },
@@ -200,14 +199,12 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_signup_gate_active");
-        setHandoffLoading(false);
         toast.error("sign in error");
         setGoogleLoading(false);
       }
     } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
       sessionStorage.removeItem("facefox_signup_gate_active");
-      setHandoffLoading(false);
       toast.error("sign in error");
       setGoogleLoading(false);
     }
