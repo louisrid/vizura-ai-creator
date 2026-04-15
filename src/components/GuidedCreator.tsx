@@ -23,7 +23,7 @@ const markHeroSeen = () => { if (typeof window !== "undefined") sessionStorage.s
 /* ── Set 1 slide configs ── */
 const SET1_SLIDE1: SlideConfig = {
   emoji: "👩‍🔬",
-  title: "let's build your ai influencer",
+  title: "let's build your ai influencer!",
   pills: [
     { text: "customize her look", side: "left" },
     { text: "pick her details", side: "right" },
@@ -436,21 +436,22 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     const nextStep = Math.min(step + 1, TOTAL - 1);
     if (nextStep === step) return;
 
-    animating.current = true;
-    if (isHeroSlide) {
-      heroVisited.current = true;
-      markHeroSeen();
-    }
-
     // Mark instructional slides as seen when leaving them
     if (isSet1Slide1) setSeenSlide1(true);
     if (isSet1Slide2) setSeenSlide2(true);
 
-    startPageTransition("default", () => {
+    if (isHeroSlide) {
+      animating.current = true;
+      heroVisited.current = true;
+      markHeroSeen();
+      startPageTransition("default", () => {
+        setStep(nextStep);
+        window.setTimeout(() => { animating.current = false; }, 520);
+      });
+    } else {
+      // Local content fade only — arrows and dashes stay visible
       setStep(nextStep);
-      if (!skipWelcome && nextStep === 0) setHeroPhase(3);
-      window.setTimeout(() => { animating.current = false; }, 520);
-    });
+    }
   }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSet1Slide2, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
@@ -459,13 +460,20 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     markHeroSeen();
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
 
-    animating.current = true;
-    startPageTransition("default", () => {
-      const prevStep = step - 1;
-      if (!skipWelcome && prevStep === 0) setHeroPhase(3);
+    const prevStep = step - 1;
+    const goingToHero = !skipWelcome && prevStep === 0;
+
+    if (goingToHero) {
+      animating.current = true;
+      setHeroPhase(3);
+      startPageTransition("default", () => {
+        setStep(prevStep);
+        window.setTimeout(() => { animating.current = false; }, 520);
+      });
+    } else {
+      // Local content fade only — arrows and dashes stay visible
       setStep(prevStep);
-      window.setTimeout(() => { animating.current = false; }, 520);
-    });
+    }
   }, [step, skipWelcome]);
 
   const handleClose = () => {
@@ -527,7 +535,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             />
           </div>
         </div>
-        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 18, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
         <div style={{ width: 195, height: 12, background: '#ffe603', borderRadius: 6, marginTop: 10, marginBottom: 26, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease 0.1s' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 185, padding: '12px 0', fontSize: 24, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
@@ -548,11 +556,40 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const renderSlide = () => {
     if (isHeroSlide) return renderHero();
 
-    /* Instructional Set 1 Slide 1 */
-    if (isSet1Slide1) return null; // rendered separately via InstructionalSlide
-
-    /* Instructional Set 1 Slide 2 */
-    if (isSet1Slide2) return null; // rendered separately via InstructionalSlide
+    /* Instructional slides rendered inline so arrows/dashes stay visible */
+    if (isSet1Slide1 || isSet1Slide2) {
+      const slide = isSet1Slide1 ? SET1_SLIDE1 : SET1_SLIDE2;
+      const alreadySeen = isSet1Slide1 ? seenSlide1 : seenSlide2;
+      const shouldAnim = !alreadySeen;
+      const isSinglePill = slide.pills.length === 1;
+      return (
+        <div className="flex w-full flex-col items-center">
+          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -8, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>
+            {slide.emoji}
+          </motion.span>
+          <h2 className={SLIDE_TITLE_CLASS}>{slide.title}</h2>
+          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-2.5">
+            {slide.pills.map((pill, i) => {
+              const isLeft = isSinglePill ? true : pill.side === "left";
+              return (
+                <motion.div
+                  key={i}
+                  className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
+                  initial={shouldAnim ? { opacity: 0, x: isLeft ? -60 : 60 } : false}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={shouldAnim ? { duration: 0.5, delay: i * 0.6 + 0.3, ease: "easeOut" } : undefined}
+                >
+                  <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
+                    style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 14%)", border: "2px solid hsl(0 0% 22%)" }}>
+                    {pill.text}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
 
     /* Name */
     if (isNameSlide) return (
@@ -677,90 +714,58 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     return null;
   };
 
-  const showNavigation = !isHeroSlide && !isSet1Slide1 && !isSet1Slide2;
+  const showNavigation = !isHeroSlide;
   const canExitFlow = skipWelcome && isLoggedIn;
-
-  /* ── Render instructional slides (Set 1) via dedicated component ── */
-  if (isSet1Slide1) {
-    return createPortal(
-      <InstructionalSlide
-        slide={SET1_SLIDE1}
-        alreadySeen={seenSlide1}
-        dashTotal={dashCount}
-        dashActive={dashActive}
-        showBack={true}
-        showForward={true}
-        onBack={goBack}
-        onForward={advance}
-      />,
-      document.body,
-    );
-  }
-
-  if (isSet1Slide2) {
-    return createPortal(
-      <InstructionalSlide
-        slide={SET1_SLIDE2}
-        alreadySeen={seenSlide2}
-        dashTotal={dashCount}
-        dashActive={dashActive}
-        showBack={true}
-        showForward={true}
-        onBack={goBack}
-        onForward={advance}
-      />,
-      document.body,
-    );
-  }
 
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{
-        background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
-      }}
+      style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
     >
-      <div className="absolute inset-0 flex flex-col">
-        <div
-          className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-          style={{
-            top: isHeroSlide ? 0 : 48,
-            bottom: isHeroSlide ? 0 : 160,
-          }}
-        >
-          <div className="grid w-full max-w-sm md:max-w-lg mx-auto">
-            <div className="w-full [grid-area:1/1]">
-              {renderSlide()}
-            </div>
+      {/* Progress dashes — static, never fade during transitions */}
+      {showNavigation && (
+        <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 38px)" }}>
+          <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
+            {Array.from({ length: dashCount }).map((_, i) => (
+              <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
+                flex: 1, borderRadius: 2,
+                background: i <= dashActive ? Y : "rgba(250,204,21,0.3)",
+              }} />
+            ))}
           </div>
         </div>
+      )}
 
-        {/* Bottom nav — only on non-hero slides */}
-        {showNavigation && (
-          <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 28px)" }}>
-            <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
-              {Array.from({ length: dashCount }).map((_, i) => (
-                <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
-                  flex: 1, borderRadius: 2,
-                  background: i <= dashActive ? Y : "rgba(250,204,21,0.1)",
-                }} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Arrow buttons */}
-        {showNavigation && (
-          <div className="absolute inset-x-0 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}>
-            <div className="flex items-center justify-center gap-4 md:gap-6">
-              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-                <NavArrow direction="left" onClick={goBack} />
-              </motion.div>
-              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
-            </div>
-          </div>
-        )}
+      {/* Content area — fades between slides */}
+      <div
+        className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
+        style={{ top: isHeroSlide ? 0 : 58, bottom: isHeroSlide ? 0 : 160 }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={isHeroSlide ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={isHeroSlide ? undefined : { opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="w-full max-w-sm md:max-w-lg mx-auto"
+          >
+            {renderSlide()}
+          </motion.div>
+        </AnimatePresence>
       </div>
+
+      {/* Arrow buttons — static, never fade during transitions */}
+      {showNavigation && (
+        <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}>
+          <div className="flex items-center justify-center gap-4 md:gap-6">
+            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+              <NavArrow direction="left" onClick={goBack} />
+            </motion.div>
+            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
+          </div>
+        </div>
+      )}
     </div>,
     document.body,
   );
