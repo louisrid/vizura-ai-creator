@@ -108,6 +108,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     let cancelled = false;
 
     const initializeAuth = async () => {
+      // Force-logout: bump this number to invalidate all existing sessions
+      const FORCE_LOGOUT_VERSION = "2";
+      const storedVersion = localStorage.getItem("facefox_logout_version");
+      if (storedVersion !== FORCE_LOGOUT_VERSION) {
+        localStorage.setItem("facefox_logout_version", FORCE_LOGOUT_VERSION);
+        localStorage.removeItem("facefox_cached_user");
+        try { await supabase.auth.signOut(); } catch {}
+      }
+
       // If the tab was closed and reopened, sign out to force re-login.
       // OAuth callbacks (with tokens/code in URL) bypass this so the flow completes.
       const TAB_KEY = "facefox_tab_alive";

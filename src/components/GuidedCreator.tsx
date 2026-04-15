@@ -38,7 +38,7 @@ const getRandomNameToast = () => "great choice";
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["slim", "regular", "curvy"], defaultOption: "regular" },
-  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "large"], defaultOption: "regular" },
+  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "extra large"], defaultOption: "regular" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
@@ -552,7 +552,11 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [updateCharacterName]);
 
   const advance = useCallback(() => {
-    if (animating.current) return;
+    if (animating.current) {
+      // Safety: if stuck for too long, force-reset
+      window.setTimeout(() => { animating.current = false; }, 100);
+      return;
+    }
     toast.dismiss();
 
     // Validation for name and trait slides
@@ -604,7 +608,12 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
-    if (animating.current) return;
+    if (animating.current) {
+      // Safety: if stuck for too long, force-reset
+      window.setTimeout(() => { animating.current = false; }, 100);
+      return;
+    }
+    toast.dismiss();
     heroVisited.current = true;
     markHeroSeen();
     if (step <= 0) { setBackArrowShaking(true); setTimeout(() => setBackArrowShaking(false), 500); return; }
@@ -620,7 +629,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         window.setTimeout(() => { animating.current = false; }, 520);
       });
     } else {
-      // Local content fade only — arrows and dashes stay visible
       setStep(prevStep);
     }
   }, [step, skipWelcome]);
