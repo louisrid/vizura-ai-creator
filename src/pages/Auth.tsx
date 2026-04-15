@@ -1,13 +1,5 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { registerBlockingLoader } from "@/lib/startupSplash";
-
-const SilentLoader = () => {
-  useLayoutEffect(() => {
-    const unregister = registerBlockingLoader();
-    return unregister;
-  }, []);
-  return <div className="min-h-screen bg-background" />;
-};
+import { useEffect, useMemo, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
@@ -175,15 +167,17 @@ const Auth = () => {
   // If user is logged in, the useEffect above handles redirect.
   // Show a minimal loading state while redirect is in progress.
   if (user) {
-    return <SilentLoader />;
+    if (document.getElementById("splash-screen")) {
+      return <LoadingScreen />;
+    }
+    return null;
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen bg-background overflow-hidden flex items-center justify-center">
       <DotDecal />
-      {/* Desktop: centered card layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0 md:max-w-2xl">
-        <div className="w-full md:max-w-md">
+      <main className="relative z-[1] w-full max-w-lg px-4 md:max-w-2xl" style={{ transform: "scale(0.9)", transformOrigin: "center center" }}>
+        <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">
             <button
               type="button"
