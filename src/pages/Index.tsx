@@ -439,6 +439,14 @@ const Index = () => {
     }
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
+  // Set 3 onboarding slides state
+  const [showSet3, setShowSet3] = useState(false);
+  const [set3Step, setSet3Step] = useState(0);
+  const [set3SeenSteps, setSet3SeenSteps] = useState<Set<number>>(new Set());
+  const hasSeenSet3 = () => {
+    try { return localStorage.getItem(SET3_KEY) === "1"; } catch { return false; }
+  };
+
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "";
   const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || ""));
