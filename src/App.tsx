@@ -36,6 +36,14 @@ import {
   getDurations,
 } from "@/lib/pageTransition";
 
+let redirectLock = false;
+const acquireRedirectLock = (): boolean => {
+  if (redirectLock) return false;
+  redirectLock = true;
+  setTimeout(() => { redirectLock = false; }, 1000);
+  return true;
+};
+
 const EXEMPT_ROUTES = ["/auth", "/reset-password", "/help", "/info"];
 const POST_AUTH_HOME_KEY = "facefox_post_auth_home";
 const ONBOARDING_FLOW_ROUTES = ["/choose-face", "/generate-face"];
@@ -63,7 +71,7 @@ const FreshLoadRedirect = () => {
     const resolveInitialRoute = async () => {
       if (user) {
         if (location.pathname === "/auth") {
-          navigate("/", { replace: true });
+          if (acquireRedirectLock()) navigate("/", { replace: true });
         }
         const cachedState = readCachedOnboardingState(user.id);
         if (!cachedState || cachedState.characterCount === 0) {
@@ -75,7 +83,7 @@ const FreshLoadRedirect = () => {
       if (!pendingPostAuthHome && !isExemptRoute(location.pathname)) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
-        navigate("/", { replace: true });
+        if (acquireRedirectLock()) navigate("/", { replace: true });
         return;
       }
     };
@@ -99,7 +107,7 @@ const PostAuthHomeRedirect = () => {
     sessionStorage.removeItem(POST_AUTH_HOME_KEY);
     if (resumeUrl) {
       sessionStorage.removeItem("facefox_resume_url");
-      navigate(resumeUrl, { replace: true });
+      if (acquireRedirectLock()) navigate(resumeUrl, { replace: true });
       return;
     }
 
@@ -220,15 +228,13 @@ const OnboardingRedirectGate = () => {
     if (!shouldRedirect || hasRedirected.current) return;
     hasRedirected.current = true;
 
-    navigate("/", {
-      replace: true,
-      state: { openCreator: true, onboardingRedirect: true },
-    });
+    if (acquireRedirectLock()) {
+      navigate("/", {
+        replace: true,
+        state: { openCreator: true, onboardingRedirect: true },
+      });
+    }
   }, [navigate, shouldRedirect]);
-
-  useEffect(() => {
-    hasRedirected.current = false;
-  }, [user?.id, location.pathname]);
 
   if (!shouldRedirect) return null;
 
@@ -258,7 +264,7 @@ const PageTransitionOverlay = () => {
 
     // Fallback only for any route change that escaped the transition hook.
     // We still use the same sitewide fade-out timing.
-    el.style.transition = "none";
+    el.style.transition = "opacity 150ms ease-in-out";
     el.style.opacity = "1";
     void el.offsetHeight;
     el.style.transition = "opacity 500ms ease-in-out";
