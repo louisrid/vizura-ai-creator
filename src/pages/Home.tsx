@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { isTestResetAccount } from "@/lib/testAccountReset";
 import { displayAge } from "@/lib/displayAge";
 import { User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -64,7 +65,8 @@ const Home = () => {
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
-  const shouldOpenGuidedOnMount = openCreatorRequested || (!user && !authLoading);
+  const isTestAccount = isTestResetAccount(user);
+  const shouldOpenGuidedOnMount = openCreatorRequested || (!user && !authLoading) || isTestAccount;
   const [images, setImages] = useState<LatestImage[]>([]);
   const [characters, setCharacters] = useState<CharacterPreview[]>([]);
   const [photosLoaded, setPhotosLoaded] = useState(false);
