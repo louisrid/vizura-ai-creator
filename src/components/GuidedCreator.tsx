@@ -652,7 +652,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             </div>
           </div>
         )}
-      </motion.div>
+      </div>
     </div>,
     document.body,
   );
