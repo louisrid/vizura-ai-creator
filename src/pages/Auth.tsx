@@ -179,11 +179,10 @@ const Auth = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen bg-background overflow-hidden flex items-center justify-center">
       <DotDecal />
-      {/* Desktop: centered card layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-10 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0 md:max-w-2xl">
-        <div className="w-full md:max-w-md">
+      <main className="relative z-[1] w-full max-w-lg px-4 md:max-w-2xl" style={{ transform: "scale(0.9)", transformOrigin: "center center" }}>
+        <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">
             <button
               type="button"
