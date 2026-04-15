@@ -734,10 +734,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       );
     }
 
+    /* Signup gate (first-time, not logged in) */
+    if (isSignupScreen) {
+      return null; // rendered separately below, outside the content fade area
+    }
+
     return null;
   };
 
-  const showNavigation = !isHeroSlide;
+  const showNavigation = !isHeroSlide && !isSignupScreen;
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
