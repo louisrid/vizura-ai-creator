@@ -245,7 +245,7 @@ const PageTransitionOverlay = () => {
   const safetyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const handleFadeIn = (e: Event) => {
+    const handleFadeIn = () => {
       const el = overlayRef.current;
       if (!el) return;
       const dur = getDurations().fadeIn;
@@ -268,7 +268,7 @@ const PageTransitionOverlay = () => {
       }, dur + 50);
     };
 
-    const handleFadeOut = (e: Event) => {
+    const handleFadeOut = () => {
       const el = overlayRef.current;
       if (!el) return;
       const dur = getDurations().fadeOut;
@@ -291,11 +291,21 @@ const PageTransitionOverlay = () => {
       }, dur + 50);
     };
 
+    const handleForceClear = () => {
+      const el = overlayRef.current;
+      if (!el) return;
+      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+      el.style.transition = "opacity 150ms ease-out";
+      el.style.opacity = "0";
+    };
+
     window.addEventListener("page-transition:fade-in", handleFadeIn);
     window.addEventListener("page-transition:fade-out", handleFadeOut);
+    window.addEventListener("page-transition:force-clear", handleForceClear);
     return () => {
       window.removeEventListener("page-transition:fade-in", handleFadeIn);
       window.removeEventListener("page-transition:fade-out", handleFadeOut);
+      window.removeEventListener("page-transition:force-clear", handleForceClear);
     };
   }, []);
 
