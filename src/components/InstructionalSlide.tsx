@@ -134,14 +134,26 @@ const InstructionalSlide = ({
     };
   }, [alreadySeen, slide.pills.length]);
 
+  /* Hide TopGradientBar while this slide is mounted */
+  useEffect(() => {
+    document.documentElement.dataset.guidedCreatorOpen = "1";
+    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
+  }, []);
+
   const shouldAnimate = !alreadySeen && !hasAnimated;
   const isSinglePill = slide.pills.length === 1;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col" style={{ background: "#000", overflow: "hidden", touchAction: "none" }}>
+    <motion.div
+      className="fixed inset-0 z-[9999] flex flex-col"
+      style={{ background: "#000", overflow: "hidden", touchAction: "none" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.45, ease: "easeInOut" }}
+    >
       {/* Dashes at top */}
-      {!slide.hideDashes && (
-        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)" }}>
+      {!slide.hideDashes && dashTotal > 0 && (
+        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)" }}>
           <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
             {Array.from({ length: dashTotal }).map((_, i) => (
               <div
@@ -167,8 +179,8 @@ const InstructionalSlide = ({
           {/* Emoji */}
           <motion.span
             className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           >
             {slide.emoji}
           </motion.span>
@@ -179,7 +191,7 @@ const InstructionalSlide = ({
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
+          <div className="mt-6 md:mt-8 w-full max-w-[20rem] md:max-w-[26rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}
@@ -208,7 +220,7 @@ const InstructionalSlide = ({
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
