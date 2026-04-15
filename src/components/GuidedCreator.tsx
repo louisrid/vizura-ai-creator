@@ -449,16 +449,15 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const internalStep = step + offset;
 
   // Map internalStep to logical meaning based on isFirstTime
-  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "set1slide2" | "signup" | "create" => {
+  const getStepType = (): "hero" | "set1slide1" | "name" | "trait" | "signup" | "create" => {
     if (isFirstTime && !skipWelcome) {
-      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:set1slide2, 11:signup (if not logged in)
+      // 0:hero, 1:set1slide1, 2:name, 3-9:traits, 10:signup (if not logged in)
       if (internalStep === 0) return "hero";
       if (internalStep === 1) return "set1slide1";
       if (internalStep === 2) return "name";
       if (internalStep >= 3 && internalStep <= 9) return "trait";
-      if (internalStep === 10) return "set1slide2";
-      if (internalStep === 11 && !isLoggedIn) return "signup";
-      return "create"; // fallback (shouldn't reach for first-time)
+      if (internalStep === 10 && !isLoggedIn) return "signup";
+      return "create"; // fallback
     }
     // Returning user
     if (internalStep === 0 && !skipWelcome) return "hero";
@@ -472,7 +471,6 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   const stepType = getStepType();
   const isHeroSlide = stepType === "hero";
   const isSet1Slide1 = stepType === "set1slide1";
-  const isSet1Slide2 = stepType === "set1slide2";
   const isNameSlide = stepType === "name";
   const isCreateSlide = stepType === "create";
   const isSignupScreen = stepType === "signup";
@@ -560,9 +558,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       return;
     }
 
-    // First-time + logged in: advancing from Set1Slide2 goes straight to face gen
-    if (isSet1Slide2 && isLoggedIn && isFirstTime) {
-      setSeenSlide2(true);
+    // First-time + logged in: advancing from last trait goes straight to face gen
+    if (isFirstTime && isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
       completeCookingFlow();
       return;
     }
@@ -572,7 +569,16 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
     // Mark instructional slides as seen when leaving them
     if (isSet1Slide1) setSeenSlide1(true);
-    if (isSet1Slide2) setSeenSlide2(true);
+
+    // First-time, not logged in: last trait → signup uses slow page transition
+    if (isFirstTime && !isLoggedIn && !skipWelcome && currentTraitIndex === 6) {
+      animating.current = true;
+      startPageTransition("slow", () => {
+        setStep(nextStep);
+        window.setTimeout(() => { animating.current = false; }, 520);
+      });
+      return;
+    }
 
     if (isHeroSlide) {
       animating.current = true;
@@ -586,7 +592,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       // Local content fade only — arrows and dashes stay visible
       setStep(nextStep);
     }
-  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSet1Slide2, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
+  }, [step, isNameSlide, isCreateSlide, isHeroSlide, isSet1Slide1, isSignupScreen, isLoggedIn, isFirstTime, currentTraitIndex, TOTAL, completeCookingFlow, skipWelcome]);
 
   const goBack = useCallback(() => {
     if (animating.current) return;
@@ -618,7 +624,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
     onExit(selectionsRef.current);
   };
 
-  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || isSet1Slide2 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
+  const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   // When user signs up/logs in on the signup screen, complete the flow immediately
   const signupCompletedRef = useRef(false);
@@ -634,8 +640,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Dash calculations ── */
   const getDashInfo = () => {
     if (isFirstTime && !skipWelcome) {
-      // 10 dashes (exclude hero & signup): set1slide1(0) + name(1) + 7traits(2-8) + set1slide2(9)
-      return { count: 10, active: Math.min(step - 1, 9) };
+      // 9 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8)
+      return { count: 9, active: Math.min(step - 1, 8) };
     }
     if (!skipWelcome) {
       return { count: 9, active: step - 1 };
@@ -895,7 +901,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
             initial={isHeroSlide ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={isHeroSlide ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.35 }}
             className="w-full max-w-sm md:max-w-lg mx-auto"
           >
             {renderSlide()}
