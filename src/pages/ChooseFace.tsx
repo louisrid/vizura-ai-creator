@@ -654,8 +654,11 @@ const ChooseFace = () => {
           cId = inserted.id;
           setCharacterId(cId);
           sessionStorage.setItem("facefox_pending_char_id", cId);
-          // Update onboarding cache so redirect gate won't block (onboardingComplete stays false until first gem purchase)
-          mergeCachedOnboardingState(currentUser.id, { characterCount: 1 });
+          // Update onboarding cache and mark onboarding complete in DB
+          mergeCachedOnboardingState(currentUser.id, { characterCount: 1, onboardingComplete: true });
+          supabase.rpc("update_profile_safe", { _onboarding_complete: true }).then(() => {
+            console.log("[ChooseFace] onboarding_complete set in DB");
+          });
         }
       } catch (err) {
         toast.error("save error");
