@@ -440,8 +440,8 @@ const Home = () => {
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading || isTestAccount;
 
-  // Show loading bar while data loads (post-auth)
-  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
+  // Show loading bar while data loads (post-auth) or redirecting to character
+  if (redirectingToCharacter || (dataLoading && !showGuided && !authLoading && autoOpenEvaluated)) {
     return <LoadingScreen />;
   }
 
