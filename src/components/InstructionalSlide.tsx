@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export interface SlideConfig {
   emoji: string;
   title: string;
-  pills: { text: string; side: "left" | "right" }[];
+  pills: { text: string; side: "left" | "right"; highlight?: boolean }[];
 }
 
 export interface InstructionalSlideProps {
