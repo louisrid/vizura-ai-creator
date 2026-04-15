@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import DotDecal from "@/components/DotDecal";
 import LoadingScreen from "@/components/LoadingScreen";
+import InstructionalSlide from "@/components/InstructionalSlide";
+import type { SlideConfig } from "@/components/InstructionalSlide";
 
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -17,7 +19,33 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { supabase } from "@/integrations/supabase/client";
 
-/* ── Ratio dropdown ── */
+const SET3_KEY = "facefox_set3_seen";
+
+const SET3_SLIDES: SlideConfig[] = [
+  {
+    emoji: "🔥",
+    title: "want to generate her whole social media?",
+    pills: [{ text: "make any picture you want", side: "left" }],
+  },
+  {
+    emoji: "🦊",
+    title: "facefox is the #1 tool to",
+    pills: [
+      { text: "generate ai characters", side: "left" },
+      { text: "create any content you want", side: "right" },
+      { text: "build out a whole social media fast", side: "left" },
+    ],
+  },
+  {
+    emoji: "💎",
+    title: "let's get you some gems",
+    pills: [
+      { text: "10 gems = 1 photo", side: "left" },
+      { text: "we'll give you 5 for free!", side: "right" },
+    ],
+  },
+];
+
 const RATIO_OPTIONS = [
   { value: "3:4", label: "3:4" },
   { value: "9:16", label: "9:16" },
@@ -411,6 +439,14 @@ const Index = () => {
     }
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
+  // Set 3 onboarding slides state
+  const [showSet3, setShowSet3] = useState(false);
+  const [set3Step, setSet3Step] = useState(0);
+  const [set3SeenSteps, setSet3SeenSteps] = useState<Set<number>>(new Set());
+  const hasSeenSet3 = () => {
+    try { return localStorage.getItem(SET3_KEY) === "1"; } catch { return false; }
+  };
+
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "";
   const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || ""));
@@ -577,6 +613,14 @@ const Index = () => {
     if (credits <= 0) { navigate("/top-ups"); return; }
     if (!selectedCharId || !prompt.trim()) { toast.error("fill all info"); return; }
 
+    // Intercept with Set 3 for first-time users
+    if (!hasSeenSet3()) {
+      setShowSet3(true);
+      setSet3Step(0);
+      setSet3SeenSteps(new Set());
+      return;
+    }
+
     setIsGenerating(true);
     setError("");
     setResultImage(null);
@@ -674,6 +718,33 @@ const Index = () => {
   };
 
   const createDisabled = isGenerating;
+
+  // Render Set 3 if active
+  if (showSet3) {
+    const slide = SET3_SLIDES[set3Step];
+    return (
+      <InstructionalSlide
+        slide={slide}
+        alreadySeen={set3SeenSteps.has(set3Step)}
+        dashTotal={3}
+        dashActive={set3Step}
+        showBack={set3Step > 0}
+        showForward={true}
+        onBack={() => { if (set3Step > 0) setSet3Step(set3Step - 1); }}
+        onForward={() => {
+          const nextStep = set3Step + 1;
+          if (nextStep >= SET3_SLIDES.length) {
+            try { localStorage.setItem(SET3_KEY, "1"); } catch {}
+            setShowSet3(false);
+            navigate("/top-ups");
+            return;
+          }
+          setSet3SeenSteps((prev) => new Set(prev).add(set3Step));
+          setSet3Step(nextStep);
+        }}
+      />
+    );
+  }
 
   /* ── Character dropdown content (shared between mobile/desktop) ── */
   const charDropdownContent = (

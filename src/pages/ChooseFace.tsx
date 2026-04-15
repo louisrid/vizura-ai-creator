@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
+import InstructionalSlide from "@/components/InstructionalSlide";
+import type { SlideConfig } from "@/components/InstructionalSlide";
 import { mergeCachedOnboardingState } from "@/lib/onboardingState";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,6 +42,16 @@ const ANGLE_GEN_PHRASES = [
   "generating full body…",
   "finalising your character…",
 ];
+
+const SET2_SLIDE: SlideConfig = {
+  emoji: "⏳",
+  title: "let's see how she looks!",
+  pills: [
+    { text: "we're creating two more photos", side: "left" },
+    { text: "regenerate until you're happy", side: "right" },
+    { text: "then click create photo", side: "left" },
+  ],
+};
 
 const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
@@ -146,6 +158,12 @@ const ChooseFace = () => {
     return () => window.removeEventListener("facefox:test-reset-complete", handler);
   }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
+
+  // Set 2 instructional slide state
+  const [showSet2Slide, setShowSet2Slide] = useState(false);
+  const pendingAngleGenRef = useRef<{
+    charId: string; prompt: string; faceUrl: string; bodyType: string; bustSize: string;
+  } | null>(null);
 
   // Angle/body generation state
   const [pendingNavCharId, setPendingNavCharId] = useState<string | null>(null);
@@ -488,6 +506,81 @@ const ChooseFace = () => {
 
   const normaliseDraftBustSize = (value?: string) => (value === "large" ? "large" : "regular");
 
+  const startAngleBodyGen = useCallback(async (charId: string, anglePrompt: string, faceUrl: string, bodyType: string, bustSize: string) => {
+    setShowSet2Slide(false);
+    setAngleBodyLoading(true);
+    setAngleBodyApiDone(false);
+    setAngleBodyBarComplete(false);
+    setPendingNavCharId(charId);
+
+    const invokeAngleBody = async (retriesLeft = 2): Promise<{ angle_url?: string; body_anchor_url?: string } | null> => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      let token = sessionData?.session?.access_token;
+      if (!token) {
+        const { data: refreshed } = await supabase.auth.refreshSession();
+        token = refreshed?.session?.access_token;
+      }
+      if (!token) return null;
+
+      const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+      const url = `https://${projectId}.supabase.co/functions/v1/generate`;
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: JSON.stringify({
+            prompt: anglePrompt,
+            generate_angles: true,
+            selected_face_url: faceUrl,
+            body_type: bodyType,
+            bust_size: bustSize,
+            angle_character_id: charId,
+          }),
+        });
+        return await response.json();
+      } catch (networkErr: any) {
+        if (retriesLeft > 0 && (networkErr?.name === "TypeError" || networkErr?.message?.includes("fetch"))) {
+          await new Promise<void>((resolve) => {
+            if (document.visibilityState === "visible") setTimeout(resolve, 1000);
+            else {
+              const onVisible = () => {
+                if (document.visibilityState === "visible") {
+                  document.removeEventListener("visibilitychange", onVisible);
+                  setTimeout(resolve, 500);
+                }
+              };
+              document.addEventListener("visibilitychange", onVisible);
+            }
+          });
+          await supabase.auth.refreshSession();
+          return invokeAngleBody(retriesLeft - 1);
+        }
+        throw networkErr;
+      }
+    };
+
+    try {
+      const result = await invokeAngleBody();
+      console.log("Angle + body generation completed:", { characterId: charId, angle: result?.angle_url, body: result?.body_anchor_url });
+    } catch (e) {
+      console.error("Angle + body generation failed:", e);
+    }
+    setAngleBodyApiDone(true);
+  }, []);
+
+  const handleSet2Forward = useCallback(() => {
+    const params = pendingAngleGenRef.current;
+    if (params) {
+      startAngleBodyGen(params.charId, params.prompt, params.faceUrl, params.bodyType, params.bustSize);
+      pendingAngleGenRef.current = null;
+    }
+  }, [startAngleBodyGen]);
+
   const doFinalSave = async (forcedFaceIdx?: number) => {
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
@@ -612,72 +705,21 @@ const ChooseFace = () => {
         if (charRecord?.bust_size) bustSize = charRecord.bust_size;
       } catch {}
 
-      // Show angle/body loading bar
-      setAngleBodyLoading(true);
-      setAngleBodyApiDone(false);
-      setAngleBodyBarComplete(false);
-      setPendingNavCharId(angleCharacterId);
-
-      // Use raw fetch (not supabase.functions.invoke) to avoid default timeouts
-      // that cause the loading bar to complete before generation finishes
-      const invokeAngleBody = async (retriesLeft = 2): Promise<{ angle_url?: string; body_anchor_url?: string } | null> => {
-        const { data: sessionData } = await supabase.auth.getSession();
-        let token = sessionData?.session?.access_token;
-        if (!token) {
-          const { data: refreshed } = await supabase.auth.refreshSession();
-          token = refreshed?.session?.access_token;
-        }
-        if (!token) return null;
-
-        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
-
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            },
-            body: JSON.stringify({
-              prompt: anglePrompt,
-              generate_angles: true,
-              selected_face_url: faceUrl,
-              body_type: bodyType,
-              bust_size: bustSize,
-              angle_character_id: angleCharacterId,
-            }),
-          });
-          return await response.json();
-        } catch (networkErr: any) {
-          if (retriesLeft > 0 && (networkErr?.name === "TypeError" || networkErr?.message?.includes("fetch"))) {
-            await new Promise<void>((resolve) => {
-              if (document.visibilityState === "visible") setTimeout(resolve, 1000);
-              else {
-                const onVisible = () => {
-                  if (document.visibilityState === "visible") {
-                    document.removeEventListener("visibilitychange", onVisible);
-                    setTimeout(resolve, 500);
-                  }
-                };
-                document.addEventListener("visibilitychange", onVisible);
-              }
-            });
-            await supabase.auth.refreshSession();
-            return invokeAngleBody(retriesLeft - 1);
-          }
-          throw networkErr;
-        }
-      };
-
-      try {
-        const result = await invokeAngleBody();
-        console.log("Angle + body generation completed:", { characterId: angleCharacterId, angle: result?.angle_url, body: result?.body_anchor_url });
-      } catch (e) {
-        console.error("Angle + body generation failed:", e);
+      // If first-time user, show Set 2 instructional slide before angle/body gen
+      if (!onboardingComplete) {
+        pendingAngleGenRef.current = {
+          charId: angleCharacterId,
+          prompt: anglePrompt,
+          faceUrl,
+          bodyType,
+          bustSize,
+        };
+        setShowSet2Slide(true);
+        return true;
       }
-      setAngleBodyApiDone(true);
+
+      // Start angle/body generation directly for returning users
+      startAngleBodyGen(angleCharacterId, anglePrompt, faceUrl, bodyType, bustSize);
     } else {
       // No angle/body to generate — navigate directly
       if (cId) sessionStorage.setItem("facefox_new_char_highlight", cId);
@@ -742,6 +784,20 @@ const ChooseFace = () => {
       <div className="relative min-h-screen bg-background">
         <PaywallOverlay open={true} onClose={() => navigate("/")} hasSubscription={subscribed} />
       </div>
+    );
+  }
+
+  if (showSet2Slide) {
+    return (
+      <InstructionalSlide
+        slide={SET2_SLIDE}
+        alreadySeen={false}
+        dashTotal={1}
+        dashActive={0}
+        showBack={false}
+        showForward={true}
+        onForward={handleSet2Forward}
+      />
     );
   }
 
