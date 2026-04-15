@@ -186,6 +186,21 @@ const CharacterDetail = () => {
     if (!character || !character.face_image_url || !user || !target) return;
     setRegenTarget(null);
 
+    // Immediate check — same pattern as face regen in ChooseFace
+    if (!onboardingComplete) {
+      if (target === "angle" && angleRegensUsed >= 1) {
+        toast("1/1 used");
+        return;
+      }
+      if (target === "body" && bodyRegensUsed >= 1) {
+        toast("1/1 used");
+        return;
+      }
+      // Optimistically mark as used immediately
+      if (target === "angle") setAngleRegensUsed(1);
+      if (target === "body") setBodyRegensUsed(1);
+    }
+
     if (target === "angle") {
       setRegeneratingAngle(true);
       sessionStorage.setItem(`facefox_regen_angle_${character.id}`, "1");
@@ -219,17 +234,12 @@ const CharacterDetail = () => {
       await refetchGems();
       if (target === "angle") {
         sessionStorage.removeItem(`facefox_regen_angle_${character.id}`);
-        if (!onboardingComplete) {
-          setAngleRegensUsed((p) => p + 1);
-          // No toast on first regen — "1/1 used" shows on second press
-        } else {
+        if (onboardingComplete) {
           toast("10 gems used");
         }
       } else {
         sessionStorage.removeItem(`facefox_regen_body_${character.id}`);
-        if (!onboardingComplete) {
-          setBodyRegensUsed((p) => p + 1);
-        } else {
+        if (onboardingComplete) {
           toast("10 gems used");
         }
       }
@@ -273,7 +283,7 @@ const CharacterDetail = () => {
       setShowDelete(false);
       return;
     }
-    toast.success("char deleted");
+    toast.success("deleted");
     const previous = readCachedOnboardingState(user!.id);
     mergeCachedOnboardingState(user!.id, {
       characterCount: Math.max((previous?.characterCount ?? 1) - 1, 0),
@@ -311,7 +321,7 @@ const CharacterDetail = () => {
   const traits: { label: string; value: string }[] = [
     { label: "skin", value: skinLabel || "—" },
     { label: "body", value: character.body || "—" },
-    { label: "size", value: character.bust_size || "regular" },
+    { label: "size", value: (character.bust_size || "regular") === "extra large" ? "XL" : (character.bust_size || "regular") },
     { label: "age", value: displayAge(character.id, character.age) },
     { label: "hair colour", value: character.hair || "—" },
     { label: "hair style", value: hairStyle || "—" },
@@ -407,8 +417,20 @@ const CharacterDetail = () => {
       {/* Mobile layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[280px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
-          <BackButton />
-          <PageTitle className="mb-0">details</PageTitle>
+          {onboardingComplete ? <BackButton /> : (
+            <button
+              type="button"
+              className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px] opacity-50"
+              style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+              aria-label="go back"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+                <line x1="12" y1="7" x2="2" y2="7" />
+                <polyline points="7,2 2,7 7,12" />
+              </svg>
+            </button>
+          )}
+          <PageTitle className="mb-0">your character</PageTitle>
         </div>
         <div className="flex flex-col gap-3">
           <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
@@ -481,9 +503,15 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
-            style={{ height: 56, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
+            style={{ height: 56, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
           >
-            <Camera size={18} strokeWidth={2.5} /> create photo
+            <motion.span
+              className="flex items-center justify-center gap-2"
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Camera size={18} strokeWidth={2.5} /> create photo
+            </motion.span>
           </button>
         </div>
       </div>
@@ -492,7 +520,7 @@ const CharacterDetail = () => {
       <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-10 pb-10 min-h-screen">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
-          <PageTitle className="mb-0">details</PageTitle>
+          <PageTitle className="mb-0">your character</PageTitle>
         </div>
         <div className="grid grid-cols-12 gap-8">
           {/* Left: photos */}

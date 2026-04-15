@@ -737,7 +737,7 @@ const ChooseFace = () => {
       sessionStorage.removeItem(AUTH_RESUME_KEY);
       setPendingAuthSave(false);
       setShowSignIn(false);
-      toast.success("char created");
+      toast.success("created!");
       navigate(`/characters/${cId}`, { replace: true });
     }
 
@@ -760,7 +760,7 @@ const ChooseFace = () => {
       sessionStorage.removeItem(AUTH_RESUME_KEY);
       setPendingAuthSave(false);
       setShowSignIn(false);
-      toast.success("char created");
+      toast.success("created!");
       navigate(`/characters/${cId}`, { replace: true });
     }
   }, [angleBodyBarComplete, pendingNavCharId, navigate]);
