@@ -355,10 +355,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      setLoginExiting(true);
-      window.setTimeout(() => {
-        completeCookingFlow();
-      }, FAST_CROSSFADE_MS);
+      completeCookingFlow();
       return;
     }
     // Hero → first slide: fade to black, hold, then reveal next slide
