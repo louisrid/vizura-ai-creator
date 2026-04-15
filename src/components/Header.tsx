@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, User } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
@@ -29,7 +30,7 @@ function useScrollGradientOpacity() {
 
 const Header = () => {
   const gradientOpacity = useScrollGradientOpacity();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
   const pathname = location.pathname;
   const { user, loading, signOut } = useAuth();

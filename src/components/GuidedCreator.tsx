@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { useNavigate } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -162,7 +162,7 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
    ══════════════════════════════════════════ */
 const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: GuidedCreatorProps) => {
   const { user } = useAuth();
-  const navigateTo = useNavigate();
+  const navigateTo = useTransitionNavigate();
   const isLoggedIn = !!user;
 
   const TOTAL = skipWelcome ? TOTAL_SKIP : TOTAL_FULL;

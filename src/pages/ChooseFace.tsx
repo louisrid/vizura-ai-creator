@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { mergeCachedOnboardingState } from "@/lib/onboardingState";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -44,7 +45,7 @@ const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const { subscribed } = useSubscription();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const location = useLocation();
 
   const { prompt: statePrompt, characterId: stateCharId, freshCreation: stateFresh } = (location.state as {
