@@ -25,18 +25,9 @@ const SET1_SLIDE1: SlideConfig = {
   emoji: "👩‍🔬",
   title: "let's build your ai influencer!",
   pills: [
-    { text: "customize her look", side: "left" },
-    { text: "pick her details", side: "right" },
-    { text: "make her yours", side: "left" },
-  ],
-};
-
-const SET1_SLIDE2: SlideConfig = {
-  emoji: "💛",
-  title: "pick the face you want",
-  pills: [
-    { text: "we'll generate three faces", side: "left" },
-    { text: "regenerate until you're happy!", side: "right" },
+    { text: "customize her look 🎨", side: "left" },
+    { text: "pick her details ✨", side: "right", highlight: true },
+    { text: "make her yours 💕", side: "left" },
   ],
 };
 
@@ -56,8 +47,8 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[34px] md:text-[48px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase" + " " + "text-muted-foreground";
+const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase text-white mt-2";
 
 /* ── Nav arrow ── */
 const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {
@@ -155,7 +146,7 @@ const ageRangeToNumber = (range: string): string => {
   }
 };
 
-const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","nina","sara","rose","nora","kira","dana","lexi","tara","zoey","emma","anna","eva","gia","mila","vera","ayla"];
+const RANDOM_NAMES = ["luna","ivy","mia","zara","nova","aria","lily","jade","ruby","ella","cleo","skye","maya","lola","sara","rose","nora","kira","lexi","tara","zoey","emma","eva","gia","mila","vera","ayla","remi","kai","juno","suki","yuki","aya","nyx","rio","bree","cora","lux","viv","wren","demi","faye","kaia","raya","tia","zuri","piper","harlow","reign","indie","sage","blair","sloan","paris","briar","eden","storm","fleur","dahlia","elodie","maren"];
 
 const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<GuidedSelections> => ({
   ...partial,
