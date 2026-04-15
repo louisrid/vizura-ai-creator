@@ -13,10 +13,10 @@ const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
 const SLIDE_FADE_DURATION = 0.2;
-const OVERLAY_FADE_DURATION = 0.2;
-const FAST_CROSSFADE_MS = 250;
-const SLOW_FADE_MS = 300;
-const BLACK_HOLD_MS = 600;
+const OVERLAY_FADE_DURATION = 0.4;
+const FAST_CROSSFADE_MS = 400;
+const SLOW_FADE_MS = 500;
+const BLACK_HOLD_MS = 100;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
@@ -250,7 +250,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
   useEffect(() => {
     if (!visible || !initialFadeIn) return;
-    const t = setTimeout(() => setInitialFadeIn(false), 600);
+    const t = setTimeout(() => setInitialFadeIn(false), FAST_CROSSFADE_MS);
     return () => clearTimeout(t);
   }, [visible, initialFadeIn]);
 
@@ -355,11 +355,10 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      window.dispatchEvent(new CustomEvent("facefox:blackout:start"));
-      setExitFade(true);
+      setLoginExiting(true);
       window.setTimeout(() => {
         completeCookingFlow();
-      }, 600);
+      }, FAST_CROSSFADE_MS);
       return;
     }
     // Hero → first slide: fade to black, hold, then reveal next slide
@@ -473,7 +472,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
               navigateTo(`/auth${window.location.search}`);
               setTimeout(() => {
                 setVisible(false);
-              }, FAST_CROSSFADE_MS + 50);
+              }, FAST_CROSSFADE_MS);
             }} style={{ width: 185, padding: '10px 0', fontSize: 24, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
@@ -629,13 +628,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
         className="pointer-events-none absolute inset-0 z-50 bg-black"
         initial={{ opacity: 0 }}
         animate={{ opacity: (exitFade || heroExiting) ? 1 : 0 }}
-        transition={{ duration: heroExiting ? SLOW_FADE_MS / 1000 : 0.6, ease: "easeInOut" }}
+        transition={{ duration: SLOW_FADE_MS / 1000, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-0 flex flex-col"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : 0.2 }}
+        transition={{ duration: initialFadeIn ? OVERLAY_FADE_DURATION : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
       >
         {/* Close button removed — home icon below arrows is the only exit */}
         {/* Skip button removed */}
@@ -657,7 +656,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                 initial="enter"
                 animate={heroExiting && isHeroSlide ? "exit" : "center"}
                 exit="exit"
-                transition={{ duration: isCreateSlide || heroExiting ? 0.5 : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
+                transition={{ duration: heroExiting ? SLOW_FADE_MS / 1000 : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
               >
                 {renderSlide()}
               </motion.div>

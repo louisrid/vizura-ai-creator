@@ -304,7 +304,7 @@ const Home = () => {
 
     sessionStorage.removeItem(FLOW_STATE_KEY);
     sessionStorage.setItem(DISMISSED_KEY, "1");
-    setTimeout(() => setShowGuided(false), 600);
+    setTimeout(() => setShowGuided(false), 400);
   };
 
   const handleGuidedExit = () => {
