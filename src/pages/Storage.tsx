@@ -83,12 +83,6 @@ const Storage = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
-  if (loading) {
-    if (document.getElementById("splash-screen")) {
-      return <LoadingScreen />;
-    }
-    return null;
-  }
 
   const handleDelete = async (img: StorageImage) => {
     setImages((prev) => prev.filter((i) => i.id !== img.id));

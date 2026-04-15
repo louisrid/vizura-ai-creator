@@ -81,12 +81,6 @@ const MyCharacters = () => {
   }, [user]);
 
   if (!authLoading && !user) return null;
-  if (loading) {
-    if (document.getElementById("splash-screen")) {
-      return <LoadingScreen />;
-    }
-    return null;
-  }
 
   const handleCreateCharacter = () => {
     sessionStorage.removeItem("facefox_creator_dismissed");

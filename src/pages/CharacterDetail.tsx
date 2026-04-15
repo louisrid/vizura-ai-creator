@@ -296,10 +296,15 @@ const CharacterDetail = () => {
   };
 
   if (loading || authLoading) {
-    if (document.getElementById("splash-screen")) {
-      return <LoadingScreen />;
-    }
-    return null;
+    return (
+      <div className="min-h-screen bg-background">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-10 pb-[280px]">
+          <div className="flex items-center gap-3 mb-7">
+            <BackButton />
+          </div>
+        </main>
+      </div>
+    );
   }
 
   if (!character) {
