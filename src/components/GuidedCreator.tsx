@@ -319,8 +319,8 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEmailAuth(); }}
             disabled={emailLoading}
-            className="w-full h-14 text-sm font-[900] lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all disabled:opacity-50 bg-neon-yellow hover:opacity-90"
-            style={{ borderRadius: 10 }}
+            className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
+            style={{ borderRadius: 10, background: '#ffe603', color: '#000' }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing up...</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
           </button>
