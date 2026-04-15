@@ -488,6 +488,26 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const isSignupScreen = stepType === "signup";
   const currentTraitIndex = currentStep.type === "trait" ? currentStep.traitIndex : -1;
 
+  /* Delayed nav visibility to avoid overlap with hero exit animation */
+  const [showNav, setShowNav] = useState(false);
+  const prevStepRef = useRef(step);
+  useEffect(() => {
+    const prevStep = prevStepRef.current;
+    prevStepRef.current = step;
+    const wasHero = (flowSteps[prevStep] ?? flowSteps[flowSteps.length - 1]).type === "hero";
+    const isNowHero = isHeroSlide;
+    const navVisible = !isHeroSlide && !isSignupScreen;
+    if (isNowHero) {
+      setShowNav(false);
+      return;
+    }
+    if (wasHero && !isNowHero) {
+      const t = setTimeout(() => setShowNav(true), 450);
+      return () => clearTimeout(t);
+    }
+    setShowNav(navVisible);
+  }, [step, isHeroSlide, isSignupScreen, flowSteps]);
+
   /* Wait for splash screen to be fully removed before starting hero animation */
   const [splashGone, setSplashGone] = useState(() => !document.getElementById("splash-screen"));
   useEffect(() => {
@@ -843,7 +863,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
     >
       {/* Progress dashes — static, never fade during transitions */}
-      {showNavigation && (
+      {showNav && (
         <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)" }}>
           <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
@@ -873,7 +893,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       </div>
 
       {/* Arrow buttons — static, never fade during transitions */}
-      {showNavigation && (
+      {showNav && (
         <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}>
           <div className="flex items-center justify-center gap-4 md:gap-6">
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
