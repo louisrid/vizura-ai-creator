@@ -189,22 +189,21 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
+    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections, flowVariant: "guest-onboarding" }));
+    sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     try {
-      persistSignupHandoff();
-      sessionStorage.setItem("facefox_resume_url", window.location.pathname);
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
         extraParams: { prompt: "select_account" },
       });
       if (result?.error) {
-        sessionStorage.removeItem("facefox_post_auth_home");
-        sessionStorage.removeItem("facefox_signup_gate_active");
         toast.error("sign in error");
         setGoogleLoading(false);
+      } else {
+        sessionStorage.setItem("facefox_signup_gate_active", "1");
+        sessionStorage.setItem("facefox_post_auth_home", "1");
       }
     } catch {
-      sessionStorage.removeItem("facefox_post_auth_home");
-      sessionStorage.removeItem("facefox_signup_gate_active");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
@@ -1022,8 +1021,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             <button
               onClick={handleEmailAuth}
               disabled={emailLoading || googleLoading}
-              className="w-full h-14 text-sm font-[900] lowercase text-neon-yellow-foreground flex items-center justify-center gap-2 transition-all disabled:opacity-50 bg-neon-yellow hover:opacity-90"
-              style={{ borderRadius: 10 }}
+              className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
+              style={{ borderRadius: 10, background: '#ffe603', color: '#000' }}
             >
               {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
             </button>
