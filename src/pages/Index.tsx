@@ -553,52 +553,32 @@ const Index = () => {
     };
   }, []);
 
-  const fetchCharacters = useCallback(async () => {
+  // Use cached characters instead of fetching
+  useEffect(() => {
     if (!user) {
       setCharacters([]);
       setCharactersLoaded(true);
       return;
     }
+    if (!cachedCharsLoaded) return;
 
-    setCharactersLoaded(false);
-    const { data } = await supabase
-      .from("characters")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-    if (data && data.length > 0) {
-      setCharacters(data as Character[]);
-      // Priority: preselected > last used (persisted) > most recent
+    const data = cachedCharacters as Character[];
+    if (data.length > 0) {
+      setCharacters(data);
       const persisted = sessionStorage.getItem("facefox_last_selected_character_id") ?? "";
-      const validPersisted = data.some((c: any) => c.id === persisted);
-      const pickId = preselectedCharacterId && data.some((c: any) => c.id === preselectedCharacterId)
+      const validPersisted = data.some((c) => c.id === persisted);
+      const pickId = preselectedCharacterId && data.some((c) => c.id === preselectedCharacterId)
         ? preselectedCharacterId
         : validPersisted
           ? persisted
           : data[0].id;
       setSelectedCharId(pickId);
       sessionStorage.setItem("facefox_last_selected_character_id", pickId);
-    } else if (data) {
+    } else {
       setCharacters([]);
     }
     setCharactersLoaded(true);
-  }, [user, preselectedCharacterId]);
-
-  useEffect(() => {
-    fetchCharacters();
-  }, [fetchCharacters]);
-
-  // Refresh character list on focus/visibility so newly created characters appear
-  useEffect(() => {
-    const refresh = () => { void fetchCharacters(); };
-    const handleVisibility = () => { if (document.visibilityState === "visible") refresh(); };
-    window.addEventListener("focus", refresh);
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => {
-      window.removeEventListener("focus", refresh);
-      document.removeEventListener("visibilitychange", handleVisibility);
-    };
-  }, [fetchCharacters]);
+  }, [user, cachedCharacters, cachedCharsLoaded, preselectedCharacterId]);
 
   if (!user && !authLoading) return null;
 
