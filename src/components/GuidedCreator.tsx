@@ -166,7 +166,7 @@ const normaliseLegacySelections = (partial: Partial<GuidedSelections>): Partial<
 /* ══════════════════════════════════════════
    SIGNUP GATE (first-time, not logged in)
    ══════════════════════════════════════════ */
-const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
+const SignupGate = ({ onComplete, selections }: { onComplete: () => void; selections: GuidedSelections }) => {
   const { user, signIn, signUp, signInPreview } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
@@ -174,10 +174,15 @@ const SignupGate = ({ onComplete }: { onComplete: () => void }) => {
   const [password, setPassword] = useState("");
   const [isSignUpMode, setIsSignUpMode] = useState(true);
 
-  // When user authenticates, complete the flow
+  // When user authenticates (email signup with auto-confirm), complete the flow
   useEffect(() => {
-    if (user) onComplete();
-  }, [user, onComplete]);
+    if (user) {
+      // Save flow state so Home.tsx can pick it up and navigate to choose-face
+      sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
+      sessionStorage.setItem("facefox_signup_gate_active", "1");
+      onComplete();
+    }
+  }, [user, onComplete, selections]);
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
