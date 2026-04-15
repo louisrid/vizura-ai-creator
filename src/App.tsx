@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CreditsProvider } from "@/contexts/CreditsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { AppDataProvider } from "@/contexts/AppDataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import HeaderTransition from "@/components/HeaderTransition";
 import TopGradientBar from "@/components/TopGradientBar";
@@ -384,15 +385,17 @@ const App = () => (
       <TooltipProvider>
         <CreditsProvider>
           <SubscriptionProvider>
-            <BrowserRouter>
-              <Sonner />
-              <PostAuthHomeRedirect />
-              <FreshLoadRedirect />
-              <ScrollToTop />
-              <TopOverscrollGuard />
-              <OnboardingRedirectGate />
-              <AppRoutes />
-            </BrowserRouter>
+            <AppDataProvider>
+              <BrowserRouter>
+                <Sonner />
+                <PostAuthHomeRedirect />
+                <FreshLoadRedirect />
+                <ScrollToTop />
+                <TopOverscrollGuard />
+                <OnboardingRedirectGate />
+                <AppRoutes />
+              </BrowserRouter>
+            </AppDataProvider>
           </SubscriptionProvider>
         </CreditsProvider>
       </TooltipProvider>
