@@ -607,9 +607,15 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
-              style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
+              style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
-              <Camera size={18} strokeWidth={2.5} /> create photo
+              <motion.span
+                className="flex items-center justify-center gap-2"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Camera size={18} strokeWidth={2.5} /> create photo
+              </motion.span>
             </button>
           </div>
         </div>
