@@ -292,10 +292,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      update_profile_safe: {
-        Args: { _has_seen_onboarding?: boolean; _has_seen_welcome?: boolean }
-        Returns: undefined
-      }
+      update_profile_safe:
+        | {
+            Args: {
+              _has_seen_onboarding?: boolean
+              _has_seen_welcome?: boolean
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              _has_seen_onboarding?: boolean
+              _has_seen_welcome?: boolean
+              _onboarding_complete?: boolean
+            }
+            Returns: undefined
+          }
     }
     Enums: {
       [_ in never]: never

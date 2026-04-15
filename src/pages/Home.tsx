@@ -278,6 +278,7 @@ const Home = () => {
   // When lock state resolves and user needs onboarding, force guided creator open
   useEffect(() => {
     if (!initialLoadComplete || !lockStateResolved || !user) return;
+    if (sessionStorage.getItem("facefox_guided_dismissed") === "1") return;
     if (!onboardingComplete && characterCount === 0) {
       setShowGuided(true);
       setSkipWelcome(true);
