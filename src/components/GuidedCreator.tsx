@@ -188,11 +188,12 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   }, [persistSignupHandoff, user]);
 
   const handleGoogle = async () => {
-    const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:#000;z-index:2147483645';
-    document.body.appendChild(overlay);
+    const _blackout = document.createElement('div');
+    _blackout.style.cssText = 'position:fixed;inset:0;background:#000;z-index:2147483645';
+    document.body.appendChild(_blackout);
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(undefined))));
     setGoogleLoading(true);
-    sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections, flowVariant: "guest-onboarding" }));
+    persistSignupHandoff();
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
@@ -200,13 +201,14 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
         extraParams: { prompt: "select_account" },
       });
       if (result?.error) {
+        sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_signup_gate_active");
         toast.error("sign in error");
         setGoogleLoading(false);
-      } else {
-        sessionStorage.setItem("facefox_signup_gate_active", "1");
-        sessionStorage.setItem("facefox_post_auth_home", "1");
       }
     } catch {
+      sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_signup_gate_active");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
@@ -927,6 +929,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(undefined))));
     setGoogleLoading(true);
     sessionStorage.setItem("facefox_post_auth_home", "1");
+    sessionStorage.setItem("facefox_signup_gate_active", "1");
+    sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
@@ -935,12 +939,13 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       });
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_signup_gate_active");
         toast.error("sign in error");
         setGoogleLoading(false);
-        return;
       }
-    } catch (err: any) {
+    } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_signup_gate_active");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
