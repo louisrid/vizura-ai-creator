@@ -55,7 +55,7 @@ const Scene0 = () => (
 
 const Scene1 = () => (
   <IntroStyleShell
-    emoji={<Gem size={60} strokeWidth={2} style={{ color: "hsl(var(--gem-green))" }} />}
+    emoji={<Gem size={60} strokeWidth={2} style={{ color: "hsl(var(--neon-green))" }} />}
     title="your imagination, no limits"
     subtitle="1 gem = 1 action · $20/month after · create unlimited characters"
   />

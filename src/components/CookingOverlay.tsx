@@ -62,8 +62,13 @@ const CookingOverlay = ({ open, onComplete, startPhase = "cooking" }: CookingOve
       {phase !== "exiting" && (
         <motion.div
           key={phase}
-          className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center ${phase === "success" ? "bg-member-green" : "bg-black"}`}
-          style={{ overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
+          style={{
+            overflow: "hidden",
+            touchAction: "none",
+            overscrollBehavior: "none",
+            backgroundColor: phase === "success" ? "hsl(var(--member-green))" : "hsl(var(--background))",
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
