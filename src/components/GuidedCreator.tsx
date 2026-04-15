@@ -370,8 +370,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
       // Fade out hero content (SLOW_FADE_MS), then hold on pure black (BLACK_HOLD_MS),
       // then set step so new slide fades in
       setTimeout(() => {
-        setStep(step + 1);
-        // Brief frame delay so AnimatePresence mounts the new slide, then release the black overlay
+        setStep((currentStep) => Math.min(currentStep + 1, TOTAL - 1));
         requestAnimationFrame(() => {
           setHeroExiting(false);
           setTimeout(() => { animating.current = false; }, SLOW_FADE_MS);
@@ -418,9 +417,9 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   if (!mounted || !visible) return null;
 
   const slideVariants = {
-    enter: () => ({ opacity: 0 }),
+    enter: { opacity: 0 },
     center: { opacity: 1 },
-    exit: () => ({ opacity: 0 }),
+    exit: { opacity: 0 },
   };
 
   /* ── HERO SLIDE (new first screen) ── */
@@ -650,12 +649,14 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           }}
         >
           <div className="grid w-full max-w-sm md:max-w-lg mx-auto">
-            <AnimatePresence mode="sync" initial={false}>
+            <AnimatePresence mode={heroExiting ? "wait" : "sync"} initial={false}>
               <motion.div
                 key={step}
                 className="w-full [grid-area:1/1]"
                 variants={slideVariants}
-                initial="enter" animate="center" exit="exit"
+                initial="enter"
+                animate={heroExiting && isHeroSlide ? "exit" : "center"}
+                exit="exit"
                 transition={{ duration: isCreateSlide || heroExiting ? 0.5 : FAST_CROSSFADE_MS / 1000, ease: "easeInOut" }}
               >
                 {renderSlide()}
@@ -666,7 +667,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
 
         {/* Bottom nav — only on non-hero slides */}
         {showNavigation && (
-          <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
+          <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 28px)" }}>
             {(() => {
               const dashCount = skipWelcome ? TOTAL : TOTAL - 1;
               const activeIndex = skipWelcome ? step : step - 1;
