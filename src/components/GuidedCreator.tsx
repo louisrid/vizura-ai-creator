@@ -602,14 +602,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
-  // When user signs up/logs in on the signup screen, complete the flow immediately
-  const signupCompletedRef = useRef(false);
-  useEffect(() => {
-    if (isSignupScreen && isLoggedIn && !signupCompletedRef.current) {
-      signupCompletedRef.current = true;
-      completeCookingFlow();
-    }
-  }, [isSignupScreen, isLoggedIn, completeCookingFlow]);
+  // When user signs up/logs in on the signup screen, the SignupGate component
+  // handles persisting selections and setting the flag. Home.tsx will read it
+  // and navigate to choose-face. No need for an effect here.
 
   if (!mounted || !visible) return null;
 
