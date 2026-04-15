@@ -719,6 +719,42 @@ const Index = () => {
 
   const createDisabled = isGenerating;
 
+  // Set 3 navigation handlers
+  const handleSet3Forward = useCallback(() => {
+    const nextStep = set3Step + 1;
+    if (nextStep >= SET3_SLIDES.length) {
+      // Done — mark as seen and go to gems page
+      try { localStorage.setItem(SET3_KEY, "1"); } catch {}
+      setShowSet3(false);
+      navigate("/top-ups");
+      return;
+    }
+    setSet3SeenSteps((prev) => new Set(prev).add(set3Step));
+    setSet3Step(nextStep);
+  }, [set3Step, navigate]);
+
+  const handleSet3Back = useCallback(() => {
+    if (set3Step <= 0) return;
+    setSet3Step(set3Step - 1);
+  }, [set3Step]);
+
+  // Render Set 3 if active
+  if (showSet3) {
+    const slide = SET3_SLIDES[set3Step];
+    return (
+      <InstructionalSlide
+        slide={slide}
+        alreadySeen={set3SeenSteps.has(set3Step)}
+        dashTotal={3}
+        dashActive={set3Step}
+        showBack={set3Step > 0}
+        showForward={true}
+        onBack={handleSet3Back}
+        onForward={handleSet3Forward}
+      />
+    );
+  }
+
   /* ── Character dropdown content (shared between mobile/desktop) ── */
   const charDropdownContent = (
     <AnimatePresence>
