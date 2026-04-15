@@ -263,11 +263,11 @@ const PageTransitionOverlay = () => {
     if (!el) return;
 
     // Fallback only for any route change that escaped the transition hook.
-    // We still use the same sitewide fade-out timing.
-    el.style.transition = "opacity 150ms ease-in-out";
+    // Snap black instantly, then fade out using the same sitewide timing.
+    el.style.transition = "none";
     el.style.opacity = "1";
     void el.offsetHeight;
-    el.style.transition = "opacity 500ms ease-in-out";
+    el.style.transition = `opacity ${getDurations().fadeOut}ms ease-in-out`;
     el.style.opacity = "0";
   }, [location.key]);
 

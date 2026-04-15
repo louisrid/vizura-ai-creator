@@ -15,7 +15,7 @@ const LoadingScreen = () => {
   return (
     <div
       className="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-background"
-      style={{ zIndex: 999999 }}
+      style={{ zIndex: 9970 }}
       role="status"
       aria-live="polite"
       aria-label="loading"
