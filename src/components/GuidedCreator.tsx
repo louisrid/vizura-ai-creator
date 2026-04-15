@@ -651,8 +651,8 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
   /* ── Dash calculations ── */
   const getDashInfo = () => {
     if (isFirstTime && !skipWelcome) {
-      // 9 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8)
-      return { count: 9, active: Math.min(step - 1, 8) };
+      // 10 dashes (exclude hero & signup): slide1(0) + name(1) + 7traits(2-8) + create(9)
+      return { count: 10, active: Math.min(step - 1, 9) };
     }
     if (!skipWelcome) {
       return { count: 9, active: step - 1 };
