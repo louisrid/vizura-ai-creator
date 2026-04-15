@@ -356,25 +356,35 @@ const AppRoutes = () => {
 
       {/* Header + page content — no animation wrapper, overlay handles transitions */}
       <HeaderTransition />
-      <Routes location={location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/generate-face" element={<ChooseFace />} />
-        <Route path="/choose-face" element={<ChooseFace />} />
-        <Route path="/create" element={<Index />} />
-        <Route path="/index" element={<Index />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/characters" element={<MyCharacters />} />
-        <Route path="/characters/:id" element={<CharacterDetail />} />
-        <Route path="/storage" element={<Storage />} />
-        <Route path="/top-ups" element={<TopUps />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/help" element={<Help />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/info" element={<Info />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.12, ease: "easeInOut" }}
+        >
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/generate-face" element={<ChooseFace />} />
+            <Route path="/choose-face" element={<ChooseFace />} />
+            <Route path="/create" element={<Index />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/characters/:id" element={<CharacterDetail />} />
+            <Route path="/storage" element={<Storage />} />
+            <Route path="/top-ups" element={<TopUps />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/info" element={<Info />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 };
