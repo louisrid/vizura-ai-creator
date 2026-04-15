@@ -166,7 +166,7 @@ const Auth = () => {
   // If user is logged in, the useEffect above handles redirect.
   // Show a minimal loading state while redirect is in progress.
   if (user) {
-    return <LoadingScreen />;
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (

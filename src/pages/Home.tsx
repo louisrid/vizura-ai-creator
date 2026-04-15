@@ -426,7 +426,7 @@ const Home = () => {
 
   // Show loading bar while data loads (post-auth)
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
-    return <LoadingScreen />;
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (
