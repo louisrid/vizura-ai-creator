@@ -730,7 +730,7 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
           <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
-              const isHighlight = !!(pill as any).highlight;
+              const isMiddle = i === 1 && slide.pills.length === 3;
               return (
                 <motion.div
                   key={i}
@@ -739,11 +739,13 @@ const GuidedCreator = ({ open, onComplete, onExit, skipWelcome = false }: Guided
                   animate={{ opacity: 1, x: 0 }}
                   transition={shouldAnim ? { duration: 0.7, delay: i * 0.9 + 0.5, ease: "easeOut" } : undefined}
                 >
-                  <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase text-white leading-snug"
+                  <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isHighlight ? "hsl(140 100% 15%)" : "hsl(0 0% 14%)",
-                      border: isHighlight ? "2px solid hsl(140 100% 30%)" : "2px solid hsl(0 0% 22%)",
+                      ...(isMiddle
+                        ? { backgroundColor: "#34C759", color: "#fff", border: "2px solid #2DA44E" }
+                        : { backgroundColor: "#fff", color: "#000", border: "2px solid #fff" }
+                      ),
                     }}>
                     {pill.text}
                   </div>

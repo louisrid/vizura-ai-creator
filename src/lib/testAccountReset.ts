@@ -19,6 +19,12 @@ export const maybeResetTestAccount = async (user: User) => {
 
   if (typeof window !== "undefined" && PROTECTED_ROUTES.some((r) => window.location.pathname === r || window.location.pathname.startsWith(r))) return;
 
+  // Skip reset if user just signed in through the signup gate
+  if (typeof window !== "undefined" && sessionStorage.getItem("facefox_signup_gate_active") === "1") {
+    sessionStorage.removeItem("facefox_signup_gate_active");
+    return;
+  }
+
   const pageFlags = window as typeof window & { [RESET_LOAD_KEY]?: string };
   const sessionFlag = pageFlags[RESET_LOAD_KEY];
   if (sessionFlag === user.id) return;
