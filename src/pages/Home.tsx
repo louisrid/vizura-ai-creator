@@ -64,6 +64,7 @@ const Home = () => {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const { gems } = useGems();
+  const { characters: cachedChars, generations: cachedGens, charactersLoaded: cachedCharsLoaded, generationsLoaded: cachedGensLoaded } = useAppData();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
