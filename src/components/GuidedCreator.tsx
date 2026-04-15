@@ -926,7 +926,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
     document.body.appendChild(_blackout);
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(undefined))));
     setGoogleLoading(true);
-    sessionStorage.setItem("facefox_post_auth_home", "1");
+    persistSignupHandoff();
     sessionStorage.setItem("facefox_resume_url", window.location.pathname);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
@@ -935,12 +935,13 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       });
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_signup_gate_active");
         toast.error("sign in error");
         setGoogleLoading(false);
-        return;
       }
-    } catch (err: any) {
+    } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_signup_gate_active");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
