@@ -890,6 +890,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {isSignupScreen && (
         <SignupGate
           onComplete={completeCookingFlow}
+          selections={selections}
         />
       )}
     </div>,
