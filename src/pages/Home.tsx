@@ -12,6 +12,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
