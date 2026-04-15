@@ -58,7 +58,7 @@ const TopUps = () => {
   }, [user]);
 
   if (!loading && !user) return null;
-  if (user && !claimChecked) return <LoadingScreen />;
+  if (user && !claimChecked) return <div className="min-h-screen bg-background" />;
 
   const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;
@@ -85,7 +85,7 @@ const TopUps = () => {
       const { data, error } = await supabase.functions.invoke("claim-free-gems");
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      refetch();
+      await refetch();
       setCanClaimFree(false);
       toast.success("gems added!");
     } catch (err: any) {
@@ -101,7 +101,7 @@ const TopUps = () => {
       <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-8 w-full">
           <BackButton />
-          <PageTitle className="mb-0">top-ups</PageTitle>
+          <PageTitle className="mb-0">get your gems</PageTitle>
         </div>
 
         <div className="flex flex-col gap-5">
@@ -111,8 +111,8 @@ const TopUps = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95, height: 0, marginBottom: 0 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                transition={{ duration: 0.15 }}
                 className="relative rounded-[10px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",

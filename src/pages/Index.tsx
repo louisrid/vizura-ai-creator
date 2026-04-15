@@ -598,7 +598,7 @@ const Index = () => {
     };
   }, [fetchCharacters]);
 
-  if (authLoading || (!!user && !charactersLoaded)) return <LoadingScreen />;
+  if (authLoading || (!!user && !charactersLoaded)) return <div className="min-h-screen bg-background" />;
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
@@ -835,7 +835,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[90px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 pb-[180px] md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>

@@ -1,10 +1,15 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 const LoadingScreen = () => {
   useLayoutEffect(() => {
     const unregister = registerBlockingLoader();
     return unregister;
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.guidedCreatorOpen = "1";
+    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
   }, []);
 
   return (
