@@ -247,29 +247,7 @@ const OnboardingRedirectGate = () => {
 
 const PageTransitionOverlay = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
-  const prevKeyRef = useRef(location.key);
   const safetyTimerRef = useRef<number | null>(null);
-
-  // Detect un-transitioned route changes (browser back/forward)
-  // and apply snap-black + fade-out
-  useEffect(() => {
-    if (location.key === prevKeyRef.current) return;
-    prevKeyRef.current = location.key;
-
-    if (isTransitioning()) return; // handled by the transition system
-
-    const el = overlayRef.current;
-    if (!el) return;
-
-    // Fallback only for any route change that escaped the transition hook.
-    // Snap black instantly, then fade out using the same sitewide timing.
-    el.style.transition = "none";
-    el.style.opacity = "1";
-    void el.offsetHeight;
-    el.style.transition = `opacity ${getDurations().fadeOut}ms ease-in-out`;
-    el.style.opacity = "0";
-  }, [location.key]);
 
   useEffect(() => {
     const handleFadeIn = (e: Event) => {
