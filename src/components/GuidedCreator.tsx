@@ -458,6 +458,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   useEffect(() => {
     if (!visible) return;
+    document.documentElement.dataset.guidedCreatorOpen = "1";
     const root = document.getElementById("root");
     const prev = { body: document.body.style.overflow, html: document.documentElement.style.overflow, root: root?.style.overflow ?? "" };
     document.body.style.overflow = "hidden";
@@ -466,6 +467,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const handlePageHide = () => persistFlow();
     window.addEventListener("pagehide", handlePageHide);
     return () => {
+      delete document.documentElement.dataset.guidedCreatorOpen;
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
@@ -592,6 +594,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     heroVisited.current = true;
     markHeroSeen();
     if (step <= 0) {
+      if (isLoggedIn && skipWelcome) {
+        handleClose();
+        return;
+      }
       setBackArrowShaking(true);
       setTimeout(() => setBackArrowShaking(false), 500);
       return;
@@ -603,7 +609,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     }
 
     setStep(prevStep);
-  }, [step, flowSteps]);
+  }, [step, flowSteps, isLoggedIn, skipWelcome]);
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
@@ -688,7 +694,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: "easeInOut" }}>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>
             {slide.emoji}
           </motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{slide.title}</h2>
@@ -724,7 +730,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: "easeInOut" }}>✨</motion.span>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>✨</motion.span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -757,7 +763,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, ease: "easeInOut" }}>{trait.emoji}</motion.span>
+          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>{trait.emoji}</motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
@@ -848,7 +854,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
     >
       {/* Progress dashes — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 48px)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{

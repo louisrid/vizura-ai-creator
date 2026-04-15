@@ -1,10 +1,12 @@
-/** Top yellow accent bar — normal document flow, never fades, always visible. */
+/** Top yellow accent bar — hidden during guided creator, visible otherwise. */
 const TopGradientBar = () => {
   return (
     <div
       className="pointer-events-none fixed top-0 left-0 right-0 h-[5px] overflow-hidden"
       style={{ zIndex: 2147483646 }}
+      data-top-gradient-bar
     >
+      <style>{`html[data-guided-creator-open="1"] [data-top-gradient-bar] { display: none !important; }`}</style>
       <svg
         aria-hidden="true"
         className="block h-full w-full"
