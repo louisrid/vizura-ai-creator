@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import PageTitle from "@/components/PageTitle";
+import BackButton from "@/components/BackButton";
 
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
@@ -162,13 +163,6 @@ const Auth = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate("/");
-  };
-
-  // Auth is already resolved by the App-level gate.
-  // If user is logged in, the useEffect above handles redirect.
-  // Show a minimal loading state while redirect is in progress.
   if (user) {
     if (document.getElementById("splash-screen")) {
       return <LoadingScreen />;
@@ -177,19 +171,12 @@ const Auth = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden flex items-center justify-center">
+    <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg px-4 md:max-w-2xl" style={{ transform: "scale(0.9)", transformOrigin: "center center" }}>
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 md:max-w-2xl md:px-10">
         <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="w-10 h-10 rounded-[10px] bg-neon-yellow flex items-center justify-center text-neon-yellow-foreground hover:opacity-90 transition-colors active:scale-95 md:w-12 md:h-12"
-              aria-label="go back"
-            >
-              <ArrowLeft size={18} strokeWidth={3} />
-            </button>
+            <BackButton />
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
