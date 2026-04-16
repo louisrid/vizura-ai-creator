@@ -1,9 +1,11 @@
 ---
 name: Border thickness
-description: All borders use 2px consistently. Border colors are always full brightness — never dim or faded.
+description: All borders use 2px consistently. Border colors are always full brightness — never dim or faded. Decorative lines/bars have straight edges.
 type: design
 ---
 All borders standardised to 2px across all components and pages. Selection highlights (pick face, character grid new item) use 3px solid #facc15. Non-selected images have no border (padding used to maintain size). Yellow borders use full #facc15 (same as button fill). Blue borders use #00e0ff (gem box, regenerate circles, gem-cost buttons). Red borders use full #ff4444 or hsl(var(--destructive)) (delete buttons, cancel subscription, sign out). No rgba or opacity on border colors — always full brightness.
+
+**Straight edges on decorative lines/bars**: All loading bars, progress bars, separators, accent lines, and range slider tracks use borderRadius: 0 (no rounded-full). This does NOT apply to pills, circular avatars, dot indicators, slider thumbs, or ambient glow blobs — those keep their rounded shape.
 
 Character detail content boxes (name+photos, traits) have NO border — just #111111 fill with 16px radius. Character detail layout: content at top (name/photos/traits), generous breathing gap in middle showing dot decal, action buttons near bottom (create photo + delete).
 

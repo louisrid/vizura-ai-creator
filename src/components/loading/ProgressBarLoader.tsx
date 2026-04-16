@@ -205,9 +205,9 @@ const ProgressBarLoader = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
       >
-        <div className="relative w-full h-4 rounded-full border-2 border-white/40 overflow-hidden bg-transparent">
+        <div className="relative w-full h-4 border-2 border-white/40 overflow-hidden bg-transparent">
           <div
-            className="absolute inset-0 rounded-full"
+            className="absolute inset-0"
             style={{
               transform: `scaleX(${pct / 100})`,
               transformOrigin: "left center",

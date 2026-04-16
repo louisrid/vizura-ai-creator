@@ -260,8 +260,8 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
     return (
       <div className="flex min-h-full w-full flex-col items-center justify-center gap-6 bg-background">
         <h2 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h2>
-        <div className="h-2 w-48 overflow-hidden rounded-full bg-card">
-          <div className="facefox-loading-bar h-full w-[60%] rounded-full bg-neon-yellow" />
+        <div className="h-2 w-48 overflow-hidden bg-card">
+          <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
         </div>
       </div>
     );
