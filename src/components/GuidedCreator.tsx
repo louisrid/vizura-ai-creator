@@ -881,8 +881,17 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </AnimatePresence>
       </div>
 
-      {/* Arrow buttons — static, never fade during transitions */}
+      {/* Home button + Arrow buttons — static, never fade during transitions */}
       <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+          {canExitFlow && (
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); sessionStorage.setItem("facefox_guided_dismissed", "1"); navigate("/"); }}
+              className="mb-4 text-[13px] font-[800] lowercase text-white/50 active:text-white/80 transition-colors duration-150"
+            >
+              🏠 home
+            </button>
+          )}
           <div className="flex items-center justify-center gap-4 md:gap-6">
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
