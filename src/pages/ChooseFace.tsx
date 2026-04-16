@@ -951,7 +951,7 @@ const ChooseFace = () => {
                   <button
                     onClick={() => { if (selectedIndex !== null) handleSelectFace(selectedIndex); }}
                     disabled={selectedIndex === null}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-none active:scale-[0.99] disabled:cursor-not-allowed"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-none active:scale-[0.98] disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 10,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
@@ -981,7 +981,7 @@ const ChooseFace = () => {
                         }
                         setShowRegenConfirm(true);
                       }}
-                      className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 active:scale-[0.99]"
+                      className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150 active:scale-[0.98]"
                       disabled={regeneratingFaces && onboardingComplete}
                       style={{
                         borderRadius: 10,
