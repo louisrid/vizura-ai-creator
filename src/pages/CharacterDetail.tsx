@@ -420,7 +420,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-6 pb-[280px] md:hidden" style={{ minHeight: "100dvh" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-3 pb-[280px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           {onboardingComplete ? <BackButton /> : (
             <button
