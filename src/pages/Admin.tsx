@@ -336,6 +336,54 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Reset confirm dialog */}
+      <AnimatePresence>
+        {confirmReset && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-[99999] flex items-center justify-center px-6"
+            style={{ backgroundColor: "rgba(0,0,0,0.85)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
+            onClick={() => !resetting && setConfirmReset(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm p-5"
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}
+            >
+              <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
+                reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setConfirmReset(false)}
+                  disabled={resetting}
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50"
+                  style={{ color: "#ffffff", borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
+                >
+                  cancel
+                </button>
+                <button
+                  onClick={handleReset}
+                  disabled={resetting}
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50 flex items-center justify-center gap-1.5"
+                  style={{ color: "#ffffff", borderRadius: 8, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
+                >
+                  {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
+                  yes, reset
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
