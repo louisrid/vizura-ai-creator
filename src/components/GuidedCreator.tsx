@@ -929,7 +929,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
-    </motion.div>,
+    </div>,
     document.body,
   );
 });
