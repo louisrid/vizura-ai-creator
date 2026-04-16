@@ -89,23 +89,16 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    if (isTestAccount) {
-      writeCachedStatus(user.id, "active");
-      setStatus("active");
-      setLoading(false);
-      return;
-    }
-
     const cachedStatus = readCachedStatus(user.id);
     if (cachedStatus) {
       setStatus(cachedStatus);
     }
     setLoading(true);
     void fetchSubscription();
-  }, [fetchSubscription, isTestAccount, readCachedStatus, user, writeCachedStatus]);
+  }, [fetchSubscription, readCachedStatus, user, writeCachedStatus]);
 
   useEffect(() => {
-    if (!user || isTestAccount) return;
+    if (!user) return;
 
     const refreshOnReturn = () => {
       void fetchSubscription();
@@ -145,11 +138,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       document.removeEventListener("visibilitychange", refreshOnReturn);
       supabase.removeChannel(channel);
     };
-  }, [fetchSubscription, user, optimistic, writeCachedStatus, isTestAccount]);
+  }, [fetchSubscription, user, optimistic, writeCachedStatus]);
 
-  const resolvedStatus = isTestAccount ? "active" : status;
-  const resolvedLoading = isTestAccount ? false : loading;
-  const subscribed = resolvedStatus !== null && ACTIVE_STATUSES.has(resolvedStatus);
+  const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 
   const optimisticSubscribe = useCallback(() => {
     setStatus("active");
