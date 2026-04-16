@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 
 /* ── Types ── */
 export interface SlideConfig {
@@ -197,13 +198,24 @@ const InstructionalSlide = ({
       >
         <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center">
           {/* Emoji */}
-          <motion.span
-            className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {slide.emoji}
-          </motion.span>
+          {slide.emoji === "🦊" ? (
+            <motion.img
+              src={foxEmojiImg}
+              alt="🦊"
+              className="mb-5 md:mb-7 inline-block"
+              style={{ width: 64, height: 64, objectFit: 'contain' }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            />
+          ) : (
+            <motion.span
+              className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {slide.emoji}
+            </motion.span>
+          )}
 
           {/* Title */}
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
