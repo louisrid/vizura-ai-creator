@@ -175,8 +175,10 @@ const Home = () => {
     }
 
     // No user → show the hero/start-now screen (GuidedCreator step 0)
-    setShowGuided(true);
-    setSkipWelcome(false);
+    if (!localStorage.getItem("facefox_cached_user")) {
+      setShowGuided(true);
+      setSkipWelcome(false);
+    }
     setAutoOpenEvaluated(true);
   }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser, initialLoadComplete, characterCount]);
 
