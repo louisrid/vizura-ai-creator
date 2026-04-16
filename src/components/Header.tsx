@@ -47,15 +47,10 @@ const Header = () => {
   const isOnboarding = (state: CachedOnboardingState | null | undefined) =>
     !!state && !state.onboardingComplete;
 
-  const [showMenuLocks, setShowMenuLocks] = useState(() => isOnboarding(readCachedOnboardingState(user?.id)));
+  const [showMenuLocks, setShowMenuLocks] = useState(false);
 
   useEffect(() => {
     if (!user) { setShowMenuLocks(false); return; }
-
-    const cachedState = readCachedOnboardingState(user.id);
-    if (cachedState) {
-      setShowMenuLocks(isOnboarding(cachedState));
-    }
 
     let cancelled = false;
 
@@ -266,7 +261,7 @@ const Header = () => {
   return (
     <>
       {/* Spacer that reserves header height in document flow */}
-      <div className="h-[107px] md:h-[117px]" aria-hidden="true" />
+      <div className="h-[123px] md:h-[133px]" aria-hidden="true" />
       <header
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
@@ -282,7 +277,7 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[22px] md:px-8 lg:px-12 pt-[40px] md:pt-[52px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[22px] md:px-8 lg:px-12 pt-[56px] md:pt-[68px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
