@@ -374,7 +374,7 @@ const Home = () => {
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-3 mb-6" style={{ width: 60, height: 6, borderRadius: 3, backgroundColor: "#ffe603" }} />
+          <div className="mt-3 mb-6" style={{ width: 60, height: 6, borderRadius: 0, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-2 mb-6">
@@ -434,13 +434,13 @@ const Home = () => {
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
-                  onClick={() => { if (showLocks) return; navigate("/storage"); }}
+                  onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform"
                   style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
                 >
                   see all →
                 </button>
-                {showLocks && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -498,10 +498,10 @@ const Home = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
-                <button onClick={() => { if (showLocks) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 active:scale-95 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
-                {showLocks && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -578,7 +578,7 @@ const Home = () => {
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-4 mb-10" style={{ width: 70, height: 7, borderRadius: 3, backgroundColor: "#ffe603" }} />
+          <div className="mt-4 mb-10" style={{ width: 60, height: 6, borderRadius: 0, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
@@ -633,13 +633,13 @@ const Home = () => {
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
-                  onClick={() => { if (showLocks) return; navigate("/storage"); }}
+                  onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow"
                   style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
                 >
                   see all →
                 </button>
-                {showLocks && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
@@ -697,10 +697,10 @@ const Home = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
-                <button onClick={() => { if (showLocks) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 active:scale-95 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
-                {showLocks && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">

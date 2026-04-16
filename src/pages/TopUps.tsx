@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import DotDecal from "@/components/DotDecal";
-import LoadingScreen from "@/components/LoadingScreen";
+
 import { readCachedOnboardingState, mergeCachedOnboardingState } from "@/lib/onboardingState";
 
 const packs = [
