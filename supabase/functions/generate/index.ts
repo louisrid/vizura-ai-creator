@@ -183,9 +183,8 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full rounded C cup breasts, prominent noticeable chest",
-  "extra large": "large DD cup breasts, heavy prominent chest, deep cleavage",
-  large: "large DD cup breasts, heavy prominent chest, deep cleavage",
+  regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
+  "extra large": "IMPORTANT: very large heavy DD-G cup breasts, extremely prominent bust protruding significantly, deep visible cleavage, breasts are the most dominant physical feature and must be clearly large in every image regardless of body type",
 };
 
 /* ── build character trait string from DB record ───────── */
@@ -211,6 +210,13 @@ function buildCharacterTraits(char: any): string {
   const bustKey = (char.bust_size || "regular").toLowerCase();
   const bustDesc = BUST_SIZE_MAP[bustKey] || "";
   if (bustDesc) parts.push(bustDesc);
+
+  if (bustKey === "extra large") {
+    const bodyIdx = parts.findIndex(p => p.includes("slim body") || p.includes("narrow waist") || p.includes("petite"));
+    if (bodyIdx >= 0) {
+      parts[bodyIdx] = "slim toned body with narrow waist but very large chest";
+    }
+  }
 
   if (bodyKey === "slim" || bodyKey === "thin") {
     parts.push("lean angular face, no roundness or puffiness in face");
@@ -274,6 +280,7 @@ function buildFinalPrompt(
   characterTraits: string | null,
   bodyType?: string,
   expression?: string,
+  bustSize?: string,
 ): string {
   const EXPRESSION_MAP: Record<string, string> = {
     "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
@@ -281,7 +288,7 @@ function buildFinalPrompt(
     "big smile": "big open-mouth smile showing teeth, happy joyful energy",
     "pout": "duck face pout, lips pushed forward, playful pouty expression",
   };
-  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "natural relaxed expression, eye contact with camera";
+  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "natural relaxed expression";
 
   const revealingKeywords = [
     "lingerie", "bikini", "underwear", "bra", "swimsuit",
@@ -306,6 +313,10 @@ function buildFinalPrompt(
 
   if (characterTraits) parts.push(characterTraits);
   if (bodyMod) parts.push(bodyMod);
+
+  if (bustSize === "extra large") {
+    parts.push("CRITICAL: her breasts must be very large and clearly prominent in the image, large heavy chest is her defining physical feature");
+  }
 
   if (photoType === "selfie") {
     parts.push("authentic one-handed selfie pose: right arm extended forward as if holding the iPhone but the phone itself is completely out of the frame and not visible, left arm relaxed naturally at her side or lightly resting on the bed next to her thigh, realistic single-arm selfie anatomy with no duplicated arms or awkward two-handed pose");
@@ -1030,6 +1041,7 @@ serve(async (req) => {
     /* ── look up character if provided ── */
     let characterTraits: string | null = null;
     let characterBodyType: string | undefined;
+    let characterBustSize: string | undefined;
     let faceImageUrls: string[] = [];
     if (characterId) {
       const { data: charData } = await adminClient
@@ -1042,6 +1054,7 @@ serve(async (req) => {
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
         characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
+        characterBustSize = (charData.bust_size || "regular").toLowerCase();
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
@@ -1141,7 +1154,7 @@ serve(async (req) => {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
-        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression);
+        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize);
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
