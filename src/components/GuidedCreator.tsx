@@ -657,16 +657,16 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100dvh' }}>
-        <div style={{ position: 'relative', width: 272, height: 272, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
+        <div style={{ position: 'relative', width: 253, height: 253, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 270, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
-            { size: 240, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
-            { size: 209, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 181, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+            { size: 251, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 223, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 194, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 168, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
-              width: on ? r.size : 68, height: on ? r.size : 68,
+              width: on ? r.size : 63, height: on ? r.size : 63,
               border: `${r.w}px ${r.dash ? 'dashed' : 'solid'} #ffe603`,
               [r.seg]: 'transparent',
               transform: `rotate(${ringT * r.spd}deg)`,
@@ -675,14 +675,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 98, height: 98, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 91, height: 91, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
-              width={196}
-              height={196}
+              width={182}
+              height={182}
               draggable={false}
-              style={{ display: 'block', width: 98, height: 98 }}
+              style={{ display: 'block', width: 91, height: 91 }}
             />
           </div>
         </div>
