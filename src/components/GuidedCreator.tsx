@@ -626,7 +626,22 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // handles persisting selections and setting the flag. Home.tsx will read it
   // and navigate to choose-face. No need for an effect here.
 
-  if (!mounted || !visible) return null;
+  // Keep mounted during fade-out, unmount after transition
+  const [shouldRender, setShouldRender] = useState(visible);
+  useEffect(() => {
+    if (visible) setShouldRender(true);
+    if (!visible && !fading) {
+      // Already done fading or was never visible
+      const t = setTimeout(() => setShouldRender(false), 10);
+      return () => clearTimeout(t);
+    }
+    if (fading) {
+      const t = setTimeout(() => { setFading(false); setVisible(false); setShouldRender(false); }, 450);
+      return () => clearTimeout(t);
+    }
+  }, [visible, fading]);
+
+  if (!mounted || !shouldRender) return null;
 
   /* ── Dash calculations ── */
   const dashSteps = flowSteps.filter((item) => item.type !== "hero" && item.type !== "signup");
