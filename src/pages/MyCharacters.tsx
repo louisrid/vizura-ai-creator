@@ -1,14 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
-
-import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import BackButton from "@/components/BackButton";
-
 import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -28,16 +24,15 @@ interface Character {
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, charactersReady, refreshCharacters } = useAppData();
+  const { characters: cachedChars, charactersReady } = useAppData();
   const navigate = useTransitionNavigate();
-  const location = useLocation();
   const [newCharId, setNewCharId] = useState<string | null>(null);
   const [isFirstCharacter, setIsFirstCharacter] = useState(false);
   const [bounceActive, setBounceActive] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
-  }, [user, authLoading, navigate, location.pathname]);
+    if (!authLoading && !user) navigate(`/auth?redirect=/characters`, { replace: true });
+  }, [user, authLoading, navigate]);
 
   // Derive complete characters from cache
   const characters = useMemo(() => {
@@ -45,8 +40,6 @@ const MyCharacters = () => {
       .filter((c) => c.face_image_url && c.face_angle_url && c.body_anchor_url)
       .slice(0, 12) as Character[];
   }, [cachedChars]);
-
-  const loading = !charactersReady;
 
   // Handle new character highlight
   useEffect(() => {
@@ -84,13 +77,11 @@ const MyCharacters = () => {
     navigate("/create");
   };
 
-  
-
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -154,7 +145,6 @@ const MyCharacters = () => {
           })}
         </div>
       </main>
-
     </div>
   );
 };

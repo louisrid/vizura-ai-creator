@@ -1,17 +1,15 @@
 import { useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
-import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Download, Calendar, Wand2, User, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
-import LoadingScreen from "@/components/LoadingScreen";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import DotDecal from "@/components/DotDecal";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface HistoryItem {
   id: string;
@@ -25,7 +23,6 @@ const History = () => {
   const { user, loading: authLoading } = useAuth();
   const { generations, characters: cachedChars, generationsReady, charactersReady } = useAppData();
   const navigate = useTransitionNavigate();
-  const location = useLocation();
   const [expanded, setExpanded] = useState<HistoryItem | null>(null);
 
   // Derive history items from cached data
@@ -59,8 +56,6 @@ const History = () => {
     return allItems;
   }, [generations, cachedChars]);
 
-  const loading = !generationsReady || !charactersReady;
-
   if (!authLoading && !user) return null;
 
   const formatDate = (dateStr: string) => {
@@ -77,21 +72,9 @@ const History = () => {
           <PageTitle className="mb-0">history</PageTitle>
         </div>
 
-        {(loading || authLoading) ? (
-          <div className="space-y-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:space-y-0">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={`skel-${i}`} className="w-full rounded-[10px] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
-                <div className="w-full aspect-[4/3]" style={{ backgroundColor: "hsl(var(--card))" }} />
-                <div className="p-4 space-y-2">
-                  <div className="h-3 w-3/4" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }} />
-                  <div className="h-3 w-1/2" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : items.length === 0 ? (
+        {items.length === 0 ? (
           <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
-            <Wand2 size={32} className="text-muted-foreground mx-auto mb-4" />
+            <Wand2 size={32} className="text-white mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
