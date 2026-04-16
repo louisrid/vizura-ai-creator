@@ -23,7 +23,7 @@ const markHeroSeen = () => { if (typeof window !== "undefined") sessionStorage.s
 /* ── Set 1 slide configs ── */
 const SET1_SLIDE1: SlideConfig = {
   emoji: "👩‍🔬",
-  title: "let's build your ai influencer!",
+  title: "let's build your\nai influencer!",
   pills: [
     { text: "customize her look 🎨", side: "left" },
     { text: "pick her details ⚙️", side: "right", highlight: true },
@@ -287,7 +287,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
       <div className="flex flex-col items-center px-8 w-full max-w-md">
         <span className="text-[64px] mb-5">🔐</span>
         <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-           {isSignUpMode ? "sign up to save her" : "sign in to save her"}
+           {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
         </h2>
 
         <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
@@ -917,6 +917,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     return null;
   };
 
+  const showDashes = !isHeroSlide;
   const showNavigation = !isHeroSlide && !isSignupScreen;
   const canExitFlow = skipWelcome && isLoggedIn;
 
@@ -930,7 +931,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       }}
     >
       {/* Progress dashes — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showDashes ? 1 : 0, transition: showDashes ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showDashes ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300 h-[4px] md:h-[6px]" style={{
@@ -950,7 +951,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
-            className={`mx-auto flex w-full max-w-sm md:max-w-lg items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[72px] pb-[160px]"}`}
+            className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[72px] pb-[160px]"}`}
           >
             {renderSlide()}
           </motion.div>
@@ -1100,7 +1101,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-md">
           <span className="text-[64px] mb-5">🔐</span>
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-            {isSignUp ? "sign up to save her" : "sign in to save her"}
+            {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
           </h2>
           <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
