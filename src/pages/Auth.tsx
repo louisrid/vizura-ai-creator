@@ -101,7 +101,7 @@ const Auth = () => {
   const handleEmailAuth = async () => {
     setSubmitting(true);
     try {
-      if (!isSignUp && !email.trim() && !password.trim()) {
+      if (!email.trim() && !password.trim()) {
         sessionStorage.setItem("facefox_post_auth_home", "1");
         await signInPreview();
         toast.success("signed in");
@@ -114,20 +114,7 @@ const Auth = () => {
         return;
       }
 
-      if (isSignUp) {
-        try {
-          await signUp(email.trim(), password);
-          toast.success("check email");
-        } catch (err: any) {
-          if (err.message?.toLowerCase().includes("already registered")) {
-            await signIn(email.trim(), password);
-          } else {
-            throw err;
-          }
-        }
-      } else {
-        await signIn(email.trim(), password);
-      }
+      await signIn(email.trim(), password);
     } catch (err: any) {
       toast.error("try again");
       setSubmitting(false);
@@ -245,20 +232,11 @@ const Auth = () => {
                 </>
               ) : (
                 <>
-                  {isSignUp ? "sign up" : email.trim() || password.trim() ? "sign in" : "preview login"}
+                  {email.trim() || password.trim() ? "sign in" : "preview login"}
                   <ArrowRight size={14} />
                 </>
               )}
             </Button>
-
-            <button
-              type="button"
-              onClick={() => setIsSignUp((v) => !v)}
-              className="w-full text-center text-[11px] md:text-[13px] font-extrabold lowercase text-white hover:text-white/80 transition-colors"
-            >
-              {isSignUp ? "already have an account? " : "no account? "}
-              <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>
-            </button>
           </div>
         </div>
       </main>
