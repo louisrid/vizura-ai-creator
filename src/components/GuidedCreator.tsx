@@ -873,7 +873,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return (
         <div className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
           <h2
-            className="mx-auto text-center text-[3rem] md:text-[4rem] font-[900] lowercase leading-[1.05] tracking-tight mt-12"
+            className="mx-auto text-center text-[3.18rem] md:text-[4.24rem] font-[900] lowercase leading-[1.05] tracking-tight"
           >
             <span className="block text-white">your character</span>
             <span className="block"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></span>
@@ -881,10 +881,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-            className="mt-10 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
+            className="mt-6 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
             style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
-            {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create"}
+            {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
           </button>
         </div>
       );
