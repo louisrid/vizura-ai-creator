@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, Lock, User } from "lucide-react";
@@ -324,10 +324,15 @@ const Admin = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
   const [viewingUserId, setViewingUserId] = useState<string | null>(null);
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!authLoading && (!user || user.email !== ADMIN_EMAIL)) {
-      navigate("/", { replace: true });
+    if (authLoading) return;
+    if (user?.email === ADMIN_EMAIL) {
+      hasAuthed.current = true;
+      return;
     }
+    if (hasAuthed.current) return;
+    navigate("/", { replace: true });
   }, [user, authLoading, navigate]);
 
   const loadAll = useCallback(async () => {
@@ -354,10 +359,14 @@ const Admin = () => {
   }, [user, loadAll]);
 
   if (authLoading || !user || user.email !== ADMIN_EMAIL) {
-    return <LoadingScreen />;
+    if (document.getElementById("splash-screen")) return <LoadingScreen />;
+    return <div className="min-h-screen bg-background" />;
   }
 
-  if (loading) return <LoadingScreen />;
+  if (loading) {
+    if (document.getElementById("splash-screen")) return <LoadingScreen />;
+    return <div className="min-h-screen bg-background" />;
+  }
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
