@@ -2,7 +2,7 @@ import { forwardRef, useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Gem, Home } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -887,9 +887,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             <button
               type="button"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); sessionStorage.setItem("facefox_guided_dismissed", "1"); navigateTo("/"); }}
-              className="mb-4 text-[13px] font-[800] lowercase text-white/50 active:text-white/80 transition-colors duration-150"
+              className="mb-6 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              style={{ width: 48, height: 48 }}
             >
-              🏠 home
+              <Home size={28} strokeWidth={2.5} color="#ffffff" />
             </button>
           )}
           <div className="flex items-center justify-center gap-4 md:gap-6">
