@@ -681,14 +681,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
         <div style={{ width: 194, height: 10, background: '#ffe603', borderRadius: 0, marginTop: 12, marginBottom: 24, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 157, padding: '10px 0', fontSize: 20, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 157, padding: '8px 0', fontSize: 20, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 204, padding: '8px 0', fontSize: 32, fontWeight: 900, background: '#000', border: '2px solid #ffe603', borderRadius: 10, color: '#fff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
