@@ -177,7 +177,7 @@ const Home = () => {
     }
 
     // No user → show the hero/start-now screen (GuidedCreator step 0)
-    if (!localStorage.getItem("facefox_cached_user")) {
+    if (!pendingAuthResume && !everHadUser.current) {
       setShowGuided(true);
       setSkipWelcome(false);
     }
