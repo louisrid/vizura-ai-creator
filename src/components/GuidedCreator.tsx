@@ -749,7 +749,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
                   initial={shouldAnim ? { x: isLeft ? "-120%" : "120%" } : false}
                   animate={{ x: 0 }}
-                  transition={shouldAnim ? { duration: 0.35, delay: i * 0.6 + 1.2, ease: [0.25, 0.8, 0.25, 1] } : undefined}
+                  transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                 >
                   <div className="relative">
                     <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
