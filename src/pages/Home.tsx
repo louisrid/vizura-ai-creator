@@ -82,7 +82,7 @@ const Home = () => {
     sessionStorage.getItem("facefox_post_auth_home") === "1" ||
     sessionStorage.getItem("facefox_signup_gate_active") === "1"
   );
-  const shouldOpenGuidedOnMount = openCreatorRequested || ((!user && !authLoading && !pendingAuthResume) || isTestAccount);
+  const shouldOpenGuidedOnMount = openCreatorRequested || isTestAccount;
   // Derive images and characters from global cache
   const images = useMemo(() => {
     return cachedGens
