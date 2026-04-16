@@ -6,7 +6,7 @@ import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
-import HexMesh1 from "@/components/HexMesh1";
+import DotDecal from "@/components/DotDecal";
 
 import InstructionalSlide from "@/components/InstructionalSlide";
 import type { SlideConfig } from "@/components/InstructionalSlide";
@@ -808,7 +808,7 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
-      <HexMesh1 />
+      <DotDecal />
       <PhotoGenerationOverlay
         open={photoOverlayPhase !== "hidden"}
         phase={photoOverlayPhase === "hidden" ? "loading" : photoOverlayPhase}

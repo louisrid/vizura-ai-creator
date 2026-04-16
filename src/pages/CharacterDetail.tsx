@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import HexMesh1 from "@/components/HexMesh1";
+import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { displayAge } from "@/lib/displayAge";
 import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
@@ -417,7 +417,7 @@ const CharacterDetail = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <HexMesh1 />
+      <DotDecal />
 
       {/* Mobile layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-3 pb-[280px] md:hidden" style={{ minHeight: "100dvh" }}>

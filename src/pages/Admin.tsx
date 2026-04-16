@@ -7,7 +7,7 @@ import BackButton from "@/components/BackButton";
 import LoadingScreen from "@/components/LoadingScreen";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
-import HexMesh1 from "@/components/HexMesh1";
+import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { supabase } from "@/integrations/supabase/client";
 import { displayAge } from "@/lib/displayAge";
@@ -458,7 +458,7 @@ const Admin = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <HexMesh1 />
+      <DotDecal />
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-3 pb-20">
 

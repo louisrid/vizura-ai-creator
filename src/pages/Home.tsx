@@ -16,7 +16,7 @@ import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
-import HexMesh1 from "@/components/HexMesh1";
+import DotDecal from "@/components/DotDecal";
 import LockOverlay from "@/components/LockOverlay";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import { toast } from "@/components/ui/sonner";
@@ -347,7 +347,7 @@ const Home = () => {
       </AnimatePresence>}
 
       {!pageHidden && <div className="relative flex h-full flex-col">
-        <HexMesh1 />
+        <DotDecal />
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-4 pb-[280px] md:hidden">
           {/* Hero */}
