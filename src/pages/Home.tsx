@@ -116,6 +116,7 @@ const Home = () => {
     return c?.characterCount ?? 0;
   });
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [freshDataLoaded, setFreshDataLoaded] = useState(false);
   const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && !onboardingComplete && characterCount === 0;
 
 
