@@ -26,7 +26,7 @@ interface StorageImage {
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars, generationsLoaded, charactersLoaded, refreshGenerations } = useAppData();
+  const { generations, characters: cachedChars, generationsReady, charactersReady, refreshGenerations } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
@@ -72,7 +72,7 @@ const Storage = () => {
     return allImages;
   }, [generations, cachedChars, deletedIds]);
 
-  const loading = !generationsLoaded || !charactersLoaded;
+  const loading = !generationsReady || !charactersReady;
 
   if (!authLoading && !user) return null;
 
@@ -125,7 +125,7 @@ const Storage = () => {
           <PageTitle className="mb-0">storage</PageTitle>
         </div>
 
-        {!loading && !authLoading && images.length === 0 ? (
+        {images.length === 0 ? (
           <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
