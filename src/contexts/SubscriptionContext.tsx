@@ -39,18 +39,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     window.sessionStorage.removeItem(key);
   }, [getCacheKey]);
 
-  const isTestAccount = hasSpecialAccountOverride(user);
-
   const fetchSubscription = useCallback(async () => {
     if (!user) {
       setStatus(null);
-      setLoading(false);
-      return;
-    }
-
-    if (isTestAccount) {
-      writeCachedStatus(user.id, "active");
-      setStatus("active");
       setLoading(false);
       return;
     }
@@ -63,12 +54,10 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         .maybeSingle();
 
       if (error) {
-        // Don't overwrite optimistic state
         if (!optimistic) setStatus(null);
       } else {
         const serverStatus = data?.status ?? null;
         writeCachedStatus(user.id, serverStatus);
-        // Only overwrite optimistic if server confirms active
         if (optimistic && serverStatus && ACTIVE_STATUSES.has(serverStatus)) {
           setStatus(serverStatus);
         } else if (!optimistic) {
@@ -80,7 +69,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, isTestAccount, optimistic, writeCachedStatus]);
+  }, [user, optimistic, writeCachedStatus]);
 
   useEffect(() => {
     if (!user) {
@@ -95,7 +84,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
     setLoading(true);
     void fetchSubscription();
-  }, [fetchSubscription, readCachedStatus, user, writeCachedStatus]);
+  }, [fetchSubscription, readCachedStatus, user]);
 
   useEffect(() => {
     if (!user) return;
@@ -154,7 +143,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   }, [user, writeCachedStatus]);
 
   return (
-    <SubscriptionContext.Provider value={{ status: resolvedStatus, subscribed, loading: resolvedLoading, refetch: fetchSubscription, optimisticSubscribe, optimisticUnsubscribe }}>
+    <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription, optimisticSubscribe, optimisticUnsubscribe }}>
       {children}
     </SubscriptionContext.Provider>
   );
