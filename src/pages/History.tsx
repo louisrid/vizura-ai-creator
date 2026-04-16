@@ -56,7 +56,7 @@ const History = () => {
     return allItems;
   }, [generations, cachedChars]);
 
-  if (!authLoading && !user) return null;
+  if (!authLoading && !user) return <div className="min-h-screen bg-background" />;
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);

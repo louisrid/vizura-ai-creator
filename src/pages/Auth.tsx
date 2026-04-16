@@ -152,7 +152,7 @@ const Auth = () => {
     if (document.getElementById("splash-screen")) {
       return <LoadingScreen />;
     }
-    return null;
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (
