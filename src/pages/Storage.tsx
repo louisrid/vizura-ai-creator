@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,6 @@ import { Download, Trash2, Wand2, Copy } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
-import LoadingScreen from "@/components/LoadingScreen";
 import PageTitle from "@/components/PageTitle";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
@@ -26,12 +25,13 @@ interface StorageImage {
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars, generationsReady, charactersReady, refreshGenerations } = useAppData();
+  const { generations, characters: cachedChars, generationsReady, charactersReady } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
   const [newImageIds, setNewImageIds] = useState<Set<string>>(new Set());
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const highlightedRef = useRef(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
@@ -59,20 +59,20 @@ const Storage = () => {
       });
     });
 
-    // Check for new image highlight
-    if (allImages.length > 0) {
-      const newest = allImages[0];
-      const createdMs = new Date(newest.created_at).getTime();
-      if (Date.now() - createdMs < 30000) {
-        setNewImageIds(new Set([newest.id]));
-        setTimeout(() => setNewImageIds(new Set()), 1500);
-      }
-    }
-
     return allImages;
   }, [generations, cachedChars, deletedIds]);
 
-  const loading = !generationsReady || !charactersReady;
+  // Highlight newest image (once, outside useMemo)
+  useEffect(() => {
+    if (highlightedRef.current || images.length === 0) return;
+    const newest = images[0];
+    const createdMs = new Date(newest.created_at).getTime();
+    if (Date.now() - createdMs < 30000) {
+      highlightedRef.current = true;
+      setNewImageIds(new Set([newest.id]));
+      setTimeout(() => setNewImageIds(new Set()), 1500);
+    }
+  }, [images]);
 
   if (!authLoading && !user) return null;
 
@@ -119,7 +119,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-24">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
