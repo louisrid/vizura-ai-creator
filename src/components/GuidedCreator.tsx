@@ -284,13 +284,13 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
 
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center">
-      <div className="flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
+      <div className="flex flex-col items-center px-8 w-full max-w-md">
         <span className="text-[64px] mb-5">🔐</span>
         <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-           sign in to save her
+           {isSignUpMode ? "sign up to save her" : "sign in to save her"}
         </h2>
 
-        <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
+        <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
