@@ -21,7 +21,7 @@ const LoadingScreen = () => {
       aria-label="loading"
     >
       <h1 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h1>
-      <div className="h-2.5 w-full max-w-[12rem] overflow-hidden bg-white/10">
+      <div className="h-3 w-full max-w-[10rem] overflow-hidden bg-white/10">
         <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
       </div>
     </div>

@@ -20,7 +20,7 @@ function isInAppWebView(): boolean {
 }
 
 const Auth = () => {
-  const { user, signIn, signInPreview } = useAuth();
+  const { user, signIn } = useAuth();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const redirectTo = useMemo(() => new URLSearchParams(location.search).get("redirect") || "/", [location.search]);
@@ -79,14 +79,6 @@ const Auth = () => {
     };
   }, [user, navigate, redirectTo]);
 
-  /* Hide TopGradientBar on auth page & reset scroll */
-  useEffect(() => {
-    document.documentElement.dataset.guidedCreatorOpen = "1";
-    const root = document.getElementById("root");
-    if (root) root.scrollTop = 0;
-    window.scrollTo(0, 0);
-    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
-  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -101,13 +93,6 @@ const Auth = () => {
   const handleEmailAuth = async () => {
     setSubmitting(true);
     try {
-      if (!email.trim() && !password.trim()) {
-        sessionStorage.setItem("facefox_post_auth_home", "1");
-        await signInPreview();
-        toast.success("signed in");
-        return;
-      }
-
       if (!email.trim() || !password.trim()) {
         toast.error("fill details");
         setSubmitting(false);
@@ -232,7 +217,7 @@ const Auth = () => {
                 </>
               ) : (
                 <>
-                  {email.trim() || password.trim() ? "sign in" : "preview login"}
+                  sign in
                   <ArrowRight size={14} />
                 </>
               )}

@@ -111,7 +111,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       ),
     }}
   >
-    <span className="block leading-none text-center whitespace-nowrap">{label === "extra large" ? "XL" : label}</span>
+    <span className="block leading-none text-center whitespace-nowrap">{label}</span>
   </motion.button>
 );
 
@@ -260,7 +260,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
     return (
       <div className="flex min-h-full w-full flex-col items-center justify-center gap-4 bg-background">
         <h2 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h2>
-        <div className="h-2.5 w-full max-w-[12rem] overflow-hidden bg-white/10">
+        <div className="h-3 w-full max-w-[10rem] overflow-hidden bg-white/10">
           <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
         </div>
       </div>
@@ -272,10 +272,10 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
       <div className="flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
         <span className="text-[64px] mb-5">🔐</span>
         <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-          sign up to save her
+           sign in to save her
         </h2>
 
-        <div className="mt-8 w-full space-y-3">
+        <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
@@ -290,7 +290,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                sign up with google
+                sign in with google
               </>
             )}
           </button>
@@ -325,7 +325,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
             style={{ borderRadius: 10, background: '#ffe603', color: '#000' }}
           >
-            {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing up...</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
+            {emailLoading ? <><Loader2 className="animate-spin" size={18} />signing in...</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
           </button>
 
         </div>
@@ -1065,7 +1065,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       >
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
           <span className="text-[64px] mb-5">🔐</span>
-          <h2 className="text-center text-[2.2rem] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             sign in to<br />save her
           </h2>
           <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
