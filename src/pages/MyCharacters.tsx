@@ -96,74 +96,63 @@ const MyCharacters = () => {
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
 
-        {(loading || authLoading) ? (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
-            {Array.from({ length: 2 }).map((_, i) => (
-              <div key={`skel-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
-                <AspectRatio ratio={3 / 4}>
-                  <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
-                </AspectRatio>
+        <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
+          {/* Always show the + button */}
+          <button
+            onClick={handleCreateCharacter}
+            className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
+            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
+          >
+            <AspectRatio ratio={3 / 4}>
+              <div className="flex h-full w-full items-center justify-center">
+                <Plus size={28} strokeWidth={2.5} className="text-white md:w-8 md:h-8" />
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
-            <button
-              onClick={handleCreateCharacter}
-              className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
-              style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
-            >
-              <AspectRatio ratio={3 / 4}>
-                <div className="flex h-full w-full items-center justify-center">
-                  <Plus size={28} strokeWidth={2.5} className="text-white md:w-8 md:h-8" />
-                </div>
-              </AspectRatio>
-            </button>
+            </AspectRatio>
+          </button>
 
-              {characters.map((char) => {
-                const isNew = newCharId === char.id;
-                const hasFace = char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg");
-                return (
-                  <button
-                    key={char.id}
-                    onClick={() => navigate(`/characters/${char.id}`)}
-                    className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
-                    style={{
-                      borderRadius: 10,
-                      border: isNew ? "3px solid #ffe603" : "2px solid hsl(var(--border-mid))",
-                      backgroundColor: "hsl(var(--card))",
-                    }}
-                  >
-                    <AspectRatio ratio={3 / 4}>
-                      {hasFace ? (
-                        <img
-                          src={char.face_image_url!}
-                          alt={char.name}
-                          className="h-full w-full object-cover"
-                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                          <svg width="28" height="28" viewBox="0 0 24 24" fill="hsl(var(--border-mid))">
-                            <circle cx="12" cy="8" r="5" />
-                            <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
-                          </svg>
-                        </div>
-                      )}
-                    </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-5">
-                      <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-tight truncate">
-                        {char.name || "unnamed"}
-                      </span>
-                      <span className="block text-[9px] md:text-[11px] font-[800] lowercase text-white">
-                        age {displayAge(char.id, char.age)}
-                      </span>
+          {characters.map((char) => {
+            const isNew = newCharId === char.id;
+            const hasFace = char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg");
+            return (
+              <button
+                key={char.id}
+                onClick={() => navigate(`/characters/${char.id}`)}
+                className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
+                style={{
+                  borderRadius: 10,
+                  border: isNew ? "3px solid #ffe603" : "2px solid hsl(var(--border-mid))",
+                  backgroundColor: "hsl(var(--card))",
+                }}
+              >
+                <AspectRatio ratio={3 / 4}>
+                  {hasFace ? (
+                    <img
+                      src={char.face_image_url!}
+                      alt={char.name}
+                      className="h-full w-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="hsl(var(--border-mid))">
+                        <circle cx="12" cy="8" r="5" />
+                        <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
+                      </svg>
                     </div>
-                  </button>
-                );
-              })}
-          </div>
-        )}
+                  )}
+                </AspectRatio>
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-5">
+                  <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-tight truncate">
+                    {char.name || "unnamed"}
+                  </span>
+                  <span className="block text-[9px] md:text-[11px] font-[800] lowercase text-white">
+                    age {displayAge(char.id, char.age)}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </main>
 
     </div>
