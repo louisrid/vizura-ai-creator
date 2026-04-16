@@ -79,10 +79,6 @@ const Auth = () => {
     };
   }, [user, navigate, redirectTo]);
 
-  useEffect(() => {
-    document.documentElement.dataset.guidedCreatorOpen = "1";
-    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
-  }, []);
 
 
   useEffect(() => {

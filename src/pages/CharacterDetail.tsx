@@ -4,7 +4,7 @@ import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, Trash2, Lock, RefreshCw, Camera, Check, User } from "lucide-react";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
-import LoadingScreen from "@/components/LoadingScreen";
+
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
