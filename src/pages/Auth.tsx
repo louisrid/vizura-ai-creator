@@ -80,9 +80,12 @@ const Auth = () => {
     };
   }, [user, navigate, redirectTo]);
 
-  /* Hide TopGradientBar on auth page */
+  /* Hide TopGradientBar on auth page & reset scroll */
   useEffect(() => {
     document.documentElement.dataset.guidedCreatorOpen = "1";
+    const root = document.getElementById("root");
+    if (root) root.scrollTop = 0;
+    window.scrollTo(0, 0);
     return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
   }, []);
 
