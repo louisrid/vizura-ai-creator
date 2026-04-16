@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import LoadingScreen from "@/components/LoadingScreen";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
+
+const SilentLoader = () => {
+  useLayoutEffect(() => {
+    const unregister = registerBlockingLoader();
+    return unregister;
+  }, []);
+  return null;
+};
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -136,7 +144,7 @@ const Auth = () => {
 
   if (user) {
     if (document.getElementById("splash-screen")) {
-      return <LoadingScreen />;
+      return <SilentLoader />;
     }
     return <div className="min-h-screen bg-background" />;
   }

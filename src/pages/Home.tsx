@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import LoadingScreen from "@/components/LoadingScreen";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
+
+const SilentLoader = () => {
+  useLayoutEffect(() => {
+    const unregister = registerBlockingLoader();
+    return unregister;
+  }, []);
+  return null;
+};
 import { createPortal } from "react-dom";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import { displayAge } from "@/lib/displayAge";
@@ -74,7 +82,7 @@ const Home = () => {
     sessionStorage.getItem("facefox_post_auth_home") === "1" ||
     sessionStorage.getItem("facefox_signup_gate_active") === "1"
   );
-  const shouldOpenGuidedOnMount = openCreatorRequested || ((!user && !authLoading && !pendingAuthResume) || isTestAccount);
+  const shouldOpenGuidedOnMount = openCreatorRequested || isTestAccount;
   // Derive images and characters from global cache
   const images = useMemo(() => {
     return cachedGens
@@ -169,9 +177,8 @@ const Home = () => {
 
 
     if (user) {
-      // Logged-in users must NEVER see the hero screen
       setSkipWelcome(true);
-      if (!openCreatorRequested && (!isOnboardingUser || localStorage.getItem("facefox_visited_character") === "1")) setShowGuided(false);
+      if (!openCreatorRequested) setShowGuided(false);
       setAutoOpenEvaluated(true);
       return;
     }
@@ -182,20 +189,6 @@ const Home = () => {
     setAutoOpenEvaluated(true);
   }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser, initialLoadComplete, characterCount]);
 
-  // When lock state resolves and user needs onboarding, force guided creator open
-  // BUT only if they've never visited the character page before
-  useEffect(() => {
-    if (!freshDataLoaded || !user) return;
-    if (sessionStorage.getItem(DISMISSED_KEY) === "1") return;
-    if (localStorage.getItem("facefox_visited_character") === "1") return;
-    if (!onboardingComplete && characterCount === 0) {
-      sessionStorage.removeItem("facefox_guided_dismissed");
-      localStorage.removeItem("facefox_visited_character");
-      setShowGuided(true);
-      setSkipWelcome(false);
-      setAutoOpenEvaluated(true);
-    }
-  }, [freshDataLoaded, user, onboardingComplete, characterCount]);
 
   // Resolve onboarding lock state
   useEffect(() => {
@@ -318,7 +311,7 @@ const Home = () => {
 
   // Only block rendering during initial splash — never after navigation
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && document.getElementById("splash-screen")) {
-    return <LoadingScreen />;
+    return <SilentLoader />;
   }
 
   return (
