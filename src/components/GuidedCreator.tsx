@@ -886,7 +886,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           {canExitFlow && (
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); sessionStorage.setItem("facefox_guided_dismissed", "1"); navigate("/"); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); sessionStorage.setItem("facefox_guided_dismissed", "1"); navigateTo("/"); }}
               className="mb-4 text-[13px] font-[800] lowercase text-white/50 active:text-white/80 transition-colors duration-150"
             >
               🏠 home
