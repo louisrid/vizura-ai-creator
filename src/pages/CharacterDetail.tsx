@@ -520,7 +520,7 @@ const CharacterDetail = () => {
             transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
           >
             <span className="flex items-center justify-center gap-2">
-              <Camera size={18} strokeWidth={2.5} /> create photo
+              {onboardingComplete ? (<><Camera size={18} strokeWidth={2.5} /> create photo</>) : "create 🖌️"}
             </span>
           </motion.button>
         </div>
@@ -622,7 +622,7 @@ const CharacterDetail = () => {
               transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
             >
               <span className="flex items-center justify-center gap-2">
-                <Camera size={18} strokeWidth={2.5} /> create photo
+                {onboardingComplete ? (<><Camera size={18} strokeWidth={2.5} /> create photo</>) : "create 🖌️"}
               </span>
             </motion.button>
           </div>

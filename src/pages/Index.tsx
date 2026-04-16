@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
+import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 const SET3_KEY = "facefox_set3_seen";
 
@@ -411,8 +412,8 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
 };
 
 /* ── Create button ── */
-const CreateButton = ({ onClick, disabled, isGenerating }: {
-  onClick: () => void; disabled: boolean; isGenerating: boolean;
+const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
+  onClick: () => void; disabled: boolean; isGenerating: boolean; onboardingComplete: boolean;
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
@@ -422,9 +423,9 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
-    ) : (
+    ) : onboardingComplete ? (
       <>create photo <span style={{ color: "#00e0ff" }}>·</span> 10 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
-    )}
+    ) : "create 🖌️"}
   </button>
 );
 
@@ -592,16 +593,14 @@ const Index = () => {
 
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
-    if (credits <= 0) { navigate("/top-ups"); return; }
     if (!selectedCharId || !prompt.trim()) { toast.error("fill all info"); return; }
-
-    // Intercept with Set 3 for first-time users
-    if (!hasSeenSet3()) {
+    if (!onboardingComplete) {
       setShowSet3(true);
       setSet3Step(0);
       setSet3SeenSteps(new Set());
       return;
     }
+    if (credits <= 0) { navigate("/top-ups"); return; }
 
     setIsGenerating(true);
     setError("");

@@ -659,9 +659,6 @@ const ChooseFace = () => {
           supabase.rpc("update_profile_safe", { _onboarding_complete: true }).then(() => {
             console.log("[ChooseFace] onboarding_complete set in DB");
           });
-          supabase.from("credits").update({ balance: 0 }).eq("user_id", currentUser.id).then(() => {
-            console.log("[ChooseFace] onboarding credits reset to 0");
-          });
         }
       } catch (err) {
         toast.error("save error");
