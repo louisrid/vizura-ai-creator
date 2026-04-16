@@ -33,8 +33,15 @@ const Storage = () => {
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
   const highlightedRef = useRef(false);
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
+    if (authLoading) return;
+    if (user) {
+      hasAuthed.current = true;
+      return;
+    }
+    if (hasAuthed.current) return;
+    navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
   }, [user, authLoading, navigate, location.pathname]);
 
   // Derive images from cached data
