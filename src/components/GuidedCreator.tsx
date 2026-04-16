@@ -893,10 +893,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                 e.preventDefault(); e.stopPropagation();
                 sessionStorage.setItem("facefox_guided_dismissed", "1");
                 setVisible(false);
-                onExit(selectionsRef.current);
-                navigateTo("/");
+                setTimeout(() => {
+                  onExit(selectionsRef.current);
+                  navigateTo("/");
+                }, 450);
               }}
-              className="mb-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              className="mb-6 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
               style={{ width: 44, height: 44 }}
             >
               <Home size={24} strokeWidth={2} color="#ffffff" />
