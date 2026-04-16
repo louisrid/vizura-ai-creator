@@ -2,15 +2,11 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-const CACHE_VERSION = "4";
+const CACHE_VERSION = "5";
 const storedVersion = localStorage.getItem("facefox_cache_version");
 if (storedVersion !== CACHE_VERSION) {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith("facefox_") || key.startsWith("sb-")) localStorage.removeItem(key);
-  });
-  Object.keys(sessionStorage).forEach((key) => {
-    if (key.startsWith("facefox_") || key.startsWith("sb-")) sessionStorage.removeItem(key);
-  });
+  localStorage.clear();
+  sessionStorage.clear();
   localStorage.setItem("facefox_cache_version", CACHE_VERSION);
 }
 
