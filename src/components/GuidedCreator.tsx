@@ -849,11 +849,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
+    <AnimatePresence>
+      {visible && (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.45, ease: "easeInOut" }}
     >
       {/* Progress dashes — static, never fade during transitions */}
