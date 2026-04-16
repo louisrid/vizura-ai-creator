@@ -658,12 +658,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%' }}>
-        <div style={{ position: 'relative', width: 310, height: 310, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
+        <div style={{ position: 'relative', width: 360, height: 360, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 308, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
-            { size: 273, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
-            { size: 238, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 206, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+            { size: 356, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 316, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 276, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 240, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
@@ -676,7 +676,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 102, height: 102, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 88, lineHeight: 1 }}>
+          <div style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 105, lineHeight: 1 }}>
             🦊
           </div>
         </div>
