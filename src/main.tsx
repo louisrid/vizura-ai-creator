@@ -14,6 +14,19 @@ if (storedVersion !== CACHE_VERSION) {
   localStorage.setItem("facefox_cache_version", CACHE_VERSION);
 }
 
+// If the user was mid-onboarding when the page loaded, wipe the flow state
+// so they land on the hero/start screen fresh
+sessionStorage.removeItem("facefox_guided_flow_state");
+sessionStorage.removeItem("facefox_guided_dismissed");
+sessionStorage.removeItem("facefox_post_auth_home");
+sessionStorage.removeItem("facefox_signup_gate_active");
+sessionStorage.removeItem("facefox_face_options");
+sessionStorage.removeItem("facefox_face_prompt");
+sessionStorage.removeItem("facefox_guided_prompt");
+sessionStorage.removeItem("facefox_character_draft");
+sessionStorage.removeItem("facefox_pending_char_id");
+sessionStorage.removeItem("facefox_selected_face");
+
 // On every fresh page load (including refresh), clear the guided creator
 // flow state so the user always starts from the hero screen.
 sessionStorage.removeItem("facefox_guided_flow_state");
