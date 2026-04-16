@@ -266,7 +266,7 @@ const Header = () => {
   return (
     <>
       {/* Spacer that reserves header height in document flow */}
-      <div className="h-[88px] md:h-[100px]" aria-hidden="true" />
+      <div className="h-[110px] md:h-[120px]" aria-hidden="true" />
       <header
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
@@ -282,7 +282,7 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-8 md:pt-10 pb-3">
+          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
@@ -294,7 +294,7 @@ const Header = () => {
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
-                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
                   }}
                   aria-label="my account"
                 >
