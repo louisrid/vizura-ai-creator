@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { createPortal } from "react-dom";
-import { isTestResetAccount } from "@/lib/testAccountReset";
+
 import { displayAge } from "@/lib/displayAge";
 import { User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,12 +69,11 @@ const Home = () => {
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
-  const isTestAccount = isTestResetAccount(user);
   const pendingAuthResume = typeof window !== "undefined" && (
     sessionStorage.getItem("facefox_post_auth_home") === "1" ||
     sessionStorage.getItem("facefox_signup_gate_active") === "1"
   );
-  const shouldOpenGuidedOnMount = openCreatorRequested || isTestAccount;
+  const shouldOpenGuidedOnMount = openCreatorRequested;
   // Derive images and characters from global cache
   const images = useMemo(() => {
     return cachedGens
@@ -303,7 +302,7 @@ const Home = () => {
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
-  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading || isTestAccount;
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
 
   // Only block rendering during initial splash — never after navigation
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && document.getElementById("splash-screen")) {

@@ -45,44 +45,6 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Test account reset — allowed regardless of demo mode
-    if (action === "test_reset") {
-      const TEST_EMAIL = "carlsonistrader@gmail.com";
-      if (user.email?.toLowerCase() !== TEST_EMAIL) {
-        return new Response(JSON.stringify({ error: "Not authorized" }), {
-          status: 403,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      // Reset balance to 100 hidden gems
-      await adminClient
-        .from("credits")
-        .update({ balance: 100, updated_at: new Date().toISOString() })
-        .eq("user_id", userId);
-
-      // Reset onboarding state
-      await adminClient
-        .from("profiles")
-        .update({
-          onboarding_complete: false,
-          has_claimed_free_gems: false,
-          has_used_free_gen: false,
-          has_seen_welcome: false,
-          has_seen_onboarding: false,
-          onboarding_face_regens_used: 0,
-          onboarding_angle_regens_used: 0,
-          onboarding_body_regens_used: 0,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
-
-      return new Response(
-        JSON.stringify({ success: true, action: "test_reset" }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     // In production (non-demo), reject direct credit additions.
     // Credits should only be granted via stripe-webhook after payment verification.
     if (!IS_DEMO_MODE) {

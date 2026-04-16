@@ -4,7 +4,7 @@ import type { User } from "@supabase/supabase-js";
 import { clearSpecialAccountCache, syncSpecialAccountCache } from "@/lib/specialAccount";
 import { getPreviewAccountCredentials } from "@/lib/previewAuth";
 import { clearCachedOnboardingState, fetchAndCacheOnboardingState } from "@/lib/onboardingState";
-import { maybeResetTestAccount } from "@/lib/testAccountReset";
+
 
 interface AuthContextType {
   user: User | null;
@@ -168,7 +168,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               syncSpecialAccountCache(nextUser);
               void fetchAndCacheOnboardingState(nextUser.id);
               void hydrateUser(nextUser);
-              void maybeResetTestAccount(nextUser);
             })();
             return;
           }
@@ -177,7 +176,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           syncSpecialAccountCache(nextUser);
           void fetchAndCacheOnboardingState(nextUser.id);
           void hydrateUser(nextUser);
-          if (event === "SIGNED_IN") void maybeResetTestAccount(nextUser);
         }
       });
       subscriptionRef.current = sub.subscription;
@@ -187,8 +185,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { data, error } = await supabase.auth.getSession();
         if (error) throw error;
         if (cancelled) return;
-        const hydratedUser = await hydrateUser(data.session?.user ?? null, cancelled);
-        if (hydratedUser) void maybeResetTestAccount(hydratedUser);
+        await hydrateUser(data.session?.user ?? null, cancelled);
       } finally {
         if (cancelled) return;
         setLoading(false);
