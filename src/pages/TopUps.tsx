@@ -58,11 +58,6 @@ const TopUps = () => {
       setClaimChecked(true);
     };
     check();
-
-    // Re-check after test account reset
-    const onReset = () => { check(); };
-    window.addEventListener("facefox:test-reset-complete", onReset);
-    return () => window.removeEventListener("facefox:test-reset-complete", onReset);
   }, [user]);
 
   if (!loading && !user) return <div className="min-h-screen bg-background" />;

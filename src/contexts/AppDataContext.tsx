@@ -191,18 +191,15 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
 
   // Listen for data-changed events
   useEffect(() => {
-    const handleReset = () => { void refreshAll(); };
     const handleCharsChanged = () => { void refreshCharacters(); };
     const handleGensChanged = () => { void refreshGenerations(); };
-    window.addEventListener("facefox:test-reset-complete", handleReset);
     window.addEventListener("facefox:characters-changed", handleCharsChanged);
     window.addEventListener("facefox:generations-changed", handleGensChanged);
     return () => {
-      window.removeEventListener("facefox:test-reset-complete", handleReset);
       window.removeEventListener("facefox:characters-changed", handleCharsChanged);
       window.removeEventListener("facefox:generations-changed", handleGensChanged);
     };
-  }, [refreshAll, refreshCharacters, refreshGenerations]);
+  }, [refreshCharacters, refreshGenerations]);
 
   return (
     <AppDataContext.Provider

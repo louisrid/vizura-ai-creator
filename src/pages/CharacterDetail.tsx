@@ -82,13 +82,6 @@ const CharacterDetail = () => {
 
   useEffect(() => { fetchProfileData(); }, [fetchProfileData]);
 
-  // Re-fetch after test account reset
-  useEffect(() => {
-    const handler = () => fetchProfileData();
-    window.addEventListener("facefox:test-reset-complete", handler);
-    return () => window.removeEventListener("facefox:test-reset-complete", handler);
-  }, [fetchProfileData]);
-
   // Latest photos for this character
   const [latestPhotos, setLatestPhotos] = useState<{ id: string; url: string; created_at: string }[]>([]);
   const MAX_LATEST = 6;

@@ -152,12 +152,6 @@ const ChooseFace = () => {
 
   useEffect(() => { fetchProfileData(); }, [fetchProfileData]);
 
-  // Re-fetch after test account reset
-  useEffect(() => {
-    const handler = () => fetchProfileData();
-    window.addEventListener("facefox:test-reset-complete", handler);
-    return () => window.removeEventListener("facefox:test-reset-complete", handler);
-  }, [fetchProfileData]);
   const hasShownGreatChoiceRef = useRef(false);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
-import { isTestResetAccount } from "@/lib/testAccountReset";
+
 import type { SlideConfig } from "@/components/InstructionalSlide";
 
 /* ── Constants ── */
