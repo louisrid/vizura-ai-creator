@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-const CACHE_VERSION = "3";
+const CACHE_VERSION = "4";
 const storedVersion = localStorage.getItem("facefox_cache_version");
 if (storedVersion !== CACHE_VERSION) {
   Object.keys(localStorage).forEach((key) => {

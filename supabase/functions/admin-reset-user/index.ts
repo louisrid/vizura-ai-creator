@@ -142,6 +142,7 @@ Deno.serve(async (req) => {
     // hero/login screen fresh instead of resuming mid-flow with stale local cache.
     try {
       await admin.auth.admin.signOut(targetUserId, "global");
+      await admin.auth.admin.signOut(targetUserId);
     } catch (signOutErr) {
       console.warn("admin-reset-user signOut warning:", signOutErr);
     }
