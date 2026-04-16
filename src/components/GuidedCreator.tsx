@@ -9,6 +9,7 @@ import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import type { SlideConfig } from "@/components/InstructionalSlide";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 
 /* ── Constants ── */
 const Y = "#ffe603";
