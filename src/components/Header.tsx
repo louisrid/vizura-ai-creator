@@ -37,6 +37,20 @@ const Header = () => {
   const { gems } = useGems();
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
+
+  // Hide header while splash screen is still visible
+  const [splashGone, setSplashGone] = useState(() => typeof document === "undefined" || !document.getElementById("splash-screen"));
+  useEffect(() => {
+    if (splashGone) return;
+    const observer = new MutationObserver(() => {
+      if (!document.getElementById("splash-screen")) {
+        setSplashGone(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [splashGone]);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
@@ -259,6 +273,10 @@ const Header = () => {
     </AnimatePresence>,
     document.body,
   ) : null;
+
+  if (!splashGone) {
+    return <div className="h-[80px] md:h-[90px]" aria-hidden="true" />;
+  }
 
   return (
     <>

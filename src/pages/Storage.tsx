@@ -74,7 +74,7 @@ const Storage = () => {
     }
   }, [images]);
 
-  if (!authLoading && !user) return null;
+  if (!authLoading && !user) return <div className="min-h-screen bg-background" />;
 
   const handleDelete = async (img: StorageImage) => {
     setDeletedIds((prev) => new Set([...prev, img.id]));

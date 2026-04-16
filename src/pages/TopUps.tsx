@@ -58,7 +58,7 @@ const TopUps = () => {
     return () => window.removeEventListener("facefox:test-reset-complete", onReset);
   }, [user]);
 
-  if (!loading && !user) return null;
+  if (!loading && !user) return <div className="min-h-screen bg-background" />;
 
   const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;

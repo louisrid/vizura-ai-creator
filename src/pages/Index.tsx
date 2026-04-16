@@ -580,7 +580,7 @@ const Index = () => {
     setCharactersLoaded(true);
   }, [user, cachedCharacters, cachedCharsLoaded, preselectedCharacterId]);
 
-  if (!user && !authLoading) return null;
+  if (!user && !authLoading) return <div className="min-h-screen bg-background" />;
 
   const handleCharacterSelect = (charId: string) => {
     setSelectedCharId(charId);
