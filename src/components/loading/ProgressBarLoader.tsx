@@ -109,32 +109,11 @@ const ProgressBarLoader = ({
     }
   }, [tick]);
 
-  // Visibility change: pause/resume elapsed tracking
-  useEffect(() => {
-    if (isControlled) return;
-
-    const onVisChange = () => {
-      if (document.hidden) {
-        pausedAtRef.current = Date.now();
-        if (animationFrameRef.current !== null) {
-          cancelAnimationFrame(animationFrameRef.current);
-          animationFrameRef.current = null;
-        }
-      } else {
-        if (pausedAtRef.current !== null) {
-          totalPausedRef.current += Date.now() - pausedAtRef.current;
-          pausedAtRef.current = null;
-        }
-        if (!completedRef.current && animationFrameRef.current === null) {
-          tick();
-          animationFrameRef.current = requestAnimationFrame(loop);
-        }
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisChange);
-    return () => document.removeEventListener("visibilitychange", onVisChange);
-  }, [isControlled, tick, loop]);
+  // NOTE: Visibility-change handler intentionally removed.
+  // It was causing the loader to re-appear / restart when users tabbed back
+  // to a page where it had previously rendered. Loader progress now keeps
+  // ticking on its rAF loop regardless of tab visibility (browser will
+  // throttle rAF on hidden tabs naturally).
 
   // Main animation loop
   useEffect(() => {
