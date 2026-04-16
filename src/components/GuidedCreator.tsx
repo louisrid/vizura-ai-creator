@@ -660,49 +660,48 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', paddingBottom: '2vh' }}>
         <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 294, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false, smallGap: true },
-            { size: 261, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true, smallGap: false },
-            { size: 228, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false, smallGap: false },
-            { size: 198, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false, smallGap: false },
+            { size: 294, w: 6, spd: 0.45, del: 0.22, dash: false, gapFraction: 0.14, baseRotation: 115.2 },
+            { size: 261, w: 2, spd: -0.3, del: 0.14, dash: true, dashArray: "4 3" },
+            { size: 228, w: 8, spd: -0.6, del: 0.07, dash: false, gapFraction: 0.25, baseRotation: -45 },
+            { size: 198, w: 3, spd: 0.5, del: 0, dash: false, gapFraction: 0.25, baseRotation: 45 },
           ].map((r, i) => {
-            // For the dashed ring, make it a complete circle (no gap)
-            const segStyle = r.dash ? {} : { [r.seg]: 'transparent' };
-            // For the outermost ring, use SVG approach instead of border gap
-            if (r.smallGap) {
-              const radius = (on ? r.size : 63) / 2;
-              const circumference = 2 * Math.PI * radius;
-              const gapFraction = 1 / 6;
-              const dashArray = `${circumference * (1 - gapFraction)} ${circumference * gapFraction}`;
-              return (
-                <svg key={i} style={{
+            const currentSize = on ? r.size : 63;
+            const center = currentSize / 2;
+            const radius = Math.max(0, center - r.w / 2);
+            const circumference = 2 * Math.PI * radius;
+            const dashArray = r.dash
+              ? r.dashArray
+              : `${circumference * (1 - r.gapFraction)} ${circumference * r.gapFraction}`;
+
+            return (
+              <svg
+                key={i}
+                style={{
                   position: 'absolute',
-                  width: on ? r.size : 63, height: on ? r.size : 63,
+                  width: currentSize,
+                  height: currentSize,
                   transform: `rotate(${ringT * r.spd}deg)`,
                   opacity: on ? 1 : 0,
                   transition: `width 0.7s cubic-bezier(0.34,1.56,0.64,1) ${r.del}s, height 0.7s cubic-bezier(0.34,1.56,0.64,1) ${r.del}s, opacity 0.35s ease ${r.del}s`,
-                  top: '50%', left: '50%', translate: '-50% -50%',
+                  top: '50%',
+                  left: '50%',
+                  translate: '-50% -50%',
                   overflow: 'visible',
-                }}>
-                  <circle
-                    cx="50%" cy="50%" r={Math.max(0, radius - r.w / 2)}
-                    fill="none" stroke="#ffe603" strokeWidth={r.w}
-                    strokeDasharray={dashArray}
-                    strokeLinecap="round"
-                  />
-                </svg>
-              );
-            }
-            return (
-              <div key={i} style={{
-                position: 'absolute', borderRadius: '50%',
-                width: on ? r.size : 63, height: on ? r.size : 63,
-                border: `${r.w}px ${r.dash ? 'dashed' : 'solid'} #ffe603`,
-                ...segStyle,
-                transform: `rotate(${ringT * r.spd}deg)`,
-                opacity: on ? 1 : 0,
-                transition: `width 0.7s cubic-bezier(0.34,1.56,0.64,1) ${r.del}s, height 0.7s cubic-bezier(0.34,1.56,0.64,1) ${r.del}s, opacity 0.35s ease ${r.del}s`,
-                top: '50%', left: '50%', translate: '-50% -50%',
-              }} />
+                }}
+                viewBox={`0 0 ${currentSize} ${currentSize}`}
+              >
+                <circle
+                  cx={center}
+                  cy={center}
+                  r={radius}
+                  fill="none"
+                  stroke="#ffe603"
+                  strokeWidth={r.w}
+                  strokeDasharray={dashArray}
+                  strokeLinecap="butt"
+                  transform={`rotate(${r.baseRotation ?? 0} ${center} ${center})`}
+                />
+              </svg>
             );
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
