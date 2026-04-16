@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { hasSpecialAccountOverride } from "@/lib/specialAccount";
 
 interface SubscriptionContextType {
   status: string | null;
