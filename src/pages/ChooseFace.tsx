@@ -566,6 +566,19 @@ const ChooseFace = () => {
     try {
       const result = await invokeAngleBody();
       console.log("Angle + body generation completed:", { characterId: charId, angle: result?.angle_url, body: result?.body_anchor_url });
+      // Preload the generated images before completing the loader
+      const urls = [result?.angle_url, result?.body_anchor_url, faceUrl].filter(Boolean) as string[];
+      if (urls.length > 0) {
+        await Promise.race([
+          Promise.all(urls.map((url) => new Promise<void>((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+            img.src = url;
+          }))),
+          new Promise<void>((resolve) => setTimeout(resolve, 4000)),
+        ]);
+      }
     } catch (e) {
       console.error("Angle + body generation failed:", e);
     }

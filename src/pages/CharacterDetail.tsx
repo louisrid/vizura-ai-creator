@@ -505,17 +505,15 @@ const CharacterDetail = () => {
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
         <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
-          <motion.button
+          <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
             style={{ height: 52, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
           >
             <span className="flex items-center justify-center gap-2">
               {onboardingComplete ? (<><Camera size={18} strokeWidth={2.5} /> create photo</>) : "create 🖌️"}
             </span>
-          </motion.button>
+          </button>
         </div>
       </div>
 
@@ -607,17 +605,15 @@ const CharacterDetail = () => {
               </div>
             </div>
             <div className="flex-1" />
-            <motion.button
+            <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
               style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
             >
               <span className="flex items-center justify-center gap-2">
                 {onboardingComplete ? (<><Camera size={18} strokeWidth={2.5} /> create photo</>) : "create 🖌️"}
               </span>
-            </motion.button>
+            </button>
           </div>
         </div>
       </main>
