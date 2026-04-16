@@ -447,7 +447,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (open) {
       const restored = restoreSavedFlow();
       if (!restored) {
-        setStep(0);
+        setStep(flowVariant === "member-onboarding" ? 1 : 0);
         setSelections({ ...emptySelections });
       }
       setShaking(false);
