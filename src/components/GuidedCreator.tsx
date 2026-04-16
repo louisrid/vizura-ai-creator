@@ -656,8 +656,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
-      <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100dvh' }}>
-        <div style={{ position: 'relative', width: 310, height: 310, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
+      <div className="flex w-full flex-col items-center justify-center" style={{ height: '100dvh', padding: '0 20px' }}>
+        <div style={{ position: 'relative', width: 310, height: 310, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {[
             { size: 308, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 273, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
@@ -677,12 +677,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           ))}
           <div style={{ width: 110, height: 110, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
-              src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
+              src="https://em-content.zobj.net/thumbs/320/apple/391/fox_1f98a.png"
               alt="fox"
-              width={440}
-              height={440}
+              width={320}
+              height={320}
               draggable={false}
-              style={{ display: 'block', width: 110, height: 110, imageRendering: 'auto' }}
+              style={{ display: 'block', width: 110, height: 110 }}
             />
           </div>
         </div>
