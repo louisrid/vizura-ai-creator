@@ -48,11 +48,11 @@ const ChatPill = ({
   return (
     <motion.div
       className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
-      initial={animate ? { opacity: 0, x: isLeft ? -250 : 250 } : false}
-      animate={{ opacity: 1, x: 0 }}
+      initial={animate ? { x: isLeft ? "-120%" : "120%" } : false}
+      animate={{ x: 0 }}
       transition={
         animate
-          ? { duration: 0.5, delay, ease: [0.2, 0.8, 0.3, 1] }
+          ? { duration: 0.35, delay, ease: [0.25, 0.8, 0.25, 1] }
           : undefined
       }
     >
@@ -72,8 +72,8 @@ const ChatPill = ({
         <div
           style={{
             position: "absolute",
-            bottom: -6,
-            ...(isLeft ? { left: 14 } : { right: 14 }),
+            bottom: -7,
+            ...(isLeft ? { left: 12 } : { right: 12 }),
             width: 0,
             height: 0,
             borderLeft: isLeft ? "none" : "8px solid transparent",
@@ -148,7 +148,7 @@ const InstructionalSlide = ({
       setHasAnimated(true);
       return;
     }
-    const totalDelay = slide.pills.length * 0.9 + 0.5 + 0.7;
+    const totalDelay = slide.pills.length * 0.6 + 1.2 + 0.35;
     timerRef.current = setTimeout(() => setHasAnimated(true), totalDelay * 1000);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -223,13 +223,13 @@ const InstructionalSlide = ({
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-6 md:mt-8 w-full max-w-[22rem] md:max-w-[28rem] flex flex-col gap-4">
+          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}
                 text={pill.text}
                 side={isSinglePill ? "left" : pill.side}
-                delay={shouldAnimate ? i * 0.8 + 0.6 : 0}
+                delay={shouldAnimate ? i * 0.6 + 1.2 : 0}
                 animate={shouldAnimate}
                 highlight={pill.highlight}
               />
