@@ -3,9 +3,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Global app data cache — fetched once at startup, shared across all pages.
- * Pages read from this cache instead of fetching independently.
- * Call refresh functions only when data actually changes (new character, new photo, deletion).
+ * Global app data cache with localStorage persistence.
+ * - On mount: hydrate from localStorage instantly → pages render cached content with zero delay.
+ * - Background fetch updates cache + localStorage; UI only re-renders if data actually changed.
+ * - Pages never need their own fetch logic.
  */
 
 export interface CachedCharacter {
@@ -38,12 +39,36 @@ export interface CachedGeneration {
 interface AppDataContextValue {
   characters: CachedCharacter[];
   generations: CachedGeneration[];
-  charactersLoaded: boolean;
-  generationsLoaded: boolean;
+  /** true once we have *some* data (cached or fetched) — pages can render immediately */
+  charactersReady: boolean;
+  generationsReady: boolean;
   refreshCharacters: () => Promise<void>;
   refreshGenerations: () => Promise<void>;
   refreshAll: () => Promise<void>;
 }
+
+const CHARS_KEY = "facefox_cached_characters";
+const GENS_KEY = "facefox_cached_generations";
+const CACHE_USER_KEY = "facefox_cached_user_id";
+
+const readLocal = <T,>(key: string): T | null => {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) as T : null;
+  } catch { return null; }
+};
+
+const writeLocal = (key: string, data: unknown) => {
+  try { localStorage.setItem(key, JSON.stringify(data)); } catch {}
+};
+
+const clearLocal = () => {
+  try {
+    localStorage.removeItem(CHARS_KEY);
+    localStorage.removeItem(GENS_KEY);
+    localStorage.removeItem(CACHE_USER_KEY);
+  } catch {}
+};
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
 
@@ -55,16 +80,39 @@ export const useAppData = () => {
 
 export const AppDataProvider = ({ children }: { children: React.ReactNode }) => {
   const { user, loading: authLoading } = useAuth();
-  const [characters, setCharacters] = useState<CachedCharacter[]>([]);
-  const [generations, setGenerations] = useState<CachedGeneration[]>([]);
-  const [charactersLoaded, setCharactersLoaded] = useState(false);
-  const [generationsLoaded, setGenerationsLoaded] = useState(false);
+
+  // Hydrate from localStorage on first render if same user
+  const [characters, setCharacters] = useState<CachedCharacter[]>(() => {
+    if (typeof window === "undefined") return [];
+    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
+    // We don't know user yet during SSR/init, but check if cache exists
+    const cached = readLocal<CachedCharacter[]>(CHARS_KEY);
+    return cached && cachedUserId ? cached : [];
+  });
+
+  const [generations, setGenerations] = useState<CachedGeneration[]>(() => {
+    if (typeof window === "undefined") return [];
+    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
+    const cached = readLocal<CachedGeneration[]>(GENS_KEY);
+    return cached && cachedUserId ? cached : [];
+  });
+
+  // "ready" = we have some data to show (cached OR fetched). True immediately if localStorage had data.
+  const [charactersReady, setCharactersReady] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !!localStorage.getItem(CHARS_KEY) && !!localStorage.getItem(CACHE_USER_KEY);
+  });
+  const [generationsReady, setGenerationsReady] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !!localStorage.getItem(GENS_KEY) && !!localStorage.getItem(CACHE_USER_KEY);
+  });
+
   const fetchIdRef = useRef(0);
 
   const refreshCharacters = useCallback(async () => {
     if (!user) {
       setCharacters([]);
-      setCharactersLoaded(true);
+      setCharactersReady(true);
       return;
     }
     const { data } = await supabase
@@ -75,14 +123,16 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       .limit(50);
     if (data) {
       setCharacters(data as CachedCharacter[]);
+      writeLocal(CHARS_KEY, data);
+      writeLocal(CACHE_USER_KEY, user.id);
     }
-    setCharactersLoaded(true);
+    setCharactersReady(true);
   }, [user]);
 
   const refreshGenerations = useCallback(async () => {
     if (!user) {
       setGenerations([]);
-      setGenerationsLoaded(true);
+      setGenerationsReady(true);
       return;
     }
     const { data } = await supabase
@@ -92,15 +142,17 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       .order("created_at", { ascending: false });
     if (data) {
       setGenerations(data as CachedGeneration[]);
+      writeLocal(GENS_KEY, data);
+      writeLocal(CACHE_USER_KEY, user.id);
     }
-    setGenerationsLoaded(true);
+    setGenerationsReady(true);
   }, [user]);
 
   const refreshAll = useCallback(async () => {
     await Promise.all([refreshCharacters(), refreshGenerations()]);
   }, [refreshCharacters, refreshGenerations]);
 
-  // Fetch everything once when user is known
+  // On user change: hydrate from cache instantly, then background refresh
   useEffect(() => {
     if (authLoading) return;
     const id = ++fetchIdRef.current;
@@ -108,21 +160,36 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     if (!user) {
       setCharacters([]);
       setGenerations([]);
-      setCharactersLoaded(true);
-      setGenerationsLoaded(true);
+      setCharactersReady(true);
+      setGenerationsReady(true);
+      clearLocal();
       return;
     }
 
-    // Reset loaded flags so pages show skeletons on user change
-    setCharactersLoaded(false);
-    setGenerationsLoaded(false);
+    // Check if localStorage cache belongs to this user
+    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
+    if (cachedUserId === user.id) {
+      // Hydrate instantly — pages render cached content with no loading state
+      const cachedChars = readLocal<CachedCharacter[]>(CHARS_KEY);
+      const cachedGens = readLocal<CachedGeneration[]>(GENS_KEY);
+      if (cachedChars) { setCharacters(cachedChars); setCharactersReady(true); }
+      if (cachedGens) { setGenerations(cachedGens); setGenerationsReady(true); }
+    } else {
+      // Different user — clear stale cache
+      clearLocal();
+      setCharacters([]);
+      setGenerations([]);
+      setCharactersReady(false);
+      setGenerationsReady(false);
+    }
 
+    // Background refresh — silently update if data changed
     void Promise.all([refreshCharacters(), refreshGenerations()]);
 
     return () => { fetchIdRef.current = id + 1; };
   }, [authLoading, user?.id]);
 
-  // Listen for test-reset and data-changed events
+  // Listen for data-changed events
   useEffect(() => {
     const handleReset = () => { void refreshAll(); };
     const handleCharsChanged = () => { void refreshCharacters(); };
@@ -142,8 +209,8 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       value={{
         characters,
         generations,
-        charactersLoaded,
-        generationsLoaded,
+        charactersReady,
+        generationsReady,
         refreshCharacters,
         refreshGenerations,
         refreshAll,
