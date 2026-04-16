@@ -89,7 +89,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
 
   // Always mask gems to 0 until user has claimed free OR made a paid purchase.
   // has_claimed_free_gems is flipped to true on free claim AND on first paid purchase.
-  const shouldMask = !hasClaimedFreeGems;
+  const shouldMask = loading || !hasClaimedFreeGems;
   const gems = shouldMask ? 0 : rawGems;
 
   return (
