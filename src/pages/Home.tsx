@@ -1,13 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { registerBlockingLoader } from "@/lib/startupSplash";
-
-const SilentLoader = () => {
-  useLayoutEffect(() => {
-    const unregister = registerBlockingLoader();
-    return unregister;
-  }, []);
-  return null;
-};
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import { displayAge } from "@/lib/displayAge";
@@ -309,10 +300,7 @@ const Home = () => {
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading || isTestAccount;
 
-  // Only block rendering during initial splash — never after navigation
-  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && document.getElementById("splash-screen")) {
-    return <SilentLoader />;
-  }
+
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
