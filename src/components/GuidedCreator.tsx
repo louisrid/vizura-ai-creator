@@ -657,12 +657,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100dvh' }}>
-        <div style={{ position: 'relative', width: 253, height: 253, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
+        <div style={{ position: 'relative', width: 266, height: 266, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 251, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
-            { size: 223, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
-            { size: 194, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 168, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+            { size: 264, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 234, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 204, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 176, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
@@ -679,10 +679,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
-              width={182}
-              height={182}
+              width={364}
+              height={364}
               draggable={false}
-              style={{ display: 'block', width: 91, height: 91 }}
+              style={{ display: 'block', width: 91, height: 91, imageRendering: 'auto' }}
             />
           </div>
         </div>
