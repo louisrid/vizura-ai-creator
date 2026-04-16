@@ -47,15 +47,10 @@ const Header = () => {
   const isOnboarding = (state: CachedOnboardingState | null | undefined) =>
     !!state && !state.onboardingComplete;
 
-  const [showMenuLocks, setShowMenuLocks] = useState(() => isOnboarding(readCachedOnboardingState(user?.id)));
+  const [showMenuLocks, setShowMenuLocks] = useState(false);
 
   useEffect(() => {
     if (!user) { setShowMenuLocks(false); return; }
-
-    const cachedState = readCachedOnboardingState(user.id);
-    if (cachedState) {
-      setShowMenuLocks(isOnboarding(cachedState));
-    }
 
     let cancelled = false;
 
