@@ -59,7 +59,7 @@ const History = () => {
     return allItems;
   }, [generations, cachedChars]);
 
-  const loading = !generationsLoaded || !charactersLoaded;
+  const loading = !generationsReady || !charactersReady;
 
   if (!authLoading && !user) return null;
 

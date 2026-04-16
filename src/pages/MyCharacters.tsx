@@ -46,11 +46,11 @@ const MyCharacters = () => {
       .slice(0, 12) as Character[];
   }, [cachedChars]);
 
-  const loading = !charactersLoaded;
+  const loading = !charactersReady;
 
   // Handle new character highlight
   useEffect(() => {
-    if (!charactersLoaded) return;
+    if (!charactersReady) return;
     const pendingNew = sessionStorage.getItem("facefox_new_char_highlight");
     if (pendingNew) {
       sessionStorage.removeItem("facefox_new_char_highlight");
@@ -62,7 +62,7 @@ const MyCharacters = () => {
       }
       setTimeout(() => setNewCharId(null), 1500);
     }
-  }, [charactersLoaded, characters.length]);
+  }, [charactersReady, characters.length]);
 
   if (!authLoading && !user) return null;
 

@@ -72,7 +72,7 @@ const Storage = () => {
     return allImages;
   }, [generations, cachedChars, deletedIds]);
 
-  const loading = !generationsLoaded || !charactersLoaded;
+  const loading = !generationsReady || !charactersReady;
 
   if (!authLoading && !user) return null;
 
