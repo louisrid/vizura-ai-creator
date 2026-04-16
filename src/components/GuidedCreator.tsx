@@ -175,6 +175,21 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   const [password, setPassword] = useState("");
   const [isSignUpMode, setIsSignUpMode] = useState(true);
 
+  useEffect(() => {
+    const resetLoading = () => setGoogleLoading(false);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") setGoogleLoading(false);
+    };
+    window.addEventListener("pageshow", resetLoading);
+    window.addEventListener("focus", resetLoading);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pageshow", resetLoading);
+      window.removeEventListener("focus", resetLoading);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   const persistSignupHandoff = useCallback(() => {
     sessionStorage.setItem(FLOW_STATE_KEY, JSON.stringify({ selections }));
     sessionStorage.setItem("facefox_signup_gate_active", "1");
@@ -981,6 +996,21 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   const [googleLoading, setGoogleLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const resetLoading = () => setGoogleLoading(false);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") setGoogleLoading(false);
+    };
+    window.addEventListener("pageshow", resetLoading);
+    window.addEventListener("focus", resetLoading);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pageshow", resetLoading);
+      window.removeEventListener("focus", resetLoading);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);

@@ -153,6 +153,21 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   const [password, setPassword] = useState("");
   const [isSignUpMode, setIsSignUpMode] = useState(false);
 
+  useEffect(() => {
+    const resetLoading = () => setGoogleLoading(false);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") setGoogleLoading(false);
+    };
+    window.addEventListener("pageshow", resetLoading);
+    window.addEventListener("focus", resetLoading);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pageshow", resetLoading);
+      window.removeEventListener("focus", resetLoading);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) {
       toast.error("fill details");
@@ -211,8 +226,8 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
-            className="w-full h-14 bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-            style={{ borderRadius: 10 }}
+            className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            style={{ background: "#ffe603", color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? (
               <><Loader2 className="animate-spin" size={18} />connecting...</>
@@ -256,7 +271,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
-          <button className="h-14 w-full bg-neon-yellow text-neon-yellow-foreground text-sm font-extrabold lowercase hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2" style={{ borderRadius: 10 }} onClick={handleEmailAuth} disabled={submitting || googleLoading}>
+          <button
+            onClick={handleEmailAuth}
+            disabled={submitting || googleLoading}
+            className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            style={{ background: "#ffe603", color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+          >
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
           </button>
           <button
