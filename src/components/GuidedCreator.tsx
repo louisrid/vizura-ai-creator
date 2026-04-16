@@ -657,12 +657,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100dvh' }}>
-        <div style={{ position: 'relative', width: 282, height: 282, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
+        <div style={{ position: 'relative', width: 310, height: 310, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 280, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
-            { size: 248, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
-            { size: 216, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 187, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
+            { size: 308, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 273, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
+            { size: 238, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 206, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
@@ -675,14 +675,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 91, height: 91, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 95, height: 95, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
-              width={364}
-              height={364}
+              width={380}
+              height={380}
               draggable={false}
-              style={{ display: 'block', width: 91, height: 91, imageRendering: 'auto' }}
+              style={{ display: 'block', width: 95, height: 95, imageRendering: 'auto' }}
             />
           </div>
         </div>
