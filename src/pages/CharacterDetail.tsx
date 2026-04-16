@@ -291,7 +291,7 @@ const CharacterDetail = () => {
   if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-10 pb-[280px]">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-6 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -303,7 +303,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-10 pb-[280px]">
+        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-6 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -420,7 +420,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-10 pb-[280px] md:hidden" style={{ minHeight: "100dvh" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-6 pb-[280px] md:hidden" style={{ minHeight: "100dvh" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           {onboardingComplete ? <BackButton /> : (
             <button
@@ -518,7 +518,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Desktop layout — two-column side by side */}
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-10 pb-10 min-h-screen">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-6 pb-10 min-h-screen">
         <div className="flex items-center gap-3 mb-8">
           {onboardingComplete ? <BackButton /> : (
             <button
