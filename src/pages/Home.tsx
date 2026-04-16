@@ -231,7 +231,7 @@ const Home = () => {
   // When lock state resolves and user needs onboarding, force guided creator open
   // BUT only if they've never visited the character page before
   useEffect(() => {
-    if (!initialLoadComplete || !lockStateResolved || !user) return;
+    if (!freshDataLoaded || !user) return;
     if (sessionStorage.getItem("facefox_guided_dismissed") === "1") return;
     if (localStorage.getItem("facefox_visited_character") === "1") return;
     if (!onboardingComplete && characterCount === 0) {
@@ -239,7 +239,7 @@ const Home = () => {
       setSkipWelcome(true);
       setAutoOpenEvaluated(true);
     }
-  }, [initialLoadComplete, lockStateResolved, user, onboardingComplete, characterCount]);
+  }, [freshDataLoaded, user, onboardingComplete, characterCount]);
 
   // Resolve onboarding lock state
   useEffect(() => {
@@ -256,6 +256,7 @@ const Home = () => {
       setCharacterCount(resolvedState.characterCount);
       setLockStateResolved(true);
       setInitialLoadComplete(true);
+      setFreshDataLoaded(true);
 
       if (resolvedState.characterCount > 0 && !openCreatorRequested) {
         setShowGuided(false);
