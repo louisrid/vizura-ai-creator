@@ -518,7 +518,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Desktop layout — two-column side by side */}
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-6 pb-10 min-h-screen">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-3 pb-10 min-h-screen">
         <div className="flex items-center gap-3 mb-8">
           {onboardingComplete ? <BackButton /> : (
             <button
