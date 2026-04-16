@@ -14,14 +14,14 @@ const LoadingScreen = () => {
 
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-center gap-3 bg-background"
+      className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background"
       style={{ zIndex: 9970, marginTop: "-4vh" }}
       role="status"
       aria-live="polite"
       aria-label="loading"
     >
       <h1 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h1>
-      <div className="w-48 overflow-hidden bg-card" style={{ height: 6 }}>
+      <div className="h-3 w-full max-w-[14rem] overflow-hidden rounded-full bg-white/10">
         <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
       </div>
     </div>
