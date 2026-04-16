@@ -11,6 +11,7 @@ import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { supabase } from "@/integrations/supabase/client";
 import { displayAge } from "@/lib/displayAge";
+import { toast } from "sonner";
 
 const ADMIN_EMAIL = "louisjridland@gmail.com";
 
