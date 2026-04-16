@@ -131,7 +131,7 @@ const Home = () => {
         sessionStorage.removeItem("facefox_signup_gate_active");
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_guided_flow_state");
-        sessionStorage.setItem("facefox_guided_dismissed", "1");
+        sessionStorage.setItem(DISMISSED_KEY, "1");
         toast("acc exists!");
         setSkipWelcome(true);
         setShowGuided(false);
@@ -160,7 +160,7 @@ const Home = () => {
           sessionStorage.removeItem("facefox_face_options");
           sessionStorage.removeItem("facefox_pending_char_id");
           sessionStorage.removeItem("facefox_guided_flow_state");
-          sessionStorage.setItem("facefox_guided_dismissed", "1");
+          sessionStorage.setItem(DISMISSED_KEY, "1");
           navigate("/choose-face", { state: { prompt, freshCreation: true } });
           return;
         }
@@ -233,7 +233,7 @@ const Home = () => {
   // BUT only if they've never visited the character page before
   useEffect(() => {
     if (!freshDataLoaded || !user) return;
-    if (sessionStorage.getItem("facefox_guided_dismissed") === "1") return;
+    if (sessionStorage.getItem(DISMISSED_KEY) === "1") return;
     if (localStorage.getItem("facefox_visited_character") === "1") return;
     if (!onboardingComplete && characterCount === 0) {
       setShowGuided(true);

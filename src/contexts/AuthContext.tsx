@@ -193,6 +193,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const keysToRemove = Object.keys(sessionStorage).filter(k => k.startsWith("facefox_"));
       keysToRemove.forEach(k => sessionStorage.removeItem(k));
     } catch {}
+    localStorage.removeItem("facefox_visited_character");
+    localStorage.removeItem("facefox_pending_creation");
+    localStorage.removeItem("facefox_draft_backup");
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   };
