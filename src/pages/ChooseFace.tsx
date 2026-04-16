@@ -581,6 +581,13 @@ const ChooseFace = () => {
     }
   }, [startAngleBodyGen]);
 
+  // Auto-advance the "let's see how she looks" slide after 6s
+  useEffect(() => {
+    if (!showSet2Slide) return;
+    const t = setTimeout(() => { handleSet2Forward(); }, 6000);
+    return () => clearTimeout(t);
+  }, [showSet2Slide, handleSet2Forward]);
+
   const doFinalSave = async (forcedFaceIdx?: number) => {
     toast.dismiss();
     const currentUser = (await supabase.auth.getUser()).data.user;
@@ -803,16 +810,19 @@ const ChooseFace = () => {
 
   if (showSet2Slide) {
     return (
-      <InstructionalSlide
-        slide={SET2_SLIDE}
-        alreadySeen={false}
-        dashTotal={0}
-        dashActive={0}
-        showBack={true}
-        showForward={true}
-        onBack={() => { setShowSet2Slide(false); }}
-        onForward={handleSet2Forward}
-      />
+      <AnimatePresence mode="wait">
+        <InstructionalSlide
+          key="set2-slide"
+          slide={SET2_SLIDE}
+          alreadySeen={false}
+          dashTotal={0}
+          dashActive={0}
+          showBack={false}
+          showForward={false}
+          onBack={() => {}}
+          onForward={() => {}}
+        />
+      </AnimatePresence>
     );
   }
 

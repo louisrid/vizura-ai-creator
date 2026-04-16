@@ -38,7 +38,7 @@ const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["slim", "regular", "curvy"], defaultOption: "regular" },
   { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "extra large"], defaultOption: "regular" },
-  { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
+  { key: "age", label: "choose her age", emoji: "🎂", options: ["24+", "18-24"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
@@ -54,6 +54,8 @@ const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase text-white 
 const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {
     const isForward = direction === "right";
     const fillColor = colorOverride || "#ffe603";
+    const transitionDuration = colorOverride ? "0.45s" : "0.15s";
+    const transitionEase = colorOverride ? "ease-in-out" : "ease-out";
     return (
       <button
         type="button"
@@ -66,6 +68,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
           border: isForward ? "none" : `2px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
           color: isForward ? "#000" : fillColor,
+          transition: `background-color ${transitionDuration} ${transitionEase}, color ${transitionDuration} ${transitionEase}, border-color ${transitionDuration} ${transitionEase}`,
         }}
       >
         {direction === "left" ? (
@@ -285,7 +288,14 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center">
       <div className="flex flex-col items-center px-8 w-full max-w-md">
-        <span className="text-[64px] mb-5">🔐</span>
+        <motion.span
+          className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -10, 0] }}
+          transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+        >
+          🔐
+        </motion.span>
         <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
            {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
         </h2>
@@ -1099,7 +1109,14 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-md">
-          <span className="text-[64px] mb-5">🔐</span>
+          <motion.span
+            className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, y: [0, -10, 0] }}
+            transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+          >
+            🔐
+          </motion.span>
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
           </h2>

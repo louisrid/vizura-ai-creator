@@ -170,7 +170,8 @@ const InstructionalSlide = ({
       style={{ background: "#000", overflow: "hidden", touchAction: "none" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.45, ease: "easeInOut" }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
     >
       {/* Dashes at top */}
       {!slide.hideDashes && dashTotal > 0 && (
