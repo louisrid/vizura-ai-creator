@@ -117,7 +117,9 @@ const Home = () => {
   });
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [freshDataLoaded, setFreshDataLoaded] = useState(false);
-  const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && !onboardingComplete && characterCount === 0;
+  const resolvedCharacterCount = charsLoaded ? Math.max(characterCount, cachedChars.length) : characterCount;
+  const effectiveOnboardingComplete = onboardingComplete || resolvedCharacterCount > 0;
+  const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
 
   useEffect(() => {
@@ -127,7 +129,7 @@ const Home = () => {
     if (user && pending && initialLoadComplete) {
       localStorage.removeItem("facefox_pending_creation");
 
-      if (characterCount > 0) {
+      if (resolvedCharacterCount > 0) {
         sessionStorage.removeItem("facefox_signup_gate_active");
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_guided_flow_state");
@@ -180,22 +182,22 @@ const Home = () => {
     setShowGuided(true);
     setSkipWelcome(false);
     setAutoOpenEvaluated(true);
-  }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser, initialLoadComplete, characterCount]);
+  }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser, initialLoadComplete, resolvedCharacterCount]);
 
   // When lock state resolves and user needs onboarding, force guided creator open
   // BUT only if they've never visited the character page before
   useEffect(() => {
-    if (!freshDataLoaded || !user) return;
+    if (!freshDataLoaded || !charsLoaded || !user) return;
     if (sessionStorage.getItem(DISMISSED_KEY) === "1") return;
     if (localStorage.getItem("facefox_visited_character") === "1") return;
-    if (!onboardingComplete && characterCount === 0) {
+    if (!effectiveOnboardingComplete && resolvedCharacterCount === 0) {
       sessionStorage.removeItem("facefox_guided_dismissed");
       localStorage.removeItem("facefox_visited_character");
       setShowGuided(true);
       setSkipWelcome(false);
       setAutoOpenEvaluated(true);
     }
-  }, [freshDataLoaded, user, onboardingComplete, characterCount]);
+  }, [charsLoaded, effectiveOnboardingComplete, freshDataLoaded, resolvedCharacterCount, user]);
 
   // Resolve onboarding lock state
   useEffect(() => {
@@ -208,13 +210,16 @@ const Home = () => {
 
     const applyResolvedState = (resolvedState: { onboardingComplete: boolean; characterCount: number }) => {
       if (cancelled) return;
-      setOnboardingComplete(resolvedState.onboardingComplete);
-      setCharacterCount(resolvedState.characterCount);
+      const nextCharacterCount = Math.max(resolvedState.characterCount, cachedChars.length);
+      const nextOnboardingComplete = resolvedState.onboardingComplete || nextCharacterCount > 0;
+
+      setOnboardingComplete(nextOnboardingComplete);
+      setCharacterCount(nextCharacterCount);
       setLockStateResolved(true);
       setInitialLoadComplete(true);
       setFreshDataLoaded(true);
 
-      if (resolvedState.characterCount > 0 && !openCreatorRequested) {
+      if (nextCharacterCount > 0 && !openCreatorRequested) {
         setShowGuided(false);
       }
     };
@@ -235,7 +240,7 @@ const Home = () => {
     });
 
     return () => { cancelled = true; };
-  }, [openCreatorRequested, user]);
+  }, [cachedChars.length, openCreatorRequested, user]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
@@ -307,8 +312,8 @@ const Home = () => {
   }, [characters]);
 
   // Lock conditions: only show locks after state is confirmed — never flash for users with characters
-  const showLocks = lockStateResolved && !onboardingComplete && characterCount === 0;
-  const forceOnboarding = !!user && lockStateResolved && !onboardingComplete && characterCount === 0;
+  const showLocks = lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
+  const forceOnboarding = !!user && lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
   // Post-auth loading: user is signed in but data hasn't finished loading yet
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
