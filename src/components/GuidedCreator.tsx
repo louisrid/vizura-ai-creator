@@ -674,19 +674,19 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 103, height: 103, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 110, height: 110, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
-              width={412}
-              height={412}
+              width={440}
+              height={440}
               draggable={false}
-              style={{ display: 'block', width: 103, height: 103, imageRendering: 'auto' }}
+              style={{ display: 'block', width: 110, height: 110, imageRendering: 'auto' }}
             />
           </div>
         </div>
-        <div style={{ fontSize: 65, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 15, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
-        <div style={{ width: 166, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 10, marginBottom: 22, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
+        <div style={{ fontSize: 67, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 15, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ width: 171, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 10, marginBottom: 23, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 157, padding: '10px 0', fontSize: 20, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
