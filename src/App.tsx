@@ -27,16 +27,9 @@ import Info from "./pages/Info";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
-import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import {
-  isTransitioning,
-  onOverlayOpaque,
-  onOverlayTransparent,
-  getDurations,
-} from "@/lib/pageTransition";
 
 let redirectLock = false;
 const acquireRedirectLock = (): boolean => {
@@ -241,91 +234,10 @@ const OnboardingRedirectGate = () => {
   return <div className="fixed inset-0 z-[9999] bg-nav" />;
 };
 
-const PageTransitionOverlay = () => {
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const safetyTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const handleFadeIn = () => {
-      const el = overlayRef.current;
-      if (!el) return;
-      const dur = getDurations().fadeIn;
-
-      el.style.transition = `opacity ${dur}ms ease-in-out`;
-      el.style.opacity = "1";
-
-      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
-
-      const onEnd = () => {
-        el.removeEventListener("transitionend", onEnd);
-        if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
-        onOverlayOpaque();
-      };
-      el.addEventListener("transitionend", onEnd);
-
-      safetyTimerRef.current = window.setTimeout(() => {
-        el.removeEventListener("transitionend", onEnd);
-        onOverlayOpaque();
-      }, dur + 50);
-    };
-
-    const handleFadeOut = () => {
-      const el = overlayRef.current;
-      if (!el) return;
-      const dur = getDurations().fadeOut;
-
-      el.style.transition = `opacity ${dur}ms ease-in-out`;
-      el.style.opacity = "0";
-
-      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
-
-      const onEnd = () => {
-        el.removeEventListener("transitionend", onEnd);
-        if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
-        onOverlayTransparent();
-      };
-      el.addEventListener("transitionend", onEnd);
-
-      safetyTimerRef.current = window.setTimeout(() => {
-        el.removeEventListener("transitionend", onEnd);
-        onOverlayTransparent();
-      }, dur + 50);
-    };
-
-    const handleForceClear = () => {
-      const el = overlayRef.current;
-      if (!el) return;
-      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
-      el.style.transition = "opacity 150ms ease-out";
-      el.style.opacity = "0";
-    };
-
-    window.addEventListener("page-transition:fade-in", handleFadeIn);
-    window.addEventListener("page-transition:fade-out", handleFadeOut);
-    window.addEventListener("page-transition:force-clear", handleForceClear);
-    return () => {
-      window.removeEventListener("page-transition:fade-in", handleFadeIn);
-      window.removeEventListener("page-transition:fade-out", handleFadeOut);
-      window.removeEventListener("page-transition:force-clear", handleForceClear);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={overlayRef}
-      className="pointer-events-none fixed inset-0 bg-black"
-      style={{ opacity: 0, zIndex: 9980 }}
-    />
-  );
-};
-
-
 const AppRoutes = () => {
   const location = useLocation();
   const { loading: authLoading, user } = useAuth();
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
-  useSwipeNavigation();
-
   useEffect(() => {
     const eventName = getBlockingLoadersEventName();
     const handleBlockingLoaders = (event: Event) => {
@@ -351,7 +263,6 @@ const AppRoutes = () => {
   return (
     <>
       <TopGradientBar />
-      <PageTransitionOverlay />
       
       <HeaderTransition />
       <Routes location={location}>

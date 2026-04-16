@@ -275,10 +275,6 @@ const Header = () => {
     document.body,
   ) : null;
 
-  if (!splashGone) {
-    return <div className="h-[80px] md:h-[90px]" aria-hidden="true" />;
-  }
-
   return (
     <>
       {/* Spacer that reserves header height in document flow */}

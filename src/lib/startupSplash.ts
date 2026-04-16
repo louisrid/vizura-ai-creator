@@ -1,7 +1,7 @@
 const SPLASH_ID = "splash-screen";
 const BLOCKING_LOADERS_EVENT = "facefox:blocking-loaders";
-const SPLASH_FADE_MS = 500;
-const MIN_SPLASH_MS = 2000;
+const SPLASH_FADE_MS = 250;
+const MIN_SPLASH_MS = 800;
 
 let blockingLoaders = 0;
 let splashRemoved = false;
