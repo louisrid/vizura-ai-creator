@@ -442,6 +442,8 @@ const Index = () => {
     }
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
+  const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
+  const onboardingComplete = cachedOnboarding?.onboardingComplete ?? true;
   // Set 3 onboarding slides state
   const [showSet3, setShowSet3] = useState(false);
   const [set3Step, setSet3Step] = useState(0);
@@ -994,7 +996,7 @@ const Index = () => {
               />
             </div>
 
-            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
           </div>
         </div>
 
@@ -1009,7 +1011,7 @@ const Index = () => {
 
       <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
         <div className="mx-auto max-w-lg pointer-events-auto">
-          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
       </div>
     </div>
