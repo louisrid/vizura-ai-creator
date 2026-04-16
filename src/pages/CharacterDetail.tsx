@@ -459,7 +459,7 @@ const CharacterDetail = () => {
                   {displayName}, {ageDisplay}
                 </h1>
                 <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <button onClick={startEditName} className="active:scale-90 transition-transform" style={{ fontSize: 16 }}>✏️</button>
+                  <button onClick={startEditName} className="active:scale-95 transition-transform" style={{ fontSize: 16 }}>✏️</button>
                   {onboardingComplete && (
 <button onClick={() => setShowDelete(true)} className="active:scale-95 transition-transform">
                       <Trash2 size={18} strokeWidth={3} color="#ff4444" />
