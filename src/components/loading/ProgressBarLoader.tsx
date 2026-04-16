@@ -173,7 +173,7 @@ const ProgressBarLoader = ({
       <motion.img
         src={foxEmojiImg}
         alt="🦊"
-        className="inline-block select-none w-[64px] h-[64px] md:w-[86px] md:h-[86px]"
+        className="inline-block select-none w-[80px] h-[80px] md:w-[108px] md:h-[108px]"
         style={{ objectFit: 'contain' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, -10, 0] }}
