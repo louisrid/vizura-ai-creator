@@ -676,16 +676,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 102, height: 102, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
-            <img
-              src={foxEmojiImg}
-              alt="fox"
-              width={512}
-              height={512}
-              draggable={false}
-              fetchPriority="high"
-              style={{ display: 'block', width: 102, height: 102, imageRendering: 'auto' }}
-            />
+          <div style={{ width: 102, height: 102, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 88, lineHeight: 1 }}>
+            🦊
           </div>
         </div>
         <div style={{ fontSize: 67, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 5, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
