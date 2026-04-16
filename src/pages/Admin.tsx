@@ -324,10 +324,15 @@ const Admin = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
   const [viewingUserId, setViewingUserId] = useState<string | null>(null);
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!authLoading && (!user || user.email !== ADMIN_EMAIL)) {
-      navigate("/", { replace: true });
+    if (authLoading) return;
+    if (user?.email === ADMIN_EMAIL) {
+      hasAuthed.current = true;
+      return;
     }
+    if (hasAuthed.current) return;
+    navigate("/", { replace: true });
   }, [user, authLoading, navigate]);
 
   const loadAll = useCallback(async () => {
