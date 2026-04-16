@@ -849,9 +849,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
-    <div
+    <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       {/* Progress dashes — static, never fade during transitions */}
       <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
