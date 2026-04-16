@@ -117,6 +117,8 @@ const Home = () => {
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [freshDataLoaded, setFreshDataLoaded] = useState(false);
   const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && !onboardingComplete && characterCount === 0;
+  const everHadUser = useRef(!!user);
+  useEffect(() => { if (user) everHadUser.current = true; }, [user]);
 
 
   useEffect(() => {
