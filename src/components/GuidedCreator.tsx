@@ -675,14 +675,15 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 110, height: 110, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 102, height: 102, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
-              src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
+              src="https://em-content.zobj.net/thumbs/320/apple/391/fox_1f98a.png"
               alt="fox"
-              width={440}
-              height={440}
+              width={320}
+              height={320}
               draggable={false}
-              style={{ display: 'block', width: 110, height: 110, imageRendering: 'auto' }}
+              fetchPriority="high"
+              style={{ display: 'block', width: 102, height: 102, imageRendering: 'auto' }}
             />
           </div>
         </div>
