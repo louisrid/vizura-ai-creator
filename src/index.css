@@ -89,6 +89,9 @@
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
     --border-mid: 0 0% 28%;
+
+    /* DARKER border grey — for menu dropdowns */
+    --border-dark: 0 0% 16%;
   }
 }
 

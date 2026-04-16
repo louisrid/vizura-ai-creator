@@ -10,7 +10,6 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { AppDataProvider } from "@/contexts/AppDataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import HeaderTransition from "@/components/HeaderTransition";
-import TopGradientBar from "@/components/TopGradientBar";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import CharacterDetail from "./pages/CharacterDetail";
@@ -262,8 +261,6 @@ const AppRoutes = () => {
 
   return (
     <>
-      <TopGradientBar />
-      
       <HeaderTransition />
       <Routes location={location}>
         <Route path="/" element={<Home />} />
