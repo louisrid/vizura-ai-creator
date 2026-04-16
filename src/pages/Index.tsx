@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
+import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 const SET3_KEY = "facefox_set3_seen";
 
@@ -411,8 +412,8 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
 };
 
 /* ── Create button ── */
-const CreateButton = ({ onClick, disabled, isGenerating }: {
-  onClick: () => void; disabled: boolean; isGenerating: boolean;
+const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
+  onClick: () => void; disabled: boolean; isGenerating: boolean; onboardingComplete: boolean;
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
@@ -422,9 +423,9 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
   >
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
-    ) : (
+    ) : onboardingComplete ? (
       <>create photo <span style={{ color: "#00e0ff" }}>·</span> 10 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
-    )}
+    ) : "create 🖌️"}
   </button>
 );
 
@@ -441,6 +442,8 @@ const Index = () => {
     }
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
+  const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
+  const onboardingComplete = cachedOnboarding?.onboardingComplete ?? true;
   // Set 3 onboarding slides state
   const [showSet3, setShowSet3] = useState(false);
   const [set3Step, setSet3Step] = useState(0);
@@ -592,16 +595,14 @@ const Index = () => {
 
   const handleCreate = async () => {
     if (!user) { navigate(`/auth?redirect=${encodeURIComponent("/create")}`); return; }
-    if (credits <= 0) { navigate("/top-ups"); return; }
     if (!selectedCharId || !prompt.trim()) { toast.error("fill all info"); return; }
-
-    // Intercept with Set 3 for first-time users
-    if (!hasSeenSet3()) {
+    if (!onboardingComplete) {
       setShowSet3(true);
       setSet3Step(0);
       setSet3SeenSteps(new Set());
       return;
     }
+    if (credits <= 0) { navigate("/top-ups"); return; }
 
     setIsGenerating(true);
     setError("");
@@ -995,7 +996,7 @@ const Index = () => {
               />
             </div>
 
-            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+            <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
           </div>
         </div>
 
@@ -1010,7 +1011,7 @@ const Index = () => {
 
       <div className="fixed left-0 right-0 bottom-0 z-10 px-[14px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
         <div className="mx-auto max-w-lg pointer-events-auto">
-          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} />
+          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
       </div>
     </div>

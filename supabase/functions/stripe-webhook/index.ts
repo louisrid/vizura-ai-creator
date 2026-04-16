@@ -97,6 +97,19 @@ serve(async (req) => {
           const gems = parseInt(metadata.credits || "0");
           const userId = metadata.user_id;
           if (gems > 0 && userId) {
+            const { data: profile } = await adminClient
+              .from("profiles")
+              .select("onboarding_complete")
+              .eq("user_id", userId)
+              .single();
+
+            if (profile && !profile.onboarding_complete) {
+              await adminClient
+                .from("credits")
+                .update({ balance: 0, updated_at: new Date().toISOString() })
+                .eq("user_id", userId);
+            }
+
             await addGems(userId, gems);
             // Mark onboarding complete on first gem purchase
             await adminClient
