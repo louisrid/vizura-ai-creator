@@ -873,7 +873,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
-        opacity: fading ? 0 : 1,
+        opacity: entered && !fading ? 1 : 0,
         transition: "opacity 0.45s ease-in-out",
       }}
     >
