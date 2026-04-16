@@ -660,8 +660,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', paddingBottom: '2vh' }}>
         <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 294, w: 4, spd: 0.4, del: 0.15, seg: 'borderLeftColor', dash: false },
-            { size: 261, w: 5, spd: -0.35, del: 0.1, seg: 'borderBottomColor', dash: false },
+            { size: 294, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
+            { size: 261, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
             { size: 228, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
             { size: 198, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
