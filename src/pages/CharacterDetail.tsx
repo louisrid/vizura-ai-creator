@@ -130,10 +130,12 @@ const CharacterDetail = () => {
     localStorage.setItem("facefox_visited_character", "1");
   }, []);
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate(`/auth?redirect=${encodeURIComponent(`/characters/${id}`)}`, { replace: true });
-    }
+    if (authLoading) return;
+    if (user) { hasAuthed.current = true; return; }
+    if (hasAuthed.current) return;
+    navigate(`/auth?redirect=${encodeURIComponent(`/characters/${id}`)}`, { replace: true });
   }, [user, authLoading, navigate, id]);
 
   useEffect(() => {
