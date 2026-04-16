@@ -461,7 +461,11 @@ const Admin = () => {
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-20">
 
         {viewingUserId ? (
-          <UserStorageView userId={viewingUserId} onBack={() => setViewingUserId(null)} />
+          <UserStorageView
+            userId={viewingUserId}
+            onBack={() => setViewingUserId(null)}
+            onReset={() => { setViewingUserId(null); loadAll(); }}
+          />
         ) : (
           <>
             <div className="flex items-center gap-3 mb-7">
