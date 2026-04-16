@@ -167,26 +167,48 @@ const ProgressBarLoader = ({
 
   return (
     <div
-      className="relative z-10 flex flex-col items-center gap-5 px-2"
-      style={{ ...contentStyle, overflow: "hidden", touchAction: "none" }}
+      className="relative z-10 flex flex-col items-center px-2"
+      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", marginTop: "-4vh", gap: 12 }}
     >
       <motion.img
         src={foxEmojiImg}
         alt="🦊"
-        className="inline-block select-none"
-        style={{ width: 56, height: 56, objectFit: 'contain' }}
+        className="inline-block select-none w-[64px] h-[64px] md:w-[86px] md:h-[86px]"
+        style={{ objectFit: 'contain' }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+        animate={{ opacity: 1, y: [0, -10, 0] }}
+        transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
       />
 
       <motion.div
-        className="w-full flex flex-col gap-2.5"
+        className="flex h-8 items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+        transition={{ duration: 0.45, ease: "easeInOut" }}
       >
-        <div className="relative w-full max-w-[14rem] mx-auto h-3 overflow-hidden bg-white/10">
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={safePhrases[phraseIndex]}
+            className="text-center font-[900] lowercase text-white"
+            style={{ fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1, margin: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            {safePhrases[phraseIndex]}
+          </motion.p>
+        </AnimatePresence>
+      </motion.div>
+
+      <motion.div
+        className="flex flex-col items-center"
+        style={{ gap: 12 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, ease: "easeInOut" }}
+      >
+        <div className="relative overflow-hidden bg-white/10" style={{ width: "14rem", height: 12 }}>
           <div
             className="absolute inset-0"
             style={{
@@ -198,29 +220,7 @@ const ProgressBarLoader = ({
             }}
           />
         </div>
-        <div className="flex justify-end">
-          <span className="min-w-[3ch] text-right text-[13px] font-[900] lowercase tabular-nums" style={{ color: "#ffffff" }}>{pct}%</span>
-        </div>
-      </motion.div>
-
-      <motion.div
-        className="flex h-8 items-center justify-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={safePhrases[phraseIndex]}
-            className="text-center text-[1.3rem] font-[900] lowercase text-white"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-          >
-            {safePhrases[phraseIndex]}
-          </motion.p>
-        </AnimatePresence>
+        <span className="text-center text-[14px] font-[900] lowercase tabular-nums" style={{ color: "#ffffff" }}>{pct}%</span>
       </motion.div>
     </div>
   );
