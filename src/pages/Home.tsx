@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import LoadingScreen from "@/components/LoadingScreen";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
+
+const SilentLoader = () => {
+  useLayoutEffect(() => {
+    const unregister = registerBlockingLoader();
+    return unregister;
+  }, []);
+  return null;
+};
 import { createPortal } from "react-dom";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import { displayAge } from "@/lib/displayAge";
