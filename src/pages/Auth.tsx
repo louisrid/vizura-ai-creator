@@ -32,6 +32,21 @@ const Auth = () => {
   const inWebView = useMemo(() => isInAppWebView(), []);
 
   useEffect(() => {
+    const resetLoading = () => setGoogleLoading(false);
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") setGoogleLoading(false);
+    };
+    window.addEventListener("pageshow", resetLoading);
+    window.addEventListener("focus", resetLoading);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pageshow", resetLoading);
+      window.removeEventListener("focus", resetLoading);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!user) return;
 
     let cancelled = false;
@@ -152,8 +167,8 @@ const Auth = () => {
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
-                  className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-[900] lowercase disabled:opacity-50 flex items-center justify-center gap-2"
-                  style={{ borderRadius: 10, transition: "transform 0.1s ease-out", WebkitTapHighlightColor: "transparent" }}
+                  className="w-full h-14 md:h-16 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+                  style={{ background: "#ffe603", color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -205,7 +220,12 @@ const Auth = () => {
               disabled={submitting || googleLoading}
             />
 
-            <Button className="h-14 md:h-16 w-full text-sm md:text-xl" onClick={handleEmailAuth} disabled={submitting || googleLoading}>
+            <button
+              onClick={handleEmailAuth}
+              disabled={submitting || googleLoading}
+              className="w-full h-14 md:h-16 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+              style={{ background: "#ffe603", color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            >
               {submitting ? (
                 <>
                   <Loader2 className="animate-spin" size={18} />
@@ -217,7 +237,7 @@ const Auth = () => {
                   <ArrowRight size={14} />
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </div>
       </main>
