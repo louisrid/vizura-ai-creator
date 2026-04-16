@@ -16,6 +16,11 @@ export const registerNavGuard = (guard: GuardCallback) => {
   };
 };
 
+/** Clear the active navigation guard. */
+export const clearNavGuard = () => {
+  activeGuard = null;
+};
+
 /** Check if navigation is currently guarded. Returns true if blocked. */
 export const checkNavGuard = (): boolean => {
   return activeGuard ? activeGuard() : false;

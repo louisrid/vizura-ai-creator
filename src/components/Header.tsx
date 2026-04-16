@@ -7,7 +7,7 @@ import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, Use
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { checkNavGuard } from "@/lib/navGuard";
+import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
 
@@ -114,7 +114,7 @@ const Header = () => {
   }, [open]);
 
   // Close on route change
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(false); clearNavGuard(); }, [pathname]);
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
@@ -133,9 +133,10 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    if (checkNavGuard()) { setOpen(false); return; }
     setOpen(false);
-    await signOut();
+    try {
+      await signOut();
+    } catch {}
     navigate("/");
   };
 
