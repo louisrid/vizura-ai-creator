@@ -1,6 +1,67 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { createClient } from "@supabase/supabase-js";
+
+// One-time global cache reset. Bump this version any time we need to force
+// every user back to a clean state (signed out, no facefox_* cache).
+const CACHE_VERSION = "2";
+const CACHE_VERSION_KEY = "facefox_cache_version";
+
+(() => {
+  try {
+    const stored = localStorage.getItem(CACHE_VERSION_KEY);
+    if (stored === CACHE_VERSION) return;
+
+    // Capture supabase config BEFORE clearing storage so we can sign out cleanly.
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
+
+    const purgePrefix = (storage: Storage) => {
+      const keys: string[] = [];
+      for (let i = 0; i < storage.length; i++) {
+        const k = storage.key(i);
+        if (k && k.startsWith("facefox_")) keys.push(k);
+      }
+      keys.forEach((k) => storage.removeItem(k));
+    };
+
+    purgePrefix(localStorage);
+    purgePrefix(sessionStorage);
+
+    // Mark as migrated immediately so a failed sign-out can't loop the reload.
+    localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+
+    const finishAndReload = () => {
+      // Clear any leftover supabase auth tokens that aren't facefox_-prefixed.
+      try {
+        const sbKeys: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith("sb-") || k.startsWith("supabase."))) sbKeys.push(k);
+        }
+        sbKeys.forEach((k) => localStorage.removeItem(k));
+      } catch {}
+      window.location.replace("/");
+    };
+
+    if (supabaseUrl && supabaseKey) {
+      const tempClient = createClient(supabaseUrl, supabaseKey, {
+        auth: { storage: localStorage, persistSession: true, autoRefreshToken: false },
+      });
+      tempClient.auth.signOut().catch(() => {}).finally(finishAndReload);
+    } else {
+      finishAndReload();
+    }
+
+    // Stop the rest of bootstrap; the reload will re-run main.tsx with the new version stamp.
+    throw new Error("__facefox_cache_reset__");
+  } catch (err) {
+    if (err instanceof Error && err.message === "__facefox_cache_reset__") throw err;
+    // If anything goes wrong, still stamp the version so we don't infinite-loop.
+    try { localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION); } catch {}
+  }
+})();
 
 // On every fresh page load (including refresh), clear the guided creator
 // flow state so the user always starts from the hero screen.
