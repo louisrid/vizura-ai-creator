@@ -123,11 +123,10 @@ const Home = () => {
     if (authLoading) return;
 
     const pending = localStorage.getItem("facefox_pending_creation");
-    if (user && pending) {
+    if (user && pending && initialLoadComplete) {
       localStorage.removeItem("facefox_pending_creation");
 
-      const cached = readCachedOnboardingState(user.id);
-      if (cached && cached.characterCount > 0) {
+      if (characterCount > 0) {
         sessionStorage.removeItem("facefox_signup_gate_active");
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_guided_flow_state");
@@ -227,7 +226,7 @@ const Home = () => {
     setShowGuided(true);
     setSkipWelcome(false);
     setAutoOpenEvaluated(true);
-  }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser]);
+  }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser, initialLoadComplete, characterCount]);
 
   // When lock state resolves and user needs onboarding, force guided creator open
   // BUT only if they've never visited the character page before
