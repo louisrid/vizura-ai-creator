@@ -18,6 +18,7 @@ import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboar
 
 import DotDecal from "@/components/DotDecal";
 import ModalCloseButton from "@/components/ModalCloseButton";
+import { toast } from "@/components/ui/sonner";
 
 const STORAGE_KEY = "facefox_character_draft";
 const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
@@ -124,6 +125,20 @@ const Home = () => {
     const pending = localStorage.getItem("facefox_pending_creation");
     if (user && pending) {
       localStorage.removeItem("facefox_pending_creation");
+
+      const cached = readCachedOnboardingState(user.id);
+      if (cached && cached.characterCount > 0) {
+        sessionStorage.removeItem("facefox_signup_gate_active");
+        sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_guided_flow_state");
+        sessionStorage.setItem("facefox_guided_dismissed", "1");
+        toast("acc exists!");
+        setSkipWelcome(true);
+        setShowGuided(false);
+        setAutoOpenEvaluated(true);
+        return;
+      }
+
       try {
         const sel = JSON.parse(pending);
         if (sel?.characterName) {
