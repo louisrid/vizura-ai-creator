@@ -889,7 +889,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               onClick={(e) => {
                 e.preventDefault(); e.stopPropagation();
                 sessionStorage.setItem("facefox_guided_dismissed", "1");
-                onExit?.();
+                onExit(selectionsRef.current);
                 navigateTo("/");
               }}
               className="mb-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
