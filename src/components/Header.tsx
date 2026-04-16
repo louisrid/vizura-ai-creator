@@ -270,7 +270,7 @@ const Header = () => {
         <div
           className="pointer-events-none absolute inset-x-0 top-0 transition-opacity duration-200"
           style={{
-            height: 170,
+            height: 120,
             opacity: gradientOpacity,
             background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,0.96) 40%, rgba(0,0,0,0.77) 60%, rgba(0,0,0,0.47) 75%, rgba(0,0,0,0.24) 88%, transparent 100%)",
           }}
