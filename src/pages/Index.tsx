@@ -436,10 +436,12 @@ const Index = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth?redirect=/create", { replace: true });
-    }
+    if (authLoading) return;
+    if (user) { hasAuthed.current = true; return; }
+    if (hasAuthed.current) return;
+    navigate("/auth?redirect=/create", { replace: true });
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
   const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;

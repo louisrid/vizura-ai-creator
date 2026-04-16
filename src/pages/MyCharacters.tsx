@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus } from "lucide-react";
@@ -30,8 +30,12 @@ const MyCharacters = () => {
   const [isFirstCharacter, setIsFirstCharacter] = useState(false);
   const [bounceActive, setBounceActive] = useState(false);
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!authLoading && !user) navigate(`/auth?redirect=/characters`, { replace: true });
+    if (authLoading) return;
+    if (user) { hasAuthed.current = true; return; }
+    if (hasAuthed.current) return;
+    navigate(`/auth?redirect=/characters`, { replace: true });
   }, [user, authLoading, navigate]);
 
   // Derive complete characters from cache
