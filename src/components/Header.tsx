@@ -266,7 +266,7 @@ const Header = () => {
   return (
     <>
       {/* Spacer that reserves header height in document flow */}
-      <div className="h-[115px] md:h-[125px]" aria-hidden="true" />
+      <div className="h-[107px] md:h-[117px]" aria-hidden="true" />
       <header
         className="fixed top-0 left-0 right-0"
         style={{ zIndex: 9990 }}
