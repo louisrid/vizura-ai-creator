@@ -630,14 +630,17 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // Keep mounted during fade-out, unmount after transition
   const [shouldRender, setShouldRender] = useState(visible);
   useEffect(() => {
-    if (visible) setShouldRender(true);
+    if (visible) {
+      setShouldRender(true);
+      // Trigger fade-in on next frame
+      requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
+    }
     if (!visible && !fading) {
-      // Already done fading or was never visible
       const t = setTimeout(() => setShouldRender(false), 10);
       return () => clearTimeout(t);
     }
     if (fading) {
-      const t = setTimeout(() => { setFading(false); setVisible(false); setShouldRender(false); }, 450);
+      const t = setTimeout(() => { setFading(false); setEntered(false); setVisible(false); setShouldRender(false); }, 450);
       return () => clearTimeout(t);
     }
   }, [visible, fading]);
