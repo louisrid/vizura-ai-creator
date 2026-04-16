@@ -258,10 +258,10 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
 
   if (handoffLoading) {
     return (
-      <div className="flex min-h-full w-full flex-col items-center justify-center gap-4 bg-background">
+      <div className="flex min-h-full w-full flex-col items-center justify-center gap-6 bg-background">
         <h2 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h2>
-        <div className="h-3 w-full max-w-[14rem] overflow-hidden rounded-full bg-white/10">
-          <div className="facefox-loading-bar h-full w-[60%] rounded-full bg-neon-yellow" />
+        <div className="h-2 w-48 overflow-hidden bg-card">
+          <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
         </div>
       </div>
     );
@@ -707,7 +707,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div>
         <div style={{ fontSize: 76, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
-        <div style={{ width: 204, height: 13, background: '#ffe603', borderRadius: 9999, marginTop: 6, marginBottom: 28, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
+        <div style={{ width: 204, height: 13, background: '#ffe603', borderRadius: 0, marginTop: 6, marginBottom: 28, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
