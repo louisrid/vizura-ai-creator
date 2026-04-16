@@ -849,9 +849,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
-    <div
+    <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       {/* Progress dashes — static, never fade during transitions */}
       <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
@@ -886,11 +889,16 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           {canExitFlow && (
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); sessionStorage.setItem("facefox_guided_dismissed", "1"); navigateTo("/"); }}
-              className="mb-6 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
-              style={{ width: 48, height: 48 }}
+              onClick={(e) => {
+                e.preventDefault(); e.stopPropagation();
+                sessionStorage.setItem("facefox_guided_dismissed", "1");
+                onExit(selectionsRef.current);
+                navigateTo("/");
+              }}
+              className="mb-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              style={{ width: 44, height: 44 }}
             >
-              <Home size={28} strokeWidth={2.5} color="#ffffff" />
+              <Home size={24} strokeWidth={2} color="#ffffff" />
             </button>
           )}
           <div className="flex items-center justify-center gap-4 md:gap-6">
@@ -901,7 +909,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
-    </div>,
+    </motion.div>,
     document.body,
   );
 });
