@@ -52,18 +52,44 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Hard guard: never allow the admin to reset their own account through this endpoint,
+    // and never allow an empty/whitespace user_id (which could otherwise widen scope).
+    const targetUserId = userId.trim();
+    if (!targetUserId) {
+      return new Response(JSON.stringify({ error: "user_id required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (targetUserId === userData.user.id) {
+      return new Response(
+        JSON.stringify({ error: "Admin cannot reset their own account from this tool" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     const admin = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Sanity check: confirm the target user actually exists before mutating anything.
+    const { data: targetLookup, error: targetLookupErr } =
+      await admin.auth.admin.getUserById(targetUserId);
+    if (targetLookupErr || !targetLookup?.user) {
+      return new Response(JSON.stringify({ error: "Target user not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Delete DB rows
-    await admin.from("generations").delete().eq("user_id", userId);
-    await admin.from("generation_logs").delete().eq("user_id", userId);
-    await admin.from("characters").delete().eq("user_id", userId);
-    await admin.from("subscriptions").delete().eq("user_id", userId);
-    await admin.from("free_gen_ips").delete().eq("user_id", userId);
-    await admin.from("rejected_prompts").delete().eq("user_id", userId);
+    await admin.from("generations").delete().eq("user_id", targetUserId);
+    await admin.from("generation_logs").delete().eq("user_id", targetUserId);
+    await admin.from("characters").delete().eq("user_id", targetUserId);
+    await admin.from("subscriptions").delete().eq("user_id", targetUserId);
+    await admin.from("free_gen_ips").delete().eq("user_id", targetUserId);
+    await admin.from("rejected_prompts").delete().eq("user_id", targetUserId);
 
     // Delete storage files in user's folder (recursive)
     const removeFolder = async (prefix: string) => {
@@ -88,13 +114,13 @@ Deno.serve(async (req) => {
         await removeFolder(sub);
       }
     };
-    await removeFolder(userId);
+    await removeFolder(targetUserId);
 
     // Reset credits to onboarding starting amount
     await admin
       .from("credits")
       .update({ balance: 100, updated_at: new Date().toISOString() })
-      .eq("user_id", userId);
+      .eq("user_id", targetUserId);
 
     // Reset profile flags
     await admin
@@ -110,7 +136,15 @@ Deno.serve(async (req) => {
         onboarding_body_regens_used: 0,
         updated_at: new Date().toISOString(),
       })
-      .eq("user_id", userId);
+      .eq("user_id", targetUserId);
+
+    // Invalidate the target user's existing sessions so their next visit lands on the
+    // hero/login screen fresh instead of resuming mid-flow with stale local cache.
+    try {
+      await admin.auth.admin.signOut(targetUserId, "global");
+    } catch (signOutErr) {
+      console.warn("admin-reset-user signOut warning:", signOutErr);
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
