@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Gem, ShoppingCart, Gift, Sparkles } from "lucide-react";
@@ -29,9 +29,16 @@ const TopUps = () => {
   const [claiming, setClaiming] = useState(false);
   const [claimChecked, setClaimChecked] = useState(false);
 
+  const hasAuthed = useRef(false);
   useEffect(() => {
-    if (!loading && !user) navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
-  }, [user, loading, navigate, location.pathname]);
+    if (loading) return;
+    if (user) {
+      hasAuthed.current = true;
+      return;
+    }
+    if (hasAuthed.current) return;
+    navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
