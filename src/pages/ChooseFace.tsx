@@ -171,6 +171,7 @@ const ChooseFace = () => {
   const [angleBodyBarComplete, setAngleBodyBarComplete] = useState(false);
 
   const hasInitRef = useRef(false);
+  const isGeneratingRef = useRef(false);
 
   // blackout:end no longer needed — overlay system handles transitions
 
@@ -506,6 +507,8 @@ const ChooseFace = () => {
   const normaliseDraftBustSize = (value?: string) => (value === "XL" || value === "extra large" || value === "large" ? "XL" : "regular");
 
   const startAngleBodyGen = useCallback(async (charId: string, anglePrompt: string, faceUrl: string, bodyType: string, bustSize: string) => {
+    if (isGeneratingRef.current) return;
+    isGeneratingRef.current = true;
     setShowSet2Slide(false);
     setAngleBodyLoading(true);
     setAngleBodyApiDone(false);
@@ -564,25 +567,29 @@ const ChooseFace = () => {
     };
 
     try {
-      const result = await invokeAngleBody();
-      console.log("Angle + body generation completed:", { characterId: charId, angle: result?.angle_url, body: result?.body_anchor_url });
-      // Preload the generated images before completing the loader
-      const urls = [result?.angle_url, result?.body_anchor_url, faceUrl].filter(Boolean) as string[];
-      if (urls.length > 0) {
-        await Promise.race([
-          Promise.all(urls.map((url) => new Promise<void>((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve();
-            img.onerror = () => resolve();
-            img.src = url;
-          }))),
-          new Promise<void>((resolve) => setTimeout(resolve, 4000)),
-        ]);
+      try {
+        const result = await invokeAngleBody();
+        console.log("Angle + body generation completed:", { characterId: charId, angle: result?.angle_url, body: result?.body_anchor_url });
+        // Preload the generated images before completing the loader
+        const urls = [result?.angle_url, result?.body_anchor_url, faceUrl].filter(Boolean) as string[];
+        if (urls.length > 0) {
+          await Promise.race([
+            Promise.all(urls.map((url) => new Promise<void>((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve();
+              img.onerror = () => resolve();
+              img.src = url;
+            }))),
+            new Promise<void>((resolve) => setTimeout(resolve, 4000)),
+          ]);
+        }
+      } catch (e) {
+        console.error("Angle + body generation failed:", e);
       }
-    } catch (e) {
-      console.error("Angle + body generation failed:", e);
+      setAngleBodyApiDone(true);
+    } finally {
+      isGeneratingRef.current = false;
     }
-    setAngleBodyApiDone(true);
   }, []);
 
   const handleSet2Forward = useCallback(() => {
