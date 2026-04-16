@@ -11,6 +11,7 @@ import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { supabase } from "@/integrations/supabase/client";
 import { displayAge } from "@/lib/displayAge";
+import { toast } from "sonner";
 
 const ADMIN_EMAIL = "louisjridland@gmail.com";
 
@@ -144,13 +145,41 @@ interface StorageImage {
   created_at: string;
 }
 
-const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => void }) => {
+const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: () => void; onReset: () => void }) => {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [images, setImages] = useState<StorageImage[]>([]);
   const [characters, setCharacters] = useState<any[]>([]);
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
   const [viewingCharacter, setViewingCharacter] = useState<any | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  const handleReset = async () => {
+    setResetting(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-reset-user`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: userId }),
+        }
+      );
+      if (!res.ok) throw new Error(await res.text());
+      toast.success("user reset!");
+      setConfirmReset(false);
+      onReset();
+    } catch (e) {
+      console.error("Reset failed:", e);
+      toast.error("reset failed");
+    }
+    setResetting(false);
+  };
 
   useEffect(() => {
     (async () => {
@@ -191,7 +220,16 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>
-      <p className="text-[12px] md:text-[13px] font-extrabold lowercase mb-6" style={{ color: "#ffe603" }}>{email}</p>
+      <div className="flex items-center justify-between mb-6 gap-3">
+        <p className="text-[12px] md:text-[13px] font-extrabold lowercase" style={{ color: "#ffe603" }}>{email}</p>
+        <button
+          onClick={() => setConfirmReset(true)}
+          className="text-[10px] md:text-[11px] font-extrabold lowercase px-2.5 py-1 transition-opacity hover:opacity-80 active:scale-95 shrink-0"
+          style={{ color: "#ff4444", borderRadius: 8, border: "1.5px solid #ff4444", backgroundColor: "transparent" }}
+        >
+          reset
+        </button>
+      </div>
 
       {loading ? (
         <AdminLoader />
@@ -298,6 +336,54 @@ const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => voi
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Reset confirm dialog */}
+      <AnimatePresence>
+        {confirmReset && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-[99999] flex items-center justify-center px-6"
+            style={{ backgroundColor: "rgba(0,0,0,0.85)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
+            onClick={() => !resetting && setConfirmReset(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm p-5"
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}
+            >
+              <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
+                reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setConfirmReset(false)}
+                  disabled={resetting}
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50"
+                  style={{ color: "#ffffff", borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
+                >
+                  cancel
+                </button>
+                <button
+                  onClick={handleReset}
+                  disabled={resetting}
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50 flex items-center justify-center gap-1.5"
+                  style={{ color: "#ffffff", borderRadius: 8, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
+                >
+                  {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
+                  yes, reset
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -375,7 +461,11 @@ const Admin = () => {
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-20">
 
         {viewingUserId ? (
-          <UserStorageView userId={viewingUserId} onBack={() => setViewingUserId(null)} />
+          <UserStorageView
+            userId={viewingUserId}
+            onBack={() => setViewingUserId(null)}
+            onReset={() => { setViewingUserId(null); loadAll(); }}
+          />
         ) : (
           <>
             <div className="flex items-center gap-3 mb-7">
