@@ -738,26 +738,39 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             {slide.emoji}
           </motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{slide.title}</h2>
-          <div className="mt-6 md:mt-8 w-full max-w-[17rem] md:max-w-[22rem] flex flex-col gap-4">
+          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
               const isMiddle = i === 1 && slide.pills.length === 3;
+              const bgColor = isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))";
               return (
                 <motion.div
                   key={i}
                   className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
-                  initial={shouldAnim ? { opacity: 0 } : false}
-                  animate={{ opacity: 1 }}
-                  transition={shouldAnim ? { duration: 0.45, delay: i * 0.18 + 0.14, ease: "easeInOut" } : undefined}
+                  initial={shouldAnim ? { x: isLeft ? "-120%" : "120%" } : false}
+                  animate={{ x: 0 }}
+                  transition={shouldAnim ? { duration: 0.35, delay: i * 0.6 + 1.2, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                 >
-                  <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
-                    style={{
-                      borderRadius: 10,
-                      backgroundColor: isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))",
-                      color: isMiddle ? "#fff" : "#000",
-                      border: "none",
-                    }}>
-                    {pill.text}
+                  <div className="relative">
+                    <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor: bgColor,
+                        color: isMiddle ? "#fff" : "#000",
+                        border: "none",
+                      }}>
+                      {pill.text}
+                    </div>
+                    <div style={{
+                      position: "absolute",
+                      bottom: -7,
+                      ...(isLeft ? { left: 12 } : { right: 12 }),
+                      width: 0,
+                      height: 0,
+                      borderLeft: isLeft ? "none" : "8px solid transparent",
+                      borderRight: isLeft ? "8px solid transparent" : "none",
+                      borderTop: `8px solid ${bgColor}`,
+                    }} />
                   </div>
                 </motion.div>
               );
