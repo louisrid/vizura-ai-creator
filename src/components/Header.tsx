@@ -282,10 +282,26 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between px-[10px] md:px-6 lg:px-8 pt-[48px] md:pt-[60px] pb-3">
-            <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
-              <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
-            </button>
+          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-[48px] md:pt-[60px] pb-3">
+            <div className="flex items-center gap-2 md:gap-2.5">
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
+                <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
+              </button>
+              {isLoggedIn && (
+                <button
+                  onClick={() => { navigate("/account"); }}
+                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "#000000",
+                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                  }}
+                  aria-label="my account"
+                >
+                  <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
+                </button>
+              )}
+            </div>
 
             {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
@@ -304,19 +320,6 @@ const Header = () => {
                   </button>
                   {showMenuLocks && <LockOverlay borderRadius={10} />}
                 </div>
-
-                <button
-                  onClick={() => { navigate("/account"); }}
-                  className="flex items-center justify-center shrink-0 active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#000000",
-                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
-                  }}
-                  aria-label="my account"
-                >
-                  <User size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
-                </button>
 
                 <div className="relative">
                   <button
