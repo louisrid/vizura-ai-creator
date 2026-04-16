@@ -9,6 +9,7 @@ import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
 import { isTestResetAccount } from "@/lib/testAccountReset";
 import type { SlideConfig } from "@/components/InstructionalSlide";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 
 /* ── Constants ── */
 const Y = "#ffe603";
@@ -675,14 +676,15 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 110, height: 110, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 102, height: 102, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
-              src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
+              src={foxEmojiImg}
               alt="fox"
-              width={440}
-              height={440}
+              width={512}
+              height={512}
               draggable={false}
-              style={{ display: 'block', width: 110, height: 110, imageRendering: 'auto' }}
+              fetchPriority="high"
+              style={{ display: 'block', width: 102, height: 102, imageRendering: 'auto' }}
             />
           </div>
         </div>
