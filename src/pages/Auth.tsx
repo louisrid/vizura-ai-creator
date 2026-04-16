@@ -28,7 +28,6 @@ const Auth = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
   const inWebView = useMemo(() => isInAppWebView(), []);
 
   useEffect(() => {
