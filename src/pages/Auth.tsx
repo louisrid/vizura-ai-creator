@@ -12,6 +12,7 @@ import BackButton from "@/components/BackButton";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { supabase } from "@/integrations/supabase/client";
 
 function isInAppWebView(): boolean {
   if (typeof navigator === "undefined") return false;
@@ -111,6 +112,9 @@ const Auth = () => {
     setGoogleLoading(true);
     sessionStorage.setItem("facefox_post_auth_home", "1");
     sessionStorage.removeItem("facefox_resume_after_auth");
+    // Mark this OAuth round-trip as a LOGIN attempt (not signup) so we can block
+    // Google accounts that have no Facefox profile when they come back.
+    sessionStorage.setItem("facefox_login_only", "1");
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin + "/auth",
@@ -120,6 +124,7 @@ const Auth = () => {
       });
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
+        sessionStorage.removeItem("facefox_login_only");
         toast.error("sign in error");
         setGoogleLoading(false);
         return;
@@ -129,6 +134,7 @@ const Auth = () => {
       }
     } catch (err: any) {
       sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_login_only");
       toast.error("sign in error");
       setGoogleLoading(false);
     }
