@@ -9,7 +9,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
-import DotDecal from "@/components/DotDecal";
+import HexMesh1 from "@/components/HexMesh1";
 
 import { readCachedOnboardingState, mergeCachedOnboardingState } from "@/lib/onboardingState";
 
@@ -62,7 +62,7 @@ const TopUps = () => {
 
   if (!loading && !user) return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
+      <HexMesh1 />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-3 pb-[280px]">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
@@ -119,7 +119,7 @@ const TopUps = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
+      <HexMesh1 />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-3 pb-[280px]">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
