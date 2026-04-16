@@ -26,7 +26,7 @@ interface StorageImage {
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars, generationsLoaded, charactersLoaded, refreshGenerations } = useAppData();
+  const { generations, characters: cachedChars, generationsReady, charactersReady, refreshGenerations } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);

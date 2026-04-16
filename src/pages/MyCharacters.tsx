@@ -28,7 +28,7 @@ interface Character {
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, charactersLoaded, refreshCharacters } = useAppData();
+  const { characters: cachedChars, charactersReady, refreshCharacters } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [newCharId, setNewCharId] = useState<string | null>(null);

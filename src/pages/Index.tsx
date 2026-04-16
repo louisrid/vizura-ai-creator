@@ -431,7 +431,7 @@ const CreateButton = ({ onClick, disabled, isGenerating }: {
 const Index = () => {
   const { user, loading: authLoading } = useAuth();
   const { credits, gems, refetch: refetchCredits } = useCredits();
-  const { characters: cachedCharacters, charactersLoaded: cachedCharsLoaded } = useAppData();
+  const { characters: cachedCharacters, charactersReady: cachedCharsLoaded } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
 
