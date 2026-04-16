@@ -1,10 +1,10 @@
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import DotDecal from "@/components/DotDecal";
+import HexMesh1 from "@/components/HexMesh1";
 
 const Info = () => (
   <div className="relative min-h-screen bg-background overflow-hidden">
-    <DotDecal />
+    <HexMesh1 />
     <main className="relative z-[1] w-full max-w-lg md:max-w-3xl mx-auto px-4 md:px-10 pt-3 pb-[280px]">
       <div className="flex items-center gap-3 mb-7">
         <BackButton />

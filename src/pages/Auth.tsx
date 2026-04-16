@@ -10,7 +10,7 @@ import PageTitle from "@/components/PageTitle";
 import BackButton from "@/components/BackButton";
 
 import { toast } from "@/components/ui/sonner";
-import DotDecal from "@/components/DotDecal";
+import HexMesh1 from "@/components/HexMesh1";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -160,7 +160,7 @@ const Auth = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
+      <HexMesh1 />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-3 md:max-w-2xl md:px-10">
         <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">

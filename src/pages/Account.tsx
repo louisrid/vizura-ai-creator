@@ -10,7 +10,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
-import DotDecal from "@/components/DotDecal";
+import HexMesh1 from "@/components/HexMesh1";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
@@ -33,7 +33,7 @@ const Account = () => {
   if (authLoading) {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
+        <HexMesh1 />
         <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-3 pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-10 w-full">
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
@@ -60,7 +60,7 @@ const Account = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
+      <HexMesh1 />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-3 pb-[280px] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
@@ -216,7 +216,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
+      <HexMesh1 />
       <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-3 pb-[280px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />

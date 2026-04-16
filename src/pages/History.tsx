@@ -8,7 +8,7 @@ import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
-import DotDecal from "@/components/DotDecal";
+import HexMesh1 from "@/components/HexMesh1";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface HistoryItem {
@@ -65,7 +65,7 @@ const History = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
+      <HexMesh1 />
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-3 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
