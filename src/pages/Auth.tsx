@@ -20,7 +20,7 @@ function isInAppWebView(): boolean {
 }
 
 const Auth = () => {
-  const { user, signIn, signUp, signInPreview } = useAuth();
+  const { user, signIn, signInPreview } = useAuth();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const redirectTo = useMemo(() => new URLSearchParams(location.search).get("redirect") || "/", [location.search]);
