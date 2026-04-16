@@ -63,6 +63,10 @@ const TopUps = () => {
   const handleBuy = async (pack: typeof packs[number]) => {
     if (buying) return;
     setBuying(pack.id);
+
+    // Check if this is the user's first purchase (during onboarding)
+    const wasOnboarding = user ? !readCachedOnboardingState(user.id)?.onboardingComplete : false;
+
     try {
       const { data, error } = await supabase.functions.invoke("add-credits", {
         body: { amount: pack.gems },
@@ -71,6 +75,12 @@ const TopUps = () => {
       if (data?.error) throw new Error(data.error);
       refetch();
       toast.success("gems added!");
+
+      // First purchase: mark onboarding complete in cache and redirect to create photo
+      if (wasOnboarding && user) {
+        mergeCachedOnboardingState(user.id, { onboardingComplete: true });
+        navigate("/create", { replace: true });
+      }
     } catch (err: any) {
       toast.error("buy error");
     } finally {
