@@ -235,7 +235,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "hsl(var(--border-dark))", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"
@@ -282,7 +282,7 @@ const Header = () => {
         />
         {/* Controls on top of gradient */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between px-[14px] md:px-8 lg:px-12 pt-[72px] md:pt-[84px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
@@ -294,7 +294,7 @@ const Header = () => {
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
-                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
+                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
                   }}
                   aria-label="my account"
                 >
