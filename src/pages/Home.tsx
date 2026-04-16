@@ -311,7 +311,7 @@ const Home = () => {
 
   // Only block rendering during initial splash — never after navigation
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && document.getElementById("splash-screen")) {
-    return <LoadingScreen />;
+    return <SilentLoader />;
   }
 
   return (
