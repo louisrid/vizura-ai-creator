@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { hasSpecialAccountOverride } from "@/lib/specialAccount";
 
 interface SubscriptionContextType {
   status: string | null;
@@ -40,18 +39,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     window.sessionStorage.removeItem(key);
   }, [getCacheKey]);
 
-  const isTestAccount = hasSpecialAccountOverride(user);
-
   const fetchSubscription = useCallback(async () => {
     if (!user) {
       setStatus(null);
-      setLoading(false);
-      return;
-    }
-
-    if (isTestAccount) {
-      writeCachedStatus(user.id, "active");
-      setStatus("active");
       setLoading(false);
       return;
     }
@@ -64,12 +54,10 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         .maybeSingle();
 
       if (error) {
-        // Don't overwrite optimistic state
         if (!optimistic) setStatus(null);
       } else {
         const serverStatus = data?.status ?? null;
         writeCachedStatus(user.id, serverStatus);
-        // Only overwrite optimistic if server confirms active
         if (optimistic && serverStatus && ACTIVE_STATUSES.has(serverStatus)) {
           setStatus(serverStatus);
         } else if (!optimistic) {
@@ -81,18 +69,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [user, isTestAccount, optimistic, writeCachedStatus]);
+  }, [user, optimistic, writeCachedStatus]);
 
   useEffect(() => {
     if (!user) {
       setStatus(null);
-      setLoading(false);
-      return;
-    }
-
-    if (isTestAccount) {
-      writeCachedStatus(user.id, "active");
-      setStatus("active");
       setLoading(false);
       return;
     }
@@ -103,10 +84,10 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
     setLoading(true);
     void fetchSubscription();
-  }, [fetchSubscription, isTestAccount, readCachedStatus, user, writeCachedStatus]);
+  }, [fetchSubscription, readCachedStatus, user]);
 
   useEffect(() => {
-    if (!user || isTestAccount) return;
+    if (!user) return;
 
     const refreshOnReturn = () => {
       void fetchSubscription();
@@ -146,11 +127,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       document.removeEventListener("visibilitychange", refreshOnReturn);
       supabase.removeChannel(channel);
     };
-  }, [fetchSubscription, user, optimistic, writeCachedStatus, isTestAccount]);
+  }, [fetchSubscription, user, optimistic, writeCachedStatus]);
 
-  const resolvedStatus = isTestAccount ? "active" : status;
-  const resolvedLoading = isTestAccount ? false : loading;
-  const subscribed = resolvedStatus !== null && ACTIVE_STATUSES.has(resolvedStatus);
+  const subscribed = status !== null && ACTIVE_STATUSES.has(status);
 
   const optimisticSubscribe = useCallback(() => {
     setStatus("active");
@@ -164,7 +143,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   }, [user, writeCachedStatus]);
 
   return (
-    <SubscriptionContext.Provider value={{ status: resolvedStatus, subscribed, loading: resolvedLoading, refetch: fetchSubscription, optimisticSubscribe, optimisticUnsubscribe }}>
+    <SubscriptionContext.Provider value={{ status, subscribed, loading, refetch: fetchSubscription, optimisticSubscribe, optimisticUnsubscribe }}>
       {children}
     </SubscriptionContext.Provider>
   );

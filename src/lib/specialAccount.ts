@@ -55,8 +55,13 @@ export const syncSpecialAccountCache = (user?: User | null) => {
   window.sessionStorage.removeItem(SPECIAL_ACCOUNT_USER_ID_KEY);
 };
 
-export const hasSpecialAccountOverride = (user?: User | null) =>
-  isSpecialAccountUser(user) || readCachedSpecialAccount(user);
+// NOTE: this used to force the admin account to behave as a permanently-subscribed
+// "test" user (always green icon, free gems, etc). That special treatment has been
+// removed — the admin email is now treated as a normal user for subscription,
+// onboarding, and gems. Admin-only access (the /admin page and admin edge
+// functions) is gated by checking ADMIN_EMAIL directly, not via this function.
+// Kept as a no-op so any lingering imports compile until they're cleaned up.
+export const hasSpecialAccountOverride = (_user?: User | null) => false;
 
 export const clearSpecialAccountCache = () => {
   if (typeof window === "undefined") return;
