@@ -260,7 +260,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
     return (
       <div className="flex min-h-full w-full flex-col items-center justify-center gap-4 bg-background">
         <h2 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h2>
-        <div className="h-2 w-full max-w-[14rem] overflow-hidden bg-white/10">
+        <div className="h-2.5 w-full max-w-[12rem] overflow-hidden bg-white/10">
           <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
         </div>
       </div>
@@ -945,7 +945,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               type="button"
               onClick={(e) => {
                 e.preventDefault(); e.stopPropagation();
-                sessionStorage.setItem("facefox_guided_dismissed", "1");
+                sessionStorage.setItem("facefox_creator_dismissed", "1");
                 setFading(true);
                 setTimeout(() => {
                   onExit(selectionsRef.current);
@@ -1131,24 +1131,6 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={async () => {
-              setEmailLoading(true);
-              sessionStorage.setItem("facefox_post_auth_home", "1");
-              try {
-                await signInPreview();
-                toast.success("signed in");
-              } catch (err: any) {
-                toast.error("try again");
-                setEmailLoading(false);
-              }
-            }}
-            disabled={emailLoading || googleLoading}
-            className="mt-3 w-full text-center text-[11px] font-extrabold lowercase text-white hover:opacity-80 transition-colors duration-150 disabled:opacity-50"
-          >
-            just browsing? <span className="underline">preview without account</span>
-          </button>
         </div>
       </motion.div>
     </div>,
