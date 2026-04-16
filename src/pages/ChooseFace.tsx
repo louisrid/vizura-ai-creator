@@ -581,6 +581,13 @@ const ChooseFace = () => {
     }
   }, [startAngleBodyGen]);
 
+  // Auto-advance the "let's see how she looks" slide after 6s
+  useEffect(() => {
+    if (!showSet2Slide) return;
+    const t = setTimeout(() => { handleSet2Forward(); }, 6000);
+    return () => clearTimeout(t);
+  }, [showSet2Slide, handleSet2Forward]);
+
   const doFinalSave = async (forcedFaceIdx?: number) => {
     toast.dismiss();
     const currentUser = (await supabase.auth.getUser()).data.user;
