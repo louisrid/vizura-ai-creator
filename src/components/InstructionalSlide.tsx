@@ -52,7 +52,7 @@ const ChatPill = ({
       animate={{ x: 0 }}
       transition={
         animate
-          ? { duration: 0.35, delay, ease: [0.25, 0.8, 0.25, 1] }
+          ? { duration: 0.25, delay, ease: [0.25, 0.8, 0.25, 1] }
           : undefined
       }
     >
@@ -148,7 +148,7 @@ const InstructionalSlide = ({
       setHasAnimated(true);
       return;
     }
-    const totalDelay = slide.pills.length * 0.6 + 1.2 + 0.35;
+    const totalDelay = slide.pills.length * 0.5 + 0.5 + 0.25;
     timerRef.current = setTimeout(() => setHasAnimated(true), totalDelay * 1000);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -229,7 +229,7 @@ const InstructionalSlide = ({
                 key={i}
                 text={pill.text}
                 side={isSinglePill ? "left" : pill.side}
-                delay={shouldAnimate ? i * 0.6 + 1.2 : 0}
+                delay={shouldAnimate ? i * 0.5 + 0.5 : 0}
                 animate={shouldAnimate}
                 highlight={pill.highlight}
               />
