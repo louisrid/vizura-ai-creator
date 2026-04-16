@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 
 const STEPS = [0, 5, 12, 20, 30, 42, 55, 68, 78, 86, 92, 96, 98, 100];
 const ACCEL_DURATION_MS = 600;
