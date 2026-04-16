@@ -532,13 +532,17 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (heroVisited.current || isHeroSeen()) {
       heroVisited.current = true;
       setHeroPhase(3);
+      markHeroSeen();
       return;
     }
+    // Mark IMMEDIATELY on first hero mount so any later remount (e.g. blocked
+    // login redirecting back here) skips the entrance animation entirely.
+    markHeroSeen();
     setHeroPhase(0);
     const ts = [
       setTimeout(() => setHeroPhase(1), 300),
       setTimeout(() => setHeroPhase(2), 650),
-      setTimeout(() => { setHeroPhase(3); heroVisited.current = true; markHeroSeen(); }, 1800),
+      setTimeout(() => { setHeroPhase(3); heroVisited.current = true; }, 1800),
     ];
     return () => ts.forEach(clearTimeout);
   }, [isHeroSlide, splashGone]);

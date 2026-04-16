@@ -25,8 +25,10 @@ sessionStorage.removeItem("facefox_selected_face");
 
 // On every fresh page load (including refresh), clear the guided creator
 // flow state so the user always starts from the hero screen.
+// NOTE: facefox_hero_seen is intentionally NOT cleared here — it should
+// persist across the whole browser session so the hero entrance animation
+// only plays once, even after auth redirects or remounts.
 sessionStorage.removeItem("facefox_guided_flow_state");
-sessionStorage.removeItem("facefox_hero_seen");
 
 const splash = document.getElementById("splash-screen");
 
