@@ -91,7 +91,7 @@ const History = () => {
                 key={item.id}
                 onClick={() => setExpanded(item)}
                 className="w-full text-left rounded-[10px] overflow-hidden transition-all hover:border-foreground/60 active:scale-[0.99] hover-lift"
-                style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
+                style={{ backgroundColor: "hsl(var(--card))", border: "none" }}
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
                 <div className="p-4 space-y-2">
@@ -135,7 +135,7 @@ const History = () => {
               className="relative w-full max-w-sm md:max-w-lg"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "none" }}>
                 <div className="relative">
                   <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
                 </div>

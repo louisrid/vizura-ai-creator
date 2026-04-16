@@ -412,7 +412,7 @@ const CharacterDetail = () => {
               }
               onRegenClick?.();
             }}
-            className="absolute flex items-center justify-center transition-transform active:scale-90"
+            className="absolute flex items-center justify-center transition-transform active:scale-95"
             style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
           >
             <RefreshCw size={13} strokeWidth={3} color="#fff" />
@@ -459,9 +459,9 @@ const CharacterDetail = () => {
                   {displayName}, {ageDisplay}
                 </h1>
                 <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <button onClick={startEditName} className="active:scale-90 transition-transform" style={{ fontSize: 16 }}>✏️</button>
+                  <button onClick={startEditName} className="active:scale-95 transition-transform" style={{ fontSize: 16 }}>✏️</button>
                   {onboardingComplete && (
-                    <button onClick={() => setShowDelete(true)} className="active:scale-90 transition-transform">
+<button onClick={() => setShowDelete(true)} className="active:scale-95 transition-transform">
                       <Trash2 size={18} strokeWidth={3} color="#ff4444" />
                     </button>
                   )}

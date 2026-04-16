@@ -81,7 +81,7 @@ const MyCharacters = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
 
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-10 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-10 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
@@ -91,8 +91,8 @@ const MyCharacters = () => {
           {/* Always show the + button */}
           <button
             onClick={handleCreateCharacter}
-            className="overflow-hidden active:scale-[0.97] transition-transform hover-lift"
-            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}
+            className="overflow-hidden active:scale-[0.98] transition-transform hover-lift"
+            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "none" }}
           >
             <AspectRatio ratio={3 / 4}>
               <div className="flex h-full w-full items-center justify-center">
@@ -108,10 +108,10 @@ const MyCharacters = () => {
               <button
                 key={char.id}
                 onClick={() => navigate(`/characters/${char.id}`)}
-                className="relative overflow-hidden active:scale-[0.97] transition-all duration-200 hover-lift"
+                className="relative overflow-hidden active:scale-[0.98] transition-all duration-200 hover-lift"
                 style={{
                   borderRadius: 10,
-                  border: isNew ? "3px solid #ffe603" : "2px solid hsl(var(--border-mid))",
+                  border: isNew ? "3px solid #ffe603" : "none",
                   backgroundColor: "hsl(var(--card))",
                 }}
               >

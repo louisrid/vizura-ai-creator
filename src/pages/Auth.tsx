@@ -143,7 +143,7 @@ const Auth = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-10 md:max-w-2xl md:px-10">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-10 md:max-w-2xl md:px-10">
         <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">
             <BackButton />
@@ -156,7 +156,7 @@ const Auth = () => {
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
-                  className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-extrabold lowercase disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full h-14 md:h-16 bg-neon-yellow text-neon-yellow-foreground text-sm md:text-xl font-[900] lowercase disabled:opacity-50 flex items-center justify-center gap-2"
                   style={{ borderRadius: 10, transition: "transform 0.1s ease-out", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (

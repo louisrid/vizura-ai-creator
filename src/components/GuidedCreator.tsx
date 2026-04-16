@@ -977,7 +977,7 @@ GuidedCreator.displayName = "GuidedCreator";
    SIGN-IN OVERLAY
    ══════════════════════════════════════════ */
 export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn: () => void }) => {
-  const { user, signIn, signUp, signInPreview } = useAuth();
+  const { user, signIn, signUp } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -1066,7 +1066,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-xs md:max-w-sm">
           <span className="text-[64px] mb-5">🔐</span>
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-            sign in to<br />save her
+            sign in to save her
           </h2>
           <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 space-y-3" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
