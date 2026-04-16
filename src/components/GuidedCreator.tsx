@@ -1,4 +1,5 @@
 import { forwardRef, useState, useCallback, useEffect, useRef } from "react";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
