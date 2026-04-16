@@ -10,6 +10,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
+import LockOverlay from "@/components/LockOverlay";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -304,36 +305,42 @@ const Header = () => {
 
             {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
-                <button
-                  onClick={() => navigate("/top-ups")}
-                  className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
-                  style={{
-                    backgroundColor: "#050a10",
-                    border: "2px solid #00e0ff",
-                    borderRadius: 10,
-                  }}
-                >
-                  <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                  <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => { if (showMenuLocks) return; navigate("/top-ups"); }}
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
+                    style={{
+                      backgroundColor: "#050a10",
+                      border: "2px solid #00e0ff",
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
+                    <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
+                  </button>
+                  {showMenuLocks && <LockOverlay borderRadius={10} />}
+                </div>
 
-                <button
-                  ref={menuBtnRef}
-                  onClick={() => setOpen(!open)}
-                  className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
-                  style={{
-                    borderRadius: 10,
-                    backgroundColor: "#000",
-                    border: "2px solid hsl(var(--border-mid))",
-                  }}
-                  aria-label="open menu"
-                >
-                  <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
-                    <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
-                    <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
-                    <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
-                  </svg>
-                </button>
+                <div className="relative">
+                  <button
+                    ref={menuBtnRef}
+                    onClick={() => { if (showMenuLocks) return; setOpen(!open); }}
+                    className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+                    style={{
+                      borderRadius: 10,
+                      backgroundColor: "#000",
+                      border: "2px solid hsl(var(--border-mid))",
+                    }}
+                    aria-label="open menu"
+                  >
+                    <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
+                      <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
+                      <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
+                      <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
+                    </svg>
+                  </button>
+                  {showMenuLocks && <LockOverlay borderRadius={10} />}
+                </div>
               </div>
             )}
           </div>

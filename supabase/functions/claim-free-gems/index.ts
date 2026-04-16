@@ -56,7 +56,13 @@ serve(async (req) => {
       );
     }
 
-    // Wipe whatever hidden onboarding gems remain and set balance to exactly 5
+    // Wipe whatever hidden onboarding gems remain — reset to 0 first
+    await adminClient
+      .from("credits")
+      .update({ balance: 0, updated_at: new Date().toISOString() })
+      .eq("user_id", userId);
+
+    // Then grant exactly the free amount (starting from 0)
     await adminClient
       .from("credits")
       .update({ balance: FREE_GEMS_AMOUNT, updated_at: new Date().toISOString() })

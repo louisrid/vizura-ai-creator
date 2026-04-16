@@ -207,7 +207,8 @@ function buildCharacterTraits(char: any): string {
   const bodyKey = normalizeBodyType((char.body || "regular").toLowerCase());
   parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
 
-  const bustKey = (char.bust_size || "regular").toLowerCase();
+  const rawBust = (char.bust_size || "regular").toLowerCase();
+  const bustKey = (rawBust === "xl" || rawBust === "extra large") ? "extra large" : "regular";
   const bustDesc = BUST_SIZE_MAP[bustKey] || "";
   if (bustDesc) parts.push(bustDesc);
 

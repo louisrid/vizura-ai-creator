@@ -503,7 +503,7 @@ const ChooseFace = () => {
     return "regular";
   };
 
-  const normaliseDraftBustSize = (value?: string) => (value === "extra large" || value === "large" ? "extra large" : "regular");
+  const normaliseDraftBustSize = (value?: string) => (value === "XL" || value === "extra large" || value === "large" ? "XL" : "regular");
 
   const startAngleBodyGen = useCallback(async (charId: string, anglePrompt: string, faceUrl: string, bodyType: string, bustSize: string) => {
     setShowSet2Slide(false);
@@ -1028,7 +1028,7 @@ const ChooseFace = () => {
                     const traitItems = [
                       { label: "skin", value: draft.skin },
                       { label: "body", value: draft.bodyType },
-                      { label: "size", value: (draft.bustSize || "regular") === "extra large" ? "XL" : (draft.bustSize || "regular") },
+                      { label: "size", value: draft.bustSize === "XL" ? "XL" : "regular" },
                       { label: "age", value: displayAge(draft.characterName || "draft", draft.age) },
                       { label: "hair colour", value: draft.hairColour },
                       { label: "hair style", value: draft.hairStyle },

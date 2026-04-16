@@ -37,7 +37,7 @@ const getRandomNameToast = () => "great choice";
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["slim", "regular", "curvy"], defaultOption: "regular" },
-  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "extra large"], defaultOption: "regular" },
+  { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "XL"], defaultOption: "regular" },
   { key: "age", label: "choose her age", emoji: "🎂", options: ["24+", "18-24"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
@@ -105,7 +105,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       borderRadius: 10,
       padding: "11px 26px",
       fontWeight: 900,
-      textTransform: "lowercase",
+      textTransform: label === "XL" ? "none" : "lowercase",
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected

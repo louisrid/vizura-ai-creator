@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 import DotDecal from "@/components/DotDecal";
+import LockOverlay from "@/components/LockOverlay";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import { toast } from "@/components/ui/sonner";
 
@@ -46,19 +47,7 @@ const isValidImageUrl = (url: string): boolean => {
   return true;
 };
 
-/* Lock overlay — 80% black, clips to button shape including border */
-const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
-  <div
-    className="pointer-events-auto absolute"
-    style={{
-      inset: 0,
-      backgroundColor: "rgba(0,0,0,0.80)",
-      borderRadius: Math.max(borderRadius - 2, 0),
-      boxShadow: "0 0 0 4px rgba(0,0,0,0.80)",
-      zIndex: 20,
-    }}
-  />
-);
+
 
 const Home = () => {
   const navigate = useTransitionNavigate();
