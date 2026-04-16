@@ -675,16 +675,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 102, height: 102, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
-            <img
-              src="https://em-content.zobj.net/thumbs/320/apple/391/fox_1f98a.png"
-              alt="fox"
-              width={320}
-              height={320}
-              draggable={false}
-              fetchPriority="high"
-              style={{ display: 'block', width: 102, height: 102, imageRendering: 'auto' }}
-            />
+          <div style={{ width: 102, height: 102, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+            <span style={{ fontSize: 88, lineHeight: 1, display: 'block', userSelect: 'none' }} role="img" aria-label="fox">🦊</span>
           </div>
         </div>
         <div style={{ fontSize: 67, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 5, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
