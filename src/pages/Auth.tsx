@@ -63,7 +63,11 @@ const Auth = () => {
         if (cancelled) return;
 
         if (needsOnboardingRedirect(resolvedState)) {
-          navigate("/", { replace: true, state: { openCreator: true, onboardingRedirect: true } });
+          // New Google account trying to login — block them
+          await supabase.auth.signOut();
+          sessionStorage.removeItem("facefox_post_auth_home");
+          toast.error("press start instead!");
+          navigate("/", { replace: true });
           return;
         }
 
