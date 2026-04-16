@@ -63,9 +63,9 @@ const FreshLoadRedirect = () => {
 
     const resolveInitialRoute = async () => {
       if (user) {
-        if (location.pathname === "/auth") {
-          if (acquireRedirectLock()) navigate("/", { replace: true });
-        }
+        // NOTE: Do NOT auto-redirect away from /auth here. Auth.tsx runs its own
+        // onboarding-completion check and either navigates to redirectTo or signs
+        // the user out. Redirecting from here races and bypasses that block.
         const cachedState = readCachedOnboardingState(user.id);
         if (!cachedState || cachedState.characterCount === 0) {
           void fetchAndCacheOnboardingState(user.id);
