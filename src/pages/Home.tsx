@@ -299,13 +299,14 @@ const Home = () => {
   const forceOnboarding = !!user && lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
   // Post-auth loading: user is signed in but data hasn't finished loading yet
-  const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
+  const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved || !freshDataLoaded);
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
 
-  // Only block rendering during initial splash — never after navigation
-  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && document.getElementById("splash-screen")) {
+  // Block render until onboarding state is fully resolved from DB — prevents light-to-dark flicker.
+  // The yellow loading bar (splash) covers this period on first load.
+  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
     return <LoadingScreen />;
   }
 

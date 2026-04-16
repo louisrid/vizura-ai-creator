@@ -42,21 +42,6 @@ const Auth = () => {
     sessionStorage.removeItem("facefox_guided_flow_state");
     sessionStorage.removeItem("facefox_post_auth_home");
 
-    const cachedState = readCachedOnboardingState(user.id);
-    if (needsOnboardingRedirect(cachedState)) {
-      navigate("/", { replace: true, state: { openCreator: true, onboardingRedirect: true } });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    if (cachedState) {
-      navigate(redirectTo, { replace: true });
-      return () => {
-        cancelled = true;
-      };
-    }
-
     const checkNewAccount = async () => {
       try {
         const resolvedState = await fetchAndCacheOnboardingState(user.id);
