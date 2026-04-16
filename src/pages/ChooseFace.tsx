@@ -801,19 +801,43 @@ const ChooseFace = () => {
     );
   }
 
-  if (showSet2Slide) {
-    return (
-      <InstructionalSlide
-        slide={SET2_SLIDE}
-        alreadySeen={false}
-        dashTotal={0}
-        dashActive={0}
-        showBack={true}
-        showForward={true}
-        onBack={() => { setShowSet2Slide(false); }}
-        onForward={handleSet2Forward}
-      />
-    );
+  useEffect(() => {
+    if (!showSet2Slide) return;
+    const t = setTimeout(() => { handleSet2Forward(); }, 6000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showSet2Slide]);
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {showSet2Slide && (
+          <InstructionalSlide
+            key="set2-slide"
+            slide={SET2_SLIDE}
+            alreadySeen={false}
+            dashTotal={0}
+            dashActive={0}
+            showBack={false}
+            showForward={false}
+            onBack={() => {}}
+            onForward={() => {}}
+          />
+        )}
+      </AnimatePresence>
+      {renderMainContent()}
+    </>
+  );
+};
+
+const renderMainContentPlaceholder = () => null;
+export default ChooseFace;
+
+// Legacy block kept below intentionally unreachable to preserve original structure during refactor
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function _legacy_unused_block() {
+  if (false) {
+    return null;
   }
 
   if (pendingAuthSave || angleBodyLoading) {
