@@ -438,8 +438,12 @@ const Admin = () => {
     setLoading(false);
   }, []);
 
+  const hasLoaded = useRef(false);
   useEffect(() => {
-    if (user?.email === ADMIN_EMAIL) loadAll();
+    if (user?.email === ADMIN_EMAIL && !hasLoaded.current) {
+      hasLoaded.current = true;
+      loadAll();
+    }
   }, [user, loadAll]);
 
   if (authLoading || !user || user.email !== ADMIN_EMAIL) {
