@@ -62,8 +62,8 @@ const Auth = () => {
         const resolvedState = await fetchAndCacheOnboardingState(user.id);
         if (cancelled) return;
 
-        if (needsOnboardingRedirect(resolvedState)) {
-          // New Google account trying to login — block them
+        if (!resolvedState.onboardingComplete) {
+          // Block any non-onboarded account from completing login
           await supabase.auth.signOut();
           sessionStorage.removeItem("facefox_post_auth_home");
           toast.error("press start instead!");

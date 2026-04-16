@@ -83,13 +83,23 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Delete DB rows
-    await admin.from("generations").delete().eq("user_id", targetUserId);
-    await admin.from("generation_logs").delete().eq("user_id", targetUserId);
-    await admin.from("characters").delete().eq("user_id", targetUserId);
-    await admin.from("subscriptions").delete().eq("user_id", targetUserId);
-    await admin.from("free_gen_ips").delete().eq("user_id", targetUserId);
-    await admin.from("rejected_prompts").delete().eq("user_id", targetUserId);
+    // Delete DB rows with per-table error reporting
+    const report: Record<string, { ok: boolean; error?: string }> = {};
+    const runDelete = async (table: string) => {
+      const { error } = await admin.from(table as any).delete().eq("user_id", targetUserId);
+      if (error) {
+        console.error(`[reset] ${table} delete:`, error);
+        report[table] = { ok: false, error: error.message };
+      } else {
+        report[table] = { ok: true };
+      }
+    };
+    await runDelete("generations");
+    await runDelete("generation_logs");
+    await runDelete("characters");
+    await runDelete("subscriptions");
+    await runDelete("free_gen_ips");
+    await runDelete("rejected_prompts");
 
     // Delete storage files in user's folder (recursive)
     const removeFolder = async (prefix: string) => {
@@ -117,26 +127,44 @@ Deno.serve(async (req) => {
     await removeFolder(targetUserId);
 
     // Reset credits to onboarding starting amount
-    await admin
-      .from("credits")
-      .update({ balance: 100, updated_at: new Date().toISOString() })
-      .eq("user_id", targetUserId);
+    {
+      const { error: creditsErr } = await admin
+        .from("credits")
+        .update({ balance: 100, updated_at: new Date().toISOString() })
+        .eq("user_id", targetUserId);
+      if (creditsErr) {
+        console.error("[reset] credits update:", creditsErr);
+        report["credits_update"] = { ok: false, error: creditsErr.message };
+      } else {
+        report["credits_update"] = { ok: true };
+      }
+    }
 
-    // Reset profile flags
-    await admin
-      .from("profiles")
-      .update({
-        onboarding_complete: false,
-        has_claimed_free_gems: false,
-        has_seen_welcome: false,
-        has_seen_onboarding: false,
-        has_used_free_gen: false,
-        onboarding_face_regens_used: 0,
-        onboarding_angle_regens_used: 0,
-        onboarding_body_regens_used: 0,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", targetUserId);
+    // Reset profile flags. NOTE: subscription state is stored in the `subscriptions`
+    // table (cleared above), not on `profiles` — there are no subscription columns
+    // on this table to reset.
+    {
+      const { error: profileErr } = await admin
+        .from("profiles")
+        .update({
+          onboarding_complete: false,
+          has_claimed_free_gems: false,
+          has_seen_welcome: false,
+          has_seen_onboarding: false,
+          has_used_free_gen: false,
+          onboarding_face_regens_used: 0,
+          onboarding_angle_regens_used: 0,
+          onboarding_body_regens_used: 0,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", targetUserId);
+      if (profileErr) {
+        console.error("[reset] profiles update:", profileErr);
+        report["profiles_update"] = { ok: false, error: profileErr.message };
+      } else {
+        report["profiles_update"] = { ok: true };
+      }
+    }
 
     // Invalidate the target user's existing sessions so their next visit lands on the
     // hero/login screen fresh instead of resuming mid-flow with stale local cache.
@@ -147,7 +175,7 @@ Deno.serve(async (req) => {
       console.warn("admin-reset-user signOut warning:", signOutErr);
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, report }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

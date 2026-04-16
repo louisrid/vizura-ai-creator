@@ -119,8 +119,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
         const nextUser = session?.user ?? null;
+        console.log("[auth]", event, "user:", nextUser?.id ?? "null");
 
         if (event === "SIGNED_OUT" || !nextUser) {
+          console.log("[auth] setUser(null) via", event);
           setUser(null);
           clearSpecialAccountCache();
           clearCachedOnboardingState();
