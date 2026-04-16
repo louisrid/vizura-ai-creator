@@ -120,14 +120,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
         const nextUser = session?.user ?? null;
 
-        if (event === "SIGNED_OUT") {
+        if (event === "SIGNED_OUT" || !nextUser) {
           setUser(null);
           clearSpecialAccountCache();
           clearCachedOnboardingState();
           return;
         }
-
-        if (!nextUser) return;
 
         if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
           setUser(nextUser);

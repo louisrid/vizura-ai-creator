@@ -73,7 +73,7 @@ const FreshLoadRedirect = () => {
         return;
       }
 
-      if (!pendingPostAuthHome && location.pathname === "/auth") {
+      if (!pendingPostAuthHome && !isExemptRoute(location.pathname)) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
         if (acquireRedirectLock()) navigate("/", { replace: true });
@@ -194,7 +194,7 @@ const OnboardingRedirectGate = () => {
     let cancelled = false;
 
     const resolveRedirect = async () => {
-      if (!user || location.pathname !== "/") {
+      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname)) {
         setShouldRedirect(false);
         return;
       }
