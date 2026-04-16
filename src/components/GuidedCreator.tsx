@@ -670,7 +670,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               width: on ? r.size : 63, height: on ? r.size : 63,
               border: `${r.w}px ${r.dash ? 'dashed' : 'solid'} #ffe603`,
               ...(i === 0
-                ? { WebkitMask: 'conic-gradient(transparent 0deg, transparent 30deg, black 30deg, black 360deg)', mask: 'conic-gradient(transparent 0deg, transparent 30deg, black 30deg, black 360deg)' }
+                ? { WebkitMask: 'conic-gradient(from 0deg, transparent 0deg, transparent 60deg, #fff 60deg, #fff 360deg)', mask: 'conic-gradient(from 0deg, transparent 0deg, transparent 60deg, #fff 60deg, #fff 360deg)' }
                 : { [r.seg]: 'transparent' }
               ),
               transform: `rotate(${ringT * r.spd}deg)`,
