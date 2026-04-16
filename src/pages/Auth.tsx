@@ -59,11 +59,16 @@ const Auth = () => {
 
     const checkNewAccount = async () => {
       try {
+        console.log("[auth-check] starting onboarding check for", user.id);
         const resolvedState = await fetchAndCacheOnboardingState(user.id);
-        if (cancelled) return;
+        console.log("[auth-check] resolvedState:", resolvedState);
+        if (cancelled) {
+          console.log("[auth-check] cancelled, abort");
+          return;
+        }
 
         if (!resolvedState.onboardingComplete) {
-          // Block any non-onboarded account from completing login
+          console.log("[auth-check] BLOCKING login — onboarding_complete=false, signing out");
           await supabase.auth.signOut();
           sessionStorage.removeItem("facefox_post_auth_home");
           toast.error("press start instead!");
@@ -71,8 +76,10 @@ const Auth = () => {
           return;
         }
 
+        console.log("[auth-check] passing through to", redirectTo);
         navigate(redirectTo, { replace: true });
-      } catch {
+      } catch (err) {
+        console.error("[auth-check] error:", err);
         if (!cancelled) navigate(redirectTo, { replace: true });
       }
     };
