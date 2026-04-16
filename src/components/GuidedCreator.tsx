@@ -662,6 +662,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             { size: 308, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 273, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
             { size: 238, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
+            { size: 206, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
@@ -685,8 +686,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             />
           </div>
         </div>
-        <div style={{ fontSize: 67, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 15, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
-        <div style={{ width: 171, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 10, marginBottom: 23, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
+        <div style={{ fontSize: 68, fontWeight: 900, color: '#fff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 15, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ width: 174, height: 10, background: '#ffe603', borderRadius: 5, marginTop: 10, marginBottom: 23, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 157, padding: '10px 0', fontSize: 20, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
