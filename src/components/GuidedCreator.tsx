@@ -662,7 +662,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             { size: 308, w: 6, spd: 0.45, del: 0.22, seg: 'borderBottomColor', dash: false },
             { size: 273, w: 2, spd: -0.3, del: 0.14, seg: 'borderLeftColor', dash: true },
             { size: 238, w: 8, spd: -0.6, del: 0.07, seg: 'borderTopColor', dash: false },
-            { size: 206, w: 3, spd: 0.5, del: 0, seg: 'borderRightColor', dash: false },
           ].map((r, i) => (
             <div key={i} style={{
               position: 'absolute', borderRadius: '50%',
@@ -675,14 +674,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               top: '50%', left: '50%', translate: '-50% -50%',
             }} />
           ))}
-          <div style={{ width: 95, height: 95, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
+          <div style={{ width: 103, height: 103, overflow: 'hidden', opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease' }}>
             <img
               src="https://em-content.zobj.net/source/apple/391/fox_1f98a.png"
               alt="fox"
-              width={380}
-              height={380}
+              width={412}
+              height={412}
               draggable={false}
-              style={{ display: 'block', width: 95, height: 95, imageRendering: 'auto' }}
+              style={{ display: 'block', width: 103, height: 103, imageRendering: 'auto' }}
             />
           </div>
         </div>
