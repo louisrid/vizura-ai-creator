@@ -220,16 +220,14 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>
-      <div className="flex items-center justify-between mb-6 gap-3">
-        <p className="text-[12px] md:text-[13px] font-extrabold lowercase" style={{ color: "#ffe603" }}>{email}</p>
-        <button
-          onClick={() => setConfirmReset(true)}
-          className="text-[10px] md:text-[11px] font-extrabold lowercase px-2.5 py-1 transition-opacity hover:opacity-80 active:scale-95 shrink-0"
-          style={{ color: "#ff4444", borderRadius: 8, border: "1.5px solid #ff4444", backgroundColor: "transparent" }}
-        >
-          reset
-        </button>
-      </div>
+      <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "#ffe603" }}>{email}</p>
+      <button
+        onClick={() => setConfirmReset(true)}
+        className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 active:scale-[0.98] transition-transform"
+        style={{ padding: "12px 0", color: "#ff4444", borderRadius: 10, border: "2px solid #ff4444", backgroundColor: "transparent" }}
+      >
+        reset user
+      </button>
 
       {loading ? (
         <AdminLoader />
