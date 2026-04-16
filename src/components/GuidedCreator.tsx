@@ -756,7 +756,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>
             {slide.emoji}
           </motion.span>
-          <h2 className={SLIDE_TITLE_CLASS}>{slide.title}</h2>
+          <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
           <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
