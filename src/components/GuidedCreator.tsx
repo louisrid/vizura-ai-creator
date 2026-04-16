@@ -660,9 +660,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', paddingBottom: '2vh' }}>
         <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
-            { size: 294, w: 6, spd: 0.45, del: 0.22, dash: false, gapFraction: 0.14, baseRotation: 115.2 },
-            { size: 261, w: 2, spd: -0.3, del: 0.14, dash: true, dashArray: "4 3" },
-            { size: 228, w: 8, spd: -0.6, del: 0.07, dash: false, gapFraction: 0.25, baseRotation: -45 },
+            { size: 294, w: 8, spd: 0.45, del: 0.22, dash: false, gapFraction: 0.08, baseRotation: 115 },
+            { size: 262, w: 2, spd: -0.3, del: 0.14, dash: true, dashArray: "4 3" },
+            { size: 230, w: 8, spd: -0.6, del: 0.07, dash: false, gapFraction: 0.25, baseRotation: -45 },
             { size: 198, w: 3, spd: 0.5, del: 0, dash: false, gapFraction: 0.25, baseRotation: 45 },
           ].map((r, i) => {
             const currentSize = on ? r.size : 63;
