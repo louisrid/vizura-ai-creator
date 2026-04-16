@@ -378,6 +378,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const [shaking, setShaking] = useState(false);
   const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(open);
+  const [fading, setFading] = useState(false);
+  const [entered, setEntered] = useState(false);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
   const [nameToastShown, setNameToastShown] = useState(false);
   
@@ -625,7 +627,25 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // handles persisting selections and setting the flag. Home.tsx will read it
   // and navigate to choose-face. No need for an effect here.
 
-  if (!mounted || !visible) return null;
+  // Keep mounted during fade-out, unmount after transition
+  const [shouldRender, setShouldRender] = useState(visible);
+  useEffect(() => {
+    if (visible) {
+      setShouldRender(true);
+      // Trigger fade-in on next frame
+      requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
+    }
+    if (!visible && !fading) {
+      const t = setTimeout(() => setShouldRender(false), 10);
+      return () => clearTimeout(t);
+    }
+    if (fading) {
+      const t = setTimeout(() => { setFading(false); setEntered(false); setVisible(false); setShouldRender(false); }, 450);
+      return () => clearTimeout(t);
+    }
+  }, [visible, fading]);
+
+  if (!mounted || !shouldRender) return null;
 
   /* ── Dash calculations ── */
   const dashSteps = flowSteps.filter((item) => item.type !== "hero" && item.type !== "signup");
@@ -849,12 +869,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
-    <motion.div
+    <div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.45, ease: "easeInOut" }}
+      style={{
+        background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
+        opacity: entered && !fading ? 1 : 0,
+        transition: "opacity 0.45s ease-in-out",
+      }}
     >
       {/* Progress dashes — static, never fade during transitions */}
       <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showNavigation ? 1 : 0, transition: showNavigation ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
@@ -892,11 +913,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               onClick={(e) => {
                 e.preventDefault(); e.stopPropagation();
                 sessionStorage.setItem("facefox_guided_dismissed", "1");
-                setVisible(false);
-                onExit(selectionsRef.current);
-                navigateTo("/");
+                setFading(true);
+                setTimeout(() => {
+                  onExit(selectionsRef.current);
+                  navigateTo("/");
+                }, 450);
               }}
-              className="mb-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              className="mb-6 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
               style={{ width: 44, height: 44 }}
             >
               <Home size={24} strokeWidth={2} color="#ffffff" />
@@ -910,7 +933,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
-    </motion.div>,
+    </div>,
     document.body,
   );
 });
