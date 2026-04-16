@@ -99,11 +99,12 @@ serve(async (req) => {
           if (gems > 0 && userId) {
             const { data: profile } = await adminClient
               .from("profiles")
-              .select("onboarding_complete")
+              .select("onboarding_complete, has_claimed_free_gems")
               .eq("user_id", userId)
               .single();
 
-            if (profile && !profile.onboarding_complete) {
+            // First-time claim/purchase: wipe hidden balance to 0 before crediting
+            if (profile && !profile.has_claimed_free_gems) {
               await adminClient
                 .from("credits")
                 .update({ balance: 0, updated_at: new Date().toISOString() })
@@ -111,6 +112,15 @@ serve(async (req) => {
             }
 
             await addGems(userId, gems);
+
+            // Flip has_claimed_free_gems on first paid purchase so gems become visible
+            if (profile && !profile.has_claimed_free_gems) {
+              await adminClient
+                .from("profiles")
+                .update({ has_claimed_free_gems: true, updated_at: new Date().toISOString() })
+                .eq("user_id", userId);
+            }
+
             // Mark onboarding complete on first gem purchase
             await adminClient
               .from("profiles")
@@ -148,8 +158,30 @@ serve(async (req) => {
               { onConflict: "user_id" }
             );
 
+            // First-time claim/purchase: wipe hidden balance to 0 before crediting
+            const { data: memProfile } = await adminClient
+              .from("profiles")
+              .select("has_claimed_free_gems")
+              .eq("user_id", userId)
+              .single();
+
+            if (memProfile && !memProfile.has_claimed_free_gems) {
+              await adminClient
+                .from("credits")
+                .update({ balance: 0, updated_at: new Date().toISOString() })
+                .eq("user_id", userId);
+            }
+
             // Grant 50 gems on initial subscription
             await addGems(userId, MEMBERSHIP_GEMS);
+
+            // Flip has_claimed_free_gems on first paid purchase so gems become visible
+            if (memProfile && !memProfile.has_claimed_free_gems) {
+              await adminClient
+                .from("profiles")
+                .update({ has_claimed_free_gems: true, updated_at: new Date().toISOString() })
+                .eq("user_id", userId);
+            }
           }
         }
         break;

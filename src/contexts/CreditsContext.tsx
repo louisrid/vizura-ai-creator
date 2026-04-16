@@ -87,11 +87,9 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     fetchGems();
   }, [fetchGems, readCachedGems, user]);
 
-  // During onboarding (onboarding_complete = false), show 0 gems to user
-  // UNLESS they have already claimed free gems — then show real balance
-  const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
-  const isOnboarding = cachedOnboarding ? !cachedOnboarding.onboardingComplete : false;
-  const shouldMask = isOnboarding && !hasClaimedFreeGems;
+  // Always mask gems to 0 until user has claimed free OR made a paid purchase.
+  // has_claimed_free_gems is flipped to true on free claim AND on first paid purchase.
+  const shouldMask = !hasClaimedFreeGems;
   const gems = shouldMask ? 0 : rawGems;
 
   return (
