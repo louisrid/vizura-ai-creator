@@ -145,13 +145,41 @@ interface StorageImage {
   created_at: string;
 }
 
-const UserStorageView = ({ userId, onBack }: { userId: string; onBack: () => void }) => {
+const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: () => void; onReset: () => void }) => {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [images, setImages] = useState<StorageImage[]>([]);
   const [characters, setCharacters] = useState<any[]>([]);
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
   const [viewingCharacter, setViewingCharacter] = useState<any | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  const handleReset = async () => {
+    setResetting(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-reset-user`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: userId }),
+        }
+      );
+      if (!res.ok) throw new Error(await res.text());
+      toast.success("user reset!");
+      setConfirmReset(false);
+      onReset();
+    } catch (e) {
+      console.error("Reset failed:", e);
+      toast.error("reset failed");
+    }
+    setResetting(false);
+  };
 
   useEffect(() => {
     (async () => {
