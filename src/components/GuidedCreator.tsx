@@ -379,6 +379,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(open);
   const [fading, setFading] = useState(false);
+  const [entered, setEntered] = useState(false);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
   const [nameToastShown, setNameToastShown] = useState(false);
   
