@@ -177,9 +177,8 @@ const Home = () => {
 
 
     if (user) {
-      // Logged-in users must NEVER see the hero screen
       setSkipWelcome(true);
-      if (!openCreatorRequested && (!isOnboardingUser || localStorage.getItem("facefox_visited_character") === "1")) setShowGuided(false);
+      if (!openCreatorRequested) setShowGuided(false);
       setAutoOpenEvaluated(true);
       return;
     }
@@ -190,20 +189,6 @@ const Home = () => {
     setAutoOpenEvaluated(true);
   }, [authLoading, openCreatorRequested, user, navigate, isOnboardingUser, initialLoadComplete, characterCount]);
 
-  // When lock state resolves and user needs onboarding, force guided creator open
-  // BUT only if they've never visited the character page before
-  useEffect(() => {
-    if (!freshDataLoaded || !user) return;
-    if (sessionStorage.getItem(DISMISSED_KEY) === "1") return;
-    if (localStorage.getItem("facefox_visited_character") === "1") return;
-    if (!onboardingComplete && characterCount === 0) {
-      sessionStorage.removeItem("facefox_guided_dismissed");
-      localStorage.removeItem("facefox_visited_character");
-      setShowGuided(true);
-      setSkipWelcome(false);
-      setAutoOpenEvaluated(true);
-    }
-  }, [freshDataLoaded, user, onboardingComplete, characterCount]);
 
   // Resolve onboarding lock state
   useEffect(() => {
