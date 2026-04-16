@@ -189,8 +189,10 @@ const Home = () => {
     if (sessionStorage.getItem(DISMISSED_KEY) === "1") return;
     if (localStorage.getItem("facefox_visited_character") === "1") return;
     if (!onboardingComplete && characterCount === 0) {
+      sessionStorage.removeItem("facefox_guided_dismissed");
+      localStorage.removeItem("facefox_visited_character");
       setShowGuided(true);
-      setSkipWelcome(true);
+      setSkipWelcome(false);
       setAutoOpenEvaluated(true);
     }
   }, [freshDataLoaded, user, onboardingComplete, characterCount]);
