@@ -190,14 +190,15 @@ const ProgressBarLoader = ({
       className="relative z-10 flex flex-col items-center gap-5 px-2"
       style={{ ...contentStyle, overflow: "hidden", touchAction: "none" }}
     >
-      <motion.span
-        className="text-[3.5rem] inline-block select-none"
+      <motion.img
+        src={foxEmojiImg}
+        alt="🦊"
+        className="inline-block select-none"
+        style={{ width: 56, height: 56, objectFit: 'contain' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-      >
-        🦊
-      </motion.span>
+      />
 
       <motion.div
         className="w-full flex flex-col gap-2.5"
