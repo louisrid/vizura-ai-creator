@@ -934,10 +934,15 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
-        opacity: entered && !fading ? 1 : 0,
-        transition: "opacity 0.45s ease-in-out",
       }}
     >
+      <div
+        className="absolute inset-0"
+        style={{
+          opacity: entered && !fading ? 1 : 0,
+          transition: "opacity 0.45s ease-in-out",
+        }}
+      >
       {/* Progress dashes — static, never fade during transitions */}
       <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)", opacity: showDashes ? 1 : 0, transition: showDashes ? 'opacity 0.4s ease-in-out 0.45s' : 'opacity 0s ease 0s', pointerEvents: showDashes ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
@@ -994,6 +999,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
+      </div>
     </div>,
     document.body,
   );
