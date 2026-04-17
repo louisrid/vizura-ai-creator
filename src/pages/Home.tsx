@@ -223,10 +223,13 @@ const Home = () => {
 
   useEffect(() => {
     if (openCreatorRequested) {
+      setShowGuided(true);
+      setSkipWelcome(!!user);
+      sessionStorage.removeItem(DISMISSED_KEY);
       navigate(location.pathname, { replace: true, state: {} });
-      handleOpenCreator(onboardingRedirectRequested);
     }
-  }, [location.pathname, navigate, onboardingRedirectRequested, openCreatorRequested, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openCreatorRequested]);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
@@ -295,8 +298,8 @@ const Home = () => {
 
   // Block render until onboarding state is fully resolved from DB — prevents light-to-dark flicker.
   // The yellow loading bar (splash) covers this period on first load.
-  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated) {
-    return <LoadingScreen />;
+  if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && !openCreatorRequested) {
+    return <div className="min-h-screen bg-background" />;
   }
 
   return (

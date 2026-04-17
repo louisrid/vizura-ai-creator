@@ -1,15 +1,10 @@
-import { useLayoutEffect, useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 const LoadingScreen = () => {
   useLayoutEffect(() => {
     const unregister = registerBlockingLoader();
     return unregister;
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.dataset.guidedCreatorOpen = "1";
-    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
   }, []);
 
   // Markup matches main.tsx splash exactly so the transition splash → LoadingScreen
