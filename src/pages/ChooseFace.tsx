@@ -569,7 +569,6 @@ const ChooseFace = () => {
     try {
       try {
         const result = await invokeAngleBody();
-        console.log("Angle + body generation completed:", { characterId: charId, angle: result?.angle_url, body: result?.body_anchor_url });
         // Preload the generated images before completing the loader
         const urls = [result?.angle_url, result?.body_anchor_url, faceUrl].filter(Boolean) as string[];
         if (urls.length > 0) {
@@ -647,7 +646,6 @@ const ChooseFace = () => {
       }
 
       try {
-        console.log("[ChooseFace] Draft from sessionStorage:", { bustSize: draft.bustSize, bodyType: draft.bodyType });
         const charData = {
           user_id: currentUser.id,
           name: sanitiseText(draft.characterName || "", 100) || "new character",
@@ -677,9 +675,7 @@ const ChooseFace = () => {
           sessionStorage.setItem("facefox_pending_char_id", cId);
           // Update onboarding cache and mark onboarding complete in DB
           mergeCachedOnboardingState(currentUser.id, { characterCount: 1, onboardingComplete: true });
-          supabase.rpc("update_profile_safe", { _onboarding_complete: true }).then(() => {
-            console.log("[ChooseFace] onboarding_complete set in DB");
-          });
+          void supabase.rpc("update_profile_safe", { _onboarding_complete: true });
         }
       } catch (err) {
         toast.error("save error");
