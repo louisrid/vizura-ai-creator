@@ -723,6 +723,19 @@ const Home = () => {
           </section>
         </main>
       </div>}
+
+      <ImageZoomViewer
+        url={selectedImage?.url ?? null}
+        onClose={() => setSelectedImage(null)}
+        showDownload={false}
+        footer={selectedImage?.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" ? (
+          <div className="px-3 pt-2.5 pb-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
+            <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
+              {selectedImage.prompt}
+            </p>
+          </div>
+        ) : undefined}
+      />
     </div>
   );
 };
