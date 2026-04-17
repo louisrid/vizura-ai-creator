@@ -11,6 +11,10 @@ import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 import type { SlideConfig } from "@/components/InstructionalSlide";
 
+/* Preload fox emoji so it's cached before hero animation starts */
+const foxPreload = new Image();
+foxPreload.src = foxEmojiImg;
+
 /* ── Constants ── */
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
