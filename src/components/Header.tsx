@@ -141,7 +141,7 @@ const Header = () => {
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
-  const menuWidth = isDesktop ? 340 : 190;
+  const menuWidth = isDesktop ? 380 : 230;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
@@ -152,7 +152,7 @@ const Header = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.08, ease: "easeInOut" }}
+          transition={{ duration: 0, ease: "easeInOut" }}
           className="fixed"
           style={{
             top: dropdownPos.top,
@@ -166,7 +166,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid #ffffff",
+                border: "2px solid hsl(var(--border-dark))",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -183,7 +183,7 @@ const Header = () => {
                 const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#ffffff", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(var(--border-dark))", margin: "0" }} />}
                     <div className="relative">
                       <button
                         onClick={() => {
@@ -265,7 +265,7 @@ const Header = () => {
       >
         {/* Controls */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[56px] md:pt-[68px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
