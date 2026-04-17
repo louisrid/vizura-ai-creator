@@ -103,7 +103,7 @@ const NavArrow = ({
         e.stopPropagation();
         onClick();
       }}
-      className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
+      className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
       style={{
         borderRadius: 10,
         backgroundColor: isForward ? Y : "#000000",
@@ -236,7 +236,7 @@ const InstructionalSlide = ({
       {/* Arrows at bottom */}
       <div
         className="absolute inset-x-0 flex flex-col items-center"
-        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 10%)" }}
+        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}
       >
         <div className="flex items-center justify-center gap-4 md:gap-6">
           {showBack && onBack && (
