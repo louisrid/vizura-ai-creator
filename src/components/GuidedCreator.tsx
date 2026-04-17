@@ -52,7 +52,7 @@ type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
 const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
-const HELPER_CLASS = "text-[9px] md:text-[11px] font-[800] lowercase text-white mt-2";
+
 
 /* ── Nav arrow ── */
 const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {

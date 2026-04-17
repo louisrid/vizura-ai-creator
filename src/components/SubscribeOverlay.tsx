@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Crown, Gem, Loader2, Camera, Sparkles } from "lucide-react";
+import { Crown, Gem, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import OverlayShell from "./overlay/OverlayShell";
 import { GoldButton, DismissLink } from "./overlay/OverlayPrimitives";
