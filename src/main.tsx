@@ -22,12 +22,8 @@ sessionStorage.removeItem("facefox_guided_prompt");
 sessionStorage.removeItem("facefox_character_draft");
 sessionStorage.removeItem("facefox_pending_char_id");
 sessionStorage.removeItem("facefox_selected_face");
+sessionStorage.removeItem("facefox_hero_seen");
 
-// On every fresh page load (including refresh), clear the guided creator
-// flow state so the user always starts from the hero screen.
-// NOTE: facefox_hero_seen is intentionally NOT cleared here — it should
-// persist across the whole browser session so the hero entrance animation
-// only plays once, even after auth redirects or remounts.
 sessionStorage.removeItem("facefox_guided_flow_state");
 
 const splash = document.getElementById("splash-screen");
