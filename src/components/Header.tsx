@@ -69,7 +69,7 @@ const Header = () => {
     const isWide = window.innerWidth >= 768;
     const docWidth = document.documentElement.clientWidth;
     setDropdownPos({
-      top: rect.bottom + (isWide ? 24 : 14),
+      top: rect.bottom + (isWide ? 30 : 20),
       right: docWidth - rect.right,
     });
   }, []);
@@ -265,7 +265,7 @@ const Header = () => {
       >
         {/* Controls */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[36px] md:pt-[48px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
