@@ -311,11 +311,6 @@ const Home = () => {
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
-      {/* Black screen portal — renders outside route animation wrapper so it's never affected by page fade-in */}
-      {pageHidden && createPortal(
-        <div className="fixed inset-0 bg-nav" style={{ zIndex: 9995 }} />,
-        document.body,
-      )}
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
