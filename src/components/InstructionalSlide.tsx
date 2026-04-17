@@ -111,7 +111,7 @@ const NavArrow = ({
         outline: "none",
         padding: 0,
         cursor: "pointer",
-        color: isForward ? "#000" : Y,
+        color: isForward ? "#000" : "#ffffff",
       }}
     >
       {direction === "left" ? (
@@ -236,7 +236,7 @@ const InstructionalSlide = ({
       {/* Arrows at bottom */}
       <div
         className="absolute inset-x-0 flex flex-col items-center"
-        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)" }}
+        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 10%)" }}
       >
         <div className="flex items-center justify-center gap-4 md:gap-6">
           {showBack && onBack && (
