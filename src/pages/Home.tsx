@@ -296,11 +296,12 @@ const Home = () => {
 
   // Hold the startup splash until Home data is ready, so header + content reveal together.
   useLayoutEffect(() => {
-    if (dataLoading) {
+    const needsBlock = !freshDataLoaded && (!!user || authLoading);
+    if (needsBlock) {
       const unregister = registerBlockingLoader();
       return unregister;
     }
-  }, [dataLoading]);
+  }, [freshDataLoaded, user, authLoading]);
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
