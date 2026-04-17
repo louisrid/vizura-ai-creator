@@ -486,7 +486,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   useEffect(() => {
     if (!visible) return;
-    document.documentElement.dataset.guidedCreatorOpen = "1";
     const root = document.getElementById("root");
     const prev = { body: document.body.style.overflow, html: document.documentElement.style.overflow, root: root?.style.overflow ?? "" };
     document.body.style.overflow = "hidden";
@@ -495,7 +494,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const handlePageHide = () => persistFlow();
     window.addEventListener("pagehide", handlePageHide);
     return () => {
-      delete document.documentElement.dataset.guidedCreatorOpen;
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;

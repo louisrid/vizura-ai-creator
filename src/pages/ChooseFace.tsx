@@ -812,14 +812,6 @@ const ChooseFace = () => {
     }
   }, [faces.length, user]);
 
-  /* Hide TopGradientBar during loading screens */
-  useEffect(() => {
-    if (loading || pendingAuthSave || angleBodyLoading) {
-      document.documentElement.dataset.guidedCreatorOpen = "1";
-      return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
-    }
-  }, [loading, pendingAuthSave, angleBodyLoading]);
-
   if (showPaywall) {
     return (
       <div className="relative min-h-screen bg-background">

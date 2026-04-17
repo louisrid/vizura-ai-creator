@@ -155,12 +155,6 @@ const InstructionalSlide = ({
     };
   }, [alreadySeen, slide.pills.length]);
 
-  /* Hide TopGradientBar while this slide is mounted */
-  useEffect(() => {
-    document.documentElement.dataset.guidedCreatorOpen = "1";
-    return () => { delete document.documentElement.dataset.guidedCreatorOpen; };
-  }, []);
-
   const shouldAnimate = !alreadySeen && !hasAnimated;
   const isSinglePill = slide.pills.length === 1;
 

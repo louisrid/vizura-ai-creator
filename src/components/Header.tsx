@@ -11,6 +11,7 @@ import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
 import LockOverlay from "@/components/LockOverlay";
+import TopGradientBar from "@/components/TopGradientBar";
 
 /** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
 function useScrollGradientOpacity() {
@@ -263,9 +264,10 @@ const Header = () => {
         className="relative"
         style={{ zIndex: 9990, backgroundColor: "#000000" }}
       >
+        <TopGradientBar />
         {/* Controls */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[40px] md:pt-[52px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
