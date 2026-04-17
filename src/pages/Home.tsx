@@ -1,7 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
-import LoadingScreen from "@/components/LoadingScreen";
-import { createPortal } from "react-dom";
 
 import { displayAge } from "@/lib/displayAge";
 import { User, Loader2 } from "lucide-react";
