@@ -977,7 +977,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       </div>
 
       {/* Arrow buttons + Home button — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 3%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-4 md:gap-6">
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
@@ -996,7 +996,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   navigateTo("/");
                 }, 450);
               }}
-              className="mt-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              className="mt-2 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
               style={{ width: 72, height: 72 }}
             >
               <Home size={36} strokeWidth={2} color="#ffffff" />
