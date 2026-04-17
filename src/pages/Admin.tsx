@@ -460,7 +460,7 @@ const Admin = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-5 pb-20">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-7 pb-20">
 
         {viewingUserId ? (
           <UserStorageView
