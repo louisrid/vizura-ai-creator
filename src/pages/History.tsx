@@ -1,15 +1,14 @@
 import { useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Loader2, Download, Calendar, Wand2, User, Camera } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Download, Calendar, Wand2, User, Camera, Copy } from "lucide-react";
 import BackButton from "@/components/BackButton";
-import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import DotDecal from "@/components/DotDecal";
-import { motion, AnimatePresence } from "framer-motion";
+import ImageZoomViewer from "@/components/ImageZoomViewer";
+import { toast } from "@/components/ui/sonner";
 
 interface HistoryItem {
   id: string;
@@ -117,55 +116,42 @@ const History = () => {
         )}
       </main>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-24 pb-6"
-            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-sm md:max-w-lg"
-            >
-              <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "none" }}>
-                <div className="relative">
-                  <img src={expanded.url} alt="" className="w-full aspect-[3/4] object-cover" />
-                </div>
-                <div className="p-4 md:p-5 space-y-3">
-                  <p className="text-[10px] md:text-[12px] font-extrabold lowercase text-muted-foreground leading-relaxed">
-                    {expanded.prompt || "no prompt"}
-                  </p>
-                  <div className="flex items-center gap-3">
-                    {expanded.characterName && (
-                      <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] font-extrabold lowercase text-neon-yellow">
-                        <User size={10} strokeWidth={2.5} />
-                        {expanded.characterName}
-                      </div>
-                    )}
-                    <div className="flex items-center gap-1 text-[9px] md:text-[10px] font-extrabold lowercase text-muted-foreground">
-                      <Calendar size={10} strokeWidth={2.5} />
-                      {formatDate(expanded.created_at)}
-                    </div>
-                  </div>
-                  <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
-                    <Button variant="outline" className="w-full h-12 md:h-14 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
-                      download <Download size={14} strokeWidth={2.5} />
-                    </Button>
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <ImageZoomViewer
+        url={expanded?.url ?? null}
+        onClose={() => setExpanded(null)}
+        showDownload={false}
+        footer={expanded ? (
+          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
+            {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  const text = expanded.prompt;
+                  if (navigator.clipboard?.writeText) {
+                    navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
+                  }
+                }}
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
+                style={{ backgroundColor: "#000" }}
+              >
+                {expanded.prompt}
+                <Copy size={12} strokeWidth={2.5} />
+              </button>
+            )}
+            <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
+              <button
+                type="button"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[10px]"
+                style={{ backgroundColor: "#000" }}
+              >
+                download <Download size={12} strokeWidth={2.5} />
+              </button>
+            </a>
+          </div>
+        ) : undefined}
+      />
     </div>
   );
 };

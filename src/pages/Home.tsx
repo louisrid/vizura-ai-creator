@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import { displayAge } from "@/lib/displayAge";
-import { User, Loader2 } from "lucide-react";
+import { User, Copy, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
@@ -728,11 +728,35 @@ const Home = () => {
         url={selectedImage?.url ?? null}
         onClose={() => setSelectedImage(null)}
         showDownload={false}
-        footer={selectedImage?.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" ? (
-          <div className="px-3 pt-2.5 pb-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
-            <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
-              {selectedImage.prompt}
-            </p>
+        footer={selectedImage ? (
+          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
+            {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  const text = selectedImage.prompt;
+                  if (navigator.clipboard?.writeText) {
+                    navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
+                  }
+                }}
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
+                style={{ backgroundColor: "#000" }}
+              >
+                {selectedImage.prompt}
+                <Copy size={12} strokeWidth={2.5} />
+              </button>
+            )}
+            <a href={selectedImage.url} download={`facefox-${selectedImage.id}.png`} target="_blank" className="block">
+              <button
+                type="button"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[10px]"
+                style={{ backgroundColor: "#000" }}
+              >
+                download <Download size={12} strokeWidth={2.5} />
+              </button>
+            </a>
           </div>
         ) : undefined}
       />
