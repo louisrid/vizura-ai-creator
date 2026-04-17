@@ -223,14 +223,11 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (openCreatorRequested) {
-      setShowGuided(true);
-      setSkipWelcome(!!user);
-      sessionStorage.removeItem(DISMISSED_KEY);
-      navigate(location.pathname, { replace: true, state: {} });
-    }
+    const handler = () => handleOpenCreator();
+    window.addEventListener("facefox:open-creator", handler);
+    return () => window.removeEventListener("facefox:open-creator", handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openCreatorRequested]);
+  }, []);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
@@ -314,11 +311,6 @@ const Home = () => {
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
-      {/* Black screen portal — renders outside route animation wrapper so it's never affected by page fade-in */}
-      {pageHidden && createPortal(
-        <div className="fixed inset-0 bg-nav" style={{ zIndex: 9995 }} />,
-        document.body,
-      )}
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}

@@ -195,7 +195,13 @@ const Header = () => {
                             navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
                             return;
                           }
-                          if (item.state) {
+                          if (item.label === "create character") {
+                            if (pathname === "/") {
+                              window.dispatchEvent(new CustomEvent("facefox:open-creator"));
+                            } else {
+                              navigate("/", { state: { openCreator: true } });
+                            }
+                          } else if (item.state) {
                             navigate(item.path, { state: item.state });
                           } else {
                             handleNav(item.path);
