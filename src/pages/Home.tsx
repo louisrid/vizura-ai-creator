@@ -178,6 +178,7 @@ const Home = () => {
       setOnboardingComplete(true);
       setLockStateResolved(false);
       setCharacterCount(0);
+      setFreshDataLoaded(true);
       return;
     }
 
