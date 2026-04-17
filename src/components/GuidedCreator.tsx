@@ -65,7 +65,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
         disabled={disabled}
-        className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[62px] h-[62px] md:w-[78px] md:h-[78px]"
+        className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
         style={{
           borderRadius: 10,
           backgroundColor: isForward ? fillColor : "#000000",
@@ -977,7 +977,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       </div>
 
       {/* Arrow buttons + Home button — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 10%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-4 md:gap-6">
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />
@@ -997,9 +997,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                 }, 450);
               }}
               className="mt-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
-              style={{ width: 56, height: 56 }}
+              style={{ width: 72, height: 72 }}
             >
-              <Home size={30} strokeWidth={2} color="#ffffff" />
+              <Home size={36} strokeWidth={2} color="#ffffff" />
             </button>
           )}
       </div>
