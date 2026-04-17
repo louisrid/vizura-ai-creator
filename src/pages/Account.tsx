@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { LogOut, ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
+import { ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
 
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";

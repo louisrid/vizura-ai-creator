@@ -8,33 +8,14 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
-import { supabase } from "@/integrations/supabase/client";
-import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
-import LockOverlay from "@/components/LockOverlay";
+import { fetchAndCacheOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
 import TopGradientBar from "@/components/TopGradientBar";
-
-/** Hook: returns 0→1 opacity based on scroll position (0 at top, 1 after 60px) */
-function useScrollGradientOpacity() {
-  const [opacity, setOpacity] = useState(0);
-  useEffect(() => {
-    const root = document.getElementById("root");
-    if (!root) return;
-    const onScroll = () => {
-      const y = root.scrollTop;
-      setOpacity(Math.min(y / 60, 1));
-    };
-    onScroll();
-    root.addEventListener("scroll", onScroll, { passive: true });
-    return () => root.removeEventListener("scroll", onScroll);
-  }, []);
-  return opacity;
-}
 
 const Header = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-  const { user, loading, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const { gems } = useGems();
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);

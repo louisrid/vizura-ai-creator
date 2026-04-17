@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { readCachedOnboardingState } from "@/lib/onboardingState";
+
 
 interface GemsContextType {
   gems: number;
