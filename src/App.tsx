@@ -237,6 +237,7 @@ const AppRoutes = () => {
   const location = useLocation();
   const { loading: authLoading, user } = useAuth();
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
+  const [headerRevealed, setHeaderRevealed] = useState(false);
   useEffect(() => {
     const eventName = getBlockingLoadersEventName();
     const handleBlockingLoaders = (event: Event) => {
@@ -259,9 +260,15 @@ const AppRoutes = () => {
     return () => cancelAnimationFrame(frame);
   }, [stillResolving, blockingLoaders, location.key]);
 
+  useEffect(() => {
+    if (!stillResolving && blockingLoaders === 0) {
+      setHeaderRevealed(true);
+    }
+  }, [stillResolving, blockingLoaders]);
+
   return (
     <>
-      <HeaderTransition />
+      {headerRevealed && <HeaderTransition />}
       <Routes location={location}>
         <Route path="/" element={<Home />} />
         <Route path="/generate-face" element={<ChooseFace />} />
