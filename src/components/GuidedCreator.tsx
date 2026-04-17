@@ -999,6 +999,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
+      </div>
     </div>,
     document.body,
   );
