@@ -17,7 +17,7 @@ import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboar
 
 import DotDecal from "@/components/DotDecal";
 import LockOverlay from "@/components/LockOverlay";
-import ModalCloseButton from "@/components/ModalCloseButton";
+import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
 
 const STORAGE_KEY = "facefox_character_draft";
@@ -316,39 +316,6 @@ const Home = () => {
         onExit={handleGuidedExit}
         skipWelcome={skipWelcome}
       />
-
-      {!pageHidden && <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            className="fixed inset-0 z-[9998] flex items-center justify-center px-6 pt-24 pb-6"
-            style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className="relative w-full max-w-[280px] md:max-w-[400px]"
-            >
-              <ModalCloseButton onClick={() => setSelectedImage(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(var(--border-mid))" }}>
-                <img src={selectedImage.url} alt="latest photo" className="w-full object-contain max-h-[50vh]" />
-                {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
-                  <div className="px-3 pt-2.5 pb-3">
-                    <p className="text-[10px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
-                      {selectedImage.prompt}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>}
 
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
