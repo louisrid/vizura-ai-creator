@@ -152,7 +152,7 @@ const Header = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
+          transition={{ duration: 0.08, ease: "easeInOut" }}
           className="fixed"
           style={{
             top: dropdownPos.top,
@@ -166,7 +166,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid hsl(var(--border-dark))",
+                border: "2px solid #ffffff",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -183,7 +183,7 @@ const Header = () => {
                 const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(var(--border-dark))", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#ffffff", margin: "0" }} />}
                     <div className="relative">
                       <button
                         onClick={() => {
