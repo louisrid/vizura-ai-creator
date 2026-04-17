@@ -71,7 +71,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
           backgroundColor: isForward ? fillColor : "#000000",
           border: isForward ? "none" : `2px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#000" : fillColor,
+          color: isForward ? "#000" : "#ffffff",
           transition: `background-color ${transitionDuration} ${transitionEase}, color ${transitionDuration} ${transitionEase}, border-color ${transitionDuration} ${transitionEase}`,
         }}
       >
@@ -976,8 +976,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </AnimatePresence>
       </div>
 
-      {/* Home button + Arrow buttons — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 6%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+      {/* Arrow buttons + Home button — static, never fade during transitions */}
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 10%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+          <div className="flex items-center justify-center gap-4 md:gap-6">
+            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+              <NavArrow direction="left" onClick={goBack} />
+            </motion.div>
+            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
+          </div>
           {canExitFlow && (
             <button
               type="button"
@@ -990,18 +996,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   navigateTo("/");
                 }, 450);
               }}
-              className="mb-6 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
-              style={{ width: 44, height: 44 }}
+              className="mt-5 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              style={{ width: 56, height: 56 }}
             >
-              <Home size={24} strokeWidth={2} color="#ffffff" />
+              <Home size={30} strokeWidth={2} color="#ffffff" />
             </button>
           )}
-          <div className="flex items-center justify-center gap-4 md:gap-6">
-            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-              <NavArrow direction="left" onClick={goBack} />
-            </motion.div>
-            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
-          </div>
       </div>
 
       </div>
