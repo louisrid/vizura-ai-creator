@@ -267,7 +267,7 @@ const Header = () => {
         <TopGradientBar />
         {/* Controls */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center active:opacity-80 transition-opacity duration-150">
                 <span className="text-[26px] md:text-[34px] font-[900] lowercase text-white tracking-tight">facefox</span>
@@ -292,7 +292,7 @@ const Header = () => {
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <button
-                    onClick={() => { if (showMenuLocks) return; navigate("/top-ups"); }}
+                    onClick={() => navigate("/top-ups")}
                     className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
                     style={{
                       backgroundColor: "#050a10",
@@ -303,13 +303,12 @@ const Header = () => {
                     <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
                     <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
                   </button>
-                  {showMenuLocks && <LockOverlay borderRadius={10} />}
                 </div>
 
                 <div className="relative">
                   <button
                     ref={menuBtnRef}
-                    onClick={() => { if (showMenuLocks) return; setOpen(!open); }}
+                    onClick={() => setOpen(!open)}
                     className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
                       borderRadius: 10,
@@ -324,7 +323,6 @@ const Header = () => {
                       <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
                     </svg>
                   </button>
-                  {showMenuLocks && <LockOverlay borderRadius={10} />}
                 </div>
               </div>
             )}

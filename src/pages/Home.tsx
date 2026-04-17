@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 import LoadingScreen from "@/components/LoadingScreen";
 import { createPortal } from "react-dom";
 
@@ -293,6 +294,14 @@ const Home = () => {
   // Post-auth loading: user is signed in but data hasn't finished loading yet
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved || !freshDataLoaded);
 
+  // Hold the startup splash until Home data is ready, so header + content reveal together.
+  useLayoutEffect(() => {
+    if (dataLoading) {
+      const unregister = registerBlockingLoader();
+      return unregister;
+    }
+  }, [dataLoading]);
+
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
 
@@ -357,7 +366,7 @@ const Home = () => {
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-3 mb-6" style={{ width: 60, height: 6, borderRadius: 0, backgroundColor: "#ffe603" }} />
+          <div className="mt-3 mb-6" style={{ width: 60, height: 7, borderRadius: 0, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-2 mb-6">
@@ -561,7 +570,7 @@ const Home = () => {
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-4 mb-10" style={{ width: 60, height: 6, borderRadius: 0, backgroundColor: "#ffe603" }} />
+          <div className="mt-4 mb-10" style={{ width: 60, height: 7, borderRadius: 0, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
