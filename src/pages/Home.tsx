@@ -223,14 +223,11 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (openCreatorRequested) {
-      setShowGuided(true);
-      setSkipWelcome(!!user);
-      sessionStorage.removeItem(DISMISSED_KEY);
-      navigate(location.pathname, { replace: true, state: {} });
-    }
+    const handler = () => handleOpenCreator();
+    window.addEventListener("facefox:open-creator", handler);
+    return () => window.removeEventListener("facefox:open-creator", handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openCreatorRequested]);
+  }, []);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
