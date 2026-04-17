@@ -11,6 +11,10 @@ import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 import type { SlideConfig } from "@/components/InstructionalSlide";
 
+/* Preload fox emoji so it's cached before hero animation starts */
+const foxPreload = new Image();
+foxPreload.src = foxEmojiImg;
+
 /* ── Constants ── */
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
@@ -405,7 +409,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(open);
   const [fading, setFading] = useState(false);
-  const [entered, setEntered] = useState(open);
+  const [entered, setEntered] = useState(false);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
   const [nameToastShown, setNameToastShown] = useState(false);
   
