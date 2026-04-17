@@ -649,6 +649,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     sessionStorage.removeItem(FLOW_STATE_KEY);
     setStep(0);
     setSelections({ ...emptySelections });
+    setEntered(false);
     setVisible(false);
     onExit(selectionsRef.current);
   };
