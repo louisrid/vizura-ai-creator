@@ -650,6 +650,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
+    delete document.documentElement.dataset.slideMenuMode;
     setStep(0);
     setSelections({ ...emptySelections });
     setEntered(false);
