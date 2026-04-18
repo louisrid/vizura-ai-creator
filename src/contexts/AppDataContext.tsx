@@ -190,6 +190,13 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     return () => { fetchIdRef.current = id + 1; };
   }, [authLoading, user?.id]);
 
+  useLayoutEffect(() => {
+    if (!charactersReady || !generationsReady) {
+      const unregister = registerBlockingLoader();
+      return unregister;
+    }
+  }, [charactersReady, generationsReady]);
+
   // Listen for data-changed events
   useEffect(() => {
     const handleCharsChanged = () => { void refreshCharacters(); };
