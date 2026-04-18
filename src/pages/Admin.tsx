@@ -364,7 +364,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={() => setConfirmReset(false)}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50"
-                  style={{ color: "#ffffff", borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
+                  style={{ color: "#ffffff", borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
                 >
                   cancel
                 </button>
@@ -372,7 +372,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={handleReset}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50 flex items-center justify-center gap-1.5"
-                  style={{ color: "#ffffff", borderRadius: 8, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
+                  style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
                 >
                   {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
                   yes, reset
