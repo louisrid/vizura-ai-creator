@@ -294,8 +294,8 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
       <div className="flex flex-col items-center px-8 w-full max-w-md">
         <motion.span
           className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
-          animate={{ y: [0, -16, 0] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ y: [0, -12, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
           🔐
         </motion.span>
@@ -765,7 +765,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -16, 0] }} transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -12, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>
             {slide.emoji}
           </motion.span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
@@ -814,7 +814,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -16, 0] }} transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}>✨</motion.span>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -12, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>✨</motion.span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -847,7 +847,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -16, 0] }} transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}>{trait.emoji}</motion.span>
+          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -12, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}>{trait.emoji}</motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
@@ -960,17 +960,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-center justify-center px-6 md:px-12">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={step}
-            initial={false}
-            animate={{}}
-            exit={{}}
-            className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[200px]"}`}
-          >
-            {renderSlide()}
-          </motion.div>
-        </AnimatePresence>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[200px]"}`}>
+          {renderSlide()}
+        </div>
       </div>
 
       {/* Arrow buttons + Home button — static, never fade during transitions */}
@@ -1117,8 +1109,8 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-md">
           <motion.span
             className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
-            animate={{ y: [0, -16, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
           >
             🔐
           </motion.span>

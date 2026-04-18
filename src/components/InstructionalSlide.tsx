@@ -201,14 +201,14 @@ const InstructionalSlide = ({
               alt="🦊"
               className="mb-5 md:mb-7 inline-block"
               style={{ width: 64, height: 64, objectFit: 'contain' }}
-              animate={{ y: [0, -16, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
             />
           ) : (
             <motion.span
               className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block"
-              animate={{ y: [0, -16, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
             >
               {slide.emoji}
             </motion.span>
