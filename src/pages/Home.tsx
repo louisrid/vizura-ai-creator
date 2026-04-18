@@ -395,9 +395,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 10%)" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 7%)" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 10%)" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 7%)" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -420,7 +420,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "none",
-                        backgroundColor: "hsl(0 0% 10%)",
+                        backgroundColor: "hsl(0 0% 7%)",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -456,9 +456,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-2">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 10%)" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 7%)" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 10%)" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 7%)" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -474,7 +474,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "hsl(0 0% 10%)",
+                          backgroundColor: "hsl(0 0% 7%)",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
@@ -498,7 +498,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "none",
-                        backgroundColor: "hsl(0 0% 10%)",
+                        backgroundColor: "hsl(0 0% 7%)",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -594,9 +594,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 10%)" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 7%)" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 10%)" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 7%)" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -619,7 +619,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "none",
-                        backgroundColor: "hsl(0 0% 10%)",
+                        backgroundColor: "hsl(0 0% 7%)",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -655,9 +655,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 10%)" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 7%)" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 10%)" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 7%)" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -673,7 +673,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "hsl(0 0% 10%)",
+                          backgroundColor: "hsl(0 0% 7%)",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >

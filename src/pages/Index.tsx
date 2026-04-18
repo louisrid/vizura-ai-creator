@@ -104,10 +104,10 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: value === opt.value ? "hsl(0 0% 10%)" : "transparent",
+                      backgroundColor: value === opt.value ? "hsl(0 0% 7%)" : "transparent",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 10%)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(0 0% 10%)" : "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 7%)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(0 0% 7%)" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -317,10 +317,10 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: value === opt.value ? "hsl(0 0% 10%)" : "transparent",
+                      backgroundColor: value === opt.value ? "hsl(0 0% 7%)" : "transparent",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 10%)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(0 0% 10%)" : "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 7%)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(0 0% 7%)" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -394,10 +394,10 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
                       color: value === opt.value ? "#ffe603" : "#fff",
-                      backgroundColor: value === opt.value ? "hsl(0 0% 10%)" : "transparent",
+                      backgroundColor: value === opt.value ? "hsl(0 0% 7%)" : "transparent",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 10%)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(0 0% 10%)" : "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 7%)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "hsl(0 0% 7%)" : "transparent")}
                   >
                     {opt.label}
                   </button>
@@ -755,18 +755,18 @@ const Index = () => {
                   onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
                   className="flex w-full items-center gap-3 px-4 py-3"
                   style={{
-                    backgroundColor: isSelected ? "hsl(0 0% 10%)" : "transparent",
+                    backgroundColor: isSelected ? "hsl(0 0% 7%)" : "transparent",
                     borderRadius,
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 10%)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? "hsl(0 0% 10%)" : "transparent")}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 7%)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? "hsl(0 0% 7%)" : "transparent")}
                 >
                   {c.face_image_url ? (
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/10">
                       <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
                     </div>
                   ) : (
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "hsl(0 0% 10%)" }}>
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "hsl(0 0% 7%)" }}>
                       <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
                     </div>
                   )}
@@ -792,7 +792,7 @@ const Index = () => {
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
                 style={{ borderRadius: "10px" }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 10%)")}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 7%)")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
                 <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
