@@ -263,6 +263,8 @@ const Header = () => {
                             } else {
                               navigate("/", { state: { openCreator: true } });
                             }
+                          } else if (item.label === "home" && slideMenuMode) {
+                            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
                           } else if (item.state) {
                             navigate(item.path, { state: item.state });
                           } else {
@@ -333,6 +335,7 @@ const Header = () => {
         onClick={() => setOpen(!open)}
         onTouchStart={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           touchActiveRef.current = true;
           setOpen(true);
         }}
@@ -403,6 +406,7 @@ const Header = () => {
                     onClick={() => setOpen(!open)}
                     onTouchStart={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       touchActiveRef.current = true;
                       setOpen(true);
                     }}
