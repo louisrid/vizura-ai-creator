@@ -1,7 +1,6 @@
-import { createContext, useContext, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createContext, useContext, useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { registerBlockingLoader } from "@/lib/startupSplash";
 
 /**
  * Global app data cache with localStorage persistence.
@@ -189,13 +188,6 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
 
     return () => { fetchIdRef.current = id + 1; };
   }, [authLoading, user?.id]);
-
-  useLayoutEffect(() => {
-    if (!charactersReady || !generationsReady) {
-      const unregister = registerBlockingLoader();
-      return unregister;
-    }
-  }, [charactersReady, generationsReady]);
 
   // Listen for data-changed events
   useEffect(() => {
