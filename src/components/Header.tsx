@@ -120,11 +120,6 @@ const Header = () => {
   // Close on route change
   useEffect(() => { setOpen(false); clearNavGuard(); touchActiveRef.current = false; document.body.style.overflow = ""; }, [pathname]);
 
-  // Reset touch state whenever the dropdown closes for any reason
-  useEffect(() => {
-    if (!open) touchActiveRef.current = false;
-  }, [open]);
-
   // Global touch handlers — bridge from menu button to portaled dropdown
   useEffect(() => {
     if (!open) return;
