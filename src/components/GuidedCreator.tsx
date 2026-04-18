@@ -979,16 +979,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               onClick={(e) => {
                 e.preventDefault(); e.stopPropagation();
                 sessionStorage.setItem("facefox_creator_dismissed", "1");
-                setFading(true);
-                setTimeout(() => {
-                  onExit(selectionsRef.current);
-                  navigateTo("/");
-                }, 450);
+                onExit(selectionsRef.current);
+                navigateTo("/");
               }}
-              className="mt-2 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
-              style={{ width: 72, height: 72 }}
+              className="mt-3 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              style={{ width: 76, height: 76 }}
             >
-              <Home size={36} strokeWidth={2} color="#ffffff" />
+              <Home size={38} strokeWidth={2} color="#ffffff" />
             </button>
           )}
       </div>
