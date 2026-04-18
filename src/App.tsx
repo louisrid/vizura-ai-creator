@@ -267,7 +267,7 @@ const AppRoutes = () => {
   }, [stillResolving, blockingLoaders]);
 
   return (
-    <>
+    <div style={{ overscrollBehavior: "none" }}>
       {headerRevealed && <HeaderTransition />}
       <Routes location={location}>
         <Route path="/" element={<Home />} />
@@ -288,7 +288,7 @@ const AppRoutes = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </div>
   );
 };
 
