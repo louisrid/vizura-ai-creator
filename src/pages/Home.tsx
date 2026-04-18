@@ -60,6 +60,11 @@ const Home = () => {
     sessionStorage.getItem("facefox_signup_gate_active") === "1"
   );
   const shouldOpenGuidedOnMount = openCreatorRequested;
+  useEffect(() => {
+    if (openCreatorRequested) {
+      window.history.replaceState({}, "");
+    }
+  }, [openCreatorRequested]);
   // Derive images and characters from global cache
   const images = useMemo(() => {
     return cachedGens
