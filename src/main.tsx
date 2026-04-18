@@ -26,6 +26,8 @@ sessionStorage.removeItem("facefox_hero_seen");
 
 sessionStorage.removeItem("facefox_guided_flow_state");
 
+localStorage.removeItem("facefox_pending_creation");
+
 const splash = document.getElementById("splash-screen");
 
 if (splash) {
