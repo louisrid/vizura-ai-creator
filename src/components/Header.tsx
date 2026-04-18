@@ -209,6 +209,7 @@ const Header = () => {
                     {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
                     <div className="relative">
                       <button
+                        data-menu-idx={idx}
                         onClick={() => {
                           if (isLocked) return;
                           if (checkNavGuard()) { setOpen(false); return; }
@@ -236,11 +237,11 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: "transparent",
+                          backgroundColor: touchHighlight === idx ? "hsl(0 0% 10%)" : "transparent",
                           borderRadius,
                         }}
                         onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(var(--card))"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 10%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
