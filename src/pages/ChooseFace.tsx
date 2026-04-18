@@ -29,6 +29,10 @@ const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
 const FACE_STORAGE_KEY = "facefox_face_options";
 const AUTH_RESUME_KEY = "facefox_resume_after_auth";
 
+if (typeof window !== "undefined") {
+  sessionStorage.removeItem("facefox_angle_generating");
+}
+
 const FACE_GEN_PHRASES = [
   "generating faces…",
   "building your look…",
@@ -579,6 +583,11 @@ const ChooseFace = () => {
     try {
       try {
         const result = await invokeAngleBody();
+        if ((result as any)?.code === "NO_GEMS" || (result as any)?.error?.includes?.("No gems")) {
+          toast.error("not enough gems");
+          setAngleBodyApiDone(true);
+          return;
+        }
         // Preload the generated images before completing the loader
         const urls = [result?.angle_url, result?.body_anchor_url, faceUrl].filter(Boolean) as string[];
         if (urls.length > 0) {
