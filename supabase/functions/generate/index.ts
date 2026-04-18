@@ -803,7 +803,7 @@ serve(async (req) => {
           .single();
         creditData = cd;
 
-      if (!isBetaUser && (!creditData || creditData.balance < GEM_COST_SINGLE_REGEN)) {
+      if (!creditData || creditData.balance < GEM_COST_SINGLE_REGEN) {
           return new Response(
             JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -966,7 +966,7 @@ serve(async (req) => {
           .single();
         creditData = cd;
 
-        if (!isBetaUser && (!creditData || creditData.balance < angleCost)) {
+        if (!creditData || creditData.balance < angleCost) {
           return new Response(
             JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -1127,7 +1127,7 @@ serve(async (req) => {
         .single();
       creditData = cd;
 
-      if (!isBetaUser && (!creditData || creditData.balance < gemCost)) {
+      if (!creditData || creditData.balance < gemCost) {
         const { data: subData } = await adminClient
           .from("subscriptions")
           .select("status")
