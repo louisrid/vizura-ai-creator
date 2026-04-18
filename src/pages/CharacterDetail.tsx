@@ -65,7 +65,11 @@ const CharacterDetail = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   // Onboarding regen limits
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(() => {
+    if (!user) return false;
+    const cached = readCachedOnboardingState(user.id);
+    return cached?.onboardingComplete ?? false;
+  });
   const [angleRegensUsed, setAngleRegensUsed] = useState(0);
   const [bodyRegensUsed, setBodyRegensUsed] = useState(0);
 
@@ -475,7 +479,7 @@ const CharacterDetail = () => {
                 </h1>
                 <div className="flex items-center gap-2 shrink-0 ml-2">
                   <button onClick={startEditName} className="active:scale-95 transition-transform" style={{ fontSize: 16 }}>✏️</button>
-                  {onboardingComplete && (
+                  {(
 <button onClick={() => setShowDelete(true)} className="active:scale-95 transition-transform">
                       <Trash2 size={18} strokeWidth={3} color="#ff4444" />
                     </button>
@@ -533,7 +537,7 @@ const CharacterDetail = () => {
             style={{ height: 52, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
-              {onboardingComplete ? (<><Camera size={18} strokeWidth={2.5} /> create photo</>) : "create 🖌️"}
+              <><Camera size={18} strokeWidth={2.5} /> create photo</>
             </span>
           </button>
         </div>
@@ -575,7 +579,7 @@ const CharacterDetail = () => {
                   </h1>
                   <div className="flex items-center gap-2 shrink-0 ml-2">
                     <button onClick={startEditName} className="active:scale-90 transition-transform" style={{ fontSize: 18 }}>✏️</button>
-                    {onboardingComplete && (
+                    {(
                       <button onClick={() => setShowDelete(true)} className="active:scale-90 transition-transform">
                         <Trash2 size={20} strokeWidth={3} color="#ff4444" />
                       </button>
@@ -633,7 +637,7 @@ const CharacterDetail = () => {
               style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">
-                {onboardingComplete ? (<><Camera size={18} strokeWidth={2.5} /> create photo</>) : "create 🖌️"}
+                <><Camera size={18} strokeWidth={2.5} /> create photo</>
               </span>
             </button>
           </div>
