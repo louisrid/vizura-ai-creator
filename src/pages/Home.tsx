@@ -500,7 +500,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "none",
-                        backgroundColor: "hsl(var(--card))",
+                        backgroundColor: "hsl(0 0% 14%)",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
@@ -596,9 +596,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!photosLoaded && images.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
+                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 14%)" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 14%)" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -657,9 +657,9 @@ const Home = () => {
             <div className="grid grid-cols-4 gap-3">
               {!charsLoaded && characters.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(var(--card))" }}>
+                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 14%)" }}>
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(var(--card))" }} />
+                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 14%)" }} />
                     </AspectRatio>
                   </div>
                 ))
@@ -675,7 +675,7 @@ const Home = () => {
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
-                          backgroundColor: "hsl(var(--card))",
+                          backgroundColor: "hsl(0 0% 14%)",
                           cursor: isFirstEmpty ? "pointer" : "default",
                         }}
                       >
