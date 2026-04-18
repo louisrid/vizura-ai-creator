@@ -403,7 +403,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const TOTAL = flowSteps.length;
   const allowFlowResume = isLoggedIn || sessionStorage.getItem("facefox_signup_gate_active") === "1";
 
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => flowVariant === "member-onboarding" ? 1 : 0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const mounted = typeof document !== "undefined";
