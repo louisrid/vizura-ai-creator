@@ -949,7 +949,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         }}
       >
       {/* Progress dashes — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 80px)", opacity: showDashes ? 1 : 0, pointerEvents: showDashes ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 64px)", opacity: showDashes ? 1 : 0, pointerEvents: showDashes ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300" style={{
@@ -996,7 +996,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   navigateTo("/");
                 }, 450);
               }}
-              className="mt-2 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              className="mt-4 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
               style={{ width: 72, height: 72 }}
             >
               <Home size={36} strokeWidth={2} color="#ffffff" />
