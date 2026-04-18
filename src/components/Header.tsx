@@ -32,6 +32,24 @@ const Header = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!slideMenuMode) {
+      setOpen(false);
+      touchActiveRef.current = false;
+    }
+  }, [slideMenuMode]);
+
+  useEffect(() => {
+    const handler = () => {
+      setOpen(false);
+      touchActiveRef.current = false;
+      touchHighlightRef.current = null;
+      setTouchHighlight(null);
+    };
+    window.addEventListener("facefox:close-creator", handler);
+    return () => window.removeEventListener("facefox:close-creator", handler);
+  }, []);
+
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
