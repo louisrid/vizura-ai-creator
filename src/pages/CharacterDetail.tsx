@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, Trash2, Lock, RefreshCw, Camera, Check, User } from "lucide-react";
+import { useAppData } from "@/contexts/AppDataContext";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 
@@ -44,8 +45,12 @@ const CharacterDetail = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const navigate = useTransitionNavigate();
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { characters: cachedChars } = useAppData();
+  const [character, setCharacter] = useState<Character | null>(() => {
+    const cached = cachedChars.find(c => c.id === id);
+    return cached ? cached as unknown as Character : null;
+  });
+  const [loading, setLoading] = useState(() => !cachedChars.find(c => c.id === id));
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [regeneratingAngle, setRegeneratingAngle] = useState(false);
@@ -290,8 +295,9 @@ const CharacterDetail = () => {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-7 pb-[280px]">
+      <div className="relative min-h-screen bg-background overflow-hidden">
+        <DotDecal />
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-7 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -302,8 +308,9 @@ const CharacterDetail = () => {
 
   if (!character) {
     return (
-      <div className="min-h-screen bg-background">
-        <main className="mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-7 pb-[280px]">
+      <div className="relative min-h-screen bg-background overflow-hidden">
+        <DotDecal />
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-7 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
