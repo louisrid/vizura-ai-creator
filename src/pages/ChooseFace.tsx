@@ -507,8 +507,9 @@ const ChooseFace = () => {
   const normaliseDraftBustSize = (value?: string) => (value === "XL" || value === "extra large" || value === "large" ? "XL" : "regular");
 
   const startAngleBodyGen = useCallback(async (charId: string, anglePrompt: string, faceUrl: string, bodyType: string, bustSize: string) => {
-    if (isGeneratingRef.current) return;
+    if (isGeneratingRef.current || sessionStorage.getItem("facefox_angle_generating") === "1") return;
     isGeneratingRef.current = true;
+    sessionStorage.setItem("facefox_angle_generating", "1");
     setShowSet2Slide(false);
     setAngleBodyLoading(true);
     setAngleBodyApiDone(false);
@@ -588,6 +589,7 @@ const ChooseFace = () => {
       setAngleBodyApiDone(true);
     } finally {
       isGeneratingRef.current = false;
+      sessionStorage.removeItem("facefox_angle_generating");
     }
   }, []);
 
