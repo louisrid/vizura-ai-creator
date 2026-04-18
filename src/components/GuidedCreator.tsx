@@ -972,7 +972,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[28vh] pb-[190px]"} justify-center`}>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[20vh] pb-[190px]"} justify-center`}>
           {renderSlide()}
         </div>
       </div>
