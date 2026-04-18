@@ -713,6 +713,7 @@ const Index = () => {
         dashActive={set3Step}
         showBack={true}
         showForward={true}
+        showHeader={true}
         onBack={() => { if (set3Step > 0) { setSet3Step(set3Step - 1); } else { setShowSet3(false); } }}
         onForward={() => {
           const nextStep = set3Step + 1;
