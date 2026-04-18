@@ -3,7 +3,6 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, Zap, Upload, Sparkles, Gem } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
-import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";

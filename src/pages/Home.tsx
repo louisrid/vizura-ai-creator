@@ -228,8 +228,7 @@ const Home = () => {
     const handler = () => handleOpenCreator();
     window.addEventListener("facefox:open-creator", handler);
     return () => window.removeEventListener("facefox:open-creator", handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {

@@ -3,7 +3,6 @@ import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import PageTitle from "@/components/PageTitle";
@@ -11,7 +10,7 @@ import BackButton from "@/components/BackButton";
 
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
-import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { fetchAndCacheOnboardingState } from "@/lib/onboardingState";
 import { supabase } from "@/integrations/supabase/client";
 
 function isInAppWebView(): boolean {
