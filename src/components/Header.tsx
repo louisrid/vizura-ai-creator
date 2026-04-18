@@ -335,6 +335,7 @@ const Header = () => {
         onClick={() => setOpen(!open)}
         onTouchStart={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           touchActiveRef.current = true;
           setOpen(true);
         }}
