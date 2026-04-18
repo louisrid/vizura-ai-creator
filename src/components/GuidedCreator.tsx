@@ -941,20 +941,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
       }}
     >
-      {canExitFlow && (
-        <button
-          type="button"
-          onClick={() => window.dispatchEvent(new CustomEvent("facefox:open-menu"))}
-          className="absolute z-20 flex items-center justify-center"
-          style={{ top: "max(env(safe-area-inset-top, 0px), 12px)", right: 16, width: 44, height: 44, borderRadius: 10, border: "2px solid hsl(0 0% 24%)", backgroundColor: "#000" }}
-        >
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
-            <line x1="0" y1="1" x2="18" y2="1" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="0" y1="6" x2="18" y2="6" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="0" y1="11" x2="18" y2="11" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        </button>
-      )}
       <div
         className="absolute inset-0"
         style={{
