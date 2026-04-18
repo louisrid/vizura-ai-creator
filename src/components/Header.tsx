@@ -322,6 +322,30 @@ const Header = () => {
     document.body,
   ) : null;
 
+  const slideMenuButton = slideMenuMode ? createPortal(
+    <div className="fixed" style={{ zIndex: 10001, top: "max(env(safe-area-inset-top, 0px), 12px)", right: 26 }}>
+      <button
+        ref={menuBtnRef}
+        onClick={() => setOpen(!open)}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          touchActiveRef.current = true;
+          setOpen(true);
+        }}
+        className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+        style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
+        aria-label="open menu"
+      >
+        <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
+          <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
+          <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
+          <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
+        </svg>
+      </button>
+    </div>,
+    document.body,
+  ) : null;
+
   return (
     <>
       <header
