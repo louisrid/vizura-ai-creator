@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import InstructionalSlide from "@/components/InstructionalSlide";
 import type { SlideConfig } from "@/components/InstructionalSlide";
-import { mergeCachedOnboardingState } from "@/lib/onboardingState";
+import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { registerNavGuard, clearNavGuard } from "@/lib/navGuard";
@@ -133,7 +133,11 @@ const ChooseFace = () => {
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(() => {
+    if (!user) return false;
+    const cached = readCachedOnboardingState(user.id);
+    return cached?.onboardingComplete ?? false;
+  });
   const lastFacesRef = useRef<string[]>([]);
 
   const hasOnboardingFaceRegenLocked = !onboardingComplete && faceRegensUsed >= 1;
