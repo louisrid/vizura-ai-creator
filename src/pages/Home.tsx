@@ -288,11 +288,11 @@ const Home = () => {
   const forceOnboarding = !!user && lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
   // Post-auth loading: user is signed in but data hasn't finished loading yet
-  const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved || !freshDataLoaded);
+  const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
 
   // Hold the startup splash until Home data is ready, so header + content reveal together.
   useLayoutEffect(() => {
-    const needsBlock = !freshDataLoaded && (!!user || authLoading);
+    const needsBlock = (!photosLoaded || !charsLoaded || !lockStateResolved) && (!!user || authLoading);
     if (needsBlock) {
       const unregister = registerBlockingLoader();
       return unregister;
