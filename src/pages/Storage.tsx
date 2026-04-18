@@ -229,11 +229,11 @@ const Storage = () => {
                         if (copyFallback()) done(); else toast.error("copy error");
                      }
                    }}
-                   className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
-                  style={{ backgroundColor: "#000" }}
-                >
-                  <span className="truncate">{expanded!.prompt}</span>
-                  <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
+                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
+                   style={{ backgroundColor: "#000" }}
+                 >
+                   <span className="truncate flex-1 text-left">{expanded!.prompt}</span>
+                   <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
                 </button>
               </div>
             )}
