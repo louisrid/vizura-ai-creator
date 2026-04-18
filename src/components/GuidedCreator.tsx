@@ -969,7 +969,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
-            className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[160px]"}`}
+            className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[180px]"}`}
           >
             {renderSlide()}
           </motion.div>
@@ -996,7 +996,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   navigateTo("/");
                 }, 450);
               }}
-              className="mt-4 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+              className="mt-2 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
               style={{ width: 72, height: 72 }}
             >
               <Home size={36} strokeWidth={2} color="#ffffff" />
