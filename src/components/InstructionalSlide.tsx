@@ -204,20 +204,20 @@ const InstructionalSlide = ({
         className="absolute inset-x-0 flex justify-center px-6 md:px-12"
         style={{ top: 0, bottom: 0 }}
       >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[22vh] pb-[200px]">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[18vh] pb-[200px]">
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <motion.img
               src={foxEmojiImg}
               alt="🦊"
-              className="mb-8 md:mb-10 inline-block"
+              className="mb-10 md:mb-12 inline-block"
               style={{ width: 64, height: 64, objectFit: 'contain' }}
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             />
           ) : (
             <motion.span
-              className="text-[64px] md:text-[86px] mb-8 md:mb-10 inline-block"
+              className="text-[64px] md:text-[86px] mb-10 md:mb-12 inline-block"
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             >
