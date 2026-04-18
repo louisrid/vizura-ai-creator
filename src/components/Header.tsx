@@ -20,7 +20,16 @@ const Header = () => {
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
   const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
+  const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
+
+  useEffect(() => {
+    const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-slide-menu-mode"] });
+    return () => observer.disconnect();
+  }, []);
 
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
