@@ -42,7 +42,7 @@ const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
   { key: "bodyType", label: "choose body type", emoji: "⌛", options: ["slim", "regular", "curvy"], defaultOption: "regular" },
   { key: "bustSize", label: "choose size", emoji: "👙", options: ["regular", "XL"], defaultOption: "regular" },
-  { key: "age", label: "choose her age", emoji: "🎂", options: ["24+", "18-24"] },
+  { key: "age", label: "choose her age", emoji: "🎂", options: ["18-24", "24+"] },
   { key: "hairColour", label: "choose hair colour", emoji: "🖌️", options: ["ginger", "black", "pink", "brown", "blonde"] },
   { key: "hairStyle", label: "choose hairstyle", emoji: "✂️", options: ["wavy", "straight", "bangs"] },
   { key: "eye", label: "choose eye colour", emoji: "👁️", options: ["brown", "blue", "green"] },
@@ -971,8 +971,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       </div>
 
       {/* Content area — fades between slides */}
-      <div className="absolute inset-0 flex items-center justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[190px]"}`}>
+      <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[28vh] pb-[190px]"} justify-center`}>
           {renderSlide()}
         </div>
       </div>
