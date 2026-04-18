@@ -458,7 +458,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   const selectionsRef = useRef(selections);
   const stepRef = useRef(step);
-  const isFirstSlide = useRef(true);
   selectionsRef.current = selections;
   stepRef.current = step;
 
@@ -944,8 +943,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div
         className="absolute inset-0"
         style={{
-          opacity: entered && !fading ? 1 : 0,
-          transition: "opacity 0.45s ease-in-out",
+          opacity: 1,
         }}
       >
       {/* Progress dashes — static, never fade during transitions */}
@@ -965,11 +963,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={step}
-            initial={isFirstSlide.current ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease: "easeInOut" }}
-            onAnimationComplete={() => { isFirstSlide.current = false; }}
+            initial={false}
+            animate={{}}
+            exit={{}}
             className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[200px]"}`}
           >
             {renderSlide()}
