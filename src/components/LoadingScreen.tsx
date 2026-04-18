@@ -44,8 +44,8 @@ const LoadingScreen = () => {
               style={{
                 width: 10,
                 height: 10,
-                borderRadius: 9999,
-                background: "hsl(54 100% 51%)",
+                borderRadius: 3,
+                background: "#ffe603",
                 animation: `facefox-dot 1.1s ease-in-out infinite`,
                 animationDelay: `${delay}s`,
               }}
