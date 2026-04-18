@@ -325,7 +325,7 @@ const Home = () => {
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-3 mb-6" style={{ width: 60, height: 7, borderRadius: 0, backgroundColor: "#ffe603" }} />
+          <div className="mt-3 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-2 mb-6">
@@ -529,7 +529,7 @@ const Home = () => {
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-4 mb-10" style={{ width: 60, height: 7, borderRadius: 0, backgroundColor: "#ffe603" }} />
+          <div className="mt-4 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">

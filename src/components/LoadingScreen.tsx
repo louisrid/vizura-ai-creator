@@ -26,7 +26,7 @@ const LoadingScreen = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 12,
+          gap: 16,
           background: "hsl(0 0% 0%)",
           color: "hsl(0 0% 100%)",
           fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif",
@@ -37,24 +37,20 @@ const LoadingScreen = () => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div
-          style={{
-            width: "14rem",
-            height: 12,
-            overflow: "hidden",
-            background: "rgba(255,255,255,0.1)",
-            borderRadius: 0,
-          }}
-        >
-          <div
-            className="facefox-loading-bar"
-            style={{
-              width: "60%",
-              height: 12,
-              background: "hsl(54 100% 51%)",
-              borderRadius: 0,
-            }}
-          />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 24 }}>
+          {[0, 0.15, 0.3].map((delay, i) => (
+            <div
+              key={i}
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 9999,
+                background: "hsl(54 100% 51%)",
+                animation: `facefox-dot 1.1s ease-in-out infinite`,
+                animationDelay: `${delay}s`,
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
