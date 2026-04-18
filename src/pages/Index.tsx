@@ -706,27 +706,37 @@ const Index = () => {
   if (showSet3) {
     const slide = SET3_SLIDES[set3Step];
     return (
-      <InstructionalSlide
-        slide={slide}
-        alreadySeen={set3SeenSteps.has(set3Step)}
-        dashTotal={3}
-        dashActive={set3Step}
-        showBack={true}
-        showForward={true}
-        showHeader={true}
-        onBack={() => { if (set3Step > 0) { setSet3Step(set3Step - 1); } else { setShowSet3(false); } }}
-        onForward={() => {
-          const nextStep = set3Step + 1;
-          if (nextStep >= SET3_SLIDES.length) {
-            try { localStorage.setItem(SET3_KEY, "1"); } catch {}
-            setShowSet3(false);
-            navigate("/top-ups");
-            return;
-          }
-          setSet3SeenSteps((prev) => new Set(prev).add(set3Step));
-          setSet3Step(nextStep);
-        }}
-      />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={set3Step}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+        >
+          <InstructionalSlide
+            slide={slide}
+            alreadySeen={set3SeenSteps.has(set3Step)}
+            dashTotal={3}
+            dashActive={set3Step}
+            showBack={true}
+            showForward={true}
+            showHeader={true}
+            onBack={() => { if (set3Step > 0) { setSet3Step(set3Step - 1); } else { setShowSet3(false); } }}
+            onForward={() => {
+              const nextStep = set3Step + 1;
+              if (nextStep >= SET3_SLIDES.length) {
+                try { localStorage.setItem(SET3_KEY, "1"); } catch {}
+                setShowSet3(false);
+                navigate("/top-ups");
+                return;
+              }
+              setSet3SeenSteps((prev) => new Set(prev).add(set3Step));
+              setSet3Step(nextStep);
+            }}
+          />
+        </motion.div>
+      </AnimatePresence>
     );
   }
 
