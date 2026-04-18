@@ -947,6 +947,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   return createPortal(
     <div
+      data-creator-portal="1"
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{
         background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
@@ -1002,7 +1003,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               onClick={(e) => {
                 e.preventDefault(); e.stopPropagation();
                 sessionStorage.setItem("facefox_creator_dismissed", "1");
-                setTimeout(() => handleClose(), 100);
+                const portal = document.querySelector('[data-creator-portal]');
+                if (portal) (portal as HTMLElement).style.pointerEvents = 'none';
+                setTimeout(() => handleClose(), 300);
               }}
               className="mt-3 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
               style={{ width: 76, height: 76 }}
