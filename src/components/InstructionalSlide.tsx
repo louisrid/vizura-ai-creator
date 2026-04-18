@@ -191,7 +191,7 @@ const InstructionalSlide = ({
       {/* Content area */}
       <div
         className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-        style={{ top: 48, bottom: 160 }}
+        style={{ top: 32, bottom: 160 }}
       >
         <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center">
           {/* Emoji */}
