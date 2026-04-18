@@ -787,7 +787,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
-                        color: isMiddle ? "#fff" : "#000",
+                        color: "#000",
                         border: "none",
                       }}>
                       {pill.text}
@@ -960,13 +960,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-center justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[200px]"}`}>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[190px]"}`}>
           {renderSlide()}
         </div>
       </div>
 
       {/* Arrow buttons + Home button — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 3%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 2%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-4 md:gap-6">
             <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
               <NavArrow direction="left" onClick={goBack} />

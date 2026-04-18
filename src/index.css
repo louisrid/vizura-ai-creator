@@ -45,7 +45,7 @@
 
     /* neon green — #00A600 */
     --neon-green: 120 100% 41%;
-    --neon-green-foreground: 0 0% 100%;
+    --neon-green-foreground: 0 0% 0%;
 
     /* gem — cyan #00e0ff */
     --gem-green: 189 100% 50%;
