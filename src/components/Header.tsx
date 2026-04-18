@@ -136,6 +136,8 @@ const Header = () => {
               } else {
                 navigate("/", { state: { openCreator: true } });
               }
+            } else if (item.label === "home" && slideMenuMode) {
+              window.dispatchEvent(new CustomEvent("facefox:close-creator"));
             } else if (item.auth && !user) {
               navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
             } else {
