@@ -163,9 +163,10 @@ const Header = () => {
       }
       // Released outside any item — keep dropdown open (treat as a press, not a drag)
       setTouchHighlight(null);
+      touchHighlightRef.current = null;
     };
 
-    document.addEventListener('touchmove', handleMove, { passive: true });
+    document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('touchend', handleEnd);
     document.addEventListener('touchcancel', handleEnd);
     return () => {
