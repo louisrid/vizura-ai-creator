@@ -949,7 +949,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         }}
       >
       {/* Progress dashes — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: "3%", paddingTop: "env(safe-area-inset-top, 0px)", opacity: showDashes ? 1 : 0, pointerEvents: showDashes ? 'auto' as const : 'none' as const }}>
+      <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 80px)", opacity: showDashes ? 1 : 0, pointerEvents: showDashes ? 'auto' as const : 'none' as const }}>
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300" style={{
