@@ -19,6 +19,8 @@ const Header = () => {
   const { gems } = useGems();
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
+  const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
+  const touchActiveRef = useRef(false);
 
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
