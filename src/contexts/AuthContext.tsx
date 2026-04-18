@@ -161,7 +161,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                   clearCachedOnboardingState();
                   if (typeof window !== "undefined") {
                     const { toast } = await import("@/components/ui/sonner");
-                    toast("no account found — tap start to sign up");
+                    toast("press start instead!");
                     if (window.location.pathname !== "/") {
                       window.location.replace("/");
                     }
@@ -202,7 +202,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                   clearCachedOnboardingState();
                   if (typeof window !== "undefined") {
                     const { toast } = await import("@/components/ui/sonner");
-                    toast("account already exists — tap login instead");
+                    toast("press login instead!");
                     if (window.location.pathname !== "/") {
                       window.location.replace("/");
                     }

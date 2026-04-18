@@ -259,7 +259,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
         }
         catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
-            toast.error("account exists!");
+        toast.error("press login instead!");
             setIsSignUpMode(false);
             setEmailLoading(false);
             setHandoffLoading(false);
@@ -1085,7 +1085,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         try { await signUp(email.trim(), password); toast.success("check email"); }
         catch (err: any) {
           if (err.message?.toLowerCase().includes("already registered")) {
-            toast.error("account exists!");
+            toast.error("press login instead!");
             setIsSignUp(false);
             setEmailLoading(false);
             return;
