@@ -12,6 +12,7 @@ interface GemsContextType {
 
 const GemsContext = createContext<GemsContextType | undefined>(undefined);
 const GEMS_CACHE_PREFIX = "facefox_gems_balance:";
+const CLAIMED_CACHE_PREFIX = "facefox_gems_claimed:";
 
 export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
@@ -23,7 +24,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
 
   const readCachedGems = useCallback((userId: string) => {
     if (typeof window === "undefined") return null;
-    const raw = window.sessionStorage.getItem(getCacheKey(userId));
+    const raw = window.localStorage.getItem(getCacheKey(userId));
     if (raw === null) return null;
     const parsed = Number(raw);
     return Number.isFinite(parsed) ? parsed : null;
@@ -33,10 +34,10 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     if (typeof window === "undefined") return;
     const key = getCacheKey(userId);
     if (typeof value === "number") {
-      window.sessionStorage.setItem(key, String(value));
+      window.localStorage.setItem(key, String(value));
       return;
     }
-    window.sessionStorage.removeItem(key);
+    window.localStorage.removeItem(key);
   }, [getCacheKey]);
 
   const fetchGems = useCallback(async () => {
@@ -55,17 +56,19 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
 
       if (creditsRes.error) {
         console.error("Failed to fetch gems:", creditsRes.error);
-        setRawGems(0);
       } else {
         const balance = creditsRes.data?.balance ?? 0;
         writeCachedGems(user.id, balance);
         setRawGems(balance);
       }
 
-      setHasClaimedFreeGems(!!profileRes.data?.has_claimed_free_gems);
+      const claimed = !!profileRes.data?.has_claimed_free_gems;
+      setHasClaimedFreeGems(claimed);
+      if (claimed && typeof window !== "undefined") {
+        window.localStorage.setItem(`${CLAIMED_CACHE_PREFIX}${user.id}`, "1");
+      }
     } catch (e) {
       console.error("Gems fetch error:", e);
-      setRawGems(0);
     } finally {
       setLoading(false);
     }
@@ -80,16 +83,21 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const cachedGems = readCachedGems(user.id);
+    const cachedClaimed = typeof window !== "undefined"
+      && window.localStorage.getItem(`${CLAIMED_CACHE_PREFIX}${user.id}`) === "1";
     if (cachedGems !== null) {
       setRawGems(cachedGems);
+    }
+    if (cachedClaimed) {
+      setHasClaimedFreeGems(true);
     }
     setLoading(true);
     fetchGems();
   }, [fetchGems, readCachedGems, user]);
 
-  // Always mask gems to 0 until user has claimed free OR made a paid purchase.
+  // Mask gems to 0 only until user has claimed free OR made a paid purchase.
   // has_claimed_free_gems is flipped to true on free claim AND on first paid purchase.
-  const shouldMask = loading || !hasClaimedFreeGems;
+  const shouldMask = !hasClaimedFreeGems;
   const gems = shouldMask ? 0 : rawGems;
 
   return (
