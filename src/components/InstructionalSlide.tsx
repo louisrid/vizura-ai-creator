@@ -169,7 +169,7 @@ const InstructionalSlide = ({
     >
       {/* Dashes at top */}
       {!slide.hideDashes && dashTotal > 0 && (
-        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 80px)" }}>
+        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 64px)" }}>
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashTotal }).map((_, i) => (
               <div
