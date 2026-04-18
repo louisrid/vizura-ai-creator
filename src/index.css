@@ -193,6 +193,11 @@ input[type="range"]::-moz-range-thumb {
   100% { transform: translateY(110vh) rotate(360deg); }
 }
 
+@keyframes emoji-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
 
 /* Global button press state + desktop hover */
 button, a[role="button"], [role="button"] {

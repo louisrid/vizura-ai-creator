@@ -826,7 +826,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <motion.span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" animate={{ y: [0, -12, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}>✨</motion.span>
+        <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -972,7 +972,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[17vh] pb-[190px]"} justify-center`}>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[19vh] pb-[190px]"} justify-center`}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={step}
@@ -1123,7 +1123,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   return createPortal(
     <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000" }}>
       <motion.div
-        className="absolute inset-0 flex flex-col items-center pt-[20vh]"
+        className="absolute inset-0 flex flex-col items-center pt-[22vh]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
