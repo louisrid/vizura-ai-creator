@@ -373,7 +373,7 @@ const Header = () => {
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
           touchActiveRef.current = true;
-          setOpen(true);
+          setOpen(prev => !prev);
         }}
         className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
         style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
@@ -445,7 +445,7 @@ const Header = () => {
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
                       touchActiveRef.current = true;
-                      setOpen(true);
+                      setOpen(prev => !prev);
                     }}
                     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
