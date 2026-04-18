@@ -210,14 +210,14 @@ const InstructionalSlide = ({
             <motion.img
               src={foxEmojiImg}
               alt="🦊"
-              className="mb-6 md:mb-8 inline-block"
+              className="mb-8 md:mb-10 inline-block"
               style={{ width: 64, height: 64, objectFit: 'contain' }}
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             />
           ) : (
             <motion.span
-              className="text-[64px] md:text-[86px] mb-6 md:mb-8 inline-block"
+              className="text-[64px] md:text-[86px] mb-8 md:mb-10 inline-block"
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             >
