@@ -300,6 +300,7 @@ const CharacterDetail = () => {
       return;
     }
     toast.success("deleted");
+    window.dispatchEvent(new CustomEvent("facefox:characters-changed"));
     const previous = readCachedOnboardingState(user!.id);
     mergeCachedOnboardingState(user!.id, {
       characterCount: Math.max((previous?.characterCount ?? 1) - 1, 0),
