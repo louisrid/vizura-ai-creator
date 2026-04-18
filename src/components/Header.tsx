@@ -327,7 +327,7 @@ const Header = () => {
   ) : null;
 
   const slideMenuButton = slideMenuMode ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "max(env(safe-area-inset-top, 0px), 12px)", right: 26 }}>
+    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
         onClick={() => setOpen(!open)}
