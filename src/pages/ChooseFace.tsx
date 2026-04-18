@@ -579,6 +579,11 @@ const ChooseFace = () => {
     try {
       try {
         const result = await invokeAngleBody();
+        if (result?.code === "NO_GEMS" || result?.error?.includes("No gems")) {
+          toast.error("not enough gems");
+          setAngleBodyApiDone(true);
+          return;
+        }
         // Preload the generated images before completing the loader
         const urls = [result?.angle_url, result?.body_anchor_url, faceUrl].filter(Boolean) as string[];
         if (urls.length > 0) {
