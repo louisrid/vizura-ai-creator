@@ -6,7 +6,7 @@ import type { SlideConfig } from "@/components/InstructionalSlide";
 import { mergeCachedOnboardingState } from "@/lib/onboardingState";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { registerNavGuard } from "@/lib/navGuard";
+import { registerNavGuard, clearNavGuard } from "@/lib/navGuard";
 import { displayAge } from "@/lib/displayAge";
 
 import PageTitle from "@/components/PageTitle";
@@ -360,6 +360,13 @@ const ChooseFace = () => {
       sessionStorage.setItem(FACE_STORAGE_KEY, JSON.stringify(nextFaces));
       // Persist prompt so regen works after refresh
       if (prompt) sessionStorage.setItem("facefox_face_prompt", prompt);
+      // Preload images so reveal is instant
+      await Promise.all(nextFaces.map((url: string) => new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = url;
+      })));
       setSelectedIndex(null);
       setApiDone(true);
     } catch (err: any) {
@@ -623,6 +630,7 @@ const ChooseFace = () => {
 
   const doFinalSave = async (forcedFaceIdx?: number) => {
     toast.dismiss();
+    clearNavGuard();
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
       toast.error("sign in first");
