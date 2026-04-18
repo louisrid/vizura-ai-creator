@@ -82,6 +82,13 @@ const Header = () => {
   // Close on route change
   useEffect(() => { setOpen(false); clearNavGuard(); }, [pathname]);
 
+  // Open menu via global event (e.g. from GuidedCreator)
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("facefox:open-menu", handler);
+    return () => window.removeEventListener("facefox:open-menu", handler);
+  }, []);
+
   // Global touch handlers — bridge from menu button to portaled dropdown
   useEffect(() => {
     if (!open) return;
@@ -207,7 +214,7 @@ const Header = () => {
             top: dropdownPos.top,
             right: dropdownPos.right,
             width: menuWidth,
-            zIndex: 99999,
+            zIndex: 10000,
           }}
         >
           <div>
