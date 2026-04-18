@@ -48,6 +48,12 @@ const TopUps = () => {
   // Check if user can claim free gems
   useEffect(() => {
     if (!user) return;
+    const cachedClaimed = localStorage.getItem(`facefox_gems_claimed:${user.id}`) === "1";
+    if (cachedClaimed) {
+      setCanClaimFree(false);
+      setClaimChecked(true);
+      return;
+    }
     const check = async () => {
       const { data } = await supabase
         .from("profiles")
