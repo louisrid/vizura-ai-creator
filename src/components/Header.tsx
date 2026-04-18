@@ -82,6 +82,71 @@ const Header = () => {
   // Close on route change
   useEffect(() => { setOpen(false); clearNavGuard(); }, [pathname]);
 
+  // Global touch handlers — bridge from menu button to portaled dropdown
+  useEffect(() => {
+    if (!open) return;
+
+    const handleMove = (e: TouchEvent) => {
+      if (!touchActiveRef.current) return;
+      const touch = e.touches[0];
+      if (!touch) return;
+      const items = document.querySelectorAll('[data-menu-idx]');
+      let foundIdx: number | null = null;
+      items.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (
+          touch.clientY >= rect.top &&
+          touch.clientY <= rect.bottom &&
+          touch.clientX >= rect.left &&
+          touch.clientX <= rect.right
+        ) {
+          foundIdx = Number(el.getAttribute('data-menu-idx'));
+        }
+      });
+      setTouchHighlight(foundIdx);
+    };
+
+    const handleEnd = () => {
+      if (!touchActiveRef.current) return;
+      touchActiveRef.current = false;
+      const idx = touchHighlight;
+      if (idx !== null) {
+        const item = menuItems[idx];
+        if (item) {
+          const isLocked = showMenuLocks && lockedLabels.has(item.label);
+          if (!isLocked) {
+            setOpen(false);
+            setTouchHighlight(null);
+            if (item.label === "create character") {
+              if (pathname === "/") {
+                window.dispatchEvent(new CustomEvent("facefox:open-creator"));
+              } else {
+                navigate("/", { state: { openCreator: true } });
+              }
+            } else if (item.auth && !user) {
+              navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+            } else {
+              navigate(item.path);
+            }
+            return;
+          }
+        }
+      }
+      // Released outside any item — keep dropdown open (treat as a press, not a drag)
+      setTouchHighlight(null);
+    };
+
+    document.addEventListener('touchmove', handleMove, { passive: true });
+    document.addEventListener('touchend', handleEnd);
+    document.addEventListener('touchcancel', handleEnd);
+    return () => {
+      document.removeEventListener('touchmove', handleMove);
+      document.removeEventListener('touchend', handleEnd);
+      document.removeEventListener('touchcancel', handleEnd);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, touchHighlight, showMenuLocks, user, pathname]);
+
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
     if (checkNavGuard()) return;
@@ -148,45 +213,6 @@ const Header = () => {
           <div>
             <div
               className="overflow-hidden py-0"
-              onTouchMove={(e) => {
-                const touch = e.touches[0];
-                const items = document.querySelectorAll('[data-menu-idx]');
-                let found = false;
-                items.forEach((el) => {
-                  const rect = el.getBoundingClientRect();
-                  if (touch.clientY >= rect.top && touch.clientY <= rect.bottom && touch.clientX >= rect.left && touch.clientX <= rect.right) {
-                    setTouchHighlight(Number(el.getAttribute('data-menu-idx')));
-                    found = true;
-                  }
-                });
-                if (!found) setTouchHighlight(null);
-              }}
-              onTouchEnd={() => {
-                touchActiveRef.current = false;
-                if (touchHighlight !== null) {
-                  const item = menuItems[touchHighlight];
-                  if (item) {
-                    const isLocked = showMenuLocks && lockedLabels.has(item.label);
-                    if (!isLocked) {
-                      setOpen(false);
-                      setTouchHighlight(null);
-                      if (item.label === "create character") {
-                        if (pathname === "/") {
-                          window.dispatchEvent(new CustomEvent("facefox:open-creator"));
-                        } else {
-                          navigate("/", { state: { openCreator: true } });
-                        }
-                      } else if (item.auth && !user) {
-                        navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
-                      } else {
-                        navigate(item.path);
-                      }
-                      return;
-                    }
-                  }
-                }
-                setTouchHighlight(null);
-              }}
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(var(--border-mid))",
