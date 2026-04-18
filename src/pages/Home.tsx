@@ -1,9 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import { displayAge } from "@/lib/displayAge";
 import { User, Copy, Download } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
@@ -12,7 +11,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAppData } from "@/contexts/AppDataContext";
-import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 import DotDecal from "@/components/DotDecal";
@@ -375,7 +373,7 @@ const Home = () => {
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
-              {showLocks && <LockOverlay borderRadius={8} />}
+              {showLocks && <LockOverlay borderRadius={10} />}
             </button>
           </div>
 
@@ -574,7 +572,7 @@ const Home = () => {
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
-              {showLocks && <LockOverlay borderRadius={8} />}
+              {showLocks && <LockOverlay borderRadius={10} />}
             </button>
           </div>
 
