@@ -204,7 +204,7 @@ const InstructionalSlide = ({
         className="absolute inset-x-0 flex justify-center px-6 md:px-12"
         style={{ top: 0, bottom: 0 }}
       >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[12vh] pb-[200px]">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[17vh] pb-[200px]">
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <motion.img
