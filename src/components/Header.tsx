@@ -113,6 +113,7 @@ const Header = () => {
 
     const handleMove = (e: TouchEvent) => {
       if (!touchActiveRef.current) return;
+      e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
       const items = document.querySelectorAll('[data-menu-idx]');
@@ -129,12 +130,13 @@ const Header = () => {
         }
       });
       setTouchHighlight(foundIdx);
+      touchHighlightRef.current = foundIdx;
     };
 
     const handleEnd = () => {
       if (!touchActiveRef.current) return;
       touchActiveRef.current = false;
-      const idx = touchHighlight;
+      const idx = touchHighlightRef.current;
       if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
