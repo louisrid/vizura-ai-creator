@@ -658,6 +658,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     onExit(selectionsRef.current);
   };
 
+  useEffect(() => {
+    const handler = () => handleClose();
+    window.addEventListener("facefox:close-creator", handler);
+    return () => window.removeEventListener("facefox:close-creator", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const canAdvance = isHeroSlide || isNameSlide || isCreateSlide || isSet1Slide1 || (currentTraitIndex >= 0 && isCurrentTraitSelected());
 
   // When user signs up/logs in on the signup screen, the SignupGate component
