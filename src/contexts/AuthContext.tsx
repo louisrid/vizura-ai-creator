@@ -179,6 +179,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             return;
           }
 
+          if (event === "SIGNED_IN" && typeof window !== "undefined" &&
+              sessionStorage.getItem("facefox_signup_only") === "1") {
+            sessionStorage.removeItem("facefox_signup_only");
+            void (async () => {
+              try {
+                const { data: profileRow } = await supabase
+                  .from("profiles")
+                  .select("user_id")
+                  .eq("user_id", nextUser.id)
+                  .maybeSingle();
+                if (profileRow) {
+                  try {
+                    sessionStorage.removeItem("facefox_post_auth_home");
+                    sessionStorage.removeItem("facefox_signup_gate_active");
+                    sessionStorage.removeItem("facefox_guided_flow_state");
+                    sessionStorage.removeItem("facefox_resume_after_auth");
+                  } catch {}
+                  await supabase.auth.signOut();
+                  setUser(null);
+                  clearSpecialAccountCache();
+                  clearCachedOnboardingState();
+                  if (typeof window !== "undefined") {
+                    const { toast } = await import("@/components/ui/sonner");
+                    toast("account already exists — tap login instead");
+                    if (window.location.pathname !== "/") {
+                      window.location.replace("/");
+                    }
+                  }
+                  return;
+                }
+              } catch (lookupErr) {
+                console.warn("signup-only profile check failed:", lookupErr);
+              }
+              setUser(nextUser);
+              syncSpecialAccountCache(nextUser);
+              void fetchAndCacheOnboardingState(nextUser.id);
+              void hydrateUser(nextUser);
+            })();
+            return;
+          }
+
           setUser(nextUser);
           syncSpecialAccountCache(nextUser);
           void fetchAndCacheOnboardingState(nextUser.id);
