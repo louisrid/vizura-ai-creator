@@ -449,7 +449,11 @@ const Header = () => {
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
                       touchActiveRef.current = true;
-                      setOpen(prev => !prev);
+                      setOpen(prev => {
+                        if (!prev) document.body.style.overflow = "hidden";
+                        else document.body.style.overflow = "";
+                        return !prev;
+                      });
                     }}
                     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
