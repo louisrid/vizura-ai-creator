@@ -579,7 +579,7 @@ const ChooseFace = () => {
     try {
       try {
         const result = await invokeAngleBody();
-        if (result?.code === "NO_GEMS" || result?.error?.includes("No gems")) {
+        if ((result as any)?.code === "NO_GEMS" || (result as any)?.error?.includes?.("No gems")) {
           toast.error("not enough gems");
           setAngleBodyApiDone(true);
           return;
