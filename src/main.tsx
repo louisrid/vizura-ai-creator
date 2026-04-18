@@ -40,10 +40,12 @@ if (splash) {
   splash.innerHTML = `
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:hsl(0 0% 0%);color:hsl(0 0% 100%);font-family:-apple-system,'SF Pro Display',system-ui,sans-serif;font-weight:900;text-transform:lowercase;letter-spacing:-0.02em;margin-top:-4vh;">
       <h1 style="margin:0;font-size:24px;line-height:1;">loading...</h1>
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;height:24px;">
-        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.1s ease-in-out infinite;animation-delay:0s;"></div>
-        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.1s ease-in-out infinite;animation-delay:0.15s;"></div>
-        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.1s ease-in-out infinite;animation-delay:0.3s;"></div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:7px;height:30px;">
+        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.2s ease-in-out infinite;animation-delay:0s;"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.2s ease-in-out infinite;animation-delay:0.15s;"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.2s ease-in-out infinite;animation-delay:0.3s;"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.2s ease-in-out infinite;animation-delay:0.45s;"></div>
+        <div style="width:10px;height:10px;border-radius:3px;background:#ffe603;animation:facefox-dot 1.2s ease-in-out infinite;animation-delay:0.6s;"></div>
       </div>
     </div>
   `;

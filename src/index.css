@@ -154,16 +154,6 @@
   display: none;
 }
 
-@keyframes facefox-loading-bar {
-  0% { transform: translateX(-100%); }
-  50% { transform: translateX(80%); }
-  100% { transform: translateX(200%); }
-}
-
-.facefox-loading-bar {
-  animation: facefox-loading-bar 1.2s ease-in-out infinite;
-}
-
 @keyframes facefox-dot {
   0%, 100% { transform: translateY(0); opacity: 0.2; }
   50% { transform: translateY(-12px); opacity: 1; }
