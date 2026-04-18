@@ -148,7 +148,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid hsl(0 0% 18%)",
+                border: "2px solid hsl(0 0% 10%)",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -165,7 +165,7 @@ const Header = () => {
                 const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 18%)", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 10%)", margin: "0" }} />}
                     <div className="relative">
                       <button
                         onClick={() => {
@@ -217,7 +217,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 2, backgroundColor: "hsl(0 0% 18%)", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "hsl(0 0% 10%)", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"

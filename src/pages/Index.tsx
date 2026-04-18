@@ -27,23 +27,23 @@ const SET3_SLIDES: SlideConfig[] = [
   {
     emoji: "🔥",
     title: "want to generate her whole social media?",
-    pills: [{ text: "make any picture you want", side: "left" }],
+    pills: [{ text: "make any picture you want 📸", side: "left" }],
   },
   {
     emoji: "🦊",
     title: "facefox is the #1 tool to",
     pills: [
-      { text: "generate ai characters", side: "left" },
-      { text: "create any content you want", side: "right" },
-      { text: "build out a whole social media fast", side: "left" },
+      { text: "generate ai characters 🧑", side: "left" },
+      { text: "create any content you want ✨", side: "right", highlight: true },
+      { text: "build out a whole social media fast 🚀", side: "left" },
     ],
   },
   {
     emoji: "💎",
     title: "let's get you some gems",
     pills: [
-      { text: "10 gems = 1 photo", side: "left" },
-      { text: "we'll give you 5 for free!", side: "right" },
+      { text: "10 gems = 1 photo 💰", side: "left" },
+      { text: "we'll give you 5 for free! 🎁", side: "right", highlight: true },
     ],
   },
 ];
