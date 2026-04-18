@@ -263,6 +263,8 @@ const Header = () => {
                             } else {
                               navigate("/", { state: { openCreator: true } });
                             }
+                          } else if (item.label === "home" && slideMenuMode) {
+                            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
                           } else if (item.state) {
                             navigate(item.path, { state: item.state });
                           } else {
