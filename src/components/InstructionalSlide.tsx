@@ -22,6 +22,8 @@ export interface InstructionalSlideProps {
   showBack?: boolean;
   /** Show forward arrow? */
   showForward?: boolean;
+  /** When true, signals header to render the floating menu button above this slide */
+  showHeader?: boolean;
   onBack?: () => void;
   onForward?: () => void;
 }
