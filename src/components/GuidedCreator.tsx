@@ -913,13 +913,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (isCreateSlide) {
       const showGemCost = !isFirstTime;
       return (
-        <div className="flex w-full flex-col items-center bg-transparent px-4 text-center">
-          <h2
-            className="mx-auto text-center text-[3.18rem] md:text-[4.24rem] font-[900] lowercase leading-[1.05] tracking-tight"
-          >
-            <span className="block text-white">your character</span>
-            <span className="block"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></span>
-          </h2>
+        <div className="flex w-full flex-col items-center">
+          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>🖌️</span>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
