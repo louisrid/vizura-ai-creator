@@ -164,6 +164,11 @@
   animation: facefox-loading-bar 1.2s ease-in-out infinite;
 }
 
+@keyframes facefox-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.2; }
+  50% { transform: translateY(-12px); opacity: 1; }
+}
+
 /* Range slider thumb */
 input[type="range"] {
   -webkit-appearance: none;

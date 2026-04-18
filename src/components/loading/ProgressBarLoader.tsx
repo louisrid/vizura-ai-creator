@@ -170,14 +170,11 @@ const ProgressBarLoader = ({
       className="relative z-10 flex flex-col items-center px-2"
       style={{ ...contentStyle, overflow: "hidden", touchAction: "none", marginTop: "-4vh", gap: 12 }}
     >
-      <motion.img
+      <img
         src={foxEmojiImg}
         alt="🦊"
-        className="inline-block select-none w-[80px] h-[80px] md:w-[108px] md:h-[108px]"
-        style={{ objectFit: 'contain' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, -10, 0] }}
-        transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+        className="inline-block select-none"
+        style={{ width: 120, height: 120, objectFit: 'contain' }}
       />
 
       <motion.div
@@ -208,7 +205,7 @@ const ProgressBarLoader = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.45, ease: "easeInOut" }}
       >
-        <div className="relative overflow-hidden bg-white/10" style={{ width: "14rem", height: 12 }}>
+        <div className="relative overflow-hidden bg-white/10" style={{ width: "14rem", height: 12, borderRadius: 9999 }}>
           <div
             className="absolute inset-0"
             style={{
@@ -217,6 +214,8 @@ const ProgressBarLoader = ({
               transition: "transform 120ms linear",
               willChange: "transform",
               background: "linear-gradient(90deg, #00e0ff 0%, #00e0ff 85%, #00bcd4 100%)",
+              borderRadius: 9999,
+              boxShadow: "0 0 10px #00e0ff, 0 0 20px rgba(0,224,255,0.25)",
             }}
           />
         </div>
