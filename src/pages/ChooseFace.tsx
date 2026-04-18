@@ -733,7 +733,7 @@ const ChooseFace = () => {
     if (faceUrl) {
       await supabase.from("generations").insert({
         user_id: currentUser.id,
-        prompt: prompt || "face generation",
+        prompt: "face generation",
         image_urls: [faceUrl],
       });
       window.dispatchEvent(new CustomEvent("facefox:generations-changed"));

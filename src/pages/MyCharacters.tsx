@@ -111,7 +111,7 @@ const MyCharacters = () => {
                 className="relative overflow-hidden active:scale-[0.98] transition-all duration-200 hover-lift"
                 style={{
                   borderRadius: 10,
-                  border: isNew ? "3px solid #ffe603" : "none",
+                  border: "none",
                   backgroundColor: "hsl(0 0% 5%)",
                 }}
               >
