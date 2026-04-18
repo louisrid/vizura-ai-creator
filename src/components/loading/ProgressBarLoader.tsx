@@ -170,13 +170,11 @@ const ProgressBarLoader = ({
       className="relative z-10 flex flex-col items-center px-2"
       style={{ ...contentStyle, overflow: "hidden", touchAction: "none", marginTop: "-4vh", gap: 12 }}
     >
-      <motion.img
+      <img
         src={foxEmojiImg}
         alt="🦊"
         className="inline-block select-none"
-        style={{ width: 120, height: 120, objectFit: 'contain' }}
-        animate={{ y: [0, -12, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        style={{ width: 120, height: 120, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
       />
 
       <motion.div

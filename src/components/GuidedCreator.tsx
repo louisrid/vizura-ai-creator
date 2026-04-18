@@ -293,13 +293,12 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   return (
     <div className="flex min-h-full w-full flex-col items-center justify-center">
       <div className="flex flex-col items-center px-8 w-full max-w-md">
-        <motion.span
+        <span
           className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block"
-          animate={{ y: [0, -12, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}
         >
           🔐
-        </motion.span>
+        </span>
         <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
            {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
         </h2>
@@ -777,9 +776,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-<motion.span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" animate={{ y: [0, -12, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}>
+<span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>
             {slide.emoji}
-          </motion.span>
+          </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
           <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => {
@@ -859,7 +858,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <motion.span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" animate={{ y: [0, -12, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}>{trait.emoji}</motion.span>
+          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
@@ -914,7 +913,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (isCreateSlide) {
       const showGemCost = !isFirstTime;
       return (
-        <div className="flex min-h-[14rem] w-full flex-col items-center justify-center bg-transparent px-4 text-center">
+        <div className="flex w-full flex-col items-center bg-transparent px-4 text-center">
           <h2
             className="mx-auto text-center text-[3.18rem] md:text-[4.24rem] font-[900] lowercase leading-[1.05] tracking-tight"
           >
@@ -1129,13 +1128,12 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
       >
         <div className="relative z-10 flex flex-col items-center px-8 w-full max-w-md">
-          <motion.span
+          <span
             className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block"
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}
           >
             🔐
-          </motion.span>
+          </span>
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
           </h2>
