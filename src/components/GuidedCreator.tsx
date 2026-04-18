@@ -1112,7 +1112,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   return createPortal(
     <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000" }}>
       <motion.div
-        className="absolute inset-0 flex flex-col items-center justify-center"
+        className="absolute inset-0 flex flex-col items-center pt-[20vh]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.15, ease: "easeInOut" }}
@@ -1128,7 +1128,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
           </h2>
-          <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(0_0%_12%)] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
@@ -1149,9 +1149,9 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
+              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 12%)" }} />
               <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
-              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
+              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 12%)" }} />
             </div>
 
             <input
