@@ -34,7 +34,7 @@ const SET3_SLIDES: SlideConfig[] = [
     title: "facefox is the #1 tool to",
     pills: [
       { text: "generate ai characters 🧑", side: "left" },
-      { text: "create any content you want ✨", side: "right", highlight: true },
+      { text: "create any content you want 🖌️", side: "right", highlight: true },
       { text: "build out a whole social media fast 🚀", side: "left" },
     ],
   },
@@ -711,9 +711,9 @@ const Index = () => {
         alreadySeen={set3SeenSteps.has(set3Step)}
         dashTotal={3}
         dashActive={set3Step}
-        showBack={set3Step > 0}
+        showBack={true}
         showForward={true}
-        onBack={() => { if (set3Step > 0) setSet3Step(set3Step - 1); }}
+        onBack={() => { if (set3Step > 0) { setSet3Step(set3Step - 1); } else { setShowSet3(false); } }}
         onForward={() => {
           const nextStep = set3Step + 1;
           if (nextStep >= SET3_SLIDES.length) {
