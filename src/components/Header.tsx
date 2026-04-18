@@ -118,7 +118,7 @@ const Header = () => {
   }, [open]);
 
   // Close on route change
-  useEffect(() => { setOpen(false); clearNavGuard(); touchActiveRef.current = false; }, [pathname]);
+  useEffect(() => { setOpen(false); clearNavGuard(); touchActiveRef.current = false; document.body.style.overflow = ""; }, [pathname]);
 
   // Reset touch state whenever the dropdown closes for any reason
   useEffect(() => {
@@ -313,11 +313,11 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: touchHighlight === idx ? "hsl(var(--card))" : "transparent",
+                          backgroundColor: touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent",
                           borderRadius,
                         }}
-                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(var(--card))"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(var(--card))" : "transparent")}
+                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
@@ -347,7 +347,7 @@ const Header = () => {
                       textTransform: "lowercase",
                       borderRadius: "0 0 10px 10px",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                   >
                     <LogOut size={isDesktop ? 18 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
