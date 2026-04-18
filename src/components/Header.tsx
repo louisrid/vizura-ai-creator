@@ -338,6 +338,11 @@ const Header = () => {
                   <button
                     ref={menuBtnRef}
                     onClick={() => setOpen(!open)}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      touchActiveRef.current = true;
+                      setOpen(true);
+                    }}
                     className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
                       borderRadius: 10,
