@@ -37,20 +37,18 @@ const LoadingScreen = () => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 24 }}>
-          {[0, 0.15, 0.3].map((delay, i) => (
-            <div
-              key={i}
-              style={{
-                width: 10,
-                height: 10,
-                borderRadius: 3,
-                background: "#ffe603",
-                animation: `facefox-dot 1.1s ease-in-out infinite`,
-                animationDelay: `${delay}s`,
-              }}
-            />
-          ))}
+        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "rgba(255,255,255,0.1)", borderRadius: 9999, position: "relative" }}>
+          <div
+            style={{
+              width: "40%",
+              height: "100%",
+              background: "#ffe603",
+              borderRadius: 9999,
+              boxShadow: "0 0 10px #ffe603, 0 0 20px rgba(255,230,3,0.25)",
+              animation: "facefox-bar 1.4s ease-in-out infinite",
+              position: "absolute",
+            }}
+          />
         </div>
       </div>
     </div>
