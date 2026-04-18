@@ -473,17 +473,15 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   useEffect(() => {
     if (open) {
-      const restored = restoreSavedFlow();
-      if (!restored) {
-        setStep(flowVariant === "member-onboarding" ? 1 : 0);
-        setSelections({ ...emptySelections });
-      }
+      sessionStorage.removeItem("facefox_guided_flow_state");
+      setStep(flowVariant === "member-onboarding" ? 1 : 0);
+      setSelections({ ...emptySelections });
       setShaking(false);
       setVisible(true);
       setNameToastShown(false);
       setBackArrowShaking(false);
     }
-  }, [open, restoreSavedFlow]);
+  }, [open, flowVariant]);
 
   useEffect(() => { persistFlow(); }, [persistFlow, step, selections]);
 
