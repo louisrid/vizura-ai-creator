@@ -207,13 +207,15 @@ const ChooseFace = () => {
     }
   }, [loading, cardsRevealed, faces.length]);
 
-  // Register navigation guard — blocks Header nav and shows confirm dialog
+  // Register navigation guard — only during first-time onboarding
   useEffect(() => {
-    return registerNavGuard(() => {
-      setShowBackConfirm(true);
-      return true;
-    });
-  }, []);
+    if (!onboardingComplete) {
+      return registerNavGuard(() => {
+        setShowBackConfirm(true);
+        return true;
+      });
+    }
+  }, [onboardingComplete]);
 
 
   const [pendingAuthSave, setPendingAuthSave] = useState(() => sessionStorage.getItem(AUTH_RESUME_KEY) === "1");

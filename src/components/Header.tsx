@@ -389,7 +389,7 @@ const Header = () => {
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <button
-                    onClick={() => navigate("/top-ups")}
+                    onClick={() => { if (checkNavGuard()) return; navigate("/top-ups"); }}
                     className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
                     style={{
                       backgroundColor: "#050a10",
