@@ -186,9 +186,15 @@ const ChooseFace = () => {
       setLoading(false);
       return;
     }
-    if (!prompt) { navigate("/"); return; }
+    if (!prompt && !hasCachedFaces) { navigate("/"); return; }
     if (hasInitRef.current) return;
     hasInitRef.current = true;
+    if (hasCachedFaces) {
+      setApiDone(true);
+      setBarComplete(true);
+      setLoading(false);
+      return;
+    }
     void generateFaces();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
@@ -330,8 +336,9 @@ const ChooseFace = () => {
           return;
         }
         if (result.code === "NO_GEMS") {
-          navigate("/top-ups");
+          toast.error("not enough gems");
           setLoading(false);
+          setGenerationError("not enough gems");
           return;
         }
         if (result.code === "CONTENT_POLICY") {
