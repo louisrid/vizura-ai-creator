@@ -22,6 +22,8 @@ export interface InstructionalSlideProps {
   showBack?: boolean;
   /** Show forward arrow? */
   showForward?: boolean;
+  /** When true, signals header to render the floating menu button above this slide */
+  showHeader?: boolean;
   onBack?: () => void;
   onForward?: () => void;
 }
@@ -137,6 +139,7 @@ const InstructionalSlide = ({
   dashActive,
   showBack = true,
   showForward = true,
+  showHeader = false,
   onBack,
   onForward,
 }: InstructionalSlideProps) => {
@@ -154,6 +157,14 @@ const InstructionalSlide = ({
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [alreadySeen, slide.pills.length]);
+
+  useEffect(() => {
+    if (!showHeader) return;
+    document.documentElement.dataset.slideMenuMode = "1";
+    return () => {
+      delete document.documentElement.dataset.slideMenuMode;
+    };
+  }, [showHeader]);
 
   const shouldAnimate = !alreadySeen && !hasAnimated;
   const isSinglePill = slide.pills.length === 1;

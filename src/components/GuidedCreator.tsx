@@ -495,15 +495,18 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     if (root) root.style.overflow = "hidden";
+    const canExitFlowLocal = skipWelcome && isLoggedIn;
+    if (canExitFlowLocal) document.documentElement.dataset.slideMenuMode = "1";
     const handlePageHide = () => persistFlow();
     window.addEventListener("pagehide", handlePageHide);
     return () => {
       document.body.style.overflow = prev.body;
       document.documentElement.style.overflow = prev.html;
       if (root) root.style.overflow = prev.root;
+      delete document.documentElement.dataset.slideMenuMode;
       window.removeEventListener("pagehide", handlePageHide);
     };
-  }, [visible, persistFlow]);
+  }, [visible, persistFlow, skipWelcome, isLoggedIn]);
 
   const completeCookingFlow = useCallback(() => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
@@ -647,6 +650,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
   const handleClose = () => {
     sessionStorage.removeItem(FLOW_STATE_KEY);
+    delete document.documentElement.dataset.slideMenuMode;
     setStep(0);
     setSelections({ ...emptySelections });
     setEntered(false);
