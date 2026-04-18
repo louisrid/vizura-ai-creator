@@ -29,6 +29,10 @@ const DRAFT_BACKUP_KEY = "facefox_character_draft_backup";
 const FACE_STORAGE_KEY = "facefox_face_options";
 const AUTH_RESUME_KEY = "facefox_resume_after_auth";
 
+if (typeof window !== "undefined") {
+  sessionStorage.removeItem("facefox_angle_generating");
+}
+
 const FACE_GEN_PHRASES = [
   "generating faces…",
   "building your look…",
