@@ -51,6 +51,7 @@ const Storage = () => {
 
     const allImages: StorageImage[] = [];
     generations.forEach((gen) => {
+      if (gen.prompt === "character references" || gen.prompt === "face generation") return;
       (gen.image_urls || []).forEach((url: string, i: number) => {
         if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
         const id = `${gen.id}-${i}`;
@@ -133,7 +134,7 @@ const Storage = () => {
         </div>
 
         {images.length === 0 ? (
-          <div className="border-2 border-[hsl(var(--border-mid))] rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(0 0% 5%)" }}>
+          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
