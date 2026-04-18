@@ -119,15 +119,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
         const nextUser = session?.user ?? null;
-        console.log("[auth]", event, "user:", nextUser?.id ?? "null");
-
-        if (event === "SIGNED_OUT" || !nextUser) {
-          console.log("[auth] setUser(null) via", event);
+        if (event === "SIGNED_OUT") {
           setUser(null);
           clearSpecialAccountCache();
           clearCachedOnboardingState();
           return;
         }
+
+        if (!nextUser && event !== "TOKEN_REFRESHED") {
+          setUser(null);
+          clearSpecialAccountCache();
+          clearCachedOnboardingState();
+          return;
+        }
+        if (!nextUser) return;
 
         if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
           // Login-only Google flow: if this OAuth round-trip was started from the
