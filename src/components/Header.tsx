@@ -22,6 +22,7 @@ const Header = () => {
   const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
   const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
+  const touchHighlightRef = useRef<number | null>(null);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -69,9 +70,15 @@ const Header = () => {
 
   useEffect(() => {
     if (open) {
+      document.body.style.overflow = "hidden";
       updateDropdownPos();
       window.addEventListener("resize", updateDropdownPos);
-      return () => window.removeEventListener("resize", updateDropdownPos);
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("resize", updateDropdownPos);
+      };
+    } else {
+      document.body.style.overflow = "";
     }
   }, [open, updateDropdownPos]);
 
@@ -106,6 +113,7 @@ const Header = () => {
 
     const handleMove = (e: TouchEvent) => {
       if (!touchActiveRef.current) return;
+      e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
       const items = document.querySelectorAll('[data-menu-idx]');
@@ -122,12 +130,13 @@ const Header = () => {
         }
       });
       setTouchHighlight(foundIdx);
+      touchHighlightRef.current = foundIdx;
     };
 
     const handleEnd = () => {
       if (!touchActiveRef.current) return;
       touchActiveRef.current = false;
-      const idx = touchHighlight;
+      const idx = touchHighlightRef.current;
       if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
@@ -154,9 +163,10 @@ const Header = () => {
       }
       // Released outside any item — keep dropdown open (treat as a press, not a drag)
       setTouchHighlight(null);
+      touchHighlightRef.current = null;
     };
 
-    document.addEventListener('touchmove', handleMove, { passive: true });
+    document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('touchend', handleEnd);
     document.addEventListener('touchcancel', handleEnd);
     return () => {
