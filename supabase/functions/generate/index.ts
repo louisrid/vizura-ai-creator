@@ -998,6 +998,17 @@ serve(async (req) => {
           console.log("Built character traits from DB:", traits.slice(0, 120));
           console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
         }
+
+        if (charData?.face_angle_url && charData?.body_anchor_url) {
+          if (creditData) {
+            await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
+          }
+          console.log("Angle + body already exist, skipping generation for character:", angleCharacterId);
+          return new Response(
+            JSON.stringify({ angle_url: charData.face_angle_url, body_anchor_url: charData.body_anchor_url, skipped: true }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
