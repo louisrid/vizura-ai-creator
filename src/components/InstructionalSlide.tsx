@@ -62,7 +62,7 @@ const ChatPill = ({
           style={{
             borderRadius: 10,
             backgroundColor: bgColor,
-            color: "#000",
+            color: "#fff",
             border: "none",
           }}
         >
