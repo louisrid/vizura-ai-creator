@@ -62,7 +62,7 @@ const ChatPill = ({
           style={{
             borderRadius: 10,
             backgroundColor: bgColor,
-            color: highlight ? "#fff" : "#000",
+            color: "#000",
             border: "none",
           }}
         >
@@ -191,7 +191,7 @@ const InstructionalSlide = ({
       {/* Content area */}
       <div
         className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-        style={{ top: 32, bottom: 200 }}
+        style={{ top: 32, bottom: 190 }}
       >
         <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center">
           {/* Emoji */}
@@ -238,7 +238,7 @@ const InstructionalSlide = ({
       {/* Arrows at bottom */}
       <div
         className="absolute inset-x-0 flex flex-col items-center"
-        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 3%)" }}
+        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 2%)" }}
       >
         <div className="flex items-center justify-center gap-4 md:gap-6">
           {showBack && onBack && (
