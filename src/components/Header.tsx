@@ -70,9 +70,15 @@ const Header = () => {
 
   useEffect(() => {
     if (open) {
+      document.body.style.overflow = "hidden";
       updateDropdownPos();
       window.addEventListener("resize", updateDropdownPos);
-      return () => window.removeEventListener("resize", updateDropdownPos);
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("resize", updateDropdownPos);
+      };
+    } else {
+      document.body.style.overflow = "";
     }
   }, [open, updateDropdownPos]);
 
