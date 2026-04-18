@@ -676,7 +676,11 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (visible) {
       setShouldRender(true);
       // Trigger fade-in on next frame
-      requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
+      if (skipWelcome) {
+        setEntered(true);
+      } else {
+        requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
+      }
     }
     if (!visible && !fading) {
       const t = setTimeout(() => setShouldRender(false), 10);
