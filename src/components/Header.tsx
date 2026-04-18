@@ -343,6 +343,7 @@ const Header = () => {
         onTouchStart={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          e.nativeEvent.stopImmediatePropagation();
           touchActiveRef.current = true;
           setOpen(true);
         }}
@@ -414,6 +415,7 @@ const Header = () => {
                     onTouchStart={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
                       touchActiveRef.current = true;
                       setOpen(true);
                     }}
