@@ -214,7 +214,7 @@ const Header = () => {
             top: dropdownPos.top,
             right: dropdownPos.right,
             width: menuWidth,
-            zIndex: 99999,
+            zIndex: 10000,
           }}
         >
           <div>
