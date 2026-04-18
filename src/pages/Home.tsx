@@ -1,9 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import { displayAge } from "@/lib/displayAge";
 import { User, Copy, Download } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
@@ -12,7 +11,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAppData } from "@/contexts/AppDataContext";
-import { supabase } from "@/integrations/supabase/client";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
 import DotDecal from "@/components/DotDecal";
