@@ -169,15 +169,17 @@ const InstructionalSlide = ({
     >
       {/* Dashes at top */}
       {!slide.hideDashes && dashTotal > 0 && (
-        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 36px)" }}>
-          <div className="flex items-center justify-center gap-[3px] md:gap-[5px] w-full max-w-[280px] md:max-w-sm mx-auto">
+        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: "3%", paddingTop: "env(safe-area-inset-top, 0px)" }}>
+          <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashTotal }).map((_, i) => (
               <div
                 key={i}
-                className="transition-all duration-300 h-[4px] md:h-[6px]"
+                className="transition-all duration-300"
                 style={{
-                  flex: 1,
-                  borderRadius: 2,
+                  width: 10,
+                  height: 10,
+                  borderRadius: 3,
+                  flexShrink: 0,
                   background: i <= dashActive ? Y : DASH_INACTIVE,
                 }}
               />
