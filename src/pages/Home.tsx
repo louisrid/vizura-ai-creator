@@ -290,7 +290,7 @@ const Home = () => {
 
   // Hold the startup splash until Home data is ready, so header + content reveal together.
   useLayoutEffect(() => {
-    const needsBlock = (!photosLoaded || !charsLoaded || !lockStateResolved) && (!!user || authLoading);
+    const needsBlock = (!photosLoaded || !charsLoaded) && (!!user || authLoading);
     if (needsBlock) {
       const unregister = registerBlockingLoader();
       return unregister;
