@@ -13,7 +13,7 @@ if (storedVersion !== CACHE_VERSION) {
 // If the user was mid-onboarding when the page loaded, wipe the flow state
 // so they land on the hero/start screen fresh
 sessionStorage.removeItem("facefox_guided_flow_state");
-sessionStorage.removeItem("facefox_guided_dismissed");
+
 sessionStorage.removeItem("facefox_post_auth_home");
 sessionStorage.removeItem("facefox_signup_gate_active");
 sessionStorage.removeItem("facefox_face_options");
