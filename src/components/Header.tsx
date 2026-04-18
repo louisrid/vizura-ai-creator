@@ -22,6 +22,7 @@ const Header = () => {
   const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
   const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
+  const touchHighlightRef = useRef<number | null>(null);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
