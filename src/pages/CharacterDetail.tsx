@@ -45,7 +45,7 @@ const CharacterDetail = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const navigate = useTransitionNavigate();
-  const { characters: cachedChars } = useAppData();
+  const { characters: cachedChars, generations: cachedGens } = useAppData();
   const [character, setCharacter] = useState<Character | null>(() => {
     const cached = cachedChars.find(c => c.id === id);
     return cached ? cached as unknown as Character : null;
@@ -88,7 +88,21 @@ const CharacterDetail = () => {
   useEffect(() => { fetchProfileData(); }, [fetchProfileData]);
 
   // Latest photos for this character
-  const [latestPhotos, setLatestPhotos] = useState<{ id: string; url: string; created_at: string }[]>([]);
+  const [latestPhotos, setLatestPhotos] = useState<{ id: string; url: string; created_at: string }[]>(() => {
+    if (!id) return [];
+    const photos: { id: string; url: string; created_at: string }[] = [];
+    for (const gen of cachedGens) {
+      if (gen.character_id !== id) continue;
+      for (let i = 0; i < (gen.image_urls || []).length; i++) {
+        const url = gen.image_urls[i];
+        if (!url || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) continue;
+        photos.push({ id: `${gen.id}-${i}`, url, created_at: gen.created_at });
+        if (photos.length >= 8) break;
+      }
+      if (photos.length >= 8) break;
+    }
+    return photos;
+  });
   const MAX_LATEST = 6;
 
   const fetchLatestPhotos = useCallback(async () => {
