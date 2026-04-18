@@ -168,7 +168,7 @@ const ProgressBarLoader = ({
   return (
     <div
       className="relative z-10 flex flex-col items-center px-2"
-      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", marginTop: "calc(-4vh - 30px)", gap: 12 }}
+      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", marginTop: "calc(-4vh - 70px)", gap: 12 }}
     >
       <img
         src={foxEmojiImg}
