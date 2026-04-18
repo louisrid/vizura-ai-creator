@@ -78,14 +78,18 @@ const Header = () => {
   // Close on outside click
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
+    const handler = (e: Event) => {
       const target = e.target as Node;
       if (menuBtnRef.current?.contains(target)) return;
       if (dropdownRef.current?.contains(target)) return;
       setOpen(false);
     };
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
   }, [open]);
 
   // Close on route change
@@ -230,7 +234,7 @@ const Header = () => {
               }}
             >
               {menuItems.map((item, idx) => {
-                const isActive = pathname === item.path && !item.state;
+                const isActive = slideMenuMode ? item.label === "create character" : pathname === item.path && !item.state;
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
@@ -323,7 +327,7 @@ const Header = () => {
   ) : null;
 
   const slideMenuButton = slideMenuMode ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "max(env(safe-area-inset-top, 0px), 12px)", right: 26 }}>
+    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
         onClick={() => setOpen(!open)}
