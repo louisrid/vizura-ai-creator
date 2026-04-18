@@ -248,6 +248,7 @@ const InstructionalSlide = ({
             <NavArrow direction="right" onClick={onForward} />
           )}
         </div>
+        <div style={{ height: 88, pointerEvents: "none" }} />
       </div>
     </motion.div>
   );

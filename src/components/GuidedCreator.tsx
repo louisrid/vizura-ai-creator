@@ -987,6 +987,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               <Home size={38} strokeWidth={2} color="#ffffff" />
             </button>
           )}
+          {!canExitFlow && (
+            <div style={{ height: 88, pointerEvents: "none" }} />
+          )}
       </div>
 
       </div>
