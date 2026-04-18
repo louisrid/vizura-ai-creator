@@ -1,6 +1,7 @@
-import { createContext, useContext, useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
 /**
  * Global app data cache with localStorage persistence.
