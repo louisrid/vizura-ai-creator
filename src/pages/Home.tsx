@@ -297,7 +297,7 @@ const Home = () => {
       const unregister = registerBlockingLoader();
       return unregister;
     }
-  }, [freshDataLoaded, user, authLoading]);
+  }, [photosLoaded, charsLoaded, lockStateResolved, user, authLoading]);
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
