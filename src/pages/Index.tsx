@@ -34,7 +34,7 @@ const SET3_SLIDES: SlideConfig[] = [
     title: "facefox is the #1 tool to",
     pills: [
       { text: "generate ai characters 🧑", side: "left" },
-      { text: "create any content you want 🖌️", side: "right", highlight: true },
+      { text: "create any content you want 🧠", side: "right", highlight: true },
       { text: "build out a whole social media fast 🚀", side: "left" },
     ],
   },
