@@ -234,7 +234,7 @@ const Header = () => {
               }}
             >
               {menuItems.map((item, idx) => {
-                const isActive = pathname === item.path && !item.state;
+                const isActive = slideMenuMode ? item.label === "create character" : pathname === item.path && !item.state;
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
