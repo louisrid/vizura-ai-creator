@@ -167,14 +167,14 @@ const ProgressBarLoader = ({
 
   return (
     <div
-      className="relative z-10 flex flex-col items-center px-2"
-      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", marginTop: "calc(-4vh - 70px)", gap: 12 }}
+      className="relative z-10 flex flex-col items-center justify-center px-2"
+      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", gap: 12 }}
     >
       <img
         src={foxEmojiImg}
         alt="🦊"
         className="inline-block select-none"
-        style={{ width: 120, height: 120, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+        style={{ width: 80, height: 80, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
       />
 
       <motion.div
@@ -219,7 +219,7 @@ const ProgressBarLoader = ({
             }}
           />
         </div>
-        <span className="text-center text-[14px] font-[900] lowercase tabular-nums" style={{ color: "#ffffff" }}>{pct}%</span>
+        <span className="text-center font-[900] lowercase tabular-nums" style={{ color: "#ffffff", fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1 }}>{pct}%</span>
       </motion.div>
     </div>
   );
