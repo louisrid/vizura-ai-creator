@@ -420,7 +420,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "none",
-                        backgroundColor: "hsl(var(--card))",
+                        backgroundColor: "hsl(0 0% 10%)",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -619,7 +619,7 @@ const Home = () => {
                       style={{
                         borderRadius: 10,
                         border: "none",
-                        backgroundColor: "hsl(var(--card))",
+                        backgroundColor: "hsl(0 0% 10%)",
                         cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                       }}
                     >
@@ -739,11 +739,11 @@ const Home = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-center rounded-[10px]"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
                 style={{ backgroundColor: "#000" }}
               >
-                {selectedImage.prompt}
-                <Copy size={12} strokeWidth={2.5} />
+                <span className="truncate flex-1 text-left">{selectedImage.prompt}</span>
+                <Copy size={12} strokeWidth={2.5} className="shrink-0" />
               </button>
             )}
             <a href={selectedImage.url} download={`facefox-${selectedImage.id}.png`} target="_blank" className="block">
