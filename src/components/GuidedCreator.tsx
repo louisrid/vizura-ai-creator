@@ -766,7 +766,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -10, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
             {slide.emoji}
           </motion.span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
@@ -815,7 +815,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>✨</motion.span>
+        <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -10, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>✨</motion.span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -848,7 +848,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -10, 0] }} transition={{ duration: 0.45, ease: "easeInOut", y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}>{trait.emoji}</motion.span>
+          <motion.span className="text-[64px] md:text-[86px] mb-5 md:mb-7 inline-block" animate={{ y: [0, -10, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>{trait.emoji}</motion.span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
@@ -969,7 +969,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
-            className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[48px] pb-[160px]"}`}
+            className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center ${isHeroSlide || isSignupScreen ? "min-h-full" : "min-h-full py-[32px] pb-[160px]"}`}
           >
             {renderSlide()}
           </motion.div>
