@@ -2,7 +2,7 @@ import { forwardRef, useState, useCallback, useEffect, useRef } from "react";
 import foxEmojiImg from "@/assets/fox-emoji.png";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RefreshCw, Gem, Home } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
@@ -973,7 +973,18 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
         <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[20vh] pb-[190px]"} justify-center`}>
-          {renderSlide()}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={step}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+              className="w-full"
+            >
+              {renderSlide()}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
