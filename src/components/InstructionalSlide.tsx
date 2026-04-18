@@ -169,7 +169,7 @@ const InstructionalSlide = ({
     >
       {/* Dashes at top */}
       {!slide.hideDashes && dashTotal > 0 && (
-        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 64px)" }}>
+        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 64px)", display: "none" }}>
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashTotal }).map((_, i) => (
               <div
@@ -191,7 +191,7 @@ const InstructionalSlide = ({
       {/* Content area */}
       <div
         className="absolute inset-x-0 flex items-center justify-center px-6 md:px-12"
-        style={{ top: 72, bottom: 160 }}
+        style={{ top: 48, bottom: 160 }}
       >
         <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center">
           {/* Emoji */}
