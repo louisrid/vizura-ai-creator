@@ -332,14 +332,14 @@ const Header = () => {
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
-        onClick={() => setOpen(!open)}
+        onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
         onTouchStart={(e) => {
           e.preventDefault();
           e.stopPropagation();
           touchActiveRef.current = true;
           setOpen(true);
         }}
-        className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+        className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
         style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
         aria-label="open menu"
       >
@@ -403,14 +403,14 @@ const Header = () => {
                 <div className="relative">
                   <button
                     ref={menuBtnRef}
-                    onClick={() => setOpen(!open)}
+                    onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
                     onTouchStart={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       touchActiveRef.current = true;
                       setOpen(true);
                     }}
-                    className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+                    className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
                       borderRadius: 10,
                       backgroundColor: "#000",
