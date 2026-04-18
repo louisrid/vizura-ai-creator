@@ -19,6 +19,8 @@ const Header = () => {
   const { gems } = useGems();
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
+  const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
+  const touchActiveRef = useRef(false);
 
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -146,6 +148,45 @@ const Header = () => {
           <div>
             <div
               className="overflow-hidden py-0"
+              onTouchMove={(e) => {
+                const touch = e.touches[0];
+                const items = document.querySelectorAll('[data-menu-idx]');
+                let found = false;
+                items.forEach((el) => {
+                  const rect = el.getBoundingClientRect();
+                  if (touch.clientY >= rect.top && touch.clientY <= rect.bottom && touch.clientX >= rect.left && touch.clientX <= rect.right) {
+                    setTouchHighlight(Number(el.getAttribute('data-menu-idx')));
+                    found = true;
+                  }
+                });
+                if (!found) setTouchHighlight(null);
+              }}
+              onTouchEnd={() => {
+                touchActiveRef.current = false;
+                if (touchHighlight !== null) {
+                  const item = menuItems[touchHighlight];
+                  if (item) {
+                    const isLocked = showMenuLocks && lockedLabels.has(item.label);
+                    if (!isLocked) {
+                      setOpen(false);
+                      setTouchHighlight(null);
+                      if (item.label === "create character") {
+                        if (pathname === "/") {
+                          window.dispatchEvent(new CustomEvent("facefox:open-creator"));
+                        } else {
+                          navigate("/", { state: { openCreator: true } });
+                        }
+                      } else if (item.auth && !user) {
+                        navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+                      } else {
+                        navigate(item.path);
+                      }
+                      return;
+                    }
+                  }
+                }
+                setTouchHighlight(null);
+              }}
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(var(--border-mid))",
@@ -168,6 +209,7 @@ const Header = () => {
                     {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
                     <div className="relative">
                       <button
+                        data-menu-idx={idx}
                         onClick={() => {
                           if (isLocked) return;
                           if (checkNavGuard()) { setOpen(false); return; }
@@ -195,11 +237,11 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: "transparent",
+                          backgroundColor: touchHighlight === idx ? "hsl(0 0% 10%)" : "transparent",
                           borderRadius,
                         }}
                         onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(var(--card))"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 10%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
@@ -296,6 +338,11 @@ const Header = () => {
                   <button
                     ref={menuBtnRef}
                     onClick={() => setOpen(!open)}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      touchActiveRef.current = true;
+                      setOpen(true);
+                    }}
                     className="flex items-center justify-center active:scale-95 transition-transform duration-150 w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
                       borderRadius: 10,
