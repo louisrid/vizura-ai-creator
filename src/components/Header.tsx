@@ -230,7 +230,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid hsl(var(--border-mid))",
+                border: "2px solid __BORDERMIDPLACEHOLDER__",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -247,7 +247,7 @@ const Header = () => {
                 const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "__BORDERMIDPLACEHOLDER__", margin: "0" }} />}
                     <div className="relative">
                       <button
                         data-menu-idx={idx}
@@ -302,7 +302,7 @@ const Header = () => {
               })}
               {user && (
                 <>
-                  <div style={{ height: 2, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />
+                  <div style={{ height: 2, backgroundColor: "__BORDERMIDPLACEHOLDER__", margin: "0" }} />
                   <button
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"
@@ -376,7 +376,7 @@ const Header = () => {
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
-                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "__BORDERMIDPLACEHOLDER__"}`,
                   }}
                   aria-label="my account"
                 >
