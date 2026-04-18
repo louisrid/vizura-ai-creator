@@ -280,11 +280,11 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: touchHighlight === idx ? "hsl(0 0% 10%)" : "transparent",
+                          backgroundColor: touchHighlight === idx ? "hsl(0 0% 7%)" : "transparent",
                           borderRadius,
                         }}
                         onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(var(--card))"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 10%)" : "transparent")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 7%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
