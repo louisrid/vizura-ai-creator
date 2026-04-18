@@ -787,7 +787,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
-                        color: "#fff",
+                        color: isMiddle ? "#fff" : "#000",
                         border: "none",
                       }}>
                       {pill.text}
