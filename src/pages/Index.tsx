@@ -18,8 +18,8 @@ import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCredits } from "@/contexts/CreditsContext";
 import { useAppData } from "@/contexts/AppDataContext";
+import { useOnboarded } from "@/hooks/useOnboarded";
 import { supabase } from "@/integrations/supabase/client";
-import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 const SET3_KEY = "facefox_set3_seen";
 
@@ -442,8 +442,7 @@ const Index = () => {
     }
   }, [authLoading, user, navigate]);
   const [searchParams] = useSearchParams();
-  const cachedOnboarding = user ? readCachedOnboardingState(user.id) : null;
-  const onboardingComplete = cachedOnboarding?.onboardingComplete ?? true;
+  const { onboardingComplete } = useOnboarded();
   // Set 3 onboarding slides state
   const [showSet3, setShowSet3] = useState(false);
   const [set3Step, setSet3Step] = useState(0);
