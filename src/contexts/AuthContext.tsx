@@ -188,10 +188,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               try {
                 const { data: profileRow } = await supabase
                   .from("profiles")
-                  .select("user_id")
+                  .select("user_id, onboarding_complete")
                   .eq("user_id", nextUser.id)
                   .maybeSingle();
-                if (profileRow) {
+                if (profileRow && profileRow.onboarding_complete) {
                   try {
                     sessionStorage.removeItem("facefox_post_auth_home");
                     sessionStorage.removeItem("facefox_signup_gate_active");
