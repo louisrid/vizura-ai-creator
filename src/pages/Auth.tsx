@@ -63,7 +63,8 @@ const Auth = () => {
 
         if (!resolvedState.onboardingComplete) {
           await supabase.auth.signOut();
-          toast.error("press start instead!");
+          sessionStorage.setItem("facefox_show_start_toast", "1");
+          navigate("/", { replace: true });
           return;
         }
 
