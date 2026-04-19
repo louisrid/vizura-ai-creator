@@ -9,7 +9,6 @@ import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { useGems } from "@/contexts/CreditsContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 
@@ -50,15 +49,9 @@ const Home = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
-  const { gems } = useGems();
   const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded, generationsReady: cachedGensLoaded } = useAppData();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
-  const onboardingRedirectRequested = Boolean(locationState?.onboardingRedirect);
-  const pendingAuthResume = typeof window !== "undefined" && (
-    sessionStorage.getItem("facefox_post_auth_home") === "1" ||
-    sessionStorage.getItem("facefox_signup_gate_active") === "1"
-  );
   const shouldOpenGuidedOnMount = openCreatorRequested;
   useEffect(() => {
     if (openCreatorRequested) {
@@ -114,10 +107,8 @@ const Home = () => {
     return c?.characterCount ?? 0;
   });
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const [freshDataLoaded, setFreshDataLoaded] = useState(false);
   const resolvedCharacterCount = charsLoaded ? Math.max(characterCount, cachedChars.length) : characterCount;
   const effectiveOnboardingComplete = onboardingComplete || resolvedCharacterCount > 0;
-  const isOnboardingUser = !!user && initialLoadComplete && lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
 
   useEffect(() => {
@@ -187,7 +178,6 @@ const Home = () => {
       setOnboardingComplete(true);
       setLockStateResolved(false);
       setCharacterCount(0);
-      setFreshDataLoaded(true);
       return;
     }
 
@@ -200,7 +190,6 @@ const Home = () => {
       setCharacterCount(nextCharacterCount);
       setLockStateResolved(true);
       setInitialLoadComplete(true);
-      setFreshDataLoaded(true);
 
       if (nextCharacterCount > 0 && !openCreatorRequested) {
         setShowGuided(false);
@@ -295,7 +284,6 @@ const Home = () => {
 
   // Lock conditions: only show locks after state is confirmed — never flash for users with characters
   const showLocks = lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
-  const forceOnboarding = !!user && lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
   // Post-auth loading: user is signed in but data hasn't finished loading yet
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
