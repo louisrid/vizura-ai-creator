@@ -263,12 +263,11 @@ const CharacterDetail = () => {
           toast("10 gems used");
         }
       }
-    } catch (err: any) {
-      const msg = err?.message || err?.error_description || err?.statusText || "regen error";
-      console.error("Regenerate error:", msg);
+    } catch (err) {
+      console.error("Regenerate error:", err);
       if (target === "angle") sessionStorage.removeItem(`facefox_regen_angle_${character.id}`);
       else sessionStorage.removeItem(`facefox_regen_body_${character.id}`);
-      toast.error(msg);
+      toast.error("regen error");
     } finally {
       setRegeneratingAngle(false);
       setRegeneratingBody(false);
