@@ -306,11 +306,13 @@ function buildFinalPrompt(
 
   const parts: string[] = [];
 
-  parts.push(IPHONE_REALISM);
+  if (characterTraits) {
+    parts.push("Exact same single woman as shown consistently across all provided reference images, unified consistent identity, identical facial features hair skin tone body proportions from the combined references, do not average or blend, treat as the same person");
+    parts.push(characterTraits);
+  }
   parts.push(scenePrompt);
   parts.push(cameraPrefix);
 
-  if (characterTraits) parts.push(characterTraits);
   if (bodyMod) parts.push(bodyMod);
 
   if (bustSize === "extra large") {
