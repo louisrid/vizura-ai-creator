@@ -948,32 +948,44 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div>
       </div>
 
-      {/* Arrow buttons + Home button — static, never fade during transitions */}
-      <div className="absolute inset-x-0 z-10 flex flex-col items-center" style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 2%)", opacity: showNavigation ? 1 : 0, pointerEvents: showNavigation ? 'auto' as const : 'none' as const }}>
-          <div className="flex items-center justify-center gap-4 md:gap-6">
-            <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
-              <NavArrow direction="left" onClick={goBack} />
-            </motion.div>
-            <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
-          </div>
-          {canExitFlow && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault(); e.stopPropagation();
-                sessionStorage.setItem("facefox_creator_dismissed", "1");
-                handleClose();
-              }}
-              className="mt-3 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
-              style={{ width: 76, height: 76 }}
-            >
-              <Home size={38} strokeWidth={2} color="#ffffff" />
-            </button>
-          )}
-          {!canExitFlow && (
-            <div style={{ height: 88, pointerEvents: "none" }} />
-          )}
-      </div>
+      {/* Arrow buttons + Home button — fade in sync with slide content */}
+      <AnimatePresence>
+        {showNavigation && (
+          <motion.div
+            key="nav-arrows"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.45, ease: "easeInOut" }}
+            className="absolute inset-x-0 z-10 flex flex-col items-center"
+            style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 2%)" }}
+          >
+            <div className="flex items-center justify-center gap-4 md:gap-6">
+              <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
+                <NavArrow direction="left" onClick={goBack} />
+              </motion.div>
+              <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
+            </div>
+            {canExitFlow && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault(); e.stopPropagation();
+                  sessionStorage.setItem("facefox_creator_dismissed", "1");
+                  handleClose();
+                }}
+                className="mt-3 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+                style={{ width: 76, height: 76 }}
+              >
+                <Home size={38} strokeWidth={2} color="#ffffff" />
+              </button>
+            )}
+            {!canExitFlow && (
+              <div style={{ height: 88, pointerEvents: "none" }} />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       </div>
     </div>,
