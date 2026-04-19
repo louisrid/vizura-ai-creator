@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import InstructionalSlide from "@/components/InstructionalSlide";
 import type { SlideConfig } from "@/components/InstructionalSlide";
-import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
+import { mergeCachedOnboardingState } from "@/lib/onboardingState";
+import { useOnboarded } from "@/hooks/useOnboarded";
 import { RefreshCw, Gem, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { registerNavGuard, clearNavGuard } from "@/lib/navGuard";
@@ -133,11 +134,8 @@ const ChooseFace = () => {
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
-  const [onboardingComplete, setOnboardingComplete] = useState(() => {
-    if (!user) return false;
-    const cached = readCachedOnboardingState(user.id);
-    return cached?.onboardingComplete ?? false;
-  });
+  const { onboardingComplete: hookOnboarded, resolved: onboardingResolved } = useOnboarded();
+  const onboardingComplete = onboardingResolved ? hookOnboarded : false;
   const lastFacesRef = useRef<string[]>([]);
 
   const hasOnboardingFaceRegenLocked = !onboardingComplete && faceRegensUsed >= 1;
@@ -146,12 +144,11 @@ const ChooseFace = () => {
     if (!user) return null;
     const { data, error } = await supabase
       .from("profiles")
-      .select("onboarding_complete, onboarding_face_regens_used")
+      .select("onboarding_face_regens_used")
       .eq("user_id", user.id)
       .single();
 
     if (!error && data) {
-      setOnboardingComplete(!!data.onboarding_complete);
       setFaceRegensUsed(data.onboarding_face_regens_used ?? 0);
     }
 
