@@ -10,7 +10,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
-import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { useOnboarded } from "@/hooks/useOnboarded";
 
 import DotDecal from "@/components/DotDecal";
 import LockOverlay from "@/components/LockOverlay";
