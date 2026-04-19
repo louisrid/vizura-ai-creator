@@ -23,9 +23,6 @@ const Header = () => {
   const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
   const touchHighlightRef = useRef<number | null>(null);
-  const touchMovedRef = useRef(false);
-  const touchStartYRef = useRef(0);
-  const lastToggleRef = useRef(0);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -107,7 +104,6 @@ const Header = () => {
   useEffect(() => {
     if (!open) return;
     const handler = (e: Event) => {
-      if (Date.now() - lastToggleRef.current < 200) return;
       const target = e.target as Node;
       if (menuBtnRef.current?.contains(target)) return;
       if (dropdownRef.current?.contains(target)) return;
@@ -133,8 +129,6 @@ const Header = () => {
       e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
-      const dy = Math.abs(touch.clientY - touchStartYRef.current);
-      if (dy > 10) touchMovedRef.current = true;
       const items = document.querySelectorAll('[data-menu-idx]');
       let foundIdx: number | null = null;
       items.forEach((el) => {
@@ -156,7 +150,7 @@ const Header = () => {
       if (!touchActiveRef.current) return;
       touchActiveRef.current = false;
       const idx = touchHighlightRef.current;
-      if (idx !== null && touchMovedRef.current) {
+      if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
           const isLocked = showMenuLocks && lockedLabels.has(item.label);
@@ -180,8 +174,7 @@ const Header = () => {
           }
         }
       }
-      // Released outside any item — close dropdown
-      setOpen(false);
+      // Released outside any item — keep dropdown open (treat as a press, not a drag)
       setTouchHighlight(null);
       touchHighlightRef.current = null;
     };
@@ -369,11 +362,17 @@ const Header = () => {
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
+        onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
         onTouchStart={(e) => {
           e.preventDefault();
-        }}
-        onClick={() => {
-          setOpen(!open);
+          e.stopPropagation();
+          e.nativeEvent.stopImmediatePropagation();
+          touchActiveRef.current = true;
+          setOpen(prev => {
+            if (!prev) document.body.style.overflow = "hidden";
+            else document.body.style.overflow = "";
+            return !prev;
+          });
         }}
         className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
         style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
@@ -439,11 +438,17 @@ const Header = () => {
                 <div className="relative">
                   <button
                     ref={menuBtnRef}
+                    onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
                     onTouchStart={(e) => {
                       e.preventDefault();
-                    }}
-                    onClick={() => {
-                      setOpen(!open);
+                      e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
+                      touchActiveRef.current = true;
+                      setOpen(prev => {
+                        if (!prev) document.body.style.overflow = "hidden";
+                        else document.body.style.overflow = "";
+                        return !prev;
+                      });
                     }}
                     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
