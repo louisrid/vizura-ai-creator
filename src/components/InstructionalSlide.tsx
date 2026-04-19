@@ -173,7 +173,7 @@ const InstructionalSlide = ({
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "#000", overflow: "hidden", touchAction: "none" }}
-      initial={{ opacity: 0 }}
+      initial={false}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -199,12 +199,12 @@ const InstructionalSlide = ({
         </div>
       )}
 
-      {/* Content area */}
+      {/* Content area — constrained above arrows */}
       <div
-        className="absolute inset-x-0 flex justify-center px-6 md:px-12"
-        style={{ top: 0, bottom: 0 }}
+        className="absolute inset-x-0 flex justify-center px-8 md:px-12"
+        style={{ top: 0, bottom: 200 }}
       >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[12vh] pb-[224px]">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[12vh]">
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <img
@@ -228,7 +228,7 @@ const InstructionalSlide = ({
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+          <div className="mt-3 md:mt-4 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-[10px]" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}
