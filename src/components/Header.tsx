@@ -25,6 +25,7 @@ const Header = () => {
   const touchHighlightRef = useRef<number | null>(null);
   const touchMovedRef = useRef(false);
   const touchStartYRef = useRef(0);
+  const lastToggleRef = useRef(0);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -106,6 +107,7 @@ const Header = () => {
   useEffect(() => {
     if (!open) return;
     const handler = (e: Event) => {
+      if (Date.now() - lastToggleRef.current < 200) return;
       const target = e.target as Node;
       if (menuBtnRef.current?.contains(target)) return;
       if (dropdownRef.current?.contains(target)) return;
