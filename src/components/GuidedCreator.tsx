@@ -405,7 +405,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const mounted = typeof document !== "undefined";
-  const [visible, setVisible] = useState(open);
+  const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
   const [entered, setEntered] = useState(false);
   const [backArrowShaking, setBackArrowShaking] = useState(false);
