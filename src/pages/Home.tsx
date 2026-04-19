@@ -101,7 +101,7 @@ const Home = () => {
     if (authLoading) return;
 
     const pending = localStorage.getItem("facefox_pending_creation");
-    if (user && pending && initialLoadComplete) {
+    if (user && pending && lockStateResolved && charsLoaded) {
       localStorage.removeItem("facefox_pending_creation");
 
       if (resolvedCharacterCount > 0) {
@@ -156,49 +156,14 @@ const Home = () => {
     setShowGuided(true);
     setSkipWelcome(false);
     setAutoOpenEvaluated(true);
-  }, [authLoading, openCreatorRequested, user, navigate, initialLoadComplete, resolvedCharacterCount]);
+  }, [authLoading, openCreatorRequested, user, navigate, lockStateResolved, charsLoaded, resolvedCharacterCount]);
 
-  // Resolve onboarding lock state
+  // Auto-close the creator once the user has at least one character, unless the creator was explicitly requested this mount.
   useEffect(() => {
-    if (!user) {
-      setOnboardingComplete(true);
-      setLockStateResolved(false);
-      setCharacterCount(0);
-      return;
+    if (resolvedCharacterCount > 0 && !openCreatorRequested) {
+      setShowGuided(false);
     }
-
-    const applyResolvedState = (resolvedState: { onboardingComplete: boolean; characterCount: number }) => {
-      if (cancelled) return;
-      const nextCharacterCount = Math.max(resolvedState.characterCount, cachedChars.length);
-      const nextOnboardingComplete = resolvedState.onboardingComplete || nextCharacterCount > 0;
-
-      setOnboardingComplete(nextOnboardingComplete);
-      setCharacterCount(nextCharacterCount);
-      setLockStateResolved(true);
-      setInitialLoadComplete(true);
-
-      if (nextCharacterCount > 0 && !openCreatorRequested) {
-        setShowGuided(false);
-      }
-    };
-
-    const cached = readCachedOnboardingState(user.id);
-    if (cached && !needsOnboardingRedirect(cached)) {
-      setOnboardingComplete(cached.onboardingComplete);
-      setCharacterCount(cached.characterCount);
-      setLockStateResolved(true);
-    } else {
-      setLockStateResolved(false);
-    }
-
-    let cancelled = false;
-
-    void fetchAndCacheOnboardingState(user.id).then((resolvedState) => {
-      applyResolvedState(resolvedState);
-    });
-
-    return () => { cancelled = true; };
-  }, [cachedChars.length, openCreatorRequested, user]);
+  }, [resolvedCharacterCount, openCreatorRequested]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
