@@ -130,6 +130,7 @@ const Header = () => {
       e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
+      touchMovedRef.current = true;
       const items = document.querySelectorAll('[data-menu-idx]');
       let foundIdx: number | null = null;
       items.forEach((el) => {
@@ -151,7 +152,7 @@ const Header = () => {
       if (!touchActiveRef.current) return;
       touchActiveRef.current = false;
       const idx = touchHighlightRef.current;
-      if (idx !== null) {
+      if (idx !== null && touchMovedRef.current) {
         const item = menuItems[idx];
         if (item) {
           const isLocked = showMenuLocks && lockedLabels.has(item.label);
@@ -175,7 +176,8 @@ const Header = () => {
           }
         }
       }
-      // Released outside any item — keep dropdown open (treat as a press, not a drag)
+      // Released outside any item — close dropdown
+      setOpen(false);
       setTouchHighlight(null);
       touchHighlightRef.current = null;
     };
@@ -369,6 +371,7 @@ const Header = () => {
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
           touchActiveRef.current = true;
+          touchMovedRef.current = false;
           setOpen(prev => {
             if (!prev) document.body.style.overflow = "hidden";
             else document.body.style.overflow = "";
@@ -445,6 +448,7 @@ const Header = () => {
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
                       touchActiveRef.current = true;
+                      touchMovedRef.current = false;
                       setOpen(prev => {
                         if (!prev) document.body.style.overflow = "hidden";
                         else document.body.style.overflow = "";
