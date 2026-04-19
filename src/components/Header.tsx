@@ -380,6 +380,7 @@ const Header = () => {
           }
         }}
         onTouchStart={(e) => {
+          lastToggleRef.current = Date.now();
           e.preventDefault();
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
@@ -470,6 +471,7 @@ const Header = () => {
                       }
                     }}
                     onTouchStart={(e) => {
+                      lastToggleRef.current = Date.now();
                       e.preventDefault();
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
