@@ -349,8 +349,13 @@ const Header = () => {
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
-        onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
+        onClick={(e) => {
+          if (menuDisabled) return;
+          if (touchActiveRef.current) { touchActiveRef.current = false; return; }
+          setOpen(!open);
+        }}
         onTouchStart={(e) => {
+          if (menuDisabled) return;
           e.preventDefault();
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
@@ -361,9 +366,17 @@ const Header = () => {
             return !prev;
           });
         }}
+        disabled={menuDisabled}
         className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
-        style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
+        style={{
+          borderRadius: 10,
+          backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000",
+          border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
+          opacity: menuDisabled ? 0.45 : 1,
+          pointerEvents: menuDisabled ? "none" : "auto",
+        }}
         aria-label="open menu"
+        aria-disabled={menuDisabled}
       >
         <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
           <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
@@ -408,25 +421,30 @@ const Header = () => {
             {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
-                  <button
-                    onClick={() => { if (checkNavGuard()) return; navigate("/top-ups"); }}
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
+                  <div
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
                       borderRadius: 10,
                     }}
+                    aria-label="gem balance"
                   >
                     <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
                     <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
-                  </button>
+                  </div>
                 </div>
 
                 <div className="relative">
                   <button
                     ref={menuBtnRef}
-                    onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
+                    onClick={(e) => {
+                      if (menuDisabled) return;
+                      if (touchActiveRef.current) { touchActiveRef.current = false; return; }
+                      setOpen(!open);
+                    }}
                     onTouchStart={(e) => {
+                      if (menuDisabled) return;
                       e.preventDefault();
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
@@ -437,13 +455,17 @@ const Header = () => {
                         return !prev;
                       });
                     }}
+                    disabled={menuDisabled}
                     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: "#000",
-                      border: "2px solid #ffe603",
+                      backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000",
+                      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
+                      opacity: menuDisabled ? 0.45 : 1,
+                      pointerEvents: menuDisabled ? "none" : "auto",
                     }}
                     aria-label="open menu"
+                    aria-disabled={menuDisabled}
                   >
                     <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
                       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
