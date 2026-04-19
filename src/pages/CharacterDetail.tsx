@@ -18,6 +18,7 @@ import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { displayAge } from "@/lib/displayAge";
 import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
+import { useOnboarded } from "@/hooks/useOnboarded";
 
 interface Character {
   id: string;
@@ -65,11 +66,7 @@ const CharacterDetail = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   // Onboarding regen limits
-  const [onboardingComplete, setOnboardingComplete] = useState(() => {
-    if (!user) return false;
-    const cached = readCachedOnboardingState(user.id);
-    return cached?.onboardingComplete ?? true;
-  });
+  const { onboardingComplete } = useOnboarded();
   const [angleRegensUsed, setAngleRegensUsed] = useState(0);
   const [bodyRegensUsed, setBodyRegensUsed] = useState(0);
 
@@ -77,12 +74,11 @@ const CharacterDetail = () => {
     if (!user) return;
     supabase
       .from("profiles")
-      .select("onboarding_complete, onboarding_angle_regens_used, onboarding_body_regens_used")
+      .select("onboarding_angle_regens_used, onboarding_body_regens_used")
       .eq("user_id", user.id)
       .single()
       .then(({ data }) => {
         if (data) {
-          setOnboardingComplete(!!data.onboarding_complete);
           setAngleRegensUsed(data.onboarding_angle_regens_used ?? 0);
           setBodyRegensUsed(data.onboarding_body_regens_used ?? 0);
         }

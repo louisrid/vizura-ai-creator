@@ -31,6 +31,7 @@ export const writeCachedOnboardingState = (state: CachedOnboardingState) => {
 
   try {
     localStorage.setItem(ONBOARDING_STATE_KEY, JSON.stringify(state));
+    window.dispatchEvent(new CustomEvent("facefox:onboarding-changed"));
   } catch {}
 
   return state;
