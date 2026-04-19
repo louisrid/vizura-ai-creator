@@ -388,7 +388,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
     switch (flowVariant) {
       case "guest-onboarding":
-        return [{ type: "hero" }, { type: "set1slide1" }, { type: "name" }, ...traitSteps, { type: "create" }, { type: "signup" }];
+        return [{ type: "hero" }, { type: "set1slide1" }, { type: "name" }, ...traitSteps, { type: "signup" }, { type: "create" }];
       case "member-onboarding":
         return [{ type: "hero" }, { type: "set1slide1" }, { type: "name" }, ...traitSteps, { type: "create" }];
       case "returning-skip":
