@@ -193,7 +193,7 @@ const OnboardingRedirectGate = () => {
     let cancelled = false;
 
     const resolveRedirect = async () => {
-      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname) || location.pathname.startsWith("/characters")) {
+      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname) || location.pathname.startsWith("/characters") || location.pathname === "/account") {
         setShouldRedirect(false);
         return;
       }
@@ -265,7 +265,8 @@ const AppRoutes = () => {
 
   useEffect(() => {
     if (!stillResolving && blockingLoaders === 0) {
-      setHeaderRevealed(true);
+      const timer = setTimeout(() => setHeaderRevealed(true), 16);
+      return () => clearTimeout(timer);
     }
   }, [stillResolving, blockingLoaders]);
 
