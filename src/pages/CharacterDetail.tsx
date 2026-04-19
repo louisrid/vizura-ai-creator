@@ -641,7 +641,7 @@ const CharacterDetail = () => {
 
       <RegenerateConfirmDialog
         open={regenTarget !== null}
-        onConfirm={handleRegenerate}
+        onConfirm={() => handleRegenerate()}
         onCancel={() => setRegenTarget(null)}
         message="regenerate this photo?"
         confirmLabel="yes • 10"
