@@ -514,12 +514,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   }, [isHeroSlide, splashGone]);
 
   /* Hero phased entrance */
+  const seenAtMountRef = useRef(isHeroSeen());
   useEffect(() => {
     if (!isHeroSlide || !splashGone) return;
-    if (heroVisited.current || isHeroSeen()) {
+    // If hero was already seen before this mount, skip the entrance entirely.
+    if (seenAtMountRef.current || heroVisited.current) {
       heroVisited.current = true;
       setHeroPhase(3);
-      markHeroSeen();
       return;
     }
     // Mark IMMEDIATELY on first hero mount so any later remount (e.g. blocked
@@ -916,7 +917,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   };
 
   const showDashes = !isHeroSlide;
-  const showNavigation = !isHeroSlide && !isSignupScreen;
+  const showNavigation = !isHeroSlide && !heroExiting && !isSignupScreen;
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
