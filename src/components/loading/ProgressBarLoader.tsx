@@ -168,17 +168,18 @@ const ProgressBarLoader = ({
   return (
     <div
       className="relative z-10 flex flex-col items-center justify-center px-2"
-      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", gap: 12 }}
+      style={{ ...contentStyle, overflow: "hidden", touchAction: "none", gap: 0 }}
     >
       <img
         src={foxEmojiImg}
         alt="🦊"
         className="inline-block select-none"
-        style={{ width: 80, height: 80, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+        style={{ width: 100, height: 100, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", marginBottom: 20 }}
       />
 
       <motion.div
         className="flex h-8 items-center justify-center"
+        style={{ marginBottom: 24 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.45, ease: "easeInOut" }}
@@ -187,7 +188,7 @@ const ProgressBarLoader = ({
           <motion.p
             key={safePhrases[phraseIndex]}
             className="text-center font-[900] lowercase text-white"
-            style={{ fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1, margin: 0 }}
+            style={{ fontSize: 26, letterSpacing: "-0.02em", lineHeight: 1, margin: 0 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -200,7 +201,7 @@ const ProgressBarLoader = ({
 
       <motion.div
         className="flex flex-col items-center"
-        style={{ gap: 12 }}
+        style={{ gap: 24 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.45, ease: "easeInOut" }}
@@ -219,7 +220,7 @@ const ProgressBarLoader = ({
             }}
           />
         </div>
-        <span className="text-center font-[900] lowercase tabular-nums" style={{ color: "#ffffff", fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1 }}>{pct}%</span>
+        <span className="text-center font-[900] lowercase tabular-nums" style={{ color: "#ffffff", fontSize: 26, letterSpacing: "-0.02em", lineHeight: 1 }}>{pct}%</span>
       </motion.div>
     </div>
   );

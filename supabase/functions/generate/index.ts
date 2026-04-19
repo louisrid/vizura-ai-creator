@@ -182,7 +182,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
   regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
-  "extra large": "IMPORTANT: very large heavy DD-G cup breasts, extremely prominent bust protruding significantly, deep visible cleavage, breasts are the most dominant physical feature and must be clearly large in every image regardless of body type",
+  "extra large": "CRITICAL: extremely large G+ cup breasts, massive prominent bust that is the most dominant visible feature, deep wide cleavage, breasts must be unmistakably oversized and impossible to miss, chest stretching and filling clothing tightly, bust visibly protruding forward significantly from the body in every single image",
 };
 
 /* ── build character trait string from DB record ───────── */
@@ -605,7 +605,8 @@ async function generateAngleAndBody(
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const angleBustKey = (bustSize || "regular").toLowerCase();
+      const rawAngleBust = (bustSize || "regular").toLowerCase();
+      const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
       const anglePrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features - no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}, clearly visible prominent cleavage showing above the neckline of the top, chest filling and stretching the top tightly, bust prominent and forward-facing. Naturally resembles the person in the reference photo. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Matte skin with visible pores. Relaxed neutral expression, lips together. Hair colour and face must be identical to reference photo.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
@@ -623,7 +624,8 @@ async function generateAngleAndBody(
       console.log("Generating full-body anchor...");
       const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
       const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      const bustKey = (bustSize || "regular").toLowerCase();
+      const rawBodyBust = (bustSize || "regular").toLowerCase();
+      const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
       const bodyPrompt = `EXACT same person from reference photo with IDENTICAL hair colour, hair tone, and facial features — no shift in warmth, coolness, or saturation of hair. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} who naturally resembles the person in the reference photo. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bustDesc ? bustDesc + ', ' : ''}${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach, untoned. Matte skin with visible pores and natural skin texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh. Hair colour and face must be identical to reference photo.`;
