@@ -144,12 +144,11 @@ const ChooseFace = () => {
     if (!user) return null;
     const { data, error } = await supabase
       .from("profiles")
-      .select("onboarding_complete, onboarding_face_regens_used")
+      .select("onboarding_face_regens_used")
       .eq("user_id", user.id)
       .single();
 
     if (!error && data) {
-      setOnboardingComplete(!!data.onboarding_complete);
       setFaceRegensUsed(data.onboarding_face_regens_used ?? 0);
     }
 
