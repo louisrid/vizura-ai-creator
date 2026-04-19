@@ -13,7 +13,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { displayAge } from "@/lib/displayAge";
 import { toast } from "sonner";
 
-const ADMIN_EMAIL = "louisjridland@gmail.com";
+// Admin identity is verified server-side in the admin-data edge function.
+// We probe it once on mount to determine whether to render the page.
 
 const fetchSection = async (section: string, extra?: Record<string, string>) => {
   const params = new URLSearchParams({ section, ...extra });
@@ -408,15 +409,26 @@ const Admin = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
   const [viewingUserId, setViewingUserId] = useState<string | null>(null);
 
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const hasAuthed = useRef(false);
+
   useEffect(() => {
     if (authLoading) return;
-    if (user?.email === ADMIN_EMAIL) {
-      hasAuthed.current = true;
+    if (!user) {
+      navigate("/", { replace: true });
       return;
     }
     if (hasAuthed.current) return;
-    navigate("/", { replace: true });
+    hasAuthed.current = true;
+    (async () => {
+      try {
+        await fetchSection("overview");
+        setIsAdmin(true);
+      } catch {
+        setIsAdmin(false);
+        navigate("/", { replace: true });
+      }
+    })();
   }, [user, authLoading, navigate]);
 
   const loadAll = useCallback(async () => {
@@ -440,13 +452,13 @@ const Admin = () => {
 
   const hasLoaded = useRef(false);
   useEffect(() => {
-    if (user?.email === ADMIN_EMAIL && !hasLoaded.current) {
+    if (isAdmin && !hasLoaded.current) {
       hasLoaded.current = true;
       loadAll();
     }
-  }, [user, loadAll]);
+  }, [isAdmin, loadAll]);
 
-  if (authLoading || !user || user.email !== ADMIN_EMAIL) {
+  if (authLoading || !user || isAdmin !== true) {
     if (document.getElementById("splash-screen")) return <LoadingScreen />;
     return (
       <div className="min-h-screen bg-background flex flex-col">
