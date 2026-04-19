@@ -100,11 +100,13 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
   // "ready" = we have some data to show (cached OR fetched). True immediately if localStorage had data.
   const [charactersReady, setCharactersReady] = useState(() => {
     if (typeof window === "undefined") return false;
-    return !!localStorage.getItem(CHARS_KEY) && !!localStorage.getItem(CACHE_USER_KEY);
+    const hasUser = !!localStorage.getItem(CACHE_USER_KEY) || !!localStorage.getItem("facefox_cached_user");
+    return !!localStorage.getItem(CHARS_KEY) && hasUser;
   });
   const [generationsReady, setGenerationsReady] = useState(() => {
     if (typeof window === "undefined") return false;
-    return !!localStorage.getItem(GENS_KEY) && !!localStorage.getItem(CACHE_USER_KEY);
+    const hasUser = !!localStorage.getItem(CACHE_USER_KEY) || !!localStorage.getItem("facefox_cached_user");
+    return !!localStorage.getItem(GENS_KEY) && hasUser;
   });
 
   const fetchIdRef = useRef(0);
@@ -164,6 +166,7 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
   // On user change: hydrate from cache instantly, then background refresh
   useEffect(() => {
     if (authLoading) return;
+    if (user) writeLocal(CACHE_USER_KEY, user.id);
     const id = ++fetchIdRef.current;
 
     if (!user) {
