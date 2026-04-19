@@ -60,7 +60,7 @@ const ChatPill = ({
     >
       <div className="relative">
         <div
-          className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+          className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
           style={{
             borderRadius: 10,
             backgroundColor: bgColor,
@@ -204,18 +204,18 @@ const InstructionalSlide = ({
         className="absolute inset-x-0 flex justify-center px-6 md:px-12"
         style={{ top: 0, bottom: 0 }}
       >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[19vh] pb-[200px]">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[12vh] pb-[224px]">
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <img
               src={foxEmojiImg}
               alt="🦊"
-              className="mb-3 md:mb-4 inline-block"
-              style={{ width: 64, height: 64, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+              className="mb-1 inline-block"
+              style={{ width: 52, height: 52, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
             />
           ) : (
             <span
-              className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block"
+              className="text-[52px] md:text-[68px] mb-1 inline-block"
               style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}
             >
               {slide.emoji}
@@ -223,7 +223,7 @@ const InstructionalSlide = ({
           )}
 
           {/* Title */}
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[29px] md:text-[42px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
           </h2>
 
