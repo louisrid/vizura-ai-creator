@@ -267,26 +267,30 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
-      {headerRevealed && <HeaderTransition />}
-      <Routes location={location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/generate-face" element={<ChooseFace />} />
-        <Route path="/choose-face" element={<ChooseFace />} />
-        <Route path="/create" element={<Index />} />
-        <Route path="/index" element={<Index />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/characters" element={<MyCharacters />} />
-        <Route path="/characters/:id" element={<CharacterDetail />} />
-        <Route path="/storage" element={<Storage />} />
-        <Route path="/top-ups" element={<TopUps />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/help" element={<Help />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/info" element={<Info />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      {headerRevealed && (
+        <>
+          <HeaderTransition />
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/generate-face" element={<ChooseFace />} />
+            <Route path="/choose-face" element={<ChooseFace />} />
+            <Route path="/create" element={<Index />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/characters" element={<MyCharacters />} />
+            <Route path="/characters/:id" element={<CharacterDetail />} />
+            <Route path="/storage" element={<Storage />} />
+            <Route path="/top-ups" element={<TopUps />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/info" element={<Info />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </>
+      )}
     </div>
   );
 };
