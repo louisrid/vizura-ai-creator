@@ -7,15 +7,6 @@ const SPECIAL_ACCOUNT_USER_ID_KEY = "facefox_special_account_user_id";
 const normaliseEmail = (value: unknown) =>
   typeof value === "string" ? value.trim().toLowerCase() : "";
 
-const readCachedSpecialAccount = (user?: User | null) => {
-  if (typeof window === "undefined" || !user?.id) return false;
-
-  const cachedEmail = normaliseEmail(window.sessionStorage.getItem(SPECIAL_ACCOUNT_CACHE_KEY));
-  const cachedUserId = window.sessionStorage.getItem(SPECIAL_ACCOUNT_USER_ID_KEY);
-
-  return cachedUserId === user.id && cachedEmail === SPECIAL_ACCOUNT_EMAIL;
-};
-
 export const getResolvedUserEmail = (user?: User | null): string => {
   if (!user) return "";
 
@@ -36,9 +27,6 @@ export const getResolvedUserEmail = (user?: User | null): string => {
   return candidates.map(normaliseEmail).find(Boolean) ?? "";
 };
 
-export const isSpecialAccountEmail = (value: unknown) =>
-  normaliseEmail(value) === SPECIAL_ACCOUNT_EMAIL;
-
 export const isSpecialAccountUser = (user?: User | null) =>
   getResolvedUserEmail(user) === SPECIAL_ACCOUNT_EMAIL;
 
@@ -54,14 +42,6 @@ export const syncSpecialAccountCache = (user?: User | null) => {
   window.sessionStorage.removeItem(SPECIAL_ACCOUNT_CACHE_KEY);
   window.sessionStorage.removeItem(SPECIAL_ACCOUNT_USER_ID_KEY);
 };
-
-// NOTE: this used to force the admin account to behave as a permanently-subscribed
-// "test" user (always green icon, free gems, etc). That special treatment has been
-// removed — the admin email is now treated as a normal user for subscription,
-// onboarding, and gems. Admin-only access (the /admin page and admin edge
-// functions) is gated by checking ADMIN_EMAIL directly, not via this function.
-// Kept as a no-op so any lingering imports compile until they're cleaned up.
-export const hasSpecialAccountOverride = (_user?: User | null) => false;
 
 export const clearSpecialAccountCache = () => {
   if (typeof window === "undefined") return;

@@ -6,7 +6,6 @@ import { ArrowRight, Loader2, Eye, ChevronRight } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
-import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -15,7 +14,6 @@ import DotDecal from "@/components/DotDecal";
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
   const { subscribed, refetch: refetchSub } = useSubscription();
-  const { refetch: refetchGems } = useGems();
   const location = useLocation();
   const navigate = useTransitionNavigate();
   const searchParams = new URLSearchParams(location.search);

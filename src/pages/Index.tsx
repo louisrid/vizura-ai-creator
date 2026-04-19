@@ -431,7 +431,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 
 const Index = () => {
   const { user, loading: authLoading } = useAuth();
-  const { credits, gems, refetch: refetchCredits } = useCredits();
+  const { credits, refetch: refetchCredits } = useCredits();
   const { characters: cachedCharacters, charactersReady: cachedCharsLoaded } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
@@ -501,7 +501,6 @@ const Index = () => {
   useEffect(() => {
     const handler = () => {
       setPhotoOverlayPhase("hidden");
-      setFadingBack(false);
       // Clear cached overlay state
       try {
         sessionStorage.removeItem("facefox_photo_overlay");
