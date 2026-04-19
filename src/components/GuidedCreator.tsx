@@ -51,7 +51,7 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const SLIDE_TITLE_CLASS = "text-center text-[29px] md:text-[42px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
 
 
 /* ── Nav arrow ── */
@@ -104,10 +104,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="flex w-full items-center justify-center h-[62px] md:h-[73px] text-[19px] md:text-[22px]"
+    className="flex w-full items-center justify-center h-[50px] md:h-[58px] text-[15px] md:text-[18px]"
     style={{
       borderRadius: 10,
-      padding: "11px 26px",
+      padding: "9px 21px",
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -754,7 +754,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-<span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>
+<span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
@@ -772,7 +772,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                 >
                   <div className="relative">
-                    <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+                    <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
@@ -803,7 +803,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
+        <span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -814,17 +814,17 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[56px] md:h-[66px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="h-[45px] md:h-[53px] flex-1 min-w-0 px-4 text-[14px] md:text-[16px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
           />
           <motion.button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
             whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            className="flex h-[45px] w-[45px] md:h-[53px] md:w-[53px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
             style={{ borderRadius: 10, backgroundColor: Y }}
           >
-            <RefreshCw size={20} strokeWidth={2.5} />
+            <RefreshCw size={16} strokeWidth={2.5} />
           </motion.button>
         </div>
       </div>
@@ -836,7 +836,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
+          <span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
             <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
@@ -892,16 +892,16 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const showGemCost = !isFirstTime;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>🖌️</span>
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
+          <span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>🖌️</span>
+          <h2 className="text-center text-[29px] md:text-[42px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
+          <h2 className="text-center text-[29px] md:text-[42px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-            className="mt-6 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
+            className="mt-6 w-full max-w-[14rem] h-11 text-base font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
             style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
-            {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
+            {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={12} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
           </button>
         </div>
       );
@@ -947,7 +947,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[19vh] pb-[190px]"} justify-center`}>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[12vh] pb-[214px]"} justify-center`}>
           <AnimatePresence mode="wait" initial={false} onExitComplete={() => setHeroExiting(false)}>
             <motion.div
               key={step}
