@@ -2,14 +2,6 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-const CACHE_VERSION = "9";
-const storedVersion = localStorage.getItem("facefox_cache_version");
-if (storedVersion !== CACHE_VERSION) {
-  localStorage.clear();
-  sessionStorage.clear();
-  localStorage.setItem("facefox_cache_version", CACHE_VERSION);
-}
-
 // If the user was mid-onboarding when the page loaded, wipe the flow state
 // so they land on the hero/start screen fresh
 sessionStorage.removeItem("facefox_guided_flow_state");
