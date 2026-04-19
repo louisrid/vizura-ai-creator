@@ -42,6 +42,7 @@ export function useOnboarded() {
 
   const onboardingComplete = state?.onboardingComplete ?? true;
   const characterCount = state?.characterCount ?? 0;
+  const resolved = state !== null;
 
-  return { onboardingComplete, characterCount };
+  return { onboardingComplete, characterCount, resolved };
 }

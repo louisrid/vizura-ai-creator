@@ -10,7 +10,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
-import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
+import { useOnboarded } from "@/hooks/useOnboarded";
 
 import DotDecal from "@/components/DotDecal";
 import LockOverlay from "@/components/LockOverlay";
@@ -92,22 +92,8 @@ const Home = () => {
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(() => shouldOpenGuidedOnMount);
-  const [onboardingComplete, setOnboardingComplete] = useState(() => {
-    const c = readCachedOnboardingState(user?.id);
-    return c?.onboardingComplete ?? true;
-  });
-  const [lockStateResolved, setLockStateResolved] = useState(() => {
-    if (!user) return false;
-    const c = readCachedOnboardingState(user?.id);
-    return !!c && !needsOnboardingRedirect(c);
-  });
-  
-  const [characterCount, setCharacterCount] = useState(() => {
-    const c = readCachedOnboardingState(user?.id);
-    return c?.characterCount ?? 0;
-  });
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const resolvedCharacterCount = charsLoaded ? Math.max(characterCount, cachedChars.length) : characterCount;
+  const { onboardingComplete, characterCount, resolved: lockStateResolved } = useOnboarded();
+  const resolvedCharacterCount = Math.max(characterCount, cachedChars.length);
   const effectiveOnboardingComplete = onboardingComplete || resolvedCharacterCount > 0;
 
 
@@ -115,7 +101,7 @@ const Home = () => {
     if (authLoading) return;
 
     const pending = localStorage.getItem("facefox_pending_creation");
-    if (user && pending && initialLoadComplete) {
+    if (user && pending && lockStateResolved && charsLoaded) {
       localStorage.removeItem("facefox_pending_creation");
 
       if (resolvedCharacterCount > 0) {
@@ -170,49 +156,14 @@ const Home = () => {
     setShowGuided(true);
     setSkipWelcome(false);
     setAutoOpenEvaluated(true);
-  }, [authLoading, openCreatorRequested, user, navigate, initialLoadComplete, resolvedCharacterCount]);
+  }, [authLoading, openCreatorRequested, user, navigate, lockStateResolved, charsLoaded, resolvedCharacterCount]);
 
-  // Resolve onboarding lock state
+  // Auto-close the creator once the user has at least one character, unless the creator was explicitly requested this mount.
   useEffect(() => {
-    if (!user) {
-      setOnboardingComplete(true);
-      setLockStateResolved(false);
-      setCharacterCount(0);
-      return;
+    if (resolvedCharacterCount > 0 && !openCreatorRequested) {
+      setShowGuided(false);
     }
-
-    const applyResolvedState = (resolvedState: { onboardingComplete: boolean; characterCount: number }) => {
-      if (cancelled) return;
-      const nextCharacterCount = Math.max(resolvedState.characterCount, cachedChars.length);
-      const nextOnboardingComplete = resolvedState.onboardingComplete || nextCharacterCount > 0;
-
-      setOnboardingComplete(nextOnboardingComplete);
-      setCharacterCount(nextCharacterCount);
-      setLockStateResolved(true);
-      setInitialLoadComplete(true);
-
-      if (nextCharacterCount > 0 && !openCreatorRequested) {
-        setShowGuided(false);
-      }
-    };
-
-    const cached = readCachedOnboardingState(user.id);
-    if (cached && !needsOnboardingRedirect(cached)) {
-      setOnboardingComplete(cached.onboardingComplete);
-      setCharacterCount(cached.characterCount);
-      setLockStateResolved(true);
-    } else {
-      setLockStateResolved(false);
-    }
-
-    let cancelled = false;
-
-    void fetchAndCacheOnboardingState(user.id).then((resolvedState) => {
-      applyResolvedState(resolvedState);
-    });
-
-    return () => { cancelled = true; };
-  }, [cachedChars.length, openCreatorRequested, user]);
+  }, [resolvedCharacterCount, openCreatorRequested]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
