@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus } from "lucide-react";
@@ -24,11 +24,8 @@ interface Character {
 
 const MyCharacters = () => {
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, charactersReady } = useAppData();
+  const { characters: cachedChars } = useAppData();
   const navigate = useTransitionNavigate();
-  const [newCharId, setNewCharId] = useState<string | null>(null);
-  const [isFirstCharacter, setIsFirstCharacter] = useState(false);
-  const [bounceActive, setBounceActive] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate(`/auth?redirect=/characters`, { replace: true });
@@ -40,22 +37,6 @@ const MyCharacters = () => {
       .filter((c) => c.face_image_url && c.face_angle_url && c.body_anchor_url)
       .slice(0, 12) as Character[];
   }, [cachedChars]);
-
-  // Handle new character highlight
-  useEffect(() => {
-    if (!charactersReady) return;
-    const pendingNew = sessionStorage.getItem("facefox_new_char_highlight");
-    if (pendingNew) {
-      sessionStorage.removeItem("facefox_new_char_highlight");
-      setNewCharId(pendingNew);
-      if (characters.length === 1) {
-        setIsFirstCharacter(true);
-        setBounceActive(true);
-        setTimeout(() => setBounceActive(false), 3500);
-      }
-      setTimeout(() => setNewCharId(null), 1500);
-    }
-  }, [charactersReady, characters.length]);
 
   if (!authLoading && !user) return <div className="min-h-screen bg-background" />;
 
@@ -102,7 +83,6 @@ const MyCharacters = () => {
           </button>
 
           {characters.map((char) => {
-            const isNew = newCharId === char.id;
             const hasFace = char.face_image_url && char.face_image_url.startsWith("http") && !char.face_image_url.startsWith("data:image/svg");
             return (
               <button

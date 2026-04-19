@@ -400,7 +400,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   })();
 
   const TOTAL = flowSteps.length;
-  const allowFlowResume = isLoggedIn || sessionStorage.getItem("facefox_signup_gate_active") === "1";
 
   const [step, setStep] = useState(() => flowVariant === "member-onboarding" ? 1 : 0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
@@ -430,31 +429,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     tick();
     return () => cancelAnimationFrame(raf);
   }, []);
-
-  const restoreSavedFlow = useCallback(() => {
-    try {
-      if (!allowFlowResume) {
-        sessionStorage.removeItem(FLOW_STATE_KEY);
-        return false;
-      }
-
-      const raw = sessionStorage.getItem(FLOW_STATE_KEY);
-      if (!raw) return false;
-      const saved = JSON.parse(raw);
-
-      if (saved?.flowVariant !== flowVariant) {
-        sessionStorage.removeItem(FLOW_STATE_KEY);
-        return false;
-      }
-
-      setStep(Math.min(Math.max(saved?.step ?? 0, 0), TOTAL - 1));
-      setSelections({ ...emptySelections, ...normaliseLegacySelections(saved?.selections ?? {}) });
-      return true;
-    } catch {
-      sessionStorage.removeItem(FLOW_STATE_KEY);
-      return false;
-    }
-  }, [TOTAL, allowFlowResume, flowVariant]);
 
   const selectionsRef = useRef(selections);
   const stepRef = useRef(step);

@@ -249,9 +249,10 @@ const AppRoutes = () => {
     return () => window.removeEventListener(eventName, handleBlockingLoaders as EventListener);
   }, []);
 
+  const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
   const stillResolving =
-    authLoading ||
-    (!authLoading && !user && !isExemptRoute(location.pathname)) ||
+    (authLoading && !hasCachedUser) ||
+    (!authLoading && !user && !hasCachedUser && !isExemptRoute(location.pathname)) ||
     (!authLoading && !!user && location.pathname === "/auth");
 
   useEffect(() => {
