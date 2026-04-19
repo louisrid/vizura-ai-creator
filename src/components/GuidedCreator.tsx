@@ -405,6 +405,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
   const [heroExiting, setHeroExiting] = useState(false);
+  const slideFirstRenderRef = useRef(true);
   const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
@@ -614,8 +615,11 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     }
 
     const prevStep = step - 1;
+    // Never go back to the hero slide — shake instead
     if ((flowSteps[prevStep]?.type ?? null) === "hero") {
-      setHeroPhase(3);
+      setBackArrowShaking(true);
+      setTimeout(() => setBackArrowShaking(false), 500);
+      return;
     }
 
     setStep(prevStep);
@@ -758,7 +762,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
-          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+          <div className="mt-3 md:mt-4 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-[10px]" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
               const isMiddle = i === 1 && slide.pills.length === 3;
@@ -805,7 +809,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
+        <div className="mt-3 md:mt-4 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -839,10 +843,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           {trait.options.length === 5 ? (
-            <div className="mt-6 md:mt-8 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
-              <div className="flex justify-center gap-3.5 md:gap-4 mb-3.5 md:mb-4">
+            <div className="mt-3 md:mt-4 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
+              <div className="flex justify-center gap-[10px] mb-[10px]">
                 {trait.options.slice(0, 3).map((opt) => (
-                  <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
+                  <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 7px)" }}>
                     <InteractivePill
                       label={opt}
                       selected={selectedVal === opt}
@@ -852,9 +856,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   </div>
                 ))}
               </div>
-              <div className="flex justify-center gap-3.5 md:gap-4">
+              <div className="flex justify-center gap-[10px]">
                 {trait.options.slice(3).map((opt) => (
-                  <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 10px)" }}>
+                  <div key={opt} className="flex flex-col items-center gap-1" style={{ width: "calc(33.333% - 7px)" }}>
                     <InteractivePill
                       label={opt}
                       selected={selectedVal === opt}
@@ -866,7 +870,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               </div>
             </div>
           ) : (
-            <div className={`mt-6 md:mt-8 grid w-full gap-3.5 md:gap-4 px-2 mx-auto ${
+            <div className={`mt-3 md:mt-4 grid w-full gap-[10px] px-2 mx-auto ${
               trait.options.length === 4 ? "max-w-[24rem] md:max-w-[31rem] grid-cols-2"
                 : trait.options.length === 2 ? "max-w-[20rem] md:max-w-[25rem] grid-cols-2"
                 : "max-w-[24rem] md:max-w-[31rem] grid-cols-3"
@@ -945,13 +949,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
-      {/* Content area — fades between slides */}
-      <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[12vh] pb-[214px]"} justify-center`}>
-          <AnimatePresence mode="wait" initial={false} onExitComplete={() => setHeroExiting(false)}>
+      {/* Content area — fades between slides; constrained above arrows */}
+      <div className="absolute inset-x-0 top-0 flex items-start justify-center px-8 md:px-12" style={{ bottom: 200 }}>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[12vh]"} justify-center`}>
+          <AnimatePresence mode="wait" initial={false} onExitComplete={() => { setHeroExiting(false); slideFirstRenderRef.current = false; }}>
             <motion.div
               key={step}
-              initial={{ opacity: 0 }}
+              initial={slideFirstRenderRef.current ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.45, ease: "easeInOut" }}
