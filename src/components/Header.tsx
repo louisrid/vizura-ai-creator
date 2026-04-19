@@ -153,25 +153,22 @@ const Header = () => {
       if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
-          const isLocked = showMenuLocks && lockedLabels.has(item.label);
-          if (!isLocked) {
-            setOpen(false);
-            setTouchHighlight(null);
-            if (item.label === "create character") {
-              if (pathname === "/") {
-                window.dispatchEvent(new CustomEvent("facefox:open-creator"));
-              } else {
-                navigate("/", { state: { openCreator: true } });
-              }
-            } else if (item.label === "home" && slideMenuMode) {
-              window.dispatchEvent(new CustomEvent("facefox:close-creator"));
-            } else if (item.auth && !user) {
-              navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+          setOpen(false);
+          setTouchHighlight(null);
+          if (item.label === "create character") {
+            if (pathname === "/") {
+              window.dispatchEvent(new CustomEvent("facefox:open-creator"));
             } else {
-              navigate(item.path);
+              navigate("/", { state: { openCreator: true } });
             }
-            return;
+          } else if (item.label === "home" && slideMenuMode) {
+            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
+          } else if (item.auth && !user) {
+            navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+          } else {
+            navigate(item.path);
           }
+          return;
         }
       }
       // Released outside any item — keep dropdown open (treat as a press, not a drag)
@@ -188,7 +185,7 @@ const Header = () => {
       document.removeEventListener('touchcancel', handleEnd);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, touchHighlight, showMenuLocks, user, pathname]);
+  }, [open, touchHighlight, user, pathname]);
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
@@ -214,8 +211,7 @@ const Header = () => {
     navigate("/");
   };
 
-  // Items that get locked when showMenuLocks is true
-  const lockedLabels = new Set(["create character", "storage"]);
+  const menuDisabled = showMenuLocks;
 
   const menuItems = [
     { label: "home", path: "/", icon: Home, auth: false },
@@ -272,7 +268,6 @@ const Header = () => {
                   : isLast
                     ? "0 0 10px 10px"
                     : "0";
-                const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
                     {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 12%)", margin: "0" }} />}
@@ -280,7 +275,6 @@ const Header = () => {
                       <button
                         data-menu-idx={idx}
                         onClick={() => {
-                          if (isLocked) return;
                           if (checkNavGuard()) { setOpen(false); return; }
                           setOpen(false);
                           if (item.auth && !user) {
@@ -311,19 +305,12 @@ const Header = () => {
                           backgroundColor: touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent",
                           borderRadius,
                         }}
-                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
+                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
                       </button>
-                      {isLocked && (
-                        <div
-                          className="absolute pointer-events-auto"
-                          style={{ inset: 0, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: isFirst ? "8px 8px 0 0" : isLast ? "0 0 8px 8px" : 0, zIndex: 10 }}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      )}
                     </div>
                   </div>
                 );
@@ -362,8 +349,13 @@ const Header = () => {
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
-        onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
+        onClick={(e) => {
+          if (menuDisabled) return;
+          if (touchActiveRef.current) { touchActiveRef.current = false; return; }
+          setOpen(!open);
+        }}
         onTouchStart={(e) => {
+          if (menuDisabled) return;
           e.preventDefault();
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
@@ -374,9 +366,17 @@ const Header = () => {
             return !prev;
           });
         }}
+        disabled={menuDisabled}
         className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
-        style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
+        style={{
+          borderRadius: 10,
+          backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000",
+          border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
+          opacity: menuDisabled ? 0.45 : 1,
+          pointerEvents: menuDisabled ? "none" : "auto",
+        }}
         aria-label="open menu"
+        aria-disabled={menuDisabled}
       >
         <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
           <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
@@ -421,25 +421,30 @@ const Header = () => {
             {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
-                  <button
-                    onClick={() => { if (checkNavGuard()) return; navigate("/top-ups"); }}
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 active:scale-95 transition-transform duration-150"
+                  <div
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
                       borderRadius: 10,
                     }}
+                    aria-label="gem balance"
                   >
                     <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
                     <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
-                  </button>
+                  </div>
                 </div>
 
                 <div className="relative">
                   <button
                     ref={menuBtnRef}
-                    onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
+                    onClick={(e) => {
+                      if (menuDisabled) return;
+                      if (touchActiveRef.current) { touchActiveRef.current = false; return; }
+                      setOpen(!open);
+                    }}
                     onTouchStart={(e) => {
+                      if (menuDisabled) return;
                       e.preventDefault();
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
@@ -450,13 +455,17 @@ const Header = () => {
                         return !prev;
                       });
                     }}
+                    disabled={menuDisabled}
                     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: "#000",
-                      border: "2px solid #ffe603",
+                      backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000",
+                      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
+                      opacity: menuDisabled ? 0.45 : 1,
+                      pointerEvents: menuDisabled ? "none" : "auto",
                     }}
                     aria-label="open menu"
+                    aria-disabled={menuDisabled}
                   >
                     <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
                       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
