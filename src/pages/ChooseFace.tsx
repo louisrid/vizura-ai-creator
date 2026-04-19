@@ -20,6 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeGenerate } from "@/lib/generateApi";
 import PaywallOverlay from "@/components/PaywallOverlay";
 import ProgressBarLoader from "@/components/loading/ProgressBarLoader";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
