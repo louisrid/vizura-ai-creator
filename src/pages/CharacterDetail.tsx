@@ -424,11 +424,6 @@ const CharacterDetail = () => {
                 toast("1/1 used");
                 return;
               }
-              if (!onboardingComplete) {
-                const directTarget = label === "3/4 angle" ? "angle" as const : "body" as const;
-                handleRegenerate(directTarget);
-                return;
-              }
               onRegenClick?.();
             }}
             className="absolute flex items-center justify-center transition-transform active:scale-95"
