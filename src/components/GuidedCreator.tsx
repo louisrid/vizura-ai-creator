@@ -574,12 +574,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       if (!selectionsRef.current[key as keyof GuidedSelections]) { triggerShake(); return; }
     }
     if (isCreateSlide) {
-      if (flowVariant === "guest-onboarding") {
-        const nextStep = Math.min(step + 1, TOTAL - 1);
-        if (nextStep === step) return;
-        setStep(nextStep);
-        return;
-      }
       completeCookingFlow();
       return;
     }
