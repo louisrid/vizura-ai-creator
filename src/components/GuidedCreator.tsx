@@ -949,8 +949,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
-      {/* Content area — fades between slides; constrained above arrows */}
-      <div className="absolute inset-x-0 top-0 flex items-start justify-center px-8 md:px-12" style={{ bottom: 200 }}>
+      {/* Content area — fades between slides; constrained above arrows for non-hero */}
+      <div className="absolute inset-x-0 top-0 flex items-start justify-center px-8 md:px-12" style={{ bottom: (isHeroSlide || heroExiting || isSignupScreen) ? 0 : 200 }}>
         <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[12vh]"} justify-center`}>
           <AnimatePresence mode="wait" initial={false} onExitComplete={() => { setHeroExiting(false); slideFirstRenderRef.current = false; }}>
             <motion.div
