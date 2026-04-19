@@ -120,7 +120,7 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
-      .limit(50);
+      .limit(10);
     if (data) {
       setCharacters(data as CachedCharacter[]);
       writeLocal(CHARS_KEY, data);
@@ -139,7 +139,8 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       .from("generations")
       .select("id, image_urls, prompt, character_id, created_at")
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(20);
     if (data) {
       setGenerations(data as CachedGeneration[]);
       writeLocal(GENS_KEY, data);
