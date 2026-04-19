@@ -404,6 +404,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const [step, setStep] = useState(() => flowVariant === "member-onboarding" ? 1 : 0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
+  const [heroExiting, setHeroExiting] = useState(false);
   const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
@@ -592,6 +593,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (isHeroSlide) {
       heroVisited.current = true;
       markHeroSeen();
+      setHeroExiting(true);
     }
 
     setStep(nextStep);
@@ -945,8 +947,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[19vh] pb-[190px]"} justify-center`}>
-          <AnimatePresence mode="wait" initial={false}>
+        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[19vh] pb-[190px]"} justify-center`}>
+          <AnimatePresence mode="wait" initial={false} onExitComplete={() => setHeroExiting(false)}>
             <motion.div
               key={step}
               initial={{ opacity: 0 }}
