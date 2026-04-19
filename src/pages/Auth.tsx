@@ -20,7 +20,7 @@ function isInAppWebView(): boolean {
 }
 
 const Auth = () => {
-  const { user, signIn } = useAuth();
+  const { user, loading, signIn } = useAuth();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const redirectTo = useMemo(() => new URLSearchParams(location.search).get("redirect") || "/", [location.search]);
@@ -29,6 +29,17 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inWebView = useMemo(() => isInAppWebView(), []);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      const hash = window.location.hash;
+      const search = window.location.search;
+      const hasOAuthReturn = hash.includes("access_token") || search.includes("code=");
+      if (!hasOAuthReturn) {
+        navigate("/", { replace: true });
+      }
+    }
+  }, [loading, user, navigate]);
 
   useEffect(() => {
     const resetLoading = () => setGoogleLoading(false);
