@@ -193,7 +193,7 @@ const OnboardingRedirectGate = () => {
     let cancelled = false;
 
     const resolveRedirect = async () => {
-      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname)) {
+      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname) || location.pathname.startsWith("/characters")) {
         setShouldRedirect(false);
         return;
       }
