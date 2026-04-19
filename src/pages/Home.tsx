@@ -92,22 +92,8 @@ const Home = () => {
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(() => shouldOpenGuidedOnMount);
-  const [onboardingComplete, setOnboardingComplete] = useState(() => {
-    const c = readCachedOnboardingState(user?.id);
-    return c?.onboardingComplete ?? true;
-  });
-  const [lockStateResolved, setLockStateResolved] = useState(() => {
-    if (!user) return false;
-    const c = readCachedOnboardingState(user?.id);
-    return !!c && !needsOnboardingRedirect(c);
-  });
-  
-  const [characterCount, setCharacterCount] = useState(() => {
-    const c = readCachedOnboardingState(user?.id);
-    return c?.characterCount ?? 0;
-  });
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const resolvedCharacterCount = charsLoaded ? Math.max(characterCount, cachedChars.length) : characterCount;
+  const { onboardingComplete, characterCount, resolved: lockStateResolved } = useOnboarded();
+  const resolvedCharacterCount = Math.max(characterCount, cachedChars.length);
   const effectiveOnboardingComplete = onboardingComplete || resolvedCharacterCount > 0;
 
 
