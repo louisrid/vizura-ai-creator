@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Plus } from "lucide-react";
