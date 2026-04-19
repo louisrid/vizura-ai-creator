@@ -23,6 +23,7 @@ const Header = () => {
   const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
   const touchHighlightRef = useRef<number | null>(null);
+  const suppressNextItemClickRef = useRef(false);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -153,8 +154,10 @@ const Header = () => {
       if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
+          suppressNextItemClickRef.current = true;
           setOpen(false);
           setTouchHighlight(null);
+          touchHighlightRef.current = null;
           if (item.label === "create character") {
             if (pathname === "/") {
               window.dispatchEvent(new CustomEvent("facefox:open-creator"));
@@ -275,6 +278,7 @@ const Header = () => {
                       <button
                         data-menu-idx={idx}
                         onClick={() => {
+                          if (suppressNextItemClickRef.current) { suppressNextItemClickRef.current = false; return; }
                           if (checkNavGuard()) { setOpen(false); return; }
                           setOpen(false);
                           if (item.auth && !user) {
