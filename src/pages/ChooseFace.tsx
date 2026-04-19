@@ -353,50 +353,7 @@ const ChooseFace = () => {
     setGenerationError(null);
 
     try {
-      const invokeAndParse = async (body: Record<string, unknown>, retriesLeft = 2): Promise<any> => {
-        const { data: sessionData } = await supabase.auth.getSession();
-        let token = sessionData?.session?.access_token;
-        if (!token) {
-          const { data: refreshed } = await supabase.auth.refreshSession();
-          token = refreshed?.session?.access_token;
-        }
-        if (!token) throw new Error("Unauthorized");
-        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            },
-            body: JSON.stringify(body),
-          });
-          return response.json();
-        } catch (networkErr: any) {
-          if (retriesLeft > 0 && (networkErr?.name === "TypeError" || networkErr?.message?.includes("fetch"))) {
-            await new Promise<void>((resolve) => {
-              if (document.visibilityState === "visible") {
-                setTimeout(resolve, 1000);
-              } else {
-                const onVisible = () => {
-                  if (document.visibilityState === "visible") {
-                    document.removeEventListener("visibilitychange", onVisible);
-                    setTimeout(resolve, 500);
-                  }
-                };
-                document.addEventListener("visibilitychange", onVisible);
-              }
-            });
-            await supabase.auth.refreshSession();
-            return invokeAndParse(body, retriesLeft - 1);
-          }
-          throw networkErr;
-        }
-      };
-
-      const result = await invokeAndParse({
+      const result = await invokeGenerate({
         prompt,
         face_regen: true,
         previous_faces: previousFaces,
