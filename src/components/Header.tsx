@@ -153,25 +153,22 @@ const Header = () => {
       if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
-          const isLocked = showMenuLocks && lockedLabels.has(item.label);
-          if (!isLocked) {
-            setOpen(false);
-            setTouchHighlight(null);
-            if (item.label === "create character") {
-              if (pathname === "/") {
-                window.dispatchEvent(new CustomEvent("facefox:open-creator"));
-              } else {
-                navigate("/", { state: { openCreator: true } });
-              }
-            } else if (item.label === "home" && slideMenuMode) {
-              window.dispatchEvent(new CustomEvent("facefox:close-creator"));
-            } else if (item.auth && !user) {
-              navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+          setOpen(false);
+          setTouchHighlight(null);
+          if (item.label === "create character") {
+            if (pathname === "/") {
+              window.dispatchEvent(new CustomEvent("facefox:open-creator"));
             } else {
-              navigate(item.path);
+              navigate("/", { state: { openCreator: true } });
             }
-            return;
+          } else if (item.label === "home" && slideMenuMode) {
+            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
+          } else if (item.auth && !user) {
+            navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+          } else {
+            navigate(item.path);
           }
+          return;
         }
       }
       // Released outside any item — keep dropdown open (treat as a press, not a drag)
@@ -188,7 +185,7 @@ const Header = () => {
       document.removeEventListener('touchcancel', handleEnd);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, touchHighlight, showMenuLocks, user, pathname]);
+  }, [open, touchHighlight, user, pathname]);
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
@@ -214,8 +211,7 @@ const Header = () => {
     navigate("/");
   };
 
-  // Items that get locked when showMenuLocks is true
-  const lockedLabels = new Set(["create character", "storage"]);
+  const menuDisabled = showMenuLocks;
 
   const menuItems = [
     { label: "home", path: "/", icon: Home, auth: false },
@@ -272,7 +268,6 @@ const Header = () => {
                   : isLast
                     ? "0 0 10px 10px"
                     : "0";
-                const isLocked = showMenuLocks && lockedLabels.has(item.label);
                 return (
                   <div key={item.label}>
                     {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 12%)", margin: "0" }} />}
@@ -280,7 +275,6 @@ const Header = () => {
                       <button
                         data-menu-idx={idx}
                         onClick={() => {
-                          if (isLocked) return;
                           if (checkNavGuard()) { setOpen(false); return; }
                           setOpen(false);
                           if (item.auth && !user) {
@@ -311,19 +305,12 @@ const Header = () => {
                           backgroundColor: touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent",
                           borderRadius,
                         }}
-                        onMouseEnter={(e) => { if (!isLocked) e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
+                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
                       </button>
-                      {isLocked && (
-                        <div
-                          className="absolute pointer-events-auto"
-                          style={{ inset: 0, backgroundColor: "rgba(0,0,0,0.80)", borderRadius: isFirst ? "8px 8px 0 0" : isLast ? "0 0 8px 8px" : 0, zIndex: 10 }}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      )}
                     </div>
                   </div>
                 );
