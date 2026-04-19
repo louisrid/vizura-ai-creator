@@ -60,7 +60,7 @@ const ChatPill = ({
     >
       <div className="relative">
         <div
-          className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
+          className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
           style={{
             borderRadius: 10,
             backgroundColor: bgColor,
@@ -173,7 +173,7 @@ const InstructionalSlide = ({
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{ background: "#000", overflow: "hidden", touchAction: "none" }}
-      initial={false}
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -199,23 +199,23 @@ const InstructionalSlide = ({
         </div>
       )}
 
-      {/* Content area — constrained above arrows */}
+      {/* Content area */}
       <div
-        className="absolute inset-x-0 flex justify-center px-8 md:px-12"
-        style={{ top: 0, bottom: 200 }}
+        className="absolute inset-x-0 flex justify-center px-6 md:px-12"
+        style={{ top: 0, bottom: 0 }}
       >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[12vh]">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center pt-[19vh] pb-[200px]">
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <img
               src={foxEmojiImg}
               alt="🦊"
-              className="mb-1 inline-block"
-              style={{ width: 52, height: 52, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+              className="mb-3 md:mb-4 inline-block"
+              style={{ width: 64, height: 64, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite" }}
             />
           ) : (
             <span
-              className="text-[52px] md:text-[68px] mb-1 inline-block"
+              className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block"
               style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}
             >
               {slide.emoji}
@@ -223,12 +223,12 @@ const InstructionalSlide = ({
           )}
 
           {/* Title */}
-          <h2 className="text-center text-[29px] md:text-[42px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-3 md:mt-4 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-[10px]" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}
