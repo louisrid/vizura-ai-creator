@@ -68,7 +68,7 @@ const CharacterDetail = () => {
   const [onboardingComplete, setOnboardingComplete] = useState(() => {
     if (!user) return false;
     const cached = readCachedOnboardingState(user.id);
-    return cached?.onboardingComplete ?? false;
+    return cached?.onboardingComplete ?? true;
   });
   const [angleRegensUsed, setAngleRegensUsed] = useState(0);
   const [bodyRegensUsed, setBodyRegensUsed] = useState(0);
