@@ -362,11 +362,17 @@ const Header = () => {
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}
+        onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
         onTouchStart={(e) => {
           e.preventDefault();
-        }}
-        onClick={() => {
-          setOpen(!open);
+          e.stopPropagation();
+          e.nativeEvent.stopImmediatePropagation();
+          touchActiveRef.current = true;
+          setOpen(prev => {
+            if (!prev) document.body.style.overflow = "hidden";
+            else document.body.style.overflow = "";
+            return !prev;
+          });
         }}
         className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
         style={{ borderRadius: 10, backgroundColor: "#000", border: "2px solid #ffe603" }}
@@ -432,11 +438,17 @@ const Header = () => {
                 <div className="relative">
                   <button
                     ref={menuBtnRef}
+                    onClick={(e) => { if (touchActiveRef.current) { touchActiveRef.current = false; return; } setOpen(!open); }}
                     onTouchStart={(e) => {
                       e.preventDefault();
-                    }}
-                    onClick={() => {
-                      setOpen(!open);
+                      e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
+                      touchActiveRef.current = true;
+                      setOpen(prev => {
+                        if (!prev) document.body.style.overflow = "hidden";
+                        else document.body.style.overflow = "";
+                        return !prev;
+                      });
                     }}
                     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
                     style={{
