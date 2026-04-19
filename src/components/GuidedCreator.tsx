@@ -51,7 +51,7 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[29px] md:text-[42px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
 
 
 /* ── Nav arrow ── */
@@ -104,10 +104,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="flex w-full items-center justify-center h-[50px] md:h-[58px] text-[15px] md:text-[18px]"
+    className="flex w-full items-center justify-center h-[62px] md:h-[73px] text-[19px] md:text-[22px]"
     style={{
       borderRadius: 10,
-      padding: "9px 21px",
+      padding: "11px 26px",
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -758,7 +758,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-<span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>
+<span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
@@ -776,7 +776,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                 >
                   <div className="relative">
-                    <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
+                    <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
@@ -807,7 +807,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[52px] md:text-[68px] mb-1 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
+        <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-3 md:mt-4 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
