@@ -209,10 +209,10 @@ const ChooseFace = () => {
 
   // When bar completes and faces are ready, stop loading (tap-to-continue handles transition)
   useEffect(() => {
-    if (barComplete && faces.length > 0) {
+    if (barComplete && apiDone && faces.length > 0) {
       setLoading(false);
     }
-  }, [barComplete, faces.length]);
+  }, [barComplete, apiDone, faces.length]);
 
   useEffect(() => {
     if (!loading && !cardsRevealed && faces.length > 0) {
@@ -1062,7 +1062,7 @@ const ChooseFace = () => {
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                              <span className="inline-block font-[800] lowercase text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]" style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
+                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>

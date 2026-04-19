@@ -521,7 +521,7 @@ const CharacterDetail = () => {
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px] text-white">{t.label}</span>
-                  <span className="inline-block font-[800] lowercase text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]" style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
+                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -625,7 +625,7 @@ const CharacterDetail = () => {
                 {traits.map((t) => (
                   <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px] text-white">{t.label}</span>
-                    <span className="inline-block font-[800] lowercase text-white leading-none text-[14px]">{t.value}</span>
+                    <span className={`inline-block font-[800] text-white leading-none text-[14px] ${t.value === "XL" ? "normal-case" : "lowercase"}`}>{t.value}</span>
                   </div>
                 ))}
               </div>
