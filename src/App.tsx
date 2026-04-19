@@ -186,51 +186,46 @@ const OnboardingRedirectGate = () => {
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useTransitionNavigate();
-  const hasRedirected = useRef(false);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const hasRedirectedRef = useRef(false);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const resolveRedirect = async () => {
-      if (!user || location.pathname === "/" || isExemptRoute(location.pathname) || isOnboardingFlowRoute(location.pathname) || location.pathname.startsWith("/characters") || location.pathname === "/account") {
-        setShouldRedirect(false);
-        return;
-      }
-
-      const cachedState = readCachedOnboardingState(user.id);
-      if (cachedState && !needsOnboardingRedirect(cachedState)) {
-        setShouldRedirect(false);
-        return;
-      }
-
-      const resolvedState = await fetchAndCacheOnboardingState(user.id);
-      if (cancelled) return;
-      setShouldRedirect(needsOnboardingRedirect(resolvedState));
-    };
-
-    void resolveRedirect();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [location.pathname, user?.id]);
+    // Reset the per-path redirect lock when path changes
+    hasRedirectedRef.current = false;
+  }, [location.pathname]);
 
   useEffect(() => {
-    if (!shouldRedirect || hasRedirected.current) return;
-    hasRedirected.current = true;
+    if (!user) return;
+    if (
+      location.pathname === "/" ||
+      isExemptRoute(location.pathname) ||
+      isOnboardingFlowRoute(location.pathname) ||
+      location.pathname.startsWith("/characters") ||
+      location.pathname === "/account"
+    ) {
+      return;
+    }
+
+    // ONLY redirect if cached state EXPLICITLY says not onboarded.
+    // If no cached state exists, do NOT redirect — assume onboarded until proven otherwise.
+    const cachedState = readCachedOnboardingState(user.id);
+    if (!cachedState) {
+      // Background fetch to populate cache for future checks, but never redirect on this pass.
+      void fetchAndCacheOnboardingState(user.id);
+      return;
+    }
+
+    // Cached state present and says onboarded — return immediately, never fetch again here.
+    if (!needsOnboardingRedirect(cachedState)) return;
+
+    if (hasRedirectedRef.current) return;
+    hasRedirectedRef.current = true;
 
     if (acquireRedirectLock()) {
-      navigate("/", {
-        replace: true,
-        state: { openCreator: true, onboardingRedirect: true },
-      });
+      navigate("/", { replace: true });
     }
-  }, [navigate, shouldRedirect]);
+  }, [location.pathname, user?.id, navigate]);
 
-  if (!shouldRedirect) return null;
-
-  return <div className="fixed inset-0 z-[9999] bg-nav" />;
+  return null;
 };
 
 const AppRoutes = () => {
