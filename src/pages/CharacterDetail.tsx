@@ -267,7 +267,7 @@ const CharacterDetail = () => {
       console.error("Regenerate error:", err);
       if (target === "angle") sessionStorage.removeItem(`facefox_regen_angle_${character.id}`);
       else sessionStorage.removeItem(`facefox_regen_body_${character.id}`);
-      toast.error("regen error");
+      toast.error(typeof err === "string" ? err : (err as any)?.message || "regen error");
     } finally {
       setRegeneratingAngle(false);
       setRegeneratingBody(false);
