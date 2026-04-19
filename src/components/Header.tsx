@@ -345,7 +345,7 @@ const Header = () => {
     document.body,
   ) : null;
 
-  const slideMenuButton = slideMenuMode ? createPortal(
+  const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <button
         ref={menuBtnRef}

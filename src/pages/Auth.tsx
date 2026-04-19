@@ -63,10 +63,7 @@ const Auth = () => {
 
         if (!resolvedState.onboardingComplete) {
           await supabase.auth.signOut();
-          sessionStorage.removeItem("facefox_post_auth_home");
           toast.error("press start instead!");
-          sessionStorage.setItem("facefox_post_auth_home", "1");
-          navigate("/", { replace: true });
           return;
         }
 

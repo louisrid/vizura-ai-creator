@@ -474,12 +474,12 @@ const Home = () => {
                       <button
                         key={`empty-${i}`}
                         type="button"
-                        onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
+                        onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
                           backgroundColor: "hsl(0 0% 5%)",
-                          cursor: isFirstEmpty ? "pointer" : "default",
+                          cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                         }}
                       >
                         <AspectRatio ratio={3 / 4}>
@@ -673,12 +673,12 @@ const Home = () => {
                       <button
                         key={`empty-${i}`}
                         type="button"
-                        onClick={() => { if (isFirstEmpty) handleOpenCreator(); }}
+                        onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
                         className="overflow-hidden"
                         style={{
                           borderRadius: 10,
                           backgroundColor: "hsl(0 0% 5%)",
-                          cursor: isFirstEmpty ? "pointer" : "default",
+                          cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                         }}
                       >
                         <AspectRatio ratio={3 / 4}>

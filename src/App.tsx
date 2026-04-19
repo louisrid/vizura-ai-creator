@@ -260,7 +260,7 @@ const AppRoutes = () => {
 
   useEffect(() => {
     if (!stillResolving && blockingLoaders === 0) {
-      const timer = setTimeout(() => setHeaderRevealed(true), 16);
+      const timer = setTimeout(() => setHeaderRevealed(true), 100);
       return () => clearTimeout(timer);
     }
   }, [stillResolving, blockingLoaders]);
