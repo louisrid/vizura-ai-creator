@@ -266,72 +266,10 @@ const ChooseFace = () => {
 
       setShowSignIn(false);
 
-      const invokeAndParse = async (body: Record<string, unknown>, retriesLeft = 2): Promise<any> => {
-        // Refresh session proactively in case tab was backgrounded
-        const { data: sessionData } = await supabase.auth.getSession();
-        let token = sessionData?.session?.access_token;
-        if (!token) {
-          const { data: refreshed } = await supabase.auth.refreshSession();
-          token = refreshed?.session?.access_token;
-        }
-        if (!token) throw new Error("Unauthorized");
-
-        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-        const url = `https://${projectId}.supabase.co/functions/v1/generate`;
-
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            },
-            body: JSON.stringify(body),
-          });
-
-          const result = await response.json();
-
-          if (!response.ok && result?.error === "Unauthorized") {
-            const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
-            if (!refreshError && refreshed.session) {
-              return invokeAndParse(body, 0);
-            }
-          }
-
-          return result;
-        } catch (networkErr: any) {
-          // Tab suspension on iOS Safari causes fetch to fail with TypeError
-          // Wait for tab to become visible again, then retry
-          if (retriesLeft > 0 && (networkErr?.name === "TypeError" || networkErr?.message?.includes("fetch"))) {
-            console.warn("Fetch failed (likely tab suspended), waiting to retry…", networkErr.message);
-            await new Promise<void>((resolve) => {
-              if (document.visibilityState === "visible") {
-                // Already visible — small delay then retry
-                setTimeout(resolve, 1000);
-              } else {
-                // Wait for tab to come back
-                const onVisible = () => {
-                  if (document.visibilityState === "visible") {
-                    document.removeEventListener("visibilitychange", onVisible);
-                    setTimeout(resolve, 500);
-                  }
-                };
-                document.addEventListener("visibilitychange", onVisible);
-              }
-            });
-            // Refresh auth before retry
-            await supabase.auth.refreshSession();
-            return invokeAndParse(body, retriesLeft - 1);
-          }
-          throw networkErr;
-        }
-      };
-
-      let result = await invokeAndParse({ prompt, face_regen: true });
+      let result = await invokeGenerate({ prompt, face_regen: true });
 
       if (result?.error && result.code === "FREE_GEN_USED") {
-        result = await invokeAndParse({ prompt, face_regen: true });
+        result = await invokeGenerate({ prompt, face_regen: true });
       }
 
       if (result?.error) {
