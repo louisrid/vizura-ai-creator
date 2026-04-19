@@ -24,6 +24,7 @@ const Header = () => {
   const touchActiveRef = useRef(false);
   const touchHighlightRef = useRef<number | null>(null);
   const touchMovedRef = useRef(false);
+  const touchStartYRef = useRef(0);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -130,7 +131,8 @@ const Header = () => {
       e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
-      touchMovedRef.current = true;
+      const dy = Math.abs(touch.clientY - touchStartYRef.current);
+      if (dy > 10) touchMovedRef.current = true;
       const items = document.querySelectorAll('[data-menu-idx]');
       let foundIdx: number | null = null;
       items.forEach((el) => {
@@ -370,8 +372,9 @@ const Header = () => {
           e.preventDefault();
           e.stopPropagation();
           e.nativeEvent.stopImmediatePropagation();
-          touchActiveRef.current = true;
+          touchActiveRef.current = !open;
           touchMovedRef.current = false;
+          touchStartYRef.current = e.touches[0]?.clientY ?? 0;
           setOpen(prev => {
             if (!prev) document.body.style.overflow = "hidden";
             else document.body.style.overflow = "";
@@ -447,8 +450,9 @@ const Header = () => {
                       e.preventDefault();
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
-                      touchActiveRef.current = true;
+                      touchActiveRef.current = !open;
                       touchMovedRef.current = false;
+                      touchStartYRef.current = e.touches[0]?.clientY ?? 0;
                       setOpen(prev => {
                         if (!prev) document.body.style.overflow = "hidden";
                         else document.body.style.overflow = "";
