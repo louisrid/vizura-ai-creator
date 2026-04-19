@@ -124,8 +124,13 @@ const Account = () => {
 
         {/* Sign out */}
         <button
-          className="mt-8 text-sm font-[900] lowercase transition-all hover:opacity-70"
-          style={{ color: "#ff4444" }}
+          className="mt-8 px-6 py-3 text-sm font-[900] lowercase transition-all hover:opacity-90"
+          style={{
+            color: "#ffffff",
+            backgroundColor: "#1a0505",
+            border: "2px solid #ff4444",
+            borderRadius: 10,
+          }}
           onClick={handleSignOut}
         >
           sign out

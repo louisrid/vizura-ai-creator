@@ -322,15 +322,17 @@ const Header = () => {
                     onClick={handleLogout}
                     className="w-full text-left flex items-center gap-2 md:gap-3"
                     style={{
-                      color: "#ff4444",
+                      color: "#ffffff",
+                      backgroundColor: "#1a0505",
+                      border: "2px solid #ff4444",
                       padding: isDesktop ? "15px 20px" : "11px 12px",
                       fontSize: isDesktop ? 16 : 13,
                       fontWeight: 700,
                       textTransform: "lowercase",
                       borderRadius: "0 0 10px 10px",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#2a0808")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#1a0505")}
                   >
                     <LogOut size={isDesktop ? 18 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
                     log out

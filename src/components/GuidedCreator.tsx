@@ -416,7 +416,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const [seenSlide1, setSeenSlide1] = useState(false);
 
   const [ringT, setRingT] = useState(0);
-  const [heroPhase, setHeroPhase] = useState(() => isHeroSeen() ? 3 : 0);
+  const [heroPhase, setHeroPhase] = useState(0);
   const heroVisited = useRef(isHeroSeen());
 
   /* Ring animation timer */
@@ -514,18 +514,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   }, [isHeroSlide, splashGone]);
 
   /* Hero phased entrance */
-  const seenAtMountRef = useRef(isHeroSeen());
   useEffect(() => {
     if (!isHeroSlide || !splashGone) return;
-    // If hero was already seen before this mount, skip the entrance entirely.
-    if (seenAtMountRef.current || heroVisited.current) {
-      heroVisited.current = true;
-      setHeroPhase(3);
-      return;
-    }
-    // Mark IMMEDIATELY on first hero mount so any later remount (e.g. blocked
-    // login redirecting back here) skips the entrance animation entirely.
-    markHeroSeen();
     setHeroPhase(0);
     const ts = [
       setTimeout(() => setHeroPhase(1), 300),
@@ -911,7 +901,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   };
 
   const showDashes = !isHeroSlide;
-  const showNavigation = !isHeroSlide && !heroExiting && !isSignupScreen;
+  const showNavigation = !isHeroSlide && !isSignupScreen;
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
