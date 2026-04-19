@@ -466,7 +466,7 @@ const Index = () => {
   const cachedOverlay = preselectedCharacterId ? null : sessionStorage.getItem("facefox_photo_overlay");
   const [photoOverlayPhase, setPhotoOverlayPhase] = useState<"hidden" | "loading" | "success">(cachedOverlay === "success" ? "success" : "hidden");
   const [photoOverlayResult, setPhotoOverlayResult] = useState<string | null>(() => cachedOverlay === "success" ? sessionStorage.getItem("facefox_photo_result") : null);
-  const [fadingBack, setFadingBack] = useState(false);
+  
 
   const [photoType, setPhotoType] = useState(() => sessionStorage.getItem("facefox_photo_type") || "selfie");
   const [photoRatio, setPhotoRatio] = useState(() => sessionStorage.getItem("facefox_photo_ratio") || "3:4");
