@@ -257,8 +257,10 @@ const AppRoutes = () => {
 
   useEffect(() => {
     if (stillResolving || blockingLoaders > 0) return;
-    const frame = requestAnimationFrame(() => hideStartupSplash());
-    return () => cancelAnimationFrame(frame);
+    const timer = setTimeout(() => {
+      if (getBlockingLoaderCount() === 0) hideStartupSplash();
+    }, 50);
+    return () => clearTimeout(timer);
   }, [stillResolving, blockingLoaders, location.key]);
 
   useEffect(() => {
