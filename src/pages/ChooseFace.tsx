@@ -134,11 +134,8 @@ const ChooseFace = () => {
   const [zoomedFaceUrl, setZoomedFaceUrl] = useState<string | null>(null);
   const isFreeUser = !subscribed && gems <= 0;
   const [faceRegensUsed, setFaceRegensUsed] = useState(0);
-  const [onboardingComplete, setOnboardingComplete] = useState(() => {
-    if (!user) return false;
-    const cached = readCachedOnboardingState(user.id);
-    return cached?.onboardingComplete ?? false;
-  });
+  const { onboardingComplete: hookOnboarded, resolved: onboardingResolved } = useOnboarded();
+  const onboardingComplete = onboardingResolved ? hookOnboarded : false;
   const lastFacesRef = useRef<string[]>([]);
 
   const hasOnboardingFaceRegenLocked = !onboardingComplete && faceRegensUsed >= 1;
