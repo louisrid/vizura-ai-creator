@@ -23,9 +23,6 @@ const Header = () => {
   const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
   const touchHighlightRef = useRef<number | null>(null);
-  const touchMovedRef = useRef(false);
-  const touchStartYRef = useRef(0);
-  const lastToggleRef = useRef(0);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -107,7 +104,6 @@ const Header = () => {
   useEffect(() => {
     if (!open) return;
     const handler = (e: Event) => {
-      if (Date.now() - lastToggleRef.current < 200) return;
       const target = e.target as Node;
       if (menuBtnRef.current?.contains(target)) return;
       if (dropdownRef.current?.contains(target)) return;
@@ -133,8 +129,6 @@ const Header = () => {
       e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
-      const dy = Math.abs(touch.clientY - touchStartYRef.current);
-      if (dy > 10) touchMovedRef.current = true;
       const items = document.querySelectorAll('[data-menu-idx]');
       let foundIdx: number | null = null;
       items.forEach((el) => {
@@ -156,7 +150,7 @@ const Header = () => {
       if (!touchActiveRef.current) return;
       touchActiveRef.current = false;
       const idx = touchHighlightRef.current;
-      if (idx !== null && touchMovedRef.current) {
+      if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
           const isLocked = showMenuLocks && lockedLabels.has(item.label);
@@ -180,8 +174,7 @@ const Header = () => {
           }
         }
       }
-      // Released outside any item — close dropdown
-      setOpen(false);
+      // Released outside any item — keep dropdown open (treat as a press, not a drag)
       setTouchHighlight(null);
       touchHighlightRef.current = null;
     };
