@@ -278,6 +278,7 @@ const Header = () => {
                       <button
                         data-menu-idx={idx}
                         onClick={() => {
+                          if (suppressNextItemClickRef.current) { suppressNextItemClickRef.current = false; return; }
                           if (checkNavGuard()) { setOpen(false); return; }
                           setOpen(false);
                           if (item.auth && !user) {
