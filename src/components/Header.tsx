@@ -154,8 +154,10 @@ const Header = () => {
       if (idx !== null) {
         const item = menuItems[idx];
         if (item) {
+          suppressNextItemClickRef.current = true;
           setOpen(false);
           setTouchHighlight(null);
+          touchHighlightRef.current = null;
           if (item.label === "create character") {
             if (pathname === "/") {
               window.dispatchEvent(new CustomEvent("facefox:open-creator"));
