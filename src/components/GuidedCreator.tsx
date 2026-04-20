@@ -495,6 +495,20 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const isNameSlide = stepType === "name";
   const isCreateSlide = stepType === "create";
   const isSignupScreen = stepType === "signup";
+
+  // Delay arrow fade-in by 450ms so arrows enter in sync with the incoming slide,
+  // not overlapping the outgoing no-arrow slide (hero or signup) as it fades out.
+  // Arrow fade-OUT remains instant to run in parallel with the current slide exit.
+  const showNavigation = !isHeroSlide && !isSignupScreen;
+  const [showNavigationDelayed, setShowNavigationDelayed] = useState(showNavigation);
+  useEffect(() => {
+    if (showNavigation) {
+      const timer = setTimeout(() => setShowNavigationDelayed(true), 450);
+      return () => clearTimeout(timer);
+    } else {
+      setShowNavigationDelayed(false);
+    }
+  }, [showNavigation]);
   const currentTraitIndex = currentStep.type === "trait" ? currentStep.traitIndex : -1;
 
 
@@ -901,7 +915,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   };
 
   const showDashes = !isHeroSlide;
-  const showNavigation = !isHeroSlide && !isSignupScreen;
   const canExitFlow = skipWelcome && isLoggedIn;
 
   return createPortal(
@@ -950,7 +963,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Arrow buttons + Home button — fade in sync with slide content */}
       <AnimatePresence>
-        {showNavigation && (
+        {showNavigationDelayed && (
           <motion.div
             key="nav-arrows"
             initial={{ opacity: 0 }}
