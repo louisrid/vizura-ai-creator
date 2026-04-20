@@ -322,7 +322,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
               <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}>
-                <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
+                <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
                     <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
@@ -539,7 +539,7 @@ const Admin = () => {
                           const { label, type } = formatPhotoLabel(p.prompt);
                           return (
                             <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", overflow: "hidden" }}>
-                              <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
+                              <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
                                   <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
