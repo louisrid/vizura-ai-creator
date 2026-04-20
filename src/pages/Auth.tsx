@@ -11,6 +11,7 @@ import BackButton from "@/components/BackButton";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 import { fetchAndCacheOnboardingState } from "@/lib/onboardingState";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 import { supabase } from "@/integrations/supabase/client";
 
 function isInAppWebView(): boolean {
