@@ -772,53 +772,44 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
 
-      /* ── onboarding regen limit check ── */
+      /* ── onboarding check + atomic slot claim for free regen ── */
       const onboarding = await isOnboardingUser(adminClient, userId);
-      if (onboarding) {
-        const { data: profile } = await adminClient
-          .from("profiles")
-          .select("onboarding_angle_regens_used, onboarding_body_regens_used")
-          .eq("user_id", userId)
-          .single();
-
-        if (profile) {
-          if (regenerateSingle === "angle" && (profile.onboarding_angle_regens_used ?? 0) >= 1) {
-            return new Response(
-              JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
-              { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-            );
-          }
-          if (regenerateSingle === "body" && (profile.onboarding_body_regens_used ?? 0) >= 1) {
-            return new Response(
-              JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
-              { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-            );
-          }
-        }
-      }
-
       let creditData: { balance: number } | null = null;
-      {
+      if (onboarding) {
+        const counterCol = regenerateSingle === "angle" ? "onboarding_angle_regens_used" : "onboarding_body_regens_used";
+        // Conditional update claims the slot only if it has not been used yet.
+        // If another concurrent request already claimed it, 0 rows are returned.
+        const { data: claimed } = await adminClient
+          .from("profiles")
+          .update({ [counterCol]: 1, updated_at: new Date().toISOString() })
+          .eq("user_id", userId)
+          .eq(counterCol, 0)
+          .select(counterCol);
+        if (!claimed || claimed.length === 0) {
+          return new Response(
+            JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
+            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        // Slot claimed successfully — regen is FREE during onboarding, no gem deduction.
+      } else {
+        /* ── non-onboarding users: normal gem deduction ── */
         const { data: cd } = await adminClient
           .from("credits")
           .select("balance")
           .eq("user_id", userId)
           .single();
         creditData = cd;
-
-      if (!creditData || creditData.balance < GEM_COST_SINGLE_REGEN) {
+        if (!creditData || creditData.balance < GEM_COST_SINGLE_REGEN) {
           return new Response(
             JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
-
-        if (creditData) {
-          await adminClient
-            .from("credits")
-            .update({ balance: creditData.balance - GEM_COST_SINGLE_REGEN, updated_at: new Date().toISOString() })
-            .eq("user_id", userId);
-        }
+        await adminClient
+          .from("credits")
+          .update({ balance: creditData.balance - GEM_COST_SINGLE_REGEN, updated_at: new Date().toISOString() })
+          .eq("user_id", userId);
       }
 
       // Always fetch fresh character data from DB
@@ -885,21 +876,6 @@ serve(async (req) => {
           });
         }
 
-        /* ── increment onboarding regen counter ── */
-        if (onboarding) {
-          const col = regenerateSingle === "angle" ? "onboarding_angle_regens_used" : "onboarding_body_regens_used";
-          const { data: currentProfile } = await adminClient
-            .from("profiles")
-            .select(col)
-            .eq("user_id", userId)
-            .single();
-          if (currentProfile) {
-            await adminClient
-              .from("profiles")
-              .update({ [col]: (currentProfile[col] ?? 0) + 1, updated_at: new Date().toISOString() })
-              .eq("user_id", userId);
-          }
-        }
 
         await logGeneration(adminClient, userId, singleCharId, "character references", regenerateSingle, GEM_COST_SINGLE_REGEN, true);
 
@@ -954,34 +930,31 @@ serve(async (req) => {
       console.log("=== ANGLE + BODY GENERATION ===");
       console.log("Face URL:", selectedFaceUrl.slice(0, 80));
 
-      /* ── deduct gems for angle + body ── */
-      let angleCost = 0;
-      if (regenerateTarget === "angle") angleCost = GEM_COST_ANGLE;
-      else if (regenerateTarget === "body") angleCost = GEM_COST_BODY;
-      else angleCost = GEM_COST_ANGLE + GEM_COST_BODY; // both
-
+      /* ── deduct gems for angle + body (skipped during onboarding) ── */
+      const onboardingAngleBody = await isOnboardingUser(adminClient, userId);
       let creditData: { balance: number } | null = null;
-      {
+      if (!onboardingAngleBody) {
+        let angleCost = 0;
+        if (regenerateTarget === "angle") angleCost = GEM_COST_ANGLE;
+        else if (regenerateTarget === "body") angleCost = GEM_COST_BODY;
+        else angleCost = GEM_COST_ANGLE + GEM_COST_BODY; // both
+
         const { data: cd } = await adminClient
           .from("credits")
           .select("balance")
           .eq("user_id", userId)
           .single();
         creditData = cd;
-
         if (!creditData || creditData.balance < angleCost) {
           return new Response(
             JSON.stringify({ error: "No gems remaining", code: "NO_GEMS" }),
             { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
-
-        if (creditData) {
-          await adminClient
-            .from("credits")
-            .update({ balance: creditData.balance - angleCost, updated_at: new Date().toISOString() })
-            .eq("user_id", userId);
-        }
+        await adminClient
+          .from("credits")
+          .update({ balance: creditData.balance - angleCost, updated_at: new Date().toISOString() })
+          .eq("user_id", userId);
       }
 
       let dbBodyType = "regular";
@@ -1084,29 +1057,23 @@ serve(async (req) => {
     const isFaceRegen = body?.face_regen === true;
     const gemCost = isFaceRegen ? GEM_COST_FACE_REGEN : GEM_COST_PHOTO;
 
-    /* ── onboarding face regen limit check / first-press lock ── */
+    /* ── onboarding face regen limit check (atomic slot claim) ── */
     // Only enforce the limit on actual regens (when previous_faces is provided),
     // not on the initial face generation.
     const isActualRegen = isFaceRegen && Array.isArray(body?.previous_faces) && body.previous_faces.length > 0;
-    if (isActualRegen) {
-      const onboarding = await isOnboardingUser(adminClient, userId);
-      if (onboarding) {
-        const { data: profile } = await adminClient
-          .from("profiles")
-          .select("onboarding_face_regens_used")
-          .eq("user_id", userId)
-          .single();
-        if (profile && (profile.onboarding_face_regens_used ?? 0) >= 1) {
-          return new Response(
-            JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
-            { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
-        }
-
-        await adminClient
-          .from("profiles")
-          .update({ onboarding_face_regens_used: 1, updated_at: new Date().toISOString() })
-          .eq("user_id", userId);
+    const onboardingFace = await isOnboardingUser(adminClient, userId);
+    if (isActualRegen && onboardingFace) {
+      const { data: claimed } = await adminClient
+        .from("profiles")
+        .update({ onboarding_face_regens_used: 1, updated_at: new Date().toISOString() })
+        .eq("user_id", userId)
+        .eq("onboarding_face_regens_used", 0)
+        .select("onboarding_face_regens_used");
+      if (!claimed || claimed.length === 0) {
+        return new Response(
+          JSON.stringify({ error: "Regen limit reached", code: "ONBOARDING_REGEN_LIMIT" }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
       }
     }
 
@@ -1121,22 +1088,21 @@ serve(async (req) => {
       }
     }
 
+    /* ── deduct gems (skipped during onboarding for free face gen/regen) ── */
     let creditData: { balance: number } | null = null;
-    {
+    if (!onboardingFace) {
       const { data: cd } = await adminClient
         .from("credits")
         .select("balance")
         .eq("user_id", userId)
         .single();
       creditData = cd;
-
       if (!creditData || creditData.balance < gemCost) {
         const { data: subData } = await adminClient
           .from("subscriptions")
           .select("status")
           .eq("user_id", userId)
           .single();
-
         return new Response(
           JSON.stringify({
             error: "No gems remaining",
@@ -1146,16 +1112,13 @@ serve(async (req) => {
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-
-      if (creditData) {
-        await adminClient
-          .from("credits")
-          .update({
-            balance: creditData.balance - gemCost,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("user_id", userId);
-      }
+      await adminClient
+        .from("credits")
+        .update({
+          balance: creditData.balance - gemCost,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId);
     }
 
     const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
