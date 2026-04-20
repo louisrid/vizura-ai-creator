@@ -138,7 +138,7 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
       onClick(e);
     }}
     className={`mt-2 text-[0.6rem] font-bold lowercase underline underline-offset-4 ${className}`}
-    style={{ color: "hsl(0 0% 100% / 0.25)" }}
+    style={{ color: "#ffffff" }}
   >
     {label}
   </button>
@@ -148,7 +148,7 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
 export const SwipeHint = () => (
   <p
     className="text-xs font-bold lowercase"
-    style={{ color: "hsl(0 0% 100% / 0.3)" }}
+    style={{ color: "#ffffff" }}
   >
     press arrow to continue
   </p>
