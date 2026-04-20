@@ -16,9 +16,10 @@ type MenuButtonProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   touchActiveRef: MutableRefObject<boolean>;
+  touchStartTimeRef: MutableRefObject<number>;
 };
 
-const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisabled, open, setOpen, touchActiveRef }, ref) => (
+const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisabled, open, setOpen, touchActiveRef, touchStartTimeRef }, ref) => (
   <button
     ref={ref}
     onClick={() => {
@@ -32,6 +33,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
       e.stopPropagation();
       e.nativeEvent.stopImmediatePropagation();
       touchActiveRef.current = true;
+      touchStartTimeRef.current = Date.now();
       setOpen(prev => {
         if (!prev) document.body.style.overflow = "hidden";
         else document.body.style.overflow = "";
@@ -70,6 +72,7 @@ const Header = () => {
   const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
   const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
+  const touchStartTimeRef = useRef(0);
   const touchHighlightRef = useRef<number | null>(null);
   const suppressNextItemClickRef = useRef(false);
 
@@ -159,6 +162,7 @@ const Header = () => {
 
     const handleMove = (e: TouchEvent) => {
       if (!touchActiveRef.current) return;
+      if (Date.now() - touchStartTimeRef.current < 150) return;
       e.preventDefault();
       const touch = e.touches[0];
       if (!touch) return;
@@ -353,7 +357,7 @@ const Header = () => {
 
   const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
-      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} />
+      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} touchStartTimeRef={touchStartTimeRef} />
     </div>,
     document.body,
   ) : null;
@@ -406,7 +410,7 @@ const Header = () => {
                 </div>
 
                 <div className="relative">
-                  <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} />
+                  <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} touchStartTimeRef={touchStartTimeRef} />
                 </div>
               </div>
             )}
