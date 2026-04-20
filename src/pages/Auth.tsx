@@ -11,6 +11,7 @@ import BackButton from "@/components/BackButton";
 import { toast } from "@/components/ui/sonner";
 import DotDecal from "@/components/DotDecal";
 import { fetchAndCacheOnboardingState } from "@/lib/onboardingState";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 import { supabase } from "@/integrations/supabase/client";
 
 function isInAppWebView(): boolean {
@@ -56,6 +57,17 @@ const Auth = () => {
     sessionStorage.removeItem("facefox_guided_flow_state");
     sessionStorage.removeItem("facefox_post_auth_home");
 
+    // Hold splash up through the entire check → signout (if needed) → navigate cycle.
+    // Without this, splash hides when auth resolves, then user sees brief flashes of
+    // header/home before onboarding redirect or signout completes.
+    const unregisterSplash = registerBlockingLoader();
+    let didUnregister = false;
+    const safeUnregister = () => {
+      if (didUnregister) return;
+      didUnregister = true;
+      unregisterSplash();
+    };
+
     const checkNewAccount = async () => {
       try {
         const resolvedState = await fetchAndCacheOnboardingState(user.id);
@@ -72,6 +84,10 @@ const Auth = () => {
       } catch (err) {
         console.error("[auth-check] error:", err);
         if (!cancelled) navigate(redirectTo, { replace: true });
+      } finally {
+        // Keep splash up a tick after navigate so the target page has time to mount
+        // and register its own blocking loader (e.g. Home.tsx) before splash hides.
+        setTimeout(safeUnregister, 100);
       }
     };
 
@@ -79,6 +95,8 @@ const Auth = () => {
 
     return () => {
       cancelled = true;
+      // Safety net if component unmounts before the finally block schedules its unregister.
+      safeUnregister();
     };
   }, [user, navigate, redirectTo]);
 
