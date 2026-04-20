@@ -248,7 +248,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   >
                     {c.face_image_url ? (
                       <AspectRatio ratio={3 / 4}>
-                        <img src={c.face_image_url} alt="" className="h-full w-full object-cover" />
+                        <img src={c.face_image_url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       </AspectRatio>
                     ) : (
                       <AspectRatio ratio={3 / 4}>
