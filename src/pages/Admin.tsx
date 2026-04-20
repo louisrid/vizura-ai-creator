@@ -470,7 +470,18 @@ const Admin = () => {
   }
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-7">
+          <div className="flex items-center gap-3 mb-7">
+            <BackButton />
+          </div>
+        </main>
+        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -120 }}>
+          <Loader2 className="animate-spin" size={28} style={{ color: "#ffffff" }} strokeWidth={2.5} />
+        </div>
+      </div>
+    );
   }
 
   return (
