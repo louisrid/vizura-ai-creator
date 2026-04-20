@@ -159,7 +159,7 @@ const TopUps = () => {
                     <button
                       onClick={handleClaimFree}
                       disabled={claiming}
-                      className="flex items-center gap-2 rounded-[10px] px-5 py-3 text-sm font-[900] lowercase transition-all active:scale-95 disabled:opacity-60"
+                      className="flex items-center gap-2 rounded-[10px] px-5 py-3 text-sm font-[900] lowercase transition-all disabled:opacity-60"
                       style={{ backgroundColor: "#ffffff", color: "#000000" }}
                     >
                       {claiming ? (
@@ -226,7 +226,7 @@ const TopUps = () => {
                   if (btn) { btn.style.backgroundColor = '#c4b000'; setTimeout(() => { btn.style.backgroundColor = ''; }, 150); }
                   handleBuy(pack);
                 }}
-                className="relative z-[1] flex flex-col items-center justify-center gap-3 min-w-[90px] active:scale-95"
+                className="relative z-[1] flex flex-col items-center justify-center gap-3 min-w-[90px]"
                 style={{ opacity: buying === pack.id ? 0.6 : 1 }}
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>

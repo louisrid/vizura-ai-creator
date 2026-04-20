@@ -229,7 +229,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
-            className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
             style={{ background: "#ffe603", color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? (
@@ -277,7 +277,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <button
             onClick={handleEmailAuth}
             disabled={submitting || googleLoading}
-            className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
             style={{ background: "#ffe603", color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}

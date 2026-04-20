@@ -105,7 +105,7 @@ const NavArrow = ({
         e.stopPropagation();
         onClick();
       }}
-      className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
+      className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
       style={{
         borderRadius: 10,
         backgroundColor: isForward ? Y : "#000000",

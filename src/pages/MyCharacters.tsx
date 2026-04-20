@@ -72,7 +72,7 @@ const MyCharacters = () => {
           {/* Always show the + button */}
           <button
             onClick={handleCreateCharacter}
-            className="overflow-hidden active:scale-[0.98] transition-transform hover-lift"
+            className="overflow-hidden transition-transform hover-lift"
             style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)", border: "none" }}
           >
             <AspectRatio ratio={3 / 4}>
@@ -88,7 +88,7 @@ const MyCharacters = () => {
               <button
                 key={char.id}
                 onClick={() => navigate(`/characters/${char.id}`)}
-                className="relative overflow-hidden active:scale-[0.98] transition-all duration-200 hover-lift"
+                className="relative overflow-hidden transition-all duration-200 hover-lift"
                 style={{
                   borderRadius: 10,
                   border: "none",
