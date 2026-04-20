@@ -46,7 +46,7 @@ export const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode;
 export const Subtitle = ({ children, delay = 0.2 }: { children: React.ReactNode; delay?: number }) => (
   <p
     className="max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
-    style={{ color: "hsl(0 0% 100% / 0.92)" }}
+    style={{ color: "#ffffff" }}
   >
     {children}
   </p>
@@ -138,7 +138,7 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
       onClick(e);
     }}
     className={`mt-2 text-[0.6rem] font-bold lowercase underline underline-offset-4 ${className}`}
-    style={{ color: "hsl(0 0% 100% / 0.25)" }}
+    style={{ color: "#ffffff" }}
   >
     {label}
   </button>
@@ -148,7 +148,7 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
 export const SwipeHint = () => (
   <p
     className="text-xs font-bold lowercase"
-    style={{ color: "hsl(0 0% 100% / 0.3)" }}
+    style={{ color: "#ffffff" }}
   >
     press arrow to continue
   </p>
