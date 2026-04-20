@@ -247,10 +247,23 @@ const AppRoutes = () => {
   }, []);
 
   const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
+  const { charactersReady, generationsReady } = useAppData();
+  const { resolved: onboardingResolved } = useOnboarded();
+  const isStaticOrAuthRoute =
+    location.pathname === "/auth" ||
+    location.pathname === "/reset-password" ||
+    location.pathname === "/help" ||
+    location.pathname === "/info" ||
+    location.pathname.startsWith("/reset-password/") ||
+    location.pathname.startsWith("/help/") ||
+    location.pathname.startsWith("/info/");
+  const hasUserContext = !!user || hasCachedUser;
+  const dataStillLoading = hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
     (authLoading && !hasCachedUser) ||
     (!authLoading && !user && !hasCachedUser && !isExemptRoute(location.pathname)) ||
-    (!authLoading && !!user && location.pathname === "/auth");
+    (!authLoading && !!user && location.pathname === "/auth") ||
+    dataStillLoading;
 
   useEffect(() => {
     if (stillResolving || blockingLoaders > 0) return;
