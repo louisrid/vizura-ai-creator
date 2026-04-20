@@ -420,7 +420,7 @@ const Header = () => {
               )}
             </div>
 
-            {isLoggedIn && !isAuthPage && (
+            {isLoggedIn && !isAuthPage && !slideMenuMode && (
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
