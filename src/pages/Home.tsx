@@ -251,10 +251,9 @@ const Home = () => {
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
 
-  // Block render until onboarding state is fully resolved from DB — prevents light-to-dark flicker.
-  // The yellow loading bar (splash) covers this period on first load.
+  // App-level <LoadingScreen /> overlay covers this period via the blocking loader registered above.
   if (dataLoading && !showGuided && !authLoading && autoOpenEvaluated && !openCreatorRequested) {
-    return <div className="min-h-screen bg-background" />;
+    return null;
   }
 
   return (

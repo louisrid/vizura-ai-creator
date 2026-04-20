@@ -4,13 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
-import LoadingScreen from "@/components/LoadingScreen";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
 import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { supabase } from "@/integrations/supabase/client";
 import { displayAge } from "@/lib/displayAge";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 import { toast } from "sonner";
 
 // Admin identity is verified server-side in the admin-data edge function.
@@ -458,36 +458,19 @@ const Admin = () => {
     }
   }, [isAdmin, loadAll]);
 
+  useEffect(() => {
+    if (authLoading || !user || isAdmin !== true || loading) {
+      const unregister = registerBlockingLoader();
+      return unregister;
+    }
+  }, [authLoading, user, isAdmin, loading]);
+
   if (authLoading || !user || isAdmin !== true) {
-    if (document.getElementById("splash-screen")) return <LoadingScreen />;
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-7">
-          <div className="flex items-center gap-3 mb-7">
-            <BackButton />
-          </div>
-        </main>
-        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -120 }}>
-          <Loader2 className="animate-spin" size={28} style={{ color: "#ffffff" }} strokeWidth={2.5} />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (loading) {
-    if (document.getElementById("splash-screen")) return <LoadingScreen />;
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-7">
-          <div className="flex items-center gap-3 mb-7">
-            <BackButton />
-          </div>
-        </main>
-        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -120 }}>
-          <Loader2 className="animate-spin" size={28} style={{ color: "#ffffff" }} strokeWidth={2.5} />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
