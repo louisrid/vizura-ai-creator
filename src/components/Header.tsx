@@ -7,8 +7,8 @@ import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, Use
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useOnboarded } from "@/hooks/useOnboarded";
 import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
-import { fetchAndCacheOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
 import TopGradientBar from "@/components/TopGradientBar";
 
 type MenuButtonProps = {
@@ -103,25 +103,9 @@ const Header = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null);
 
-  // Onboarding lock state for menu — hide controls whenever onboarding is incomplete
-  const isOnboarding = (state: CachedOnboardingState | null | undefined) =>
-    !!state && !state.onboardingComplete;
-
-  const [showMenuLocks, setShowMenuLocks] = useState(false);
-
-  useEffect(() => {
-    if (!user) { setShowMenuLocks(false); return; }
-
-    let cancelled = false;
-
-    (async () => {
-      const resolvedState = await fetchAndCacheOnboardingState(user.id);
-      if (cancelled) return;
-      setShowMenuLocks(isOnboarding(resolvedState));
-    })();
-
-    return () => { cancelled = true; };
-  }, [user]);
+  // Onboarding lock state for menu — uses shared hook that reads cache synchronously on mount
+  const { onboardingComplete } = useOnboarded();
+  const showMenuLocks = !!user && !onboardingComplete;
 
   // Position dropdown relative to hamburger button
   const updateDropdownPos = useCallback(() => {
@@ -436,7 +420,7 @@ const Header = () => {
               )}
             </div>
 
-            {isLoggedIn && !isAuthPage && (
+            {isLoggedIn && !isAuthPage && !slideMenuMode && (
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
