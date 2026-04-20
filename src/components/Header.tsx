@@ -238,14 +238,6 @@ const Header = () => {
     handleNav("/");
   };
 
-  const handleLogout = async () => {
-    setOpen(false);
-    try {
-      await signOut();
-    } catch {}
-    navigate("/");
-  };
-
   const menuDisabled = showMenuLocks;
 
   const menuItems = [
