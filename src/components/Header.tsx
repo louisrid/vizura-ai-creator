@@ -40,6 +40,12 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
         return !prev;
       });
     }}
+    onTouchEnd={() => {
+      // Reset touchActiveRef here directly — the global handler may not be registered yet on the first tap
+      // because the useEffect that registers it only runs when `open` becomes true (after setState reconciles).
+      // Without this, touchActiveRef stays stuck true and pollutes the next tap on a menu item.
+      setTimeout(() => { touchActiveRef.current = false; }, 0);
+    }}
     disabled={menuDisabled}
     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
     style={{
