@@ -44,7 +44,7 @@ const SKIN_LABELS: Record<string, string> = {
 const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading } = useAuth();
-  const { gems, refetch: refetchGems } = useGems();
+  const { refetch: refetchGems } = useGems();
   const navigate = useTransitionNavigate();
   const { characters: cachedChars, generations: cachedGens } = useAppData();
   const [character, setCharacter] = useState<Character | null>(() => {
@@ -409,7 +409,7 @@ const CharacterDetail = () => {
         ) : null}
         {overlay === "lock" && isValidImg(url) && (
           <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
-            <Lock size={14} strokeWidth={3} color="#000" fill="none" />
+            <Lock size={14} strokeWidth={3} color="#000000" fill="none" />
           </div>
         )}
         {overlay === "regenerate" && (
@@ -425,7 +425,7 @@ const CharacterDetail = () => {
             className="absolute flex items-center justify-center transition-transform active:scale-95"
             style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
           >
-            <RefreshCw size={13} strokeWidth={3} color="#fff" />
+            <RefreshCw size={13} strokeWidth={3} color="#ffffff" />
           </button>
         )}
       </div>
@@ -446,7 +446,7 @@ const CharacterDetail = () => {
               style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
                 <line x1="12" y1="7" x2="2" y2="7" />
                 <polyline points="7,2 2,7 7,12" />
               </svg>
@@ -458,9 +458,9 @@ const CharacterDetail = () => {
           <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
                 <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 10, backgroundColor: "#ffe603" }}>
-                  {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000" />}
+                  {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
               </div>
             ) : (
@@ -495,7 +495,7 @@ const CharacterDetail = () => {
                     <div
                       key={photo?.id ?? `placeholder-${i}`}
                       className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                      style={{ borderRadius: 10, backgroundColor: "#000" }}
+                      style={{ borderRadius: 10, backgroundColor: "#000000" }}
                       onClick={() => { if (photo) setZoomedUrl(photo.url); }}
                     >
                       {photo && (
@@ -512,7 +512,7 @@ const CharacterDetail = () => {
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px] text-white">{t.label}</span>
-                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000", padding: "4px 8px" }}>{t.value}</span>
+                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000000", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -525,7 +525,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
-            style={{ height: 52, color: "#000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
+            style={{ height: 52, color: "#000000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
               <><Camera size={18} strokeWidth={2.5} /> create photo</>
@@ -544,7 +544,7 @@ const CharacterDetail = () => {
               style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
-              <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="7" x2="2" y2="7" />
                 <polyline points="7,2 2,7 7,12" />
               </svg>
@@ -558,9 +558,9 @@ const CharacterDetail = () => {
             <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
                   <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 10, backgroundColor: "#ffe603" }}>
-                    {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000" />}
+                    {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
                 </div>
               ) : (
@@ -595,7 +595,7 @@ const CharacterDetail = () => {
                       <div
                         key={photo?.id ?? `dplaceholder-${i}`}
                         className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                        style={{ borderRadius: 10, backgroundColor: "#000" }}
+                        style={{ borderRadius: 10, backgroundColor: "#000000" }}
                         onClick={() => { if (photo) setZoomedUrl(photo.url); }}
                       >
                         {photo && (
@@ -614,7 +614,7 @@ const CharacterDetail = () => {
               <h3 className="text-sm font-[900] lowercase text-white mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
-                  <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000", border: "2px solid hsl(var(--border-mid))" }}>
+                  <div key={t.label} className="rounded-[10px] px-3 py-2 text-center" style={{ backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px] text-white">{t.label}</span>
                     <span className={`inline-block font-[800] text-white leading-none text-[14px] ${t.value === "XL" ? "normal-case" : "lowercase"}`}>{t.value}</span>
                   </div>
@@ -625,7 +625,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
-              style={{ color: "#000", borderRadius: 10, backgroundColor: "#ffe603" }}
+              style={{ color: "#000000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">
                 <><Camera size={18} strokeWidth={2.5} /> create photo</>

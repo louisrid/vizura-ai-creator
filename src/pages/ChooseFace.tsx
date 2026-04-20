@@ -786,7 +786,7 @@ const ChooseFace = () => {
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
+              transition={{ duration: 0.45, ease: "easeInOut" }}
             />
           )}
         </AnimatePresence>
@@ -800,7 +800,7 @@ const ChooseFace = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
+              transition={{ duration: 0.45, ease: "easeInOut" }}
             >
                 <ProgressBarLoader
                   duration={45000}
@@ -827,7 +827,7 @@ const ChooseFace = () => {
                   style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
                   aria-label="go back"
                 >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
                     <line x1="12" y1="7" x2="2" y2="7" />
                     <polyline points="7,2 2,7 7,12" />
                   </svg>
@@ -853,7 +853,7 @@ const ChooseFace = () => {
                         animate={cardsRevealed ? { opacity: 1 } : { opacity: 0 }}
                         whileTap={{ scale: 1.02 }}
                         transition={{
-                          opacity: { duration: 0.4, ease: "easeOut" },
+                          opacity: { duration: 0.45, ease: "easeOut" },
                         }}
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
@@ -862,7 +862,7 @@ const ChooseFace = () => {
                           overflow: "hidden",
                         }}
                       >
-                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: "#000" }}>
+                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: "#000000" }}>
                           {regeneratingFaces ? (
                             <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
                           ) : (
@@ -883,7 +883,7 @@ const ChooseFace = () => {
                     style={{
                       borderRadius: 10,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
-                      color: selectedIndex !== null ? "#000" : "#ffffff",
+                      color: selectedIndex !== null ? "#000000" : "#ffffff",
                     }}
                   >
                     {selectedIndex !== null ? "use this face →" : "select a face"}
@@ -955,7 +955,7 @@ const ChooseFace = () => {
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000", padding: "6px 12px" }}>{t.value}</span>
+                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000000", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>
@@ -977,7 +977,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#ffe603", color: "#000", borderRadius: 10 }}
+                  style={{ backgroundColor: "#ffe603", color: "#000000", borderRadius: 10 }}
                 >
                   try again
                 </button>

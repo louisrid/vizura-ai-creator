@@ -42,7 +42,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
     style={{
       borderRadius: 10,
-      backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000",
+      backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
       border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",

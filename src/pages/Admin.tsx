@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, Lock, User } from "lucide-react";
+import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -107,7 +107,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
           className="flex items-center justify-center shrink-0"
           style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <ArrowLeft size={14} strokeWidth={2.5} color="#000" />
+          <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
         <PageTitle className="mb-0">character</PageTitle>
       </div>
@@ -217,7 +217,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
           className="flex items-center justify-center shrink-0"
           style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
-          <ArrowLeft size={14} strokeWidth={2.5} color="#000" />
+          <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>

@@ -64,7 +64,7 @@ const ChatPill = ({
           style={{
             borderRadius: 10,
             backgroundColor: bgColor,
-            color: highlight ? "#fff" : "#000",
+            color: highlight ? "#ffffff" : "#000000",
             border: "none",
           }}
         >
@@ -113,7 +113,7 @@ const NavArrow = ({
         outline: "none",
         padding: 0,
         cursor: "pointer",
-        color: isForward ? "#000" : "#ffffff",
+        color: isForward ? "#000000" : "#ffffff",
       }}
     >
       {direction === "left" ? (
@@ -172,7 +172,7 @@ const InstructionalSlide = ({
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
-      style={{ background: "#000", overflow: "hidden", touchAction: "none" }}
+      style={{ background: "#000000", overflow: "hidden", touchAction: "none" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

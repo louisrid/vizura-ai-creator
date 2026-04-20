@@ -103,7 +103,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
-                      color: value === opt.value ? "#ffe603" : "#fff",
+                      color: value === opt.value ? "#ffe603" : "#ffffff",
                       backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
@@ -168,7 +168,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[17px] font-[900] lowercase transition-all"
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
-                color: isSelected ? "#000" : "#ffffff",
+                color: isSelected ? "#000000" : "#ffffff",
                 borderRadius: isFirst && isLast ? "10px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
               }}
             >
@@ -316,7 +316,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
-                      color: value === opt.value ? "#ffe603" : "#fff",
+                      color: value === opt.value ? "#ffe603" : "#ffffff",
                       backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
@@ -393,7 +393,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
-                      color: value === opt.value ? "#ffe603" : "#fff",
+                      color: value === opt.value ? "#ffe603" : "#ffffff",
                       backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
@@ -780,7 +780,7 @@ const Index = () => {
                   )}
                   <span
                     className="text-lg font-[900] lowercase truncate"
-                    style={{ color: isSelected ? "#ffe603" : "#fff" }}
+                    style={{ color: isSelected ? "#ffe603" : "#ffffff" }}
                   >
                     {c.name || "unnamed"}
                   </span>

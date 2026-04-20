@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 export const LIGHT_BLUE = "hsl(195 100% 55%)";
-const PURE_WHITE = "hsl(0 0% 100%)";
+const PURE_WHITE = "#ffffff";
 
 export const dotColors = [
   "hsl(50 100% 50%)",
@@ -36,7 +36,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
 export const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode; delay?: number }) => (
   <h2
     className="text-center text-[2rem] font-[900] lowercase leading-[1.1] tracking-tight"
-    style={{ color: "hsl(0 0% 100%)" }}
+    style={{ color: "#ffffff" }}
   >
     {children}
   </h2>
@@ -121,7 +121,7 @@ export const GoldButton = ({
     style={{
       background: "hsl(var(--neon-yellow))",
       borderColor: "hsl(var(--neon-yellow))",
-      color: "#000",
+      color: "#000000",
       borderRadius: 10,
       transition: "transform 0.05s",
     }}
@@ -190,7 +190,7 @@ export const ArrowButton = ({
     {direction === "left" ? (
       <ArrowLeft size={22} strokeWidth={2.75} style={{ color: PURE_WHITE }} />
     ) : (
-      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "hsl(0 0% 0%)" }} />
+      <ArrowRight size={22} strokeWidth={2.5} style={{ color: "#000000" }} />
     )}
   </button>
 );

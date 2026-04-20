@@ -13,7 +13,7 @@ const LoadingScreen = () => {
   return (
     <div
       className="fixed inset-0"
-      style={{ zIndex: 99999, background: "#000" }}
+      style={{ zIndex: 99999, background: "#000000" }}
       role="status"
       aria-live="polite"
       aria-label="loading"
@@ -27,8 +27,8 @@ const LoadingScreen = () => {
           alignItems: "center",
           justifyContent: "center",
           gap: 16,
-          background: "hsl(0 0% 0%)",
-          color: "hsl(0 0% 100%)",
+          background: "#000000",
+          color: "#ffffff",
           fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif",
           fontWeight: 900,
           textTransform: "lowercase",
