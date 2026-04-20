@@ -404,7 +404,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const [step, setStep] = useState(() => flowVariant === "member-onboarding" ? 1 : 0);
   const [selections, setSelections] = useState<GuidedSelections>({ ...emptySelections });
   const [shaking, setShaking] = useState(false);
-  const [heroExiting, setHeroExiting] = useState(false);
+  
   const mounted = typeof document !== "undefined";
   const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
@@ -495,6 +495,16 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const isNameSlide = stepType === "name";
   const isCreateSlide = stepType === "create";
   const isSignupScreen = stepType === "signup";
+
+  // Tracks the slide type currently VISIBLE on screen. Updates after the exit animation
+  // completes (450ms), so wrapper alignment stays in sync with the outgoing slide
+  // until it fully exits — prevents layout snap-reposition during transitions where
+  // incoming and outgoing slides have different alignments (e.g. trait→signup).
+  const [visualStepType, setVisualStepType] = useState<string>(stepType);
+  useEffect(() => {
+    const t = setTimeout(() => setVisualStepType(stepType), 450);
+    return () => clearTimeout(t);
+  }, [stepType]);
 
   // Delay arrow fade-in by 450ms so arrows enter in sync with the incoming slide,
   // not overlapping the outgoing no-arrow slide (hero or signup) as it fades out.
@@ -592,7 +602,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (isHeroSlide) {
       heroVisited.current = true;
       markHeroSeen();
-      setHeroExiting(true);
     }
 
     setStep(nextStep);
@@ -945,8 +954,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${isSignupScreen ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${isHeroSlide || heroExiting || isSignupScreen ? "items-center justify-center min-h-full" : "items-start pt-[19vh] pb-[190px]"} justify-center`}>
-          <AnimatePresence mode="wait" initial={false} onExitComplete={() => setHeroExiting(false)}>
+        <div className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center min-h-full" : "items-start pt-[19vh] pb-[190px]"} justify-center`}>
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={step}
               initial={{ opacity: 0 }}
