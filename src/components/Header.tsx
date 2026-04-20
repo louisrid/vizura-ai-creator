@@ -7,8 +7,8 @@ import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, Use
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useOnboarded } from "@/hooks/useOnboarded";
 import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
-import { fetchAndCacheOnboardingState, type CachedOnboardingState } from "@/lib/onboardingState";
 import TopGradientBar from "@/components/TopGradientBar";
 
 type MenuButtonProps = {
