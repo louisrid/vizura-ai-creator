@@ -258,7 +258,12 @@ const AppRoutes = () => {
     location.pathname.startsWith("/help/") ||
     location.pathname.startsWith("/info/");
   const hasUserContext = !!user || hasCachedUser;
-  const dataStillLoading = hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
+  const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setDataLoadGracePassed(true), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+  const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
     (authLoading && !hasCachedUser) ||
     (!authLoading && !user && !hasCachedUser && !isExemptRoute(location.pathname)) ||
