@@ -1,4 +1,4 @@
-/* Lock overlay — 80% black, clips to button shape including border */
+/* Lock overlay — 55% black, clips to button shape including border */
 const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
   <div
     className="pointer-events-auto absolute"
