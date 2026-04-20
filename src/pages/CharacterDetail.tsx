@@ -422,7 +422,7 @@ const CharacterDetail = () => {
               }
               onRegenClick?.();
             }}
-            className="absolute flex items-center justify-center transition-transform active:scale-95"
+            className="absolute flex items-center justify-center transition-transform"
             style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
           >
             <RefreshCw size={13} strokeWidth={3} color="#ffffff" />
@@ -524,7 +524,7 @@ const CharacterDetail = () => {
         <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] text-[16px]"
+            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
             style={{ height: 52, color: "#000000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
@@ -624,7 +624,7 @@ const CharacterDetail = () => {
             <div className="flex-1" />
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all active:scale-[0.98] h-14 text-base"
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-base"
               style={{ color: "#000000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">
@@ -675,7 +675,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
-                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors active:opacity-70 disabled:opacity-50"
+                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors disabled:opacity-50"
                   style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                 >
                   no

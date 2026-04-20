@@ -224,7 +224,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
       <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "#ffe603" }}>{email}</p>
       <button
         onClick={() => setConfirmReset(true)}
-        className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 active:scale-[0.98] transition-transform"
+        className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 transition-transform"
         style={{ padding: "12px 0", color: "#ff4444", borderRadius: 10, border: "2px solid #ff4444", backgroundColor: "transparent" }}
       >
         reset user
@@ -243,7 +243,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   <button
                     key={c.id}
                     onClick={() => setViewingCharacter(c)}
-                    className="relative overflow-hidden hover-lift active:scale-[0.97] transition-transform text-left"
+                    className="relative overflow-hidden hover-lift transition-transform text-left"
                     style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
                   >
                     {c.face_image_url ? (
@@ -278,7 +278,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   <div key={img.id} className="flex flex-col hover-lift">
                     <button
                       onClick={() => setExpanded(img)}
-                      className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 active:scale-[0.98] text-left"
+                      className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
                     >
                       <AspectRatio ratio={3 / 4}>
                         <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -364,7 +364,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                 <button
                   onClick={() => setConfirmReset(false)}
                   disabled={resetting}
-                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50"
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50"
                   style={{ color: "#ffffff", borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
                 >
                   cancel
@@ -372,7 +372,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                 <button
                   onClick={handleReset}
                   disabled={resetting}
-                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 active:scale-[0.97] disabled:opacity-50 flex items-center justify-center gap-1.5"
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1.5"
                   style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
                 >
                   {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
@@ -576,7 +576,7 @@ const Admin = () => {
                           <button
                             key={i}
                             onClick={() => { setViewingUserId(u.user_id); window.scrollTo(0, 0); }}
-                            className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20 active:scale-[0.98]"
+                            className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20"
                             style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
                           >
                             <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>

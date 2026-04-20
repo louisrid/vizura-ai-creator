@@ -65,7 +65,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
         disabled={disabled}
-        className="flex items-center justify-center active:opacity-70 transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
+        className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
         style={{
           borderRadius: 10,
           backgroundColor: isForward ? fillColor : "#000000",
@@ -307,7 +307,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
-            className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+            className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
             style={{ background: Y, color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
@@ -820,7 +820,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
             whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black active:opacity-70 transition-opacity duration-150"
+            className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black transition-opacity duration-150"
             style={{ borderRadius: 10, backgroundColor: Y }}
           >
             <RefreshCw size={20} strokeWidth={2.5} />
@@ -987,7 +987,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   sessionStorage.setItem("facefox_creator_dismissed", "1");
                   handleClose();
                 }}
-                className="mt-3 flex items-center justify-center active:opacity-60 transition-opacity duration-150"
+                className="mt-3 flex items-center justify-center transition-opacity duration-150"
                 style={{ width: 76, height: 76 }}
               >
                 <Home size={38} strokeWidth={2} color="#ffffff" />
@@ -1127,7 +1127,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             <button
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
-              className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
+              className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
               style={{ background: Y, color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
