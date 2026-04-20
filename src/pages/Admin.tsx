@@ -44,10 +44,10 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
     <div className="relative w-full max-w-md md:max-w-lg">
       <ModalCloseButton onClick={onClose} />
       <div>
-        <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" />
+        <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
         <div className="mt-4 space-y-1.5">
           <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
-          <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "hsl(var(--border-mid))" }}>
+          <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "#ffffff" }}>
             {photo.user_email}
             {photo.character_name && ` · ${photo.character_name}`}
             {` · ${fmtDate(photo.created_at)}`}
@@ -92,9 +92,9 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
   const imgSlot = (url: string | null | undefined, label: string) => (
     <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 10, backgroundColor: "#000000" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "hsl(var(--border-mid))" }}>no photo</span>
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "#ffffff" }}>no photo</span>
       )}
     </div>
   );
@@ -127,7 +127,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
           <div className="grid grid-cols-4 gap-1.5">
             {traits.map((t) => (
               <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "hsl(var(--border-mid))" }}>{t.label}</span>
+                <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "#ffffff" }}>{t.label}</span>
                 <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
               </div>
             ))}
@@ -248,18 +248,18 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   >
                     {c.face_image_url ? (
                       <AspectRatio ratio={3 / 4}>
-                        <img src={c.face_image_url} alt="" className="h-full w-full object-cover" />
+                        <img src={c.face_image_url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       </AspectRatio>
                     ) : (
                       <AspectRatio ratio={3 / 4}>
                         <div className="flex h-full w-full items-center justify-center">
-                          <User size={24} strokeWidth={2.5} style={{ color: "hsl(var(--border-mid))" }} />
+                          <User size={24} strokeWidth={2.5} style={{ color: "#ffffff" }} />
                         </div>
                       </AspectRatio>
                     )}
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
                       <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{c.name || "unnamed"}</span>
-                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "hsl(var(--border-mid))" }}>age {displayAge(c.id, c.age)}</span>
+                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "#ffffff" }}>age {displayAge(c.id, c.age)}</span>
                     </div>
                   </button>
                 ))}
@@ -322,10 +322,10 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
               <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}>
-                <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" />
+                <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
-                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "hsl(var(--border-mid))" }}>
+                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
                       {expanded.prompt}
                     </p>
                   </div>
@@ -525,7 +525,7 @@ const Admin = () => {
                       <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
                         <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
                         <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
-                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "hsl(var(--border-mid))" }}>{label}</span>
+                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>{label}</span>
                       </div>
                     ))}
                   </div>
@@ -539,17 +539,17 @@ const Admin = () => {
                           const { label, type } = formatPhotoLabel(p.prompt);
                           return (
                             <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", overflow: "hidden" }}>
-                              <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" />
+                              <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
-                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "hsl(var(--border-mid))" }}>
+                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
                                     {label}
                                   </span>
                                 ) : (
                                   <p className="text-[10px] md:text-[11px] font-extrabold lowercase text-white truncate leading-tight">{label}</p>
                                 )}
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "hsl(var(--border-mid))" }}>{p.user_email}</p>
+                                  <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "#ffffff" }}>{p.user_email}</p>
                                   {p.character_name && (
                                     <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
                                   )}
@@ -581,7 +581,7 @@ const Admin = () => {
                           >
                             <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
                             <div className="flex items-center gap-3 shrink-0">
-                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "hsl(var(--border-mid))" }}>{u.photos_this_week} photos</span>
+                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "#ffffff" }}>{u.photos_this_week} photos</span>
                               <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "#00e0ff" }}>{u.gems_remaining}💎</span>
                             </div>
                           </button>
@@ -600,7 +600,7 @@ const Admin = () => {
                         {rejected.map((r: any, i: number) => (
                           <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
                             <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-white leading-snug">{r.prompt_text}</p>
-                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "hsl(var(--border-mid))" }}>
+                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>
                               {r.user_email} · {fmtDate(r.rejected_at)}
                             </p>
                           </div>
