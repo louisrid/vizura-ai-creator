@@ -74,7 +74,11 @@ const FreshLoadRedirect = () => {
         return;
       }
 
-      if (!pendingPostAuthHome && !isExemptRoute(location.pathname)) {
+      const isFreshPageLoad = location.key === "default";
+      const shouldBootToStart =
+        !pendingPostAuthHome &&
+        (!isExemptRoute(location.pathname) || (location.pathname === "/auth" && isFreshPageLoad));
+      if (shouldBootToStart) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
         if (acquireRedirectLock()) navigate("/", { replace: true });
