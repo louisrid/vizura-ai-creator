@@ -1,11 +1,4 @@
-import { useLayoutEffect } from "react";
-import { registerBlockingLoader } from "@/lib/startupSplash";
-
 const LoadingScreen = () => {
-  useLayoutEffect(() => {
-    const unregister = registerBlockingLoader();
-    return unregister;
-  }, []);
 
   // Markup matches main.tsx splash exactly so the transition splash → LoadingScreen
   // shows zero movement: same flex layout, same -4vh offset, same 24px text,

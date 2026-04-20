@@ -87,7 +87,7 @@ const Auth = () => {
       } finally {
         // Keep splash up a tick after navigate so the target page has time to mount
         // and register its own blocking loader (e.g. Home.tsx) before splash hides.
-        setTimeout(safeUnregister, 100);
+        setTimeout(safeUnregister, 600);
       }
     };
 

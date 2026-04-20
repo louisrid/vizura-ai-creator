@@ -10,6 +10,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { AppDataProvider } from "@/contexts/AppDataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import HeaderTransition from "@/components/HeaderTransition";
+import LoadingScreen from "@/components/LoadingScreen";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import CharacterDetail from "./pages/CharacterDetail";
@@ -267,6 +268,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
+      {blockingLoaders > 0 && <LoadingScreen />}
       {headerRevealed && (
         <>
           <HeaderTransition />

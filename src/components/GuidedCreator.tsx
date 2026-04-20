@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import type { SlideConfig } from "@/components/InstructionalSlide";
 
@@ -203,12 +204,40 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
     sessionStorage.setItem("facefox_post_auth_home", "1");
   }, [selections]);
 
+  const navigateToChoose = useTransitionNavigate();
   useEffect(() => {
-    if (user) {
-      persistSignupHandoff();
-      setHandoffLoading(true);
+    if (!user) return;
+    setHandoffLoading(true);
+    const unregister = registerBlockingLoader();
+    try {
+      const draft = {
+        characterName: selections.characterName,
+        skin: selections.skin || "tan",
+        bodyType: selections.bodyType || "regular",
+        bustSize: selections.bustSize || "regular",
+        hairStyle: selections.hairStyle || "long straight",
+        hairColour: selections.hairColour || "brunette",
+        eye: selections.eye || "brown",
+        age: selections.age === "18-24" ? "18" : selections.age === "24+" ? "24" : selections.age || "18",
+        description: selections.description || "",
+      };
+      sessionStorage.setItem("facefox_character_draft", JSON.stringify(draft));
+      localStorage.setItem("facefox_draft_backup", JSON.stringify(draft));
+      const prompt = `${draft.age} year old woman, ${draft.skin} skin, ${draft.hairStyle} ${draft.hairColour} hair, ${draft.eye} eyes`;
+      sessionStorage.setItem("facefox_guided_prompt", prompt);
+      sessionStorage.removeItem("facefox_face_options");
+      sessionStorage.removeItem("facefox_pending_char_id");
+      sessionStorage.removeItem(FLOW_STATE_KEY);
+      sessionStorage.removeItem("facefox_post_auth_home");
+      sessionStorage.removeItem("facefox_signup_gate_active");
+      sessionStorage.setItem("facefox_creator_dismissed", "1");
+      localStorage.removeItem("facefox_pending_creation");
+      navigateToChoose("/choose-face", { state: { prompt, freshCreation: true } });
+    } finally {
+      // Unregister after target page has had time to mount + register its own blocker
+      setTimeout(unregister, 600);
     }
-  }, [persistSignupHandoff, user]);
+  }, [user, selections, navigateToChoose]);
 
   const handleGoogle = async () => {
     const _blackout = document.createElement('div');
