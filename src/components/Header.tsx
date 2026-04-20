@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gem, Camera, LayoutGrid, Settings, LogOut, Home, UserPlus, Archive, User } from "lucide-react";
+import { Gem, Camera, LayoutGrid, Settings, Home, UserPlus, Archive, User } from "lucide-react";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -63,7 +63,7 @@ const Header = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { gems } = useGems();
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
@@ -238,14 +238,6 @@ const Header = () => {
     handleNav("/");
   };
 
-  const handleLogout = async () => {
-    setOpen(false);
-    try {
-      await signOut();
-    } catch {}
-    navigate("/");
-  };
-
   const menuDisabled = showMenuLocks;
 
   const menuItems = [
@@ -351,30 +343,6 @@ const Header = () => {
                   </div>
                 );
               })}
-              {user && (
-                <>
-                  <div style={{ height: 2, backgroundColor: "hsl(0 0% 12%)", margin: "0" }} />
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left flex items-center gap-2 md:gap-3"
-                    style={{
-                      color: "#ffffff",
-                      backgroundColor: "#1a0505",
-                      border: "2px solid #ff4444",
-                      padding: isDesktop ? "15px 20px" : "11px 12px",
-                      fontSize: isDesktop ? 16 : 13,
-                      fontWeight: 700,
-                      textTransform: "lowercase",
-                      borderRadius: "0 0 10px 10px",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#2a0808")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#1a0505")}
-                  >
-                    <LogOut size={isDesktop ? 18 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ff4444" }} />
-                    log out
-                  </button>
-                </>
-              )}
             </div>
           </div>
         </motion.div>

@@ -467,7 +467,7 @@ const Admin = () => {
             <BackButton />
           </div>
         </main>
-        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -60 }}>
+        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -120 }}>
           <Loader2 className="animate-spin" size={28} style={{ color: "#ffffff" }} strokeWidth={2.5} />
         </div>
       </div>
@@ -483,7 +483,7 @@ const Admin = () => {
             <BackButton />
           </div>
         </main>
-        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -60 }}>
+        <div className="flex-1 flex items-center justify-center" style={{ marginTop: -120 }}>
           <Loader2 className="animate-spin" size={28} style={{ color: "#ffffff" }} strokeWidth={2.5} />
         </div>
       </div>
