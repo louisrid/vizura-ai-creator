@@ -200,18 +200,15 @@ input[type="range"]::-moz-range-thumb {
 }
 
 
-/* Global button press state + desktop hover */
+/* Kill iOS default tap-highlight flash on all buttons/interactive elements */
 button, a[role="button"], [role="button"] {
-  transition: transform 0.1s ease-out;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Desktop hover effects for interactive elements */
 @media (hover: hover) and (pointer: fine) {
   button:hover, a[role="button"]:hover, [role="button"]:hover {
     opacity: 0.92;
-  }
-  button:active, a[role="button"]:active, [role="button"]:active {
-    opacity: 0.85;
   }
 
   /* Card hover lift */
