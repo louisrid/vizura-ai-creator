@@ -71,7 +71,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
           backgroundColor: isForward ? fillColor : "#000000",
           border: isForward ? "none" : `2px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
-          color: isForward ? "#000" : "#ffffff",
+          color: isForward ? "#000000" : "#ffffff",
           transition: `background-color ${transitionDuration} ${transitionEase}, color ${transitionDuration} ${transitionEase}, border-color ${transitionDuration} ${transitionEase}`,
         }}
       >
@@ -113,8 +113,8 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
-        ? { backgroundColor: Y, color: "#000", border: `2px solid ${Y}` }
-        : { backgroundColor: "hsl(var(--card))", color: "#fff", border: "2px solid hsl(var(--border-mid))" }
+        ? { backgroundColor: Y, color: "#000000", border: `2px solid ${Y}` }
+        : { backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))" }
       ),
     }}
   >
@@ -308,7 +308,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-            style={{ background: Y, color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: Y, color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
               <>
@@ -775,7 +775,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
-                        color: isMiddle ? "#fff" : "#000",
+                        color: isMiddle ? "#ffffff" : "#000000",
                         border: "none",
                       }}>
                       {pill.text}
@@ -922,7 +922,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       data-creator-portal="1"
       className="fixed inset-0 z-[9999] flex flex-col"
       style={{
-        background: "#000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
+        background: "#000000", overflow: "hidden", touchAction: "none", overscrollBehavior: "none",
       }}
     >
       <div
@@ -1106,7 +1106,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
   if (!visible) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000" }}>
+    <div className="fixed inset-0 z-[9999]" style={{ backgroundColor: "#000000" }}>
       <motion.div
         className="absolute inset-0 flex flex-col items-center pt-[22vh]"
         initial={{ opacity: 0 }}
@@ -1128,7 +1128,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
               className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-              style={{ background: Y, color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: Y, color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
                 <>

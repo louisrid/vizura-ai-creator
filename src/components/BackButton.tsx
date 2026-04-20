@@ -26,7 +26,7 @@ const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
       }}
       aria-label="go back"
     >
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
         <line x1="12" y1="7" x2="2" y2="7" />
         <polyline points="7,2 2,7 7,12" />
       </svg>

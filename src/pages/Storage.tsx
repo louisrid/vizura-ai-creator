@@ -173,7 +173,7 @@ const Storage = () => {
                   download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#000", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
+                  style={{ backgroundColor: "#000000", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
@@ -200,7 +200,7 @@ const Storage = () => {
                      e.preventDefault();
                       const btn = e.currentTarget;
                        btn.style.backgroundColor = "hsl(var(--card))";
-                       setTimeout(() => { btn.style.backgroundColor = "#000"; }, 150);
+                       setTimeout(() => { btn.style.backgroundColor = "#000000"; }, 150);
                      const text = expanded!.prompt;
                      const copyFallback = () => {
                        try {
@@ -231,7 +231,7 @@ const Storage = () => {
                      }
                    }}
                    className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
-                   style={{ backgroundColor: "#000" }}
+                   style={{ backgroundColor: "#000000" }}
                  >
                    <span className="truncate flex-1 text-left">{expanded!.prompt}</span>
                    <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60" />
@@ -240,7 +240,7 @@ const Storage = () => {
             )}
             <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
               <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="flex-1">
-                <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000", color: "#ffffff" }}>
+                <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000000", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />
                 </Button>
               </a>

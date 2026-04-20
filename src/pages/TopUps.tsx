@@ -160,7 +160,7 @@ const TopUps = () => {
                       onClick={handleClaimFree}
                       disabled={claiming}
                       className="flex items-center gap-2 rounded-[10px] px-5 py-3 text-sm font-[900] lowercase transition-all active:scale-95 disabled:opacity-60"
-                      style={{ backgroundColor: "#fff", color: "#000" }}
+                      style={{ backgroundColor: "#ffffff", color: "#000000" }}
                     >
                       {claiming ? (
                         "claiming..."
@@ -185,7 +185,7 @@ const TopUps = () => {
               key={pack.id}
               className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
               style={{
-                backgroundColor: "#000",
+                backgroundColor: "#000000",
                 border: "2px solid hsl(var(--border-mid))",
                 minHeight: 170,
               }}

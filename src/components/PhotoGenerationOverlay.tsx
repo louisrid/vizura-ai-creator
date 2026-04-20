@@ -67,7 +67,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           className="fixed inset-0 z-[9999] bg-black"
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
         />
       ) : !showSuccess ? (
         <motion.div
@@ -77,7 +77,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
         >
           <ProgressBarLoader
             duration={25000}
@@ -116,7 +116,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.4, ease: "easeInOut" }}
+                transition={{ duration: 0.45, delay: 0.4, ease: "easeInOut" }}
                 className="rounded-[10px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 <img src={resultImageUrl} alt="generated" className="w-[20rem] md:w-[28rem] h-auto object-contain" />
@@ -127,7 +127,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
               className="text-[15px] font-[900] lowercase text-white mt-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.9, ease: "easeInOut" }}
+              transition={{ duration: 0.45, delay: 0.9, ease: "easeInOut" }}
             >
               tap to continue
             </motion.p>

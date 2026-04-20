@@ -81,7 +81,7 @@ const Account = () => {
         <div className="w-full flex flex-col gap-3">
           <button
             className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
-            style={{ backgroundColor: "#000" }}
+            style={{ backgroundColor: "#000000" }}
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">subscription</span>
@@ -98,7 +98,7 @@ const Account = () => {
 
           <button
             className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
-            style={{ backgroundColor: "#000" }}
+            style={{ backgroundColor: "#000000" }}
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">change password</span>
@@ -111,7 +111,7 @@ const Account = () => {
           <div className="w-full pt-3">
             <button
               className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
-              style={{ backgroundColor: "#000" }}
+              style={{ backgroundColor: "#000000" }}
               onClick={() => navigate("/admin")}
             >
               admin
@@ -230,7 +230,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
             className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? (
               <><Loader2 className="animate-spin" size={18} />connecting...</>
@@ -278,7 +278,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onClick={handleEmailAuth}
             disabled={submitting || googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 active:scale-[0.95] disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
           </button>
