@@ -26,7 +26,7 @@ if (splash) {
   Object.assign(splash.style, {
     zIndex: "2147483647",
     opacity: "1",
-    transition: "opacity 0.5s ease-in-out",
+    transition: "opacity 0.3s ease-in-out",
     pointerEvents: "auto",
     background: "#000000",
   });
