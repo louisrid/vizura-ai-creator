@@ -28,8 +28,8 @@ export interface InstructionalSlideProps {
   onForward?: () => void;
 }
 
-const Y = "#c4a0ff";
-const DASH_INACTIVE = "rgba(196,160,255,0.30)";
+const Y = "#ffe603";
+const DASH_INACTIVE = "rgba(250,204,21,0.30)";
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
@@ -108,7 +108,7 @@ const NavArrow = ({
       className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
       style={{
         borderRadius: 10,
-        background: isForward ? "linear-gradient(135deg, #d4b8ff, #c4a0ff)" : "#000000",
+        backgroundColor: isForward ? Y : "#000000",
         border: isForward ? "none" : `2px solid ${Y}`,
         outline: "none",
         padding: 0,

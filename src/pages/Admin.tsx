@@ -105,7 +105,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+          style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
@@ -215,13 +215,13 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+          style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>
-      <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "#c4a0ff" }}>{email}</p>
+      <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "#ffe603" }}>{email}</p>
       <button
         onClick={() => setConfirmReset(true)}
         className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 transition-transform"
@@ -506,7 +506,7 @@ const Admin = () => {
                       { label: "photos", value: overview?.photos ?? 0, icon: ImageIcon },
                     ].map(({ label, value, icon: Icon }) => (
                       <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
-                        <Icon size={16} strokeWidth={2.5} style={{ color: "#c4a0ff" }} className="mb-1 md:w-5 md:h-5" />
+                        <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
                         <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
                         <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>{label}</span>
                       </div>
@@ -534,7 +534,7 @@ const Admin = () => {
                                 <div className="flex items-center gap-1.5">
                                   <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "#ffffff" }}>{p.user_email}</p>
                                   {p.character_name && (
-                                    <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#c4a0ff" }}>· {p.character_name}</span>
+                                    <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
                                   )}
                                 </div>
                               </div>

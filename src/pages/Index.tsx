@@ -75,7 +75,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
@@ -103,7 +103,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
-                      color: value === opt.value ? "#c4a0ff" : "#ffffff",
+                      color: value === opt.value ? "#ffe603" : "#ffffff",
                       backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
@@ -167,7 +167,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               onClick={() => onChange(opt)}
               className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[17px] font-[900] lowercase transition-all"
               style={{
-                background: isSelected ? "linear-gradient(135deg, #d4b8ff, #c4a0ff)" : "transparent",
+                backgroundColor: isSelected ? "#ffe603" : "transparent",
                 color: isSelected ? "#000000" : "#ffffff",
                 borderRadius: isFirst && isLast ? "10px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
               }}
@@ -288,7 +288,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
@@ -316,7 +316,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
-                      color: value === opt.value ? "#c4a0ff" : "#ffffff",
+                      color: value === opt.value ? "#ffe603" : "#ffffff",
                       backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
@@ -365,7 +365,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+          style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
@@ -393,7 +393,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
                     onClick={() => { onChange(opt.value); setOpen(false); }}
                     className="flex w-full items-center px-4 py-3 transition-colors text-base font-[900] lowercase"
                     style={{
-                      color: value === opt.value ? "#c4a0ff" : "#ffffff",
+                      color: value === opt.value ? "#ffe603" : "#ffffff",
                       backgroundColor: value === opt.value ? "hsl(var(--card))" : "transparent",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
@@ -780,7 +780,7 @@ const Index = () => {
                   )}
                   <span
                     className="text-lg font-[900] lowercase truncate"
-                    style={{ color: isSelected ? "#c4a0ff" : "#ffffff" }}
+                    style={{ color: isSelected ? "#ffe603" : "#ffffff" }}
                   >
                     {c.name || "unnamed"}
                   </span>
@@ -803,10 +803,10 @@ const Index = () => {
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
-                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(196,160,255,0.1)", border: "2px solid rgba(196,160,255,0.3)" }}>
+                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                   <span className="text-xs">+</span>
                 </div>
-                <span className="text-lg font-[900] lowercase" style={{ color: "#c4a0ff" }}>create character</span>
+                <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
               </button>
             </Fragment>
           )}
@@ -841,7 +841,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -876,7 +876,7 @@ const Index = () => {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(196,160,255,0.08)", border: "2px solid #c4a0ff" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
                       <span className="text-xl">🪄</span>
                     </div>
                   </div>
@@ -934,7 +934,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -969,7 +969,7 @@ const Index = () => {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(196,160,255,0.08)", border: "2px solid #c4a0ff" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
                       <span className="text-2xl">🪄</span>
                     </div>
                   </div>
