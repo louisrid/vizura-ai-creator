@@ -158,14 +158,6 @@ const InstructionalSlide = ({
     };
   }, [alreadySeen, slide.pills.length]);
 
-  useEffect(() => {
-    if (!showHeader) return;
-    document.documentElement.dataset.slideMenuMode = "1";
-    return () => {
-      delete document.documentElement.dataset.slideMenuMode;
-    };
-  }, [showHeader]);
-
   const shouldAnimate = !alreadySeen && !hasAnimated;
   const isSinglePill = slide.pills.length === 1;
 
