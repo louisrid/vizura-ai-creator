@@ -236,9 +236,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (error) throw error;
         if (cancelled) return;
         await hydrateUser(data.session?.user ?? null, cancelled);
+      } catch (err) {
+        console.error("Auth init failed:", err);
       } finally {
-        if (cancelled) return;
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 

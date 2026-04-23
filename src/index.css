@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/azonix');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -187,11 +189,6 @@ input[type="range"]::-moz-range-thumb {
   background: hsl(var(--neon-yellow));
   border: 3px solid hsl(var(--neon-yellow-foreground));
   cursor: pointer;
-}
-
-@keyframes geo-fall {
-  0% { transform: translateY(-10%) rotate(0deg); }
-  100% { transform: translateY(110vh) rotate(360deg); }
 }
 
 @keyframes emoji-bounce {
