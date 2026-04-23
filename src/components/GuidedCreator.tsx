@@ -546,14 +546,21 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // Arrow fade-OUT remains instant to run in parallel with the current slide exit.
   const showNavigation = !isHeroSlide && !isSignupScreen;
   const [showNavigationDelayed, setShowNavigationDelayed] = useState(showNavigation);
+  const prevVisibleForNavRef = useRef(visible);
   useEffect(() => {
+    const justOpened = visible && !prevVisibleForNavRef.current;
+    prevVisibleForNavRef.current = visible;
+    if (justOpened && showNavigation) {
+      setShowNavigationDelayed(true);
+      return;
+    }
     if (showNavigation) {
       const timer = setTimeout(() => setShowNavigationDelayed(true), 450);
       return () => clearTimeout(timer);
     } else {
       setShowNavigationDelayed(false);
     }
-  }, [showNavigation]);
+  }, [showNavigation, visible]);
   const currentTraitIndex = currentStep.type === "trait" ? currentStep.traitIndex : -1;
 
 
