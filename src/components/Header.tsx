@@ -24,6 +24,9 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     ref={ref}
     onMouseDown={() => {
       if (menuDisabled) return;
+      // iOS Safari synthesizes mousedown after touchstart. If touchstart happened in the last 500ms,
+      // ignore this mousedown — the touchstart handler already toggled the menu.
+      if (Date.now() - touchStartTimeRef.current < 500) return;
       setOpen(prev => {
         if (!prev) document.body.style.overflow = "hidden";
         else document.body.style.overflow = "";
@@ -44,9 +47,12 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
       });
     }}
     onTouchEnd={() => {
-      // Clear synchronously — no setTimeout. The global touchend handler (when registered) also clears this,
-      // but on the very first tap the global handler may not yet be registered, so we handle it locally too.
-      touchActiveRef.current = false;
+      // Defer the clear via setTimeout(0) so the global document-level touchend handler (which also
+      // reads touchActiveRef) fires first with ref still true. Without the defer, the slide-to-item
+      // navigation silently fails because the global handler sees ref=false and returns early.
+      // On the very first tap before the global handler is registered, the setTimeout still clears
+      // the ref so it doesn't stay stuck true.
+      setTimeout(() => { touchActiveRef.current = false; }, 0);
     }}
     disabled={menuDisabled}
     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
