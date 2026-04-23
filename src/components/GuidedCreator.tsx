@@ -776,7 +776,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div>
-        <div style={{ fontSize: 76, fontWeight: 900, color: '#ffffff', textTransform: 'lowercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facefox</div>
+        <div style={{ fontSize: 76, fontWeight: 900, color: '#ffffff', fontFamily: 'Azonix, -apple-system, sans-serif', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>FACEFOX</div>
         <div style={{ width: 204, height: 16, background: '#ffe603', borderRadius: 9999, marginTop: 6, marginBottom: 28, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
@@ -1013,7 +1013,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       </div>
 
       {/* Arrow buttons + Home button — fade in sync with slide content */}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {showNavigationDelayed && (
           <motion.div
             key="nav-arrows"
