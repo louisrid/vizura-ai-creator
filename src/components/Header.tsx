@@ -15,45 +15,29 @@ type MenuButtonProps = {
   menuDisabled: boolean;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  touchActiveRef: MutableRefObject<boolean>;
-  touchStartTimeRef: MutableRefObject<number>;
+  wasOpenAtStartRef: MutableRefObject<boolean>;
+  onPointerMove: (e: React.PointerEvent<HTMLButtonElement>) => void;
+  onPointerEnd: (e: React.PointerEvent<HTMLButtonElement>) => void;
 };
 
-const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisabled, open, setOpen, touchActiveRef, touchStartTimeRef }, ref) => (
+const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisabled, open, setOpen, wasOpenAtStartRef, onPointerMove, onPointerEnd }, ref) => (
   <button
     ref={ref}
-    onMouseDown={() => {
+    onPointerDown={(e) => {
       if (menuDisabled) return;
-      // iOS Safari synthesizes mousedown after touchstart. If touchstart happened in the last 500ms,
-      // ignore this mousedown — the touchstart handler already toggled the menu.
-      if (Date.now() - touchStartTimeRef.current < 500) return;
-      setOpen(prev => {
-        if (!prev) document.body.style.overflow = "hidden";
-        else document.body.style.overflow = "";
-        return !prev;
-      });
+      // Capture the pointer so move/up fire on this button even when the finger moves onto a menu item.
+      // Only primary button/touch (e.button === 0 for mouse; always 0 for touch).
+      if (e.button !== 0) return;
+      e.currentTarget.setPointerCapture(e.pointerId);
+      wasOpenAtStartRef.current = open;
+      if (!open) {
+        document.body.style.overflow = "hidden";
+        setOpen(true);
+      }
     }}
-    onTouchStart={(e) => {
-      if (menuDisabled) return;
-      e.preventDefault();
-      e.stopPropagation();
-      e.nativeEvent.stopImmediatePropagation();
-      touchActiveRef.current = true;
-      touchStartTimeRef.current = Date.now();
-      setOpen(prev => {
-        if (!prev) document.body.style.overflow = "hidden";
-        else document.body.style.overflow = "";
-        return !prev;
-      });
-    }}
-    onTouchEnd={() => {
-      // Defer the clear via setTimeout(0) so the global document-level touchend handler (which also
-      // reads touchActiveRef) fires first with ref still true. Without the defer, the slide-to-item
-      // navigation silently fails because the global handler sees ref=false and returns early.
-      // On the very first tap before the global handler is registered, the setTimeout still clears
-      // the ref so it doesn't stay stuck true.
-      setTimeout(() => { touchActiveRef.current = false; }, 0);
-    }}
+    onPointerMove={onPointerMove}
+    onPointerUp={onPointerEnd}
+    onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
     style={{
@@ -62,6 +46,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
       border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
+      touchAction: "none",
     }}
     aria-label="open menu"
     aria-disabled={menuDisabled}
@@ -83,12 +68,9 @@ const Header = () => {
   const { gems } = useGems();
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
-  const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
+  const [highlight, setHighlight] = useState<number | null>(null);
   const [slideMenuMode, setSlideMenuMode] = useState(false);
-  const touchActiveRef = useRef(false);
-  const touchStartTimeRef = useRef(0);
-  const touchHighlightRef = useRef<number | null>(null);
-  const suppressNextItemClickRef = useRef(false);
+  const wasOpenAtStartRef = useRef(false);
 
   useEffect(() => {
     const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
@@ -101,16 +83,13 @@ const Header = () => {
   useEffect(() => {
     if (!slideMenuMode) {
       setOpen(false);
-      touchActiveRef.current = false;
     }
   }, [slideMenuMode]);
 
   useEffect(() => {
     const handler = () => {
       setOpen(false);
-      touchActiveRef.current = false;
-      touchHighlightRef.current = null;
-      setTouchHighlight(null);
+      setHighlight(null);
     };
     window.addEventListener("facefox:close-creator", handler);
     return () => window.removeEventListener("facefox:close-creator", handler);
@@ -168,77 +147,82 @@ const Header = () => {
   }, [open]);
 
   // Close on route change
-  useEffect(() => { setOpen(false); clearNavGuard(); touchActiveRef.current = false; document.body.style.overflow = ""; }, [pathname]);
+  useEffect(() => { setOpen(false); clearNavGuard(); setHighlight(null); document.body.style.overflow = ""; }, [pathname]);
 
-  // Global touch handlers — bridge from menu button to portaled dropdown
-  useEffect(() => {
-    if (!open) return;
-
-    const handleMove = (e: TouchEvent) => {
-      if (!touchActiveRef.current) return;
-      if (Date.now() - touchStartTimeRef.current < 150) return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      if (!touch) return;
-      const items = document.querySelectorAll('[data-menu-idx]');
-      let foundIdx: number | null = null;
-      items.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (
-          touch.clientY >= rect.top &&
-          touch.clientY <= rect.bottom &&
-          touch.clientX >= rect.left &&
-          touch.clientX <= rect.right
-        ) {
-          foundIdx = Number(el.getAttribute('data-menu-idx'));
-        }
-      });
-      setTouchHighlight(foundIdx);
-      touchHighlightRef.current = foundIdx;
-    };
-
-    const handleEnd = () => {
-      if (!touchActiveRef.current) return;
-      touchActiveRef.current = false;
-      const idx = touchHighlightRef.current;
-      if (idx !== null) {
-        const item = menuItems[idx];
-        if (item) {
-          suppressNextItemClickRef.current = true;
-          setOpen(false);
-          setTouchHighlight(null);
-          touchHighlightRef.current = null;
-          if (item.label === "create character") {
-            if (pathname === "/") {
-              window.dispatchEvent(new CustomEvent("facefox:open-creator"));
-            } else {
-              navigate("/", { state: { openCreator: true } });
-            }
-          } else if (item.label === "home" && slideMenuMode) {
-            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
-          } else if (item.auth && !user) {
-            navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
-          } else {
-            navigate(item.path);
-          }
-          return;
-        }
+  // Shared navigation function — one source of truth for both pointer-up (slide gesture) and item onClick (tap).
+  const handleItemSelect = (idx: number) => {
+    const item = menuItems[idx];
+    if (!item) return;
+    setOpen(false);
+    setHighlight(null);
+    document.body.style.overflow = "";
+    if (checkNavGuard()) return;
+    if (item.auth && !user) {
+      navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
+      return;
+    }
+    if (item.label === "create character") {
+      if (pathname === "/") {
+        window.dispatchEvent(new CustomEvent("facefox:open-creator"));
+      } else {
+        navigate("/", { state: { openCreator: true } });
       }
-      // Released outside any item — keep dropdown open (treat as a press, not a drag)
-      setTouchHighlight(null);
-      touchHighlightRef.current = null;
-    };
+      return;
+    }
+    if (item.label === "home" && slideMenuMode) {
+      window.dispatchEvent(new CustomEvent("facefox:close-creator"));
+      return;
+    }
+    if (item.state) {
+      navigate(item.path, { state: item.state });
+      return;
+    }
+    navigate(item.path);
+  };
 
-    document.addEventListener('touchmove', handleMove, { passive: false });
-    document.addEventListener('touchend', handleEnd);
-    document.addEventListener('touchcancel', handleEnd);
-    return () => {
-      document.removeEventListener('touchmove', handleMove);
-      document.removeEventListener('touchend', handleEnd);
-      document.removeEventListener('touchcancel', handleEnd);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, touchHighlight, user, pathname]);
+  // Pointer move handler — hit-tests against menu items and updates highlight. Fires on the button
+  // throughout the gesture thanks to pointer capture set in onPointerDown.
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!open) return;
+    const elUnder = document.elementFromPoint(e.clientX, e.clientY);
+    const itemEl = elUnder ? (elUnder as Element).closest('[data-menu-idx]') as HTMLElement | null : null;
+    setHighlight(itemEl ? Number(itemEl.getAttribute('data-menu-idx')) : null);
+  };
+
+  // Pointer up/cancel handler — decides what the gesture meant based on where the pointer was released.
+  const handlePointerEnd = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const btn = e.currentTarget;
+    if (btn.hasPointerCapture(e.pointerId)) btn.releasePointerCapture(e.pointerId);
+    // pointercancel (e.g. browser scroll override) — treat as no-op, leave menu open
+    if (e.type === "pointercancel") {
+      setHighlight(null);
+      return;
+    }
+    const elUnder = document.elementFromPoint(e.clientX, e.clientY);
+    const itemEl = elUnder ? (elUnder as Element).closest('[data-menu-idx]') as HTMLElement | null : null;
+    if (itemEl) {
+      const idx = Number(itemEl.getAttribute('data-menu-idx'));
+      handleItemSelect(idx);
+      return;
+    }
+    const releasedOnButton = !!elUnder && btn.contains(elUnder as Node);
+    if (releasedOnButton) {
+      // Tap on button — toggle based on what state menu was in BEFORE this gesture.
+      // wasOpenAtStartRef is the open-state snapshot taken in onPointerDown.
+      if (wasOpenAtStartRef.current) {
+        // Menu was open, user tapped button to close it
+        setOpen(false);
+        setHighlight(null);
+        document.body.style.overflow = "";
+      }
+      // else: menu was closed, onPointerDown already opened it — leave open
+      return;
+    }
+    // Released outside button and outside any item — close menu
+    setOpen(false);
+    setHighlight(null);
+    document.body.style.overflow = "";
+  };
 
   const handleNav = (path: string, requiresAuth = false) => {
     setOpen(false);
@@ -319,28 +303,7 @@ const Header = () => {
                     <div className="relative">
                       <button
                         data-menu-idx={idx}
-                        onClick={() => {
-                          if (suppressNextItemClickRef.current) { suppressNextItemClickRef.current = false; return; }
-                          if (checkNavGuard()) { setOpen(false); return; }
-                          setOpen(false);
-                          if (item.auth && !user) {
-                            navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
-                            return;
-                          }
-                          if (item.label === "create character") {
-                            if (pathname === "/") {
-                              window.dispatchEvent(new CustomEvent("facefox:open-creator"));
-                            } else {
-                              navigate("/", { state: { openCreator: true } });
-                            }
-                          } else if (item.label === "home" && slideMenuMode) {
-                            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
-                          } else if (item.state) {
-                            navigate(item.path, { state: item.state });
-                          } else {
-                            handleNav(item.path);
-                          }
-                        }}
+                        onClick={() => handleItemSelect(idx)}
                         className="w-full text-left flex items-center gap-2 md:gap-3"
                         style={{
                           padding: isDesktop ? "15px 20px" : "11px 12px",
@@ -348,11 +311,12 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent",
+                          backgroundColor: highlight === idx ? "hsl(0 0% 15%)" : "transparent",
                           borderRadius,
+                          touchAction: "none",
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(0 0% 15%)" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
@@ -371,7 +335,7 @@ const Header = () => {
 
   const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
-      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} touchStartTimeRef={touchStartTimeRef} />
+      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
     </div>,
     document.body,
   ) : null;
@@ -424,7 +388,7 @@ const Header = () => {
                 </div>
 
                 <div className="relative">
-                  <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} touchStartTimeRef={touchStartTimeRef} />
+                  <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
                 </div>
               </div>
             )}
