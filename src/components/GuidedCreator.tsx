@@ -17,7 +17,7 @@ const foxPreload = new Image();
 foxPreload.src = foxEmojiImg;
 
 /* ── Constants ── */
-const Y = "#ffe603";
+const Y = "#c4a0ff";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
 
@@ -58,7 +58,7 @@ const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] low
 /* ── Nav arrow ── */
 const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: "left" | "right"; onClick: () => void; disabled?: boolean; colorOverride?: string }) => {
     const isForward = direction === "right";
-    const fillColor = colorOverride || "#ffe603";
+    const fillColor = colorOverride || "#c4a0ff";
     const transitionDuration = colorOverride ? "0.45s" : "0.15s";
     const transitionEase = colorOverride ? "ease-in-out" : "ease-out";
     return (
@@ -69,7 +69,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
         className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
         style={{
           borderRadius: 10,
-          backgroundColor: isForward ? fillColor : "#000000",
+          background: isForward ? "linear-gradient(135deg, #d4b8ff, #c4a0ff)" : "#000000",
           border: isForward ? "none" : `2px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
           color: isForward ? "#000000" : "#ffffff",
@@ -114,7 +114,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
-        ? { backgroundColor: Y, color: "#000000", border: `2px solid ${Y}` }
+        ? { background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)", color: "#000000", border: `2px solid ${Y}` }
         : { backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))" }
       ),
     }}
@@ -376,7 +376,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEmailAuth(); }}
             disabled={emailLoading}
             className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-            style={{ borderRadius: 10, background: '#ffe603', color: '#000000' }}
+            style={{ borderRadius: 10, background: 'linear-gradient(135deg, #d4b8ff, #c4a0ff)', color: '#000000' }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "signing in..."}</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
           </button>
@@ -748,7 +748,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   cy={center}
                   r={radius}
                   fill="none"
-                  stroke="#ffe603"
+                  stroke="#c4a0ff"
                   strokeWidth={r.w}
                   strokeDasharray={dashArray}
                   strokeLinecap="butt"
@@ -760,16 +760,16 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div>
         <div style={{ fontSize: 67, fontWeight: 900, fontFamily: "Azonix, -apple-system, 'SF Pro Display', system-ui, sans-serif", color: '#ffffff', textTransform: 'uppercase', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>FACEFOX</div>
-        <div style={{ width: 204, height: 16, background: '#ffe603', borderRadius: 9999, marginTop: 6, marginBottom: 28, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
+        <div style={{ width: 204, height: 16, background: 'linear-gradient(135deg, #d4b8ff, #c4a0ff)', borderRadius: 9999, marginTop: 6, marginBottom: 28, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 10, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #d4b8ff, #c4a0ff)', border: 'none', borderRadius: 10, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 204, padding: '8px 0', fontSize: 32, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 10, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 204, padding: '8px 0', fontSize: 32, fontWeight: 900, background: '#000000', border: '2px solid #c4a0ff', borderRadius: 10, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -971,7 +971,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300" style={{
                 width: 10, height: 10, borderRadius: 3, flexShrink: 0,
-                background: i <= dashActive ? Y : "rgba(250,204,21,0.30)",
+                background: i <= dashActive ? Y : "rgba(196,160,255,0.30)",
               }} />
             ))}
           </div>
@@ -1205,7 +1205,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={handleEmailAuth}
               disabled={emailLoading || googleLoading}
               className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-              style={{ borderRadius: 10, background: '#ffe603', color: '#000000' }}
+              style={{ borderRadius: 10, background: 'linear-gradient(135deg, #d4b8ff, #c4a0ff)', color: '#000000' }}
             >
               {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "signing in..."}</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
             </button>

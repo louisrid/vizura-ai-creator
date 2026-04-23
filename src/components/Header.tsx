@@ -51,7 +51,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     style={{
       borderRadius: 10,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
+      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#c4a0ff"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
     }}
@@ -339,14 +339,14 @@ const Header = () => {
                           fontSize: isDesktop ? 16 : 13,
                           fontWeight: 700,
                           textTransform: "lowercase",
-                          color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
+                          color: isActive ? "#c4a0ff" : "rgba(255,255,255,0.9)",
                           backgroundColor: touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent",
                           borderRadius,
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = touchHighlight === idx ? "hsl(0 0% 15%)" : "transparent")}
                       >
-                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
+                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#c4a0ff" }} />
                         {item.label}
                       </button>
                     </div>

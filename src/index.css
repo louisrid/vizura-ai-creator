@@ -26,7 +26,7 @@
     --muted: 0 0% 6%;
     --muted-foreground: 0 0% 100%;
 
-    --accent: 54 100% 51%;
+    --accent: 265 100% 82%;
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
@@ -37,8 +37,8 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* neon yellow accent — #ffe603 */
-    --neon-yellow: 54 100% 51%;
+    /* light purple accent — #c4a0ff */
+    --neon-yellow: 265 100% 82%;
     --neon-yellow-foreground: 0 0% 0%;
 
     /* loader bar — light blue */
@@ -219,7 +219,7 @@ button, a[role="button"], [role="button"] {
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(255, 230, 3, 0.15);
+    box-shadow: 0 8px 24px -8px rgba(196,160,255,0.15);
   }
 
   /* Subtle border glow on hover */
