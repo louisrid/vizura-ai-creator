@@ -76,10 +76,26 @@ const Header = () => {
   const { subscribed } = useSubscription();
   const [open, setOpen] = useState(false);
   const [touchHighlight, setTouchHighlight] = useState<number | null>(null);
+  const [slideMenuMode, setSlideMenuMode] = useState(false);
   const touchActiveRef = useRef(false);
   const touchStartTimeRef = useRef(0);
   const touchHighlightRef = useRef<number | null>(null);
   const suppressNextItemClickRef = useRef(false);
+
+  useEffect(() => {
+    const check = () => setSlideMenuMode(document.documentElement.dataset.slideMenuMode === "1");
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-slide-menu-mode"] });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!slideMenuMode) {
+      setOpen(false);
+      touchActiveRef.current = false;
+    }
+  }, [slideMenuMode]);
 
   useEffect(() => {
     const handler = () => {
@@ -190,6 +206,8 @@ const Header = () => {
             } else {
               navigate("/", { state: { openCreator: true } });
             }
+          } else if (item.label === "home" && slideMenuMode) {
+            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
           } else if (item.auth && !user) {
             navigate(`/auth?redirect=${encodeURIComponent(item.path)}`);
           } else {
@@ -279,7 +297,7 @@ const Header = () => {
               }}
             >
               {menuItems.map((item, idx) => {
-                const isActive = pathname === item.path && !item.state;
+                const isActive = slideMenuMode ? item.label === "create character" : pathname === item.path && !item.state;
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
@@ -307,6 +325,8 @@ const Header = () => {
                             } else {
                               navigate("/", { state: { openCreator: true } });
                             }
+                          } else if (item.label === "home" && slideMenuMode) {
+                            window.dispatchEvent(new CustomEvent("facefox:close-creator"));
                           } else if (item.state) {
                             navigate(item.path, { state: item.state });
                           } else {
@@ -341,6 +361,13 @@ const Header = () => {
     document.body,
   ) : null;
 
+  const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
+    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
+      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} touchActiveRef={touchActiveRef} touchStartTimeRef={touchStartTimeRef} />
+    </div>,
+    document.body,
+  ) : null;
+
   return (
     <>
       <header
@@ -371,7 +398,7 @@ const Header = () => {
               )}
             </div>
 
-            {isLoggedIn && !isAuthPage && (
+            {isLoggedIn && !isAuthPage && !slideMenuMode && (
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
@@ -397,6 +424,7 @@ const Header = () => {
         </div>
       </header>
       {menuDropdown}
+      {slideMenuButton}
     </>
   );
 };
