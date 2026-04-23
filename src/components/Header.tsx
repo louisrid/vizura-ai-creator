@@ -22,10 +22,8 @@ type MenuButtonProps = {
 const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisabled, open, setOpen, touchActiveRef, touchStartTimeRef }, ref) => (
   <button
     ref={ref}
-    onMouseDown={(e) => {
+    onMouseDown={() => {
       if (menuDisabled) return;
-      // Desktop only — touch devices handle this in onTouchStart
-      if (e.nativeEvent.pointerType === "touch") return;
       setOpen(prev => {
         if (!prev) document.body.style.overflow = "hidden";
         else document.body.style.overflow = "";

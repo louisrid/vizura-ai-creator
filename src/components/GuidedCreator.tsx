@@ -525,11 +525,21 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // completes (450ms), so wrapper alignment stays in sync with the outgoing slide
   // until it fully exits — prevents layout snap-reposition during transitions where
   // incoming and outgoing slides have different alignments (e.g. trait→signup).
+  // Exception: when the creator first opens (visible flips true), sync immediately
+  // so the layout matches the current stepType from frame 1 (no 450ms off-by-one
+  // where content appears centered before snapping to top-aligned).
   const [visualStepType, setVisualStepType] = useState<string>(stepType);
+  const prevVisibleRef = useRef(visible);
   useEffect(() => {
+    const justOpened = visible && !prevVisibleRef.current;
+    prevVisibleRef.current = visible;
+    if (justOpened) {
+      setVisualStepType(stepType);
+      return;
+    }
     const t = setTimeout(() => setVisualStepType(stepType), 450);
     return () => clearTimeout(t);
-  }, [stepType]);
+  }, [stepType, visible]);
 
   // Delay arrow fade-in by 450ms so arrows enter in sync with the incoming slide,
   // not overlapping the outgoing no-arrow slide (hero or signup) as it fades out.
