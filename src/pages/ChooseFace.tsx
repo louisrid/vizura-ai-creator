@@ -824,7 +824,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
                   className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+                  style={{ borderRadius: 10, background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)" }}
                   aria-label="go back"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -858,7 +858,7 @@ const ChooseFace = () => {
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
                           borderRadius: 10,
-                          border: selectedIndex === i ? "3px solid #ffe603" : "3px solid transparent",
+                          border: selectedIndex === i ? "3px solid #c4a0ff" : "3px solid transparent",
                           overflow: "hidden",
                         }}
                       >
@@ -882,7 +882,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-none disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 10,
-                      backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
+                      backgroundColor: selectedIndex !== null ? "linear-gradient(135deg, #d4b8ff, #c4a0ff)" : "hsl(var(--card))",
                       color: selectedIndex !== null ? "#000000" : "#ffffff",
                     }}
                   >
@@ -977,7 +977,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#ffe603", color: "#000000", borderRadius: 10 }}
+                  style={{ background: "linear-gradient(135deg, #d4b8ff, #c4a0ff)", color: "#000000", borderRadius: 10 }}
                 >
                   try again
                 </button>
