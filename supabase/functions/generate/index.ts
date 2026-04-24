@@ -1069,14 +1069,16 @@ serve(async (req) => {
     let characterBodyType: string | undefined;
     let characterBustSize: string | undefined;
     let faceImageUrls: string[] = [];
+    let charData: any = null;
     if (characterId) {
-      const { data: charData } = await adminClient
+      const { data: cd } = await adminClient
         .from("characters")
         .select("*")
         .eq("id", characterId)
         .eq("user_id", userId)
         .single();
 
+      charData = cd;
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
         characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
