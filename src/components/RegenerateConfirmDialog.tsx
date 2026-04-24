@@ -83,8 +83,8 @@ const RegenerateConfirmDialog = ({
                 <button
                   onClick={onConfirm}
                   disabled={loading}
-                  className="flex-1 h-12 text-sm font-[900] lowercase text-black transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: "#ffe603", borderRadius: 10 }}
+                  className="flex-1 h-12 text-sm font-[900] lowercase transition-colors disabled:opacity-50"
+                  style={{ backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10, color: "#ffe603" }}
                 >
                   {loading ? <Loader2 className="animate-spin mx-auto" size={18} /> : confirmLabel}
                 </button>
