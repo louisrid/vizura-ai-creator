@@ -118,12 +118,13 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       return;
     }
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("characters")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(10);
+      if (error) throw error;
       if (data) {
         setCharacters(data as CachedCharacter[]);
         writeLocal(CHARS_KEY, data);
@@ -142,12 +143,13 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       return;
     }
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("generations")
         .select("id, image_urls, prompt, character_id, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(20);
+      if (error) throw error;
       if (data) {
         setGenerations(data as CachedGeneration[]);
         writeLocal(GENS_KEY, data);

@@ -40,7 +40,14 @@ export function useOnboarded() {
       });
 
     const handleChange = () => {
-      if (!cancelled) setState(readCachedOnboardingState(user.id));
+      if (cancelled) return;
+      const cached = readCachedOnboardingState(user.id);
+      setState(cached ?? {
+        userId: user.id,
+        onboardingComplete: true,
+        characterCount: 0,
+        resolvedAt: Date.now(),
+      });
     };
     window.addEventListener(ONBOARDING_CHANGED_EVENT, handleChange);
 
