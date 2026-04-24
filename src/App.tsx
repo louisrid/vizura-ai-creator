@@ -56,9 +56,12 @@ const FreshLoadRedirect = () => {
   const { user, loading } = useAuth();
   const hasRedirected = useRef(false);
 
+   useEffect(() => {
+     hasRedirected.current = false;
+   }, [location.pathname]);
+
   useEffect(() => {
     if (hasRedirected.current || loading) return;
-    hasRedirected.current = true;
 
     const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
 
@@ -81,7 +84,10 @@ const FreshLoadRedirect = () => {
       if (shouldBootToStart) {
         sessionStorage.removeItem("facefox_auto_opened");
         sessionStorage.removeItem("facefox_creator_dismissed");
-        if (acquireRedirectLock()) navigate("/", { replace: true });
+        if (acquireRedirectLock()) {
+          hasRedirected.current = true;
+          navigate("/", { replace: true });
+        }
         return;
       }
     };
@@ -270,7 +276,6 @@ const AppRoutes = () => {
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
     (authLoading && !hasCachedUser) ||
-    (!authLoading && !user && !hasCachedUser && !isExemptRoute(location.pathname)) ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading;
 
