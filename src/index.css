@@ -1,7 +1,7 @@
 @font-face {
-  font-family: 'Chillax';
-  src: url('/fonts/Chillax-Semibold.otf') format('opentype');
-  font-weight: 600;
+  font-family: 'Outfit';
+  src: url('/fonts/Outfit-Black.otf') format('opentype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
