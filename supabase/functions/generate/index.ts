@@ -300,7 +300,9 @@ function buildFinalPrompt(
 ): string {
   const parts: string[] = [];
 
-  // 1. CAMERA + SCENE + POSE + EXPRESSION (one sentence)
+  // 1. CAMERA + SCENE + EXPRESSION
+  // The scene prompt from the user carries pose, location, outfit, props, lighting.
+  // We only prepend the camera type and append the expression.
   let camera = CAMERA_PHOTO;
   if (photoType === "selfie") camera = CAMERA_SELFIE;
   else if (photoType === "mirror_selfie") camera = CAMERA_MIRROR;
@@ -309,23 +311,21 @@ function buildFinalPrompt(
     ? (PHOTO_EXPR[expression] || expression)
     : "direct eye contact with relaxed sultry expression lips slightly parted";
 
-  parts.push(`${camera} ${scenePrompt}, head tilted slightly, body angled toward camera, ${exprStr}`);
+  parts.push(`${camera} ${scenePrompt}, ${exprStr}`);
 
-  // 2. BODY (full anatomy template + bust + skin tone)
+  // 2. BODY (figure + bust + skin tone)
   const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
   const bodyDesc = PHOTO_BODY_DESC[normBody] || PHOTO_BODY_DESC.regular;
   const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
   const skinKey = (character?.country || "").toLowerCase();
   const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
 
-  // Insert bust right after "figure with " — matches dataset style
-  // "Curvaceous hourglass figure with very large prominent breasts, narrow waist..."
   const bodyWithBust = bustKey === "extra large"
     ? `${bodyDesc.replace(/(with )/, `with very large prominent breasts, `)}, ${skinTone}`
     : `${bodyDesc}, ${skinTone}`;
   parts.push(bodyWithBust);
 
-  // 3. HAIR (long sentence with placement + face-framing strands)
+  // 3. HAIR
   if (character) {
     const hairStyleMatch = character.description?.match(/^(.*?)\s*hair\./i);
     const hairStyle = (hairStyleMatch?.[1]?.trim() || "").toLowerCase();
@@ -344,10 +344,9 @@ function buildFinalPrompt(
     parts.push(hairDesc);
   }
 
-  // 4. OUTFIT — already inside scenePrompt
-
-  // 5. MAKEUP
-  if (character) {
+  // 4. MAKEUP — only if character has style set AND scene prompt doesn't already describe makeup
+  const sceneHasMakeup = /makeup|eyeliner|mascara|lipstick|lip gloss|blush/i.test(scenePrompt);
+  if (character && !sceneHasMakeup) {
     const mk = (character.style || "").toLowerCase();
     if (mk === "natural") {
       parts.push("Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips");
@@ -358,27 +357,26 @@ function buildFinalPrompt(
     }
   }
 
-  // 6. JEWELRY — dataset uses "Layered jewelry:" as literal prefix
-  if (character?.description) {
+  // 5. JEWELRY — only if character description has extras AND scene doesn't mention them
+  const sceneHasJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(scenePrompt);
+  if (character?.description && !sceneHasJewelry) {
     const extras = character.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
     if (extras) {
-      const hasJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(extras);
-      parts.push(hasJewelry ? extras : `Layered jewelry: ${extras}`);
+      const hasJewelryInExtras = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(extras);
+      parts.push(hasJewelryInExtras ? extras : `Layered jewelry: ${extras}`);
     }
   }
 
-  // 7. LIGHTING (full dataset sentence: source + direction + glow + shadow triad)
-  const mentionsLight = /light|glow|shadow|sun|lamp|neon|golden.hour|backlit|moonlight/i.test(scenePrompt);
-  if (!mentionsLight) {
+  // 6. LIGHTING — only if scene prompt doesn't already describe it
+  const sceneHasLight = /light|glow|shadow|sun|lamp|neon|golden.hour|backlit|moonlight|fluorescent|dim|bright/i.test(scenePrompt);
+  if (!sceneHasLight) {
     parts.push("Natural lighting from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
-  } else {
-    parts.push("Uneven natural glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   }
 
-  // 8. BACKGROUND (dataset style)
-  parts.push("Setting fully sharp in background");
+  // 7. BACKGROUND — force concrete sharpness on background environment and props
+  parts.push(`Every object and surface in the background fully sharp in focus, no bokeh, no shallow depth of field, background environment and props crystal clear`);
 
-  // 9. CAMERA ANGLE + FULL TECH TAIL (exactly matching dataset)
+  // 8. CAMERA ANGLE + FULL TECH TAIL
   let angleLine = "";
   if (photoType === "selfie") {
     angleLine = "Shot from close three-quarter angle on iPhone front camera";
@@ -389,9 +387,6 @@ function buildFinalPrompt(
   }
 
   parts.push(`${angleLine}, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup`);
-
-  // 10. CLOTHING OPACITY GUARD (prevents nipples showing through fabric)
-  parts.push("Opaque fabric with no transparency, no see-through clothing, no visible anatomy beneath clothing");
 
   const finalPrompt = parts.filter(Boolean).join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
