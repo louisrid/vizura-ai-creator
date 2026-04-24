@@ -443,7 +443,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-              style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
+              style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -459,8 +459,8 @@ const CharacterDetail = () => {
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
                 <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
-                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}>
-                  {savingName ? <Loader2 size={16} className="animate-spin" style={{ color: "#ffe603" }} /> : <Check size={18} strokeWidth={3} color="#ffe603" />}
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 10, backgroundColor: "#ffe603" }}>
+                  {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
               </div>
             ) : (
@@ -525,7 +525,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
-            style={{ height: 52, color: "#ffe603", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603", padding: "0 16px" }}
+            style={{ height: 52, color: "#000000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
               <><Camera size={18} strokeWidth={2.5} /> create photo</>
@@ -541,7 +541,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[48px] h-[48px]"
-              style={{ borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
+              style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
               <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -559,8 +559,8 @@ const CharacterDetail = () => {
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
                   <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))", borderRadius: 10 }} />
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}>
-                    {savingName ? <Loader2 size={18} className="animate-spin" style={{ color: "#ffe603" }} /> : <Check size={22} strokeWidth={3} color="#ffe603" />}
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 10, backgroundColor: "#ffe603" }}>
+                    {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
                 </div>
               ) : (
@@ -625,7 +625,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-base"
-              style={{ color: "#ffe603", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
+              style={{ color: "#000000", borderRadius: 10, backgroundColor: "#ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">
                 <><Camera size={18} strokeWidth={2.5} /> create photo</>

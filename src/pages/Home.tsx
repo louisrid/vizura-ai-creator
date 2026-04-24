@@ -285,15 +285,14 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                backgroundColor: "#000000",
-                border: "2px solid #ffe603",
+                backgroundColor: "#ffe603",
                 padding: "16px 14px 16px 20px",
                 borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffe603" }}>create<br />character</span>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffe603" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -489,14 +488,13 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                backgroundColor: "#000000",
-                border: "2px solid #ffe603",
+                backgroundColor: "#ffe603",
                 padding: "22px 20px 22px 28px",
                 borderRadius: 10,
               }}
             >
-              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffe603" }}>create<br />character</span>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffe603" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
