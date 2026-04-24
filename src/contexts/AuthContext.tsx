@@ -18,6 +18,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const AUTH_INIT_TIMEOUT_MS = 6000;
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(() => {
     try {
@@ -108,6 +110,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     let cancelled = false;
+    let authInitTimedOut = false;
+    const finishLoading = () => {
+      if (!cancelled) setLoading(false);
+    };
+    const authInitTimeout = window.setTimeout(() => {
+      authInitTimedOut = true;
+      finishLoading();
+    }, AUTH_INIT_TIMEOUT_MS);
 
     const initializeAuth = async () => {
       // Force-logout: bump this number to invalidate all existing sessions
@@ -239,7 +249,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } catch (err) {
         console.error("Auth init failed:", err);
       } finally {
-        if (!cancelled) setLoading(false);
+        window.clearTimeout(authInitTimeout);
+        if (!authInitTimedOut) finishLoading();
       }
     };
 
@@ -247,6 +258,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => {
       cancelled = true;
+      window.clearTimeout(authInitTimeout);
       subscriptionRef.current?.unsubscribe();
     };
   }, [hydrateUser]);
