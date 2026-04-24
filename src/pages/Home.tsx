@@ -271,9 +271,9 @@ const Home = () => {
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-8 pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? <span style={{ display: "inline-block", transform: "translateY(6px)" }}>✨</span>
+            what are we making today? <span style={{ display: "inline-block", transform: "translateY(16px)" }}>✨</span>
           </h1>
-          <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-3 mb-6" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-2 mb-6">
