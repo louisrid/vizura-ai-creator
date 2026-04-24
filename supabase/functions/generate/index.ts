@@ -288,88 +288,100 @@ function buildCharacterTraits(char: any): string {
   return parts.join(", ");
 }
 
-/* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
-const BODY_PROMPT_MODIFIER: Record<string, string> = {
-  slim: "petite frame, toned stomach, narrow hips",
-  thin: "petite frame, toned stomach, narrow hips",
-  regular: "hourglass figure, defined waist, feminine hips",
-  average: "hourglass figure, defined waist, feminine hips",
-  curvy: "voluptuous, wider hips, natural curves, soft thighs",
-  thick: "voluptuous, wider hips, natural curves, soft thighs",
-};
-
-/* ── build final prompt with structured format ─────────── */
+/* ── build final photo prompt (dataset-matching structure, no reference language) ── */
 function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
-  characterTraits: string | null,
+  _characterTraits: string | null,
   bodyType?: string,
   expression?: string,
   bustSize?: string,
+  character?: any,
 ): string {
-  const EXPRESSION_MAP: Record<string, string> = {
-    "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
-    "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
-    "big smile": "big open-mouth smile showing teeth, happy joyful energy",
-    "pout": "duck face pout, lips pushed forward, playful pouty expression",
-  };
-  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "natural relaxed expression";
-
-  const revealingKeywords = [
-    "lingerie", "bikini", "underwear", "bra", "swimsuit",
-    "swimwear", "nightwear", "negligee", "corset", "bodysuit",
-    "crop top", "sports bra",
-  ];
-  const isRevealing = revealingKeywords.some(kw => scenePrompt.toLowerCase().includes(kw));
-
-  let cameraPrefix = PHOTO_PREFIX;
-  if (photoType === "selfie") cameraPrefix = SELFIE_PREFIX;
-  else if (photoType === "mirror_selfie") cameraPrefix = MIRROR_SELFIE_PREFIX;
-
-  const bodyMod = bodyType
-    ? (BODY_PROMPT_MODIFIER?.[normalizeBodyType(bodyType.toLowerCase())] || BODY_PROMPT_MODIFIER?.["regular"])
-    : "";
-
   const parts: string[] = [];
 
-  if (characterTraits) {
-    parts.push("Exact same single woman as shown consistently across all provided reference images, unified consistent identity, identical facial features hair skin tone body proportions from the combined references, do not average or blend, treat as the same person");
-    parts.push(characterTraits);
+  // 1. CAMERA + SCENE + POSE + EXPRESSION
+  let camera = CAMERA_PHOTO;
+  if (photoType === "selfie") camera = CAMERA_SELFIE;
+  else if (photoType === "mirror_selfie") camera = CAMERA_MIRROR;
+
+  const exprStr = expression
+    ? (PHOTO_EXPR[expression] || expression)
+    : "direct eye contact with relaxed sultry expression lips slightly parted";
+
+  parts.push(`${camera} ${scenePrompt}, head tilted slightly, ${exprStr}`);
+
+  // 2. BODY (figure + bust + skin tone)
+  const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
+  const bodyDesc = PHOTO_BODY_DESC[normBody] || PHOTO_BODY_DESC.regular;
+  const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
+  const bustDesc = PHOTO_BUST_DESC[bustKey] || "";
+  const skinKey = (character?.country || "").toLowerCase();
+  const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
+  parts.push(`${bustDesc ? bustDesc + ", " : ""}${bodyDesc}, ${skinTone}`);
+
+  // 3. HAIR
+  if (character) {
+    const hairStyleMatch = character.description?.match(/^(.*?)\s*hair\./i);
+    const hairStyle = (hairStyleMatch?.[1]?.trim() || "").toLowerCase();
+    const hairColour = character.hair || "";
+    const mappedColour = hairColour.toLowerCase() === "blonde" ? "cool white-blonde" : hairColour;
+    let hairDesc = `Long ${mappedColour} hair with face-framing strands`.trim();
+    if (hairStyle === "bangs") {
+      hairDesc = `Long center-parted ${mappedColour} hair with soft curtain bangs and face-framing strands`;
+    } else if (hairStyle === "straight") {
+      hairDesc = `Long straight ${mappedColour} hair with face-framing strands`;
+    } else if (hairStyle === "curly" || hairStyle === "wavy") {
+      hairDesc = `Long ${mappedColour} hair with soft voluminous waves and face-framing strands`;
+    } else if (hairStyle) {
+      hairDesc = `Long ${hairStyle} ${mappedColour} hair with face-framing strands`.trim();
+    }
+    parts.push(hairDesc);
   }
-  parts.push(scenePrompt);
-  parts.push(cameraPrefix);
 
-  if (bodyMod) parts.push(bodyMod);
+  // 4. OUTFIT — already inside scenePrompt, no extra flags needed
 
-  if (bustSize === "extra large") {
-    parts.push("CRITICAL: her breasts must be very large and clearly prominent in the image, large heavy chest is her defining physical feature");
+  // 5. MAKEUP
+  if (character) {
+    const mk = (character.style || "").toLowerCase();
+    if (mk === "natural") {
+      parts.push("Natural minimal makeup with visible lip gloss and subtle mascara");
+    } else if (mk === "classic") {
+      parts.push("Classic polished makeup with defined eyeliner, mascara, subtle contour, lip colour");
+    } else if (mk) {
+      parts.push(`${mk} makeup`);
+    }
   }
 
-  if (photoType === "selfie") {
-    parts.push("authentic one-handed selfie pose: right arm extended forward as if holding the iPhone but the phone itself is completely out of the frame and not visible, left arm relaxed naturally at her side or lightly resting on the bed next to her thigh, realistic single-arm selfie anatomy with no duplicated arms or awkward two-handed pose");
-  } else if (photoType === "mirror_selfie") {
-    parts.push("standing in front of a full-length mirror taking a mirror selfie, iPhone clearly visible in her right hand held up in front of her chest or face area, phone also visible in the mirror reflection, natural mirror selfie pose");
+  // 6. JEWELRY / EXTRAS from character description
+  if (character?.description) {
+    const extras = character.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
+    if (extras) parts.push(extras);
   }
 
-  parts.push(SKIN_QUALITY);
-  parts.push("highly detailed skin texture with clearly visible pores, peach fuzz, subtle natural imperfections");
-  parts.push(exprStr);
-  parts.push("smooth midsection, no visible ribs");
-
-  if (isRevealing) {
-    parts.push("exactly wearing the outfit described in the scene prompt, highly detailed realistic clothing with visible fabric texture, proper coverage of breasts and body, no missing clothing, no nudity");
+  // 7. LIGHTING
+  const mentionsLight = /light|glow|shadow|sun|lamp|neon|golden.hour|backlit/i.test(scenePrompt);
+  if (!mentionsLight) {
+    parts.push("Natural lighting with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   } else {
-    parts.push("fully clothed");
+    parts.push("Real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   }
 
-  parts.push("maintaining exact same face, body proportions, and identity as in the three reference photos");
+  // 8. BACKGROUND
+  parts.push("Background fully sharp in the image");
 
-  const seed = Math.floor(Math.random() * 999999);
-  parts.push(`seed:${seed}`);
+  // 9. CAMERA TECH
+  if (photoType === "selfie") {
+    parts.push("Shot from close front-on slightly above angle on iPhone front camera");
+  } else if (photoType === "mirror_selfie") {
+    parts.push("Shot from front-on chest height on iPhone front camera");
+  } else {
+    parts.push("Shot from standing three-quarter angle on iPhone camera");
+  }
 
-  parts.push(IPHONE_REALISM);
+  parts.push("entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup");
 
-  const finalPrompt = parts.filter(Boolean).join(", ");
+  const finalPrompt = parts.filter(Boolean).join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
   return finalPrompt;
 }
