@@ -117,18 +117,25 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setCharactersReady(true);
       return;
     }
-    const { data } = await supabase
-      .from("characters")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
-    if (data) {
-      setCharacters(data as CachedCharacter[]);
-      writeLocal(CHARS_KEY, data);
-      writeLocal(CACHE_USER_KEY, user.id);
+    try {
+      const { data, error } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (!error && data) {
+        setCharacters(data as CachedCharacter[]);
+        writeLocal(CHARS_KEY, data);
+        writeLocal(CACHE_USER_KEY, user.id);
+      }
+    } catch (err) {
+      console.error("refreshCharacters failed:", err);
+    } finally {
+      // Always flip ready, even on error — otherwise blocking loaders never release
+      // and the yellow splash hangs forever on a silent network failure.
+      setCharactersReady(true);
     }
-    setCharactersReady(true);
   }, [user]);
 
   const refreshGenerations = useCallback(async () => {
@@ -137,18 +144,23 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setGenerationsReady(true);
       return;
     }
-    const { data } = await supabase
-      .from("generations")
-      .select("id, image_urls, prompt, character_id, created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(20);
-    if (data) {
-      setGenerations(data as CachedGeneration[]);
-      writeLocal(GENS_KEY, data);
-      writeLocal(CACHE_USER_KEY, user.id);
+    try {
+      const { data, error } = await supabase
+        .from("generations")
+        .select("id, image_urls, prompt, character_id, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (!error && data) {
+        setGenerations(data as CachedGeneration[]);
+        writeLocal(GENS_KEY, data);
+        writeLocal(CACHE_USER_KEY, user.id);
+      }
+    } catch (err) {
+      console.error("refreshGenerations failed:", err);
+    } finally {
+      setGenerationsReady(true);
     }
-    setGenerationsReady(true);
   }, [user]);
 
   const refreshAll = useCallback(async () => {

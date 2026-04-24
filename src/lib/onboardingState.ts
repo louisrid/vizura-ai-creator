@@ -68,6 +68,21 @@ export const fetchAndCacheOnboardingState = async (userId: string) => {
     supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", userId),
   ]);
 
+  // Treat Supabase error responses as failures: if either query failed, fall back to the
+  // previously cached state so we never overwrite a known-onboarded user with `false` due
+  // to a transient backend hiccup. This prevents the yellow loader from getting stuck
+  // when a silent failure flips onboardingComplete to false on refresh.
+  if (profileRes.error || charsRes.error) {
+    const previous = readCachedOnboardingState(userId);
+    if (previous) return previous;
+    return writeCachedOnboardingState({
+      userId,
+      onboardingComplete: false,
+      characterCount: 0,
+      resolvedAt: Date.now(),
+    });
+  }
+
   return writeCachedOnboardingState({
     userId,
     onboardingComplete: !!profileRes.data?.onboarding_complete,
