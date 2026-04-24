@@ -232,7 +232,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         await resolveOAuthCallback();
-        const { data, error } = await supabase.auth.getSession();
+        // Hard 6s timeout: if Supabase's session restore stalls (e.g. flaky network on
+        // a full refresh), don't keep the user trapped behind the yellow loader forever.
+        // Race getSession() against a timeout and fall through to setLoading(false) either way.
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise<{ data: { session: null }; error: null }>((resolve) =>
+          setTimeout(() => resolve({ data: { session: null }, error: null }), 6000),
+        );
+        const { data, error } = (await Promise.race([sessionPromise, timeoutPromise])) as Awaited<typeof sessionPromise>;
         if (error) throw error;
         if (cancelled) return;
         await hydrateUser(data.session?.user ?? null, cancelled);
