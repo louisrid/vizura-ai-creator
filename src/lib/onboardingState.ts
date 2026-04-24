@@ -62,16 +62,28 @@ export const clearCachedOnboardingState = () => {
 export const needsOnboardingRedirect = (state: CachedOnboardingState | null | undefined) =>
   !!state && !state.onboardingComplete && state.characterCount === 0;
 
-export const fetchAndCacheOnboardingState = async (userId: string) => {
-  const [profileRes, charsRes] = await Promise.all([
-    supabase.from("profiles").select("onboarding_complete").eq("user_id", userId).maybeSingle(),
-    supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", userId),
-  ]);
+export const fetchAndCacheOnboardingState = async (userId: string): Promise<CachedOnboardingState> => {
+  try {
+    const [profileRes, charsRes] = await Promise.all([
+      supabase.from("profiles").select("onboarding_complete").eq("user_id", userId).maybeSingle(),
+      supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", userId),
+    ]);
 
-  return writeCachedOnboardingState({
-    userId,
-    onboardingComplete: !!profileRes.data?.onboarding_complete,
-    characterCount: charsRes.count ?? 0,
-    resolvedAt: Date.now(),
-  });
+    return writeCachedOnboardingState({
+      userId,
+      onboardingComplete: !!profileRes.data?.onboarding_complete,
+      characterCount: charsRes.count ?? 0,
+      resolvedAt: Date.now(),
+    });
+  } catch (err) {
+    console.error("fetchAndCacheOnboardingState failed:", err);
+    // Fall back to a permissive default so the UI can unblock. Prefer cached value if we have one.
+    const cached = readCachedOnboardingState(userId);
+    return cached ?? {
+      userId,
+      onboardingComplete: true,
+      characterCount: 0,
+      resolvedAt: Date.now(),
+    };
+  }
 };
