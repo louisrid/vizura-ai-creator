@@ -25,9 +25,19 @@ export function useOnboarded() {
 
     let cancelled = false;
 
-    void fetchAndCacheOnboardingState(user.id).then((fresh) => {
-      if (!cancelled) setState(fresh);
-    });
+    void fetchAndCacheOnboardingState(user.id)
+      .then((fresh) => {
+        if (!cancelled) setState(fresh);
+      })
+      .catch((err) => {
+        console.error("useOnboarded fetch failed:", err);
+        if (!cancelled) setState({
+          userId: user.id,
+          onboardingComplete: true,
+          characterCount: 0,
+          resolvedAt: Date.now(),
+        });
+      });
 
     const handleChange = () => {
       if (!cancelled) setState(readCachedOnboardingState(user.id));

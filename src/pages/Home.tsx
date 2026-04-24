@@ -240,11 +240,19 @@ const Home = () => {
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
 
   // Hold the startup splash until Home data is ready, so header + content reveal together.
+  // Safety net: force-unregister after 5s regardless, so a silent fetch failure can never
+  // trap the user behind a perpetual yellow loading bar.
   useLayoutEffect(() => {
     const needsBlock = (!photosLoaded || !charsLoaded || !lockStateResolved) && (!!user || authLoading);
     if (needsBlock) {
       const unregister = registerBlockingLoader();
-      return unregister;
+      const safetyTimer = setTimeout(() => {
+        unregister();
+      }, 5000);
+      return () => {
+        clearTimeout(safetyTimer);
+        unregister();
+      };
     }
   }, [photosLoaded, charsLoaded, lockStateResolved, user, authLoading]);
 
