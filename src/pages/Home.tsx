@@ -246,12 +246,18 @@ const Home = () => {
     const needsBlock = (!photosLoaded || !charsLoaded || !lockStateResolved) && (!!user || authLoading);
     if (needsBlock) {
       const unregister = registerBlockingLoader();
-      const safetyTimer = setTimeout(() => {
+      let didUnregister = false;
+      const safeUnregister = () => {
+        if (didUnregister) return;
+        didUnregister = true;
         unregister();
+      };
+      const safetyTimer = setTimeout(() => {
+        safeUnregister();
       }, 5000);
       return () => {
         clearTimeout(safetyTimer);
-        unregister();
+        safeUnregister();
       };
     }
   }, [photosLoaded, charsLoaded, lockStateResolved, user, authLoading]);
