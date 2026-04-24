@@ -29,12 +29,12 @@ const CAMERA_PHOTO = "Casual iPhone photo of a woman";
 const CAMERA_MIRROR = "Casual iPhone mirror selfie of a woman standing in front of a full-length mirror, hip popped to one side, one hand holding phone at chest height";
 
 const PHOTO_BODY_DESC: Record<string, string> = {
-  slim: "slim toned figure with narrow waist, toned slim arms, flat toned stomach, fit figure",
-  thin: "slim toned figure with narrow waist, toned slim arms, flat toned stomach, fit figure",
-  regular: "hourglass figure with defined waist, toned slim arms, flat toned stomach, fit figure",
-  average: "hourglass figure with defined waist, toned slim arms, flat toned stomach, fit figure",
-  curvy: "curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-  thick: "curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+  slim: "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+  thin: "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+  regular: "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+  average: "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+  curvy: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+  thick: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
 };
 
 const PHOTO_BUST_DESC: Record<string, string> = {
@@ -300,7 +300,7 @@ function buildFinalPrompt(
 ): string {
   const parts: string[] = [];
 
-  // 1. CAMERA + SCENE + POSE + EXPRESSION
+  // 1. CAMERA + SCENE + POSE + EXPRESSION (one sentence)
   let camera = CAMERA_PHOTO;
   if (photoType === "selfie") camera = CAMERA_SELFIE;
   else if (photoType === "mirror_selfie") camera = CAMERA_MIRROR;
@@ -309,77 +309,89 @@ function buildFinalPrompt(
     ? (PHOTO_EXPR[expression] || expression)
     : "direct eye contact with relaxed sultry expression lips slightly parted";
 
-  parts.push(`${camera} ${scenePrompt}, head tilted slightly, ${exprStr}`);
+  parts.push(`${camera} ${scenePrompt}, head tilted slightly, body angled toward camera, ${exprStr}`);
 
-  // 2. BODY (figure + bust + skin tone)
+  // 2. BODY (full anatomy template + bust + skin tone)
   const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
   const bodyDesc = PHOTO_BODY_DESC[normBody] || PHOTO_BODY_DESC.regular;
   const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
-  const bustDesc = PHOTO_BUST_DESC[bustKey] || "";
   const skinKey = (character?.country || "").toLowerCase();
   const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
-  parts.push(`${bustDesc ? bustDesc + ", " : ""}${bodyDesc}, ${skinTone}`);
 
-  // 3. HAIR
+  // Insert bust right after "figure with " — matches dataset style
+  // "Curvaceous hourglass figure with very large prominent breasts, narrow waist..."
+  const bodyWithBust = bustKey === "extra large"
+    ? `${bodyDesc.replace(/(with )/, `with very large prominent breasts, `)}, ${skinTone}`
+    : `${bodyDesc}, ${skinTone}`;
+  parts.push(bodyWithBust);
+
+  // 3. HAIR (long sentence with placement + face-framing strands)
   if (character) {
     const hairStyleMatch = character.description?.match(/^(.*?)\s*hair\./i);
     const hairStyle = (hairStyleMatch?.[1]?.trim() || "").toLowerCase();
     const hairColour = character.hair || "";
     const mappedColour = hairColour.toLowerCase() === "blonde" ? "cool white-blonde" : hairColour;
-    let hairDesc = `Long ${mappedColour} hair with face-framing strands`.trim();
+    let hairDesc = `Long ${mappedColour} hair draped over shoulders with face-framing strands`.trim();
     if (hairStyle === "bangs") {
-      hairDesc = `Long center-parted ${mappedColour} hair with soft curtain bangs and face-framing strands`;
+      hairDesc = `Long center-parted ${mappedColour} hair with soft curtain bangs and face-framing strands, draped over shoulders`;
     } else if (hairStyle === "straight") {
-      hairDesc = `Long straight ${mappedColour} hair with face-framing strands`;
+      hairDesc = `Long straight center-parted ${mappedColour} hair draped over shoulders with face-framing strands`;
     } else if (hairStyle === "curly" || hairStyle === "wavy") {
-      hairDesc = `Long ${mappedColour} hair with soft voluminous waves and face-framing strands`;
+      hairDesc = `Long ${mappedColour} hair with soft voluminous waves draped over shoulders with face-framing strands`;
     } else if (hairStyle) {
-      hairDesc = `Long ${hairStyle} ${mappedColour} hair with face-framing strands`.trim();
+      hairDesc = `Long ${hairStyle} ${mappedColour} hair draped over shoulders with face-framing strands`.trim();
     }
     parts.push(hairDesc);
   }
 
-  // 4. OUTFIT — already inside scenePrompt, no extra flags needed
+  // 4. OUTFIT — already inside scenePrompt
 
   // 5. MAKEUP
   if (character) {
     const mk = (character.style || "").toLowerCase();
     if (mk === "natural") {
-      parts.push("Natural minimal makeup with visible lip gloss and subtle mascara");
+      parts.push("Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips");
     } else if (mk === "classic") {
-      parts.push("Classic polished makeup with defined eyeliner, mascara, subtle contour, lip colour");
+      parts.push("Classic polished makeup with defined eyeliner, full lashes, subtle contour, mascara, glossy lip colour");
     } else if (mk) {
-      parts.push(`${mk} makeup`);
+      parts.push(`${mk} makeup with defined eyeliner, full lashes, blush, glossy lips`);
     }
   }
 
-  // 6. JEWELRY / EXTRAS from character description
+  // 6. JEWELRY — dataset uses "Layered jewelry:" as literal prefix
   if (character?.description) {
     const extras = character.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
-    if (extras) parts.push(extras);
+    if (extras) {
+      const hasJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(extras);
+      parts.push(hasJewelry ? extras : `Layered jewelry: ${extras}`);
+    }
   }
 
-  // 7. LIGHTING
-  const mentionsLight = /light|glow|shadow|sun|lamp|neon|golden.hour|backlit/i.test(scenePrompt);
+  // 7. LIGHTING (full dataset sentence: source + direction + glow + shadow triad)
+  const mentionsLight = /light|glow|shadow|sun|lamp|neon|golden.hour|backlit|moonlight/i.test(scenePrompt);
   if (!mentionsLight) {
-    parts.push("Natural lighting with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
+    parts.push("Natural lighting from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   } else {
-    parts.push("Real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
+    parts.push("Uneven natural glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   }
 
-  // 8. BACKGROUND
-  parts.push("Background fully sharp in the image");
+  // 8. BACKGROUND (dataset style)
+  parts.push("Setting fully sharp in background");
 
-  // 9. CAMERA TECH
+  // 9. CAMERA ANGLE + FULL TECH TAIL (exactly matching dataset)
+  let angleLine = "";
   if (photoType === "selfie") {
-    parts.push("Shot from close front-on slightly above angle on iPhone front camera");
+    angleLine = "Shot from close three-quarter angle on iPhone front camera";
   } else if (photoType === "mirror_selfie") {
-    parts.push("Shot from front-on chest height on iPhone front camera");
+    angleLine = "Shot from front-on chest height on iPhone front camera with phone visible in the mirror reflection";
   } else {
-    parts.push("Shot from standing three-quarter angle on iPhone camera");
+    angleLine = "Shot from standing three-quarter angle on iPhone camera";
   }
 
-  parts.push("entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup");
+  parts.push(`${angleLine}, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup`);
+
+  // 10. CLOTHING OPACITY GUARD (prevents nipples showing through fabric)
+  parts.push("Opaque fabric with no transparency, no see-through clothing, no visible anatomy beneath clothing");
 
   const finalPrompt = parts.filter(Boolean).join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
