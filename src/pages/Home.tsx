@@ -268,12 +268,12 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-8 pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-12 pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? <span style={{ display: "inline-block", transform: "translateY(16px)" }}>✨</span>
           </h1>
-          <div className="mt-7 mb-6" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-9 mb-6" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-2 mb-6 -mx-[6px]">
@@ -473,11 +473,11 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-8 pb-[280px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-12 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? <span style={{ display: "inline-block", transform: "translateY(20px)" }}>✨</span>
           </h1>
-          <div className="mt-9 mb-10" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-11 mb-10" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8 -mx-2">
