@@ -117,16 +117,20 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setCharactersReady(true);
       return;
     }
-    const { data } = await supabase
-      .from("characters")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
-    if (data) {
-      setCharacters(data as CachedCharacter[]);
-      writeLocal(CHARS_KEY, data);
-      writeLocal(CACHE_USER_KEY, user.id);
+    try {
+      const { data } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (data) {
+        setCharacters(data as CachedCharacter[]);
+        writeLocal(CHARS_KEY, data);
+        writeLocal(CACHE_USER_KEY, user.id);
+      }
+    } catch (err) {
+      console.error("refreshCharacters failed:", err);
     }
     setCharactersReady(true);
   }, [user]);
