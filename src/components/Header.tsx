@@ -10,6 +10,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { useOnboarded } from "@/hooks/useOnboarded";
 import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
 import TopGradientBar from "@/components/TopGradientBar";
+import foxHeader from "@/assets/fox-header.png";
 
 type MenuButtonProps = {
   menuDisabled: boolean;
