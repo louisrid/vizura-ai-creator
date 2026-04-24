@@ -69,6 +69,9 @@ export const fetchAndCacheOnboardingState = async (userId: string): Promise<Cach
       supabase.from("characters").select("id", { count: "exact", head: true }).eq("user_id", userId),
     ]);
 
+    if (profileRes.error) throw profileRes.error;
+    if (charsRes.error) throw charsRes.error;
+
     return writeCachedOnboardingState({
       userId,
       onboardingComplete: !!profileRes.data?.onboarding_complete,
