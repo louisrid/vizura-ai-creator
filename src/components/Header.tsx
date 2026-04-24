@@ -10,6 +10,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { useOnboarded } from "@/hooks/useOnboarded";
 import { checkNavGuard, clearNavGuard } from "@/lib/navGuard";
 import TopGradientBar from "@/components/TopGradientBar";
+import foxHeader from "@/assets/fox-header.png";
 
 type MenuButtonProps = {
   menuDisabled: boolean;
@@ -351,8 +352,9 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[26px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
-                <span className="text-[26px] md:text-[34px] text-white tracking-tight" style={{ fontFamily: "'Outfit', -apple-system, sans-serif", fontWeight: 900 }}>facefox</span>
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-2 md:gap-2.5 transition-opacity duration-150">
+                <span className="text-[34px] md:text-[44px] text-white tracking-tight leading-none" style={{ fontFamily: "'Outfit', -apple-system, sans-serif", fontWeight: 900 }}>facefox</span>
+                <img src={foxHeader} alt="" className="w-[34px] h-[34px] md:w-[44px] md:h-[44px] shrink-0" />
               </button>
               {isLoggedIn && (
                 <button
