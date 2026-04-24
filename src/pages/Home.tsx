@@ -240,25 +240,11 @@ const Home = () => {
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
 
   // Hold the startup splash until Home data is ready, so header + content reveal together.
-  // Safety net: force-unregister after 5s regardless, so a silent fetch failure can never
-  // trap the user behind a perpetual yellow loading bar.
   useLayoutEffect(() => {
     const needsBlock = (!photosLoaded || !charsLoaded || !lockStateResolved) && (!!user || authLoading);
     if (needsBlock) {
       const unregister = registerBlockingLoader();
-      let didUnregister = false;
-      const safeUnregister = () => {
-        if (didUnregister) return;
-        didUnregister = true;
-        unregister();
-      };
-      const safetyTimer = setTimeout(() => {
-        safeUnregister();
-      }, 5000);
-      return () => {
-        clearTimeout(safetyTimer);
-        safeUnregister();
-      };
+      return unregister;
     }
   }, [photosLoaded, charsLoaded, lockStateResolved, user, authLoading]);
 
@@ -282,15 +268,15 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-12 pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-8 pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? <span style={{ display: "inline-block", transform: "translateY(8px)" }}>✨</span>
+            what are we making today? ✨
           </h1>
-          <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-3 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
-          <div className="flex gap-2 mb-6 -mx-[6px]">
+          <div className="flex gap-2 mb-6">
             {/* Create Character - solid yellow */}
             <button
               type="button"
@@ -300,7 +286,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffe603",
-                padding: "16px 14px 16px 20px",
+                padding: "16px 14px",
                 borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
@@ -324,7 +310,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "16px 20px 16px 14px",
+                padding: "16px 14px",
                 borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
@@ -487,14 +473,14 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-12 pb-[280px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-8 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? <span style={{ display: "inline-block", transform: "translateY(10px)" }}>✨</span>
+            what are we making today? ✨
           </h1>
-          <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-4 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
-          <div className="flex gap-3 mb-8 -mx-2">
+          <div className="flex gap-3 mb-8">
             <button
               type="button"
               onClick={handleOpenCreator}
@@ -503,7 +489,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffe603",
-                padding: "22px 20px 22px 28px",
+                padding: "22px 20px",
                 borderRadius: 10,
               }}
             >
@@ -524,7 +510,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "22px 28px 22px 20px",
+                padding: "22px 20px",
                 borderRadius: 10,
                 color: "#ffffff",
                 backgroundColor: "#000000",
