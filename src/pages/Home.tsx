@@ -273,7 +273,7 @@ const Home = () => {
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? <span style={{ display: "inline-block", transform: "translateY(16px)" }}>✨</span>
           </h1>
-          <div className="mt-3 mb-6" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-7 mb-6" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-2 mb-6">
@@ -477,7 +477,7 @@ const Home = () => {
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? <span style={{ display: "inline-block", transform: "translateY(20px)" }}>✨</span>
           </h1>
-          <div className="mt-4 mb-10" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          <div className="mt-9 mb-10" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
