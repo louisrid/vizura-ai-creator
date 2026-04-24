@@ -54,11 +54,23 @@ const FreshLoadRedirect = () => {
   const location = useLocation();
   const navigate = useTransitionNavigate();
   const { user, loading } = useAuth();
-  const hasRedirected = useRef(false);
+  const hasRedirectedRef = useRef(false);
+  const lastUserIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (hasRedirected.current || loading) return;
-    hasRedirected.current = true;
+    if (loading) return;
+
+    // Reset the one-shot guard whenever the auth identity changes (sign-in or sign-out).
+    // Previously this only ever fired once per page load, so a sign-out from a
+    // non-exempt page never triggered the bounce-to-start and the splash stayed up.
+    const currentUserId = user?.id ?? null;
+    if (currentUserId !== lastUserIdRef.current) {
+      hasRedirectedRef.current = false;
+      lastUserIdRef.current = currentUserId;
+    }
+
+    if (hasRedirectedRef.current) return;
+    hasRedirectedRef.current = true;
 
     const pendingPostAuthHome = sessionStorage.getItem(POST_AUTH_HOME_KEY) === "1";
 
@@ -270,7 +282,6 @@ const AppRoutes = () => {
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
     (authLoading && !hasCachedUser) ||
-    (!authLoading && !user && !hasCachedUser && !isExemptRoute(location.pathname)) ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading;
 

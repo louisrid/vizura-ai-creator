@@ -240,11 +240,23 @@ const Home = () => {
   const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
 
   // Hold the startup splash until Home data is ready, so header + content reveal together.
+  // Safety timer: if data never resolves (silent network failure), force-release the loader
+  // after 5s so the user is never trapped behind the yellow bar.
   useLayoutEffect(() => {
     const needsBlock = (!photosLoaded || !charsLoaded || !lockStateResolved) && (!!user || authLoading);
     if (needsBlock) {
+      let released = false;
       const unregister = registerBlockingLoader();
-      return unregister;
+      const safeUnregister = () => {
+        if (released) return;
+        released = true;
+        unregister();
+      };
+      const safetyTimer = window.setTimeout(safeUnregister, 5000);
+      return () => {
+        window.clearTimeout(safetyTimer);
+        safeUnregister();
+      };
     }
   }, [photosLoaded, charsLoaded, lockStateResolved, user, authLoading]);
 
