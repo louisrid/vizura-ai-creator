@@ -21,16 +21,42 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-/* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "a candid close-up selfie taken slightly above eye-level with her iPhone front camera";
+/* ── prompt constants (photo generation) ───────────────── */
+const CAMERA_SELFIE = "Casual iPhone selfie of a woman";
 
-const PHOTO_PREFIX = "a candid third-person phone snapshot";
+const CAMERA_PHOTO = "Casual iPhone photo of a woman";
 
-const MIRROR_SELFIE_PREFIX = "a candid mirror selfie taken with an iPhone held up in front of a full-length mirror, phone clearly visible in her hand and in the reflection, full body or upper body visible in the mirror reflection";
+const CAMERA_MIRROR = "Casual iPhone mirror selfie of a woman standing in front of a full-length mirror, hip popped to one side, one hand holding phone at chest height";
 
-const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural skin texture, subtle imperfections, peach fuzz, matte finish, realistic subsurface scattering, no plastic, no airbrushed, no overly smooth or doll-like skin";
+const PHOTO_BODY_DESC: Record<string, string> = {
+  slim: "slim toned figure with narrow waist, toned slim arms, flat toned stomach, fit figure",
+  thin: "slim toned figure with narrow waist, toned slim arms, flat toned stomach, fit figure",
+  regular: "hourglass figure with defined waist, toned slim arms, flat toned stomach, fit figure",
+  average: "hourglass figure with defined waist, toned slim arms, flat toned stomach, fit figure",
+  curvy: "curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+  thick: "curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+};
 
-const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard camera mode (explicitly NOT portrait mode and NOT any artificial depth effect), posted on Instagram by an influencer, the ENTIRE image in razor-sharp focus with maximum depth of field, every single detail from the subject to the farthest background including furniture, walls, bedding, lamps, and objects is crystal clear and perfectly in focus, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
+const PHOTO_BUST_DESC: Record<string, string> = {
+  regular: "prominent chest",
+  "extra large": "very large prominent breasts",
+};
+
+const PHOTO_SKIN_TONE: Record<string, string> = {
+  white: "fair skin",
+  pale: "very pale fair skin",
+  tan: "warm olive skin",
+  asian: "warm golden skin",
+  black: "rich dark skin",
+  dark: "rich dark skin",
+};
+
+const PHOTO_EXPR: Record<string, string> = {
+  "casual smile": "relaxed sultry expression with gentle closed-mouth smile",
+  "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
+  "big smile": "big open-mouth smile showing teeth, happy joyful energy",
+  "pout": "duck face pout, lips pushed forward, playful pouty expression",
+};
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
