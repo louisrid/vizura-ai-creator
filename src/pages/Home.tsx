@@ -287,8 +287,8 @@ const Home = () => {
           </h1>
           <div className="mt-3 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
-          {/* Two action buttons */}
-          <div className="flex gap-2 mb-6">
+          {/* Two action buttons — extended outward to align with photo pill row edges */}
+          <div className="flex gap-2 mb-6 -mx-[6px] md:-mx-2">
             {/* Create Character - solid yellow */}
             <button
               type="button"
@@ -298,7 +298,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffe603",
-                padding: "16px 14px",
+                padding: "16px 14px 16px 20px",
                 borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
@@ -322,7 +322,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "16px 14px",
+                padding: "16px 20px 16px 14px",
                 borderRadius: 10,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
