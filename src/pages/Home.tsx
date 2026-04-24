@@ -480,7 +480,7 @@ const Home = () => {
           <div className="mt-9 mb-10" style={{ width: 60, height: 5, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
-          <div className="flex gap-3 mb-8">
+          <div className="flex gap-3 mb-8 -mx-2">
             <button
               type="button"
               onClick={handleOpenCreator}
@@ -489,7 +489,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffe603",
-                padding: "22px 20px",
+                padding: "22px 20px 22px 28px",
                 borderRadius: 10,
               }}
             >
@@ -510,7 +510,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "22px 20px",
+                padding: "22px 28px 22px 20px",
                 borderRadius: 10,
                 color: "#ffffff",
                 backgroundColor: "#000000",
