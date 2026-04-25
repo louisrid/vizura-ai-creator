@@ -62,8 +62,36 @@ const PHOTO_CAMERA_ANGLE: Record<string, string> = {
 
 const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
-/* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+/* ── face generation constants ─────────────────────────── */
+const FACE_IDENTITY_TAIL = "Passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, confident subtle closed-mouth smile. Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, sharp focus, matte finish.";
+
+const FACE_AGE_DESC: Record<string, string> = {
+  young: "20 year old young-woman with round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features",
+  older: "24 year old woman with visible cheekbones, clean jawline, balanced features, clear skin",
+};
+
+const FACE_RACE_FEATURES: Record<string, string> = {
+  asian: "East-asian eyelid-fold, flatter nose-bridge, soft round face, clearly asian complexion, warm skin not orange, no green cast",
+  black: "Fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
+  dark: "Fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
+  tan: "Defined brow-bone, olive warm undertone, strong lashes",
+};
+
+const FACE_VARIATIONS = [
+  "Big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin",
+  "Very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin",
+  "Large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin",
+];
+
+const FACE_MAKEUP_VARIATIONS = [
+  "Defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
+  "Mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
+  "Defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
+];
+
+/* ── angle/body generation constants ───────────────────── */
+const REF_IDENTITY_SINGLE = "Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference";
+const REF_TECH_TAIL = "Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, entire image completely sharp edge to edge, matte finish";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
