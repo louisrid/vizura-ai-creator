@@ -355,11 +355,12 @@ EXAMPLE OUTPUT:
     console.log("SCENE EXPANSION:", JSON.stringify(parsed));
     return parsed;
   } catch (err) {
-    const isTimeout = err?.name === "TimeoutError" || err?.name === "AbortError";
+    const e = err as { name?: string; message?: string };
+    const isTimeout = e?.name === "TimeoutError" || e?.name === "AbortError";
     if (isTimeout) {
       console.error("Grok scene expansion timed out after 45s — falling back to template prompt");
     } else {
-      console.error("Grok scene expansion failed:", err?.message || err);
+      console.error("Grok scene expansion failed:", e?.message || err);
     }
     return null;
   }
