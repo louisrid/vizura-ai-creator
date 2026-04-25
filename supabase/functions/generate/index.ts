@@ -1017,7 +1017,7 @@ serve(async (req) => {
     }
 
     /* ── look up character if provided ── */
-    let characterTraits: string | null = null;
+    let hasCharacter = false;
     let characterBodyType: string | undefined;
     let characterBustSize: string | undefined;
     let characterHairStyle = "straight";
@@ -1033,7 +1033,7 @@ serve(async (req) => {
         .single();
 
       if (charData) {
-        characterTraits = buildCharacterTraits(charData);
+        hasCharacter = true;
         characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
         characterBustSize = (charData.bust_size || "regular").toLowerCase();
         const hairMatch = charData.description?.match(/^(.*?)\s*hair\./i);
