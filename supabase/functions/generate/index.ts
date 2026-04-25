@@ -631,7 +631,7 @@ async function generateFaceImages(
       }
     }
 
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
+    const positivePrompt = `${FACE_QUALITY}. ${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
