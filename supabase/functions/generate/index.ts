@@ -22,23 +22,21 @@ const corsHeaders = {
 };
 
 /* ── photo prompt constants ────────────────────────────── */
-const PHOTO_IDENTITY = "Exact same woman as the two uploaded face reference images, identical face from every angle, perfect face match to both references";
-
 const PHOTO_BODY_FIGURE: Record<string, Record<string, string>> = {
   slim: {
-    regular: "Slim toned figure with full C-D cup breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Slim toned figure with large D-DD cup breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Slim toned figure with very large prominent breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
   },
   regular: {
-    regular: "Hourglass figure with full C-D cup breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Hourglass figure with large D-DD cup breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Hourglass figure with very large prominent breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
   },
   curvy: {
-    regular: "Curvaceous hourglass figure with full C-D cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with large D-DD cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
   thick: {
-    regular: "Curvaceous hourglass figure with full C-D cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with large D-DD cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
 };
