@@ -324,10 +324,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                  <div className="px-3 md:px-4 pt-2.5 pb-2.5 flex items-start gap-2">
-                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug line-clamp-2 flex-1" style={{ color: "#ffffff" }}>
-                      {expanded.prompt}
-                    </p>
+                  <div className="px-3 md:px-4 pt-2.5 pb-2.5">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -358,11 +355,11 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                           if (copyFallback()) done(); else toast.error("copy error");
                         }
                       }}
-                      className="shrink-0 h-9 w-9 flex items-center justify-center border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]"
+                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[10px]"
                       style={{ backgroundColor: "#000000" }}
-                      aria-label="copy prompt"
                     >
-                      <Copy size={13} strokeWidth={2.5} className="text-white" />
+                      <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
+                      <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />
                     </button>
                   </div>
                 )}
