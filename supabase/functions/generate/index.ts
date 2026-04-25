@@ -21,16 +21,46 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-/* ── prompt constants ──────────────────────────────────── */
-const SELFIE_PREFIX = "a candid close-up selfie taken slightly above eye-level with her iPhone front camera";
+/* ── photo prompt constants ────────────────────────────── */
+const PHOTO_IDENTITY = "Exact same woman as the two uploaded face reference images, identical face from every angle, perfect face match to both references";
 
-const PHOTO_PREFIX = "a candid third-person phone snapshot";
+const PHOTO_BODY_FIGURE: Record<string, Record<string, string>> = {
+  slim: {
+    regular: "Slim toned figure with full C-D cup breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Slim toned figure with very large prominent breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+  },
+  regular: {
+    regular: "Hourglass figure with full C-D cup breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Hourglass figure with very large prominent breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+  },
+  curvy: {
+    regular: "Curvaceous hourglass figure with full C-D cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+  },
+  thick: {
+    regular: "Curvaceous hourglass figure with full C-D cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+  },
+};
 
-const MIRROR_SELFIE_PREFIX = "a candid mirror selfie taken with an iPhone held up in front of a full-length mirror, phone clearly visible in her hand and in the reflection, full body or upper body visible in the mirror reflection";
+const PHOTO_SKIN_TONE: Record<string, string> = {
+  white: "fair skin",
+  pale: "very pale fair skin",
+  tan: "warm olive skin",
+  asian: "warm golden skin",
+  black: "rich dark skin",
+  dark: "rich dark skin",
+};
 
-const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural skin texture, subtle imperfections, peach fuzz, matte finish, realistic subsurface scattering, no plastic, no airbrushed, no overly smooth or doll-like skin";
+const PHOTO_MAKEUP = "Natural makeup with defined eyeliner, full lashes, rosy blush, glossy nude-pink lips";
 
-const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard camera mode (explicitly NOT portrait mode and NOT any artificial depth effect), posted on Instagram by an influencer, the ENTIRE image in razor-sharp focus with maximum depth of field, every single detail from the subject to the farthest background including furniture, walls, bedding, lamps, and objects is crystal clear and perfectly in focus, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
+const PHOTO_CAMERA_ANGLE: Record<string, string> = {
+  selfie: "Shot from close overhead three-quarter angle on iPhone front camera",
+  photo: "Shot from standing three-quarter angle on iPhone camera",
+  mirror_selfie: "Shot from front-on chest height on iPhone front camera",
+};
+
+const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
 /* ── face generation quality prompt ─────────────────────── */
 const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
