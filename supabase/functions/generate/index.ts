@@ -317,7 +317,7 @@ STRICT RULES:
 - scene must describe pose, body position, hand placement, head angle, and end with the expression naturally woven in.
 - If selfie: pose must be one-handed, arm extended holding phone out of frame.
 - If mirror selfie: must include phone visible in hand and in mirror reflection.
-- hair_context is ONLY how the hair sits in this specific scene (e.g. "fanned out across the pillow with face-framing strands" or "loose and slightly messy with face-framing strands"). Never mention hair colour or style.
+- hair_context is ONLY the physical position of the hair in this scene — where it falls, how it drapes, what it touches. Examples: "fanned out across the white pillow with face-framing strands", "draped over her shoulders with face-framing strands", "loose and slightly messy with face-framing strands". NEVER repeat or reference the hair style name (straight, wavy, bangs, curly etc), hair colour, or hair length — those are already handled separately and repeating them causes duplicates in the final prompt.
 - outfit starts with "Wearing". Describe fabric type, fit, coverage, what skin is visible.
 - lighting names a specific light source and describes shadow/highlight behavior, ending with "slight sheen on skin".
 - background names 2-3 concrete props or surfaces and ends with "fully sharp in background".
