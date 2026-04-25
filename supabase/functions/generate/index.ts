@@ -204,7 +204,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "massive E-F cup breasts, extremely heavy prominent chest, very deep cleavage, bust stretching and overflowing clothing tightly",
+  regular: "large DD-E cup breasts, heavy prominent chest, deep cleavage, bust filling clothing tightly",
   "extra large": "CRITICAL: absurdly large H+ cup breasts, comically oversized massive bust dominating the entire image, extreme deep cleavage, breasts impossibly large and heavy, chest stretching clothing to the absolute limit, bust protruding forward dramatically from the body",
 };
 
@@ -584,7 +584,7 @@ async function generateFaceImages(
 
   const makeupVariations = [
     "defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
-    "mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
+    "defined mascara, eyeliner, eyeshadow, blush, natural polished makeup",
     "defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
   ];
 
