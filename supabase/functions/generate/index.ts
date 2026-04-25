@@ -22,23 +22,21 @@ const corsHeaders = {
 };
 
 /* ── photo prompt constants ────────────────────────────── */
-const PHOTO_IDENTITY = "Exact same woman as the two uploaded face reference images, identical face from every angle, perfect face match to both references";
-
 const PHOTO_BODY_FIGURE: Record<string, Record<string, string>> = {
   slim: {
-    regular: "Slim toned figure with full C-D cup breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Slim toned figure with large D-DD cup breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Slim toned figure with very large prominent breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
   },
   regular: {
-    regular: "Hourglass figure with full C-D cup breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Hourglass figure with large D-DD cup breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Hourglass figure with very large prominent breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
   },
   curvy: {
-    regular: "Curvaceous hourglass figure with full C-D cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with large D-DD cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
   thick: {
-    regular: "Curvaceous hourglass figure with full C-D cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with large D-DD cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
 };
@@ -54,11 +52,6 @@ const PHOTO_SKIN_TONE: Record<string, string> = {
 
 const PHOTO_MAKEUP = "Natural makeup with defined eyeliner, full lashes, rosy blush, glossy nude-pink lips";
 
-const PHOTO_CAMERA_ANGLE: Record<string, string> = {
-  selfie: "Shot from close overhead three-quarter angle on iPhone front camera",
-  photo: "Shot from standing three-quarter angle on iPhone camera",
-  mirror_selfie: "Shot from front-on chest height on iPhone front camera",
-};
 
 const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
@@ -382,32 +375,23 @@ function buildFinalPrompt(
 ): string {
   const sections: string[] = [];
 
-  // 1. Identity block
-  if (characterTraits) {
-    sections.push(PHOTO_IDENTITY);
-  }
-
-  // 2. Camera angle + tech tail
-  const cameraAngle = PHOTO_CAMERA_ANGLE[photoType] || PHOTO_CAMERA_ANGLE["photo"];
-  sections.push(`${cameraAngle}, ${PHOTO_TECH_TAIL}`);
-
-  // 3. Scene + pose + expression
+  // 1. Scene + pose + expression
   if (sceneExpansion?.scene) {
-    sections.push(sceneExpansion.scene);
+    sections.push(sceneExpansion.scene.replace("of a woman", "of this fictional woman"));
   } else {
     const cameraLabel = photoType === "selfie" ? "Casual iPhone selfie" : photoType === "mirror_selfie" ? "Casual iPhone mirror selfie" : "Casual iPhone photo";
     const exprFallback = expression || "natural relaxed expression";
-    sections.push(`${cameraLabel} of a woman, ${scenePrompt}, ${exprFallback}`);
+    sections.push(`${cameraLabel} of this fictional woman, ${scenePrompt}, ${exprFallback}`);
   }
 
-  // 4. Body figure + skin tone
+  // 2. Body figure + skin tone
   const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
   const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
   const bodyFig = PHOTO_BODY_FIGURE[normBody]?.[bustKey] || PHOTO_BODY_FIGURE["regular"]["regular"];
   const skinTone = PHOTO_SKIN_TONE[country || ""] || "fair skin";
   sections.push(`${bodyFig}, ${skinTone}`);
 
-  // 5. Hair + scene context
+  // 3. Hair + scene context
   const mappedColour = (hairColour || "").toLowerCase() === "blonde" ? "cool white-blonde" : (hairColour || "");
   let hairBase = `Long ${mappedColour} hair`.trim();
   if (hairStyle === "bangs") hairBase = `Long ${mappedColour} hair with soft curtain bangs`;
@@ -417,29 +401,32 @@ function buildFinalPrompt(
   const hairContext = sceneExpansion?.hair_context || "with face-framing strands";
   sections.push(`${hairBase} ${hairContext}`);
 
-  // 6. Outfit
+  // 4. Outfit
   if (sceneExpansion?.outfit) {
     sections.push(sceneExpansion.outfit);
   } else {
     sections.push(`Wearing the outfit described: ${scenePrompt}`);
   }
 
-  // 7. Makeup
+  // 5. Makeup
   sections.push(PHOTO_MAKEUP);
 
-  // 8. Lighting
+  // 6. Lighting
   if (sceneExpansion?.lighting) {
     sections.push(sceneExpansion.lighting);
   } else {
     sections.push("Natural lighting from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   }
 
-  // 9. Background
+  // 7. Background
   if (sceneExpansion?.background) {
     sections.push(sceneExpansion.background);
   } else {
     sections.push("Surroundings fully sharp in background");
   }
+
+  // 8. Tech tail (last)
+  sections.push(PHOTO_TECH_TAIL);
 
   const finalPrompt = sections.join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
@@ -706,10 +693,7 @@ async function generateAngleAndBody(
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const rawAngleBust = (bustSize || "regular").toLowerCase();
-      const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
-      const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores, micro texture, peach fuzz, flat iPhone dynamic range not DSLR, matte finish, candid not studio. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, plain white background, natural soft lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores, micro texture, peach fuzz, flat iPhone dynamic range not DSLR, matte finish, candid not studio. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. Tight white v-neck top, plain white background, natural soft lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to upper shoulders. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
