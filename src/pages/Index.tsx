@@ -410,7 +410,7 @@ const Index = () => {
 
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "";
-  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || "").replace(/<[^>]*>/g, ""));
+  const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => preselectedCharacterId ? null : (sessionStorage.getItem("facefox_photo_result") || null));
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
@@ -502,7 +502,6 @@ const Index = () => {
         setResultImage(null);
         setPhotoOverlayResult(null);
         try { sessionStorage.removeItem("facefox_photo_result"); sessionStorage.removeItem("facefox_photo_overlay"); } catch {}
-        sessionStorage.setItem("facefox_photo_prompt", copiedPrompt);
         sessionStorage.setItem("facefox_applied_copied_prompt_ts", String(copiedTs));
       } catch {}
     };
@@ -650,7 +649,6 @@ const Index = () => {
       try {
         sessionStorage.setItem("facefox_photo_result", generatedUrl);
         sessionStorage.setItem("facefox_photo_overlay", "success");
-        sessionStorage.setItem("facefox_photo_prompt", prompt);
       } catch {}
 
       await refetchCredits();
@@ -889,7 +887,6 @@ const Index = () => {
               value={prompt}
               onChange={(v) => {
                 setPrompt(v);
-                try { sessionStorage.setItem("facefox_photo_prompt", v); } catch {}
               }}
               charName={selectedChar?.name || ""}
               placeholder={
@@ -984,7 +981,6 @@ const Index = () => {
                 value={prompt}
                 onChange={(v) => {
                   setPrompt(v);
-                  try { sessionStorage.setItem("facefox_photo_prompt", v); } catch {}
                 }}
                 charName={selectedChar?.name || ""}
                 placeholder={
