@@ -337,8 +337,6 @@ function buildFinalPrompt(
     parts.push("fully clothed");
   }
 
-  const seed = Math.floor(Math.random() * 999999);
-  parts.push(`seed:${seed}`);
 
   parts.push(IPHONE_REALISM);
 
