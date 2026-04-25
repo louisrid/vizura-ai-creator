@@ -1230,6 +1230,8 @@ serve(async (req) => {
     if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
     let imageUrls: string[];
+    let sceneExpansion: { scene: string; hair_context: string; outfit: string; lighting: string; background: string } | null = null;
+    let finalPrompt: string = prompt;
     try {
       if (isFaceRegen) {
         imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId, previousFaces);
@@ -1237,9 +1239,9 @@ serve(async (req) => {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
-        const sceneExpansion = await expandSceneWithGrok(prompt, photoType, expression, characterBodyType, characterBustSize, characterHairStyle, characterHairColour, XAI_API_KEY);
+        sceneExpansion = await expandSceneWithGrok(prompt, photoType, expression, characterBodyType, characterBustSize, characterHairStyle, characterHairColour, XAI_API_KEY);
         if (!sceneExpansion) console.log("Scene expansion failed, using fallback");
-        const finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
+        finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
