@@ -1127,14 +1127,31 @@ serve(async (req) => {
     let finalPrompt: string = prompt;
     try {
       if (isFaceRegen) {
-        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId, previousFaces);
+        let faceCharData: any = null;
+        if (characterId) {
+          const { data: cd } = await adminClient.from("characters").select("*").eq("id", characterId).eq("user_id", userId).single();
+          faceCharData = cd;
+        }
+        if (!faceCharData) {
+          const parts = prompt.split(",").map((s: string) => s.trim());
+          faceCharData = {
+            age: parts[0]?.match(/\d+/)?.[0] || "18",
+            country: parts[1]?.replace(" skin", "") || "white",
+            hair: parts[2]?.split(" ").pop()?.replace(" hair", "") || "brown",
+            eye: parts[3]?.replace(" eyes", "") || "brown",
+            body: "regular",
+            bust_size: "regular",
+            description: "straight hair.",
+          };
+        }
+        imageUrls = await generateFaceImages(faceCharData, 3, XAI_API_KEY, adminClient, userId, previousFaces);
       } else {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
         sceneExpansion = await expandSceneWithGrok(prompt, photoType, expression, characterBodyType, characterBustSize, characterHairStyle, characterHairColour, XAI_API_KEY);
         if (!sceneExpansion) console.log("Scene expansion failed, using fallback");
-        finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
+        finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, hasCharacter, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
