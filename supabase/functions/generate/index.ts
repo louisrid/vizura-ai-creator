@@ -387,7 +387,7 @@ function buildFinalPrompt(
   const sections: string[] = [];
 
   // 0. Identity lock
-  sections.push("Fully synthetic AI-generated character, artistic fashion photography. Exact same woman as the uploaded reference image, identical face from every angle, perfect face match to reference");
+  sections.push("Exact same woman as the uploaded reference images, identical face from every angle, perfect face match to references");
 
   // 1. Scene + pose + expression
   if (sceneExpansion?.scene) {
