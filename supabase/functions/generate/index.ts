@@ -1041,7 +1041,8 @@ serve(async (req) => {
         characterBustSize = (charData.bust_size || "regular").toLowerCase();
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
-        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        // temporarily disabled: body anchor reference
+        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
