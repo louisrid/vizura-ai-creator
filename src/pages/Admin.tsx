@@ -39,24 +39,66 @@ const AdminLoader = () => (
   </div>
 );
 
-const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => (
-  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 px-4 pt-24 pb-6">
-    <div className="relative w-full max-w-md md:max-w-lg">
-      <ModalCloseButton onClick={onClose} />
-      <div>
-        <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-        <div className="mt-4 space-y-1.5">
-          <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
-          <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "#ffffff" }}>
-            {photo.user_email}
-            {photo.character_name && ` · ${photo.character_name}`}
-            {` · ${fmtDate(photo.created_at)}`}
-          </p>
+const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => {
+  const showPromptButton = photo.prompt && photo.prompt !== "character references" && photo.prompt !== "face generation";
+  return (
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 px-4 pt-24 pb-6">
+      <div className="relative w-full max-w-md md:max-w-lg">
+        <ModalCloseButton onClick={onClose} />
+        <div>
+          <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+          <div className="mt-4 space-y-2">
+            {showPromptButton ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  const btn = e.currentTarget;
+                  btn.style.backgroundColor = "hsl(var(--card))";
+                  setTimeout(() => { btn.style.backgroundColor = "#000000"; }, 150);
+                  const text = photo.prompt as string;
+                  const copyFallback = () => {
+                    try {
+                      const ta = document.createElement("textarea");
+                      ta.value = text;
+                      ta.style.position = "fixed";
+                      ta.style.left = "-9999px";
+                      document.body.appendChild(ta);
+                      ta.select();
+                      document.execCommand("copy");
+                      document.body.removeChild(ta);
+                      return true;
+                    } catch { return false; }
+                  };
+                  const done = () => { toast.success("copied"); };
+                  if (navigator.clipboard?.writeText) {
+                    navigator.clipboard.writeText(text).then(done).catch(() => {
+                      if (copyFallback()) done(); else toast.error("copy error");
+                    });
+                  } else {
+                    if (copyFallback()) done(); else toast.error("copy error");
+                  }
+                }}
+                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[10px]"
+                style={{ backgroundColor: "#000000" }}
+              >
+                <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
+                <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />
+              </button>
+            ) : (
+              <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
+            )}
+            <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "#ffffff" }}>
+              {photo.user_email}
+              {photo.character_name && ` · ${photo.character_name}`}
+              {` · ${fmtDate(photo.created_at)}`}
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 /* ── Skin label helper ── */
 const SKIN_LABELS: Record<string, string> = {
