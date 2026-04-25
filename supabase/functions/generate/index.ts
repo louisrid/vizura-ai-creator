@@ -1147,8 +1147,9 @@ serve(async (req) => {
         characterHairStyle = (hairMatch?.[1]?.trim() || "straight").toLowerCase();
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
-        if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
-        if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        // temporarily disabled: all photo gen references for testing
+        // if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
+        // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         // temporarily disabled: body anchor reference
         // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
