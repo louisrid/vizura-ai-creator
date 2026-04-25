@@ -709,7 +709,7 @@ async function generateAngleAndBody(
       const rawAngleBust = (bustSize || "regular").toLowerCase();
       const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores, micro texture, peach fuzz, flat iPhone dynamic range not DSLR, matte finish, candid not studio. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, plain white background, natural soft lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
