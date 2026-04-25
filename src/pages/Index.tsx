@@ -209,7 +209,7 @@ const HighlightedPromptArea = ({
         spellCheck={false}
         autoCorrect="off"
         className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-white focus:outline-none"
-        style={{ caretColor: "hsl(var(--foreground))" }}
+        style={{ caretColor: "hsl(var(--foreground))", fontStyle: "normal", fontWeight: 900, textDecoration: "none" }}
       />
       {!value && !focused && <div data-placeholder>{placeholder}</div>}
     </div>
