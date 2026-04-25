@@ -62,8 +62,36 @@ const PHOTO_CAMERA_ANGLE: Record<string, string> = {
 
 const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
-/* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+/* ── face generation constants ─────────────────────────── */
+const FACE_IDENTITY_TAIL = "Passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, confident subtle closed-mouth smile. Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, sharp focus, matte finish.";
+
+const FACE_AGE_DESC: Record<string, string> = {
+  young: "20 year old young-woman with round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features",
+  older: "24 year old woman with visible cheekbones, clean jawline, balanced features, clear skin",
+};
+
+const FACE_RACE_FEATURES: Record<string, string> = {
+  asian: "East-asian eyelid-fold, flatter nose-bridge, soft round face, clearly asian complexion, warm skin not orange, no green cast",
+  black: "Fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
+  dark: "Fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
+  tan: "Defined brow-bone, olive warm undertone, strong lashes",
+};
+
+const FACE_VARIATIONS = [
+  "Big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin",
+  "Very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin",
+  "Large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin",
+];
+
+const FACE_MAKEUP_VARIATIONS = [
+  "Defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
+  "Mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
+  "Defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
+];
+
+/* ── angle/body generation constants ───────────────────── */
+const REF_IDENTITY_SINGLE = "Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference";
+const REF_TECH_TAIL = "Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, entire image completely sharp edge to edge, matte finish";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -139,41 +167,11 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
   }
 }
 
-/* ── trait mapping ─────────────────────────────────────── */
-const SKIN_MAP: Record<string, string> = {
-  white: "light pale skin with warm undertone",
-  pale: "very pale fair skin",
-  tan: "olive mediterranean skin tone",
-  asian: "asian skin tone",
-  black: "rich dark skin with natural healthy glow",
-  dark: "rich dark skin with natural healthy glow",
-};
-
 const normalizeBodyType = (v: string) => {
   const k = v.toLowerCase();
   if (k === "thin") return "slim";
   return k;
 };
-
-const BODY_MAP: Record<string, string> = {
-  slim: "slim body, narrow waist",
-  thin: "slim body, narrow waist",
-  regular: "soft feminine body, defined waist",
-  average: "soft feminine body, defined waist",
-  curvy: "curvy feminine figure, wide hips, defined waist",
-  thick: "curvy feminine figure, wide hips, defined waist",
-};
-
-const MAKEUP_MAP: Record<string, string> = {
-  natural: "natural minimal makeup with visible lip gloss and subtle mascara",
-  classic: "classic polished makeup with defined eyeliner, mascara, subtle contour, lip colour",
-};
-
-function ageToDescription(ageStr: string): string {
-  const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "20 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced features, clear skin";
-}
 
 function extractXaiImageUrl(data: any): string | null {
   const candidates = [
@@ -189,107 +187,6 @@ function extractXaiImageUrl(data: any): string | null {
   }
 
   return null;
-}
-
-function stripFacePromptBodyLanguage(prompt: string): string {
-  return prompt
-    .replace(/\b(?:slim|average|regular|curvy|thick)\s+body\s+type\b/gi, "")
-    .replace(/\b(?:small|medium|large)\s+chest\b/gi, "")
-    .replace(/\b(?:large\s+bust(?:\s+[a-z-]+)?|smaller\s+chest|wide\s+hips|defined\s+waist|narrow\s+waist|g-h\s+cup|dd)\b/gi, "")
-    .replace(/\b[A-Z]-[A-Z]\s+cup\s+breasts[^,]*/gi, "")
-    .replace(/\bvery-large\s+DD-E\s+cup\s+breasts[^,]*/gi, "")
-    .replace(/\bproportional\s+to\s+frame\b/gi, "")
-    .replace(/\bfull\s+heavy-chest[^,]*/gi, "")
-    .replace(/\bvisible\s+cleavage[^,]*/gi, "")
-    .replace(/\bmatte\s+textured\s+skin\s+across\s+chest\b/gi, "")
-    .replace(/\s+,/g, ",")
-    .replace(/,{2,}/g, ",")
-    .replace(/\s{2,}/g, " ")
-    .trim()
-    .replace(/^,|,$/g, "");
-}
-
-/* ── bust size descriptor ── */
-const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
-  "extra large": "CRITICAL: extremely large G+ cup breasts, massive prominent bust that is the most dominant visible feature, deep wide cleavage, breasts must be unmistakably oversized and impossible to miss, chest stretching and filling clothing tightly, bust visibly protruding forward significantly from the body in every single image",
-};
-
-/* ── build character trait string from DB record ───────── */
-function buildCharacterTraits(char: any): string {
-  const parts: string[] = [];
-
-  if (char.age) {
-    parts.push(`${char.age} year old woman`);
-    parts.push(ageToDescription(char.age));
-  }
-
-  const skinKey = (char.country || "").toLowerCase();
-  if (skinKey && skinKey !== "any") {
-    parts.push(SKIN_MAP[skinKey] || `${skinKey} skin`);
-    if (skinKey === "asian") parts.push("east asian facial structure, flatter nose bridge, monolid or subtle double eyelid");
-    if (skinKey === "black" || skinKey === "dark") parts.push("natural african facial structure, wider nose, full natural lips");
-    if (skinKey === "tan") parts.push("mediterranean facial structure, defined brow bone, olive undertone");
-  }
-
-  const bodyKey = normalizeBodyType((char.body || "regular").toLowerCase());
-  parts.push(BODY_MAP[bodyKey] || BODY_MAP.regular);
-
-  const rawBust = (char.bust_size || "regular").toLowerCase();
-  const bustKey = (rawBust === "xl" || rawBust === "extra large") ? "extra large" : "regular";
-  const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-  if (bustDesc) parts.push(bustDesc);
-
-  if (bustKey === "extra large") {
-    const bodyIdx = parts.findIndex(p => p.includes("slim body") || p.includes("narrow waist") || p.includes("petite"));
-    if (bodyIdx >= 0) {
-      parts[bodyIdx] = "slim toned body with narrow waist but very large chest";
-    }
-  }
-
-  if (bodyKey === "slim" || bodyKey === "thin") {
-    parts.push("lean angular face, no roundness or puffiness in face");
-  } else if (bodyKey === "regular" || bodyKey === "average") {
-    parts.push("soft face but not fat, no round chubby face");
-  }
-  
-  const hairStyleMatch = char.description?.match(/^(.*?)\s*hair\./i);
-  let hairStyle = hairStyleMatch?.[1]?.trim() || "";
-  const hairColour = char.hair || "";
-  const mappedHairColour = hairColour.toLowerCase() === "blonde" ? "cool white-blonde" : hairColour;
-  if (hairStyle.toLowerCase() === "bangs") {
-    parts.push(`long ${mappedHairColour} hair draped over shoulders onto chest with soft curtain-parted bangs framing face, IMPORTANT: curtain bangs not flat fringe, hair must be long draped over shoulders in every image`.trim());
-  } else if (hairStyle.toLowerCase() === "straight") {
-    const strandChance = Math.random() < 0.4 ? " with several thick strands falling onto cheeks" : "";
-    parts.push(`long straight ${mappedHairColour} hair${strandChance}, draped over shoulders onto chest, naturally parted, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
-  } else if (hairStyle.toLowerCase() === "curly" || hairStyle.toLowerCase() === "wavy") {
-    parts.push(`long ${mappedHairColour} hair with soft voluminous waves draped over shoulders onto chest, IMPORTANT: hair must be long draped over shoulders in every image`.trim());
-  } else if (hairStyle || hairColour) {
-    parts.push(`long ${hairStyle} ${mappedHairColour} hair draped over shoulders onto chest`.trim());
-  }
-  
-  if (char.eye) {
-    const eyeMap: Record<string, string> = {
-      blue: "subtle dark grey-blue",
-      green: "dark rich emerald-green",
-      brown: "warm deep brown",
-    };
-    const eyeKey = char.eye.toLowerCase();
-    const eyeColour = eyeMap[eyeKey] || char.eye;
-    parts.push(`${eyeColour} eyes`);
-  }
-
-  const makeupKey = (char.style || "").toLowerCase();
-  if (makeupKey) {
-    parts.push(MAKEUP_MAP[makeupKey] || `${makeupKey} makeup`);
-  }
-
-  if (char.description) {
-    let desc = char.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
-    if (desc) parts.push(desc);
-  }
-
-  return parts.join(", ");
 }
 
 /* ── Grok scene expander ──────────────────────────────── */
@@ -372,7 +269,7 @@ function buildFinalPrompt(
   sceneExpansion: { scene: string; hair_context: string; outfit: string; lighting: string; background: string } | null,
   scenePrompt: string,
   photoType: string,
-  characterTraits: string | null,
+  hasCharacter: boolean,
   bodyType?: string,
   expression?: string,
   bustSize?: string,
@@ -383,7 +280,7 @@ function buildFinalPrompt(
   const sections: string[] = [];
 
   // 1. Identity block
-  if (characterTraits) {
+  if (hasCharacter) {
     sections.push(PHOTO_IDENTITY);
   }
 
@@ -579,59 +476,53 @@ async function xaiImageEdit(
 
 /* ── generate face options (text-to-image, always 3:4) ── */
 async function generateFaceImages(
-  prompt: string,
+  charData: any,
   count: number,
   apiKey: string,
   adminClient: any,
   userId: string,
   previousFaces: string[] = []
 ): Promise<string[]> {
-  const variations = [
-    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin",
-    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin",
-    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin",
-  ];
-
-  const makeupVariations = [
-    "defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
-    "mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
-    "defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
-  ];
-
-  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, skin with visible pores and colour variation, long styled hair past shoulders, plump lips with soft pink tint, mascara, eyeliner, eyeshadow, blush, confident subtle closed-mouth smile";
-
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
   const previousSet = new Set(previousFaces.filter(Boolean));
 
+  const ageNum = parseInt(charData.age, 10);
+  const ageDesc = (isNaN(ageNum) || ageNum <= 24) ? FACE_AGE_DESC.young : FACE_AGE_DESC.older;
+  const skinKey = (charData.country || "").toLowerCase();
+  const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
+  const raceFeatures = FACE_RACE_FEATURES[skinKey] || "";
+  const hairColour = (charData.hair || "").toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
+  const hairStyleMatch = charData.description?.match(/^(.*?)\s*hair\./i);
+  const hairStyle = (hairStyleMatch?.[1]?.trim() || "straight").toLowerCase();
+  let hairDesc = `Long ${hairColour} hair draped over shoulders`.trim();
+  if (hairStyle === "bangs") hairDesc = `Long ${hairColour} hair with soft curtain bangs draped over shoulders`;
+  else if (hairStyle === "straight") hairDesc = `Long straight ${hairColour} hair draped over shoulders`;
+  else if (hairStyle === "curly" || hairStyle === "wavy") hairDesc = `Long ${hairColour} hair with soft voluminous waves draped over shoulders`;
+  else if (hairStyle) hairDesc = `Long ${hairStyle} ${hairColour} hair draped over shoulders`.trim();
+  const eyeMap: Record<string, string> = { blue: "subtle dark grey-blue", green: "dark rich emerald-green", brown: "warm deep brown" };
+  const eyeKey = (charData.eye || "").toLowerCase();
+  const eyeDesc = `${eyeMap[eyeKey] || charData.eye || "brown"} eyes`;
+  const blondePattern = /\b(cool\s+white-blonde|white-blonde|platinum-blonde|blonde)\b/i;
+  const blondePicks = ["cool white-blonde", "cool white-blonde", "light platinum-blonde"];
+
   for (let i = 0; i < targetCount; i++) {
-    const variation = variations[i] || variations[0];
-    const makeupVar = makeupVariations[i] || makeupVariations[0];
-    const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-
-    let tonedPrompt = faceOnlyPrompt;
-
-    const blondePattern = /\b(cool\s+white-blonde|white-blonde|platinum-blonde|blonde)\b/i;
-    if (blondePattern.test(tonedPrompt)) {
-      const picks = ["cool white-blonde", "cool white-blonde", "light platinum-blonde"];
-      tonedPrompt = tonedPrompt.replace(blondePattern, picks[Math.floor(Math.random() * picks.length)]);
+    const variation = FACE_VARIATIONS[i] || FACE_VARIATIONS[0];
+    const makeupVar = FACE_MAKEUP_VARIATIONS[i] || FACE_MAKEUP_VARIATIONS[0];
+    let finalHairDesc = hairDesc;
+    if (blondePattern.test(finalHairDesc)) {
+      finalHairDesc = finalHairDesc.replace(blondePattern, blondePicks[Math.floor(Math.random() * blondePicks.length)]);
     }
-
-    const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, clearly asian complexion, warm skin not orange, no green cast",
-      black: ", fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
-      dark: ", fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
-      tan: ", defined brow-bone, olive warm undertone, strong lashes",
-    };
-    let raceAppend = "";
-    for (const [key, features] of Object.entries(raceFeatures)) {
-      if (tonedPrompt.toLowerCase().includes(key + " skin") || tonedPrompt.toLowerCase().includes(key + " tone")) {
-        raceAppend = features;
-        break;
-      }
-    }
-
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
+    const sections: string[] = [];
+    sections.push(ageDesc);
+    sections.push(skinTone);
+    if (raceFeatures) sections.push(raceFeatures);
+    sections.push(finalHairDesc);
+    sections.push(eyeDesc);
+    sections.push(makeupVar);
+    sections.push(variation);
+    sections.push(FACE_IDENTITY_TAIL);
+    const positivePrompt = sections.join(". ");
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -680,21 +571,10 @@ async function generateFaceImages(
   return imageUrls;
 }
 
-/* ── body-type descriptor for full-body anchor ─────────── */
-const BODY_ANCHOR_MAP: Record<string, string> = {
-  thin: "slim toned body, narrow waist, lean figure",
-  regular: "soft feminine body, defined waist, feminine hips",
-  average: "soft feminine body, defined waist, feminine hips",
-  curvy: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
-  thick: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
-};
-
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
 async function generateAngleAndBody(
   faceUrl: string,
-  characterTraits: string,
-  bodyType: string,
-  bustSize: string,
+  charData: any,
   apiKey: string,
   adminClient: any,
   userId: string,
@@ -702,14 +582,32 @@ async function generateAngleAndBody(
 ): Promise<{ angleUrl: string | null; bodyAnchorUrl: string | null }> {
   let angleUrl: string | null = null;
   let bodyAnchorUrl: string | null = null;
+  const bodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
+  const bustKey = ((charData.bust_size || "regular").toLowerCase() === "xl" || (charData.bust_size || "regular").toLowerCase() === "extra large") ? "extra large" : "regular";
+  const bodyFig = PHOTO_BODY_FIGURE[bodyType]?.[bustKey] || PHOTO_BODY_FIGURE["regular"]["regular"];
+  const skinKey = (charData.country || "").toLowerCase();
+  const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
+  const hairColour = (charData.hair || "").toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
+  const hairStyleMatch = charData.description?.match(/^(.*?)\s*hair\./i);
+  const hairStyle = (hairStyleMatch?.[1]?.trim() || "straight").toLowerCase();
+  let hairDesc = `Long ${hairColour} hair draped over shoulders`.trim();
+  if (hairStyle === "bangs") hairDesc = `Long ${hairColour} hair with soft curtain bangs draped over shoulders`;
+  else if (hairStyle === "straight") hairDesc = `Long straight ${hairColour} hair draped over shoulders`;
+  else if (hairStyle === "curly" || hairStyle === "wavy") hairDesc = `Long ${hairColour} hair with soft voluminous waves draped over shoulders`;
+  else if (hairStyle) hairDesc = `Long ${hairStyle} ${hairColour} hair draped over shoulders`.trim();
 
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const rawAngleBust = (bustSize || "regular").toLowerCase();
-      const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
-      const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
+      const sections: string[] = [];
+      sections.push(REF_IDENTITY_SINGLE);
+      sections.push("Head turned 45 degrees to the left showing 3/4 profile, framed from top of head to stomach");
+      sections.push(`${bodyFig}, ${skinTone}`);
+      sections.push(hairDesc);
+      sections.push("Tight white v-neck top, white background, soft even lighting");
+      sections.push("Relaxed neutral expression, lips together");
+      sections.push(REF_TECH_TAIL);
+      const anglePrompt = sections.join(". ");
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -723,13 +621,17 @@ async function generateAngleAndBody(
   if (target === "body" || target === "both") {
     try {
       console.log("Generating full-body anchor...");
-      const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
-      const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      const rawBodyBust = (bustSize || "regular").toLowerCase();
-      const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
-      const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-
-      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const sections: string[] = [];
+      sections.push(REF_IDENTITY_SINGLE);
+      sections.push("Standing straight upright facing camera, relaxed natural posture, arms behind back, framed with space above head down to mid-thigh");
+      sections.push(`${bodyFig}, ${skinTone}`);
+      sections.push(hairDesc);
+      sections.push("Tight white v-neck top tucked into tight black leggings, visible cleavage, chest filling the top");
+      sections.push("White background, soft even lighting");
+      sections.push("Relaxed neutral expression, lips together");
+      sections.push("Smooth flat stomach, natural feminine body not athletic not muscular");
+      sections.push(REF_TECH_TAIL);
+      const bodyPrompt = sections.join(". ");
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
@@ -929,16 +831,12 @@ serve(async (req) => {
       const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
       if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
-      const traits = buildCharacterTraits(charData);
-      const dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
-      const dbBustSize = (charData.bust_size || "regular").toLowerCase();
-
       const freshFaceUrl = charData.face_image_url;
       console.log(`=== SINGLE REGENERATION: ${regenerateSingle} (using fresh DB face URL) ===`);
 
       try {
         const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-          freshFaceUrl, traits, dbBodyType, dbBustSize, XAI_API_KEY, adminClient, userId, regenerateSingle
+          freshFaceUrl, charData, XAI_API_KEY, adminClient, userId, regenerateSingle
         );
 
         const updates: Record<string, string | null> = {};
@@ -1054,9 +952,7 @@ serve(async (req) => {
           .eq("user_id", userId);
       }
 
-      let dbBodyType = "regular";
-      let dbBustSize = "regular";
-      let traits = prompt;
+      let angleCharData: any = null;
       if (angleCharacterId) {
         const { data: charData } = await adminClient
           .from("characters")
@@ -1065,27 +961,24 @@ serve(async (req) => {
           .eq("user_id", userId)
           .single();
         if (charData) {
-          traits = buildCharacterTraits(charData);
-          dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
-          dbBustSize = (charData.bust_size || "regular").toLowerCase();
-          console.log("Built character traits from DB:", traits.slice(0, 120));
-          console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
+          angleCharData = charData;
+          console.log("Loaded character data from DB for angle/body gen");
         }
 
-        if (charData?.face_angle_url && charData?.body_anchor_url) {
+        if (angleCharData?.face_angle_url && angleCharData?.body_anchor_url) {
           if (creditData) {
             await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
           }
           console.log("Angle + body already exist, skipping generation for character:", angleCharacterId);
           return new Response(
-            JSON.stringify({ angle_url: charData.face_angle_url, body_anchor_url: charData.body_anchor_url, skipped: true }),
+            JSON.stringify({ angle_url: angleCharData.face_angle_url, body_anchor_url: angleCharData.body_anchor_url, skipped: true }),
             { headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, traits, dbBodyType, dbBustSize, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
+        selectedFaceUrl, angleCharData || { age: "18", country: "white", hair: "brown", eye: "brown", body: "regular", bust_size: "regular", description: "straight hair." }, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
       );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
@@ -1124,7 +1017,7 @@ serve(async (req) => {
     }
 
     /* ── look up character if provided ── */
-    let characterTraits: string | null = null;
+    let hasCharacter = false;
     let characterBodyType: string | undefined;
     let characterBustSize: string | undefined;
     let characterHairStyle = "straight";
@@ -1140,7 +1033,7 @@ serve(async (req) => {
         .single();
 
       if (charData) {
-        characterTraits = buildCharacterTraits(charData);
+        hasCharacter = true;
         characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
         characterBustSize = (charData.bust_size || "regular").toLowerCase();
         const hairMatch = charData.description?.match(/^(.*?)\s*hair\./i);
@@ -1234,14 +1127,31 @@ serve(async (req) => {
     let finalPrompt: string = prompt;
     try {
       if (isFaceRegen) {
-        imageUrls = await generateFaceImages(prompt, 3, XAI_API_KEY, adminClient, userId, previousFaces);
+        let faceCharData: any = null;
+        if (characterId) {
+          const { data: cd } = await adminClient.from("characters").select("*").eq("id", characterId).eq("user_id", userId).single();
+          faceCharData = cd;
+        }
+        if (!faceCharData) {
+          const parts = prompt.split(",").map((s: string) => s.trim());
+          faceCharData = {
+            age: parts[0]?.match(/\d+/)?.[0] || "18",
+            country: parts[1]?.replace(" skin", "") || "white",
+            hair: parts[2]?.split(" ").pop()?.replace(" hair", "") || "brown",
+            eye: parts[3]?.replace(" eyes", "") || "brown",
+            body: "regular",
+            bust_size: "regular",
+            description: "straight hair.",
+          };
+        }
+        imageUrls = await generateFaceImages(faceCharData, 3, XAI_API_KEY, adminClient, userId, previousFaces);
       } else {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
         sceneExpansion = await expandSceneWithGrok(prompt, photoType, expression, characterBodyType, characterBustSize, characterHairStyle, characterHairColour, XAI_API_KEY);
         if (!sceneExpansion) console.log("Scene expansion failed, using fallback");
-        finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
+        finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, hasCharacter, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
