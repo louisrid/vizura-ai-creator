@@ -198,6 +198,7 @@ const HighlightedPromptArea = ({
   placeholder: React.ReactNode;
 }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [focused, setFocused] = useState(false);
 
   const highlightedHtml = useMemo(() => {
     if (!value) return "";
@@ -228,7 +229,7 @@ const HighlightedPromptArea = ({
         ref={overlayRef}
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase text-foreground"
-        dangerouslySetInnerHTML={{ __html: highlightedHtml || "&nbsp;" }}
+        dangerouslySetInnerHTML={{ __html: highlightedHtml }}
       />
       <textarea
         value={value}
@@ -239,22 +240,14 @@ const HighlightedPromptArea = ({
             overlayRef.current.scrollLeft = e.currentTarget.scrollLeft;
           }
         }}
-        onFocus={(e) => {
-          const ph = e.currentTarget.parentElement?.querySelector('[data-placeholder]') as HTMLElement | null;
-          if (ph) ph.style.display = 'none';
-        }}
-        onBlur={(e) => {
-          if (!value) {
-            const ph = e.currentTarget.parentElement?.querySelector('[data-placeholder]') as HTMLElement | null;
-            if (ph) ph.style.display = '';
-          }
-        }}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         spellCheck={false}
         autoCorrect="off"
         className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
         style={{ caretColor: "hsl(var(--foreground))", WebkitTextFillColor: "transparent" }}
       />
-      {!value && <div data-placeholder>{placeholder}</div>}
+      {!value && !focused && <div data-placeholder>{placeholder}</div>}
     </div>
   );
 };
