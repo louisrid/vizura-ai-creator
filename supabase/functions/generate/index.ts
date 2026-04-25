@@ -324,7 +324,7 @@ EXAMPLE OUTPUT:
   try {
     const response = await fetch("https://api.x.ai/v1/chat/completions", {
       method: "POST",
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(45000),
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
@@ -355,7 +355,13 @@ EXAMPLE OUTPUT:
     console.log("SCENE EXPANSION:", JSON.stringify(parsed));
     return parsed;
   } catch (err) {
-    console.error("Grok scene expand threw:", err);
+    const e = err as { name?: string; message?: string };
+    const isTimeout = e?.name === "TimeoutError" || e?.name === "AbortError";
+    if (isTimeout) {
+      console.error("Grok scene expansion timed out after 45s — falling back to template prompt");
+    } else {
+      console.error("Grok scene expansion failed:", e?.message || err);
+    }
     return null;
   }
 }
