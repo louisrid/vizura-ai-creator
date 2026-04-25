@@ -1012,7 +1012,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div>
       </div>
 
-      {/* Arrow buttons + Home button — fade in sync with slide content */}
+      {/* Arrow buttons — fade in sync with slide content */}
       <AnimatePresence initial={false}>
         {showNavigationDelayed && (
           <motion.div
