@@ -21,45 +21,19 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-/* ── prompt constants (photo generation) ───────────────── */
-const CAMERA_SELFIE = "Casual iPhone selfie of a woman";
+/* ── prompt constants ──────────────────────────────────── */
+const SELFIE_PREFIX = "a candid close-up selfie taken slightly above eye-level with her iPhone front camera";
 
-const CAMERA_PHOTO = "Casual iPhone photo of a woman";
+const PHOTO_PREFIX = "a candid third-person phone snapshot";
 
-const CAMERA_MIRROR = "Casual iPhone mirror selfie of a woman standing in front of a full-length mirror, hip popped to one side, one hand holding phone at chest height";
+const MIRROR_SELFIE_PREFIX = "a candid mirror selfie taken with an iPhone held up in front of a full-length mirror, phone clearly visible in her hand and in the reflection, full body or upper body visible in the mirror reflection";
 
-const PHOTO_BODY_DESC: Record<string, string> = {
-  slim: "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
-  thin: "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
-  regular: "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
-  average: "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
-  curvy: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-  thick: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-};
+const SKIN_QUALITY = "hyper-realistic skin with clearly visible pores, natural skin texture, subtle imperfections, peach fuzz, matte finish, realistic subsurface scattering, no plastic, no airbrushed, no overly smooth or doll-like skin";
 
-const PHOTO_BUST_DESC: Record<string, string> = {
-  regular: "prominent chest",
-  "extra large": "very large prominent breasts",
-};
-
-const PHOTO_SKIN_TONE: Record<string, string> = {
-  white: "fair skin",
-  pale: "very pale fair skin",
-  tan: "warm olive skin",
-  asian: "warm golden skin",
-  black: "rich dark skin",
-  dark: "rich dark skin",
-};
-
-const PHOTO_EXPR: Record<string, string> = {
-  "casual smile": "relaxed sultry expression with gentle closed-mouth smile",
-  "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
-  "big smile": "big open-mouth smile showing teeth, happy joyful energy",
-  "pout": "duck face pout, lips pushed forward, playful pouty expression",
-};
+const IPHONE_REALISM = `authentic casual iPhone 16 Pro photo taken in standard camera mode (explicitly NOT portrait mode and NOT any artificial depth effect), posted on Instagram by an influencer, the ENTIRE image in razor-sharp focus with maximum depth of field, every single detail from the subject to the farthest background including furniture, walls, bedding, lamps, and objects is crystal clear and perfectly in focus, NO background blur whatsoever, NO bokeh, NO shallow depth of field, NO portrait mode softening, natural smartphone lighting with authentic handheld grain and typical iPhone JPEG compression artifacts, realistic unedited casual photo, not studio, not polished, not DSLR, not cinematic`;
 
 /* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles";
+const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -207,8 +181,8 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "prominent chest",
-  "extra large": "very large prominent breasts",
+  regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
+  "extra large": "CRITICAL: extremely large G+ cup breasts, massive prominent bust that is the most dominant visible feature, deep wide cleavage, breasts must be unmistakably oversized and impossible to miss, chest stretching and filling clothing tightly, bust visibly protruding forward significantly from the body in every single image",
 };
 
 /* ── build character trait string from DB record ───────── */
@@ -288,229 +262,88 @@ function buildCharacterTraits(char: any): string {
   return parts.join(", ");
 }
 
-/* ── Grok-3 prompt rewriter ──────────────────────────────
- * Converts short user scene text + character data into one
- * dataset-style prompt (~180 words, 9-section structure)
- * via a small Grok-3 chat call with few-shot examples.
- * Returns null on failure so caller falls back to template.
- */
-async function rewritePromptWithGrok(
-  userScene: string,
-  photoType: string,
-  bodyType: string | undefined,
-  bustSize: string | undefined,
-  expression: string | undefined,
-  character: any,
-  apiKey: string,
-): Promise<string | null> {
-  const photoTypeLabel = photoType === "selfie"
-    ? "Casual iPhone selfie"
-    : photoType === "mirror_selfie"
-      ? "Casual iPhone mirror selfie"
-      : "Casual iPhone photo";
+/* ── body-type prompt modifier (appended to body-anchor & photo prompts) ── */
+const BODY_PROMPT_MODIFIER: Record<string, string> = {
+  slim: "petite frame, toned stomach, narrow hips",
+  thin: "petite frame, toned stomach, narrow hips",
+  regular: "hourglass figure, defined waist, feminine hips",
+  average: "hourglass figure, defined waist, feminine hips",
+  curvy: "voluptuous, wider hips, natural curves, soft thighs",
+  thick: "voluptuous, wider hips, natural curves, soft thighs",
+};
 
-  const desc = (character?.description || "").trim();
-  const descAfterHair = desc.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
-  const hasExplicitJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(descAfterHair);
-  const jewelryText = hasExplicitJewelry ? descAfterHair : "";
-
-  const ctxParts: string[] = [];
-  if (bodyType) ctxParts.push(`body type: ${bodyType}`);
-  if (bustSize === "extra large") ctxParts.push(`bust: very large prominent breasts`);
-  if (character?.country) ctxParts.push(`skin/ethnicity: ${character.country}`);
-  if (character?.hair) ctxParts.push(`hair colour: ${character.hair}`);
-  if (character?.style) ctxParts.push(`makeup style: ${character.style}`);
-  if (expression) ctxParts.push(`expression: ${expression}`);
-  if (jewelryText) ctxParts.push(`jewelry to include: ${jewelryText}`);
-  else ctxParts.push(`jewelry: NONE — do not add any jewelry`);
-  if (!character?.style) ctxParts.push(`makeup: NONE specified — keep makeup minimal and natural, do not invent specific products`);
-  const characterContext = ctxParts.join("; ");
-
-  const systemMsg = `You rewrite short photo descriptions into ONE detailed prompt that matches the exact style of the examples. The output goes to xAI's image edit endpoint along with separate reference images of a specific woman, so the prompt must NEVER mention "reference image", "same woman", "matching identity", "AI", or anything that hints this is generated. Write as a real photographer's brief.
-
-CAMERA TYPE — STRICT:
-- The user-given camera type prefix MUST be the literal first words of the prompt. If "Casual iPhone selfie", start with "Casual iPhone selfie of a woman ...". If "Casual iPhone photo", start with "Casual iPhone photo of a woman ...". If "Casual iPhone mirror selfie", start with "Casual iPhone mirror selfie of a woman ..." and the scene MUST take place in front of a mirror with phone visible in the reflection.
-- A SELFIE means held with one hand at arm's length — pose must reflect this (no two-handed poses, no third-person framing).
-- A PHOTO means third-person — someone else is taking it. Pose can be full body, hands free.
-- A MIRROR SELFIE means standing in front of a full-length or bathroom mirror, phone visible in hand and reflection.
-
-USER WORDS — LOCKED:
-- Anything the user explicitly mentioned (outfit type, location, pose, lighting, props) MUST appear in your output as they intended.
-- DO NOT replace, contradict, or "improve" user-supplied details.
-- INVENT defaults ONLY for slots the user did NOT mention.
-
-CHARACTER CONTEXT — STRICT:
-- Use the body, hair colour, skin/ethnicity, makeup style, expression EXACTLY as given in the character context.
-- JEWELRY: if the context says "jewelry: NONE — do not add any jewelry", DO NOT mention jewelry at all in your output. Skip section 6 entirely. If the context lists specific jewelry, include it verbatim using "Layered jewelry: [items]".
-- MAKEUP: if the context lists a makeup style, write a natural matching makeup sentence. If the context says "makeup: NONE specified", keep makeup vague and minimal ("natural minimal makeup") — do NOT invent specific eyeliner colours, lip products, or brand-style descriptions.
-
-OUTPUT FORMAT:
-- ONE paragraph, sentences joined by periods.
-- 150–200 words.
-- No preamble, no quotes, no explanation, no markdown.
-- Section order: (1) camera + scene + pose + body angle + expression / (2) body figure + skin tone / (3) hair / (4) outfit with fabric and fit / (5) makeup (only if applicable) / (6) jewelry (only if listed in context) / (7) lighting / (8) concrete named background props ending in "fully sharp in background" / (9) shot angle + camera tech tail.
-- BACKGROUND: name 2-3 concrete props or surfaces ("beige pillows and fabric", "turquoise pool water and stone patio", "white tile bathroom with chrome fixtures") then "fully sharp in background".
-- END WITH EXACTLY this verbatim tail: "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup."`;
-
-  const example1 = "Casual iPhone selfie of a woman lying on a beige textured couch, propped up on her left elbow with left hand in her hair, head tilted slightly, body angled toward camera, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, fair skin. Long center-parted blonde hair with two loose side braids and face-framing strands. Wearing a tight white ribbed-knit long-sleeve bodysuit with deep plunging asymmetrical neckline showing maximum cleavage, high-cut at hips with thin white underwear straps visible. Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips. Layered jewelry: small white pearl strand necklace, thin gold chain with tiny rectangular pendant, small silver hoop earring. Warm bedside lamp lighting from behind creating uneven harsh glow with blown-out highlights on the wall behind her and real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Cozy bedroom with beige pillows and fabric fully sharp in background. Shot from close three-quarter overhead angle on iPhone front camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
-
-  const example2 = "Casual iPhone photo of a woman sitting on the edge of a swimming pool with her legs dangling in the water, leaning back on both hands behind her, head tilted slightly toward camera, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, fair skin. Long center-parted blonde hair loose and slightly damp with face-framing strands. Wearing a tiny white triangle string bikini with deep plunging top showing maximum cleavage and matching low-rise tie-side bottoms sitting high on her hips. Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips. Layered jewelry: small white pearl strand necklace, thin gold chain with tiny rectangular pendant, small silver hoop earring. Harsh direct overhead midday sunlight creating strong real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Turquoise swimming pool water and sun-bleached stone patio fully sharp in background. Shot from standing three-quarter angle slightly above on iPhone camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
-
-  const example3 = "Casual iPhone selfie of a woman sitting cross-legged on a messy unmade bed, one hand holding phone up, other hand pulling the collar of her hoodie to one side exposing her shoulder and collarbone, head tilted slightly, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, warm golden skin. Long straight jet black hair with vivid pink dyed ends loose and slightly messy with face-framing strands. Wearing an oversized cream cropped hoodie pulled off one shoulder showing bare shoulder and collarbone with deep cleavage visible at the neckline, paired with tiny black cotton shorts barely visible under the hoodie hem. Soft natural makeup with thin brown eyeliner, wispy lashes, peachy blush, glossy mauve lips. Layered jewelry: thin silver chain choker, small gold hoop earrings, delicate silver ring on index finger. Warm fairy light string lighting draped on the wall behind creating soft uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Cozy bedroom with white walls and pinned polaroid photos fully sharp in background. Shot from close front-on slightly above angle on iPhone front camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
-
-  const userMsg = `User input: "${userScene}"
-Camera type to use: ${photoTypeLabel}
-Character context to use: ${characterContext}
-
-EXAMPLE 1 (couch bodysuit selfie):
-${example1}
-
-EXAMPLE 2 (pool bikini photo):
-${example2}
-
-EXAMPLE 3 (bedroom hoodie selfie, asian pink hair):
-${example3}
-
-Now write ONE prompt in the exact same style for the user input above. Output only the rewritten prompt.`;
-
-  try {
-    const response = await fetch("https://api.x.ai/v1/chat/completions", {
-      method: "POST",
-      signal: AbortSignal.timeout(15000),
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "grok-3",
-        messages: [
-          { role: "system", content: systemMsg },
-          { role: "user", content: userMsg },
-        ],
-        temperature: 0.7,
-        max_tokens: 700,
-      }),
-    });
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("Grok rewrite failed:", response.status, errText);
-      return null;
-    }
-    const data = await response.json();
-    const rewritten = data?.choices?.[0]?.message?.content?.trim();
-    if (!rewritten || rewritten.length < 100) {
-      console.error("Grok rewrite empty/short:", rewritten);
-      return null;
-    }
-    console.log("REWRITTEN PROMPT:", rewritten);
-    return rewritten;
-  } catch (err) {
-    console.error("Grok rewrite threw:", err);
-    return null;
-  }
-}
-
-/* ── build final photo prompt (dataset-matching structure, no reference language) ── */
+/* ── build final prompt with structured format ─────────── */
 function buildFinalPrompt(
   scenePrompt: string,
   photoType: string,
-  _characterTraits: string | null,
+  characterTraits: string | null,
   bodyType?: string,
   expression?: string,
   bustSize?: string,
-  character?: any,
 ): string {
+  const EXPRESSION_MAP: Record<string, string> = {
+    "casual smile": "gentle casual closed-mouth smile, relaxed friendly",
+    "straight face": "serious straight face, no smile, vogue editorial expression, lips together",
+    "big smile": "big open-mouth smile showing teeth, happy joyful energy",
+    "pout": "duck face pout, lips pushed forward, playful pouty expression",
+  };
+  const exprStr = expression ? EXPRESSION_MAP[expression] || expression : "natural relaxed expression";
+
+  const revealingKeywords = [
+    "lingerie", "bikini", "underwear", "bra", "swimsuit",
+    "swimwear", "nightwear", "negligee", "corset", "bodysuit",
+    "crop top", "sports bra",
+  ];
+  const isRevealing = revealingKeywords.some(kw => scenePrompt.toLowerCase().includes(kw));
+
+  let cameraPrefix = PHOTO_PREFIX;
+  if (photoType === "selfie") cameraPrefix = SELFIE_PREFIX;
+  else if (photoType === "mirror_selfie") cameraPrefix = MIRROR_SELFIE_PREFIX;
+
+  const bodyMod = bodyType
+    ? (BODY_PROMPT_MODIFIER?.[normalizeBodyType(bodyType.toLowerCase())] || BODY_PROMPT_MODIFIER?.["regular"])
+    : "";
+
   const parts: string[] = [];
 
-  // 1. CAMERA + SCENE + EXPRESSION
-  // The scene prompt from the user carries pose, location, outfit, props, lighting.
-  // We only prepend the camera type and append the expression.
-  let camera = CAMERA_PHOTO;
-  if (photoType === "selfie") camera = CAMERA_SELFIE;
-  else if (photoType === "mirror_selfie") camera = CAMERA_MIRROR;
+  if (characterTraits) {
+    parts.push("Exact same single woman as shown consistently across all provided reference images, unified consistent identity, identical facial features hair skin tone body proportions from the combined references, do not average or blend, treat as the same person");
+    parts.push(characterTraits);
+  }
+  parts.push(scenePrompt);
+  parts.push(cameraPrefix);
 
-  const exprStr = expression
-    ? (PHOTO_EXPR[expression] || expression)
-    : "direct eye contact with relaxed sultry expression lips slightly parted";
+  if (bodyMod) parts.push(bodyMod);
 
-  parts.push(`${camera} ${scenePrompt}, ${exprStr}`);
-
-  // 2. BODY (figure + bust + skin tone)
-  const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
-  const bodyDesc = PHOTO_BODY_DESC[normBody] || PHOTO_BODY_DESC.regular;
-  const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
-  const skinKey = (character?.country || "").toLowerCase();
-  const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
-
-  const bodyWithBust = bustKey === "extra large"
-    ? `${bodyDesc.replace(/(with )/, `with very large prominent breasts, `)}, ${skinTone}`
-    : `${bodyDesc}, ${skinTone}`;
-  parts.push(bodyWithBust);
-
-  // 3. HAIR
-  if (character) {
-    const hairStyleMatch = character.description?.match(/^(.*?)\s*hair\./i);
-    const hairStyle = (hairStyleMatch?.[1]?.trim() || "").toLowerCase();
-    const hairColour = character.hair || "";
-    const mappedColour = hairColour.toLowerCase() === "blonde" ? "cool white-blonde" : hairColour;
-    let hairDesc = `Long ${mappedColour} hair draped over shoulders with face-framing strands`.trim();
-    if (hairStyle === "bangs") {
-      hairDesc = `Long center-parted ${mappedColour} hair with soft curtain bangs and face-framing strands, draped over shoulders`;
-    } else if (hairStyle === "straight") {
-      hairDesc = `Long straight center-parted ${mappedColour} hair draped over shoulders with face-framing strands`;
-    } else if (hairStyle === "curly" || hairStyle === "wavy") {
-      hairDesc = `Long ${mappedColour} hair with soft voluminous waves draped over shoulders with face-framing strands`;
-    } else if (hairStyle) {
-      hairDesc = `Long ${hairStyle} ${mappedColour} hair draped over shoulders with face-framing strands`.trim();
-    }
-    parts.push(hairDesc);
+  if (bustSize === "extra large") {
+    parts.push("CRITICAL: her breasts must be very large and clearly prominent in the image, large heavy chest is her defining physical feature");
   }
 
-  // 4. MAKEUP — only if character has style set AND scene prompt doesn't already describe makeup
-  const sceneHasMakeup = /makeup|eyeliner|mascara|lipstick|lip gloss|blush/i.test(scenePrompt);
-  if (character && !sceneHasMakeup) {
-    const mk = (character.style || "").toLowerCase();
-    if (mk === "natural") {
-      parts.push("Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips");
-    } else if (mk === "classic") {
-      parts.push("Classic polished makeup with defined eyeliner, full lashes, subtle contour, mascara, glossy lip colour");
-    } else if (mk) {
-      parts.push(`${mk} makeup with defined eyeliner, full lashes, blush, glossy lips`);
-    }
-  }
-
-  // 5. JEWELRY — only if character description has extras AND scene doesn't mention them
-  const sceneHasJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(scenePrompt);
-  if (character?.description && !sceneHasJewelry) {
-    const extras = character.description.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
-    if (extras) {
-      const hasJewelryInExtras = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(extras);
-      parts.push(hasJewelryInExtras ? extras : `Layered jewelry: ${extras}`);
-    }
-  }
-
-  // 6. LIGHTING — only if scene prompt doesn't already describe it
-  const sceneHasLight = /light|glow|shadow|sun|lamp|neon|golden.hour|backlit|moonlight|fluorescent|dim|bright/i.test(scenePrompt);
-  if (!sceneHasLight) {
-    parts.push("Natural lighting from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
-  }
-
-  // 7. BACKGROUND — force concrete sharpness on background environment and props
-  parts.push(`Every object and surface in the background fully sharp in focus, no bokeh, no shallow depth of field, background environment and props crystal clear`);
-
-  // 8. CAMERA ANGLE + FULL TECH TAIL
-  let angleLine = "";
   if (photoType === "selfie") {
-    angleLine = "Shot from close three-quarter angle on iPhone front camera";
+    parts.push("authentic one-handed selfie pose: right arm extended forward as if holding the iPhone but the phone itself is completely out of the frame and not visible, left arm relaxed naturally at her side or lightly resting on the bed next to her thigh, realistic single-arm selfie anatomy with no duplicated arms or awkward two-handed pose");
   } else if (photoType === "mirror_selfie") {
-    angleLine = "Shot from front-on chest height on iPhone front camera with phone visible in the mirror reflection";
-  } else {
-    angleLine = "Shot from standing three-quarter angle on iPhone camera";
+    parts.push("standing in front of a full-length mirror taking a mirror selfie, iPhone clearly visible in her right hand held up in front of her chest or face area, phone also visible in the mirror reflection, natural mirror selfie pose");
   }
 
-  parts.push(`${angleLine}, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup`);
+  parts.push(SKIN_QUALITY);
+  parts.push("highly detailed skin texture with clearly visible pores, peach fuzz, subtle natural imperfections");
+  parts.push(exprStr);
+  parts.push("smooth midsection, no visible ribs");
 
-  const finalPrompt = parts.filter(Boolean).join(". ");
+  if (isRevealing) {
+    parts.push("exactly wearing the outfit described in the scene prompt, highly detailed realistic clothing with visible fabric texture, proper coverage of breasts and body, no missing clothing, no nudity");
+  } else {
+    parts.push("fully clothed");
+  }
+
+  parts.push("maintaining exact same face, body proportions, and identity as in the three reference photos");
+
+  const seed = Math.floor(Math.random() * 999999);
+  parts.push(`seed:${seed}`);
+
+  parts.push(IPHONE_REALISM);
+
+  const finalPrompt = parts.filter(Boolean).join(", ");
   console.log("FINAL PROMPT:", finalPrompt);
   return finalPrompt;
 }
@@ -779,7 +612,7 @@ async function generateAngleAndBody(
       const rawAngleBust = (bustSize || "regular").toLowerCase();
       const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -799,7 +632,7 @@ async function generateAngleAndBody(
       const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
-      const bodyPrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const bodyPrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
@@ -1198,16 +1031,14 @@ serve(async (req) => {
     let characterBodyType: string | undefined;
     let characterBustSize: string | undefined;
     let faceImageUrls: string[] = [];
-    let charData: any = null;
     if (characterId) {
-      const { data: cd } = await adminClient
+      const { data: charData } = await adminClient
         .from("characters")
         .select("*")
         .eq("id", characterId)
         .eq("user_id", userId)
         .single();
 
-      charData = cd;
       if (charData) {
         characterTraits = buildCharacterTraits(charData);
         characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
@@ -1301,11 +1132,7 @@ serve(async (req) => {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
-        let finalPrompt = await rewritePromptWithGrok(prompt, photoType, characterBodyType, characterBustSize, expression, charData, XAI_API_KEY);
-        if (!finalPrompt) {
-          console.log("Grok rewrite failed, using deterministic fallback");
-          finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, charData);
-        }
+        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize);
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
