@@ -897,7 +897,7 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <span className="text-2xl font-extrabold lowercase text-muted-foreground">{placeholderText}</span>
+                  <span className="text-2xl font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
                 </div>
               }
             />
@@ -992,7 +992,7 @@ const Index = () => {
                 charName={selectedChar?.name || ""}
                 placeholder={
                   <div className="pointer-events-none absolute left-4 top-3 right-4">
-                    <span className="text-2xl font-extrabold lowercase text-muted-foreground">{placeholderText}</span>
+                    <span className="text-2xl font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
                   </div>
                 }
               />
