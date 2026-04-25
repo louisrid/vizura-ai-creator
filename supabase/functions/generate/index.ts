@@ -52,11 +52,6 @@ const PHOTO_SKIN_TONE: Record<string, string> = {
 
 const PHOTO_MAKEUP = "Natural makeup with defined eyeliner, full lashes, rosy blush, glossy nude-pink lips";
 
-const PHOTO_CAMERA_ANGLE: Record<string, string> = {
-  selfie: "Shot from close overhead three-quarter angle on iPhone front camera",
-  photo: "Shot from standing three-quarter angle on iPhone camera",
-  mirror_selfie: "Shot from front-on chest height on iPhone front camera",
-};
 
 const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
