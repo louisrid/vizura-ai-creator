@@ -387,7 +387,11 @@ function buildFinalPrompt(
     sections.push(PHOTO_IDENTITY);
   }
 
-  // 2. Scene + pose + expression
+  // 2. Camera angle + tech tail
+  const cameraAngle = PHOTO_CAMERA_ANGLE[photoType] || PHOTO_CAMERA_ANGLE["photo"];
+  sections.push(`${cameraAngle}, ${PHOTO_TECH_TAIL}`);
+
+  // 3. Scene + pose + expression
   if (sceneExpansion?.scene) {
     sections.push(sceneExpansion.scene);
   } else {
@@ -396,14 +400,14 @@ function buildFinalPrompt(
     sections.push(`${cameraLabel} of a woman, ${scenePrompt}, ${exprFallback}`);
   }
 
-  // 3. Body figure + skin tone
+  // 4. Body figure + skin tone
   const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
   const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
   const bodyFig = PHOTO_BODY_FIGURE[normBody]?.[bustKey] || PHOTO_BODY_FIGURE["regular"]["regular"];
   const skinTone = PHOTO_SKIN_TONE[country || ""] || "fair skin";
   sections.push(`${bodyFig}, ${skinTone}`);
 
-  // 4. Hair + scene context
+  // 5. Hair + scene context
   const mappedColour = (hairColour || "").toLowerCase() === "blonde" ? "cool white-blonde" : (hairColour || "");
   let hairBase = `Long ${mappedColour} hair`.trim();
   if (hairStyle === "bangs") hairBase = `Long ${mappedColour} hair with soft curtain bangs`;
@@ -413,33 +417,29 @@ function buildFinalPrompt(
   const hairContext = sceneExpansion?.hair_context || "with face-framing strands";
   sections.push(`${hairBase} ${hairContext}`);
 
-  // 5. Outfit
+  // 6. Outfit
   if (sceneExpansion?.outfit) {
     sections.push(sceneExpansion.outfit);
   } else {
     sections.push(`Wearing the outfit described: ${scenePrompt}`);
   }
 
-  // 6. Makeup
+  // 7. Makeup
   sections.push(PHOTO_MAKEUP);
 
-  // 7. Lighting
+  // 8. Lighting
   if (sceneExpansion?.lighting) {
     sections.push(sceneExpansion.lighting);
   } else {
     sections.push("Natural lighting from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   }
 
-  // 8. Background
+  // 9. Background
   if (sceneExpansion?.background) {
     sections.push(sceneExpansion.background);
   } else {
     sections.push("Surroundings fully sharp in background");
   }
-
-  // 9. Camera angle + tech tail
-  const cameraAngle = PHOTO_CAMERA_ANGLE[photoType] || PHOTO_CAMERA_ANGLE["photo"];
-  sections.push(`${cameraAngle}, ${PHOTO_TECH_TAIL}`);
 
   const finalPrompt = sections.join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
