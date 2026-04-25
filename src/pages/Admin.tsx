@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, User } from "lucide-react";
+import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, User, Copy } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import ModalCloseButton from "@/components/ModalCloseButton";
