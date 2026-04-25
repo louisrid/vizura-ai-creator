@@ -410,7 +410,7 @@ const Index = () => {
 
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "";
-  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || ""));
+  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || "").replace(/<[^>]*>/g, ""));
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => preselectedCharacterId ? null : (sessionStorage.getItem("facefox_photo_result") || null));
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
