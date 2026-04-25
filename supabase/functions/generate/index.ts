@@ -269,7 +269,7 @@ function buildFinalPrompt(
   sceneExpansion: { scene: string; hair_context: string; outfit: string; lighting: string; background: string } | null,
   scenePrompt: string,
   photoType: string,
-  characterTraits: string | null,
+  hasCharacter: boolean,
   bodyType?: string,
   expression?: string,
   bustSize?: string,
@@ -280,7 +280,7 @@ function buildFinalPrompt(
   const sections: string[] = [];
 
   // 1. Identity block
-  if (characterTraits) {
+  if (hasCharacter) {
     sections.push(PHOTO_IDENTITY);
   }
 
