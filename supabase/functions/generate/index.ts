@@ -308,7 +308,7 @@ function buildFinalPrompt(
   const parts: string[] = [];
 
   if (characterTraits) {
-    parts.push("The exact same woman as in the reference images, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the references");
+    parts.push("Exact same woman as the two uploaded face reference images, identical face from every angle, perfect face match to both references");
     parts.push(characterTraits);
   }
   parts.push(scenePrompt);
