@@ -1145,7 +1145,8 @@ serve(async (req) => {
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
         // Stage A: face-only reference to reduce moderation triggers
-        if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
+        // Stage A test: zero refs
+        // if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
