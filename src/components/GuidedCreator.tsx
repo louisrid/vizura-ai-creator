@@ -966,7 +966,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   };
 
   const showDashes = !isHeroSlide;
-  const canExitFlow = skipWelcome && isLoggedIn;
+  
 
   return createPortal(
     <div
