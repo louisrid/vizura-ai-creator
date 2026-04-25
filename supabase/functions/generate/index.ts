@@ -729,7 +729,7 @@ async function generateAngleAndBody(
       const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
-      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
