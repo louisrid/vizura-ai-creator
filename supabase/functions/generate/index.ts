@@ -831,16 +831,12 @@ serve(async (req) => {
       const XAI_API_KEY = Deno.env.get("XAI_API_KEY");
       if (!XAI_API_KEY) throw new Error("XAI_API_KEY is not configured");
 
-      const traits = buildCharacterTraits(charData);
-      const dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
-      const dbBustSize = (charData.bust_size || "regular").toLowerCase();
-
       const freshFaceUrl = charData.face_image_url;
       console.log(`=== SINGLE REGENERATION: ${regenerateSingle} (using fresh DB face URL) ===`);
 
       try {
         const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-          freshFaceUrl, traits, dbBodyType, dbBustSize, XAI_API_KEY, adminClient, userId, regenerateSingle
+          freshFaceUrl, charData, XAI_API_KEY, adminClient, userId, regenerateSingle
         );
 
         const updates: Record<string, string | null> = {};
