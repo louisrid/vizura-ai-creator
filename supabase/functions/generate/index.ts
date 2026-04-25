@@ -59,7 +59,7 @@ const PHOTO_EXPR: Record<string, string> = {
 };
 
 /* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -207,8 +207,8 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
-  "extra large": "CRITICAL: extremely large G+ cup breasts, massive prominent bust that is the most dominant visible feature, deep wide cleavage, breasts must be unmistakably oversized and impossible to miss, chest stretching and filling clothing tightly, bust visibly protruding forward significantly from the body in every single image",
+  regular: "prominent chest",
+  "extra large": "very large prominent breasts",
 };
 
 /* ── build character trait string from DB record ───────── */
@@ -286,6 +286,109 @@ function buildCharacterTraits(char: any): string {
   }
 
   return parts.join(", ");
+}
+
+/* ── Grok-3 prompt rewriter ──────────────────────────────
+ * Converts short user scene text + character data into one
+ * dataset-style prompt (~180 words, 9-section structure)
+ * via a small Grok-3 chat call with few-shot examples.
+ * Returns null on failure so caller falls back to template.
+ */
+async function rewritePromptWithGrok(
+  userScene: string,
+  photoType: string,
+  bodyType: string | undefined,
+  bustSize: string | undefined,
+  expression: string | undefined,
+  character: any,
+  apiKey: string,
+): Promise<string | null> {
+  const photoTypeLabel = photoType === "selfie"
+    ? "Casual iPhone selfie"
+    : photoType === "mirror_selfie"
+      ? "Casual iPhone mirror selfie"
+      : "Casual iPhone photo";
+
+  const ctxParts: string[] = [];
+  if (bodyType) ctxParts.push(`body: ${bodyType}`);
+  if (bustSize === "extra large") ctxParts.push(`bust: very large prominent breasts`);
+  else if (bustSize) ctxParts.push(`bust: prominent chest`);
+  if (character?.country) ctxParts.push(`skin/ethnicity: ${character.country}`);
+  if (character?.hair) ctxParts.push(`hair colour: ${character.hair}`);
+  if (character?.style) ctxParts.push(`makeup style: ${character.style}`);
+  if (expression) ctxParts.push(`expression: ${expression}`);
+  if (character?.description) ctxParts.push(`character extras: ${character.description}`);
+  const characterContext = ctxParts.join(", ");
+
+  const systemMsg = `You rewrite short photo descriptions into one detailed prompt in the exact style of the examples shown. The output is sent to xAI's image edit endpoint to generate a photo of a specific woman whose face/body reference images are sent separately — so the prompt must NEVER mention "reference image", "same woman", "matching identity", "AI", or anything that suggests this is a generated image. Write it as a real photographer's brief.
+
+STRICT RULES:
+- Output ONLY the rewritten prompt. No preamble, no quotes, no explanation, no formatting.
+- Length: 150-200 words, ONE paragraph, sentences joined by periods.
+- Always start with the camera type given.
+- Use the 9-section dataset structure: (1) camera + scene + pose + body angle + expression / (2) body figure + skin tone / (3) hair / (4) outfit with fabric and fit / (5) makeup / (6) jewelry / (7) lighting / (8) background "fully sharp in background" with named props / (9) shot angle + camera tech tail.
+- LOCK the user's words: anything the user explicitly mentioned (location, outfit, pose, lighting) MUST appear in your output exactly as they intended. Do not contradict or replace user-supplied details.
+- INVENT defaults only for slots the user did NOT mention. E.g. user says "bikini pool" → default pose: sitting on pool edge with legs in water; default lighting: midday sun; user already gave outfit and location so keep those.
+- ALWAYS describe a specific concrete background environment with named props that will be "fully sharp in background" (turquoise pool water, beige pillows, white tile bathroom, etc).
+- ALWAYS use the body figure, hair, skin tone, makeup, and jewelry from the character context — do not change them.
+- End with this EXACT tail (verbatim): "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup."`;
+
+  const example1 = "Casual iPhone selfie of a woman lying on a beige textured couch, propped up on her left elbow with left hand in her hair, head tilted slightly, body angled toward camera, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, fair skin. Long center-parted blonde hair with two loose side braids and face-framing strands. Wearing a tight white ribbed-knit long-sleeve bodysuit with deep plunging asymmetrical neckline showing maximum cleavage, high-cut at hips with thin white underwear straps visible. Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips. Layered jewelry: small white pearl strand necklace, thin gold chain with tiny rectangular pendant, small silver hoop earring. Warm bedside lamp lighting from behind creating uneven harsh glow with blown-out highlights on the wall behind her and real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Cozy bedroom with beige pillows and fabric fully sharp in background. Shot from close three-quarter overhead angle on iPhone front camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
+
+  const example2 = "Casual iPhone photo of a woman sitting on the edge of a swimming pool with her legs dangling in the water, leaning back on both hands behind her, head tilted slightly toward camera, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, fair skin. Long center-parted blonde hair loose and slightly damp with face-framing strands. Wearing a tiny white triangle string bikini with deep plunging top showing maximum cleavage and matching low-rise tie-side bottoms sitting high on her hips. Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips. Layered jewelry: small white pearl strand necklace, thin gold chain with tiny rectangular pendant, small silver hoop earring. Harsh direct overhead midday sunlight creating strong real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Turquoise swimming pool water and sun-bleached stone patio fully sharp in background. Shot from standing three-quarter angle slightly above on iPhone camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
+
+  const example3 = "Casual iPhone selfie of a woman sitting cross-legged on a messy unmade bed, one hand holding phone up, other hand pulling the collar of her hoodie to one side exposing her shoulder and collarbone, head tilted slightly, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, warm golden skin. Long straight jet black hair with vivid pink dyed ends loose and slightly messy with face-framing strands. Wearing an oversized cream cropped hoodie pulled off one shoulder showing bare shoulder and collarbone with deep cleavage visible at the neckline, paired with tiny black cotton shorts barely visible under the hoodie hem. Soft natural makeup with thin brown eyeliner, wispy lashes, peachy blush, glossy mauve lips. Layered jewelry: thin silver chain choker, small gold hoop earrings, delicate silver ring on index finger. Warm fairy light string lighting draped on the wall behind creating soft uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Cozy bedroom with white walls and pinned polaroid photos fully sharp in background. Shot from close front-on slightly above angle on iPhone front camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
+
+  const userMsg = `User input: "${userScene}"
+Camera type to use: ${photoTypeLabel}
+Character context to use: ${characterContext}
+
+EXAMPLE 1 (couch bodysuit selfie):
+${example1}
+
+EXAMPLE 2 (pool bikini photo):
+${example2}
+
+EXAMPLE 3 (bedroom hoodie selfie, asian pink hair):
+${example3}
+
+Now write ONE prompt in the exact same style for the user input above. Output only the rewritten prompt.`;
+
+  try {
+    const response = await fetch("https://api.x.ai/v1/chat/completions", {
+      method: "POST",
+      signal: AbortSignal.timeout(15000),
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "grok-3",
+        messages: [
+          { role: "system", content: systemMsg },
+          { role: "user", content: userMsg },
+        ],
+        temperature: 0.7,
+        max_tokens: 700,
+      }),
+    });
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Grok rewrite failed:", response.status, errText);
+      return null;
+    }
+    const data = await response.json();
+    const rewritten = data?.choices?.[0]?.message?.content?.trim();
+    if (!rewritten || rewritten.length < 100) {
+      console.error("Grok rewrite empty/short:", rewritten);
+      return null;
+    }
+    console.log("REWRITTEN PROMPT:", rewritten);
+    return rewritten;
+  } catch (err) {
+    console.error("Grok rewrite threw:", err);
+    return null;
+  }
 }
 
 /* ── build final photo prompt (dataset-matching structure, no reference language) ── */
@@ -657,7 +760,7 @@ async function generateAngleAndBody(
       const rawAngleBust = (bustSize || "regular").toLowerCase();
       const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -677,7 +780,7 @@ async function generateAngleAndBody(
       const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
-      const bodyPrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const bodyPrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
@@ -1179,7 +1282,11 @@ serve(async (req) => {
         console.log("Aspect ratio:", aspectRatio, "| Photo type:", photoType, "| Character:", characterId);
         console.log("Face references:", faceImageUrls.length);
 
-        const finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, charData);
+        let finalPrompt = await rewritePromptWithGrok(prompt, photoType, characterBodyType, characterBustSize, expression, charData, XAI_API_KEY);
+        if (!finalPrompt) {
+          console.log("Grok rewrite failed, using deterministic fallback");
+          finalPrompt = buildFinalPrompt(prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, charData);
+        }
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
 
