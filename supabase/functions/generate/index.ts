@@ -719,22 +719,24 @@ async function generateAngleAndBody(
 
   if (target === "body" || target === "both") {
     try {
-      console.log("Generating full-body anchor...");
-      const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
-      const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      const rawBodyBust = (bustSize || "regular").toLowerCase();
-      const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
-      const bustDesc = BUST_SIZE_MAP[bustKey] || "";
+      console.log("Generating composite reference sheet...");
+      // Original body anchor prompt — temporarily replaced with composite sheet
+      // const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
+      // const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
+      // const rawBodyBust = (bustSize || "regular").toLowerCase();
+      // const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
+      // const bustDesc = BUST_SIZE_MAP[bustKey] || "";
+      // const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
 
-      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
-      console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
-      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
+      const bodyPrompt = `Character reference sheet of the exact same woman, two views side by side on plain white background: left shows front face and upper shoulders, right shows 3/4 angle profile. Clean even lighting, white top, sharp focus, realistic skin.`;
+      console.log("Composite sheet prompt:", bodyPrompt.slice(0, 200));
+      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "16:9");
       if (bodyResult) {
-        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
+        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "composite");
       }
-      console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
+      console.log("Composite sheet generated:", bodyAnchorUrl?.slice(0, 80));
     } catch (e: any) {
-      console.error("Full-body anchor reference generation failed:", e?.message || e);
+      console.error("Composite reference sheet generation failed:", e?.message || e);
     }
   }
 
@@ -1144,11 +1146,8 @@ serve(async (req) => {
         characterHairStyle = (hairMatch?.[1]?.trim() || "straight").toLowerCase();
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
-        // Stage A: face-only reference to reduce moderation triggers
-        // Stage A test: zero refs
-        // if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
-        // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
-        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        // Stage C: using composite sheet (stored in body_anchor_url) as single reference
+        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
