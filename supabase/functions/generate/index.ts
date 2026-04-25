@@ -24,20 +24,20 @@ const corsHeaders = {
 /* ── photo prompt constants ────────────────────────────── */
 const PHOTO_BODY_FIGURE: Record<string, Record<string, string>> = {
   slim: {
-    regular: "Slim toned figure with large D-DD cup breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Slim toned figure with very large prominent breasts, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
   },
   regular: {
-    regular: "Hourglass figure with large D-DD cup breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Hourglass figure with very large prominent breasts, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
   },
   curvy: {
-    regular: "Curvaceous hourglass figure with large D-DD cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
   thick: {
-    regular: "Curvaceous hourglass figure with large D-DD cup breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
 };
 
@@ -164,8 +164,8 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "20 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced features, clear skin";
+  if (isNaN(num) || num <= 24) return "youthful woman in her early twenties, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
+  return "woman in her mid twenties, visible cheekbones, clean jawline, balanced features, clear skin";
 }
 
 function extractXaiImageUrl(data: any): string | null {
@@ -204,7 +204,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
+  regular: "very large DD-E cup breasts, heavy prominent chest, bust visibly filling and stretching clothing",
   "extra large": "CRITICAL: extremely large G+ cup breasts, massive prominent bust that is the most dominant visible feature, deep wide cleavage, breasts must be unmistakably oversized and impossible to miss, chest stretching and filling clothing tightly, bust visibly protruding forward significantly from the body in every single image",
 };
 
@@ -213,7 +213,6 @@ function buildCharacterTraits(char: any): string {
   const parts: string[] = [];
 
   if (char.age) {
-    parts.push(`${char.age} year old woman`);
     parts.push(ageToDescription(char.age));
   }
 
@@ -1132,10 +1131,8 @@ serve(async (req) => {
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
-        // temporarily disabled: angle reference for testing
-        // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
-        // temporarily disabled: body anchor reference
-        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
