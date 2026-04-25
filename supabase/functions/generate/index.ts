@@ -571,21 +571,10 @@ async function generateFaceImages(
   return imageUrls;
 }
 
-/* ── body-type descriptor for full-body anchor ─────────── */
-const BODY_ANCHOR_MAP: Record<string, string> = {
-  thin: "slim toned body, narrow waist, lean figure",
-  regular: "soft feminine body, defined waist, feminine hips",
-  average: "soft feminine body, defined waist, feminine hips",
-  curvy: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
-  thick: "curvy feminine figure, defined waist, wider hips, soft thighs, hourglass shape",
-};
-
 /* ── generate 3/4 angle + full-body anchor from reference face ── */
 async function generateAngleAndBody(
   faceUrl: string,
-  characterTraits: string,
-  bodyType: string,
-  bustSize: string,
+  charData: any,
   apiKey: string,
   adminClient: any,
   userId: string,
@@ -593,14 +582,32 @@ async function generateAngleAndBody(
 ): Promise<{ angleUrl: string | null; bodyAnchorUrl: string | null }> {
   let angleUrl: string | null = null;
   let bodyAnchorUrl: string | null = null;
+  const bodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
+  const bustKey = ((charData.bust_size || "regular").toLowerCase() === "xl" || (charData.bust_size || "regular").toLowerCase() === "extra large") ? "extra large" : "regular";
+  const bodyFig = PHOTO_BODY_FIGURE[bodyType]?.[bustKey] || PHOTO_BODY_FIGURE["regular"]["regular"];
+  const skinKey = (charData.country || "").toLowerCase();
+  const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
+  const hairColour = (charData.hair || "").toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
+  const hairStyleMatch = charData.description?.match(/^(.*?)\s*hair\./i);
+  const hairStyle = (hairStyleMatch?.[1]?.trim() || "straight").toLowerCase();
+  let hairDesc = `Long ${hairColour} hair draped over shoulders`.trim();
+  if (hairStyle === "bangs") hairDesc = `Long ${hairColour} hair with soft curtain bangs draped over shoulders`;
+  else if (hairStyle === "straight") hairDesc = `Long straight ${hairColour} hair draped over shoulders`;
+  else if (hairStyle === "curly" || hairStyle === "wavy") hairDesc = `Long ${hairColour} hair with soft voluminous waves draped over shoulders`;
+  else if (hairStyle) hairDesc = `Long ${hairStyle} ${hairColour} hair draped over shoulders`.trim();
 
   if (target === "angle" || target === "both") {
     try {
       console.log("Generating 3/4 angle...");
-      const rawAngleBust = (bustSize || "regular").toLowerCase();
-      const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
-      const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
+      const sections: string[] = [];
+      sections.push(REF_IDENTITY_SINGLE);
+      sections.push("Head turned 45 degrees to the left showing 3/4 profile, framed from top of head to stomach");
+      sections.push(`${bodyFig}, ${skinTone}`);
+      sections.push(hairDesc);
+      sections.push("Tight white v-neck top, white background, soft even lighting");
+      sections.push("Relaxed neutral expression, lips together");
+      sections.push(REF_TECH_TAIL);
+      const anglePrompt = sections.join(". ");
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -614,13 +621,17 @@ async function generateAngleAndBody(
   if (target === "body" || target === "both") {
     try {
       console.log("Generating full-body anchor...");
-      const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
-      const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      const rawBodyBust = (bustSize || "regular").toLowerCase();
-      const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
-      const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-
-      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const sections: string[] = [];
+      sections.push(REF_IDENTITY_SINGLE);
+      sections.push("Standing straight upright facing camera, relaxed natural posture, arms behind back, framed with space above head down to mid-thigh");
+      sections.push(`${bodyFig}, ${skinTone}`);
+      sections.push(hairDesc);
+      sections.push("Tight white v-neck top tucked into tight black leggings, visible cleavage, chest filling the top");
+      sections.push("White background, soft even lighting");
+      sections.push("Relaxed neutral expression, lips together");
+      sections.push("Smooth flat stomach, natural feminine body not athletic not muscular");
+      sections.push(REF_TECH_TAIL);
+      const bodyPrompt = sections.join(". ");
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
