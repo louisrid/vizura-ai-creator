@@ -530,8 +530,7 @@ async function generateFaceImages(
       }
     }
 
-    const regenDiscriminator = `variation token ${crypto.randomUUID().slice(0, 8)}, distinct facial micro-choices, clearly different option set from previous generated faces while preserving same identity`;
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}, ${regenDiscriminator}`;
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
