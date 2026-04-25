@@ -952,9 +952,7 @@ serve(async (req) => {
           .eq("user_id", userId);
       }
 
-      let dbBodyType = "regular";
-      let dbBustSize = "regular";
-      let traits = prompt;
+      let angleCharData: any = null;
       if (angleCharacterId) {
         const { data: charData } = await adminClient
           .from("characters")
@@ -963,27 +961,24 @@ serve(async (req) => {
           .eq("user_id", userId)
           .single();
         if (charData) {
-          traits = buildCharacterTraits(charData);
-          dbBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
-          dbBustSize = (charData.bust_size || "regular").toLowerCase();
-          console.log("Built character traits from DB:", traits.slice(0, 120));
-          console.log("Body type from DB:", dbBodyType, "| Bust size:", dbBustSize);
+          angleCharData = charData;
+          console.log("Loaded character data from DB for angle/body gen");
         }
 
-        if (charData?.face_angle_url && charData?.body_anchor_url) {
+        if (angleCharData?.face_angle_url && angleCharData?.body_anchor_url) {
           if (creditData) {
             await adminClient.from("credits").update({ balance: creditData.balance, updated_at: new Date().toISOString() }).eq("user_id", userId);
           }
           console.log("Angle + body already exist, skipping generation for character:", angleCharacterId);
           return new Response(
-            JSON.stringify({ angle_url: charData.face_angle_url, body_anchor_url: charData.body_anchor_url, skipped: true }),
+            JSON.stringify({ angle_url: angleCharData.face_angle_url, body_anchor_url: angleCharData.body_anchor_url, skipped: true }),
             { headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
       }
 
       const { angleUrl, bodyAnchorUrl } = await generateAngleAndBody(
-        selectedFaceUrl, traits, dbBodyType, dbBustSize, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
+        selectedFaceUrl, angleCharData || { age: "18", country: "white", hair: "brown", eye: "brown", body: "regular", bust_size: "regular", description: "straight hair." }, Deno.env.get("XAI_API_KEY")!, adminClient, userId, regenerateTarget
       );
       console.log("Angle result:", angleUrl?.slice(0, 60) || "null");
       console.log("Body result:", bodyAnchorUrl?.slice(0, 60) || "null");
