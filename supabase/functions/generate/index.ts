@@ -308,7 +308,7 @@ function buildFinalPrompt(
   const parts: string[] = [];
 
   if (characterTraits) {
-    parts.push("The exact same woman as in the reference images, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the references");
+    parts.push("Exact same woman as the two uploaded face reference images, identical face from every angle, perfect face match to both references");
     parts.push(characterTraits);
   }
   parts.push(scenePrompt);
@@ -337,8 +337,6 @@ function buildFinalPrompt(
     parts.push("fully clothed");
   }
 
-  const seed = Math.floor(Math.random() * 999999);
-  parts.push(`seed:${seed}`);
 
   parts.push(IPHONE_REALISM);
 
@@ -488,9 +486,9 @@ async function generateFaceImages(
   previousFaces: string[] = []
 ): Promise<string[]> {
   const variations = [
-    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin, SAME hair style and colour as described",
+    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin",
+    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin",
+    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin",
   ];
 
   const makeupVariations = [
@@ -532,8 +530,7 @@ async function generateFaceImages(
       }
     }
 
-    const regenDiscriminator = `variation token ${crypto.randomUUID().slice(0, 8)}, distinct facial micro-choices, clearly different option set from previous generated faces while preserving same identity`;
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}, ${regenDiscriminator}`;
+    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -611,7 +608,7 @@ async function generateAngleAndBody(
       const rawAngleBust = (bustSize || "regular").toLowerCase();
       const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -631,7 +628,7 @@ async function generateAngleAndBody(
       const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
-      const bodyPrompt = `The exact same woman as in the reference image, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {
@@ -1044,7 +1041,8 @@ serve(async (req) => {
         characterBustSize = (charData.bust_size || "regular").toLowerCase();
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
-        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        // temporarily disabled: body anchor reference
+        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
