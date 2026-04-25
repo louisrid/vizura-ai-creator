@@ -437,15 +437,9 @@ const Index = () => {
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
 
-  // One-time cleanup of any HTML tags accidentally cached in the prompt
+  // Always start with empty prompt — clear any stale cached value
   useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("facefox_photo_prompt");
-      if (raw) {
-        const cleaned = raw.replace(/<[^>]*>/g, "");
-        if (cleaned !== raw) sessionStorage.setItem("facefox_photo_prompt", cleaned);
-      }
-    } catch {}
+    try { sessionStorage.removeItem("facefox_photo_prompt"); } catch {}
   }, []);
 
   useEffect(() => {
