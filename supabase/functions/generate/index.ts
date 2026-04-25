@@ -309,29 +309,48 @@ async function rewritePromptWithGrok(
       ? "Casual iPhone mirror selfie"
       : "Casual iPhone photo";
 
+  const desc = (character?.description || "").trim();
+  const descAfterHair = desc.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
+  const hasExplicitJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(descAfterHair);
+  const jewelryText = hasExplicitJewelry ? descAfterHair : "";
+
   const ctxParts: string[] = [];
-  if (bodyType) ctxParts.push(`body: ${bodyType}`);
+  if (bodyType) ctxParts.push(`body type: ${bodyType}`);
   if (bustSize === "extra large") ctxParts.push(`bust: very large prominent breasts`);
-  else if (bustSize) ctxParts.push(`bust: prominent chest`);
   if (character?.country) ctxParts.push(`skin/ethnicity: ${character.country}`);
   if (character?.hair) ctxParts.push(`hair colour: ${character.hair}`);
   if (character?.style) ctxParts.push(`makeup style: ${character.style}`);
   if (expression) ctxParts.push(`expression: ${expression}`);
-  if (character?.description) ctxParts.push(`character extras: ${character.description}`);
-  const characterContext = ctxParts.join(", ");
+  if (jewelryText) ctxParts.push(`jewelry to include: ${jewelryText}`);
+  else ctxParts.push(`jewelry: NONE — do not add any jewelry`);
+  if (!character?.style) ctxParts.push(`makeup: NONE specified — keep makeup minimal and natural, do not invent specific products`);
+  const characterContext = ctxParts.join("; ");
 
-  const systemMsg = `You rewrite short photo descriptions into one detailed prompt in the exact style of the examples shown. The output is sent to xAI's image edit endpoint to generate a photo of a specific woman whose face/body reference images are sent separately — so the prompt must NEVER mention "reference image", "same woman", "matching identity", "AI", or anything that suggests this is a generated image. Write it as a real photographer's brief.
+  const systemMsg = `You rewrite short photo descriptions into ONE detailed prompt that matches the exact style of the examples. The output goes to xAI's image edit endpoint along with separate reference images of a specific woman, so the prompt must NEVER mention "reference image", "same woman", "matching identity", "AI", or anything that hints this is generated. Write as a real photographer's brief.
 
-STRICT RULES:
-- Output ONLY the rewritten prompt. No preamble, no quotes, no explanation, no formatting.
-- Length: 150-200 words, ONE paragraph, sentences joined by periods.
-- Always start with the camera type given.
-- Use the 9-section dataset structure: (1) camera + scene + pose + body angle + expression / (2) body figure + skin tone / (3) hair / (4) outfit with fabric and fit / (5) makeup / (6) jewelry / (7) lighting / (8) background "fully sharp in background" with named props / (9) shot angle + camera tech tail.
-- LOCK the user's words: anything the user explicitly mentioned (location, outfit, pose, lighting) MUST appear in your output exactly as they intended. Do not contradict or replace user-supplied details.
-- INVENT defaults only for slots the user did NOT mention. E.g. user says "bikini pool" → default pose: sitting on pool edge with legs in water; default lighting: midday sun; user already gave outfit and location so keep those.
-- ALWAYS describe a specific concrete background environment with named props that will be "fully sharp in background" (turquoise pool water, beige pillows, white tile bathroom, etc).
-- ALWAYS use the body figure, hair, skin tone, makeup, and jewelry from the character context — do not change them.
-- End with this EXACT tail (verbatim): "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup."`;
+CAMERA TYPE — STRICT:
+- The user-given camera type prefix MUST be the literal first words of the prompt. If "Casual iPhone selfie", start with "Casual iPhone selfie of a woman ...". If "Casual iPhone photo", start with "Casual iPhone photo of a woman ...". If "Casual iPhone mirror selfie", start with "Casual iPhone mirror selfie of a woman ..." and the scene MUST take place in front of a mirror with phone visible in the reflection.
+- A SELFIE means held with one hand at arm's length — pose must reflect this (no two-handed poses, no third-person framing).
+- A PHOTO means third-person — someone else is taking it. Pose can be full body, hands free.
+- A MIRROR SELFIE means standing in front of a full-length or bathroom mirror, phone visible in hand and reflection.
+
+USER WORDS — LOCKED:
+- Anything the user explicitly mentioned (outfit type, location, pose, lighting, props) MUST appear in your output as they intended.
+- DO NOT replace, contradict, or "improve" user-supplied details.
+- INVENT defaults ONLY for slots the user did NOT mention.
+
+CHARACTER CONTEXT — STRICT:
+- Use the body, hair colour, skin/ethnicity, makeup style, expression EXACTLY as given in the character context.
+- JEWELRY: if the context says "jewelry: NONE — do not add any jewelry", DO NOT mention jewelry at all in your output. Skip section 6 entirely. If the context lists specific jewelry, include it verbatim using "Layered jewelry: [items]".
+- MAKEUP: if the context lists a makeup style, write a natural matching makeup sentence. If the context says "makeup: NONE specified", keep makeup vague and minimal ("natural minimal makeup") — do NOT invent specific eyeliner colours, lip products, or brand-style descriptions.
+
+OUTPUT FORMAT:
+- ONE paragraph, sentences joined by periods.
+- 150–200 words.
+- No preamble, no quotes, no explanation, no markdown.
+- Section order: (1) camera + scene + pose + body angle + expression / (2) body figure + skin tone / (3) hair / (4) outfit with fabric and fit / (5) makeup (only if applicable) / (6) jewelry (only if listed in context) / (7) lighting / (8) concrete named background props ending in "fully sharp in background" / (9) shot angle + camera tech tail.
+- BACKGROUND: name 2-3 concrete props or surfaces ("beige pillows and fabric", "turquoise pool water and stone patio", "white tile bathroom with chrome fixtures") then "fully sharp in background".
+- END WITH EXACTLY this verbatim tail: "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup."`;
 
   const example1 = "Casual iPhone selfie of a woman lying on a beige textured couch, propped up on her left elbow with left hand in her hair, head tilted slightly, body angled toward camera, direct eye contact with relaxed sultry expression lips slightly parted. Curvaceous hourglass figure with very large prominent breasts, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure, fair skin. Long center-parted blonde hair with two loose side braids and face-framing strands. Wearing a tight white ribbed-knit long-sleeve bodysuit with deep plunging asymmetrical neckline showing maximum cleavage, high-cut at hips with thin white underwear straps visible. Natural makeup with heavy black winged eyeliner, full lashes, rosy blush, glossy nude-pink lips. Layered jewelry: small white pearl strand necklace, thin gold chain with tiny rectangular pendant, small silver hoop earring. Warm bedside lamp lighting from behind creating uneven harsh glow with blown-out highlights on the wall behind her and real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin. Cozy bedroom with beige pillows and fabric fully sharp in background. Shot from close three-quarter overhead angle on iPhone front camera, entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup.";
 
