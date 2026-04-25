@@ -309,16 +309,22 @@ async function rewritePromptWithGrok(
       ? "Casual iPhone mirror selfie"
       : "Casual iPhone photo";
 
+  const desc = (character?.description || "").trim();
+  const descAfterHair = desc.replace(/^.*?hair\.\s*/i, "").replace(/\[emoji:.+?\]/g, "").trim();
+  const hasExplicitJewelry = /jewelry|jewellery|necklace|earring|bracelet|ring|pendant|choker/i.test(descAfterHair);
+  const jewelryText = hasExplicitJewelry ? descAfterHair : "";
+
   const ctxParts: string[] = [];
-  if (bodyType) ctxParts.push(`body: ${bodyType}`);
+  if (bodyType) ctxParts.push(`body type: ${bodyType}`);
   if (bustSize === "extra large") ctxParts.push(`bust: very large prominent breasts`);
-  else if (bustSize) ctxParts.push(`bust: prominent chest`);
   if (character?.country) ctxParts.push(`skin/ethnicity: ${character.country}`);
   if (character?.hair) ctxParts.push(`hair colour: ${character.hair}`);
   if (character?.style) ctxParts.push(`makeup style: ${character.style}`);
   if (expression) ctxParts.push(`expression: ${expression}`);
-  if (character?.description) ctxParts.push(`character extras: ${character.description}`);
-  const characterContext = ctxParts.join(", ");
+  if (jewelryText) ctxParts.push(`jewelry to include: ${jewelryText}`);
+  else ctxParts.push(`jewelry: NONE — do not add any jewelry`);
+  if (!character?.style) ctxParts.push(`makeup: NONE specified — keep makeup minimal and natural, do not invent specific products`);
+  const characterContext = ctxParts.join("; ");
 
   const systemMsg = `You rewrite short photo descriptions into one detailed prompt in the exact style of the examples shown. The output is sent to xAI's image edit endpoint to generate a photo of a specific woman whose face/body reference images are sent separately — so the prompt must NEVER mention "reference image", "same woman", "matching identity", "AI", or anything that suggests this is a generated image. Write it as a real photographer's brief.
 
