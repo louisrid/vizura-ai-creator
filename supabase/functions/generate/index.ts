@@ -164,8 +164,8 @@ const MAKEUP_MAP: Record<string, string> = {
 
 function ageToDescription(ageStr: string): string {
   const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "20 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced features, clear skin";
+  if (isNaN(num) || num <= 24) return "youthful woman in her early twenties, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
+  return "woman in her mid twenties, visible cheekbones, clean jawline, balanced features, clear skin";
 }
 
 function extractXaiImageUrl(data: any): string | null {
