@@ -24,20 +24,20 @@ const corsHeaders = {
 /* ── photo prompt constants ────────────────────────────── */
 const PHOTO_BODY_FIGURE: Record<string, Record<string, string>> = {
   slim: {
-    regular: "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Slim toned figure with narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Slim toned figure with large DD-E cup breasts, heavy prominent chest, deep cleavage, bust filling clothing tightly, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Slim toned figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
   },
   regular: {
-    regular: "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Hourglass figure with defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Hourglass figure with large DD-E cup breasts, heavy prominent chest, deep cleavage, bust filling clothing tightly, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Hourglass figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
   },
   curvy: {
-    regular: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with large DD-E cup breasts, heavy prominent chest, deep cleavage, bust filling clothing tightly, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Curvaceous hourglass figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
   thick: {
-    regular: "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
-    "extra large": "Curvaceous hourglass figure with narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with large DD-E cup breasts, heavy prominent chest, deep cleavage, bust filling clothing tightly, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    "extra large": "Curvaceous hourglass figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
 };
 
@@ -205,7 +205,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
   regular: "large DD-E cup breasts, heavy prominent chest, deep cleavage, bust filling clothing tightly",
-  "extra large": "CRITICAL: absurdly large H+ cup breasts, comically oversized massive bust dominating the entire image, extreme deep cleavage, breasts impossibly large and heavy, chest stretching clothing to the absolute limit, bust protruding forward dramatically from the body",
+  "extra large": "very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, visibly protruding forward from the body",
 };
 
 /* ── build character trait string from DB record ───────── */
@@ -387,7 +387,7 @@ function buildFinalPrompt(
   const sections: string[] = [];
 
   // 0. Identity lock
-  sections.push("Fully synthetic AI-generated character, artistic fashion photography. Exact same woman as the uploaded reference image, identical face from every angle, perfect face match to reference");
+  sections.push("Exact same woman as the uploaded reference images, identical face from every angle, perfect face match to references");
 
   // 1. Scene + pose + expression
   if (sceneExpansion?.scene) {
@@ -1144,10 +1144,9 @@ serve(async (req) => {
         characterHairStyle = (hairMatch?.[1]?.trim() || "straight").toLowerCase();
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
-        // Single face ref to reduce moderation triggers
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
-        // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
-        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
