@@ -728,9 +728,9 @@ async function generateAngleAndBody(
       // const bustDesc = BUST_SIZE_MAP[bustKey] || "";
       // const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
 
-      const bodyPrompt = `Character reference sheet of the exact same woman, two views side by side on plain white background: left shows front face and upper shoulders, right shows 3/4 angle profile. Clean even lighting, white top, sharp focus, realistic skin.`;
+      const bodyPrompt = `Character reference sheet of a ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}, four views arranged in a 2x2 grid on plain white background: top left shows front face and upper shoulders, top right shows 3/4 angle profile, bottom left shows full body standing facing camera, bottom right shows side profile. Clean even lighting, white top in all views, sharp focus, realistic skin.`;
       console.log("Composite sheet prompt:", bodyPrompt.slice(0, 200));
-      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "16:9");
+      const bodyResult = await xaiTextToImage(bodyPrompt, apiKey);
       if (bodyResult) {
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "composite");
       }
