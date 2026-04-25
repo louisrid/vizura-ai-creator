@@ -1143,8 +1143,10 @@ serve(async (req) => {
         characterHairStyle = (hairMatch?.[1]?.trim() || "straight").toLowerCase();
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
-        // Stage C: using composite sheet (stored in body_anchor_url) as single reference
-        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        // Single face ref to reduce moderation triggers
+        if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
+        // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
