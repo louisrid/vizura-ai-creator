@@ -584,7 +584,7 @@ async function generateFaceImages(
 
   const makeupVariations = [
     "defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
-    "mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
+    "defined mascara, eyeliner, eyeshadow, blush, natural polished makeup",
     "defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
   ];
 
