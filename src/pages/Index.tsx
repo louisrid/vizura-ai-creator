@@ -209,7 +209,7 @@ const HighlightedPromptArea = ({
         spellCheck={false}
         autoCorrect="off"
         className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-white focus:outline-none"
-        style={{ caretColor: "hsl(var(--foreground))" }}
+        style={{ caretColor: "hsl(var(--foreground))", fontStyle: "normal", fontWeight: 900, textDecoration: "none" }}
       />
       {!value && !focused && <div data-placeholder>{placeholder}</div>}
     </div>
@@ -410,7 +410,7 @@ const Index = () => {
 
   const preselectedCharacterId = (location.state as any)?.preselectedCharacterId;
   const persistedCharacterId = typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "";
-  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || ""));
+  const [prompt, setPrompt] = useState(() => preselectedCharacterId ? "" : (sessionStorage.getItem("facefox_photo_prompt") || "").replace(/<[^>]*>/g, ""));
   const [isGenerating, setIsGenerating] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(() => preselectedCharacterId ? null : (sessionStorage.getItem("facefox_photo_result") || null));
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
@@ -436,6 +436,17 @@ const Index = () => {
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
+
+  // One-time cleanup of any HTML tags accidentally cached in the prompt
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("facefox_photo_prompt");
+      if (raw) {
+        const cleaned = raw.replace(/<[^>]*>/g, "");
+        if (cleaned !== raw) sessionStorage.setItem("facefox_photo_prompt", cleaned);
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     if (!charDropdownOpen) return;
