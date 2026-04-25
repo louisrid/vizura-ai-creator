@@ -486,9 +486,9 @@ async function generateFaceImages(
   previousFaces: string[] = []
 ): Promise<string[]> {
   const variations = [
-    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin, SAME hair style and colour as described",
-    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin, SAME hair style and colour as described",
+    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin",
+    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin",
+    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin",
   ];
 
   const makeupVariations = [
