@@ -197,55 +197,19 @@ const HighlightedPromptArea = ({
   value: string; onChange: (v: string) => void; charName: string;
   placeholder: React.ReactNode;
 }) => {
-  const overlayRef = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(false);
-
-  const highlightedHtml = useMemo(() => {
-    if (!value) return "";
-    if (!charName.trim()) return escapeHtml(value);
-    const escapedName = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escapedName})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
-    const parts: string[] = [];
-    let lastIndex = 0;
-    let match: RegExpExecArray | null;
-    while ((match = regex.exec(value)) !== null) {
-      const boundary = match[1] ?? "";
-      const name = match[2] ?? "";
-      const matchStart = match.index;
-      const highlightStart = matchStart + boundary.length;
-      const highlightEnd = highlightStart + name.length;
-      if (lastIndex < matchStart) parts.push(escapeHtml(value.slice(lastIndex, matchStart)));
-      if (boundary) parts.push(escapeHtml(boundary));
-      parts.push(`<span style="color:hsl(var(--neon-yellow));">${escapeHtml(name)}</span>`);
-      lastIndex = highlightEnd;
-    }
-    if (lastIndex < value.length) parts.push(escapeHtml(value.slice(lastIndex)));
-    return parts.join("");
-  }, [value, charName]);
 
   return (
     <div className="relative overflow-hidden rounded-[10px] border-2 border-input bg-card">
-      <div
-        ref={overlayRef}
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words px-4 py-3 text-2xl font-[900] lowercase text-foreground"
-        dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-      />
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onScroll={(e) => {
-          if (overlayRef.current) {
-            overlayRef.current.scrollTop = e.currentTarget.scrollTop;
-            overlayRef.current.scrollLeft = e.currentTarget.scrollLeft;
-          }
-        }}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         spellCheck={false}
         autoCorrect="off"
-        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
-        style={{ caretColor: "hsl(var(--foreground))", WebkitTextFillColor: "transparent" }}
+        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-white focus:outline-none"
+        style={{ caretColor: "hsl(var(--foreground))" }}
       />
       {!value && !focused && <div data-placeholder>{placeholder}</div>}
     </div>
