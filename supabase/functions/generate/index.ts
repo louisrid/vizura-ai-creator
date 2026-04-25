@@ -167,41 +167,11 @@ async function logRejectedPrompt(adminClient: any, userId: string, promptText: s
   }
 }
 
-/* ── trait mapping ─────────────────────────────────────── */
-const SKIN_MAP: Record<string, string> = {
-  white: "light pale skin with warm undertone",
-  pale: "very pale fair skin",
-  tan: "olive mediterranean skin tone",
-  asian: "asian skin tone",
-  black: "rich dark skin with natural healthy glow",
-  dark: "rich dark skin with natural healthy glow",
-};
-
 const normalizeBodyType = (v: string) => {
   const k = v.toLowerCase();
   if (k === "thin") return "slim";
   return k;
 };
-
-const BODY_MAP: Record<string, string> = {
-  slim: "slim body, narrow waist",
-  thin: "slim body, narrow waist",
-  regular: "soft feminine body, defined waist",
-  average: "soft feminine body, defined waist",
-  curvy: "curvy feminine figure, wide hips, defined waist",
-  thick: "curvy feminine figure, wide hips, defined waist",
-};
-
-const MAKEUP_MAP: Record<string, string> = {
-  natural: "natural minimal makeup with visible lip gloss and subtle mascara",
-  classic: "classic polished makeup with defined eyeliner, mascara, subtle contour, lip colour",
-};
-
-function ageToDescription(ageStr: string): string {
-  const num = parseInt(ageStr, 10);
-  if (isNaN(num) || num <= 24) return "20 year old young-woman, round soft face, soft cheeks, big bright-eyes, small-nose, natural lips, smooth skin, soft jaw, small-chin, youthful compact features";
-  return "24 year old woman, visible cheekbones, clean jawline, balanced features, clear skin";
-}
 
 function extractXaiImageUrl(data: any): string | null {
   const candidates = [
