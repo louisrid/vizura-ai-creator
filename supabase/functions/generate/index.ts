@@ -1309,7 +1309,11 @@ serve(async (req) => {
       });
     }
 
-    await logGeneration(adminClient, userId, characterId, prompt, genType, gemCost, true);
+    if (!isFaceRegen && sceneExpansion) {
+      await logGeneration(adminClient, userId, characterId, JSON.stringify(sceneExpansion), "scene_expansion", 0, true);
+    }
+    const loggedPrompt = !isFaceRegen ? finalPrompt : prompt;
+    await logGeneration(adminClient, userId, characterId, loggedPrompt, genType, gemCost, true);
 
     return new Response(
       JSON.stringify({
