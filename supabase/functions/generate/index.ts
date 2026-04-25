@@ -340,16 +340,19 @@ EXAMPLE OUTPUT:
       }),
     });
     if (!response.ok) {
-      console.error("Grok scene expand failed:", response.status);
+      console.error(`Grok scene expansion HTTP error: ${response.status} — falling back to template prompt`);
       return null;
     }
     const data = await response.json();
     const raw = data?.choices?.[0]?.message?.content?.trim();
-    if (!raw) { console.error("Grok scene expand empty"); return null; }
+    if (!raw) {
+      console.error("Grok scene expansion returned empty response — falling back to template prompt");
+      return null;
+    }
     const cleaned = raw.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(cleaned);
     if (!parsed.scene || !parsed.outfit || !parsed.lighting || !parsed.background) {
-      console.error("Grok scene expand missing fields:", Object.keys(parsed));
+      console.error("Grok scene expansion missing required fields:", Object.keys(parsed), "— falling back to template prompt");
       return null;
     }
     console.log("SCENE EXPANSION:", JSON.stringify(parsed));
@@ -708,8 +711,8 @@ async function generateAngleAndBody(
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
         console.log("Angle generated:", angleUrl?.slice(0, 80));
       }
-    } catch (e) {
-      console.error("3/4 angle generation failed:", e);
+    } catch (e: any) {
+      console.error("3/4 angle reference generation failed:", e?.message || e);
     }
   }
 
@@ -729,8 +732,8 @@ async function generateAngleAndBody(
         bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
       }
       console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
-    } catch (e) {
-      console.error("Full-body anchor generation failed:", e);
+    } catch (e: any) {
+      console.error("Full-body anchor reference generation failed:", e?.message || e);
     }
   }
 
@@ -1232,7 +1235,7 @@ serve(async (req) => {
         console.log("Face references:", faceImageUrls.length);
 
         sceneExpansion = await expandSceneWithGrok(prompt, photoType, expression, characterBodyType, characterBustSize, characterHairStyle, characterHairColour, XAI_API_KEY);
-        if (!sceneExpansion) console.log("Scene expansion failed, using fallback");
+        if (!sceneExpansion) console.log("Scene expansion unavailable — using template fallback prompt");
         finalPrompt = buildFinalPrompt(sceneExpansion, prompt, photoType, characterTraits, characterBodyType, expression, characterBustSize, characterCountry, characterHairStyle, characterHairColour);
         const grokResult = await generatePhoto(finalPrompt, faceImageUrls, XAI_API_KEY, aspectRatio);
         const result = grokResult ? await storeImagePermanently(grokResult, userId, adminClient, "photo") : null;
