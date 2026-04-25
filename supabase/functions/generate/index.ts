@@ -213,7 +213,6 @@ function buildCharacterTraits(char: any): string {
   const parts: string[] = [];
 
   if (char.age) {
-    parts.push(`${char.age} year old woman`);
     parts.push(ageToDescription(char.age));
   }
 
