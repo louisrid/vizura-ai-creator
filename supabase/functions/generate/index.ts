@@ -476,59 +476,53 @@ async function xaiImageEdit(
 
 /* ── generate face options (text-to-image, always 3:4) ── */
 async function generateFaceImages(
-  prompt: string,
+  charData: any,
   count: number,
   apiKey: string,
   adminClient: any,
   userId: string,
   previousFaces: string[] = []
 ): Promise<string[]> {
-  const variations = [
-    "big round doe-eyes, small button-nose, soft lips, soft-round face, smooth-chin",
-    "very large doe-eyes, small button-nose, soft natural lips, soft-round face, smooth-chin",
-    "large bright almond-eyes, small button-nose, soft lips, slim oval face, smooth-chin",
-  ];
-
-  const makeupVariations = [
-    "defined mascara, eyeliner, eyeshadow, blush, lip tint, polished influencer makeup",
-    "mascara, eyeliner, light eyeshadow, blush, natural polished makeup",
-    "defined mascara, eyeliner, eyeshadow, blush, lip colour, glam makeup",
-  ];
-
-  const beautyCore = "extremely attractive young-woman, soft-rounded jaw, small-rounded chin, slim face, very small button-nose, skin with visible pores and colour variation, long styled hair past shoulders, plump lips with soft pink tint, mascara, eyeliner, eyeshadow, blush, confident subtle closed-mouth smile";
-
   const imageUrls: string[] = [];
   const targetCount = Math.min(count, 3);
   const previousSet = new Set(previousFaces.filter(Boolean));
 
+  const ageNum = parseInt(charData.age, 10);
+  const ageDesc = (isNaN(ageNum) || ageNum <= 24) ? FACE_AGE_DESC.young : FACE_AGE_DESC.older;
+  const skinKey = (charData.country || "").toLowerCase();
+  const skinTone = PHOTO_SKIN_TONE[skinKey] || "fair skin";
+  const raceFeatures = FACE_RACE_FEATURES[skinKey] || "";
+  const hairColour = (charData.hair || "").toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
+  const hairStyleMatch = charData.description?.match(/^(.*?)\s*hair\./i);
+  const hairStyle = (hairStyleMatch?.[1]?.trim() || "straight").toLowerCase();
+  let hairDesc = `Long ${hairColour} hair draped over shoulders`.trim();
+  if (hairStyle === "bangs") hairDesc = `Long ${hairColour} hair with soft curtain bangs draped over shoulders`;
+  else if (hairStyle === "straight") hairDesc = `Long straight ${hairColour} hair draped over shoulders`;
+  else if (hairStyle === "curly" || hairStyle === "wavy") hairDesc = `Long ${hairColour} hair with soft voluminous waves draped over shoulders`;
+  else if (hairStyle) hairDesc = `Long ${hairStyle} ${hairColour} hair draped over shoulders`.trim();
+  const eyeMap: Record<string, string> = { blue: "subtle dark grey-blue", green: "dark rich emerald-green", brown: "warm deep brown" };
+  const eyeKey = (charData.eye || "").toLowerCase();
+  const eyeDesc = `${eyeMap[eyeKey] || charData.eye || "brown"} eyes`;
+  const blondePattern = /\b(cool\s+white-blonde|white-blonde|platinum-blonde|blonde)\b/i;
+  const blondePicks = ["cool white-blonde", "cool white-blonde", "light platinum-blonde"];
+
   for (let i = 0; i < targetCount; i++) {
-    const variation = variations[i] || variations[0];
-    const makeupVar = makeupVariations[i] || makeupVariations[0];
-    const faceOnlyPrompt = stripFacePromptBodyLanguage(prompt);
-
-    let tonedPrompt = faceOnlyPrompt;
-
-    const blondePattern = /\b(cool\s+white-blonde|white-blonde|platinum-blonde|blonde)\b/i;
-    if (blondePattern.test(tonedPrompt)) {
-      const picks = ["cool white-blonde", "cool white-blonde", "light platinum-blonde"];
-      tonedPrompt = tonedPrompt.replace(blondePattern, picks[Math.floor(Math.random() * picks.length)]);
+    const variation = FACE_VARIATIONS[i] || FACE_VARIATIONS[0];
+    const makeupVar = FACE_MAKEUP_VARIATIONS[i] || FACE_MAKEUP_VARIATIONS[0];
+    let finalHairDesc = hairDesc;
+    if (blondePattern.test(finalHairDesc)) {
+      finalHairDesc = finalHairDesc.replace(blondePattern, blondePicks[Math.floor(Math.random() * blondePicks.length)]);
     }
-
-    const raceFeatures: Record<string, string> = {
-      asian: ", east-asian eyelid-fold, flatter nose-bridge, soft round face, clearly asian complexion, warm skin not orange, no green cast",
-      black: ", fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
-      dark: ", fuller natural lips, wider soft nose, slim face, brown-toned blush, brown lip colour, visible makeup",
-      tan: ", defined brow-bone, olive warm undertone, strong lashes",
-    };
-    let raceAppend = "";
-    for (const [key, features] of Object.entries(raceFeatures)) {
-      if (tonedPrompt.toLowerCase().includes(key + " skin") || tonedPrompt.toLowerCase().includes(key + " tone")) {
-        raceAppend = features;
-        break;
-      }
-    }
-
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
+    const sections: string[] = [];
+    sections.push(ageDesc);
+    sections.push(skinTone);
+    if (raceFeatures) sections.push(raceFeatures);
+    sections.push(finalHairDesc);
+    sections.push(eyeDesc);
+    sections.push(makeupVar);
+    sections.push(variation);
+    sections.push(FACE_IDENTITY_TAIL);
+    const positivePrompt = sections.join(". ");
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
