@@ -315,12 +315,13 @@ STRICT RULES:
 - lighting names a specific light source and describes shadow/highlight behavior, ending with "slight sheen on skin".
 - background names 2-3 concrete props or surfaces and ends with "fully sharp in background".
 - When describing poses, use natural confident language. Avoid words like sultry, seductive, sensual, provocative. Use words like relaxed, confident, natural, casual instead.
+- Never use the words sultry, seductive, sensual, provocative, maximum cleavage, deep plunging, or thong. Use relaxed, confident, natural, casual instead. Describe clothing simply without exaggerating how revealing it is.
 EXAMPLE INPUT: "lying on bed wearing a bralette", selfie, casual smile, slim, regular bust, straight, cool white-blonde
 EXAMPLE OUTPUT:
-{"scene":"Casual iPhone selfie of a woman lying on her back on a white unmade bed, propped up on her elbows with shoulders lifted and chest pushed forward, one knee bent up, head tilted slightly, body angled toward camera, direct eye contact with relaxed sultry expression lips slightly parted","hair_context":"fanned out across the white pillow with face-framing strands","outfit":"Wearing a tiny white cotton bralette with thin straps and deep plunging neckline showing maximum cleavage, bare stomach visible","lighting":"Soft morning sunlight streaming through a window from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin","background":"White linen sheets and wooden headboard fully sharp in background"}
+{"scene":"Casual iPhone selfie of a woman lying on her back on a white unmade bed, propped up on her elbows with shoulders lifted and natural pose, one knee bent up, head tilted slightly, body angled toward camera, direct eye contact with relaxed confident expression","hair_context":"fanned out across the white pillow with face-framing strands","outfit":"Wearing a tiny white cotton bralette with thin straps and low neckline, bare stomach visible","lighting":"Soft morning sunlight streaming through a window from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin","background":"White linen sheets and wooden headboard fully sharp in background"}
 EXAMPLE INPUT: "mirror selfie in bedroom wearing cropped top and thong", mirror_selfie, casual smile, curvy, extra large bust, wavy, brown
 EXAMPLE OUTPUT:
-{"scene":"Casual iPhone mirror selfie of a woman standing in a dim bedroom facing a full-length mirror, hip popped to one side, free hand resting on her hip, phone held at chest height in other hand, head tilted slightly, direct eye contact with relaxed sultry expression lips slightly parted","hair_context":"loose and slightly messy with face-framing strands","outfit":"Wearing a cropped white ribbed tank top cut short just under her bust with deep scoop neckline showing maximum cleavage, paired with a tiny black thong sitting high on her hips with thin side straps, bare stomach and full hips visible","lighting":"Warm bedside lamp lighting from behind creating uneven harsh glow with blown-out highlights on the wall behind her and real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin","background":"Messy bedroom with unmade bed and scattered clothes fully sharp in background"}`;
+{"scene":"Casual iPhone mirror selfie of a woman standing in a dim bedroom facing a full-length mirror, hip popped to one side, free hand resting on her hip, phone held at chest height in other hand, head tilted slightly, direct eye contact with relaxed confident expression","hair_context":"loose and slightly messy with face-framing strands","outfit":"Wearing a cropped white ribbed tank top cut short just under her bust with low scoop neckline, paired with black underwear sitting on her hips, bare stomach visible","lighting":"Warm bedside lamp lighting from behind creating uneven harsh glow with blown-out highlights on the wall behind her and real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin","background":"Messy bedroom with unmade bed and scattered clothes fully sharp in background"}`;
   const userMsg = `"${userScene}", ${cameraLabel.toLowerCase()}, ${exprLabel}, ${bodyType || "regular"}, ${bustSize || "regular"} bust, ${hairStyle}, ${hairColour}`;
   try {
     const response = await fetch("https://api.x.ai/v1/chat/completions", {
@@ -719,24 +720,21 @@ async function generateAngleAndBody(
 
   if (target === "body" || target === "both") {
     try {
-      console.log("Generating composite reference sheet...");
-      // Original body anchor prompt — temporarily replaced with composite sheet
-      // const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
-      // const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
-      // const rawBodyBust = (bustSize || "regular").toLowerCase();
-      // const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
-      // const bustDesc = BUST_SIZE_MAP[bustKey] || "";
-      // const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
-
-      const bodyPrompt = `Character reference sheet of a ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}, four views arranged in a 2x2 grid on plain white background: top left shows front face and upper shoulders, top right shows 3/4 angle profile, bottom left shows full body standing facing camera, bottom right shows side profile. Clean even lighting, white top in all views, sharp focus, realistic skin.`;
-      console.log("Composite sheet prompt:", bodyPrompt.slice(0, 200));
-      const bodyResult = await xaiTextToImage(bodyPrompt, apiKey);
+      console.log("Generating body anchor...");
+      const bodyKey = normalizeBodyType((bodyType || "regular").toLowerCase());
+      const bodyDesc = BODY_ANCHOR_MAP[bodyKey] || BODY_ANCHOR_MAP.regular;
+      const rawBodyBust = (bustSize || "regular").toLowerCase();
+      const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
+      const bustDesc = BUST_SIZE_MAP[bustKey] || "";
+      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
+      const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "3:4");
       if (bodyResult) {
-        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "composite");
+        bodyAnchorUrl = await storeImagePermanently(bodyResult, userId, adminClient, "body");
       }
-      console.log("Composite sheet generated:", bodyAnchorUrl?.slice(0, 80));
+      console.log("Body anchor generated:", bodyAnchorUrl?.slice(0, 80));
     } catch (e: any) {
-      console.error("Composite reference sheet generation failed:", e?.message || e);
+      console.error("Body anchor generation failed:", e?.message || e);
     }
   }
 
@@ -1146,8 +1144,10 @@ serve(async (req) => {
         characterHairStyle = (hairMatch?.[1]?.trim() || "straight").toLowerCase();
         characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
         characterCountry = (charData.country || "").toLowerCase();
-        // Stage C: using composite sheet (stored in body_anchor_url) as single reference
-        if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
+        // Single face ref to reduce moderation triggers
+        if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
+        // if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
+        // if (charData.body_anchor_url) faceImageUrls.push(charData.body_anchor_url);
       }
     }
 
