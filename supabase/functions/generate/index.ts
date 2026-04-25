@@ -308,7 +308,7 @@ function buildFinalPrompt(
   const parts: string[] = [];
 
   if (characterTraits) {
-    parts.push("Exact same single woman as shown consistently across all provided reference images, unified consistent identity, identical facial features hair skin tone body proportions from the combined references, do not average or blend, treat as the same person");
+    parts.push("The exact same woman as in the reference images, 100% identical facial features, exact same face shape, eye shape and color, nose, lips, jawline, IDENTICAL hair color tone highlights and style with no warmth or coolness shift, identical skin tone and texture, preserve every detail from the references");
     parts.push(characterTraits);
   }
   parts.push(scenePrompt);
@@ -336,8 +336,6 @@ function buildFinalPrompt(
   } else {
     parts.push("fully clothed");
   }
-
-  parts.push("maintaining exact same face, body proportions, and identity as in the three reference photos");
 
   const seed = Math.floor(Math.random() * 999999);
   parts.push(`seed:${seed}`);
