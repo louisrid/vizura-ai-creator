@@ -204,7 +204,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full C-D cup breasts, clearly visible prominent chest, noticeable bust",
+  regular: "very large DD-E cup breasts, heavy prominent chest, bust visibly filling and stretching clothing",
   "extra large": "CRITICAL: extremely large G+ cup breasts, massive prominent bust that is the most dominant visible feature, deep wide cleavage, breasts must be unmistakably oversized and impossible to miss, chest stretching and filling clothing tightly, bust visibly protruding forward significantly from the body in every single image",
 };
 
