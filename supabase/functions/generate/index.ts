@@ -63,7 +63,7 @@ const PHOTO_CAMERA_ANGLE: Record<string, string> = {
 const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
 /* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+const FACE_QUALITY = "casual photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, natural soft lighting, looking at camera, sharp focus, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, flat iPhone dynamic range not DSLR, matte finish, candid not studio";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
