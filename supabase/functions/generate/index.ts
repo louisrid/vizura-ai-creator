@@ -374,13 +374,16 @@ function buildFinalPrompt(
 ): string {
   const sections: string[] = [];
 
+  // 0. Identity lock
+  sections.push("Exact same woman as the uploaded reference images, identical face from every angle, perfect face match to references");
+
   // 1. Scene + pose + expression
   if (sceneExpansion?.scene) {
-    sections.push(sceneExpansion.scene.replace("of a woman", "of this fictional woman"));
+    sections.push(sceneExpansion.scene);
   } else {
     const cameraLabel = photoType === "selfie" ? "Casual iPhone selfie" : photoType === "mirror_selfie" ? "Casual iPhone mirror selfie" : "Casual iPhone photo";
     const exprFallback = expression || "natural relaxed expression";
-    sections.push(`${cameraLabel} of this fictional woman, ${scenePrompt}, ${exprFallback}`);
+    sections.push(`${cameraLabel} of a woman, ${scenePrompt}, ${exprFallback}`);
   }
 
   // 2. Body figure + skin tone
