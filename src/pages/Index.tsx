@@ -593,10 +593,19 @@ const Index = () => {
       }
 
       if (fnError) {
+        console.error("[gen-debug] supabase.functions.invoke fnError:", {
+          fnError,
+          message: fnError?.message,
+          name: fnError?.name,
+          status: (fnError as any)?.status,
+          context: (fnError as any)?.context,
+          stringified: (() => { try { return JSON.stringify(fnError); } catch { return "<unstringifiable>"; } })(),
+        });
         const msg = typeof fnError === "object" && fnError.message ? fnError.message : String(fnError);
         throw new Error(msg);
       }
       if (data?.error) {
+        console.error("[gen-debug] edge function returned data.error:", { error: data.error, code: data?.code, fullData: data });
         if (data?.code === "CONTENT_POLICY") {
           toast("not allowed");
           setPhotoOverlayPhase("hidden");
@@ -635,7 +644,20 @@ const Index = () => {
 
       await refetchCredits();
     } catch (e: any) {
-      console.error("Photo generation error:", e);
+      console.error("[gen-debug] photo generation catch:", {
+        error: e,
+        message: e?.message,
+        name: e?.name,
+        stack: e?.stack,
+        timestamp: new Date().toISOString(),
+        prompt: userPrompt,
+        characterId: selectedCharId,
+        photoType,
+        aspectRatio: photoRatio,
+        expression,
+        onboardingComplete,
+        credits,
+      });
       setPhotoOverlayPhase("hidden");
 
       const msg = e?.message || String(e);
