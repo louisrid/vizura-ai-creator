@@ -1127,6 +1127,9 @@ serve(async (req) => {
     let characterTraits: string | null = null;
     let characterBodyType: string | undefined;
     let characterBustSize: string | undefined;
+    let characterHairStyle = "straight";
+    let characterHairColour = "";
+    let characterCountry = "";
     let faceImageUrls: string[] = [];
     if (characterId) {
       const { data: charData } = await adminClient
@@ -1140,6 +1143,10 @@ serve(async (req) => {
         characterTraits = buildCharacterTraits(charData);
         characterBodyType = normalizeBodyType((charData.body || "regular").toLowerCase());
         characterBustSize = (charData.bust_size || "regular").toLowerCase();
+        const hairMatch = charData.description?.match(/^(.*?)\s*hair\./i);
+        characterHairStyle = (hairMatch?.[1]?.trim() || "straight").toLowerCase();
+        characterHairColour = charData.hair?.toLowerCase() === "blonde" ? "cool white-blonde" : (charData.hair || "");
+        characterCountry = (charData.country || "").toLowerCase();
         if (charData.face_image_url) faceImageUrls.push(charData.face_image_url);
         if (charData.face_angle_url) faceImageUrls.push(charData.face_angle_url);
         // temporarily disabled: body anchor reference
