@@ -63,7 +63,7 @@ const PHOTO_CAMERA_ANGLE: Record<string, string> = {
 const PHOTO_TECH_TAIL = "entire image completely sharp edge to edge with deep depth of field and zero background blur or bokeh, flat iPhone dynamic range not DSLR, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, subtle digital camera noise and compression artefacts, candid not studio, slightly imperfect framing, natural asymmetry in hair and makeup";
 
 /* ── face generation quality prompt ─────────────────────── */
-const FACE_QUALITY = "passport photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, soft even lighting, looking at camera, sharp focus, matte skin with visible pores and natural skin-texture";
+const FACE_QUALITY = "casual photo, plain white background, face and upper shoulders centred with space above head, low-scoop white top at neckline, natural soft lighting, looking at camera, sharp focus, realistic skin with visible pore texture and micro-detail no airbrushed smoothness no freckles no moles, flat iPhone dynamic range not DSLR, matte finish, candid not studio";
 
 const XAI_IMAGE_MODEL = "grok-imagine-image";
 
@@ -387,7 +387,11 @@ function buildFinalPrompt(
     sections.push(PHOTO_IDENTITY);
   }
 
-  // 2. Scene + pose + expression
+  // 2. Camera angle + tech tail
+  const cameraAngle = PHOTO_CAMERA_ANGLE[photoType] || PHOTO_CAMERA_ANGLE["photo"];
+  sections.push(`${cameraAngle}, ${PHOTO_TECH_TAIL}`);
+
+  // 3. Scene + pose + expression
   if (sceneExpansion?.scene) {
     sections.push(sceneExpansion.scene);
   } else {
@@ -396,14 +400,14 @@ function buildFinalPrompt(
     sections.push(`${cameraLabel} of a woman, ${scenePrompt}, ${exprFallback}`);
   }
 
-  // 3. Body figure + skin tone
+  // 4. Body figure + skin tone
   const normBody = normalizeBodyType((bodyType || "regular").toLowerCase());
   const bustKey = (bustSize === "xl" || bustSize === "extra large") ? "extra large" : "regular";
   const bodyFig = PHOTO_BODY_FIGURE[normBody]?.[bustKey] || PHOTO_BODY_FIGURE["regular"]["regular"];
   const skinTone = PHOTO_SKIN_TONE[country || ""] || "fair skin";
   sections.push(`${bodyFig}, ${skinTone}`);
 
-  // 4. Hair + scene context
+  // 5. Hair + scene context
   const mappedColour = (hairColour || "").toLowerCase() === "blonde" ? "cool white-blonde" : (hairColour || "");
   let hairBase = `Long ${mappedColour} hair`.trim();
   if (hairStyle === "bangs") hairBase = `Long ${mappedColour} hair with soft curtain bangs`;
@@ -413,33 +417,29 @@ function buildFinalPrompt(
   const hairContext = sceneExpansion?.hair_context || "with face-framing strands";
   sections.push(`${hairBase} ${hairContext}`);
 
-  // 5. Outfit
+  // 6. Outfit
   if (sceneExpansion?.outfit) {
     sections.push(sceneExpansion.outfit);
   } else {
     sections.push(`Wearing the outfit described: ${scenePrompt}`);
   }
 
-  // 6. Makeup
+  // 7. Makeup
   sections.push(PHOTO_MAKEUP);
 
-  // 7. Lighting
+  // 8. Lighting
   if (sceneExpansion?.lighting) {
     sections.push(sceneExpansion.lighting);
   } else {
     sections.push("Natural lighting from the side creating uneven glow with real shadows across one side of her face, specular highlights on nose and lip, slight sheen on skin");
   }
 
-  // 8. Background
+  // 9. Background
   if (sceneExpansion?.background) {
     sections.push(sceneExpansion.background);
   } else {
     sections.push("Surroundings fully sharp in background");
   }
-
-  // 9. Camera angle + tech tail
-  const cameraAngle = PHOTO_CAMERA_ANGLE[photoType] || PHOTO_CAMERA_ANGLE["photo"];
-  sections.push(`${cameraAngle}, ${PHOTO_TECH_TAIL}`);
 
   const finalPrompt = sections.join(". ");
   console.log("FINAL PROMPT:", finalPrompt);
@@ -631,7 +631,7 @@ async function generateFaceImages(
       }
     }
 
-    const positivePrompt = `${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}. ${FACE_QUALITY}`;
+    const positivePrompt = `${FACE_QUALITY}. ${tonedPrompt}, ${beautyCore}, ${makeupVar}, ${variation}${raceAppend}`;
     console.log(`Face gen ${i + 1}/${targetCount} starting...`);
 
     let retries = 0;
@@ -709,7 +709,7 @@ async function generateAngleAndBody(
       const rawAngleBust = (bustSize || "regular").toLowerCase();
       const angleBustKey = (rawAngleBust === "xl" || rawAngleBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[angleBustKey] || "";
-      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, same white background, same lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Realistic skin with visible pores, micro texture, peach fuzz. Relaxed neutral expression, lips together.`;
+      const anglePrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores, micro texture, peach fuzz, flat iPhone dynamic range not DSLR, matte finish, candid not studio. A ${characterTraits.includes('young-woman') ? 'young-woman' : 'woman'} with ${characterTraits}. ${bustDesc}. Tight white v-neck top, plain white background, natural soft lighting. Head turned 45 degrees to the left showing 3/4 profile. Framed from top of head to stomach. Relaxed neutral expression, lips together.`;
       const angleResult = await xaiImageEdit(anglePrompt, [faceUrl], apiKey, "3:4");
       if (angleResult) {
         angleUrl = await storeImagePermanently(angleResult, userId, adminClient, "angle");
@@ -729,7 +729,7 @@ async function generateAngleAndBody(
       const bustKey = (rawBodyBust === "xl" || rawBodyBust === "extra large") ? "extra large" : "regular";
       const bustDesc = BUST_SIZE_MAP[bustKey] || "";
 
-      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. Same white background, same lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Realistic skin with visible pores and natural texture. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
+      const bodyPrompt = `Exact same woman as the uploaded face reference image, identical face from every angle, perfect face match to the reference. Realistic skin with visible pores and natural texture, flat iPhone dynamic range not DSLR, matte finish, candid not studio. Petite young woman, standing straight upright facing camera, relaxed natural posture, arms behind back. Tight white v-neck top tucked into leggings, ${bustDesc}, visible cleavage, chest filling the top. Tight black leggings. plain white background, natural soft lighting. ${bodyDesc}, natural feminine body not athletic not muscular, smooth flat-stomach. Neutral relaxed expression, lips together. Framed with space above head down to mid-thigh.`;
       console.log("Body anchor prompt:", bodyPrompt.slice(0, 200));
       const bodyResult = await xaiImageEdit(bodyPrompt, [faceUrl], apiKey, "2:3");
       if (bodyResult) {

@@ -3,7 +3,7 @@ import foxEmojiImg from "@/assets/fox-emoji.png";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, RefreshCw, Gem, Home } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, Gem } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
@@ -966,7 +966,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   };
 
   const showDashes = !isHeroSlide;
-  const canExitFlow = skipWelcome && isLoggedIn;
+  
 
   return createPortal(
     <div
@@ -1012,7 +1012,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div>
       </div>
 
-      {/* Arrow buttons + Home button — fade in sync with slide content */}
+      {/* Arrow buttons — fade in sync with slide content */}
       <AnimatePresence initial={false}>
         {showNavigationDelayed && (
           <motion.div
@@ -1022,7 +1022,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45, ease: "easeInOut" }}
             className="absolute inset-x-0 z-10 flex flex-col items-center"
-            style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 2%)" }}
+            style={{ bottom: "max(calc(env(safe-area-inset-bottom, 0px) + 50px), 8%)" }}
           >
             <div className="flex items-center justify-center gap-4 md:gap-6">
               <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
@@ -1030,23 +1030,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               </motion.div>
               <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
             </div>
-            {canExitFlow && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault(); e.stopPropagation();
-                  sessionStorage.setItem("facefox_creator_dismissed", "1");
-                  handleClose();
-                }}
-                className="mt-3 flex items-center justify-center transition-opacity duration-150"
-                style={{ width: 76, height: 76 }}
-              >
-                <Home size={38} strokeWidth={2} color="#ffffff" />
-              </button>
-            )}
-            {!canExitFlow && (
-              <div style={{ height: 88, pointerEvents: "none" }} />
-            )}
           </motion.div>
         )}
       </AnimatePresence>
