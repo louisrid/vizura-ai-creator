@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, User } from "lucide-react";
+import { Loader2, Users, ImageIcon, Sparkles, ArrowLeft, Download, User, Copy } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import ModalCloseButton from "@/components/ModalCloseButton";
@@ -324,10 +324,46 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
-                  <div className="px-3 md:px-4 pt-2.5 pb-2.5">
-                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug" style={{ color: "#ffffff" }}>
+                  <div className="px-3 md:px-4 pt-2.5 pb-2.5 flex items-start gap-2">
+                    <p className="text-[10px] md:text-[12px] font-[800] lowercase leading-snug line-clamp-2 flex-1" style={{ color: "#ffffff" }}>
                       {expanded.prompt}
                     </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const btn = e.currentTarget;
+                        btn.style.backgroundColor = "hsl(var(--card))";
+                        setTimeout(() => { btn.style.backgroundColor = "#000000"; }, 150);
+                        const text = expanded!.prompt;
+                        const copyFallback = () => {
+                          try {
+                            const ta = document.createElement("textarea");
+                            ta.value = text;
+                            ta.style.position = "fixed";
+                            ta.style.left = "-9999px";
+                            document.body.appendChild(ta);
+                            ta.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(ta);
+                            return true;
+                          } catch { return false; }
+                        };
+                        const done = () => { toast.success("copied"); };
+                        if (navigator.clipboard?.writeText) {
+                          navigator.clipboard.writeText(text).then(done).catch(() => {
+                            if (copyFallback()) done(); else toast.error("copy error");
+                          });
+                        } else {
+                          if (copyFallback()) done(); else toast.error("copy error");
+                        }
+                      }}
+                      className="shrink-0 h-9 w-9 flex items-center justify-center border-[2px] border-[hsl(var(--border-mid))] rounded-[10px]"
+                      style={{ backgroundColor: "#000000" }}
+                      aria-label="copy prompt"
+                    >
+                      <Copy size={13} strokeWidth={2.5} className="text-white" />
+                    </button>
                   </div>
                 )}
               </div>
