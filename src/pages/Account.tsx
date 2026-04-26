@@ -223,7 +223,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
       <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-7 pb-[280px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />
-          <PageTitle className="mb-0">my account</PageTitle>
+          <PageTitle className="mb-0">settings</PageTitle>
         </div>
         <div className="w-full p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
           <button
