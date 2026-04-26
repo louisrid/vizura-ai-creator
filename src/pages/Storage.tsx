@@ -143,6 +143,26 @@ const Storage = () => {
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
+          <button
+            type="button"
+            onClick={toggleHidden}
+            className="ml-auto flex items-center justify-center"
+            style={{
+              width: 40,
+              height: 40,
+              padding: 8,
+              borderRadius: 10,
+              backgroundColor: "#000000",
+              border: "2px solid hsl(0 0% 15%)",
+            }}
+            aria-label={hidden ? "show photos" : "hide photos"}
+          >
+            {hidden ? (
+              <Eye size={20} strokeWidth={2.5} color="#ffffff" />
+            ) : (
+              <EyeOff size={20} strokeWidth={2.5} color="#ffffff" />
+            )}
+          </button>
         </div>
 
         {images.length === 0 ? (
