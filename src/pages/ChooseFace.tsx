@@ -19,6 +19,7 @@ import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeGenerate } from "@/lib/generateApi";
 import PaywallOverlay from "@/components/PaywallOverlay";
