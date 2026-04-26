@@ -311,12 +311,12 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: highlight === idx ? "hsl(0 0% 15%)" : "transparent",
+                          backgroundColor: highlight === idx ? "hsl(var(--border-mid))" : "transparent",
                           borderRadius,
                           touchAction: "none",
                         }}
-                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(0 0% 15%)"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(0 0% 15%)" : "transparent")}
+                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--border-mid))"; }}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(var(--border-mid))" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
