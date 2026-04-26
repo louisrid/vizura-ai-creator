@@ -389,7 +389,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 const Index = () => {
   const { user, loading: authLoading } = useAuth();
   const { credits, refetch: refetchCredits } = useCredits();
-  const { characters: cachedCharacters, charactersReady: cachedCharsLoaded } = useAppData();
+  const { characters: cachedCharacters, charactersReady: cachedCharsLoaded, refetch: refetchAppData } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
 
@@ -646,6 +646,7 @@ const Index = () => {
       } catch {}
 
       await refetchCredits();
+      void refetchAppData();
     } catch (e: any) {
       console.error("[gen-debug] photo generation catch:", {
         error: e,

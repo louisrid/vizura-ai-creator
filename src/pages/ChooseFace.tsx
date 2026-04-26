@@ -19,6 +19,7 @@ import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGems } from "@/contexts/CreditsContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useAppData } from "@/contexts/AppDataContext";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeGenerate } from "@/lib/generateApi";
 import PaywallOverlay from "@/components/PaywallOverlay";
@@ -64,6 +65,7 @@ const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const { subscribed } = useSubscription();
+  const { refetch: refetchAppData } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
 
@@ -705,9 +707,10 @@ const ChooseFace = () => {
       setShowSignIn(false);
       toast.success("created!");
       window.dispatchEvent(new CustomEvent("facefox:characters-changed"));
+      void refetchAppData();
       navigate(`/characters/${cId}`, { replace: true });
     }
-  }, [angleBodyBarComplete, pendingNavCharId, navigate]);
+  }, [angleBodyBarComplete, pendingNavCharId, navigate, refetchAppData]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {

@@ -49,7 +49,8 @@ const Home = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded, generationsReady: cachedGensLoaded } = useAppData();
+  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded, generationsReady: cachedGensLoaded, refetch: refetchAppData } = useAppData();
+  useEffect(() => { void refetchAppData(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const shouldOpenGuidedOnMount = openCreatorRequested;
