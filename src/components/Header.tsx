@@ -311,7 +311,7 @@ const Header = () => {
                           fontWeight: 700,
                           textTransform: "lowercase",
                           color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
-                          backgroundColor: highlight === idx ? "hsl(0 0% 15%)" : "transparent",
+                          backgroundColor: highlight === idx ? "hsl(var(--border-mid))" : "transparent",
                           borderRadius,
                           touchAction: "none",
                         }}
