@@ -855,7 +855,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-5 md:mt-7 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
+        <div className="mt-6 md:mt-8 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -864,7 +864,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[21px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="h-[62px] md:h-[73px] flex-1 min-w-0 px-4 text-[19px] md:text-[22px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
           />
           <motion.button
