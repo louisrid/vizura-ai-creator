@@ -24,19 +24,19 @@ const corsHeaders = {
 /* ── photo prompt constants ────────────────────────────── */
 const PHOTO_BODY_FIGURE: Record<string, Record<string, string>> = {
   slim: {
-    regular: "Slim toned figure with full D cup breasts, prominent chest, visible cleavage, bust filling clothing, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Slim toned figure with natural C cup breasts, modest chest, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Slim toned figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, narrow waist, narrow hips, toned slim arms, flat toned stomach, fit figure",
   },
   regular: {
-    regular: "Hourglass figure with full D cup breasts, prominent chest, visible cleavage, bust filling clothing, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Hourglass figure with natural C cup breasts, modest chest, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Hourglass figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, defined waist, feminine hips, toned slim arms, flat toned stomach, fit figure",
   },
   curvy: {
-    regular: "Curvaceous hourglass figure with full D cup breasts, prominent chest, visible cleavage, bust filling clothing, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with natural C cup breasts, modest chest, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Curvaceous hourglass figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
   thick: {
-    regular: "Curvaceous hourglass figure with full D cup breasts, prominent chest, visible cleavage, bust filling clothing, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
+    regular: "Curvaceous hourglass figure with natural C cup breasts, modest chest, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
     "extra large": "Curvaceous hourglass figure with very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, narrow waist, wide hips, toned slim arms, flat toned stomach, fit figure",
   },
 };
@@ -204,7 +204,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "full D cup breasts, prominent chest, visible cleavage, bust filling clothing",
+  regular: "natural C cup breasts, modest chest",
   "extra large": "very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, visibly protruding forward from the body",
 };
 
