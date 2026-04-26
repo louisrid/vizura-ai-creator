@@ -707,6 +707,7 @@ const ChooseFace = () => {
       setShowSignIn(false);
       toast.success("created!");
       window.dispatchEvent(new CustomEvent("facefox:characters-changed"));
+      void refetchAppData();
       navigate(`/characters/${cId}`, { replace: true });
     }
   }, [angleBodyBarComplete, pendingNavCharId, navigate]);
