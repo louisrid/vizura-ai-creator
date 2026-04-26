@@ -484,29 +484,7 @@ const CharacterDetail = () => {
               {imgSlot(character.body_anchor_url, "full body", "regenerate", regeneratingBody, () => setRegenTarget("body"), revealingBody)}
             </div>
           </div>
-          {/* Latest photos section — only show if there are photos */}
-          {latestPhotos.length > 0 && (
-            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
-              <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
-              <div className="grid grid-cols-3 gap-2">
-                {Array.from({ length: 3 }).map((_, i) => {
-                  const photo = latestPhotos[i];
-                  return (
-                    <div
-                      key={photo?.id ?? `placeholder-${i}`}
-                      className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                      style={{ borderRadius: 10, backgroundColor: "#000000" }}
-                      onClick={() => { if (photo) setZoomedUrl(photo.url); }}
-                    >
-                      {photo && (
-                        <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          {/* Latest photos section removed from mobile */}
           <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-3 py-2">
             <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
