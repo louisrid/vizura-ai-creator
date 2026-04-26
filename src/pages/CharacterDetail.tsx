@@ -528,7 +528,7 @@ const CharacterDetail = () => {
             style={{ height: 52, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
-              <>> create photo <Camera size={18} strokeWidth={3} /></>
+              create photo <Camera size={18} strokeWidth={3} />
             </span>
           </button>
         </div>
