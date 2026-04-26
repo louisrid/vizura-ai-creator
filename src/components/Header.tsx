@@ -244,12 +244,12 @@ const Header = () => {
 
   const menuItems = [
     { label: "home", path: "/", icon: Home, auth: false },
+    { label: "buy gems", path: "/top-ups", icon: Gem, auth: true },
     { label: "create character", path: "/", icon: UserPlus, state: { openCreator: true }, auth: false },
     { label: "create photo", path: "/create", icon: Camera, auth: true },
     { label: "my characters", path: "/characters", icon: LayoutGrid, auth: true },
-    { label: "storage", path: "/storage", icon: Archive, auth: true },
-    { label: "gems", path: "/top-ups", icon: Gem, auth: true },
-    { label: "my account", path: "/account", icon: Settings, auth: false },
+    { label: "my storage", path: "/storage", icon: Archive, auth: true },
+    { label: "settings", path: "/account", icon: Settings, auth: false },
   ];
 
   const isLoggedIn = !!user?.id;
