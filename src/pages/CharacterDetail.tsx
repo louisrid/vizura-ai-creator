@@ -525,10 +525,10 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
-            style={{ height: 52, color: "#000000", borderRadius: 10, backgroundColor: "#ffe603", padding: "0 16px" }}
+            style={{ height: 52, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
-              <><Camera size={18} strokeWidth={2.5} /> create photo</>
+              create photo <Camera size={18} strokeWidth={3} />
             </span>
           </button>
         </div>
@@ -625,10 +625,10 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-base"
-              style={{ color: "#000000", borderRadius: 10, backgroundColor: "#ffe603" }}
+              style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">
-                <><Camera size={18} strokeWidth={2.5} /> create photo</>
+                create photo <Camera size={18} strokeWidth={3} />
               </span>
             </button>
           </div>
