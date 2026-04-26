@@ -45,6 +45,8 @@ interface AppDataContextValue {
   refreshCharacters: () => Promise<void>;
   refreshGenerations: () => Promise<void>;
   refreshAll: () => Promise<void>;
+  /** Re-query characters and generations from Supabase. Alias for refreshAll. */
+  refetch: () => Promise<void>;
 }
 
 const CHARS_KEY = "facefox_cached_characters";
