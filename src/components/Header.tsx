@@ -299,7 +299,7 @@ const Header = () => {
                     : "0";
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 12%)", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 15%)", margin: "0" }} />}
                     <div className="relative">
                       <button
                         data-menu-idx={idx}
