@@ -646,6 +646,7 @@ const Index = () => {
       } catch {}
 
       await refetchCredits();
+      void refetchAppData();
     } catch (e: any) {
       console.error("[gen-debug] photo generation catch:", {
         error: e,
