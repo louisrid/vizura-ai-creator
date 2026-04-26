@@ -105,7 +105,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="inline-flex items-center justify-center h-[52px] md:h-[62px] text-[15px] md:text-[18px] w-[95px] md:w-[120px]"
+    className="inline-flex items-center justify-center h-[52px] md:h-[62px] text-[15px] md:text-[18px] w-[130px] md:w-[155px]"
     style={{
       borderRadius: 10,
       padding: 0,
@@ -888,7 +888,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <div className="flex w-full flex-col items-center">
           <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className="mt-5 md:mt-7 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[20rem] md:max-w-[28rem]">
+          <div className="mt-5 md:mt-7 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
             {trait.options.map((opt) => (
               <InteractivePill
                 key={opt}
