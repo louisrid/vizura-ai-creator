@@ -65,6 +65,7 @@ const ChooseFace = () => {
   const { user, loading: authLoading } = useAuth();
   const { gems, refetch: refetchGems } = useGems();
   const { subscribed } = useSubscription();
+  const { refetch: refetchAppData } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
 
