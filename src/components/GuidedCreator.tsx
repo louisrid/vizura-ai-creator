@@ -105,10 +105,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="inline-flex items-center justify-center h-[54px] md:h-[64px] text-[17px] md:text-[20px]"
+    className="inline-flex items-center justify-center h-[58px] md:h-[68px] text-[18px] md:text-[21px]"
     style={{
       borderRadius: 10,
-      padding: "0 24px",
+      padding: "0 26px",
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
@@ -855,7 +855,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-4 md:mt-6 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
+        <div className="mt-5 md:mt-7 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -864,7 +864,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             placeholder="type a name…"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[54px] md:h-[64px] flex-1 min-w-0 px-4 text-[17px] md:text-[20px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+            className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[21px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
             style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
           />
           <motion.button
@@ -888,7 +888,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <div className="flex w-full flex-col items-center">
           <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className="mt-4 md:mt-6 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[26rem] md:max-w-[33rem]">
+          <div className="mt-5 md:mt-7 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[22rem] md:max-w-[28rem]">
             {trait.options.map((opt) => (
               <InteractivePill
                 key={opt}
