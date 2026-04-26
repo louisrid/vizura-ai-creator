@@ -105,10 +105,10 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="inline-flex items-center justify-center h-[54px] md:h-[64px] text-[17px] md:text-[20px]"
+    className="inline-flex items-center justify-center h-[58px] md:h-[68px] text-[18px] md:text-[21px]"
     style={{
       borderRadius: 10,
-      padding: "0 24px",
+      padding: "0 26px",
       fontWeight: 900,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
