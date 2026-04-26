@@ -710,7 +710,7 @@ const ChooseFace = () => {
       void refetchAppData();
       navigate(`/characters/${cId}`, { replace: true });
     }
-  }, [angleBodyBarComplete, pendingNavCharId, navigate]);
+  }, [angleBodyBarComplete, pendingNavCharId, navigate, refetchAppData]);
 
   const handleSignedIn = useCallback(async () => {
     if (faces.length === 0) {
