@@ -193,11 +193,17 @@ const Storage = () => {
                 className="flex flex-col hover-lift"
               >
                 <button
-                  onClick={() => setExpanded(img)}
+                  onClick={() => { if (!hidden) setExpanded(img); }}
                   className="group relative rounded-t-[10px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
-                    <img src={img.url} alt="" className="h-full w-full object-cover" onError={() => { handleDelete(img); }} />
+                    <img
+                      src={img.url}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      style={hidden ? { filter: "blur(20px) brightness(0.3)" } : undefined}
+                      onError={() => { handleDelete(img); }}
+                    />
                   </AspectRatio>
                 </button>
                 <a
