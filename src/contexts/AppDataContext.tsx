@@ -237,6 +237,7 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
         refreshCharacters,
         refreshGenerations,
         refreshAll,
+        refetch: refreshAll,
       }}
     >
       {children}
