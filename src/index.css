@@ -195,6 +195,20 @@ input[type="range"]::-moz-range-thumb {
 }
 
 
+/* Disable text selection, tap highlight, and callout sitewide */
+* {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Keep selection enabled inside text inputs/textareas so users can edit */
+textarea, input {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
 /* Kill iOS default tap-highlight flash on all buttons/interactive elements */
 button, a[role="button"], [role="button"] {
   -webkit-tap-highlight-color: transparent;
