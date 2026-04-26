@@ -32,6 +32,17 @@ const Storage = () => {
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
   const [newImageIds, setNewImageIds] = useState<Set<string>>(new Set());
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [hidden, setHidden] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try { return localStorage.getItem("facefox_storage_hidden") === "1"; } catch { return false; }
+  });
+  const toggleHidden = () => {
+    setHidden((prev) => {
+      const next = !prev;
+      try { localStorage.setItem("facefox_storage_hidden", next ? "1" : "0"); } catch {}
+      return next;
+    });
+  };
   const highlightedRef = useRef(false);
 
   const hasAuthed = useRef(false);
