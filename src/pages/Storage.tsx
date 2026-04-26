@@ -25,7 +25,8 @@ interface StorageImage {
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars, generationsReady, charactersReady } = useAppData();
+  const { generations, characters: cachedChars, generationsReady, charactersReady, refetch: refetchAppData } = useAppData();
+  useEffect(() => { void refetchAppData(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
