@@ -37,7 +37,7 @@ const SET1_SLIDE1: SlideConfig = {
 };
 
 /* ── Name toast ── */
-const getRandomNameToast = () => "great choice";
+const getRandomNameToast = () => "great choice!";
 
 const TRAITS = [
   { key: "skin", label: "choose skin tone", emoji: "🎨", options: ["asian", "black", "tan", "white"] },
