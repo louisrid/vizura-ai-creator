@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, Trash2, Wand2, Copy } from "lucide-react";
+import { Download, Trash2, Wand2, Copy, Eye, EyeOff } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
@@ -32,6 +32,17 @@ const Storage = () => {
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
   const [newImageIds, setNewImageIds] = useState<Set<string>>(new Set());
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [hidden, setHidden] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try { return localStorage.getItem("facefox_storage_hidden") === "1"; } catch { return false; }
+  });
+  const toggleHidden = () => {
+    setHidden((prev) => {
+      const next = !prev;
+      try { localStorage.setItem("facefox_storage_hidden", next ? "1" : "0"); } catch {}
+      return next;
+    });
+  };
   const highlightedRef = useRef(false);
 
   const hasAuthed = useRef(false);
@@ -132,6 +143,26 @@ const Storage = () => {
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">storage</PageTitle>
+          <button
+            type="button"
+            onClick={toggleHidden}
+            className="ml-auto flex items-center justify-center"
+            style={{
+              width: 40,
+              height: 40,
+              padding: 8,
+              borderRadius: 10,
+              backgroundColor: "#000000",
+              border: "2px solid hsl(0 0% 15%)",
+            }}
+            aria-label={hidden ? "show photos" : "hide photos"}
+          >
+            {hidden ? (
+              <Eye size={20} strokeWidth={2.5} color="#ffffff" />
+            ) : (
+              <EyeOff size={20} strokeWidth={2.5} color="#ffffff" />
+            )}
+          </button>
         </div>
 
         {images.length === 0 ? (
@@ -162,11 +193,17 @@ const Storage = () => {
                 className="flex flex-col hover-lift"
               >
                 <button
-                  onClick={() => setExpanded(img)}
+                  onClick={() => { if (!hidden) setExpanded(img); }}
                   className="group relative rounded-t-[10px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
-                    <img src={img.url} alt="" className="h-full w-full object-cover" onError={() => { handleDelete(img); }} />
+                    <img
+                      src={img.url}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      style={hidden ? { filter: "blur(20px) brightness(0.3)" } : undefined}
+                      onError={() => { handleDelete(img); }}
+                    />
                   </AspectRatio>
                 </button>
                 <a
