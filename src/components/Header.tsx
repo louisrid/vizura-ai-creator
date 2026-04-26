@@ -316,7 +316,7 @@ const Header = () => {
                           touchAction: "none",
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--border-mid))"; }}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(0 0% 15%)" : "transparent")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(var(--border-mid))" : "transparent")}
                       >
                         <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
