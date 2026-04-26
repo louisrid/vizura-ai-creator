@@ -204,7 +204,7 @@ function stripFacePromptBodyLanguage(prompt: string): string {
 
 /* ── bust size descriptor ── */
 const BUST_SIZE_MAP: Record<string, string> = {
-  regular: "natural C cup breasts, modest chest",
+  regular: "C-D cup breasts, noticeable chest, natural cleavage",
   "extra large": "very large G+ cup breasts, extremely heavy prominent chest, deep wide cleavage, bust stretching and filling clothing tightly, visibly protruding forward from the body",
 };
 
