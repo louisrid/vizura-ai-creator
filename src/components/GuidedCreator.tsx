@@ -888,7 +888,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <div className="flex w-full flex-col items-center">
           <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[20rem] md:max-w-[28rem]">
+          <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[21rem] md:max-w-[30rem]">
             {trait.options.map((opt) => (
               <InteractivePill
                 key={opt}
