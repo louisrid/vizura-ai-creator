@@ -46,8 +46,7 @@ const CharacterDetail = () => {
   const { user, loading: authLoading } = useAuth();
   const { refetch: refetchGems } = useGems();
   const navigate = useTransitionNavigate();
-  const { characters: cachedChars, generations: cachedGens, refetch: refetchAppData } = useAppData();
-  useEffect(() => { void refetchAppData(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+  const { characters: cachedChars, generations: cachedGens } = useAppData();
   const [character, setCharacter] = useState<Character | null>(() => {
     const cached = cachedChars.find(c => c.id === id);
     return cached ? cached as unknown as Character : null;
