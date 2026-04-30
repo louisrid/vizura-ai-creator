@@ -259,8 +259,8 @@ const Home = () => {
           </h1>
           <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 3, backgroundColor: "hsl(var(--neon-yellow))" }} />
 
-          {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-6 -mx-[6px] md:-mx-2">
+          {/* Two action buttons */}
+          <div className="flex gap-2 mb-6">
             {/* Create Character - solid yellow */}
             <button
               type="button"
