@@ -334,7 +334,7 @@ const Header = () => {
     document.body,
   ) : null;
 
-  const showFixedMenuButton = isLoggedIn && !isAuthPage && (slideMenuMode || !menuDisabled);
+  const showFixedMenuButton = slideMenuMode && !menuDisabled;
   const fixedMenuButton = showFixedMenuButton ? createPortal(
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 54px)", right: 26 }}>
       <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
@@ -391,8 +391,8 @@ const Header = () => {
                   </div>
                 </div>
 
-                {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
-                <div aria-hidden className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]" />
+                {/* Inline menu button — scrolls with header. Fixed portal version only used in slideMenuMode. */}
+                <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
               </div>
             )}
           </div>
