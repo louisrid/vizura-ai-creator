@@ -728,7 +728,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', paddingTop: '6vh', paddingBottom: '2vh' }}>
-        <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
+        <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
           {[
             { size: 294, w: 8, spd: 0.45, del: 0.22, dash: false, gapFraction: 0.08, baseRotation: 115 },
             { size: 262, w: 2, spd: -0.3, del: 0.14, dash: true, dashArray: "4 3" },
@@ -776,7 +776,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div>
-        <div className="font-display" style={{ fontSize: 76, color: '#ffffff', lineHeight: 1, marginTop: 4, marginBottom: 14, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facebox</div>
+        <div className="font-display" style={{ fontSize: 88, color: '#ffffff', lineHeight: 1, marginTop: 18, marginBottom: 14, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facebox</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: 'hsl(var(--neon-yellow))', border: 'none', borderRadius: 3, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
