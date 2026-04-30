@@ -354,10 +354,10 @@ const Header = () => {
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-1.5 md:gap-2 transition-opacity duration-150">
+                <img src={foxEmojiImg} alt="" className="h-[28px] md:h-[36px] w-auto select-none" draggable={false} />
                 <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facebox</span>
-                <img src={foxEmojiImg} alt="" className="h-[20px] md:h-[26px] w-auto select-none" draggable={false} />
               </button>
-              {isLoggedIn && (
+              {/* {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
                   className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
@@ -370,7 +370,7 @@ const Header = () => {
                 >
                   <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
                 </button>
-              )}
+              )} */}
             </div>
 
             {isLoggedIn && !isAuthPage && !slideMenuMode && (
