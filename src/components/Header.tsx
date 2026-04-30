@@ -40,11 +40,11 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+    className="flex items-center justify-center w-[32px] h-[32px] md:w-[46px] md:h-[46px]"
     style={{
-      borderRadius: 4,
+      borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
+      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#dddddd"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -52,7 +52,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     aria-label="open menu"
     aria-disabled={menuDisabled}
   >
-    <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
+    <svg width="14" height="11" viewBox="0 0 22 16" fill="none" className="md:w-[18px] md:h-[14px]">
       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
@@ -285,7 +285,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(0 0% 15%)",
-                borderRadius: 4,
+                borderRadius: 2,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -294,9 +294,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? "4px 4px 0 0"
+                  ? "2px 2px 0 0"
                   : isLast
-                    ? "0 0 4px 4px"
+                    ? "0 0 2px 2px"
                     : "0";
                 return (
                   <div key={item.label}>
@@ -311,7 +311,7 @@ const Header = () => {
                           fontSize: isDesktop ? 16 : 13,
                           fontWeight: 700,
                           textTransform: "lowercase",
-                          color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
+                          color: isActive ? "#dddddd" : "rgba(255,255,255,0.9)",
                           backgroundColor: highlight === idx ? "hsl(var(--border-mid))" : "transparent",
                           borderRadius,
                           touchAction: "none",
@@ -319,7 +319,7 @@ const Header = () => {
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--border-mid))"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(var(--border-mid))" : "transparent")}
                       >
-                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
+                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#dddddd" }} />
                         {item.label}
                       </button>
                     </div>
@@ -381,7 +381,7 @@ const Header = () => {
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
-                      borderRadius: 4,
+                      borderRadius: 2,
                     }}
                     aria-label="gem balance"
                   >
@@ -391,7 +391,7 @@ const Header = () => {
                 </div>
 
                 {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
-                <div aria-hidden className="w-[42px] h-[42px] md:w-[52px] md:h-[52px]" />
+                <div aria-hidden className="w-[32px] h-[32px] md:w-[46px] md:h-[46px]" />
               </div>
             )}
           </div>
