@@ -44,7 +44,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     style={{
       borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#727272"}`,
+      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#595959"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -354,9 +354,9 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-1.5 md:gap-2 transition-opacity duration-150 leading-none">
+              <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-3 md:gap-3.5 transition-opacity duration-150 leading-none">
                 <img src={foxEmojiImg} alt="" className="h-[32px] md:h-[40px] w-auto select-none block shrink-0 align-middle" draggable={false} style={{ verticalAlign: "middle" }} />
-                <span className="text-[25px] md:text-[32px] text-white inline-flex items-center" style={{ lineHeight: 1, fontFamily: '"Bebas Neue", sans-serif', fontWeight: 400, letterSpacing: "3px" }}>facebox</span>
+                <span className="font-display text-[25px] md:text-[32px] text-white inline-flex items-center" style={{ lineHeight: 1 }}>facebox</span>
               </button>
               {/* {isLoggedIn && (
                 <button
@@ -387,7 +387,7 @@ const Header = () => {
                     aria-label="gem balance"
                   >
                     <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                    <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
+                    <span className="font-gem text-[18px] md:text-[22px] text-white">{gems}</span>
                   </div>
                 </div>
 

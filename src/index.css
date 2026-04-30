@@ -102,9 +102,9 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inconsolata', ui-monospace, monospace;
-    font-weight: 500;
-    letter-spacing: 0;
+    font-family: 'Inconsolata', ui-monospace, monospace !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
     overflow: hidden;
     overscroll-behavior: contain;
     overscroll-behavior-y: none;
@@ -113,6 +113,29 @@
     width: 100%;
     height: 100%;
     touch-action: manipulation;
+  }
+
+  /* Force Inconsolata 500 on every element by default — opt-in to display font with .font-display */
+  body, body * {
+    font-family: 'Inconsolata', ui-monospace, monospace;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  /* Bebas Neue display font — wordmark + gem numbers */
+  .font-display,
+  .font-display * {
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-weight: 400 !important;
+    letter-spacing: 3px !important;
+  }
+
+  /* Gem-number variant — Bebas Neue but tighter letter-spacing for numerals */
+  .font-gem,
+  .font-gem * {
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-weight: 400 !important;
+    letter-spacing: 1px !important;
   }
 
   #root {
