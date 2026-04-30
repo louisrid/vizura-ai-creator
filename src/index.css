@@ -35,8 +35,8 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* neon yellow accent — #eaeaea */
-    --neon-yellow: 0 0% 87%;
+    /* theme accent — #ffffff */
+    --neon-yellow: 0 0% 100%;
     --neon-yellow-foreground: 0 0% 0%;
 
     /* loader bar — light blue */
