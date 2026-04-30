@@ -376,7 +376,7 @@ const Header = () => {
 
             {isLoggedIn && !isAuthPage && !slideMenuMode && (
               <div className="flex items-center gap-3 md:gap-5">
-                <div className="relative" style={{ transform: "translateX(0px)" }}>
+                <div className="relative" style={{ transform: "translateX(-2px)" }}>
                   <div
                     className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
                     style={{
@@ -392,7 +392,7 @@ const Header = () => {
                 </div>
 
                 {/* Inline menu button — scrolls with header. Fixed portal version only used in slideMenuMode. */}
-                <div style={{ transform: "translateX(-4px)" }}>
+                <div style={{ transform: "translateX(-6px)" }}>
                   <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
                 </div>
               </div>
