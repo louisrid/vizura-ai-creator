@@ -307,7 +307,7 @@ const Home = () => {
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
-              {showLocks && <LockOverlay borderRadius={10} />}
+              {showLocks && <LockOverlay borderRadius={4} />}
             </button>
           </div>
 
@@ -323,7 +323,7 @@ const Home = () => {
                 >
                   see all →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={4} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -384,7 +384,7 @@ const Home = () => {
                 <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 4 }}>
                   manage →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={4} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -506,7 +506,7 @@ const Home = () => {
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
-              {showLocks && <LockOverlay borderRadius={10} />}
+              {showLocks && <LockOverlay borderRadius={4} />}
             </button>
           </div>
 
@@ -522,7 +522,7 @@ const Home = () => {
                 >
                   see all →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={4} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
@@ -583,7 +583,7 @@ const Home = () => {
                 <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 4 }}>
                   manage →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {!onboardingComplete && <LockOverlay borderRadius={4} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
