@@ -374,7 +374,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 2 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 3 }}
     onClick={onClick}
     disabled={disabled}
   >

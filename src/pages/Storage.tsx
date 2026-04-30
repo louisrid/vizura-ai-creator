@@ -171,7 +171,7 @@ const Storage = () => {
             <button
               onClick={() => navigate("/create")}
               className="h-12 md:h-14 w-full max-w-[12rem] md:max-w-[16rem] mx-auto bg-neon-yellow text-sm md:text-base font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-              style={{ borderRadius: 2 }}
+              style={{ borderRadius: 3 }}
             >
               create a photo
             </button>

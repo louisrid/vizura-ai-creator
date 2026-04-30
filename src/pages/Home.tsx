@@ -315,11 +315,11 @@ const Home = () => {
           <section className="mb-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 2 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 3 }}>
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
-                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 2 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}
                 >
                   see all →
                 </button>
@@ -380,8 +380,8 @@ const Home = () => {
           <section className="mt-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 2 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 2 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 3 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={4} />}
@@ -514,11 +514,11 @@ const Home = () => {
           <section className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 2 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 3 }}>
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
-                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 2 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}
                 >
                   see all →
                 </button>
@@ -579,8 +579,8 @@ const Home = () => {
           <section className="mt-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 2 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 2 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 3 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={4} />}

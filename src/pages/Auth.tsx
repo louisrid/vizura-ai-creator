@@ -220,7 +220,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -232,7 +232,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}
               disabled={submitting || googleLoading}
             />
 

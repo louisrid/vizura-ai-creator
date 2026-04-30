@@ -134,7 +134,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
   const imgSlot = (url: string | null | undefined, label: string) => (
     <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 3, backgroundColor: "#000000" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 2 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 3 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "#ffffff" }}>no photo</span>
       )}
@@ -155,7 +155,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
       </div>
 
       <div className="flex flex-col gap-3 max-w-lg">
-        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }} className="p-5">
+        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }} className="p-5">
           <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
             {displayName}, {ageDisplay}
           </h1>
@@ -165,7 +165,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
             {imgSlot(character.body_anchor_url, "full body")}
           </div>
         </div>
-        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }} className="px-4 py-3">
+        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }} className="px-4 py-3">
           <div className="grid grid-cols-4 gap-1.5">
             {traits.map((t) => (
               <div key={t.label} className="rounded-[3px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
