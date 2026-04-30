@@ -827,7 +827,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
                   className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 2, backgroundColor: "hsl(var(--neon-yellow))" }}
+                  style={{ borderRadius: 3, backgroundColor: "hsl(var(--neon-yellow))" }}
                   aria-label="go back"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -860,7 +860,7 @@ const ChooseFace = () => {
                         }}
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
-                          borderRadius: 2,
+                          borderRadius: 3,
                           border: selectedIndex === i ? "3px solid hsl(var(--neon-yellow))" : "3px solid transparent",
                           overflow: "hidden",
                         }}
@@ -884,7 +884,7 @@ const ChooseFace = () => {
                     disabled={selectedIndex === null}
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-none disabled:cursor-not-allowed"
                     style={{
-                      borderRadius: 2,
+                      borderRadius: 3,
                       backgroundColor: selectedIndex !== null ? "hsl(var(--neon-yellow))" : "hsl(var(--card))",
                       color: selectedIndex !== null ? "#000000" : "#ffffff",
                     }}
@@ -915,7 +915,7 @@ const ChooseFace = () => {
                       className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150"
                       disabled={regeneratingFaces && onboardingComplete}
                       style={{
-                        borderRadius: 2,
+                        borderRadius: 3,
                         backgroundColor: "#050a10",
                         border: "2px solid #00e0ff",
                         color: "#ffffff",
@@ -956,9 +956,9 @@ const ChooseFace = () => {
                       <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}>
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
-                            <div key={t.label} className="rounded-[2px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                            <div key={t.label} className="rounded-[3px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[2px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000000", padding: "6px 12px" }}>{t.value}</span>
+                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[3px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000000", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>

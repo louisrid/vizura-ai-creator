@@ -122,7 +122,7 @@ export const GoldButton = ({
       background: "hsl(var(--neon-yellow))",
       borderColor: "hsl(var(--neon-yellow))",
       color: "#000000",
-      borderRadius: 2,
+      borderRadius: 3,
       transition: "transform 0.05s",
     }}
   >
@@ -180,7 +180,7 @@ export const ArrowButton = ({
     style={{
       backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
       border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${LIGHT_BLUE}`,
-      borderRadius: 2,
+      borderRadius: 3,
       outline: "none",
       cursor: disabled ? "default" : "pointer",
       opacity: disabled ? 0.3 : 1,

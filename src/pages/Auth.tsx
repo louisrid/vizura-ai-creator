@@ -177,14 +177,14 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[2px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="rounded-[3px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             {!inWebView && (
               <>
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-                  style={{ background: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 2, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
+                  style={{ background: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 3, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -240,7 +240,7 @@ const Auth = () => {
               onClick={handleEmailAuth}
               disabled={submitting || googleLoading}
               className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 2, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 3, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {submitting ? (
                 <>
