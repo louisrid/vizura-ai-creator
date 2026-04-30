@@ -29,7 +29,7 @@ const useDotGrid = ({ cx, cy, radius, flipX }: DotGridProps) => {
 };
 
 const DotDecal = () => {
-  const dots1 = useDotGrid({ cx: 280, cy: 220, radius: 180, flipX: false });
+  const dots1 = useDotGrid({ cx: 280, cy: 195, radius: 180, flipX: false });
   return (
     <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
       <svg
