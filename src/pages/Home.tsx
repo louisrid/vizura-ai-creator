@@ -255,7 +255,7 @@ const Home = () => {
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-8 pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? ✨
+            what are we making today?{/* ✨ */}
           </h1>
           <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 2, backgroundColor: "#dddddd" }} />
 
@@ -459,7 +459,7 @@ const Home = () => {
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-8 pb-[280px]">
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? ✨
+            what are we making today?{/* ✨ */}
           </h1>
           <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 2, backgroundColor: "#dddddd" }} />
 
