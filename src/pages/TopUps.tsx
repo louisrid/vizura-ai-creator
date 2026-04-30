@@ -144,7 +144,7 @@ const TopUps = () => {
                 className="relative rounded-[3px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
-                  border: "2px solid hsl(var(--border-mid))",
+                  border: "2.5px solid hsl(var(--border-mid))",
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -186,7 +186,7 @@ const TopUps = () => {
               className="relative rounded-[3px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid hsl(var(--border-mid))",
+                border: "2.5px solid hsl(var(--border-mid))",
                 minHeight: 170,
               }}
             >
@@ -210,7 +210,7 @@ const TopUps = () => {
                 <div className="mt-auto pt-2">
                   <span
                     className="inline-flex items-center gap-1.5 rounded-[3px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
-                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
+                    style={{ backgroundColor: "#050a10", border: "2.5px solid #00e0ff" }}
                   >
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                     {pack.gems} gems

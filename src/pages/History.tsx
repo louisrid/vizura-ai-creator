@@ -72,7 +72,7 @@ const History = () => {
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-[3px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
+          <div className="rounded-[3px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2.5px solid hsl(0 0% 12%)" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -133,7 +133,7 @@ const History = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[3px] overflow-hidden"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2.5px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[3px] overflow-hidden"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="truncate flex-1 text-left">{expanded.prompt}</span>
@@ -143,7 +143,7 @@ const History = () => {
             <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
               <button
                 type="button"
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[3px]"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2.5px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[3px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 download <Download size={12} strokeWidth={2.5} />

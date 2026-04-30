@@ -109,7 +109,7 @@ const NavArrow = ({
       style={{
         borderRadius: 3,
         backgroundColor: isForward ? Y : "#000000",
-        border: isForward ? "none" : `2px solid ${Y}`,
+        border: isForward ? "none" : `2.5px solid ${Y}`,
         outline: "none",
         padding: 0,
         cursor: "pointer",

@@ -117,7 +117,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.45, delay: 0.4, ease: "easeInOut" }}
-                className="rounded-[3px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}
+                className="rounded-[3px] border-[2.5px] border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 <img src={resultImageUrl} alt="generated" className="w-[20rem] md:w-[28rem] h-auto object-contain" />
               </motion.div>
