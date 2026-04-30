@@ -206,7 +206,7 @@ const ProgressBarLoader = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.45, ease: "easeInOut" }}
       >
-        <div className="relative overflow-hidden bg-white/10" style={{ width: "14rem", height: 8, borderRadius: 2 }}>
+        <div className="relative overflow-hidden bg-white/10" style={{ width: "14rem", height: 8, borderRadius: 3 }}>
           <div
             className="absolute inset-0"
             style={{
@@ -215,7 +215,7 @@ const ProgressBarLoader = ({
               transition: "transform 120ms linear",
               willChange: "transform",
               background: "linear-gradient(90deg, #00e0ff 0%, #00e0ff 85%, #00bcd4 100%)",
-              borderRadius: 2,
+              borderRadius: 3,
               boxShadow: "0 0 10px #00e0ff, 0 0 20px rgba(0,224,255,0.25)",
             }}
           />

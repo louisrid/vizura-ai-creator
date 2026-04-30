@@ -42,9 +42,9 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     disabled={menuDisabled}
     className="flex items-center justify-center w-[34px] h-[34px] md:w-[44px] md:h-[44px]"
     style={{
-      borderRadius: 2,
+      borderRadius: 3,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#292929"}`,
+      border: `3px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#292929"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -285,7 +285,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(0 0% 15%)",
-                borderRadius: 2,
+                borderRadius: 3,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -382,7 +382,7 @@ const Header = () => {
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
-                      borderRadius: 2,
+                      borderRadius: 3,
                     }}
                     aria-label="gem balance"
                   >
