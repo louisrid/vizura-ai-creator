@@ -42,7 +42,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     disabled={menuDisabled}
     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
     style={{
-      borderRadius: 6,
+      borderRadius: 4,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
       border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
       opacity: menuDisabled ? 0.45 : 1,
@@ -285,7 +285,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(0 0% 15%)",
-                borderRadius: 6,
+                borderRadius: 4,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -294,9 +294,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? "6px 6px 0 0"
+                  ? "4px 4px 0 0"
                   : isLast
-                    ? "0 0 6px 6px"
+                    ? "0 0 4px 4px"
                     : "0";
                 return (
                   <div key={item.label}>
@@ -354,10 +354,10 @@ const Header = () => {
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-1.5 md:gap-2 transition-opacity duration-150">
+                <img src={foxEmojiImg} alt="" className="h-[28px] md:h-[36px] w-auto select-none" draggable={false} />
                 <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facebox</span>
-                <img src={foxEmojiImg} alt="" className="h-[20px] md:h-[26px] w-auto select-none" draggable={false} />
               </button>
-              {isLoggedIn && (
+              {/* {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
                   className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
@@ -370,7 +370,7 @@ const Header = () => {
                 >
                   <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
                 </button>
-              )}
+              )} */}
             </div>
 
             {isLoggedIn && !isAuthPage && !slideMenuMode && (
@@ -381,7 +381,7 @@ const Header = () => {
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
-                      borderRadius: 6,
+                      borderRadius: 4,
                     }}
                     aria-label="gem balance"
                   >

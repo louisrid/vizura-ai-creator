@@ -75,7 +75,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+          style={{ borderRadius: 4, backgroundColor: "#ffe603" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
@@ -93,7 +93,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 4, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {RATIO_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -151,7 +151,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[6px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+    <div className="flex items-stretch rounded-[4px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -169,7 +169,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
                 color: isSelected ? "#000000" : "#ffffff",
-                borderRadius: isFirst && isLast ? "6px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
+                borderRadius: isFirst && isLast ? "4px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
               }}
             >
               {opt}
@@ -200,7 +200,7 @@ const HighlightedPromptArea = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-[6px] border-2 border-input bg-card">
+    <div className="relative overflow-hidden rounded-[4px] border-2 border-input bg-card">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -245,7 +245,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+          style={{ borderRadius: 4, backgroundColor: "#ffe603" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
@@ -263,7 +263,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 4, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {PHOTO_TYPE_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -322,7 +322,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4 transition-colors active:scale-[0.99]"
-          style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+          style={{ borderRadius: 4, backgroundColor: "#ffe603" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
@@ -340,7 +340,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-              style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+              style={{ borderRadius: 4, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
             >
               {EXPRESSION_OPTIONS.map((opt, idx) => (
                 <div key={opt.value}>
@@ -374,7 +374,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 6 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 4 }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -731,13 +731,13 @@ const Index = () => {
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+          style={{ borderRadius: 4, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
         >
           {characters.map((c, idx) => {
             const isFirst = idx === 0;
             const isLast = idx === characters.length - 1 && !(characters.length === 0 && user);
             const isSelected = selectedCharId === c.id;
-            const borderRadius = isFirst && isLast ? "6px" : isFirst ? "6px 6px 0 0" : isLast ? "0 0 6px 6px" : "0";
+            const borderRadius = isFirst && isLast ? "4px" : isFirst ? "4px 4px 0 0" : isLast ? "0 0 4px 4px" : "0";
             return (
               <Fragment key={c.id}>
                 {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
@@ -782,7 +782,7 @@ const Index = () => {
                   navigate("/", { state: { openCreator: true } });
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
-                style={{ borderRadius: "6px" }}
+                style={{ borderRadius: "4px" }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
@@ -824,7 +824,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 4, backgroundColor: "#ffe603" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -843,7 +843,7 @@ const Index = () => {
               {charDropdownContent}
             </div>
 
-            <div className="relative rounded-[6px] border-2 border-input bg-card overflow-hidden">
+            <div className="relative rounded-[4px] border-2 border-input bg-card overflow-hidden">
               <motion.section
                 layout
                 className="relative flex w-full items-center justify-center bg-card"
@@ -894,7 +894,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[6px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[4px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -916,7 +916,7 @@ const Index = () => {
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setCharDropdownOpen((v) => !v)}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 4, backgroundColor: "#ffe603" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -935,7 +935,7 @@ const Index = () => {
               {charDropdownContent}
             </div>
 
-            <div className="relative rounded-[6px] border-2 border-input bg-card overflow-hidden">
+            <div className="relative rounded-[4px] border-2 border-input bg-card overflow-hidden">
               <motion.section
                 layout
                 className="relative flex w-full items-center justify-center bg-card"
@@ -991,7 +991,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[6px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[4px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
