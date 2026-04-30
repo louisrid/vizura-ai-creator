@@ -40,11 +40,11 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[32px] h-[32px] md:w-[46px] md:h-[46px]"
+    className="flex items-center justify-center w-[34px] h-[34px] md:w-[44px] md:h-[44px]"
     style={{
       borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#dddddd"}`,
+      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#727272"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -52,7 +52,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     aria-label="open menu"
     aria-disabled={menuDisabled}
   >
-    <svg width="14" height="11" viewBox="0 0 22 16" fill="none" className="md:w-[18px] md:h-[14px]">
+    <svg width="16" height="13" viewBox="0 0 22 16" fill="none" className="md:w-[20px] md:h-[15px]">
       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
@@ -311,7 +311,7 @@ const Header = () => {
                           fontSize: isDesktop ? 16 : 13,
                           fontWeight: 700,
                           textTransform: "lowercase",
-                          color: isActive ? "#dddddd" : "rgba(255,255,255,0.9)",
+                          color: isActive ? "#727272" : "rgba(255,255,255,0.9)",
                           backgroundColor: highlight === idx ? "hsl(var(--border-mid))" : "transparent",
                           borderRadius,
                           touchAction: "none",
@@ -319,7 +319,7 @@ const Header = () => {
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--border-mid))"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(var(--border-mid))" : "transparent")}
                       >
-                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#dddddd" }} />
+                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#727272" }} />
                         {item.label}
                       </button>
                     </div>
@@ -336,7 +336,7 @@ const Header = () => {
 
   const showFixedMenuButton = isLoggedIn && !isAuthPage && (slideMenuMode || !menuDisabled);
   const fixedMenuButton = showFixedMenuButton ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
+    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 54px)", right: 26 }}>
       <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
     </div>,
     document.body,
@@ -349,6 +349,7 @@ const Header = () => {
         style={{ zIndex: 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
+        <div aria-hidden style={{ height: 9, backgroundColor: "#000000" }} />
         {/* Controls */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
@@ -377,7 +378,7 @@ const Header = () => {
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
@@ -391,7 +392,7 @@ const Header = () => {
                 </div>
 
                 {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
-                <div aria-hidden className="w-[32px] h-[32px] md:w-[46px] md:h-[46px]" />
+                <div aria-hidden className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]" />
               </div>
             )}
           </div>
