@@ -251,6 +251,7 @@ const AppRoutes = () => {
   const { loading: authLoading, user } = useAuth();
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
   const [headerRevealed, setHeaderRevealed] = useState(false);
+  const splashHiddenRef = useRef(false);
   useEffect(() => {
     const eventName = getBlockingLoadersEventName();
     const handleBlockingLoaders = (event: Event) => {
@@ -276,15 +277,8 @@ const AppRoutes = () => {
   const hasUserContext = !!user || hasCachedUser;
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setDataLoadGracePassed(true), 1500);
+    const timer = setTimeout(() => setDataLoadGracePassed(true), 2500);
     return () => clearTimeout(timer);
-  }, []);
-  useEffect(() => {
-    const hardTimeout = setTimeout(() => {
-      hideStartupSplash();
-      setHeaderRevealed(true);
-    }, 3000);
-    return () => clearTimeout(hardTimeout);
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
@@ -295,7 +289,10 @@ const AppRoutes = () => {
   useEffect(() => {
     if (stillResolving || blockingLoaders > 0) return;
     const timer = setTimeout(() => {
-      if (getBlockingLoaderCount() === 0) hideStartupSplash();
+      if (getBlockingLoaderCount() === 0) {
+        splashHiddenRef.current = true;
+        hideStartupSplash();
+      }
     }, 50);
     return () => clearTimeout(timer);
   }, [stillResolving, blockingLoaders, location.key]);
@@ -315,7 +312,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
-      {(blockingLoaders > 0 || suppressUnauthRoutes) && <LoadingScreen />}
+      {((blockingLoaders > 0 && !splashHiddenRef.current) || suppressUnauthRoutes) && <LoadingScreen />}
       {headerRevealed && !suppressUnauthRoutes && (
         <>
           <HeaderTransition />
