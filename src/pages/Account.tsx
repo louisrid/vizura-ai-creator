@@ -34,16 +34,16 @@ const Account = () => {
         <DotDecal />
         <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-7 pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-10 w-full">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 6, backgroundColor: "hsl(0 0% 5%)" }} />
-            <div className="h-7 w-28" style={{ borderRadius: 6, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 4, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="h-7 w-28" style={{ borderRadius: 4, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
           <div className="flex flex-col items-center mb-8 mt-4">
             <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
-            <div className="h-4 w-40" style={{ borderRadius: 6, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="h-4 w-40" style={{ borderRadius: 4, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
           <div className="w-full flex flex-col gap-3">
-            <div className="w-full h-14" style={{ borderRadius: 6, backgroundColor: "hsl(0 0% 5%)" }} />
-            <div className="w-full h-14" style={{ borderRadius: 6, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="w-full h-14" style={{ borderRadius: 4, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="w-full h-14" style={{ borderRadius: 4, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
         </main>
       </div>
@@ -80,7 +80,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[4px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             style={{ backgroundColor: "#000000" }}
             onClick={() => toast("coming soon")}
           >
@@ -97,7 +97,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[4px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             style={{ backgroundColor: "#000000" }}
             onClick={() => toast("coming soon")}
           >
@@ -110,7 +110,7 @@ const Account = () => {
         {user?.email === "louisjridland@gmail.com" && (
           <div className="w-full pt-3">
             <button
-              className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[4px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               style={{ backgroundColor: "#000000" }}
               onClick={() => navigate("/admin")}
             >
@@ -127,7 +127,7 @@ const Account = () => {
             color: "#ffffff",
             backgroundColor: "#1a0505",
             border: "2px solid #ff4444",
-            borderRadius: 6,
+            borderRadius: 4,
           }}
           onClick={handleSignOut}
         >
@@ -225,12 +225,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 4, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? (
               <><Loader2 className="animate-spin" size={18} />connecting...</>
@@ -259,7 +259,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -271,14 +271,14 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 4, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
           <button
             onClick={handleEmailAuth}
             disabled={submitting || googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 4, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
           </button>

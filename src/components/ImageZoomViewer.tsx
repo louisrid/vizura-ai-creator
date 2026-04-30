@@ -60,14 +60,14 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
           >
             <ModalCloseButton onClick={onClose} />
 
-            <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6, border: "2px solid hsl(0 0% 12%)" }}>
+            <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 4, border: "2px solid hsl(0 0% 12%)" }}>
               <div className="pt-3" style={{ backgroundColor: "hsl(var(--card))" }} />
               <div className="px-3 overflow-hidden relative">
-                <img src={url} alt="" className="w-full object-contain max-h-[58vh] md:max-h-[70vh] block" style={{ borderRadius: 6 }} />
+                <img src={url} alt="" className="w-full object-contain max-h-[58vh] md:max-h-[70vh] block" style={{ borderRadius: 4 }} />
                 {imageOverlay}
               </div>
               {footer ?? (showDownload && (
-                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 6px 6px" }}>
+                <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 4px 4px" }}>
                   <a href={url} download={downloadFilename} target="_blank" className="flex-1">
                     <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000000", color: "#ffffff" }}>
                       download <Download size={12} strokeWidth={2.5} />
