@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gem, Camera, LayoutGrid, Settings, Home, UserPlus, Archive, User } from "lucide-react";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -352,8 +353,9 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
-                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-1.5 md:gap-2 transition-opacity duration-150">
+                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facebox</span>
+                <img src={foxEmojiImg} alt="" className="h-[20px] md:h-[26px] w-auto select-none" draggable={false} />
               </button>
               {isLoggedIn && (
                 <button
