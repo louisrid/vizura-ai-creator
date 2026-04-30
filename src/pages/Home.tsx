@@ -235,8 +235,7 @@ const Home = () => {
   // Lock conditions: only show locks after state is confirmed — never flash for users with characters
   const showLocks = lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
-  // Post-auth loading: user is signed in but data hasn't finished loading yet
-  const dataLoading = !!user && (!photosLoaded || !charsLoaded || !lockStateResolved);
+  // (dataLoading removed — App-level splash + cached data handle initial render)
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
   const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
