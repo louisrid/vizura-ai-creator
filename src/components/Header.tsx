@@ -349,6 +349,7 @@ const Header = () => {
         style={{ zIndex: 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
+        <div aria-hidden style={{ height: 9, backgroundColor: "#000000" }} />
         {/* Controls */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
@@ -377,7 +378,7 @@ const Header = () => {
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
@@ -391,7 +392,7 @@ const Header = () => {
                 </div>
 
                 {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
-                <div aria-hidden className="w-[32px] h-[32px] md:w-[46px] md:h-[46px]" />
+                <div aria-hidden className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]" />
               </div>
             )}
           </div>
