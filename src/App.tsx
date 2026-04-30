@@ -281,7 +281,7 @@ const AppRoutes = () => {
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
-    authLoading ||
+    (authLoading && !hasCachedUser) ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading;
 
@@ -300,10 +300,16 @@ const AppRoutes = () => {
     }
   }, [stillResolving, blockingLoaders]);
 
+  // Cached user but auth not yet confirmed — don't render Start/Login routes,
+  // they'd flash before auth resolves and redirects the user.
+  const suppressUnauthRoutes =
+    hasCachedUser && authLoading && !user &&
+    (location.pathname === "/" || location.pathname === "/auth");
+
   return (
     <div style={{ overscrollBehavior: "none" }}>
-      {blockingLoaders > 0 && <LoadingScreen />}
-      {headerRevealed && (
+      {(blockingLoaders > 0 || suppressUnauthRoutes) && <LoadingScreen />}
+      {headerRevealed && !suppressUnauthRoutes && (
         <>
           <HeaderTransition />
           <Routes location={location}>
