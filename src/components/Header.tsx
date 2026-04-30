@@ -349,7 +349,7 @@ const Header = () => {
         style={{ zIndex: 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
-        <div aria-hidden style={{ height: 9, backgroundColor: "#000000" }} />
+        <div aria-hidden style={{ height: 4, backgroundColor: "#000000" }} />
         {/* Controls */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
