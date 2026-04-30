@@ -727,7 +727,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const renderHero = () => {
     const on = heroPhase >= 2;
     return (
-      <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', paddingTop: '0', paddingBottom: '22vh' }}>
+      <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', paddingTop: '6vh', paddingBottom: '2vh' }}>
         <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
             { size: 294, w: 8, spd: 0.45, del: 0.22, dash: false, gapFraction: 0.08, baseRotation: 115 },
