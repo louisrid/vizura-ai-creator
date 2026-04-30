@@ -177,14 +177,14 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[1px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="rounded-[2px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             {!inWebView && (
               <>
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-                  style={{ background: "#eaeaea", color: "#000000", borderRadius: 1, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
+                  style={{ background: "#eaeaea", color: "#000000", borderRadius: 2, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -220,7 +220,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 1 }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -232,7 +232,7 @@ const Auth = () => {
               spellCheck={false}
               autoCorrect="off"
               className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 1 }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}
               disabled={submitting || googleLoading}
             />
 
@@ -240,7 +240,7 @@ const Auth = () => {
               onClick={handleEmailAuth}
               disabled={submitting || googleLoading}
               className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: "#eaeaea", color: "#000000", borderRadius: 1, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: "#eaeaea", color: "#000000", borderRadius: 2, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {submitting ? (
                 <>
