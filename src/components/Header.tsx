@@ -44,7 +44,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     style={{
       borderRadius: 3,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2.5px solid ${menuDisabled ? "#0c0c0c" : "#ffffff"}`,
+      border: `2.5px solid ${menuDisabled ? "#191919" : "#ffffff"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -284,7 +284,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2.5px solid #0c0c0c",
+                border: "2.5px solid #191919",
                 borderRadius: 3,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -300,7 +300,7 @@ const Header = () => {
                     : "0";
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#0c0c0c", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#191919", margin: "0" }} />}
                     <div className="relative">
                       <button
                         data-menu-idx={idx}

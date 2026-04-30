@@ -225,7 +225,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))", border: "2.5px solid #0c0c0c" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))", border: "2.5px solid #191919" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
