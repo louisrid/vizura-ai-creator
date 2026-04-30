@@ -312,7 +312,7 @@ const CharacterDetail = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-8 pt-7 pb-[280px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-8 pt-12 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -325,7 +325,7 @@ const CharacterDetail = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-8 pt-7 pb-[280px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-8 pt-12 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -437,7 +437,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-12 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           {onboardingComplete ? <BackButton /> : (
             <button
@@ -513,7 +513,7 @@ const CharacterDetail = () => {
       </div>
 
       {/* Desktop layout — two-column side by side */}
-      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-7 pb-10 min-h-screen">
+      <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-10 pt-12 pb-10 min-h-screen">
         <div className="flex items-center gap-3 mb-8">
           {onboardingComplete ? <BackButton /> : (
             <button
