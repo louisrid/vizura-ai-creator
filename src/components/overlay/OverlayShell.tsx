@@ -44,7 +44,7 @@ const IntroNavArrow = ({
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
       backgroundColor: direction === "right" ? NEON_BLUE : "transparent",
-      border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${NEON_BLUE}`,
+      border: direction === "left" ? `2px solid ${PURE_WHITE}` : `2px solid ${NEON_BLUE}`,
       borderRadius: 3, outline: "none", padding: 0,
       cursor: disabled ? "default" : "pointer",
       opacity: disabled ? 0.3 : 1,

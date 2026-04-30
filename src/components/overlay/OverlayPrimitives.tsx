@@ -179,7 +179,7 @@ export const ArrowButton = ({
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
       backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
-      border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${LIGHT_BLUE}`,
+      border: direction === "left" ? `2px solid ${PURE_WHITE}` : `2px solid ${LIGHT_BLUE}`,
       borderRadius: 3,
       outline: "none",
       cursor: disabled ? "default" : "pointer",
