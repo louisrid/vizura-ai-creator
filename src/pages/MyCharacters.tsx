@@ -73,7 +73,7 @@ const MyCharacters = () => {
           <button
             onClick={handleCreateCharacter}
             className="overflow-hidden transition-transform hover-lift"
-            style={{ borderRadius: 3, backgroundColor: "#0c0c0c", border: "none" }}
+            style={{ borderRadius: 3, backgroundColor: "hsl(0 0% 5%)", border: "none" }}
           >
             <AspectRatio ratio={3 / 4}>
               <div className="flex h-full w-full items-center justify-center">
