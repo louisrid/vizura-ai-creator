@@ -213,7 +213,7 @@ const TopUps = () => {
                     style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
                   >
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
-                    <span className="font-gem text-[18px]">{pack.gems}</span> gems
+                    {pack.gems} gems
                   </span>
                 </div>
               </div>

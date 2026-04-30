@@ -953,7 +953,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300" style={{
-                width: 10, height: 10, borderRadius: 3, flexShrink: 0,
+                width: 10, height: 10, borderRadius: 2, flexShrink: 0,
                 background: i <= dashActive ? Y : "rgba(250,204,21,0.30)",
               }} />
             ))}

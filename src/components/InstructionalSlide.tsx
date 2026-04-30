@@ -189,7 +189,7 @@ const InstructionalSlide = ({
                 style={{
                   width: 10,
                   height: 10,
-                  borderRadius: 3,
+                  borderRadius: 2,
                   flexShrink: 0,
                   background: i <= dashActive ? Y : DASH_INACTIVE,
                 }}

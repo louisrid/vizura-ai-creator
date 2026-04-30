@@ -381,7 +381,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
     {isGenerating ? (
       <><Loader2 className="animate-spin" size={18} />creating...</>
     ) : onboardingComplete ? (
-      <>create photo <span style={{ color: "#00e0ff" }}>·</span> <span className="font-gem text-[18px]">10</span> <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
+      <>create photo <span style={{ color: "#00e0ff" }}>·</span> 10 <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>
     ) : "create 🖌️"}
   </button>
 );
