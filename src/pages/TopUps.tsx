@@ -69,7 +69,7 @@ const TopUps = () => {
   if (!loading && !user) return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-12 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-7 pb-[280px]">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
           <PageTitle className="mb-0">buy gems</PageTitle>
@@ -126,7 +126,7 @@ const TopUps = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-12 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-7 pb-[280px]">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
           <PageTitle className="mb-0">buy gems</PageTitle>
@@ -141,10 +141,10 @@ const TopUps = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.97, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 }}
                 transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="relative rounded-[3px] overflow-hidden p-5"
+                className="relative rounded-[10px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
-                  border: "2.5px solid hsl(var(--border-mid))",
+                  border: "2px solid hsl(var(--border-mid))",
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -159,7 +159,7 @@ const TopUps = () => {
                     <button
                       onClick={handleClaimFree}
                       disabled={claiming}
-                      className="flex items-center gap-2 rounded-[3px] px-5 py-3 text-sm font-[900] lowercase transition-all disabled:opacity-60"
+                      className="flex items-center gap-2 rounded-[10px] px-5 py-3 text-sm font-[900] lowercase transition-all disabled:opacity-60"
                       style={{ backgroundColor: "#ffffff", color: "#000000" }}
                     >
                       {claiming ? (
@@ -183,10 +183,10 @@ const TopUps = () => {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className="relative rounded-[3px] overflow-hidden p-5 flex gap-4"
+              className="relative rounded-[10px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000000",
-                border: "2.5px solid hsl(var(--border-mid))",
+                border: "2px solid hsl(var(--border-mid))",
                 minHeight: 170,
               }}
             >
@@ -201,7 +201,7 @@ const TopUps = () => {
 
                 {pack.badge && (
                   <div className="mt-2">
-                    <span className="inline-block rounded-[3px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                    <span className="inline-block rounded-[10px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
                   </div>
@@ -209,8 +209,8 @@ const TopUps = () => {
 
                 <div className="mt-auto pt-2">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-[3px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
-                    style={{ backgroundColor: "#050a10", border: "2.5px solid #00e0ff" }}
+                    className="inline-flex items-center gap-1.5 rounded-[10px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
+                    style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
                   >
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                     {pack.gems} gems
@@ -231,7 +231,7 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="cart-btn rounded-[3px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
+                  className="cart-btn rounded-[10px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
                   <ShoppingCart size={22} strokeWidth={3} />
                 </span>

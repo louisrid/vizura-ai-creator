@@ -46,7 +46,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
       <div className="relative w-full max-w-md md:max-w-lg">
         <ModalCloseButton onClick={onClose} />
         <div>
-          <img src={photo.image_url} alt="" className="w-full rounded-[3px] object-contain max-h-[60vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+          <img src={photo.image_url} alt="" className="w-full rounded-[10px] object-contain max-h-[60vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
           <div className="mt-4 space-y-2">
             {showPromptButton ? (
               <button
@@ -79,7 +79,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                     if (copyFallback()) done(); else toast.error("copy error");
                   }
                 }}
-                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2.5px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[3px]"
+                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[10px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
@@ -132,9 +132,9 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
   const ageDisplay = displayAge(character.id, character.age);
 
   const imgSlot = (url: string | null | undefined, label: string) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 3, backgroundColor: "#000000" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 10, backgroundColor: "#000000" }}>
       {isValidImg(url) ? (
-        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 3 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+        <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 10 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
         <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "#ffffff" }}>no photo</span>
       )}
@@ -147,7 +147,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 40, height: 40, borderRadius: 3, backgroundColor: "hsl(var(--neon-yellow))" }}
+          style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
@@ -155,7 +155,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
       </div>
 
       <div className="flex flex-col gap-3 max-w-lg">
-        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }} className="p-5">
+        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="p-5">
           <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
             {displayName}, {ageDisplay}
           </h1>
@@ -165,10 +165,10 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
             {imgSlot(character.body_anchor_url, "full body")}
           </div>
         </div>
-        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }} className="px-4 py-3">
+        <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }} className="px-4 py-3">
           <div className="grid grid-cols-4 gap-1.5">
             {traits.map((t) => (
-              <div key={t.label} className="rounded-[3px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+              <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                 <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "#ffffff" }}>{t.label}</span>
                 <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
               </div>
@@ -257,17 +257,17 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 40, height: 40, borderRadius: 3, backgroundColor: "hsl(var(--neon-yellow))" }}
+          style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: "#ffe603" }}
         >
           <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>
-      <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "hsl(var(--neon-yellow))" }}>{email}</p>
+      <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "#ffe603" }}>{email}</p>
       <button
         onClick={() => setConfirmReset(true)}
         className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 transition-transform"
-        style={{ padding: "12px 0", color: "#ff4444", borderRadius: 3, border: "2.5px solid #ff4444", backgroundColor: "transparent" }}
+        style={{ padding: "12px 0", color: "#ff4444", borderRadius: 10, border: "2px solid #ff4444", backgroundColor: "transparent" }}
       >
         reset user
       </button>
@@ -286,7 +286,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                     key={c.id}
                     onClick={() => setViewingCharacter(c)}
                     className="relative overflow-hidden hover-lift transition-transform text-left"
-                    style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))" }}
+                    style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
                   >
                     {c.face_image_url ? (
                       <AspectRatio ratio={3 / 4}>
@@ -320,7 +320,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   <div key={img.id} className="flex flex-col hover-lift">
                     <button
                       onClick={() => setExpanded(img)}
-                      className="group relative rounded-t-[10px] border-[2.5px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
+                      className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
                     >
                       <AspectRatio ratio={3 / 4}>
                         <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -331,7 +331,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                       download={`facefox-${img.id}.png`}
                       target="_blank"
                       className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2.5px solid hsl(var(--border-mid))", borderTop: "none" }}
+                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                     >
                       download
                       <Download size={12} strokeWidth={2.5} />
@@ -363,7 +363,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3, border: "2.5px solid #191919" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
@@ -397,7 +397,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                           if (copyFallback()) done(); else toast.error("copy error");
                         }
                       }}
-                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2.5px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[3px]"
+                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[10px]"
                       style={{ backgroundColor: "#000000" }}
                     >
                       <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
@@ -430,7 +430,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-sm p-5"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3, border: "2.5px solid #191919" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}
             >
               <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
                 reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
@@ -440,7 +440,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={() => setConfirmReset(false)}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50"
-                  style={{ color: "#ffffff", borderRadius: 3, border: "2.5px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
+                  style={{ color: "#ffffff", borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
                 >
                   cancel
                 </button>
@@ -448,7 +448,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={handleReset}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1.5"
-                  style={{ color: "#ffffff", borderRadius: 3, backgroundColor: "#ff4444", border: "2.5px solid #ff4444" }}
+                  style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
                 >
                   {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
                   yes, reset
@@ -552,7 +552,7 @@ const Admin = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-10 pt-12 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[14px] md:px-10 pt-7 pb-[280px]">
 
         {viewingUserId ? (
           <UserStorageView
@@ -580,8 +580,8 @@ const Admin = () => {
                       { label: "characters", value: overview?.characters ?? 0, icon: Sparkles },
                       { label: "photos", value: overview?.photos ?? 0, icon: ImageIcon },
                     ].map(({ label, value, icon: Icon }) => (
-                      <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))" }}>
-                        <Icon size={16} strokeWidth={2.5} style={{ color: "hsl(var(--neon-yellow))" }} className="mb-1 md:w-5 md:h-5" />
+                      <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
+                        <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
                         <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
                         <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>{label}</span>
                       </div>
@@ -596,11 +596,11 @@ const Admin = () => {
                         {photos.map((p: any, i: number) => {
                           const { label, type } = formatPhotoLabel(p.prompt);
                           return (
-                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))", overflow: "hidden" }}>
+                            <button key={i} onClick={() => setSelectedPhoto(p)} className="text-left hover-lift" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", overflow: "hidden" }}>
                               <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
-                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
+                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
                                     {label}
                                   </span>
                                 ) : (
@@ -609,7 +609,7 @@ const Admin = () => {
                                 <div className="flex items-center gap-1.5">
                                   <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "#ffffff" }}>{p.user_email}</p>
                                   {p.character_name && (
-                                    <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "hsl(var(--neon-yellow))" }}>· {p.character_name}</span>
+                                    <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
                                   )}
                                 </div>
                               </div>
@@ -635,7 +635,7 @@ const Admin = () => {
                             key={i}
                             onClick={() => { setViewingUserId(u.user_id); window.scrollTo(0, 0); }}
                             className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20"
-                            style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))" }}
+                            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}
                           >
                             <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
                             <div className="flex items-center gap-3 shrink-0">
@@ -656,7 +656,7 @@ const Admin = () => {
                     {rejected.length > 0 ? (
                       <div className="space-y-1.5">
                         {rejected.map((r: any, i: number) => (
-                          <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))" }}>
+                          <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }}>
                             <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-white leading-snug">{r.prompt_text}</p>
                             <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>
                               {r.user_email} · {fmtDate(r.rejected_at)}

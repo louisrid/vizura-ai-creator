@@ -170,21 +170,21 @@ const Auth = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-12 md:max-w-2xl md:px-10">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[14px] pt-7 md:max-w-2xl md:px-10">
         <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">
             <BackButton />
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[3px] border-[2.5px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             {!inWebView && (
               <>
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-                  style={{ background: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 3, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
+                  style={{ background: "#ffe603", color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -219,8 +219,8 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-[2.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
             <input
@@ -231,8 +231,8 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-[2.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
               disabled={submitting || googleLoading}
             />
 
@@ -240,7 +240,7 @@ const Auth = () => {
               onClick={handleEmailAuth}
               disabled={submitting || googleLoading}
               className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 3, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: "#ffe603", color: "#000000", borderRadius: 10, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {submitting ? (
                 <>

@@ -43,7 +43,7 @@ const ResetPassword = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-[24px] md:px-10 pt-12 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-4 md:px-10 pt-7 pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
         <div className="w-full md:max-w-md">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
@@ -51,22 +51,22 @@ const ResetPassword = () => {
           </div>
 
           {success ? (
-            <div className="border-[2.5px] border-border rounded-[3px] p-6 md:p-8 text-center">
+            <div className="border-[2px] border-border rounded-[10px] p-6 md:p-8 text-center">
               <p className="text-xs md:text-sm font-extrabold lowercase mb-1 text-foreground">password updated</p>
               <p className="text-[10px] md:text-[12px] font-bold lowercase text-foreground/50">redirecting...</p>
             </div>
           ) : !isRecovery ? (
-            <div className="border-[2.5px] border-border rounded-[3px] p-6 md:p-8 text-center">
+            <div className="border-[2px] border-border rounded-[10px] p-6 md:p-8 text-center">
               <p className="text-xs md:text-sm font-extrabold lowercase mb-3 text-foreground">invalid link</p>
               <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px] md:text-[12px]">
                 back to sign in
               </button>
             </div>
           ) : (
-            <div className="border-[2.5px] border-border rounded-[3px] p-4 md:p-6">
+            <div className="border-[2px] border-border rounded-[10px] p-4 md:p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="border-[2.5px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-[3px] text-xs md:text-sm">
+                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-[10px] text-xs md:text-sm">
                     {error}
                   </div>
                 )}
@@ -81,8 +81,8 @@ const ResetPassword = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-[2.5px] border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
-                      style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}
+                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
+                      style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                       placeholder="••••••••"
                     />
                   </div>
@@ -98,8 +98,8 @@ const ResetPassword = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-[2.5px] border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
-                      style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}
+                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
+                      style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                       placeholder="••••••••"
                     />
                   </div>

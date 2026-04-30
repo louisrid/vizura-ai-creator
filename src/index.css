@@ -24,7 +24,7 @@
     --muted: 0 0% 6%;
     --muted-foreground: 0 0% 100%;
 
-    --accent: 0 0% 100%;
+    --accent: 54 100% 51%;
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
@@ -35,8 +35,8 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* theme accent — #ffffff */
-    --neon-yellow: 0 0% 100%;
+    /* neon yellow accent — #ffe603 */
+    --neon-yellow: 54 100% 51%;
     --neon-yellow-foreground: 0 0% 0%;
 
     /* loader bar — light blue */
@@ -59,7 +59,7 @@
     --ambient-blue-3: 231 74% 38%;
 
     --loader-cyan: 189 100% 50%;
-    --loader-gold: 0 0% 100%;
+    --loader-gold: 54 100% 51%;
     --loader-green: 114 90% 45%;
     --loader-pink: 330 80% 55%;
     --loader-blue: 210 100% 55%;
@@ -88,7 +88,7 @@
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 10%;
+    --border-mid: 0 0% 22%;
 
     /* DARKER border grey — for menu dropdowns */
     --border-dark: 0 0% 9%;
@@ -102,9 +102,8 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inconsolata', ui-monospace, monospace !important;
-    font-weight: 800 !important;
-    letter-spacing: 0 !important;
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    font-weight: 700;
     overflow: hidden;
     overscroll-behavior: contain;
     overscroll-behavior-y: none;
@@ -113,21 +112,6 @@
     width: 100%;
     height: 100%;
     touch-action: manipulation;
-  }
-
-  /* Force Inconsolata 700 on every element by default — opt-in to display font with .font-display */
-  body, body * {
-    font-family: 'Inconsolata', ui-monospace, monospace;
-    font-weight: 800;
-    letter-spacing: 0;
-  }
-
-  /* Bebas Neue display font — wordmark only */
-  .font-display,
-  .font-display * {
-    font-family: 'Bebas Neue', sans-serif !important;
-    font-weight: 400 !important;
-    letter-spacing: 3px !important;
   }
 
   #root {
@@ -160,7 +144,7 @@
 /* Content pill */
 .content-pill {
   background: hsl(var(--card));
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0 2px 12px -2px hsl(0 0% 0% / 0.06), 0 1px 4px -1px hsl(0 0% 0% / 0.04);
 }
 
@@ -193,7 +177,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 22px;
   border-radius: 50%;
   background: hsl(var(--neon-yellow));
-  border: 2.5px solid hsl(var(--neon-yellow-foreground));
+  border: 3px solid hsl(var(--neon-yellow-foreground));
   cursor: pointer;
 }
 input[type="range"]::-moz-range-thumb {
@@ -201,7 +185,7 @@ input[type="range"]::-moz-range-thumb {
   height: 22px;
   border-radius: 50%;
   background: hsl(var(--neon-yellow));
-  border: 2.5px solid hsl(var(--neon-yellow-foreground));
+  border: 3px solid hsl(var(--neon-yellow-foreground));
   cursor: pointer;
 }
 
@@ -242,7 +226,7 @@ button, a[role="button"], [role="button"] {
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px -8px rgba(255, 230, 3, 0.15);
   }
 
   /* Subtle border glow on hover */
@@ -250,7 +234,7 @@ button, a[role="button"], [role="button"] {
     transition: border-color 0.2s ease-out;
   }
   .hover-glow:hover {
-    border-color: rgba(255, 255, 255, 0.4) !important;
+    border-color: rgba(255, 230, 3, 0.4) !important;
   }
 }
 

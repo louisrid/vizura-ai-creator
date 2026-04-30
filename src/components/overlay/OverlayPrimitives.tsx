@@ -117,12 +117,12 @@ export const GoldButton = ({
       onClick(e);
     }}
     disabled={disabled}
-    className="relative mt-5 h-16 w-full border-[2.5px] text-xl font-[900] lowercase tracking-tight disabled:opacity-60 active:scale-[0.93]"
+    className="relative mt-5 h-16 w-full border-2 text-xl font-[900] lowercase tracking-tight disabled:opacity-60 active:scale-[0.93]"
     style={{
       background: "hsl(var(--neon-yellow))",
       borderColor: "hsl(var(--neon-yellow))",
       color: "#000000",
-      borderRadius: 3,
+      borderRadius: 10,
       transition: "transform 0.05s",
     }}
   >
@@ -179,8 +179,8 @@ export const ArrowButton = ({
     className="flex h-14 w-14 items-center justify-center active:scale-[1.05]"
     style={{
       backgroundColor: direction === "right" ? LIGHT_BLUE : "transparent",
-      border: direction === "left" ? `2.5px solid ${PURE_WHITE}` : `2.5px solid ${LIGHT_BLUE}`,
-      borderRadius: 3,
+      border: direction === "left" ? `5px solid ${PURE_WHITE}` : `5px solid ${LIGHT_BLUE}`,
+      borderRadius: 10,
       outline: "none",
       cursor: disabled ? "default" : "pointer",
       opacity: disabled ? 0.3 : 1,

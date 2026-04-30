@@ -821,13 +821,13 @@ const ChooseFace = () => {
           <>
             <DotDecal />
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[24px] pt-10 pb-[280px] md:max-w-3xl md:px-10">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-10 pb-[280px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
                 <button
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
                   className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 3, backgroundColor: "hsl(var(--neon-yellow))" }}
+                  style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
                   aria-label="go back"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -860,8 +860,8 @@ const ChooseFace = () => {
                         }}
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
-                          borderRadius: 3,
-                          border: selectedIndex === i ? "2.5px solid hsl(var(--neon-yellow))" : "2.5px solid transparent",
+                          borderRadius: 10,
+                          border: selectedIndex === i ? "3px solid #ffe603" : "3px solid transparent",
                           overflow: "hidden",
                         }}
                       >
@@ -884,8 +884,8 @@ const ChooseFace = () => {
                     disabled={selectedIndex === null}
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-sm md:text-xl font-[900] lowercase transition-none disabled:cursor-not-allowed"
                     style={{
-                      borderRadius: 3,
-                      backgroundColor: selectedIndex !== null ? "hsl(var(--neon-yellow))" : "hsl(var(--card))",
+                      borderRadius: 10,
+                      backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
                       color: selectedIndex !== null ? "#000000" : "#ffffff",
                     }}
                   >
@@ -915,9 +915,9 @@ const ChooseFace = () => {
                       className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-sm md:text-xl font-[900] lowercase transition-all duration-150"
                       disabled={regeneratingFaces && onboardingComplete}
                       style={{
-                        borderRadius: 3,
+                        borderRadius: 10,
                         backgroundColor: "#050a10",
-                        border: "2.5px solid #00e0ff",
+                        border: "2px solid #00e0ff",
                         color: "#ffffff",
                       }}
                     >
@@ -953,12 +953,12 @@ const ChooseFace = () => {
                     ].filter(t => t.value);
                     if (traitItems.length === 0) return null;
                     return (
-                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3 }}>
+                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}>
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
-                            <div key={t.label} className="rounded-[3px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                            <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2.5px] border-[hsl(var(--border-mid))] rounded-[3px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000000", padding: "6px 12px" }}>{t.value}</span>
+                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "#000000", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>
@@ -972,7 +972,7 @@ const ChooseFace = () => {
         )}
 
         {!loading && faces.length === 0 && !showSignIn && (
-          <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[24px] pt-8">
+          <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
             <div className="mt-16 flex flex-col items-center gap-4">
               <p className="text-sm font-[900] lowercase text-white">{generationError || "no faces generated yet"}</p>
               {generationError && (
@@ -980,7 +980,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "hsl(var(--neon-yellow))", color: "#000000", borderRadius: 3 }}
+                  style={{ backgroundColor: "#ffe603", color: "#000000", borderRadius: 10 }}
                 >
                   try again
                 </button>

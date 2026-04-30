@@ -65,20 +65,20 @@ const History = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-10 pt-12 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-4 md:px-10 pt-7 pb-[280px]">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">history</PageTitle>
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-[3px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2.5px solid #191919" }}>
+          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
               className="h-12 md:h-14 w-full max-w-[12rem] mx-auto flex items-center justify-center gap-2 bg-neon-yellow text-sm font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-              style={{ borderRadius: 3 }}
+              style={{ borderRadius: 10 }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
@@ -89,7 +89,7 @@ const History = () => {
               <button
                 key={item.id}
                 onClick={() => setExpanded(item)}
-                className="w-full text-left rounded-[3px] overflow-hidden transition-all hover:border-foreground/60 hover-lift"
+                className="w-full text-left rounded-[10px] overflow-hidden transition-all hover:border-foreground/60 hover-lift"
                 style={{ backgroundColor: "hsl(var(--card))", border: "none" }}
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
@@ -121,7 +121,7 @@ const History = () => {
         onClose={() => setExpanded(null)}
         showDownload={false}
         footer={expanded ? (
-          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 2px 2px" }}>
+          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
               <button
                 type="button"
@@ -133,7 +133,7 @@ const History = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2.5px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[3px] overflow-hidden"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="truncate flex-1 text-left">{expanded.prompt}</span>
@@ -143,7 +143,7 @@ const History = () => {
             <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
               <button
                 type="button"
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2.5px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[3px]"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[10px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 download <Download size={12} strokeWidth={2.5} />

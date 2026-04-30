@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gem, Camera, LayoutGrid, Settings, Home, UserPlus, Archive, User } from "lucide-react";
-import foxEmojiImg from "@/assets/fox-emoji.png";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -40,11 +39,11 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[34px] h-[34px] md:w-[44px] md:h-[44px]"
+    className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
     style={{
-      borderRadius: 3,
+      borderRadius: 10,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2.5px solid ${menuDisabled ? "#191919" : "#ffffff"}`,
+      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -52,7 +51,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     aria-label="open menu"
     aria-disabled={menuDisabled}
   >
-    <svg width="16" height="13" viewBox="0 0 22 16" fill="none" className="md:w-[20px] md:h-[15px]">
+    <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
@@ -284,8 +283,8 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2.5px solid #191919",
-                borderRadius: 3,
+                border: "2px solid hsl(0 0% 15%)",
+                borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -294,13 +293,13 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? "2px 2px 0 0"
+                  ? "10px 10px 0 0"
                   : isLast
-                    ? "0 0 2px 2px"
+                    ? "0 0 10px 10px"
                     : "0";
                 return (
                   <div key={item.label}>
-                    {idx > 0 && <div style={{ height: 2, backgroundColor: "#191919", margin: "0" }} />}
+                    {idx > 0 && <div style={{ height: 2, backgroundColor: "hsl(0 0% 15%)", margin: "0" }} />}
                     <div className="relative">
                       <button
                         data-menu-idx={idx}
@@ -311,7 +310,7 @@ const Header = () => {
                           fontSize: isDesktop ? 16 : 13,
                           fontWeight: 700,
                           textTransform: "lowercase",
-                          color: isActive ? "hsl(var(--neon-yellow))" : "rgba(255,255,255,0.9)",
+                          color: isActive ? "#ffe603" : "rgba(255,255,255,0.9)",
                           backgroundColor: highlight === idx ? "hsl(var(--border-mid))" : "transparent",
                           borderRadius,
                           touchAction: "none",
@@ -319,7 +318,7 @@ const Header = () => {
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "hsl(var(--border-mid))"; }}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = highlight === idx ? "hsl(var(--border-mid))" : "transparent")}
                       >
-                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "hsl(var(--neon-yellow))" }} />
+                        <item.icon size={isDesktop ? 19 : 16} strokeWidth={2.5} className="shrink-0" style={{ color: "#ffe603" }} />
                         {item.label}
                       </button>
                     </div>
@@ -334,9 +333,9 @@ const Header = () => {
     document.body,
   ) : null;
 
-  const showFixedMenuButton = slideMenuMode && !menuDisabled;
+  const showFixedMenuButton = isLoggedIn && !isAuthPage && (slideMenuMode || !menuDisabled);
   const fixedMenuButton = showFixedMenuButton ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 54px)", right: 26 }}>
+    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
     </div>,
     document.body,
@@ -349,50 +348,48 @@ const Header = () => {
         style={{ zIndex: 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
-        <div aria-hidden style={{ height: 8, backgroundColor: "#000000" }} />
         {/* Controls */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between px-[24px] md:px-8 lg:px-12 pt-[45px] md:pt-[57px] pb-3">
+          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-2 md:gap-2.5 transition-opacity duration-150 leading-none">
-                <img src={foxEmojiImg} alt="" className="h-[30px] md:h-[38px] w-auto select-none block shrink-0 align-middle" draggable={false} style={{ verticalAlign: "middle" }} />
-                <span className="font-display text-[24px] md:text-[30px] text-white inline-flex items-center" style={{ lineHeight: 1, transform: "translateY(2px)" }}>facebox</span>
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
+                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
               </button>
-              {/* {isLoggedIn && (
+              {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
                   className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
-                    border: `2.5px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
                   }}
                   aria-label="my account"
                 >
                   <User size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
                 </button>
-              )} */}
+              )}
             </div>
 
             {isLoggedIn && !isAuthPage && !slideMenuMode && (
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
                     style={{
                       backgroundColor: "#050a10",
-                      border: "2.5px solid #00e0ff",
-                      borderRadius: 3,
+                      border: "2px solid #00e0ff",
+                      borderRadius: 10,
                     }}
                     aria-label="gem balance"
                   >
                     <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                    <span className="text-[14px] md:text-[17px] text-white" style={{ fontFamily: "'Inconsolata', ui-monospace, monospace", fontWeight: 700 }}>{gems}</span>
+                    <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
                   </div>
                 </div>
 
-                {/* Inline menu button — scrolls with header. Fixed portal version only used in slideMenuMode. */}
-                <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
+                {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
+                <div aria-hidden className="w-[42px] h-[42px] md:w-[52px] md:h-[52px]" />
               </div>
             )}
           </div>
