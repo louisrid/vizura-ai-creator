@@ -953,7 +953,7 @@ const ChooseFace = () => {
                     ].filter(t => t.value);
                     if (traitItems.length === 0) return null;
                     return (
-                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}>
+                      <div className="mt-4 md:mt-6 px-4 py-3" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 1 }}>
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[1px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
@@ -980,7 +980,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-[12px] font-[900] lowercase"
-                  style={{ backgroundColor: "#eaeaea", color: "#000000", borderRadius: 2 }}
+                  style={{ backgroundColor: "#eaeaea", color: "#000000", borderRadius: 1 }}
                 >
                   try again
                 </button>
