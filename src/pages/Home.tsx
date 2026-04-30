@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { registerBlockingLoader } from "@/lib/startupSplash";
+import { useEffect, useMemo, useState } from "react";
 
 import { displayAge } from "@/lib/displayAge";
 import { User, Copy, Download } from "lucide-react";
