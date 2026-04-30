@@ -375,8 +375,8 @@ const Header = () => {
             </div>
 
             {isLoggedIn && !isAuthPage && !slideMenuMode && (
-              <div className="flex items-center gap-3 md:gap-5" style={{ transform: "translateX(-2px)" }}>
-                <div className="relative" style={{ transform: "translateX(0px)" }}>
+              <div className="flex items-center gap-3 md:gap-5" style={{ transform: "translateX(0px)" }}>
+                <div className="relative" style={{ transform: "translateX(2px)" }}>
                   <div
                     className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
                     style={{
