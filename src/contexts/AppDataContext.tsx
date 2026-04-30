@@ -213,8 +213,16 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setGenerationsReady(false);
     }
 
-    // Background refresh — silently update if data changed
-    void Promise.all([refreshCharacters(), refreshGenerations()]);
+    // Check cache staleness — if older than 30s, refetch immediately in background
+    const tsRaw = (() => { try { return localStorage.getItem(CACHE_TIMESTAMP_KEY); } catch { return null; } })();
+    const ts = tsRaw ? Number(tsRaw) : 0;
+    const isStale = !ts || Date.now() - ts > CACHE_STALE_MS;
+    if (isStale || cachedUserId !== user.id) {
+      void Promise.all([refreshCharacters(), refreshGenerations()]);
+    } else {
+      // Cache is fresh — still kick off a quiet refresh but it's non-urgent
+      void Promise.all([refreshCharacters(), refreshGenerations()]);
+    }
 
     return () => { fetchIdRef.current = id + 1; };
   }, [authLoading, user?.id]);
