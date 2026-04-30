@@ -40,7 +40,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[32px] h-[32px] md:w-[46px] md:h-[46px]"
+    className="flex items-center justify-center w-[34px] h-[34px] md:w-[46px] md:h-[46px]"
     style={{
       borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
@@ -52,7 +52,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     aria-label="open menu"
     aria-disabled={menuDisabled}
   >
-    <svg width="14" height="11" viewBox="0 0 22 16" fill="none" className="md:w-[18px] md:h-[14px]">
+    <svg width="16" height="13" viewBox="0 0 22 16" fill="none" className="md:w-[20px] md:h-[15px]">
       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
