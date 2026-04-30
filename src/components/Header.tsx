@@ -44,7 +44,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     style={{
       borderRadius: 3,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2.5px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#323232"}`,
+      border: `2.5px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#313131"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
