@@ -333,7 +333,8 @@ const Header = () => {
     document.body,
   ) : null;
 
-  const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
+  const showFixedMenuButton = isLoggedIn && !isAuthPage && (slideMenuMode || !menuDisabled);
+  const fixedMenuButton = showFixedMenuButton ? createPortal(
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
     </div>,
