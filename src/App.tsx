@@ -251,6 +251,7 @@ const AppRoutes = () => {
   const { loading: authLoading, user } = useAuth();
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
   const [headerRevealed, setHeaderRevealed] = useState(false);
+  const splashHiddenRef = useRef(false);
   useEffect(() => {
     const eventName = getBlockingLoadersEventName();
     const handleBlockingLoaders = (event: Event) => {
