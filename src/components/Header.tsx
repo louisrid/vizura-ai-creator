@@ -40,7 +40,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+    className="flex items-center justify-center w-[32px] h-[32px] md:w-[46px] md:h-[46px]"
     style={{
       borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
@@ -52,7 +52,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     aria-label="open menu"
     aria-disabled={menuDisabled}
   >
-    <svg width="18" height="14" viewBox="0 0 22 16" fill="none" className="md:w-[22px] md:h-[17px]">
+    <svg width="14" height="11" viewBox="0 0 22 16" fill="none" className="md:w-[18px] md:h-[14px]">
       <rect y="0" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="6.6" width="22" height="2.8" rx="1.4" fill="white" />
       <rect y="13.2" width="22" height="2.8" rx="1.4" fill="white" />
@@ -391,7 +391,7 @@ const Header = () => {
                 </div>
 
                 {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
-                <div aria-hidden className="w-[42px] h-[42px] md:w-[52px] md:h-[52px]" />
+                <div aria-hidden className="w-[32px] h-[32px] md:w-[46px] md:h-[46px]" />
               </div>
             )}
           </div>
