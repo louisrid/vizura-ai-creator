@@ -861,7 +861,7 @@ const ChooseFace = () => {
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
                           borderRadius: 3,
-                          border: selectedIndex === i ? "3px solid hsl(var(--neon-yellow))" : "3px solid transparent",
+                          border: selectedIndex === i ? "2px solid hsl(var(--neon-yellow))" : "2px solid transparent",
                           overflow: "hidden",
                         }}
                       >
