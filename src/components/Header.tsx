@@ -352,7 +352,7 @@ const Header = () => {
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
-                <span className="text-[28px] md:text-[36px] font-[900] text-white tracking-tight">facefox</span>
+                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
               </button>
               {isLoggedIn && (
                 <button
