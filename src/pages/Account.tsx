@@ -80,7 +80,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full rounded-[3px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[3px] border-[2.5px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             style={{ backgroundColor: "#000000" }}
             onClick={() => toast("coming soon")}
           >
@@ -97,7 +97,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[3px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[3px] border-[2.5px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             style={{ backgroundColor: "#000000" }}
             onClick={() => toast("coming soon")}
           >
@@ -110,7 +110,7 @@ const Account = () => {
         {user?.email === "louisjridland@gmail.com" && (
           <div className="w-full pt-3">
             <button
-              className="w-full rounded-[3px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[3px] border-[2.5px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               style={{ backgroundColor: "#000000" }}
               onClick={() => navigate("/admin")}
             >
@@ -126,7 +126,7 @@ const Account = () => {
           style={{
             color: "#ffffff",
             backgroundColor: "#1a0505",
-            border: "2px solid #ff4444",
+            border: "2.5px solid #ff4444",
             borderRadius: 3,
           }}
           onClick={handleSignOut}
@@ -225,7 +225,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))", border: "2.5px solid hsl(0 0% 12%)" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -258,7 +258,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
@@ -270,7 +270,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 3, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />

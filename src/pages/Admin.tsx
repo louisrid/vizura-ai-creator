@@ -79,7 +79,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                     if (copyFallback()) done(); else toast.error("copy error");
                   }
                 }}
-                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[3px]"
+                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2.5px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[3px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
@@ -267,7 +267,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
       <button
         onClick={() => setConfirmReset(true)}
         className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 transition-transform"
-        style={{ padding: "12px 0", color: "#ff4444", borderRadius: 3, border: "2px solid #ff4444", backgroundColor: "transparent" }}
+        style={{ padding: "12px 0", color: "#ff4444", borderRadius: 3, border: "2.5px solid #ff4444", backgroundColor: "transparent" }}
       >
         reset user
       </button>
@@ -320,7 +320,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   <div key={img.id} className="flex flex-col hover-lift">
                     <button
                       onClick={() => setExpanded(img)}
-                      className="group relative rounded-t-[10px] border-[2px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
+                      className="group relative rounded-t-[10px] border-[2.5px] border-b-0 border-border overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
                     >
                       <AspectRatio ratio={3 / 4}>
                         <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -331,7 +331,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                       download={`facefox-${img.id}.png`}
                       target="_blank"
                       className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
+                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2.5px solid hsl(var(--border-mid))", borderTop: "none" }}
                     >
                       download
                       <Download size={12} strokeWidth={2.5} />
@@ -363,7 +363,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3, border: "2px solid hsl(0 0% 12%)" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3, border: "2.5px solid hsl(0 0% 12%)" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
@@ -397,7 +397,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                           if (copyFallback()) done(); else toast.error("copy error");
                         }
                       }}
-                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[3px]"
+                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2.5px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[3px]"
                       style={{ backgroundColor: "#000000" }}
                     >
                       <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
@@ -430,7 +430,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-sm p-5"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3, border: "2px solid hsl(0 0% 12%)" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 3, border: "2.5px solid hsl(0 0% 12%)" }}
             >
               <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
                 reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
@@ -440,7 +440,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={() => setConfirmReset(false)}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50"
-                  style={{ color: "#ffffff", borderRadius: 3, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
+                  style={{ color: "#ffffff", borderRadius: 3, border: "2.5px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
                 >
                   cancel
                 </button>
@@ -448,7 +448,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={handleReset}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1.5"
-                  style={{ color: "#ffffff", borderRadius: 3, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
+                  style={{ color: "#ffffff", borderRadius: 3, backgroundColor: "#ff4444", border: "2.5px solid #ff4444" }}
                 >
                   {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
                   yes, reset

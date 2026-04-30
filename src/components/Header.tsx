@@ -44,7 +44,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     style={{
       borderRadius: 3,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#323232"}`,
+      border: `2.5px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#323232"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -284,7 +284,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid hsl(0 0% 15%)",
+                border: "2.5px solid hsl(0 0% 15%)",
                 borderRadius: 3,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
@@ -365,7 +365,7 @@ const Header = () => {
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
-                    border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                    border: `2.5px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
                   }}
                   aria-label="my account"
                 >
@@ -381,7 +381,7 @@ const Header = () => {
                     className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
                     style={{
                       backgroundColor: "#050a10",
-                      border: "2px solid #00e0ff",
+                      border: "2.5px solid #00e0ff",
                       borderRadius: 3,
                     }}
                     aria-label="gem balance"

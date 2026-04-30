@@ -299,7 +299,7 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
                 backgroundColor: "#000000",
-                border: "2px solid hsl(var(--neon-yellow))",
+                border: "2.5px solid hsl(var(--neon-yellow))",
               }}
             >
               <span className="relative z-[1] text-[16px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -319,7 +319,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
-                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2.5px solid hsl(var(--neon-yellow))", borderRadius: 3 }}
                 >
                   see all →
                 </button>
@@ -381,7 +381,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 3 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2.5px solid hsl(var(--neon-yellow))", borderRadius: 3 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={4} />}
@@ -498,7 +498,7 @@ const Home = () => {
                 borderRadius: 3,
                 color: "#ffffff",
                 backgroundColor: "#000000",
-                border: "2px solid hsl(var(--neon-yellow))",
+                border: "2.5px solid hsl(var(--neon-yellow))",
               }}
             >
               <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -518,7 +518,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
-                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2.5px solid hsl(var(--neon-yellow))", borderRadius: 3 }}
                 >
                   see all →
                 </button>
@@ -580,7 +580,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 3 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid hsl(var(--neon-yellow))", borderRadius: 3 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2.5px solid hsl(var(--neon-yellow))", borderRadius: 3 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={4} />}
@@ -673,7 +673,7 @@ const Home = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[3px] overflow-hidden"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2.5px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[3px] overflow-hidden"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="truncate flex-1 text-left">{selectedImage.prompt}</span>
@@ -683,7 +683,7 @@ const Home = () => {
             <a href={selectedImage.url} download={`facefox-${selectedImage.id}.png`} target="_blank" className="block">
               <button
                 type="button"
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[3px]"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2.5px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white rounded-[3px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 download <Download size={12} strokeWidth={2.5} />
