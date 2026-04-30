@@ -81,7 +81,7 @@ const RatioDropdown = ({ value, onChange }: { value: string; onChange: (v: strin
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -251,7 +251,7 @@ const PhotoTypeDropdown = ({ value, onChange }: { value: string; onChange: (v: s
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -328,7 +328,7 @@ const ExpressionDropdown = ({ value, onChange }: { value: string; onChange: (v: 
           <ChevronDown
             size={18}
             strokeWidth={2.5}
-            className={`text-black/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`text-black transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -838,7 +838,7 @@ const Index = () => {
                 <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
                   {selectedChar?.name || "select character"}
                 </span>
-                <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
+                <ChevronDown size={18} strokeWidth={2.5} className={`text-black transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
               {charDropdownContent}
             </div>
@@ -930,7 +930,7 @@ const Index = () => {
                 <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
                   {selectedChar?.name || "select character"}
                 </span>
-                <ChevronDown size={20} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
+                <ChevronDown size={20} strokeWidth={2.5} className={`text-black transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
               {charDropdownContent}
             </div>
