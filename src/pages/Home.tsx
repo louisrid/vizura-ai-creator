@@ -319,7 +319,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
-                  style={{ color: "#727272", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}
                 >
                   see all →
                 </button>
@@ -381,7 +381,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 2 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#727272", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={4} />}
@@ -518,7 +518,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
-                  style={{ color: "#727272", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}
                 >
                   see all →
                 </button>
@@ -580,7 +580,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 2 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#727272", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #727272", borderRadius: 2 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={4} />}

@@ -789,7 +789,7 @@ const Index = () => {
                 <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                   <span className="text-xs">+</span>
                 </div>
-                <span className="text-lg font-[900] lowercase" style={{ color: "#727272" }}>create character</span>
+                <span className="text-lg font-[900] lowercase" style={{ color: "#ffffff" }}>create character</span>
               </button>
             </Fragment>
           )}
