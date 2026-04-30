@@ -821,7 +821,7 @@ const ChooseFace = () => {
           <>
             <DotDecal />
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-10 pb-[280px] md:max-w-3xl md:px-10">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[24px] pt-10 pb-[280px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">
                 <button
                   type="button"
@@ -972,7 +972,7 @@ const ChooseFace = () => {
         )}
 
         {!loading && faces.length === 0 && !showSignIn && (
-          <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
+          <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[24px] pt-8">
             <div className="mt-16 flex flex-col items-center gap-4">
               <p className="text-sm font-[900] lowercase text-white">{generationError || "no faces generated yet"}</p>
               {generationError && (
