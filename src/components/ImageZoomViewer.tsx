@@ -60,10 +60,10 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
           >
             <ModalCloseButton onClick={onClose} />
 
-            <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 12%)" }}>
+            <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6, border: "2px solid hsl(0 0% 12%)" }}>
               <div className="pt-3" style={{ backgroundColor: "hsl(var(--card))" }} />
               <div className="px-3 overflow-hidden relative">
-                <img src={url} alt="" className="w-full object-contain max-h-[58vh] md:max-h-[70vh] block" style={{ borderRadius: 10 }} />
+                <img src={url} alt="" className="w-full object-contain max-h-[58vh] md:max-h-[70vh] block" style={{ borderRadius: 6 }} />
                 {imageOverlay}
               </div>
               {footer ?? (showDownload && (
