@@ -173,13 +173,8 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     await Promise.all([refreshCharacters(), refreshGenerations()]);
   }, [refreshCharacters, refreshGenerations]);
 
-  // Kick off parallel fetch on mount if we have a cached user — saves time on return visits
-  useEffect(() => {
-    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
-    if (!cachedUserId) return;
-    void Promise.all([refreshCharacters(), refreshGenerations()]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Initial data loading is handled by the user-change effect below.
+  // It hydrates from cache instantly and refetches in background if stale.
 
   // On user change: hydrate from cache instantly, then background refresh
   useEffect(() => {
