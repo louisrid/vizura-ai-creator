@@ -28,7 +28,7 @@ export interface InstructionalSlideProps {
   onForward?: () => void;
 }
 
-const Y = "#727272";
+const Y = "#cbc5c0";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
 
 /* ── Chat bubble pill ── */
