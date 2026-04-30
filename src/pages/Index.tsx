@@ -169,7 +169,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
                 color: isSelected ? "#000000" : "#ffffff",
-                borderRadius: isFirst && isLast ? "4px" : isFirst ? "10px 0 0 10px" : isLast ? "0 10px 10px 0" : "0",
+                borderRadius: isFirst && isLast ? "4px" : isFirst ? "4px 0 0 4px" : isLast ? "0 4px 4px 0" : "0",
               }}
             >
               {opt}
