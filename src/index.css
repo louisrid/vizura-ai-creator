@@ -144,7 +144,7 @@
 /* Content pill */
 .content-pill {
   background: hsl(var(--card));
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 2px 12px -2px hsl(0 0% 0% / 0.06), 0 1px 4px -1px hsl(0 0% 0% / 0.04);
 }
 
