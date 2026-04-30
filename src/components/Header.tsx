@@ -353,9 +353,9 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-1.5 md:gap-2 transition-opacity duration-150">
-                <img src={foxEmojiImg} alt="" className="h-[28px] md:h-[36px] w-auto select-none" draggable={false} />
-                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facebox</span>
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-1.5 md:gap-2 transition-opacity duration-150 leading-none">
+                <img src={foxEmojiImg} alt="" className="h-[28px] md:h-[36px] w-auto select-none block" style={{ verticalAlign: "middle" }} draggable={false} />
+                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none flex items-center">facebox</span>
               </button>
               {/* {isLoggedIn && (
                 <button
