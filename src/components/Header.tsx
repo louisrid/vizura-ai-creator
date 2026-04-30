@@ -392,7 +392,7 @@ const Header = () => {
                 </div>
 
                 {/* Inline menu button — scrolls with header. Fixed portal version only used in slideMenuMode. */}
-                <div style={{ transform: "translateX(-3px)" }}>
+                <div style={{ transform: "translateX(-2.5px)" }}>
                   <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
                 </div>
               </div>
