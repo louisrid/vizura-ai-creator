@@ -388,16 +388,15 @@ const Header = () => {
                   </div>
                 </div>
 
-                <div className="relative">
-                  <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
-                </div>
+                {/* Spacer to reserve room for the fixed menu button so the gem counter doesn't sit underneath it */}
+                <div aria-hidden className="w-[42px] h-[42px] md:w-[52px] md:h-[52px]" />
               </div>
             )}
           </div>
         </div>
       </header>
       {menuDropdown}
-      {slideMenuButton}
+      {fixedMenuButton}
     </>
   );
 };
