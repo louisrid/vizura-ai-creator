@@ -298,11 +298,11 @@ const AppRoutes = () => {
   }, [stillResolving, blockingLoaders, location.key]);
 
   useEffect(() => {
-    if (!stillResolving && blockingLoaders === 0) {
+    if (!stillResolving) {
       const timer = setTimeout(() => setHeaderRevealed(true), 100);
       return () => clearTimeout(timer);
     }
-  }, [stillResolving, blockingLoaders]);
+  }, [stillResolving]);
 
   // Cached user but auth not yet confirmed — don't render Start/Login routes,
   // they'd flash before auth resolves and redirects the user.
@@ -312,7 +312,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
-      {((blockingLoaders > 0 && !splashHiddenRef.current) || suppressUnauthRoutes) && <LoadingScreen />}
+      {(stillResolving || suppressUnauthRoutes) && <LoadingScreen />}
       {headerRevealed && !suppressUnauthRoutes && (
         <>
           <HeaderTransition />
