@@ -17,7 +17,7 @@ const useDotGrid = ({ cx, cy, radius, flipX }: DotGridProps) => {
         const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
         if (dist > radius) continue;
         const normalised = dist / radius;
-        const opacity = Math.min(1, 1.0 * (1 - normalised * normalised));
+        const opacity = 0.22 * (1 - normalised * normalised);
         if (opacity > 0.01) {
           const finalX = flipX ? 430 - x : x;
           result.push({ x: finalX, y, opacity });
@@ -44,7 +44,7 @@ const DotDecal = () => {
             r={1.4}
             fill="hsl(var(--neon-yellow))"
             opacity={d.opacity}
-            className="md:opacity-[0.6]"
+            className="md:opacity-[0.12]"
           />
         ))}
       </svg>
