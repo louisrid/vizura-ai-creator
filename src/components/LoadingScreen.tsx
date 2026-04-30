@@ -35,9 +35,9 @@ const LoadingScreen = () => {
             style={{
               width: "40%",
               height: "100%",
-              background: "#cbc5c0",
+              background: "#eaeaea",
               borderRadius: 2,
-              boxShadow: "0 0 10px #cbc5c0, 0 0 20px rgba(203, 197, 192,0.25)",
+              boxShadow: "0 0 10px #eaeaea, 0 0 20px rgba(234, 234, 234,0.25)",
               animation: "facefox-bar 1.4s ease-in-out infinite",
               position: "absolute",
             }}

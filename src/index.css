@@ -35,7 +35,7 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* neon yellow accent — #cbc5c0 */
+    /* neon yellow accent — #eaeaea */
     --neon-yellow: 0 0% 87%;
     --neon-yellow-foreground: 0 0% 0%;
 
@@ -226,7 +226,7 @@ button, a[role="button"], [role="button"] {
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(203, 197, 192, 0.15);
+    box-shadow: 0 8px 24px -8px rgba(234, 234, 234, 0.15);
   }
 
   /* Subtle border glow on hover */
@@ -234,7 +234,7 @@ button, a[role="button"], [role="button"] {
     transition: border-color 0.2s ease-out;
   }
   .hover-glow:hover {
-    border-color: rgba(203, 197, 192, 0.4) !important;
+    border-color: rgba(234, 234, 234, 0.4) !important;
   }
 }
 
