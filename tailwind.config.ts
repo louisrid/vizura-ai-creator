@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['-apple-system', '"SF Pro Display"', 'system-ui', 'sans-serif'],
+        sans: ['Inconsolata', 'ui-monospace', 'monospace'],
+        display: ['"Bebas Neue"', 'sans-serif'],
       },
       fontSize: {
         'display': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.03em', fontWeight: '800' }],

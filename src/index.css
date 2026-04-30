@@ -102,8 +102,9 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
-    font-weight: 700;
+    font-family: 'Inconsolata', ui-monospace, monospace;
+    font-weight: 500;
+    letter-spacing: 0;
     overflow: hidden;
     overscroll-behavior: contain;
     overscroll-behavior-y: none;

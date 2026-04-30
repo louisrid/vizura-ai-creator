@@ -44,7 +44,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     style={{
       borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
-      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "hsl(var(--neon-yellow))"}`,
+      border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#727272"}`,
       opacity: menuDisabled ? 0.45 : 1,
       pointerEvents: menuDisabled ? "none" : "auto",
       touchAction: "none",
@@ -356,7 +356,7 @@ const Header = () => {
             <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-1.5 md:gap-2 transition-opacity duration-150 leading-none">
                 <img src={foxEmojiImg} alt="" className="h-[32px] md:h-[40px] w-auto select-none block shrink-0 align-middle" draggable={false} style={{ verticalAlign: "middle" }} />
-                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight inline-flex items-center" style={{ lineHeight: 1 }}>facebox</span>
+                <span className="text-[25px] md:text-[32px] text-white inline-flex items-center" style={{ lineHeight: 1, fontFamily: '"Bebas Neue", sans-serif', fontWeight: 400, letterSpacing: "3px" }}>facebox</span>
               </button>
               {/* {isLoggedIn && (
                 <button
