@@ -276,8 +276,15 @@ const AppRoutes = () => {
   const hasUserContext = !!user || hasCachedUser;
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setDataLoadGracePassed(true), 5000);
+    const timer = setTimeout(() => setDataLoadGracePassed(true), 1500);
     return () => clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    const hardTimeout = setTimeout(() => {
+      hideStartupSplash();
+      setHeaderRevealed(true);
+    }, 3000);
+    return () => clearTimeout(hardTimeout);
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
