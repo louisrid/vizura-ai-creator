@@ -42,7 +42,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     disabled={menuDisabled}
     className="flex items-center justify-center w-[34px] h-[34px] md:w-[44px] md:h-[44px]"
     style={{
-      borderRadius: 1,
+      borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
       border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#eaeaea"}`,
       opacity: menuDisabled ? 0.45 : 1,
@@ -285,7 +285,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(0 0% 15%)",
-                borderRadius: 1,
+                borderRadius: 2,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -349,7 +349,7 @@ const Header = () => {
         style={{ zIndex: 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
-        <div aria-hidden style={{ height: 9, backgroundColor: "#000000" }} />
+        <div aria-hidden style={{ height: 4, backgroundColor: "#000000" }} />
         {/* Controls */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
@@ -382,7 +382,7 @@ const Header = () => {
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
-                      borderRadius: 1,
+                      borderRadius: 2,
                     }}
                     aria-label="gem balance"
                   >

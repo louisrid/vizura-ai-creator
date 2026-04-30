@@ -44,7 +44,7 @@ const RegenerateConfirmDialog = ({
             className="relative w-full max-w-sm"
             style={{
               backgroundColor: "#000000",
-              borderRadius: 1,
+              borderRadius: 2,
               border: "2px solid hsl(var(--border-mid))",
               padding: "28px 24px 24px",
             }}
@@ -59,7 +59,7 @@ const RegenerateConfirmDialog = ({
                 onClick={onCancel}
                 disabled={loading}
                 className="flex-1 h-12 text-sm font-[900] lowercase text-white transition-colors disabled:opacity-50"
-                style={{ backgroundColor: "hsl(var(--card))", borderRadius: 1 }}
+                style={{ backgroundColor: "hsl(var(--card))", borderRadius: 2 }}
               >
                 no
               </button>
@@ -68,7 +68,7 @@ const RegenerateConfirmDialog = ({
                   onClick={onConfirm}
                   disabled={loading}
                   className="flex-1 h-12 text-sm font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
-                  style={{ backgroundColor: "#050a10", borderRadius: 1, border: "2px solid #00e0ff", color: "#ffffff" }}
+                  style={{ backgroundColor: "#050a10", borderRadius: 2, border: "2px solid #00e0ff", color: "#ffffff" }}
                 >
                   {loading ? (
                     <Loader2 className="animate-spin mx-auto" size={18} />
@@ -84,7 +84,7 @@ const RegenerateConfirmDialog = ({
                   onClick={onConfirm}
                   disabled={loading}
                   className="flex-1 h-12 text-sm font-[900] lowercase text-black transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: "#eaeaea", borderRadius: 1 }}
+                  style={{ backgroundColor: "#eaeaea", borderRadius: 2 }}
                 >
                   {loading ? <Loader2 className="animate-spin mx-auto" size={18} /> : confirmLabel}
                 </button>
