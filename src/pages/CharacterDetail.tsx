@@ -408,7 +408,7 @@ const CharacterDetail = () => {
           <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 2 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
         ) : null}
         {overlay === "lock" && isValidImg(url) && (
-          <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#727272", top: -6, right: -6 }}>
+          <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#cbc5c0", top: -6, right: -6 }}>
             <Lock size={14} strokeWidth={3} color="#000000" fill="none" />
           </div>
         )}
@@ -443,7 +443,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-              style={{ borderRadius: 2, backgroundColor: "#727272" }}
+              style={{ borderRadius: 2, backgroundColor: "#cbc5c0" }}
               aria-label="go back"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -459,7 +459,7 @@ const CharacterDetail = () => {
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
                 <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))", borderRadius: 2 }} />
-                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 2, backgroundColor: "#727272" }}>
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 2, backgroundColor: "#cbc5c0" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
               </div>
@@ -503,7 +503,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
-            style={{ height: 52, color: "#ffffff", borderRadius: 2, backgroundColor: "#000000", border: "2px solid #727272", padding: "0 16px" }}
+            style={{ height: 52, color: "#ffffff", borderRadius: 2, backgroundColor: "#000000", border: "2px solid #cbc5c0", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
               create photo <Camera size={18} strokeWidth={3} />
@@ -519,7 +519,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[48px] h-[48px]"
-              style={{ borderRadius: 2, backgroundColor: "#727272" }}
+              style={{ borderRadius: 2, backgroundColor: "#cbc5c0" }}
               aria-label="go back"
             >
               <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -537,7 +537,7 @@ const CharacterDetail = () => {
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
                   <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "#000000", border: "2px solid hsl(var(--border-mid))", borderRadius: 2 }} />
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 2, backgroundColor: "#727272" }}>
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 2, backgroundColor: "#cbc5c0" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
                 </div>
@@ -603,7 +603,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-base"
-              style={{ color: "#ffffff", borderRadius: 2, backgroundColor: "#000000", border: "2px solid #727272" }}
+              style={{ color: "#ffffff", borderRadius: 2, backgroundColor: "#000000", border: "2px solid #cbc5c0" }}
             >
               <span className="flex items-center justify-center gap-2">
                 create photo <Camera size={18} strokeWidth={3} />
