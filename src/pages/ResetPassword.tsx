@@ -51,22 +51,22 @@ const ResetPassword = () => {
           </div>
 
           {success ? (
-            <div className="border-[2px] border-border rounded-[2px] p-6 md:p-8 text-center">
+            <div className="border-[2px] border-border rounded-[1px] p-6 md:p-8 text-center">
               <p className="text-xs md:text-sm font-extrabold lowercase mb-1 text-foreground">password updated</p>
               <p className="text-[10px] md:text-[12px] font-bold lowercase text-foreground/50">redirecting...</p>
             </div>
           ) : !isRecovery ? (
-            <div className="border-[2px] border-border rounded-[2px] p-6 md:p-8 text-center">
+            <div className="border-[2px] border-border rounded-[1px] p-6 md:p-8 text-center">
               <p className="text-xs md:text-sm font-extrabold lowercase mb-3 text-foreground">invalid link</p>
               <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px] md:text-[12px]">
                 back to sign in
               </button>
             </div>
           ) : (
-            <div className="border-[2px] border-border rounded-[2px] p-4 md:p-6">
+            <div className="border-[2px] border-border rounded-[1px] p-4 md:p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-[2px] text-xs md:text-sm">
+                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-[1px] text-xs md:text-sm">
                     {error}
                   </div>
                 )}

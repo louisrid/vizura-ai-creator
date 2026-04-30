@@ -141,7 +141,7 @@ const TopUps = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.97, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 }}
                 transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="relative rounded-[2px] overflow-hidden p-5"
+                className="relative rounded-[1px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
                   border: "2px solid hsl(var(--border-mid))",
@@ -159,7 +159,7 @@ const TopUps = () => {
                     <button
                       onClick={handleClaimFree}
                       disabled={claiming}
-                      className="flex items-center gap-2 rounded-[2px] px-5 py-3 text-sm font-[900] lowercase transition-all disabled:opacity-60"
+                      className="flex items-center gap-2 rounded-[1px] px-5 py-3 text-sm font-[900] lowercase transition-all disabled:opacity-60"
                       style={{ backgroundColor: "#ffffff", color: "#000000" }}
                     >
                       {claiming ? (
@@ -183,7 +183,7 @@ const TopUps = () => {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className="relative rounded-[2px] overflow-hidden p-5 flex gap-4"
+              className="relative rounded-[1px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(var(--border-mid))",
@@ -201,7 +201,7 @@ const TopUps = () => {
 
                 {pack.badge && (
                   <div className="mt-2">
-                    <span className="inline-block rounded-[2px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                    <span className="inline-block rounded-[1px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
                   </div>
@@ -209,7 +209,7 @@ const TopUps = () => {
 
                 <div className="mt-auto pt-2">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-[2px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
+                    className="inline-flex items-center gap-1.5 rounded-[1px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
                     style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
                   >
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
@@ -231,7 +231,7 @@ const TopUps = () => {
               >
                 <span className="text-3xl font-[900] text-white">${pack.price}</span>
                 <span
-                  className="cart-btn rounded-[2px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
+                  className="cart-btn rounded-[1px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >
                   <ShoppingCart size={22} strokeWidth={3} />
                 </span>
