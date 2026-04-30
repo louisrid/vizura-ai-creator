@@ -776,7 +776,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div>
-        <div className="font-display" style={{ fontSize: 88, color: '#ffffff', lineHeight: 1, marginTop: 18, marginBottom: 10, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facebox</div>
+        <div className="font-display" style={{ fontSize: 88, color: '#ffffff', lineHeight: 1, marginTop: 18, marginBottom: 4, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>facebox</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 204, padding: '10px 0', fontSize: 32, fontWeight: 900, background: 'hsl(var(--neon-yellow))', border: 'none', borderRadius: 3, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
