@@ -40,7 +40,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[34px] h-[34px] md:w-[46px] md:h-[46px]"
+    className="flex items-center justify-center w-[34px] h-[34px] md:w-[44px] md:h-[44px]"
     style={{
       borderRadius: 2,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
