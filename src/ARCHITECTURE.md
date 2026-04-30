@@ -91,7 +91,7 @@ Synchronous first-frame reads: `facefox_cached_user`, `facefox_onboarding_state`
 ## Design
 
 - Background: #000000
-- Primary yellow: #eaeaea (load bar, arrows, accents)
+- Primary yellow: #ffffff (load bar, arrows, accents)
 - Cyan: #00e0ff (gems, generation progress)
 - Red destructive: #ff4444
 - Card: `hsl(var(--card))` (`hsl(0 0% 6%)`)

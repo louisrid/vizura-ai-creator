@@ -42,7 +42,7 @@ const DotDecal = () => {
             cx={`${(d.x / 430) * 100}%`}
             cy={d.y}
             r={1.4}
-            fill="#eaeaea"
+            fill="hsl(var(--neon-yellow))"
             opacity={d.opacity}
             className="md:opacity-[0.3]"
           />
