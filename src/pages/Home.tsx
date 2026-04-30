@@ -257,7 +257,7 @@ const Home = () => {
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 4, backgroundColor: "#ffe603" }} />
+          <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 2, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6 -mx-[6px] md:-mx-2">
@@ -461,7 +461,7 @@ const Home = () => {
           <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
           </h1>
-          <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 4, backgroundColor: "#ffe603" }} />
+          <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 2, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
