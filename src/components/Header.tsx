@@ -353,7 +353,7 @@ const Header = () => {
         {/* Controls */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between px-[24px] md:px-8 lg:px-12 pt-[45px] md:pt-[57px] pb-3">
-            <div className="flex items-center gap-2 md:gap-2.5" style={{ transform: "translateX(4px)" }}>
+            <div className="flex items-center gap-2 md:gap-2.5">
               <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-2 md:gap-2.5 transition-opacity duration-150 leading-none">
                 <img src={foxEmojiImg} alt="" className="h-[30px] md:h-[38px] w-auto select-none block shrink-0 align-middle" draggable={false} style={{ verticalAlign: "middle", marginLeft: "-5px" }} />
                 <span className="font-display text-[24px] md:text-[30px] text-white inline-flex items-center" style={{ lineHeight: 1, transform: "translateY(2px)", marginLeft: "3px" }}>facebox</span>
@@ -375,8 +375,8 @@ const Header = () => {
             </div>
 
             {isLoggedIn && !isAuthPage && !slideMenuMode && (
-              <div className="flex items-center gap-3 md:gap-5" style={{ transform: "translateX(0px)" }}>
-                <div className="relative" style={{ transform: "translateX(2px)" }}>
+              <div className="flex items-center gap-3 md:gap-5">
+                <div className="relative">
                   <div
                     className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[44px]"
                     style={{
