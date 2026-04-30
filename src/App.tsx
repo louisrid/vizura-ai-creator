@@ -281,7 +281,7 @@ const AppRoutes = () => {
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
   const stillResolving =
-    authLoading ||
+    (authLoading && !hasCachedUser) ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading;
 
