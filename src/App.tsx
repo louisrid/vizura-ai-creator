@@ -312,7 +312,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
-      {(blockingLoaders > 0 || suppressUnauthRoutes) && <LoadingScreen />}
+      {((blockingLoaders > 0 && !splashHiddenRef.current) || suppressUnauthRoutes) && <LoadingScreen />}
       {headerRevealed && !suppressUnauthRoutes && (
         <>
           <HeaderTransition />
