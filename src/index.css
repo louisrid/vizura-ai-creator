@@ -103,7 +103,7 @@
   html, body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inconsolata', ui-monospace, monospace !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     letter-spacing: 0 !important;
     overflow: hidden;
     overscroll-behavior: contain;
@@ -118,7 +118,7 @@
   /* Force Inconsolata 700 on every element by default — opt-in to display font with .font-display */
   body, body * {
     font-family: 'Inconsolata', ui-monospace, monospace;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0;
   }
 
