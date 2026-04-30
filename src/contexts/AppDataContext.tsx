@@ -160,6 +160,7 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
         setGenerations(data as CachedGeneration[]);
         writeLocal(GENS_KEY, data);
         writeLocal(CACHE_USER_KEY, user.id);
+        try { localStorage.setItem(CACHE_TIMESTAMP_KEY, String(Date.now())); } catch {}
       }
     } catch (err) {
       console.error("refreshGenerations failed:", err);
