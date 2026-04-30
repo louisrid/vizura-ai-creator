@@ -661,7 +661,7 @@ const Home = () => {
         onClose={() => setSelectedImage(null)}
         showDownload={false}
         footer={selectedImage ? (
-          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
+          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 6px 6px" }}>
             {selectedImage.prompt && selectedImage.prompt !== "character references" && selectedImage.prompt !== "face generation" && (
               <button
                 type="button"
