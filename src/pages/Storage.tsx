@@ -150,7 +150,7 @@ const Storage = () => {
               width: 40,
               height: 40,
               padding: 8,
-              borderRadius: 10,
+              borderRadius: 6,
               backgroundColor: "#000000",
               border: "2px solid hsl(0 0% 15%)",
             }}
@@ -165,13 +165,13 @@ const Storage = () => {
         </div>
 
         {images.length === 0 ? (
-          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
+          <div className="rounded-[6px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
               className="h-12 md:h-14 w-full max-w-[12rem] md:max-w-[16rem] mx-auto bg-neon-yellow text-sm md:text-base font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-              style={{ borderRadius: 10 }}
+              style={{ borderRadius: 6 }}
             >
               create a photo
             </button>
@@ -267,7 +267,7 @@ const Storage = () => {
                         if (copyFallback()) done(); else toast.error("copy error");
                      }
                    }}
-                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
+                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase text-white text-left rounded-[6px] overflow-hidden"
                    style={{ backgroundColor: "#000000" }}
                  >
                    <span className="truncate flex-1 text-left">{expanded!.prompt}</span>
@@ -275,7 +275,7 @@ const Storage = () => {
                 </button>
               </div>
             )}
-            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
+            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 6px 6px" }}>
               <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="flex-1">
                 <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000000", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />

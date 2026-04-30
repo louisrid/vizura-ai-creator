@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gem, Camera, LayoutGrid, Settings, Home, UserPlus, Archive, User } from "lucide-react";
+import foxEmojiImg from "@/assets/fox-emoji.png";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -41,7 +42,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     disabled={menuDisabled}
     className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
     style={{
-      borderRadius: 10,
+      borderRadius: 6,
       backgroundColor: menuDisabled ? "hsl(0 0% 8%)" : "#000000",
       border: `2px solid ${menuDisabled ? "hsl(0 0% 18%)" : "#ffe603"}`,
       opacity: menuDisabled ? 0.45 : 1,
@@ -284,7 +285,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#000000",
                 border: "2px solid hsl(0 0% 15%)",
-                borderRadius: 10,
+                borderRadius: 6,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
             >
@@ -293,9 +294,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? "10px 10px 0 0"
+                  ? "6px 6px 0 0"
                   : isLast
-                    ? "0 0 10px 10px"
+                    ? "0 0 6px 6px"
                     : "0";
                 return (
                   <div key={item.label}>
@@ -352,8 +353,9 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
-                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
+              <button onClick={() => { handleLogoClick(); }} className="flex items-center gap-1.5 md:gap-2 transition-opacity duration-150">
+                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facebox</span>
+                <img src={foxEmojiImg} alt="" className="h-[20px] md:h-[26px] w-auto select-none" draggable={false} />
               </button>
               {isLoggedIn && (
                 <button
@@ -379,7 +381,7 @@ const Header = () => {
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
-                      borderRadius: 10,
+                      borderRadius: 6,
                     }}
                     aria-label="gem balance"
                   >
