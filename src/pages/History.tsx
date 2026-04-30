@@ -121,7 +121,7 @@ const History = () => {
         onClose={() => setExpanded(null)}
         showDownload={false}
         footer={expanded ? (
-          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 4px 4px" }}>
+          <div className="p-3 md:p-4 space-y-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 2px 2px" }}>
             {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
               <button
                 type="button"

@@ -294,9 +294,9 @@ const Header = () => {
                 const isFirst = idx === 0;
                 const isLast = !user && idx === menuItems.length - 1;
                 const borderRadius = isFirst
-                  ? "4px 4px 0 0"
+                  ? "2px 2px 0 0"
                   : isLast
-                    ? "0 0 4px 4px"
+                    ? "0 0 2px 2px"
                     : "0";
                 return (
                   <div key={item.label}>

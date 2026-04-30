@@ -169,7 +169,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               style={{
                 backgroundColor: isSelected ? "#dddddd" : "transparent",
                 color: isSelected ? "#000000" : "#ffffff",
-                borderRadius: isFirst && isLast ? "4px" : isFirst ? "4px 0 0 4px" : isLast ? "0 4px 4px 0" : "0",
+                borderRadius: isFirst && isLast ? "4px" : isFirst ? "2px 0 0 2px" : isLast ? "0 2px 2px 0" : "0",
               }}
             >
               {opt}
@@ -737,7 +737,7 @@ const Index = () => {
             const isFirst = idx === 0;
             const isLast = idx === characters.length - 1 && !(characters.length === 0 && user);
             const isSelected = selectedCharId === c.id;
-            const borderRadius = isFirst && isLast ? "4px" : isFirst ? "4px 4px 0 0" : isLast ? "0 0 4px 4px" : "0";
+            const borderRadius = isFirst && isLast ? "4px" : isFirst ? "2px 2px 0 0" : isLast ? "0 0 2px 2px" : "0";
             return (
               <Fragment key={c.id}>
                 {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
@@ -782,7 +782,7 @@ const Index = () => {
                   navigate("/", { state: { openCreator: true } });
                 }}
                 className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
-                style={{ borderRadius: "4px" }}
+                style={{ borderRadius: "2px" }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >

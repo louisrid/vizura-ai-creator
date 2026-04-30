@@ -275,7 +275,7 @@ const Storage = () => {
                 </button>
               </div>
             )}
-            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 4px 4px" }}>
+            <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 2px 2px" }}>
               <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="flex-1">
                 <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "#000000", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />
