@@ -354,9 +354,9 @@ const Header = () => {
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[38px] md:pt-[50px] pb-3">
             <div className="flex items-center gap-2 md:gap-2.5">
-              <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-3 md:gap-3.5 transition-opacity duration-150 leading-none">
+              <button onClick={() => { handleLogoClick(); }} className="inline-flex items-center gap-1 md:gap-1.5 transition-opacity duration-150 leading-none">
                 <img src={foxEmojiImg} alt="" className="h-[32px] md:h-[40px] w-auto select-none block shrink-0 align-middle" draggable={false} style={{ verticalAlign: "middle" }} />
-                <span className="font-display text-[25px] md:text-[32px] text-white inline-flex items-center" style={{ lineHeight: 1 }}>facebox</span>
+                <span className="font-display text-[25px] md:text-[32px] text-white inline-flex items-center" style={{ lineHeight: 1, transform: "translateY(2px)" }}>facebox</span>
               </button>
               {/* {isLoggedIn && (
                 <button
@@ -387,7 +387,7 @@ const Header = () => {
                     aria-label="gem balance"
                   >
                     <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                    <span className="font-gem text-[18px] md:text-[22px] text-white">{gems}</span>
+                    <span className="text-[14px] md:text-[17px] text-white" style={{ fontFamily: "'Inconsolata', ui-monospace, monospace", fontWeight: 700 }}>{gems}</span>
                   </div>
                 </div>
 
