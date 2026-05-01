@@ -101,17 +101,11 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     return cached && cachedUserId ? cached : [];
   });
 
-  // "ready" = we have some data to show (cached OR fetched). True immediately if localStorage had data.
-  const [charactersReady, setCharactersReady] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const hasUser = !!localStorage.getItem(CACHE_USER_KEY);
-    return !!localStorage.getItem(CHARS_KEY) && hasUser;
-  });
-  const [generationsReady, setGenerationsReady] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const hasUser = !!localStorage.getItem(CACHE_USER_KEY);
-    return !!localStorage.getItem(GENS_KEY) && hasUser;
-  });
+  // "ready" = background fetch has settled (cache may have already hydrated state).
+  // Start false so the yellow splash stays visible until live data lands and
+  // skeletons never flash on first paint.
+  const [charactersReady, setCharactersReady] = useState(false);
+  const [generationsReady, setGenerationsReady] = useState(false);
 
   const fetchIdRef = useRef(0);
 
@@ -200,9 +194,11 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       const cachedChars = readLocal<CachedCharacter[]>(CHARS_KEY);
       const cachedGens = readLocal<CachedGeneration[]>(GENS_KEY);
       if (cachedChars) setCharacters(cachedChars);
-      setCharactersReady(true);
       if (cachedGens) setGenerations(cachedGens);
-      setGenerationsReady(true);
+      // Do NOT mark ready yet — keep yellow load bar up until background fetch
+      // completes so skeletons never flash after the splash drops.
+      setCharactersReady(false);
+      setGenerationsReady(false);
     } else {
       // Different user — clear stale cache
       clearLocal();
