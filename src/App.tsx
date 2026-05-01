@@ -289,10 +289,8 @@ const AppRoutes = () => {
   useEffect(() => {
     if (stillResolving) return;
     const timer = setTimeout(() => {
-      if (getBlockingLoaderCount() === 0) {
-        splashHiddenRef.current = true;
-        hideStartupSplash();
-      }
+      splashHiddenRef.current = true;
+      hideStartupSplash();
     }, 50);
     return () => clearTimeout(timer);
   }, [stillResolving, blockingLoaders, location.key]);
