@@ -1144,9 +1144,9 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 12%)" }} />
+              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 8%)" }} />
               <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
-              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 12%)" }} />
+              <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 8%)" }} />
             </div>
 
             <input

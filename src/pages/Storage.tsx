@@ -152,7 +152,7 @@ const Storage = () => {
               padding: 8,
               borderRadius: 10,
               backgroundColor: "#000000",
-              border: "2px solid hsl(0 0% 15%)",
+              border: "2px solid hsl(0 0% 11%)",
             }}
             aria-label={hidden ? "show photos" : "hide photos"}
           >
@@ -165,7 +165,7 @@ const Storage = () => {
         </div>
 
         {images.length === 0 ? (
-          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 12%)" }}>
+          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 8%)" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
