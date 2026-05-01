@@ -252,13 +252,13 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-[104px] pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-[90px] pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="block w-full mx-auto text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
-            what are we making today?{/* ✨ */}
+            what are we making today? ✨
           </h1>
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[34px]" />
+          <div className="mb-[16px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6">
