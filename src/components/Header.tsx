@@ -103,24 +103,15 @@ const Header = () => {
   const { onboardingComplete } = useOnboarded();
   const showMenuLocks = !!user && !onboardingComplete;
 
-  // Position dropdown relative to the fixed menu button location.
-  // Uses a constant calculation so the dropdown sits in the same spot on every page,
-  // regardless of whether the menu button is inline or in slideMenuMode.
+  // Position dropdown from the inline menu button so it stays locked to the
+  // same header slot on every page while still scrolling with the page.
   const updateDropdownPos = useCallback(() => {
     const isWide = window.innerWidth >= 768;
-    const safeTop = (() => {
-      const probe = document.createElement("div");
-      probe.style.cssText = "position:fixed;top:env(safe-area-inset-top, 0px);visibility:hidden;";
-      document.body.appendChild(probe);
-      const v = probe.getBoundingClientRect().top;
-      document.body.removeChild(probe);
-      return v || 0;
-    })();
-    const buttonTop = safeTop + 45;
-    const buttonHeight = isWide ? 52 : 42;
+    const rect = menuBtnRef.current?.getBoundingClientRect();
+    if (!rect) return;
     setDropdownPos({
-      top: buttonTop + buttonHeight + (isWide ? 28 : 18),
-      right: 26,
+      top: rect.bottom + (isWide ? 25 : 15),
+      right: Math.max(12, window.innerWidth - rect.right),
     });
   }, []);
 
@@ -267,7 +258,7 @@ const Header = () => {
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
-  const menuWidth = isDesktop ? 266 : 169;
+  const menuWidth = isDesktop ? 200 : 127;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
@@ -342,16 +333,6 @@ const Header = () => {
     document.body,
   ) : null;
 
-  // Menu button is ALWAYS rendered in a fixed portal at the same screen position
-  // so it never shifts between pages, slideMenuMode, or any other state.
-  const showFixedMenuButton = isLoggedIn && !isAuthPage && (slideMenuMode || !menuDisabled);
-  const fixedMenuButton = showFixedMenuButton ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
-      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
-    </div>,
-    document.body,
-  ) : null;
-
   return (
     <>
       <header
@@ -374,6 +355,7 @@ const Header = () => {
                     borderRadius: "50%",
                     backgroundColor: "#000000",
                     border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                    transform: "translateX(-2px)",
                   }}
                   aria-label="my account"
                 >
@@ -382,32 +364,32 @@ const Header = () => {
               )}
             </div>
 
-            {isLoggedIn && !isAuthPage && !slideMenuMode && (
+            {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
-                <div className="relative">
-                  <div
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
-                    style={{
-                      backgroundColor: "#050a10",
-                      border: "2px solid #00e0ff",
-                      borderRadius: 10,
-                    }}
-                    aria-label="gem balance"
-                  >
-                    <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                    <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
+                {!slideMenuMode && (
+                  <div className="relative">
+                    <div
+                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
+                      style={{
+                        backgroundColor: "#050a10",
+                        border: "2px solid #00e0ff",
+                        borderRadius: 10,
+                      }}
+                      aria-label="gem balance"
+                    >
+                      <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
+                      <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                {/* Spacer reserves the menu button slot — actual button rendered via fixed portal so it never shifts. */}
-                <div aria-hidden className="w-[42px] h-[42px] md:w-[52px] md:h-[52px]" />
+                <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
               </div>
             )}
           </div>
         </div>
       </header>
       {menuDropdown}
-      {fixedMenuButton}
     </>
   );
 };

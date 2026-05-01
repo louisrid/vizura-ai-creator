@@ -17,7 +17,7 @@ const useDotGrid = ({ cx, cy, radius, flipX }: DotGridProps) => {
         const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
         if (dist > radius) continue;
         const normalised = dist / radius;
-        const opacity = 0.4232 * (1 - normalised * normalised);
+        const opacity = 0.4444 * (1 - normalised * normalised);
         if (opacity > 0.01) {
           const finalX = flipX ? 430 - x : x;
           result.push({ x: finalX, y, opacity });
@@ -49,7 +49,7 @@ const DotDecal = () => {
         ))}
       </svg>
       {/* Black overlay on top of dots — 47% opacity */}
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.45)" }} />
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.43)" }} />
     </div>
   );
 };
