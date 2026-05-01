@@ -317,7 +317,7 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-4">
+          <section className="mb-3">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
