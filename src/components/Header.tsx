@@ -394,6 +394,7 @@ const Header = () => {
         </div>
       </header>
       {menuDropdown}
+      {slideMenuButton}
     </>
   );
 };
