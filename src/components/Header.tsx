@@ -264,13 +264,11 @@ const Header = () => {
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
   const menuWidth = isDesktop ? 360 : 228;
 
-  // Slide-mode menu button rendered via portal so it floats above guided creator slides
-  const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
-      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
-    </div>,
-    document.body,
-  ) : null;
+  // No portal duplicate of the menu button: the inline header MenuButton stays in
+  // its exact position and styling at all times. When the guided creator opens
+  // (slideMenuMode), the header z-index is bumped above the slides so the same
+  // inline button remains visible and clickable — no movement, no restyle.
+  const slideMenuButton = null;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
