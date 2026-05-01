@@ -16,9 +16,21 @@ const CLAIMED_CACHE_PREFIX = "facefox_gems_claimed:";
 
 export const GemsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [rawGems, setRawGems] = useState(0);
+  const [rawGems, setRawGems] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    const rawUser = localStorage.getItem("facefox_cached_user");
+    const userId = rawUser ? (() => { try { return JSON.parse(rawUser)?.id; } catch { return null; } })() : localStorage.getItem("facefox_cached_user_id");
+    if (!userId) return 0;
+    const cached = localStorage.getItem("facefox_gems_balance:" + userId);
+    return cached !== null ? Number(cached) : 0;
+  });
   const [loading, setLoading] = useState(true);
-  const [hasClaimedFreeGems, setHasClaimedFreeGems] = useState(false);
+  const [hasClaimedFreeGems, setHasClaimedFreeGems] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const rawUser = localStorage.getItem("facefox_cached_user");
+    const userId = rawUser ? (() => { try { return JSON.parse(rawUser)?.id; } catch { return null; } })() : localStorage.getItem("facefox_cached_user_id");
+    return userId ? localStorage.getItem("facefox_gems_claimed:" + userId) === "1" : false;
+  });
 
   const getCacheKey = useCallback((userId: string) => `${GEMS_CACHE_PREFIX}${userId}`, []);
 
