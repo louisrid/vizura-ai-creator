@@ -264,13 +264,11 @@ const Header = () => {
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
   const menuWidth = isDesktop ? 360 : 228;
 
-  // Slide-mode menu button rendered via portal so it floats above guided creator slides
-  const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
-    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
-      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
-    </div>,
-    document.body,
-  ) : null;
+  // No portal duplicate of the menu button: the inline header MenuButton stays in
+  // its exact position and styling at all times. When the guided creator opens
+  // (slideMenuMode), the header z-index is bumped above the slides so the same
+  // inline button remains visible and clickable — no movement, no restyle.
+  const slideMenuButton = null;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
@@ -349,7 +347,7 @@ const Header = () => {
     <>
       <header
         className="relative"
-        style={{ zIndex: 9990, backgroundColor: "#000000" }}
+        style={{ zIndex: slideMenuMode ? 10000 : 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
         {/* Controls */}
@@ -378,22 +376,20 @@ const Header = () => {
 
             {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
-                {!slideMenuMode && (
-                  <div className="relative">
-                    <div
-                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[35px] md:h-[43px]"
-                      style={{
-                        backgroundColor: "#050a10",
-                        border: "2px solid #00e0ff",
-                        borderRadius: 10,
-                      }}
-                      aria-label="gem balance"
-                    >
-                      <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                      <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
-                    </div>
+                <div className="relative">
+                  <div
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[35px] md:h-[43px]"
+                    style={{
+                      backgroundColor: "#050a10",
+                      border: "2px solid #00e0ff",
+                      borderRadius: 10,
+                    }}
+                    aria-label="gem balance"
+                  >
+                    <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
+                    <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
                   </div>
-                )}
+                </div>
 
                 <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
               </div>
