@@ -262,7 +262,7 @@ const Header = () => {
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
-  const menuWidth = isDesktop ? 200 : 127;
+  const menuWidth = isDesktop ? 240 : 152;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
