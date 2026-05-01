@@ -238,7 +238,7 @@ const Home = () => {
   // (dataLoading removed — App-level splash + cached data handle initial render)
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
-  const pageHidden = showGuided || (!autoOpenEvaluated && !user) || authLoading;
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user);
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
@@ -262,7 +262,7 @@ const Home = () => {
             </span>
           </h1>
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[28px]" />
+          <div className="mb-[22px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6">
@@ -471,7 +471,7 @@ const Home = () => {
             </span>
           </h1>
           {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[44px]" />
+          <div className="mb-[36px]" />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
