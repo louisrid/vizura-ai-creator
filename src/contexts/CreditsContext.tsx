@@ -15,7 +15,7 @@ const GEMS_CACHE_PREFIX = "facefox_gems_balance:";
 const CLAIMED_CACHE_PREFIX = "facefox_gems_claimed:";
 
 export const GemsProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [rawGems, setRawGems] = useState(() => {
     if (typeof window === "undefined") return 0;
     const rawUser = localStorage.getItem("facefox_cached_user");
@@ -87,6 +87,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
   }, [user, writeCachedGems]);
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) {
       setRawGems(0);
       setHasClaimedFreeGems(false);
@@ -105,7 +106,7 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     }
     setLoading(true);
     fetchGems();
-  }, [fetchGems, readCachedGems, user]);
+  }, [authLoading, fetchGems, readCachedGems, user]);
 
   // Mask gems to 0 only until user has claimed free OR made a paid purchase.
   // has_claimed_free_gems is flipped to true on free claim AND on first paid purchase.

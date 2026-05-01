@@ -199,8 +199,10 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       // Hydrate instantly — pages render cached content with no loading state
       const cachedChars = readLocal<CachedCharacter[]>(CHARS_KEY);
       const cachedGens = readLocal<CachedGeneration[]>(GENS_KEY);
-      if (cachedChars) { setCharacters(cachedChars); setCharactersReady(true); }
-      if (cachedGens) { setGenerations(cachedGens); setGenerationsReady(true); }
+      if (cachedChars) setCharacters(cachedChars);
+      setCharactersReady(true);
+      if (cachedGens) setGenerations(cachedGens);
+      setGenerationsReady(true);
     } else {
       // Different user — clear stale cache
       clearLocal();
