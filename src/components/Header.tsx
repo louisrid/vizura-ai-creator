@@ -287,7 +287,7 @@ const Header = () => {
               className="overflow-hidden py-0"
               style={{
                 backgroundColor: "#000000",
-                border: "2px solid hsl(0 0% 11%)",
+                border: "2px solid hsl(var(--border-mid))",
                 borderRadius: 10,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
               }}
