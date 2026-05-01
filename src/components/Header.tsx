@@ -354,7 +354,7 @@ const Header = () => {
               {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
-                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
+                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[34px] h-[34px] md:w-[42px] md:h-[42px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
