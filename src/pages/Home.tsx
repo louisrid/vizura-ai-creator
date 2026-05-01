@@ -262,7 +262,7 @@ const Home = () => {
             </span>
           </h1>
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[28px]" />
+          <div className="mb-[22px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6">
