@@ -291,7 +291,7 @@ const AppRoutes = () => {
     const timer = setTimeout(() => {
       splashHiddenRef.current = true;
       hideStartupSplash();
-    }, 50);
+    }, 300);
     return () => clearTimeout(timer);
   }, [stillResolving, blockingLoaders, location.key]);
 
