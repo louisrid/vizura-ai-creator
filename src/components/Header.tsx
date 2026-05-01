@@ -103,15 +103,24 @@ const Header = () => {
   const { onboardingComplete } = useOnboarded();
   const showMenuLocks = !!user && !onboardingComplete;
 
-  // Position dropdown relative to hamburger button
+  // Position dropdown relative to the fixed menu button location.
+  // Uses a constant calculation so the dropdown sits in the same spot on every page,
+  // regardless of whether the menu button is inline or in slideMenuMode.
   const updateDropdownPos = useCallback(() => {
-    if (!menuBtnRef.current) return;
-    const rect = menuBtnRef.current.getBoundingClientRect();
     const isWide = window.innerWidth >= 768;
-    const docWidth = document.documentElement.clientWidth;
+    const safeTop = (() => {
+      const probe = document.createElement("div");
+      probe.style.cssText = "position:fixed;top:env(safe-area-inset-top, 0px);visibility:hidden;";
+      document.body.appendChild(probe);
+      const v = probe.getBoundingClientRect().top;
+      document.body.removeChild(probe);
+      return v || 0;
+    })();
+    const buttonTop = safeTop + 45;
+    const buttonHeight = isWide ? 52 : 42;
     setDropdownPos({
-      top: rect.bottom + (isWide ? 30 : 20),
-      right: docWidth - rect.right,
+      top: buttonTop + buttonHeight + (isWide ? 28 : 18),
+      right: 26,
     });
   }, []);
 
@@ -258,7 +267,7 @@ const Header = () => {
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
-  const menuWidth = isDesktop ? 355 : 225;
+  const menuWidth = isDesktop ? 266 : 169;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
@@ -333,7 +342,9 @@ const Header = () => {
     document.body,
   ) : null;
 
-  const showFixedMenuButton = slideMenuMode && !menuDisabled;
+  // Menu button is ALWAYS rendered in a fixed portal at the same screen position
+  // so it never shifts between pages, slideMenuMode, or any other state.
+  const showFixedMenuButton = isLoggedIn && !isAuthPage && (slideMenuMode || !menuDisabled);
   const fixedMenuButton = showFixedMenuButton ? createPortal(
     <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
       <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
@@ -351,7 +362,7 @@ const Header = () => {
         {/* Controls */}
         <div className="relative">
           <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
-            <div className="flex items-center gap-[11px] md:gap-[13px]">
+            <div className="flex items-center gap-[10px] md:gap-[12px]">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
                 <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
               </button>
@@ -388,7 +399,8 @@ const Header = () => {
                   </div>
                 </div>
 
-                <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
+                {/* Spacer reserves the menu button slot — actual button rendered via fixed portal so it never shifts. */}
+                <div aria-hidden className="w-[42px] h-[42px] md:w-[52px] md:h-[52px]" />
               </div>
             )}
           </div>
