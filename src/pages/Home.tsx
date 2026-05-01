@@ -252,7 +252,7 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-[60px] pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-[60px] pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="flex w-full flex-col items-start text-[48px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 text-left">
             <span className="block w-full text-left">what are we</span>
@@ -265,7 +265,7 @@ const Home = () => {
           <div className="mb-[22px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-6 mt-[16px]">
+          <div className="flex gap-2 mb-6 mt-[32px]">
             {/* Create Character - solid yellow */}
             <button
               type="button"
@@ -462,7 +462,7 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-[60px] pb-[280px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-[56px] pt-[60px] pb-[280px]">
           <h1 className="flex w-full flex-col items-start text-[60px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[10px] whitespace-nowrap text-left">
@@ -474,7 +474,7 @@ const Home = () => {
           <div className="mb-[36px]" />
 
           {/* Two action buttons */}
-          <div className="flex gap-3 mb-8 mt-[16px]">
+          <div className="flex gap-3 mb-8 mt-[32px]">
             <button
               type="button"
               onClick={handleOpenCreator}
