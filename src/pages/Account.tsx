@@ -32,7 +32,7 @@ const Account = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-7 pb-[280px] flex flex-col items-center">
+        <main className="relative z-[1] w-full max-w-lg mx-auto px-6 pt-7 pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-10 w-full">
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
             <div className="h-7 w-28" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
@@ -59,7 +59,7 @@ const Account = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-4 pt-7 pb-[280px] flex flex-col items-center">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-6 pt-7 pb-[280px] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
@@ -220,7 +220,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-4 pt-7 pb-[280px] flex flex-col items-center">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-7 pb-[280px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>

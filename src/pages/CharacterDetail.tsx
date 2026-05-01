@@ -312,7 +312,7 @@ const CharacterDetail = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-7 pb-[280px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-6 md:px-8 pt-7 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -325,7 +325,7 @@ const CharacterDetail = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[14px] md:px-8 pt-7 pb-[280px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-6 md:px-8 pt-7 pb-[280px]">
           <div className="flex items-center gap-3 mb-7">
             <BackButton />
           </div>
@@ -437,7 +437,7 @@ const CharacterDetail = () => {
       <DotDecal />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
         <div className="flex items-center gap-3 mb-7" style={{ position: "relative", zIndex: 10 }}>
           {onboardingComplete ? <BackButton /> : (
             <button
@@ -499,7 +499,7 @@ const CharacterDetail = () => {
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-[2] md:hidden">
-        <div className="mx-auto w-full max-w-lg px-[14px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
+        <div className="mx-auto w-full max-w-lg px-6 pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
