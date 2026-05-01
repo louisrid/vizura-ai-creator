@@ -252,7 +252,7 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[14px] pt-20 pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-20 pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
             what are we making today? ✨
@@ -260,7 +260,7 @@ const Home = () => {
           <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-6 -mx-[6px] md:-mx-2">
+          <div className="flex gap-2 mb-6">
             {/* Create Character - solid yellow */}
             <button
               type="button"

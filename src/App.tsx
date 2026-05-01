@@ -287,7 +287,7 @@ const AppRoutes = () => {
     dataStillLoading;
 
   useEffect(() => {
-    if (stillResolving || blockingLoaders > 0) return;
+    if (stillResolving) return;
     const timer = setTimeout(() => {
       if (getBlockingLoaderCount() === 0) {
         splashHiddenRef.current = true;
