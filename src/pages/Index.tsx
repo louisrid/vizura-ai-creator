@@ -810,7 +810,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-6 pt-7 pb-[120px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-7 pb-[120px] md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -901,7 +901,7 @@ const Index = () => {
       </main>
 
       {/* Desktop layout — two-column */}
-      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-10 pt-7 pb-[280px]">
+      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[56px] pt-7 pb-[280px]">
         <div className="flex items-center gap-3 mb-8">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -999,7 +999,7 @@ const Index = () => {
 
       <ImageZoomViewer url={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-6 md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
+      <div className="fixed left-0 right-0 bottom-0 z-10 px-[32px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
         <div className="mx-auto max-w-lg pointer-events-auto">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
