@@ -342,7 +342,7 @@ const Header = () => {
         <TopGradientBar />
         {/* Controls */}
         <div className="relative">
-          <div className="w-full mx-auto flex items-center justify-between pl-[22px] pr-[18px] md:px-8 lg:px-12 pt-[44px] md:pt-[56px] pb-3">
+          <div className="mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-[44px] pb-3 md:pt-[56px]">
             <div className="flex items-center gap-[10px] md:gap-[12px]">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
                 <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
