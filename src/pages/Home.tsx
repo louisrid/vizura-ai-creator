@@ -252,13 +252,13 @@ const Home = () => {
       {!pageHidden && <div className="relative flex h-full flex-col">
         <DotDecal />
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-[104px] pb-[280px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-[90px] pb-[280px] md:hidden">
           {/* Hero */}
           <h1 className="block w-full mx-auto text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
-            what are we making today?{/* ✨ */}
+            what are we making today? ✨
           </h1>
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[34px]" />
+          <div className="mb-[16px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6">
@@ -328,7 +328,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {!photosLoaded && images.length === 0 ? (
+              {!photosLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
@@ -389,7 +389,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {!charsLoaded && characters.length === 0 ? (
+              {!charsLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
@@ -458,12 +458,12 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-[104px] pb-[280px]">
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-[90px] pb-[280px]">
           <h1 className="block w-full mx-auto text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
-            what are we making today?{/* ✨ */}
+            what are we making today? ✨
           </h1>
           {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[50px]" />
+          <div className="mb-[32px]" />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
@@ -528,7 +528,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {!photosLoaded && images.length === 0 ? (
+              {!photosLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
@@ -589,7 +589,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {!charsLoaded && characters.length === 0 ? (
+              {!charsLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
