@@ -282,9 +282,12 @@ const AppRoutes = () => {
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
   const stillResolving =
-    (authLoading && !hasCachedUser) ||
+    authLoading ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading;
+  const suppressUnauthRoutes =
+    hasCachedUser && authLoading && !user &&
+    (location.pathname === "/" || location.pathname === "/auth");
 
   useEffect(() => {
     if (stillResolving) return;
