@@ -373,7 +373,7 @@ const Header = () => {
                 {!slideMenuMode && (
                   <div className="relative">
                     <div
-                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[42px]"
+                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[35px] md:h-[43px]"
                       style={{
                         backgroundColor: "#050a10",
                         border: "2px solid #00e0ff",
