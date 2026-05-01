@@ -254,10 +254,11 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-20 pb-[280px] md:hidden">
           {/* Hero */}
-          <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? ✨
+          <h1 className="text-[50px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
+            what are we making today?{/* ✨ */}
           </h1>
-          <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
+          <div className="mb-6" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6">
@@ -319,7 +320,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
-                  style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
                 >
                   see all →
                 </button>
@@ -381,7 +382,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -458,10 +459,11 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-20 pb-[280px]">
-          <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-            what are we making today? ✨
+          <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
+            what are we making today?{/* ✨ */}
           </h1>
-          <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} />
+          {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
+          <div className="mb-10" />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
@@ -518,7 +520,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
-                  style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
                 >
                   see all →
                 </button>
@@ -580,7 +582,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffe603", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
