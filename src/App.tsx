@@ -280,7 +280,7 @@ const AppRoutes = () => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 2500);
     return () => clearTimeout(timer);
   }, []);
-  const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady || !onboardingResolved);
+  const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
   const stillResolving =
     (authLoading && !hasCachedUser) ||
     (!authLoading && !!user && location.pathname === "/auth") ||
