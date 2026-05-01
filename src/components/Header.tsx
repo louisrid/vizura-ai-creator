@@ -347,7 +347,7 @@ const Header = () => {
     <>
       <header
         className="relative"
-        style={{ zIndex: 9990, backgroundColor: "#000000" }}
+        style={{ zIndex: slideMenuMode ? 10000 : 9990, backgroundColor: "#000000" }}
       >
         <TopGradientBar />
         {/* Controls */}
