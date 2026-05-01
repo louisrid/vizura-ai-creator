@@ -328,7 +328,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {!photosLoaded && images.length === 0 ? (
+              {!photosLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
@@ -389,7 +389,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {!charsLoaded && characters.length === 0 ? (
+              {!charsLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
@@ -528,7 +528,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {!photosLoaded && images.length === 0 ? (
+              {!photosLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
@@ -589,7 +589,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {!charsLoaded && characters.length === 0 ? (
+              {!charsLoaded ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
                     <AspectRatio ratio={3 / 4}>
