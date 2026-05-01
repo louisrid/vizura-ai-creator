@@ -307,8 +307,8 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
-      {stillResolving && <LoadingScreen />}
-      {headerRevealed && (
+      {(stillResolving || suppressUnauthRoutes) && <LoadingScreen />}
+      {headerRevealed && !suppressUnauthRoutes && (
         <>
           <HeaderTransition />
           <Routes location={location}>
