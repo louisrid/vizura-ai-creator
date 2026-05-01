@@ -256,13 +256,21 @@ const Header = () => {
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
   const isHomeRoute = pathname === "/";
   const headerContainerClass = isHomeRoute
-    ? "mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-[44px] pb-3 md:max-w-3xl md:px-10 md:pt-[56px]"
-    : "mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-[44px] pb-3 md:max-w-6xl md:px-10 md:pt-[56px]";
+    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[44px] pb-3 md:max-w-3xl md:px-[56px] md:pt-[56px]"
+    : "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[44px] pb-3 md:max-w-6xl md:px-[56px] md:pt-[56px]";
   
 
   // Detect desktop
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
   const menuWidth = isDesktop ? 360 : 228;
+
+  // Slide-mode menu button rendered via portal so it floats above guided creator slides
+  const slideMenuButton = (slideMenuMode && !menuDisabled) ? createPortal(
+    <div className="fixed" style={{ zIndex: 10001, top: "calc(max(env(safe-area-inset-top, 0px), 0px) + 45px)", right: 26 }}>
+      <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
+    </div>,
+    document.body,
+  ) : null;
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
@@ -394,6 +402,7 @@ const Header = () => {
         </div>
       </header>
       {menuDropdown}
+      {slideMenuButton}
     </>
   );
 };
