@@ -17,7 +17,7 @@ const useDotGrid = ({ cx, cy, radius, flipX }: DotGridProps) => {
         const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
         if (dist > radius) continue;
         const normalised = dist / radius;
-        const opacity = 0.55 * (1 - normalised * normalised);
+        const opacity = 0.495 * (1 - normalised * normalised);
         if (opacity > 0.01) {
           const finalX = flipX ? 430 - x : x;
           result.push({ x: finalX, y, opacity });
