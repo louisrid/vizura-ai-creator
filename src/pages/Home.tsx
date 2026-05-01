@@ -586,7 +586,7 @@ const Home = () => {
           </section>
 
           {/* My Characters Section */}
-          <section className="mt-6">
+          <section className="mt-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
