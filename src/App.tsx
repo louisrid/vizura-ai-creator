@@ -275,9 +275,13 @@ const AppRoutes = () => {
     location.pathname.startsWith("/help/") ||
     location.pathname.startsWith("/info/");
   const hasUserContext = !!user || hasCachedUser;
+  // Safety ceiling: if data fetch silently stalls (network failure that didn't throw),
+  // release the splash after 12s so the user is never trapped on yellow forever.
+  // Under normal conditions this never fires — charactersReady/generationsReady flip
+  // first and dataStillLoading drops to false.
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setDataLoadGracePassed(true), 2500);
+    const timer = setTimeout(() => setDataLoadGracePassed(true), 12000);
     return () => clearTimeout(timer);
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
