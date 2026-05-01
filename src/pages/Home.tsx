@@ -458,9 +458,9 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-[90px] pb-[280px]">
-          <h1 className="block w-full mx-auto text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
-            what are we making today? ✨
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-[83px] pb-[280px]">
+          <h1 className="block w-full mx-auto text-[62px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
+            what are we <span style={{ whiteSpace: "nowrap" }}>making today? ✨</span>
           </h1>
           {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
           <div className="mb-[32px]" />
