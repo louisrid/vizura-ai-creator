@@ -39,7 +39,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+    className="flex items-center justify-center w-[34px] h-[34px] md:w-[42px] md:h-[42px]"
     style={{
       borderRadius: 10,
       backgroundColor: menuDisabled ? "hsl(0 0% 4%)" : "#000000",
@@ -349,12 +349,12 @@ const Header = () => {
           <div className={headerContainerClass}>
             <div className="flex items-center gap-[10px] md:gap-[12px]">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
-                <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
+                <span className="text-[26px] md:text-[34px] font-[900] text-white tracking-tight leading-none">facefox</span>
               </button>
               {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
-                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[32px] h-[32px] md:w-[40px] md:h-[40px]"
+                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[34px] h-[34px] md:w-[42px] md:h-[42px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "#000000",
@@ -373,7 +373,7 @@ const Header = () => {
                 {!slideMenuMode && (
                   <div className="relative">
                     <div
-                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2.5 select-none"
+                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[34px] md:h-[42px]"
                       style={{
                         backgroundColor: "#050a10",
                         border: "2px solid #00e0ff",
