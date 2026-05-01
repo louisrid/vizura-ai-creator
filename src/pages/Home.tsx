@@ -254,15 +254,15 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-6 pt-[83px] pb-[280px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-center text-[48px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
+          <h1 className="flex w-full flex-col items-center text-[40px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 text-center">
             <span className="block w-full text-center">what are we</span>
-            <span className="inline-flex items-center justify-center gap-[10px] whitespace-nowrap text-center">
+            <span className="inline-flex items-center justify-center gap-[8px] whitespace-nowrap text-center">
               <span>making today?</span>
               <span aria-hidden="true" className="shrink-0">✨</span>
             </span>
           </h1>
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[16px]" />
+          <div className="mb-[28px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
           <div className="flex gap-2 mb-6">
@@ -463,15 +463,15 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-[83px] pb-[280px]">
-          <h1 className="flex w-full flex-col items-center text-[62px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
+          <h1 className="flex w-full flex-col items-center text-[52px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 text-center">
             <span className="block w-full text-center">what are we</span>
-            <span className="inline-flex items-center justify-center gap-3 whitespace-nowrap text-center">
+            <span className="inline-flex items-center justify-center gap-[10px] whitespace-nowrap text-center">
               <span>making today?</span>
               <span aria-hidden="true" className="shrink-0">✨</span>
             </span>
           </h1>
           {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
-          <div className="mb-[32px]" />
+          <div className="mb-[44px]" />
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8">
