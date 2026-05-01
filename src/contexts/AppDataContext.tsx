@@ -200,9 +200,11 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       const cachedChars = readLocal<CachedCharacter[]>(CHARS_KEY);
       const cachedGens = readLocal<CachedGeneration[]>(GENS_KEY);
       if (cachedChars) setCharacters(cachedChars);
-      setCharactersReady(true);
       if (cachedGens) setGenerations(cachedGens);
-      setGenerationsReady(true);
+      // Do NOT mark ready yet — keep yellow load bar up until background fetch
+      // completes so skeletons never flash after the splash drops.
+      setCharactersReady(false);
+      setGenerationsReady(false);
     } else {
       // Different user — clear stale cache
       clearLocal();
