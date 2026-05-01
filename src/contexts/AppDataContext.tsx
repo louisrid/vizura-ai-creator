@@ -88,7 +88,7 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
   // Hydrate from localStorage on first render if same user
   const [characters, setCharacters] = useState<CachedCharacter[]>(() => {
     if (typeof window === "undefined") return [];
-    const cachedUserId = localStorage.getItem(CACHE_USER_KEY) || localStorage.getItem("facefox_cached_user");
+    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
     // We don't know user yet during SSR/init, but check if cache exists
     const cached = readLocal<CachedCharacter[]>(CHARS_KEY);
     return cached && cachedUserId ? cached : [];
@@ -96,7 +96,7 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
 
   const [generations, setGenerations] = useState<CachedGeneration[]>(() => {
     if (typeof window === "undefined") return [];
-    const cachedUserId = localStorage.getItem(CACHE_USER_KEY) || localStorage.getItem("facefox_cached_user");
+    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
     const cached = readLocal<CachedGeneration[]>(GENS_KEY);
     return cached && cachedUserId ? cached : [];
   });
@@ -104,12 +104,12 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
   // "ready" = we have some data to show (cached OR fetched). True immediately if localStorage had data.
   const [charactersReady, setCharactersReady] = useState(() => {
     if (typeof window === "undefined") return false;
-    const hasUser = !!localStorage.getItem(CACHE_USER_KEY) || !!localStorage.getItem("facefox_cached_user");
+    const hasUser = !!localStorage.getItem(CACHE_USER_KEY);
     return !!localStorage.getItem(CHARS_KEY) && hasUser;
   });
   const [generationsReady, setGenerationsReady] = useState(() => {
     if (typeof window === "undefined") return false;
-    const hasUser = !!localStorage.getItem(CACHE_USER_KEY) || !!localStorage.getItem("facefox_cached_user");
+    const hasUser = !!localStorage.getItem(CACHE_USER_KEY);
     return !!localStorage.getItem(GENS_KEY) && hasUser;
   });
 
