@@ -376,22 +376,20 @@ const Header = () => {
 
             {isLoggedIn && !isAuthPage && (
               <div className="flex items-center gap-3 md:gap-5">
-                {!slideMenuMode && (
-                  <div className="relative">
-                    <div
-                      className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[35px] md:h-[43px]"
-                      style={{
-                        backgroundColor: "#050a10",
-                        border: "2px solid #00e0ff",
-                        borderRadius: 10,
-                      }}
-                      aria-label="gem balance"
-                    >
-                      <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                      <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
-                    </div>
+                <div className="relative">
+                  <div
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[35px] md:h-[43px]"
+                    style={{
+                      backgroundColor: "#050a10",
+                      border: "2px solid #00e0ff",
+                      borderRadius: 10,
+                    }}
+                    aria-label="gem balance"
+                  >
+                    <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
+                    <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
                   </div>
-                )}
+                </div>
 
                 <MenuButton ref={menuBtnRef} menuDisabled={menuDisabled} open={open} setOpen={setOpen} wasOpenAtStartRef={wasOpenAtStartRef} onPointerMove={handlePointerMove} onPointerEnd={handlePointerEnd} />
               </div>
