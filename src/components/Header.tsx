@@ -254,6 +254,10 @@ const Header = () => {
 
   const isLoggedIn = !!user?.id;
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
+  const isHomeRoute = pathname === "/";
+  const headerContainerClass = isHomeRoute
+    ? "mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-[44px] pb-3 md:max-w-3xl md:px-10 md:pt-[56px]"
+    : "mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-[44px] pb-3 md:max-w-6xl md:px-10 md:pt-[56px]";
   
 
   // Detect desktop
@@ -342,7 +346,7 @@ const Header = () => {
         <TopGradientBar />
         {/* Controls */}
         <div className="relative">
-          <div className="mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-[44px] pb-3 md:pt-[56px]">
+          <div className={headerContainerClass}>
             <div className="flex items-center gap-[10px] md:gap-[12px]">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
                 <span className="text-[25px] md:text-[32px] font-[900] text-white tracking-tight leading-none">facefox</span>
