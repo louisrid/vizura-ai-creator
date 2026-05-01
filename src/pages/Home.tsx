@@ -265,7 +265,7 @@ const Home = () => {
           <div className="mb-[22px]" />
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2 mb-6 mt-[16px]">
             {/* Create Character - solid yellow */}
             <button
               type="button"
@@ -474,7 +474,7 @@ const Home = () => {
           <div className="mb-[36px]" />
 
           {/* Two action buttons */}
-          <div className="flex gap-3 mb-8">
+          <div className="flex gap-3 mb-8 mt-[16px]">
             <button
               type="button"
               onClick={handleOpenCreator}
