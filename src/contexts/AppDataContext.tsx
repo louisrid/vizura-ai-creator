@@ -192,7 +192,9 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     }
 
     // Check if localStorage cache belongs to this user
-    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
+    const rawCached = localStorage.getItem("facefox_cached_user");
+    const parsedId = rawCached ? ((): string | null => { try { return JSON.parse(rawCached)?.id ?? null; } catch { return null; } })() : null;
+    const cachedUserId = localStorage.getItem(CACHE_USER_KEY) || parsedId;
     if (cachedUserId === user.id) {
       // Hydrate instantly — pages render cached content with no loading state
       const cachedChars = readLocal<CachedCharacter[]>(CHARS_KEY);
