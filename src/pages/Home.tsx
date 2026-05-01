@@ -317,7 +317,7 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-4">
+          <section className="mb-3">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
@@ -382,7 +382,7 @@ const Home = () => {
           </section>
 
           {/* My Characters Section */}
-          <section className="mt-4">
+          <section className="mt-3">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
@@ -521,7 +521,7 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
@@ -586,7 +586,7 @@ const Home = () => {
           </section>
 
           {/* My Characters Section */}
-          <section className="mt-6">
+          <section className="mt-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
