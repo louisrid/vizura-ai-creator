@@ -200,7 +200,7 @@ const HighlightedPromptArea = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-[10px] border-2 border-input bg-card">
+    <div className="relative overflow-hidden rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -843,7 +843,7 @@ const Index = () => {
               {charDropdownContent}
             </div>
 
-            <div className="relative rounded-[10px] border-2 border-input bg-card overflow-hidden">
+            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <motion.section
                 layout
                 className="relative flex w-full items-center justify-center bg-card"
@@ -935,7 +935,7 @@ const Index = () => {
               {charDropdownContent}
             </div>
 
-            <div className="relative rounded-[10px] border-2 border-input bg-card overflow-hidden">
+            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <motion.section
                 layout
                 className="relative flex w-full items-center justify-center bg-card"
