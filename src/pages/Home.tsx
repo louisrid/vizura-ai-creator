@@ -458,17 +458,15 @@ const Home = () => {
         </main>
 
         {/* Desktop layout */}
-        <main className="relative z-[1] mx-auto hidden w-full max-w-3xl flex-col items-center px-10 pt-20 pb-[280px] md:flex">
-          <div className="w-full px-0 text-center">
-            <h1 className="mx-auto w-full text-center text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0">
-              what are we making today?{/* ✨ */}
-            </h1>
-          </div>
+        <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-10 pt-20 pb-[280px]">
+          <h1 className="text-[64px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 text-center">
+            what are we making today?{/* ✨ */}
+          </h1>
           {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
           <div className="mb-[50px]" />
 
           {/* Two action buttons */}
-          <div className="mb-8 flex w-full gap-3">
+          <div className="flex gap-3 mb-8">
             <button
               type="button"
               onClick={handleOpenCreator}
