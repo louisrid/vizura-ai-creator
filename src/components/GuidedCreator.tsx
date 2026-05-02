@@ -21,10 +21,10 @@ const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
 const SLIDE_TOP_OFFSET = "clamp(156px, 22svh, 196px)";
-const SLIDE_CONTENT_GAP = 10;
+const SLIDE_CONTENT_GAP = 40;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
-const EMOJI_MARGIN_BOTTOM = 10;
+const EMOJI_MARGIN_BOTTOM = 40;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
@@ -1031,8 +1031,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {/* Content area — fades between slides, anchored to fixed top so emoji+title stay consistent */}
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
-          className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-start"}`}
-          style={visualStepType !== "hero" ? { paddingTop: SLIDE_TOP_OFFSET, paddingBottom: 24 } : undefined}
+          className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-center justify-center"}`}
+          style={visualStepType !== "hero" ? { paddingTop: 24, paddingBottom: 24 } : undefined}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
