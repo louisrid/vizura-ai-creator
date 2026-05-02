@@ -363,7 +363,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 8%)" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 4%)" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
@@ -430,7 +430,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-sm p-5"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 8%)" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10, border: "2px solid hsl(0 0% 4%)" }}
             >
               <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
                 reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
