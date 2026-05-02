@@ -9,6 +9,7 @@ import BackButton from "@/components/BackButton";
 import DotDecal from "@/components/DotDecal";
 
 import InstructionalSlide from "@/components/InstructionalSlide";
+import SlideDropdown from "@/components/SlideDropdown";
 import type { SlideConfig } from "@/components/InstructionalSlide";
 
 import PhotoGenerationOverlay from "@/components/PhotoGenerationOverlay";
