@@ -978,16 +978,18 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div>
       </div>
 
-      {/* Red spacer rectangle — debug fill, prevents content from coming near arrows */}
-      <div
-        style={{
-          width: "100%",
-          height: "22vh",
-          background: "rgba(255, 0, 0, 0.5)",
-          flexShrink: 0,
-          pointerEvents: "none",
-        }}
-      />
+      {/* Red spacer rectangle — hidden on hero slide (hero has its own self-contained layout) */}
+      {visualStepType !== "hero" && (
+        <div
+          style={{
+            width: "100%",
+            height: "22vh",
+            background: "rgba(255, 0, 0, 0.5)",
+            flexShrink: 0,
+            pointerEvents: "none",
+          }}
+        />
+      )}
 
       {/* Arrow buttons row — always rendered for consistent spacing, fades in sync with slide content */}
       <div
