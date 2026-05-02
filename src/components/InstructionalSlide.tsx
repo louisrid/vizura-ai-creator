@@ -31,7 +31,8 @@ export interface InstructionalSlideProps {
 const Y = "#ffe603";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
 const SLIDE_TOP_OFFSET = "clamp(156px, 22svh, 196px)";
-const SLIDE_CONTENT_GAP = 10;
+const SLIDE_CONTENT_GAP = 40;
+const EMOJI_MARGIN_BOTTOM = 40;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
 
@@ -235,20 +236,20 @@ const InstructionalSlide = ({
       {/* Centered content area (emoji on top, title, pills) */}
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
-          className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center"
-          style={{ paddingTop: SLIDE_TOP_OFFSET }}
+          className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center"
+          style={{ paddingTop: 24, paddingBottom: 24 }}
         >
           {slide.emoji === "🦊" ? (
             <img
               src={foxEmojiImg}
               alt="🦊"
               className="inline-block"
-              style={{ width: 60, height: 60, objectFit: "contain", marginBottom: 10, animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+              style={{ width: 60, height: 60, objectFit: "contain", marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite" }}
             />
           ) : (
             <span
               className="text-[60px] md:text-[78px] inline-block leading-none"
-              style={{ marginBottom: 10, animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+              style={{ marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite" }}
             >
               {slide.emoji}
             </span>
