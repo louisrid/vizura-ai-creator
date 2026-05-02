@@ -68,9 +68,9 @@
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 6%;
+    --sidebar-accent: 0 0% 2%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 17%;
+    --sidebar-border: 0 0% 13%;
     --sidebar-ring: 0 0% 100%;
 
     /* custom tokens */
@@ -79,19 +79,19 @@
     --nav-foreground: 0 0% 100%;
     --surface-dark: 0 0% 2%;
     --surface-dark-foreground: 0 0% 100%;
-    --surface-elevated: 0 0% 6%;
+    --surface-elevated: 0 0% 2%;
 
     /* wizard bg */
     --wizard-bg: 0 0% 2%;
 
-    --surface-strong: 0 0% 6%;
+    --surface-strong: 0 0% 2%;
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 15%;
+    --border-mid: 0 0% 11%;
 
     /* DARKER border grey — for menu dropdowns */
-    --border-dark: 0 0% 9%;
+    --border-dark: 0 0% 5%;
   }
 }
 
