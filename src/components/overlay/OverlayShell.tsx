@@ -195,38 +195,62 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-            <div className="relative flex-1 overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center px-8">
+            {/* Standardized layout: centered content -> red 22vh spacer -> arrows row -> dots */}
+            <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+              {/* Centered content */}
+              <div className="flex-1 flex items-center justify-center px-8 min-h-0">
                 <div className="mx-auto flex w-full max-w-xs flex-col items-center">
                   <div className="grid w-full">
-                  <AnimatePresence mode="sync" initial={false}>
-                    <motion.div
-                      key={step}
-                      className="w-full [grid-area:1/1]"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.45, ease: "easeInOut" }}
-                    >
-                      {children(step)}
-                    </motion.div>
-                  </AnimatePresence>
+                    <AnimatePresence mode="sync" initial={false}>
+                      <motion.div
+                        key={step}
+                        className="w-full [grid-area:1/1]"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.45, ease: "easeInOut" }}
+                      >
+                        {children(step)}
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 </div>
               </div>
 
-              <div className="absolute inset-x-0 flex flex-col items-center" style={{ top: "75%" }}>
-                {showNav && (
+              {/* Red spacer rectangle */}
+              <div
+                style={{
+                  width: "100%",
+                  height: "22vh",
+                  background: "rgba(255, 0, 0, 0.5)",
+                  flexShrink: 0,
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Arrows row + dots — always rendered for consistent spacing */}
+              <div
+                className="flex flex-col items-center"
+                style={{
+                  flexShrink: 0,
+                  paddingBottom: "max(env(safe-area-inset-bottom, 0px), 2%)",
+                }}
+              >
+                {showNav ? (
                   <>
-                    <div className={`mb-4 flex h-14 items-center gap-4 ${isLastStep && !reserveLastStepNavSpace ? "invisible" : "visible"}`}>
-                      <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
-                      <NavArrow
-                        direction="right"
-                        onClick={advance}
-                        disabled={false}
-                        onLongPress={startLongPress}
-                        onLongPressEnd={stopSkip}
-                      />
+                    <div className="mb-4 flex h-14 items-center gap-4">
+                      <div style={{ visibility: step === 0 ? "hidden" : "visible" }}>
+                        <NavArrow direction="left" onClick={goBack} disabled={step === 0} />
+                      </div>
+                      <div style={{ visibility: isLastStep && !reserveLastStepNavSpace ? "hidden" : "visible" }}>
+                        <NavArrow
+                          direction="right"
+                          onClick={advance}
+                          disabled={false}
+                          onLongPress={startLongPress}
+                          onLongPressEnd={stopSkip}
+                        />
+                      </div>
                     </div>
                     <div className="flex h-3 items-center">
                       <Dots current={step} total={totalSteps} />
@@ -237,13 +261,12 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
                       </div>
                     )}
                   </>
-                )}
-
-                {!showNav && totalSteps > 1 && (
+                ) : totalSteps > 1 ? (
                   <div className="flex h-3 items-center">
                     <Dots current={step} total={totalSteps} />
                   </div>
-                )}
+                ) : null}
+                <div style={{ height: 24, pointerEvents: "none" }} />
               </div>
             </div>
           </motion.div>

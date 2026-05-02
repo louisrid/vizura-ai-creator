@@ -169,6 +169,8 @@ const InstructionalSlide = ({
   const shouldAnimate = !alreadySeen && !hasAnimated;
   const isSinglePill = slide.pills.length === 1;
 
+  const noop = () => {};
+
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col"
@@ -178,33 +180,12 @@ const InstructionalSlide = ({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      {/* Dashes at top */}
-      {!slide.hideDashes && dashTotal > 0 && (
-        <div className="absolute inset-x-0 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 64px)", display: "none" }}>
-          <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
-            {Array.from({ length: dashTotal }).map((_, i) => (
-              <div
-                key={i}
-                className="transition-all duration-300"
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 3,
-                  flexShrink: 0,
-                  background: i <= dashActive ? Y : DASH_INACTIVE,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Standardized vertical layout:
+          [flex-grow centered content] [22vh red spacer] [arrows row] [safe-area] */}
 
-      {/* Content area */}
-      <div
-        className="absolute inset-x-0 flex justify-center px-6 md:px-12"
-        style={{ top: 0, bottom: 0 }}
-      >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center min-h-full pb-[120px]" style={{ transform: "translateY(15%)" }}>
+      {/* Centered content area (emoji on top, title, pills) */}
+      <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center">
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <img
@@ -228,33 +209,49 @@ const InstructionalSlide = ({
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-5 md:mt-6 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
-            {slide.pills.map((pill, i) => (
-              <ChatPill
-                key={i}
-                text={pill.text}
-                side={isSinglePill ? "left" : pill.side}
-                delay={shouldAnimate ? i * 0.5 + 0.5 : 0}
-                animate={shouldAnimate}
-                highlight={pill.highlight}
-              />
-            ))}
-          </div>
+          {slide.pills.length > 0 && (
+            <div className="mt-5 md:mt-6 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible" }}>
+              {slide.pills.map((pill, i) => (
+                <ChatPill
+                  key={i}
+                  text={pill.text}
+                  side={isSinglePill ? "left" : pill.side}
+                  delay={shouldAnimate ? i * 0.5 + 0.5 : 0}
+                  animate={shouldAnimate}
+                  highlight={pill.highlight}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Arrows at bottom */}
+      {/* Red spacer rectangle — debug fill, prevents content from coming near arrows */}
       <div
-        className="absolute inset-x-0 flex flex-col items-center"
-        style={{ bottom: "max(env(safe-area-inset-bottom, 0px), 2%)" }}
+        style={{
+          width: "100%",
+          height: "22vh",
+          background: "rgba(255, 0, 0, 0.5)",
+          flexShrink: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Arrows row — always rendered, invisible when disabled to keep spacing identical */}
+      <div
+        className="flex flex-col items-center"
+        style={{
+          flexShrink: 0,
+          paddingBottom: "max(env(safe-area-inset-bottom, 0px), 2%)",
+        }}
       >
         <div className="flex items-center justify-center gap-4 md:gap-6">
-          {showBack && onBack && (
-            <NavArrow direction="left" onClick={onBack} />
-          )}
-          {showForward && onForward && (
-            <NavArrow direction="right" onClick={onForward} />
-          )}
+          <div style={{ visibility: showBack && onBack ? "visible" : "hidden" }}>
+            <NavArrow direction="left" onClick={onBack ?? noop} />
+          </div>
+          <div style={{ visibility: showForward && onForward ? "visible" : "hidden" }}>
+            <NavArrow direction="right" onClick={onForward ?? noop} />
+          </div>
         </div>
         <div style={{ height: 88, pointerEvents: "none" }} />
       </div>
