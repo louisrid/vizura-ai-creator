@@ -375,7 +375,7 @@ const AppRoutes = () => {
     }
 
     return [];
-  }, [characters, generations, isStaticOrAuthRoute, location.pathname, user]);
+  }, [characters, generations, isStaticOrAuthRoute, location.pathname, location.state, user]);
 
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
   useEffect(() => {
