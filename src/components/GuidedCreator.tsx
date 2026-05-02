@@ -27,7 +27,6 @@ const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
 const EMOJI_MARGIN_BOTTOM = 16;
 const EMOJI_MARGIN_TOP = 56;
 const EMOJI_SLOT_HEIGHT = 78;
-const TITLE_SLOT_CLASS = "flex h-[84px] w-full items-start justify-center md:h-[110px]";
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
@@ -335,16 +334,19 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   }
 
   return (
-    <div className="flex w-full flex-col items-center justify-start">
-      <div className="flex w-full max-w-md flex-col items-center px-8">
-        <BouncingEmoji emoji="🔐" />
-        <div className={TITLE_SLOT_CLASS}>
-          <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-             {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
-          </h2>
-        </div>
+    <div className="flex min-h-full w-full flex-col items-center justify-center">
+      <div className="flex flex-col items-center px-8 w-full max-w-md">
+        <span
+          className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block"
+          style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+        >
+          🔐
+        </span>
+        <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+           {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
+        </h2>
 
-        <div className="w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))", marginTop: SLIDE_CONTENT_GAP }}>
+        <div className="mt-8 w-full rounded-[10px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
@@ -868,9 +870,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return (
         <div className="flex w-full flex-col items-center">
           <BouncingEmoji emoji={slide.emoji} />
-          <div className={TITLE_SLOT_CLASS}>
-            <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
-          </div>
+          <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
           <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
             <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
               <div className="w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
@@ -921,9 +921,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <BouncingEmoji emoji="✨" />
-        <div className={TITLE_SLOT_CLASS}>
-          <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        </div>
+        <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
           <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
             <div className="flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem] mx-auto">
@@ -959,24 +957,22 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <BouncingEmoji emoji={trait.emoji} />
-          <div className={TITLE_SLOT_CLASS}>
-            <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          </div>
-          <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
-            <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
-              <div className="flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
-                {trait.options.map((opt) => (
-                  <InteractivePill
-                    key={opt}
-                    label={opt}
-                    selected={selectedVal === opt}
-                    shaking={shaking && selectedVal !== opt}
-                    onClick={() => setTrait(trait.key, opt)}
-                  />
-                ))}
+            <BouncingEmoji emoji={trait.emoji} />
+          <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
+            <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+              <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+                <div className="flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
+                  {trait.options.map((opt) => (
+                    <InteractivePill
+                      key={opt}
+                      label={opt}
+                      selected={selectedVal === opt}
+                      shaking={shaking && selectedVal !== opt}
+                      onClick={() => setTrait(trait.key, opt)}
+                    />
+                  ))}
+                </div>
               </div>
-          </div>
           </div>
         </div>
       );
@@ -988,12 +984,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return (
         <div className="flex w-full flex-col items-center">
           <BouncingEmoji emoji="🖌️" />
-          <div className={TITLE_SLOT_CLASS}>
-            <div>
-              <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
-              <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
-            </div>
-          </div>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
             <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
               <button
@@ -1050,7 +1042,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {/* Content area — fades between slides, anchored to fixed top so emoji+title stay consistent */}
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
-          className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-center justify-center"}`}
+          className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-center justify-start"}`}
           style={visualStepType !== "hero" ? { paddingTop: 64, paddingBottom: 0 } : undefined}
         >
           <AnimatePresence mode="wait" initial={false}>

@@ -37,7 +37,6 @@ const EMOJI_MARGIN_TOP = 56;
 const EMOJI_SLOT_HEIGHT = 78;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
-const TITLE_SLOT_CLASS = "flex w-full items-start justify-center min-h-[76px] md:min-h-[110px]";
 
 const BouncingEmoji = ({ emoji }: { emoji: string }) => (
   <div
@@ -267,11 +266,9 @@ const InstructionalSlide = ({
         >
           <BouncingEmoji emoji={slide.emoji} />
 
-          <div className={TITLE_SLOT_CLASS}>
-            <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-              {slide.title}
-            </h2>
-          </div>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+            {slide.title}
+          </h2>
 
           {slide.pills.length > 0 && (
             <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
