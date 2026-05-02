@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import foxEmojiImg from "@/assets/fox-emoji.png";
 
@@ -30,6 +30,9 @@ export interface InstructionalSlideProps {
 
 const Y = "#ffe603";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
+const SLIDE_TOP_OFFSET = "24vh";
+const SLIDE_CONTENT_GAP = 10;
+const SLIDE_MIN_CONTENT_SCALE = 0.78;
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
@@ -168,6 +171,51 @@ const InstructionalSlide = ({
 
   const shouldAnimate = !alreadySeen && !hasAnimated;
   const isSinglePill = slide.pills.length === 1;
+  const spacerRef = useRef<HTMLDivElement | null>(null);
+  const contentSlotRef = useRef<HTMLDivElement | null>(null);
+  const contentInnerRef = useRef<HTMLDivElement | null>(null);
+  const [contentScale, setContentScale] = useState(1);
+  const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (!contentSlotRef.current || !contentInnerRef.current || !spacerRef.current || slide.pills.length === 0) {
+        setContentScale(1);
+        setContentHeight(undefined);
+        return;
+      }
+
+      const availableHeight = spacerRef.current.getBoundingClientRect().top - contentSlotRef.current.getBoundingClientRect().top - 8;
+      const naturalHeight = contentInnerRef.current.scrollHeight;
+
+      if (naturalHeight <= 0 || availableHeight <= 0) {
+        const fallbackScale = SLIDE_MIN_CONTENT_SCALE;
+        setContentScale(fallbackScale);
+        setContentHeight(naturalHeight > 0 ? naturalHeight * fallbackScale : undefined);
+        return;
+      }
+
+      const nextScale = Math.max(SLIDE_MIN_CONTENT_SCALE, Math.min(1, availableHeight / naturalHeight));
+      setContentScale(nextScale);
+      setContentHeight(naturalHeight * nextScale);
+    };
+
+    measure();
+    const frame = requestAnimationFrame(measure);
+    const resizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (resizeObserver) {
+      if (contentSlotRef.current) resizeObserver.observe(contentSlotRef.current);
+      if (contentInnerRef.current) resizeObserver.observe(contentInnerRef.current);
+      if (spacerRef.current) resizeObserver.observe(spacerRef.current);
+    }
+    window.addEventListener("resize", measure);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [slide.title, slide.pills.length]);
 
   const noop = () => {};
 
@@ -187,43 +235,44 @@ const InstructionalSlide = ({
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center"
-          style={{ paddingTop: "53vh" }}
+          style={{ paddingTop: SLIDE_TOP_OFFSET }}
         >
-          {/* Emoji — shifted lower toward the title */}
           {slide.emoji === "🦊" ? (
             <img
               src={foxEmojiImg}
               alt="🦊"
-              className="mb-3 md:mb-4 inline-block"
-              style={{ width: 52, height: 52, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(45%)" }}
+              className="inline-block"
+              style={{ width: 46, height: 46, objectFit: "contain", marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}
             />
           ) : (
             <span
-              className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block"
-              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(45%)" }}
+              className="text-[46px] md:text-[62px] inline-block leading-none"
+              style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}
             >
               {slide.emoji}
             </span>
           )}
 
-          {/* Title */}
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
           </h2>
 
-          {/* Chat bubble pills */}
           {slide.pills.length > 0 && (
-            <div className="mt-5 md:mt-6 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible" }}>
-              {slide.pills.map((pill, i) => (
-                <ChatPill
-                  key={i}
-                  text={pill.text}
-                  side={isSinglePill ? "left" : pill.side}
-                  delay={shouldAnimate ? i * 0.5 + 0.5 : 0}
-                  animate={shouldAnimate}
-                  highlight={pill.highlight}
-                />
-              ))}
+            <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+              <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+                <div className="w-full max-w-[90vw] md:max-w-[32rem] mx-auto flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible" }}>
+                  {slide.pills.map((pill, i) => (
+                    <ChatPill
+                      key={i}
+                      text={pill.text}
+                      side={isSinglePill ? "left" : pill.side}
+                      delay={shouldAnimate ? i * 0.5 + 0.5 : 0}
+                      animate={shouldAnimate}
+                      highlight={pill.highlight}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -231,6 +280,7 @@ const InstructionalSlide = ({
 
       {/* Red spacer rectangle — debug fill, prevents content from coming near arrows */}
       <div
+        ref={spacerRef}
         style={{
           width: "100%",
           height: "14.1vh",
