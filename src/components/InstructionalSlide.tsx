@@ -231,7 +231,7 @@ const InstructionalSlide = ({
         style={{
           width: "100%",
           height: "22vh",
-          background: "rgba(255, 0, 0, 0.5)",
+          background: "#ff0000",
           flexShrink: 0,
           pointerEvents: "none",
         }}
