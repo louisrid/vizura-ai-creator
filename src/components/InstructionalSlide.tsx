@@ -199,7 +199,7 @@ const InstructionalSlide = ({
             />
           ) : (
             <span
-              className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block"
+              className="text-[58px] md:text-[78px] mb-3 md:mb-4 inline-block"
               style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
             >
               {slide.emoji}
