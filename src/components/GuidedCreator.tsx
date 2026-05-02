@@ -27,6 +27,7 @@ const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
 const EMOJI_MARGIN_BOTTOM = 16;
 const EMOJI_MARGIN_TOP = 56;
 const EMOJI_SLOT_HEIGHT = 78;
+const TITLE_SLOT_CLASS = "flex w-full items-start justify-center min-h-[76px] md:min-h-[110px]";
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
