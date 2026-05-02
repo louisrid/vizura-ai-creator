@@ -20,13 +20,13 @@ foxPreload.src = foxEmojiImg;
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
-const SLIDE_TOP_OFFSET = "35vh";
+const SLIDE_TOP_OFFSET = "41vh";
 const SLIDE_CONTENT_GAP = 10;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
-const RED_SPACER_HEIGHT = "6.2vh";
+const RED_SPACER_HEIGHT = "4.3vh";
 const EMOJI_MOBILE_SIZE = 45;
-const EMOJI_MARGIN_BOTTOM = 28;
-const EMOJI_TRANSLATE_Y = "translateY(-62%)";
+const EMOJI_MARGIN_BOTTOM = 32;
+const EMOJI_TRANSLATE_Y = "translateY(-70%)";
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
