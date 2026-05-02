@@ -943,7 +943,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       }}
     >
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 flex flex-col"
         style={{
           opacity: 1,
         }}
@@ -960,9 +960,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           </div>
       </div>
 
-      {/* Content area — fades between slides */}
-      <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center min-h-full" : "items-start pt-[37vh] pb-[190px]"} justify-center`}>
+      {/* Centered content area — fades between slides, fills space above red spacer */}
+      <div className="flex-1 flex items-center justify-center px-6 md:px-12 min-h-0">
+        <div className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center`}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={step}
@@ -978,27 +978,44 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div>
       </div>
 
-      {/* Arrow buttons — fade in sync with slide content */}
-      <AnimatePresence initial={false}>
-        {showNavigationDelayed && (
-          <motion.div
-            key="nav-arrows"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease: "easeInOut" }}
-            className="absolute inset-x-0 z-10 flex flex-col items-center"
-            style={{ bottom: "max(calc(env(safe-area-inset-bottom, 0px) + 50px), 8%)" }}
-          >
-            <div className="flex items-center justify-center gap-4 md:gap-6">
+      {/* Red spacer rectangle — debug fill, prevents content from coming near arrows */}
+      <div
+        style={{
+          width: "100%",
+          height: "22vh",
+          background: "rgba(255, 0, 0, 0.5)",
+          flexShrink: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Arrow buttons row — always rendered for consistent spacing, fades in sync with slide content */}
+      <div
+        className="flex flex-col items-center"
+        style={{
+          flexShrink: 0,
+          paddingBottom: "max(env(safe-area-inset-bottom, 0px), 2%)",
+        }}
+      >
+        <AnimatePresence initial={false}>
+          {showNavigationDelayed && (
+            <motion.div
+              key="nav-arrows"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+              className="flex items-center justify-center gap-4 md:gap-6"
+            >
               <motion.div animate={backArrowShaking ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }}>
                 <NavArrow direction="left" onClick={goBack} />
               </motion.div>
               <NavArrow direction="right" onClick={advance} disabled={!canAdvance && currentTraitIndex >= 0} colorOverride={isCreateSlide ? "#00e0ff" : undefined} />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div style={{ height: 24, pointerEvents: "none" }} />
+      </div>
 
       </div>
     </div>,
