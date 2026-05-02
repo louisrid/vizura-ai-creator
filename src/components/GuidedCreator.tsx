@@ -571,6 +571,48 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   }, [showNavigation, visible]);
   const currentTraitIndex = currentStep.type === "trait" ? currentStep.traitIndex : -1;
 
+  useLayoutEffect(() => {
+    const isScalableStep = isSet1Slide1 || isNameSlide || currentTraitIndex >= 0 || isCreateSlide;
+
+    const measure = () => {
+      if (!isScalableStep || !contentSlotRef.current || !contentInnerRef.current || !spacerRef.current) {
+        setContentScale(1);
+        setContentHeight(undefined);
+        return;
+      }
+
+      const availableHeight = spacerRef.current.getBoundingClientRect().top - contentSlotRef.current.getBoundingClientRect().top - 8;
+      const naturalHeight = contentInnerRef.current.scrollHeight;
+
+      if (naturalHeight <= 0 || availableHeight <= 0) {
+        const fallbackScale = SLIDE_MIN_CONTENT_SCALE;
+        setContentScale(fallbackScale);
+        setContentHeight(naturalHeight > 0 ? naturalHeight * fallbackScale : undefined);
+        return;
+      }
+
+      const nextScale = Math.max(SLIDE_MIN_CONTENT_SCALE, Math.min(1, availableHeight / naturalHeight));
+      setContentScale(nextScale);
+      setContentHeight(naturalHeight * nextScale);
+    };
+
+    measure();
+    const frame = requestAnimationFrame(measure);
+    const resizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (resizeObserver) {
+      if (contentSlotRef.current) resizeObserver.observe(contentSlotRef.current);
+      if (contentInnerRef.current) resizeObserver.observe(contentInnerRef.current);
+      if (spacerRef.current) resizeObserver.observe(spacerRef.current);
+    }
+    window.addEventListener("resize", measure);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [isSet1Slide1, isNameSlide, currentTraitIndex, isCreateSlide, step, selections.characterName]);
+
 
 
 
