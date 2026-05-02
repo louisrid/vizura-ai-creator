@@ -195,7 +195,7 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="mb-3 md:mb-4 inline-block"
-              style={{ width: 64, height: 64, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
+              style={{ width: 58, height: 58, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
             />
           ) : (
             <span
