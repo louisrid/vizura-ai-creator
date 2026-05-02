@@ -262,7 +262,7 @@ const InstructionalSlide = ({
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center"
-          style={{ paddingTop: 64, paddingBottom: 0 }}
+          style={{ paddingTop: 96, paddingBottom: 0 }}
         >
           <BouncingEmoji emoji={slide.emoji} />
 

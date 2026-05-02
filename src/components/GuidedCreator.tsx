@@ -626,7 +626,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       resizeObserver?.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [isSet1Slide1, isNameSlide, currentTraitIndex, isCreateSlide, step, selections.characterName]);
+  }, [isSet1Slide1, isNameSlide, currentTraitIndex, isCreateSlide, step]);
 
 
 
@@ -1043,7 +1043,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-center justify-start"}`}
-          style={visualStepType !== "hero" ? { paddingTop: 64, paddingBottom: 0 } : undefined}
+          style={visualStepType !== "hero" ? { paddingTop: 96, paddingBottom: 0 } : undefined}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
