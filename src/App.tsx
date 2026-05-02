@@ -388,9 +388,24 @@ const AppRoutes = () => {
   useEffect(() => {
     if (authLoading) return;
 
-    if (!user || isStaticOrAuthRoute || criticalImageUrls.length === 0) {
+    if (!user || isStaticOrAuthRoute) {
       setCriticalImagesReady(true);
       initialPreloadDoneRef.current = true;
+      return;
+    }
+
+    // If data isn't ready yet AND we have no URLs to preload, do NOT mark the
+    // initial preload as done — otherwise URLs that arrive moments later would
+    // be backgrounded and the user would see grey image boxes after the splash
+    // hides. Keep the splash up until real URLs arrive and finish preloading.
+    const dataReady = charactersReady && generationsReady;
+    if (criticalImageUrls.length === 0) {
+      if (dataReady) {
+        setCriticalImagesReady(true);
+        initialPreloadDoneRef.current = true;
+      } else {
+        setCriticalImagesReady(false);
+      }
       return;
     }
 
@@ -421,7 +436,7 @@ const AppRoutes = () => {
     return () => {
       cancelled = true;
     };
-  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user]);
+  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady]);
 
   // Safety ceiling: if data fetch silently stalls (network failure that didn't throw),
   // release the splash after 12s so the user is never trapped on yellow forever.
