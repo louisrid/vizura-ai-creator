@@ -184,10 +184,10 @@ const InstructionalSlide = ({
           [flex-grow centered content] [22vh red spacer] [arrows row] [safe-area] */}
 
       {/* Centered content area (emoji on top, title, pills) */}
-      <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0">
+      <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
-          className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center"
-          style={{ transform: "translateY(14%)" }}
+          className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center"
+          style={{ paddingTop: "18vh" }}
         >
           {/* Emoji — shifted 8% lower toward the title */}
           {slide.emoji === "🦊" ? (
@@ -195,12 +195,12 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="mb-3 md:mb-4 inline-block"
-              style={{ width: 64, height: 64, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(8%)" }}
+              style={{ width: 58, height: 58, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
             />
           ) : (
             <span
-              className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block"
-              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(8%)" }}
+              className="text-[58px] md:text-[78px] mb-3 md:mb-4 inline-block"
+              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
             >
               {slide.emoji}
             </span>
@@ -233,7 +233,7 @@ const InstructionalSlide = ({
       <div
         style={{
           width: "100%",
-          height: "22vh",
+          height: "17.6vh",
           background: "#ff0000",
           flexShrink: 0,
           pointerEvents: "none",
