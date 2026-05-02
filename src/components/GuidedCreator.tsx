@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useEffect, useRef } from "react";
+import { forwardRef, useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import foxEmojiImg from "@/assets/fox-emoji.png";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
@@ -22,6 +22,7 @@ const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
 const SLIDE_TOP_OFFSET = "24vh";
 const SLIDE_CONTENT_GAP = 10;
+const SLIDE_MIN_CONTENT_SCALE = 0.78;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
