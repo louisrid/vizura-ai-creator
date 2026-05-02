@@ -20,6 +20,8 @@ foxPreload.src = foxEmojiImg;
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
+const SLIDE_TOP_OFFSET = "24vh";
+const SLIDE_CONTENT_GAP = 10;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
@@ -804,11 +806,11 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-<span className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}>
+          <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
-          <div className="mt-5 md:mt-6 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+          <div className="mt-[10px] md:mt-[10px] w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
               const isMiddle = i === 1 && slide.pills.length === 3;
@@ -853,9 +855,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}>✨</span>
+        <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-5 md:mt-7 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
+        <div className="mt-[10px] md:mt-[10px] flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
             animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
             transition={{ duration: 0.4 }}
@@ -886,9 +888,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}>{trait.emoji}</span>
+            <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className="mt-5 md:mt-7 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
+          <div className="mt-[10px] md:mt-[10px] flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
             {trait.options.map((opt) => (
               <InteractivePill
                 key={opt}
@@ -908,13 +910,13 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const showGemCost = !isFirstTime;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}>🖌️</span>
+          <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>🖌️</span>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-            className="mt-6 w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
+            className="mt-[10px] w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
             style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
           >
             {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
@@ -964,7 +966,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-start"}`}
-          style={visualStepType !== "hero" ? { paddingTop: "18vh" } : undefined}
+          style={visualStepType !== "hero" ? { paddingTop: SLIDE_TOP_OFFSET } : undefined}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
