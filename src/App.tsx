@@ -319,8 +319,12 @@ const AppRoutes = () => {
       if (isRenderableImageUrl(url)) urls.add(url);
     };
     const path = location.pathname;
+    const openingCreator = !!(location.state as { openCreator?: boolean } | null)?.openCreator;
 
     if (path === "/") {
+      // When opening the creator overlay, Home content is covered — skip preloading its images.
+      if (openingCreator) return [];
+
       generations
         .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl).slice(0, 1))
         .slice(0, 8)
@@ -371,7 +375,7 @@ const AppRoutes = () => {
     }
 
     return [];
-  }, [characters, generations, isStaticOrAuthRoute, location.pathname, user]);
+  }, [characters, generations, isStaticOrAuthRoute, location.pathname, location.state, user]);
 
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
   useEffect(() => {
