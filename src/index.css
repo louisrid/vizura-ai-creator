@@ -12,24 +12,24 @@
     --card: 0 0% 5%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 6%;
+    --popover: 0 0% 2%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 6%;
+    --secondary: 0 0% 2%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 6%;
+    --muted: 0 0% 2%;
     --muted-foreground: 0 0% 100%;
 
     --accent: 54 100% 51%;
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
-    --border: 0 0% 17%;
-    --input: 0 0% 17%;
+    --border: 0 0% 13%;
+    --input: 0 0% 13%;
     --ring: 0 0% 100%;
 
     --destructive: 0 72% 51%;
