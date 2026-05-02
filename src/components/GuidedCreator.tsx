@@ -962,7 +962,10 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Centered content area — fades between slides, fills space above red spacer */}
       <div className="flex-1 flex items-center justify-center px-6 md:px-12 min-h-0">
-        <div className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center`}>
+        <div
+          className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} items-center justify-center`}
+          style={visualStepType !== "hero" ? { transform: "translateY(14%)" } : undefined}
+        >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={step}
