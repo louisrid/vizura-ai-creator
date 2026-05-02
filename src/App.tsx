@@ -373,6 +373,7 @@ const AppRoutes = () => {
     return [];
   }, [characters, generations, isStaticOrAuthRoute, location.pathname, user]);
 
+  const preloadedUrlsRef = useRef<Set<string>>(new Set());
   useEffect(() => {
     if (authLoading) return;
 
@@ -381,11 +382,22 @@ const AppRoutes = () => {
       return;
     }
 
+    // Only block on URLs we have NOT already preloaded this session.
+    // Returning to a page whose images are cached should NOT re-trigger the
+    // yellow loader — they're already in the browser image cache.
+    const newUrls = criticalImageUrls.filter((url) => !preloadedUrlsRef.current.has(url));
+    if (newUrls.length === 0) {
+      setCriticalImagesReady(true);
+      return;
+    }
+
     let cancelled = false;
     setCriticalImagesReady(false);
 
-    void Promise.all(criticalImageUrls.map(preloadImage)).finally(() => {
-      if (!cancelled) setCriticalImagesReady(true);
+    void Promise.all(newUrls.map(preloadImage)).finally(() => {
+      if (cancelled) return;
+      newUrls.forEach((url) => preloadedUrlsRef.current.add(url));
+      setCriticalImagesReady(true);
     });
 
     return () => {
