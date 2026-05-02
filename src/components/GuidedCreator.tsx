@@ -1033,7 +1033,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-center justify-center"}`}
-          style={visualStepType !== "hero" ? { paddingTop: 24, paddingBottom: 24 } : undefined}
+          style={visualStepType !== "hero" ? { paddingTop: 120, paddingBottom: 0 } : undefined}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
