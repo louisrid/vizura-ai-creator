@@ -58,6 +58,7 @@ const isRenderableImageUrl = (url: string | null | undefined): url is string => 
   return true;
 };
 
+const PRELOAD_TIMEOUT_MS = 3500;
 const preloadImage = (url: string) => new Promise<void>((resolve) => {
   const img = new Image();
   let settled = false;
@@ -65,6 +66,7 @@ const preloadImage = (url: string) => new Promise<void>((resolve) => {
   const finish = () => {
     if (settled) return;
     settled = true;
+    window.clearTimeout(timer);
     resolve();
   };
 
@@ -75,6 +77,10 @@ const preloadImage = (url: string) => new Promise<void>((resolve) => {
     }
     finish();
   };
+
+  // Hard ceiling per image: one slow/dead URL must not freeze the splash.
+  // Images keep loading in the background via the <img> tags after splash hides.
+  const timer = window.setTimeout(finish, PRELOAD_TIMEOUT_MS);
 
   img.onload = decodeAndFinish;
   img.onerror = finish;
@@ -423,7 +429,7 @@ const AppRoutes = () => {
   // first and dataStillLoading drops to false.
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setDataLoadGracePassed(true), 12000);
+    const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
     return () => clearTimeout(timer);
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
