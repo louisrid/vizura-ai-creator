@@ -195,12 +195,12 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="mb-3 md:mb-4 inline-block"
-              style={{ width: 58, height: 58, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
+              style={{ width: 52, height: 52, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}
             />
           ) : (
             <span
-              className="text-[58px] md:text-[78px] mb-3 md:mb-4 inline-block"
-              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(15%)" }}
+              className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block"
+              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}
             >
               {slide.emoji}
             </span>
@@ -233,7 +233,7 @@ const InstructionalSlide = ({
       <div
         style={{
           width: "100%",
-          height: "17.6vh",
+          height: "14.1vh",
           background: "#ff0000",
           flexShrink: 0,
           pointerEvents: "none",
