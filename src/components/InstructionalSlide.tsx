@@ -242,11 +242,11 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="inline-block"
-              style={{ width: 42, height: 42, objectFit: "contain", marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
+              style={{ width: 45, height: 45, objectFit: "contain", marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
             />
           ) : (
             <span
-              className="text-[42px] md:text-[58px] inline-block leading-none"
+              className="text-[45px] md:text-[62px] inline-block leading-none"
               style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
             >
               {slide.emoji}
