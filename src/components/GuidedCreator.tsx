@@ -858,43 +858,47 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
-          <div className="mt-[10px] md:mt-[10px] w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
-            {slide.pills.map((pill, i) => {
-              const isLeft = isSinglePill ? true : pill.side === "left";
-              const isMiddle = i === 1 && slide.pills.length === 3;
-              const bgColor = isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))";
-              return (
-                <motion.div
-                  key={i}
-                  className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
-                  initial={shouldAnim ? { x: isLeft ? "-120%" : "120%" } : false}
-                  animate={{ x: 0 }}
-                  transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
-                >
-                  <div className="relative">
-                    <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
-                      style={{
-                        borderRadius: 10,
-                        backgroundColor: bgColor,
-                        color: isMiddle ? "#ffffff" : "#000000",
-                        border: "none",
-                      }}>
-                      {pill.text}
-                    </div>
-                    <div style={{
-                      position: "absolute",
-                      bottom: -7,
-                      ...(isLeft ? { left: 12 } : { right: 12 }),
-                      width: 0,
-                      height: 0,
-                      borderLeft: isLeft ? "none" : "8px solid transparent",
-                      borderRight: isLeft ? "8px solid transparent" : "none",
-                      borderTop: `8px solid ${bgColor}`,
-                    }} />
-                  </div>
-                </motion.div>
-              );
-            })}
+          <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+            <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+              <div className="w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+                {slide.pills.map((pill, i) => {
+                  const isLeft = isSinglePill ? true : pill.side === "left";
+                  const isMiddle = i === 1 && slide.pills.length === 3;
+                  const bgColor = isMiddle ? "hsl(var(--neon-green))" : "hsl(var(--foreground))";
+                  return (
+                    <motion.div
+                      key={i}
+                      className={`flex ${isLeft ? "justify-start" : "justify-end"}`}
+                      initial={shouldAnim ? { x: isLeft ? "-120%" : "120%" } : false}
+                      animate={{ x: 0 }}
+                      transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
+                    >
+                      <div className="relative">
+                        <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
+                          style={{
+                            borderRadius: 10,
+                            backgroundColor: bgColor,
+                            color: isMiddle ? "#ffffff" : "#000000",
+                            border: "none",
+                          }}>
+                          {pill.text}
+                        </div>
+                        <div style={{
+                          position: "absolute",
+                          bottom: -7,
+                          ...(isLeft ? { left: 12 } : { right: 12 }),
+                          width: 0,
+                          height: 0,
+                          borderLeft: isLeft ? "none" : "8px solid transparent",
+                          borderRight: isLeft ? "8px solid transparent" : "none",
+                          borderTop: `8px solid ${bgColor}`,
+                        }} />
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -905,27 +909,31 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
-        <div className="mt-[10px] md:mt-[10px] flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
-          <motion.input
-            animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-            transition={{ duration: 0.4 }}
-            value={selections.characterName}
-            onChange={(e) => updateCharacterName(e.target.value)}
-            placeholder="type a name…"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-            className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[21px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-            style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
-          />
-          <motion.button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
-            whileTap={{ scale: 0.85, rotate: 180 }}
-            className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black transition-opacity duration-150"
-            style={{ borderRadius: 10, backgroundColor: Y }}
-          >
-            <RefreshCw size={20} strokeWidth={2.5} />
-          </motion.button>
+        <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+          <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+            <div className="flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem] mx-auto">
+              <motion.input
+                animate={shaking && !selections.characterName.trim() ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+                transition={{ duration: 0.4 }}
+                value={selections.characterName}
+                onChange={(e) => updateCharacterName(e.target.value)}
+                placeholder="type a name…"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
+                className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[21px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+                style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+              />
+              <motion.button
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
+                whileTap={{ scale: 0.85, rotate: 180 }}
+                className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black transition-opacity duration-150"
+                style={{ borderRadius: 10, backgroundColor: Y }}
+              >
+                <RefreshCw size={20} strokeWidth={2.5} />
+              </motion.button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -938,16 +946,20 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <div className="flex w-full flex-col items-center">
             <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-          <div className="mt-[10px] md:mt-[10px] flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
-            {trait.options.map((opt) => (
-              <InteractivePill
-                key={opt}
-                label={opt}
-                selected={selectedVal === opt}
-                shaking={shaking && selectedVal !== opt}
-                onClick={() => setTrait(trait.key, opt)}
-              />
-            ))}
+            <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+              <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+                <div className="flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
+                  {trait.options.map((opt) => (
+                    <InteractivePill
+                      key={opt}
+                      label={opt}
+                      selected={selectedVal === opt}
+                      shaking={shaking && selectedVal !== opt}
+                      onClick={() => setTrait(trait.key, opt)}
+                    />
+                  ))}
+                </div>
+              </div>
           </div>
         </div>
       );
@@ -961,14 +973,18 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <span className="text-[46px] md:text-[62px] inline-block leading-none" style={{ marginBottom: 6, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(12%)" }}>🖌️</span>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-            className="mt-[10px] w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5"
-            style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
-          >
-            {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
-          </button>
+          <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+            <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+              <button
+                type="button"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
+                className="w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 mx-auto"
+                style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 10, border: "2px solid #00e0ff" }}
+              >
+                {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
+              </button>
+            </div>
+          </div>
         </div>
       );
     }
