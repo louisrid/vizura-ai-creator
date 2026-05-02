@@ -429,7 +429,7 @@ const AppRoutes = () => {
   // first and dataStillLoading drops to false.
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setDataLoadGracePassed(true), 12000);
+    const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
     return () => clearTimeout(timer);
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
