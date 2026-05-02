@@ -853,7 +853,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>✨</span>
+        <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(8%)" }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div className="mt-5 md:mt-7 flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem]">
           <motion.input
@@ -886,7 +886,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>{trait.emoji}</span>
+          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(8%)" }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
           <div className="mt-5 md:mt-7 flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
             {trait.options.map((opt) => (
@@ -908,7 +908,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const showGemCost = !isFirstTime;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}>🖌️</span>
+          <span className="text-[64px] md:text-[86px] mb-3 md:mb-4 inline-block" style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(8%)" }}>🖌️</span>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <button
