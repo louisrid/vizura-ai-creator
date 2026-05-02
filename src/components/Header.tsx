@@ -276,9 +276,10 @@ const Header = () => {
 
   // Menu dropdown rendered via portal to escape stacking context
   const menuDropdown = dropdownPos ? createPortal(
-    <AnimatePresence>
+    <AnimatePresence mode="wait" initial={false}>
       {open && (
         <motion.div
+          key="menu-dropdown"
           ref={dropdownRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
