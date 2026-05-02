@@ -30,9 +30,9 @@ export interface InstructionalSlideProps {
 
 const Y = "#ffe603";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
-const SLIDE_TOP_OFFSET = "30vh";
+const SLIDE_TOP_OFFSET = "34vh";
 const SLIDE_CONTENT_GAP = 10;
-const SLIDE_MIN_CONTENT_SCALE = 0.78;
+const SLIDE_MIN_CONTENT_SCALE = 0.70;
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
@@ -242,12 +242,12 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="inline-block"
-              style={{ width: 42, height: 42, objectFit: "contain", marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(24%)" }}
+              style={{ width: 42, height: 42, objectFit: "contain", marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
             />
           ) : (
             <span
               className="text-[42px] md:text-[58px] inline-block leading-none"
-              style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(24%)" }}
+              style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
             >
               {slide.emoji}
             </span>
