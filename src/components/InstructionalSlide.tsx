@@ -34,8 +34,32 @@ const SLIDE_TOP_OFFSET = "clamp(156px, 22svh, 196px)";
 const SLIDE_CONTENT_GAP = 24;
 const EMOJI_MARGIN_BOTTOM = 16;
 const EMOJI_MARGIN_TOP = 56;
+const EMOJI_SLOT_HEIGHT = 78;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
+
+const BouncingEmoji = ({ emoji }: { emoji: string }) => (
+  <div
+    className="flex items-center justify-center"
+    style={{ height: EMOJI_SLOT_HEIGHT, marginTop: EMOJI_MARGIN_TOP, marginBottom: EMOJI_MARGIN_BOTTOM }}
+  >
+    {emoji === "🦊" ? (
+      <img
+        src={foxEmojiImg}
+        alt="🦊"
+        className="inline-block"
+        style={{ width: 60, height: 60, objectFit: "contain", animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+      />
+    ) : (
+      <span
+        className="text-[60px] md:text-[78px] inline-block leading-none"
+        style={{ animation: "emoji-bounce 1.6s ease-in-out infinite" }}
+      >
+        {emoji}
+      </span>
+    )}
+  </div>
+);
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
@@ -240,21 +264,7 @@ const InstructionalSlide = ({
           className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center"
           style={{ paddingTop: 64, paddingBottom: 0 }}
         >
-          {slide.emoji === "🦊" ? (
-            <img
-              src={foxEmojiImg}
-              alt="🦊"
-              className="inline-block"
-              style={{ width: 60, height: 60, objectFit: "contain", marginTop: EMOJI_MARGIN_TOP, marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite" }}
-            />
-          ) : (
-            <span
-              className="text-[60px] md:text-[78px] inline-block leading-none"
-              style={{ marginTop: EMOJI_MARGIN_TOP, marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite" }}
-            >
-              {slide.emoji}
-            </span>
-          )}
+          <BouncingEmoji emoji={slide.emoji} />
 
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
