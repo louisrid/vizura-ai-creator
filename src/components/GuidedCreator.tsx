@@ -21,10 +21,11 @@ const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
 const SLIDE_TOP_OFFSET = "clamp(156px, 22svh, 196px)";
-const SLIDE_CONTENT_GAP = 40;
+const SLIDE_CONTENT_GAP = 24;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
 const EMOJI_MARGIN_BOTTOM = 40;
+const EMOJI_MARGIN_TOP = 32;
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
