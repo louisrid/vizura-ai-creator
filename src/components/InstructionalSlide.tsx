@@ -60,9 +60,9 @@ const ChatPill = ({
     >
       <div className="relative">
         <div
-          className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+          className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
           style={{
-            borderRadius: 10,
+            borderRadius: 8,
             backgroundColor: bgColor,
             color: highlight ? "#ffffff" : "#000000",
             border: "none",
@@ -204,7 +204,7 @@ const InstructionalSlide = ({
         className="absolute inset-x-0 flex justify-center px-6 md:px-12"
         style={{ top: 0, bottom: 0 }}
       >
-        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center min-h-full pb-[120px]">
+        <div className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center min-h-full pb-[120px]" style={{ transform: "translateY(15%)" }}>
           {/* Emoji */}
           {slide.emoji === "🦊" ? (
             <img
@@ -228,7 +228,7 @@ const InstructionalSlide = ({
           </h2>
 
           {/* Chat bubble pills */}
-          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+          <div className="mt-5 md:mt-6 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => (
               <ChatPill
                 key={i}

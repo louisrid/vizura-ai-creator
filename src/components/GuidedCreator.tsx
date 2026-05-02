@@ -105,7 +105,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
           ? { x: [0, -6, 6, -4, 4, 0], transition: { duration: 0.25 } }
           : {}
     }
-    className="inline-flex items-center justify-center h-[58px] md:h-[68px] text-[17px] md:text-[20px] w-[138px] md:w-[165px]"
+    className="inline-flex items-center justify-center h-[46px] md:h-[54px] text-[14px] md:text-[16px] w-[110px] md:w-[132px]"
     style={{
       borderRadius: 10,
       padding: 0,
@@ -808,7 +808,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
-          <div className="mt-6 md:mt-8 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-4" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
+          <div className="mt-5 md:mt-6 w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
             {slide.pills.map((pill, i) => {
               const isLeft = isSinglePill ? true : pill.side === "left";
               const isMiddle = i === 1 && slide.pills.length === 3;
@@ -822,7 +822,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                 >
                   <div className="relative">
-                    <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+                    <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
@@ -962,7 +962,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
 
       {/* Content area — fades between slides */}
       <div className="absolute inset-0 flex items-start justify-center px-6 md:px-12">
-        <div className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center min-h-full" : "items-start pt-[22vh] pb-[190px]"} justify-center`}>
+        <div className={`mx-auto flex w-full ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center min-h-full" : "items-start pt-[37vh] pb-[190px]"} justify-center`}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={step}
