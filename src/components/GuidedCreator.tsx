@@ -871,7 +871,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return (
         <div className="flex w-full flex-col items-center">
           <BouncingEmoji emoji={slide.emoji} />
-          <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
+          <div className={TITLE_SLOT_CLASS}>
+            <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
+          </div>
           <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
             <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
               <div className="w-full max-w-[90vw] md:max-w-[32rem] flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible", paddingBottom: 10 }}>
@@ -922,7 +924,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
         <BouncingEmoji emoji="✨" />
-        <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
+        <div className={TITLE_SLOT_CLASS}>
+          <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
+        </div>
         <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
           <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
             <div className="flex items-center gap-2.5 w-full max-w-[17rem] md:max-w-[22rem] mx-auto">
@@ -958,22 +962,24 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-            <BouncingEmoji emoji={trait.emoji} />
-          <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
-            <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
-              <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
-                <div className="flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
-                  {trait.options.map((opt) => (
-                    <InteractivePill
-                      key={opt}
-                      label={opt}
-                      selected={selectedVal === opt}
-                      shaking={shaking && selectedVal !== opt}
-                      onClick={() => setTrait(trait.key, opt)}
-                    />
-                  ))}
-                </div>
+          <BouncingEmoji emoji={trait.emoji} />
+          <div className={TITLE_SLOT_CLASS}>
+            <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
+          </div>
+          <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
+            <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
+              <div className="flex flex-wrap justify-center gap-3 md:gap-3.5 px-2 mx-auto max-w-[28rem] md:max-w-[28rem]">
+                {trait.options.map((opt) => (
+                  <InteractivePill
+                    key={opt}
+                    label={opt}
+                    selected={selectedVal === opt}
+                    shaking={shaking && selectedVal !== opt}
+                    onClick={() => setTrait(trait.key, opt)}
+                  />
+                ))}
               </div>
+          </div>
           </div>
         </div>
       );
@@ -985,8 +991,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return (
         <div className="flex w-full flex-col items-center">
           <BouncingEmoji emoji="🖌️" />
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
+          <div className={TITLE_SLOT_CLASS}>
+            <div>
+              <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
+              <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
+            </div>
+          </div>
           <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
             <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
               <button
