@@ -67,7 +67,7 @@ const writeLocal = (key: string, data: unknown) => {
   try { localStorage.setItem(key, JSON.stringify(data)); } catch {}
 };
 
-const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, label: string): Promise<T> => {
+const withTimeout = async <T,>(promise: PromiseLike<T>, timeoutMs: number, label: string): Promise<T> => {
   let timeoutId: number | null = null;
 
   const timeoutPromise = new Promise<never>((_, reject) => {
@@ -75,7 +75,7 @@ const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, label: st
   });
 
   try {
-    return await Promise.race([promise, timeoutPromise]);
+    return await Promise.race([Promise.resolve(promise), timeoutPromise]);
   } finally {
     if (timeoutId !== null) window.clearTimeout(timeoutId);
   }
