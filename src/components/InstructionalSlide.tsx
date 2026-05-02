@@ -260,7 +260,7 @@ const InstructionalSlide = ({
           {slide.pills.length > 0 && (
             <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
               <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
-                <div className="w-full max-w-[90vw] md:max-w-[32rem] mx-auto flex flex-col gap-3" style={{ overflowX: "hidden", overflowY: "visible" }}>
+                <div className="w-full max-w-[20rem] md:max-w-[26rem] mx-auto flex flex-col gap-3 px-2" style={{ overflowX: "hidden", overflowY: "visible" }}>
                   {slide.pills.map((pill, i) => (
                     <ChatPill
                       key={i}
