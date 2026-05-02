@@ -69,7 +69,7 @@ const TopUps = () => {
   if (!loading && !user) return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-7 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[60px] pb-[280px]">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
           <PageTitle className="mb-0">buy gems</PageTitle>
@@ -126,7 +126,7 @@ const TopUps = () => {
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-7 pb-[280px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[60px] pb-[280px]">
         <div className="flex items-center gap-3 mb-7 w-full">
           <BackButton />
           <PageTitle className="mb-0">buy gems</PageTitle>
