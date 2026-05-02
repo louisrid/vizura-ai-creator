@@ -67,20 +67,6 @@ const writeLocal = (key: string, data: unknown) => {
   try { localStorage.setItem(key, JSON.stringify(data)); } catch {}
 };
 
-const withTimeout = async <T,>(promise: PromiseLike<T>, timeoutMs: number, label: string): Promise<T> => {
-  let timeoutId: number | null = null;
-
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    timeoutId = window.setTimeout(() => reject(new Error(`${label} timed out`)), timeoutMs);
-  });
-
-  try {
-    return await Promise.race([Promise.resolve(promise), timeoutPromise]);
-  } finally {
-    if (timeoutId !== null) window.clearTimeout(timeoutId);
-  }
-};
-
 const clearLocal = () => {
   try {
     localStorage.removeItem(CHARS_KEY);
@@ -139,17 +125,21 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setCharactersReady(true);
       return;
     }
+
+    let releasedReady = false;
+    const readyTimer = window.setTimeout(() => {
+      releasedReady = true;
+      setCharactersReady(true);
+    }, QUERY_TIMEOUT_MS);
+
     try {
-      const { data, error } = await withTimeout(
-        supabase
-          .from("characters")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(10),
-        QUERY_TIMEOUT_MS,
-        "characters query",
-      );
+      const { data, error } = await supabase
+        .from("characters")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+
       if (!error && data) {
         setCharacters(data as CachedCharacter[]);
         writeLocal(CHARS_KEY, data);
@@ -159,9 +149,10 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     } catch (err) {
       console.error("refreshCharacters failed:", err);
     } finally {
+      window.clearTimeout(readyTimer);
       // Always flip ready, even on error — otherwise blocking loaders never release
       // and the yellow splash hangs forever on a silent network failure.
-      setCharactersReady(true);
+      if (!releasedReady) setCharactersReady(true);
     }
   }, [user]);
 
@@ -171,17 +162,21 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setGenerationsReady(true);
       return;
     }
+
+    let releasedReady = false;
+    const readyTimer = window.setTimeout(() => {
+      releasedReady = true;
+      setGenerationsReady(true);
+    }, QUERY_TIMEOUT_MS);
+
     try {
-      const { data, error } = await withTimeout(
-        supabase
-          .from("generations")
-          .select("id, image_urls, prompt, character_id, created_at")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(20),
-        QUERY_TIMEOUT_MS,
-        "generations query",
-      );
+      const { data, error } = await supabase
+        .from("generations")
+        .select("id, image_urls, prompt, character_id, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
+
       if (!error && data) {
         setGenerations(data as CachedGeneration[]);
         writeLocal(GENS_KEY, data);
@@ -191,7 +186,8 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     } catch (err) {
       console.error("refreshGenerations failed:", err);
     } finally {
-      setGenerationsReady(true);
+      window.clearTimeout(readyTimer);
+      if (!releasedReady) setGenerationsReady(true);
     }
   }, [user]);
 
