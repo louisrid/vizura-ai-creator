@@ -385,6 +385,11 @@ const AppRoutes = () => {
 
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
   const initialPreloadDoneRef = useRef(false);
+  const mountTimeRef = useRef<number>(Date.now());
+  // Within this window after mount, treat newly-arrived URLs as part of the
+  // initial paint and keep the splash up while they preload. After this window,
+  // any new URLs come from background refreshes and must NOT re-trigger the loader.
+  const INITIAL_PAINT_WINDOW_MS = 6000;
   useEffect(() => {
     if (authLoading) return;
 
@@ -394,24 +399,24 @@ const AppRoutes = () => {
       return;
     }
 
-    // If data isn't ready yet AND we have no URLs to preload, do NOT mark the
-    // initial preload as done — otherwise URLs that arrive moments later would
-    // be backgrounded and the user would see grey image boxes after the splash
-    // hides. Keep the splash up until real URLs arrive and finish preloading.
     const dataReady = charactersReady && generationsReady;
+    const withinInitialWindow = Date.now() - mountTimeRef.current < INITIAL_PAINT_WINDOW_MS;
+
+    // No URLs to preload right now.
     if (criticalImageUrls.length === 0) {
-      if (dataReady) {
+      // If data isn't ready yet and we're still in the initial window, keep the
+      // splash up — URLs may arrive imminently and we want to preload them
+      // before the user sees grey image boxes.
+      if (!dataReady && withinInitialWindow) {
+        setCriticalImagesReady(false);
+      } else {
         setCriticalImagesReady(true);
         initialPreloadDoneRef.current = true;
-      } else {
-        setCriticalImagesReady(false);
       }
       return;
     }
 
     // Only block on URLs we have NOT already preloaded this session.
-    // Returning to a page whose images are cached should NOT re-trigger the
-    // yellow loader — they're already in the browser image cache.
     const newUrls = criticalImageUrls.filter((url) => !preloadedUrlsRef.current.has(url));
     if (newUrls.length === 0) {
       setCriticalImagesReady(true);
@@ -420,10 +425,11 @@ const AppRoutes = () => {
     }
 
     let cancelled = false;
-    // Only show the yellow loader for the FIRST preload pass on this mount.
-    // After that, preload new URLs silently in the background — DB refreshes
-    // returning fresh image URLs must not re-trigger the loader.
-    const shouldBlock = !initialPreloadDoneRef.current;
+    // Block the splash if either:
+    //  - this is the very first preload pass on this mount, OR
+    //  - we're still inside the initial paint window AND data just became ready
+    //    (fresh URLs from the first DB fetch should be preloaded before paint).
+    const shouldBlock = !initialPreloadDoneRef.current || withinInitialWindow;
     if (shouldBlock) setCriticalImagesReady(false);
 
     void Promise.all(newUrls.map(preloadImage)).finally(() => {
