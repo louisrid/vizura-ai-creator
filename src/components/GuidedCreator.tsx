@@ -822,7 +822,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                   transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                 >
                   <div className="relative">
-                    <div className="px-5 py-3 text-[15px] md:text-[17px] font-[900] lowercase leading-snug"
+                    <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
                       style={{
                         borderRadius: 10,
                         backgroundColor: bgColor,
