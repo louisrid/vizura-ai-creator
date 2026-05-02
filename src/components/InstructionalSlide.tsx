@@ -30,7 +30,7 @@ export interface InstructionalSlideProps {
 
 const Y = "#ffe603";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
-const SLIDE_TOP_OFFSET = "34vh";
+const SLIDE_TOP_OFFSET = "14vh";
 const SLIDE_CONTENT_GAP = 10;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 
@@ -242,12 +242,12 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="inline-block"
-              style={{ width: 45, height: 45, objectFit: "contain", marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
+              style={{ width: 49, height: 49, objectFit: "contain", marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(6%)" }}
             />
           ) : (
             <span
-              className="text-[45px] md:text-[62px] inline-block leading-none"
-              style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(18%)" }}
+              className="text-[49px] md:text-[67px] inline-block leading-none"
+              style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(6%)" }}
             >
               {slide.emoji}
             </span>
