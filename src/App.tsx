@@ -378,11 +378,13 @@ const AppRoutes = () => {
   }, [characters, generations, isStaticOrAuthRoute, location.pathname, location.state, user]);
 
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
+  const initialPreloadDoneRef = useRef(false);
   useEffect(() => {
     if (authLoading) return;
 
     if (!user || isStaticOrAuthRoute || criticalImageUrls.length === 0) {
       setCriticalImagesReady(true);
+      initialPreloadDoneRef.current = true;
       return;
     }
 
@@ -392,16 +394,22 @@ const AppRoutes = () => {
     const newUrls = criticalImageUrls.filter((url) => !preloadedUrlsRef.current.has(url));
     if (newUrls.length === 0) {
       setCriticalImagesReady(true);
+      initialPreloadDoneRef.current = true;
       return;
     }
 
     let cancelled = false;
-    setCriticalImagesReady(false);
+    // Only show the yellow loader for the FIRST preload pass on this mount.
+    // After that, preload new URLs silently in the background — DB refreshes
+    // returning fresh image URLs must not re-trigger the loader.
+    const shouldBlock = !initialPreloadDoneRef.current;
+    if (shouldBlock) setCriticalImagesReady(false);
 
     void Promise.all(newUrls.map(preloadImage)).finally(() => {
       if (cancelled) return;
       newUrls.forEach((url) => preloadedUrlsRef.current.add(url));
       setCriticalImagesReady(true);
+      initialPreloadDoneRef.current = true;
     });
 
     return () => {
