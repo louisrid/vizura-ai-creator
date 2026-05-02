@@ -92,7 +92,7 @@ const Account = () => {
               >
                 {subscribed ? "active" : "inactive"}
               </span>
-              <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
+              <ChevronRight size={16} strokeWidth={2.5} className="text-white" />
             </div>
           </button>
 
@@ -102,7 +102,7 @@ const Account = () => {
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">change password</span>
-            <ChevronRight size={16} strokeWidth={2.5} className="text-white/30" />
+            <ChevronRight size={16} strokeWidth={2.5} className="text-white" />
           </button>
         </div>
 
@@ -138,7 +138,7 @@ const Account = () => {
           <button
             type="button"
             onClick={() => navigate("/info")}
-            className="text-[11px] font-extrabold lowercase underline transition-colors hover:text-white/70"
+            className="text-[11px] font-extrabold lowercase underline transition-colors"
             style={{ color: "#ffffff" }}
           >
             terms &amp; privacy
