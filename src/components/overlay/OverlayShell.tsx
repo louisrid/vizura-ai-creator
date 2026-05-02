@@ -198,8 +198,8 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
             {/* Standardized layout: centered content -> red 22vh spacer -> arrows row -> dots */}
             <div className="flex-1 flex flex-col overflow-hidden min-h-0">
               {/* Centered content */}
-              <div className="flex-1 flex items-center justify-center px-8 min-h-0">
-                <div className="mx-auto flex w-full max-w-xs flex-col items-center" style={{ transform: "translateY(14%)" }}>
+              <div className="flex-1 flex justify-center px-8 min-h-0 overflow-hidden">
+                <div className="mx-auto flex w-full max-w-xs flex-col items-center" style={{ paddingTop: "18vh" }}>
                   <div className="grid w-full">
                     <AnimatePresence mode="sync" initial={false}>
                       <motion.div
