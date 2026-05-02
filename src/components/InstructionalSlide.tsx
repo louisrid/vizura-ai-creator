@@ -184,10 +184,10 @@ const InstructionalSlide = ({
           [flex-grow centered content] [22vh red spacer] [arrows row] [safe-area] */}
 
       {/* Centered content area (emoji on top, title, pills) */}
-      <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0">
+      <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
-          className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center justify-center"
-          style={{ transform: "translateY(14%)" }}
+          className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center"
+          style={{ paddingTop: "18vh" }}
         >
           {/* Emoji — shifted 8% lower toward the title */}
           {slide.emoji === "🦊" ? (
