@@ -195,10 +195,11 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       const cachedGens = readLocal<CachedGeneration[]>(GENS_KEY);
       if (cachedChars) setCharacters(cachedChars);
       if (cachedGens) setGenerations(cachedGens);
-      // Do NOT mark ready yet — keep yellow load bar up until background fetch
-      // completes so skeletons never flash after the splash drops.
-      setCharactersReady(false);
-      setGenerationsReady(false);
+      // Cache exists for this user → mark ready immediately so the yellow
+      // load bar does NOT re-appear on tab refocus / auth refresh / remount.
+      // Background refetch still runs but never blocks the UI.
+      setCharactersReady(true);
+      setGenerationsReady(true);
     } else {
       // Different user — clear stale cache
       clearLocal();
