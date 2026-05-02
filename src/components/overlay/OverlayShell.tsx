@@ -221,7 +221,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
               <div
                 style={{
                   width: "100%",
-                  height: "17.6vh",
+                  height: "14.1vh",
                   background: "#ff0000",
                   flexShrink: 0,
                   pointerEvents: "none",
