@@ -30,9 +30,10 @@ export interface InstructionalSlideProps {
 
 const Y = "#ffe603";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
-const SLIDE_TOP_OFFSET = "22vh";
+const SLIDE_TOP_OFFSET = "28vh";
 const SLIDE_CONTENT_GAP = 10;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
+const RED_SPACER_HEIGHT = "9.25vh";
 
 /* ── Chat bubble pill ── */
 const ChatPill = ({
@@ -185,7 +186,7 @@ const InstructionalSlide = ({
         return;
       }
 
-      const availableHeight = spacerRef.current.getBoundingClientRect().top - contentSlotRef.current.getBoundingClientRect().top - 8;
+      const availableHeight = spacerRef.current.getBoundingClientRect().top - contentSlotRef.current.getBoundingClientRect().top - 20;
       const naturalHeight = contentInnerRef.current.scrollHeight;
 
       if (naturalHeight <= 0 || availableHeight <= 0) {
@@ -242,12 +243,12 @@ const InstructionalSlide = ({
               src={foxEmojiImg}
               alt="🦊"
               className="inline-block"
-              style={{ width: 47, height: 47, objectFit: "contain", marginBottom: 14, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(-36%)" }}
+              style={{ width: 45, height: 45, objectFit: "contain", marginBottom: 18, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(-48%)" }}
             />
           ) : (
             <span
-              className="text-[47px] md:text-[64px] inline-block leading-none"
-              style={{ marginBottom: 14, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(-36%)" }}
+              className="text-[45px] md:text-[61px] inline-block leading-none"
+              style={{ marginBottom: 18, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(-48%)" }}
             >
               {slide.emoji}
             </span>
@@ -283,7 +284,7 @@ const InstructionalSlide = ({
         ref={spacerRef}
         style={{
           width: "100%",
-          height: "14.1vh",
+          height: RED_SPACER_HEIGHT,
           background: "#ff0000",
           flexShrink: 0,
           pointerEvents: "none",
