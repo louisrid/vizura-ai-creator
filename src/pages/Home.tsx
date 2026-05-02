@@ -48,7 +48,7 @@ const Home = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded, generationsReady: cachedGensLoaded } = useAppData();
+  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded } = useAppData();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const shouldOpenGuidedOnMount = openCreatorRequested;
@@ -85,7 +85,6 @@ const Home = () => {
       .slice(0, 4) as CharacterPreview[];
   }, [cachedChars]);
 
-  const photosLoaded = cachedGensLoaded;
   const charsLoaded = cachedCharsLoaded;
   const [showGuided, setShowGuided] = useState(() => shouldOpenGuidedOnMount);
   const [skipWelcome, setSkipWelcome] = useState(false);
@@ -332,52 +331,42 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {!photosLoaded ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
+              {photoSlots.map((photo, i) => {
+                const isPlaceholder = !photo.url;
+                const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
+                return (
+                  <button
+                    key={`photo-slot-${i}`}
+                    type="button"
+                    onClick={() => {
+                      if (!isPlaceholder) setSelectedImage(photo);
+                      else if (isFirstPlaceholder) {
+                        if (!user) { navigate("/auth?redirect=/create"); return; }
+                        navigate("/create");
+                      }
+                    }}
+                    className="overflow-hidden"
+                    style={{
+                      borderRadius: 10,
+                      border: "none",
+                      backgroundColor: "hsl(0 0% 5%)",
+                      cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
+                    }}
+                  >
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
-                    </AspectRatio>
-                  </div>
-                ))
-              ) : (
-                photoSlots.map((photo, i) => {
-                  const isPlaceholder = !photo.url;
-                  const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
-                  return (
-                    <button
-                      key={`photo-slot-${i}`}
-                      type="button"
-                      onClick={() => {
-                        if (!isPlaceholder) setSelectedImage(photo);
-                        else if (isFirstPlaceholder) {
-                          if (!user) { navigate("/auth?redirect=/create"); return; }
-                          navigate("/create");
-                        }
-                      }}
-                      className="overflow-hidden"
-                      style={{
-                        borderRadius: 10,
-                        border: "none",
-                        backgroundColor: "hsl(0 0% 5%)",
-                        cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
-                      }}
-                    >
-                      <AspectRatio ratio={3 / 4}>
-                        {isPlaceholder ? (
-                          isFirstPlaceholder ? (
-                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-                          ) : (
-                            <div className="h-full w-full" />
-                          )
+                      {isPlaceholder ? (
+                        isFirstPlaceholder ? (
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
-                        )}
-                      </AspectRatio>
-                    </button>
-                  );
-                })
-              )}
+                          <div className="h-full w-full" />
+                        )
+                      ) : (
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
+                      )}
+                    </AspectRatio>
+                  </button>
+                );
+              })}
             </div>
           </section>
 
@@ -393,70 +382,60 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {!charsLoaded ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
-                    <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
-                    </AspectRatio>
-                  </div>
-                ))
-              ) : (
-                charSlots.map((char, i) => {
-                  if (!char) {
-                    const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
-                    return (
-                      <button
-                        key={`empty-${i}`}
-                        type="button"
-                        onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
-                        className="overflow-hidden"
-                        style={{
-                          borderRadius: 10,
-                          backgroundColor: "hsl(0 0% 5%)",
-                          cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
-                        }}
-                      >
-                        <AspectRatio ratio={3 / 4}>
-                          {isFirstEmpty ? (
-                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-                          ) : (
-                            <div className="h-full w-full" />
-                          )}
-                        </AspectRatio>
-                      </button>
-                    );
-                  }
-                  const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
+              {charSlots.map((char, i) => {
+                if (!char) {
+                  const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
                   return (
                     <button
-                      key={`char-slot-${i}`}
+                      key={`empty-${i}`}
                       type="button"
-                      onClick={() => navigate(`/characters/${char.id}`)}
-                      className="relative overflow-hidden"
+                      onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
+                      className="overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: "none",
                         backgroundColor: "hsl(0 0% 5%)",
+                        cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        {hasFace ? (
-                          <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        {isFirstEmpty ? (
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center">
-                            <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
-                          </div>
+                          <div className="h-full w-full" />
                         )}
                       </AspectRatio>
-                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
-                        <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[9px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
-                      </div>
                     </button>
                   );
-                })
-              )}
+                }
+                const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
+                return (
+                  <button
+                    key={`char-slot-${i}`}
+                    type="button"
+                    onClick={() => navigate(`/characters/${char.id}`)}
+                    className="relative overflow-hidden"
+                    style={{
+                      borderRadius: 10,
+                      border: "none",
+                      backgroundColor: "hsl(0 0% 5%)",
+                    }}
+                  >
+                    <AspectRatio ratio={3 / 4}>
+                      {hasFace ? (
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center">
+                          <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
+                        </div>
+                      )}
+                    </AspectRatio>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
+                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
+                      <span className="block text-[9px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </section>
         </main>
@@ -536,52 +515,42 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {!photosLoaded ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-p-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
+              {photoSlots.map((photo, i) => {
+                const isPlaceholder = !photo.url;
+                const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
+                return (
+                  <button
+                    key={`photo-slot-desktop-${i}`}
+                    type="button"
+                    onClick={() => {
+                      if (!isPlaceholder) setSelectedImage(photo);
+                      else if (isFirstPlaceholder) {
+                        if (!user) { navigate("/auth?redirect=/create"); return; }
+                        navigate("/create");
+                      }
+                    }}
+                    className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
+                    style={{
+                      borderRadius: 10,
+                      border: "none",
+                      backgroundColor: "hsl(0 0% 5%)",
+                      cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
+                    }}
+                  >
                     <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
-                    </AspectRatio>
-                  </div>
-                ))
-              ) : (
-                photoSlots.map((photo, i) => {
-                  const isPlaceholder = !photo.url;
-                  const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
-                  return (
-                    <button
-                      key={`photo-slot-desktop-${i}`}
-                      type="button"
-                      onClick={() => {
-                        if (!isPlaceholder) setSelectedImage(photo);
-                        else if (isFirstPlaceholder) {
-                          if (!user) { navigate("/auth?redirect=/create"); return; }
-                          navigate("/create");
-                        }
-                      }}
-                      className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
-                      style={{
-                        borderRadius: 10,
-                        border: "none",
-                        backgroundColor: "hsl(0 0% 5%)",
-                        cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
-                      }}
-                    >
-                      <AspectRatio ratio={3 / 4}>
-                        {isPlaceholder ? (
-                          isFirstPlaceholder ? (
-                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-                          ) : (
-                            <div className="h-full w-full" />
-                          )
+                      {isPlaceholder ? (
+                        isFirstPlaceholder ? (
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
-                          <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
-                        )}
-                      </AspectRatio>
-                    </button>
-                  );
-                })
-              )}
+                          <div className="h-full w-full" />
+                        )
+                      ) : (
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
+                      )}
+                    </AspectRatio>
+                  </button>
+                );
+              })}
             </div>
           </section>
 
@@ -597,70 +566,60 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {!charsLoaded ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={`skel-c-${i}`} style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "hsl(0 0% 5%)" }}>
-                    <AspectRatio ratio={3 / 4}>
-                      <div className="h-full w-full" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
-                    </AspectRatio>
-                  </div>
-                ))
-              ) : (
-                charSlots.map((char, i) => {
-                  if (!char) {
-                    const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
-                    return (
-                      <button
-                        key={`empty-${i}`}
-                        type="button"
-                        onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
-                        className="overflow-hidden"
-                        style={{
-                          borderRadius: 10,
-                          backgroundColor: "hsl(0 0% 5%)",
-                          cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
-                        }}
-                      >
-                        <AspectRatio ratio={3 / 4}>
-                          {isFirstEmpty ? (
-                            <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-                          ) : (
-                            <div className="h-full w-full" />
-                          )}
-                        </AspectRatio>
-                      </button>
-                    );
-                  }
-                  const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
+              {charSlots.map((char, i) => {
+                if (!char) {
+                  const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
                   return (
                     <button
-                      key={`char-slot-desktop-${i}`}
+                      key={`empty-${i}`}
                       type="button"
-                      onClick={() => navigate(`/characters/${char.id}`)}
-                      className="relative overflow-hidden hover-lift"
+                      onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
+                      className="overflow-hidden"
                       style={{
                         borderRadius: 10,
-                        border: "none",
-                        backgroundColor: "hsl(var(--card))",
+                        backgroundColor: "hsl(0 0% 5%)",
+                        cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        {hasFace ? (
-                          <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        {isFirstEmpty ? (
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center">
-                            <User size={32} strokeWidth={2.5} style={{ color: "#ffffff" }} />
-                          </div>
+                          <div className="h-full w-full" />
                         )}
                       </AspectRatio>
-                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
-                        <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                        <span className="block text-[10px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
-                      </div>
                     </button>
                   );
-                })
-              )}
+                }
+                const hasFace = char.face_image_url && char.face_image_url.startsWith("http");
+                return (
+                  <button
+                    key={`char-slot-desktop-${i}`}
+                    type="button"
+                    onClick={() => navigate(`/characters/${char.id}`)}
+                    className="relative overflow-hidden hover-lift"
+                    style={{
+                      borderRadius: 10,
+                      border: "none",
+                      backgroundColor: "hsl(var(--card))",
+                    }}
+                  >
+                    <AspectRatio ratio={3 / 4}>
+                      {hasFace ? (
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center">
+                          <User size={32} strokeWidth={2.5} style={{ color: "#ffffff" }} />
+                        </div>
+                      )}
+                    </AspectRatio>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
+                      <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
+                      <span className="block text-[10px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </section>
         </main>
