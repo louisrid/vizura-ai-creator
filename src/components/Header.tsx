@@ -237,6 +237,10 @@ const Header = () => {
 
   const handleLogoClick = () => {
     if (checkNavGuard()) return;
+    if (slideMenuMode) {
+      window.dispatchEvent(new CustomEvent("facefox:close-creator"));
+      return;
+    }
     handleNav("/");
   };
 
