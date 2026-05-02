@@ -30,7 +30,7 @@ export interface InstructionalSlideProps {
 
 const Y = "#ffe603";
 const DASH_INACTIVE = "rgba(250,204,21,0.30)";
-const SLIDE_TOP_OFFSET = "clamp(108px, 16svh, 148px)";
+const SLIDE_TOP_OFFSET = "clamp(132px, 19svh, 172px)";
 const SLIDE_CONTENT_GAP = 10;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 const RED_SPACER_HEIGHT = "clamp(38px, 6svh, 56px)";
