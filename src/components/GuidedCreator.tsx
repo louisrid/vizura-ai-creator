@@ -20,9 +20,13 @@ foxPreload.src = foxEmojiImg;
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
-const SLIDE_TOP_OFFSET = "22vh";
+const SLIDE_TOP_OFFSET = "41vh";
 const SLIDE_CONTENT_GAP = 10;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
+const RED_SPACER_HEIGHT = "4.3vh";
+const EMOJI_MOBILE_SIZE = 45;
+const EMOJI_MARGIN_BOTTOM = 32;
+const EMOJI_TRANSLATE_Y = "translateY(-70%)";
 
 const RING_EPOCH = typeof performance !== "undefined" ? performance.now() : Date.now();
 const isHeroSeen = () => typeof window !== "undefined" && sessionStorage.getItem(HERO_SEEN_KEY) === "1";
@@ -581,7 +585,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         return;
       }
 
-      const availableHeight = spacerRef.current.getBoundingClientRect().top - contentSlotRef.current.getBoundingClientRect().top - 8;
+      const availableHeight = spacerRef.current.getBoundingClientRect().top - contentSlotRef.current.getBoundingClientRect().top - 20;
       const naturalHeight = contentInnerRef.current.scrollHeight;
 
       if (naturalHeight <= 0 || availableHeight <= 0) {
@@ -854,7 +858,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const isSinglePill = slide.pills.length === 1;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[49px] md:text-[67px] inline-block leading-none" style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(6%)" }}>
+          <span className="inline-block text-[45px] md:text-[61px] leading-none" style={{ marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: EMOJI_TRANSLATE_Y }}>
             {slide.emoji}
           </span>
           <h2 className={`${SLIDE_TITLE_CLASS} whitespace-pre-line`}>{slide.title}</h2>
@@ -907,7 +911,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     /* Name */
     if (isNameSlide) return (
       <div className="flex w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-        <span className="text-[49px] md:text-[67px] inline-block leading-none" style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(6%)" }}>✨</span>
+        <span className="inline-block text-[45px] md:text-[61px] leading-none" style={{ marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: EMOJI_TRANSLATE_Y }}>✨</span>
         <h2 className={SLIDE_TITLE_CLASS}>give her a name</h2>
         <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
           <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
@@ -944,7 +948,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const selectedVal = selections[trait.key as keyof GuidedSelections] as string;
       return (
         <div className="flex w-full flex-col items-center">
-            <span className="text-[49px] md:text-[67px] inline-block leading-none" style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(6%)" }}>{trait.emoji}</span>
+            <span className="inline-block text-[45px] md:text-[61px] leading-none" style={{ marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: EMOJI_TRANSLATE_Y }}>{trait.emoji}</span>
           <h2 className={SLIDE_TITLE_CLASS}>{trait.label}</h2>
             <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
               <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
@@ -970,7 +974,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       const showGemCost = !isFirstTime;
       return (
         <div className="flex w-full flex-col items-center">
-          <span className="text-[49px] md:text-[67px] inline-block leading-none" style={{ marginBottom: 2, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(6%)" }}>🖌️</span>
+          <span className="inline-block text-[45px] md:text-[61px] leading-none" style={{ marginBottom: EMOJI_MARGIN_BOTTOM, animation: "emoji-bounce 1.6s ease-in-out infinite", transform: EMOJI_TRANSLATE_Y }}>🖌️</span>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
           <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
@@ -1053,7 +1057,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           ref={spacerRef}
           style={{
             width: "100%",
-            height: "14.1vh",
+            height: RED_SPACER_HEIGHT,
             background: "#ff0000",
             flexShrink: 0,
             pointerEvents: "none",

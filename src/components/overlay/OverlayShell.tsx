@@ -199,7 +199,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
             <div className="flex-1 flex flex-col overflow-hidden min-h-0">
               {/* Centered content */}
               <div className="flex-1 flex justify-center px-8 min-h-0 overflow-hidden">
-                <div className="mx-auto flex w-full max-w-xs flex-col items-center" style={{ paddingTop: "22vh" }}>
+                <div className="mx-auto flex w-full max-w-xs flex-col items-center" style={{ paddingTop: "41vh" }}>
                   <div className="grid w-full">
                     <AnimatePresence mode="sync" initial={false}>
                       <motion.div
@@ -221,7 +221,7 @@ const OverlayShell = ({ open, totalSteps, children, showNav = true, onExited, on
               <div
                 style={{
                   width: "100%",
-                  height: "14.1vh",
+                  height: "4.3vh",
                   background: "#ff0000",
                   flexShrink: 0,
                   pointerEvents: "none",
