@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -49,6 +49,41 @@ const isExemptRoute = (pathname: string) =>
 
 const isOnboardingFlowRoute = (pathname: string) =>
   ONBOARDING_FLOW_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/") || pathname.startsWith(r + "?"));
+
+const isRenderableImageUrl = (url: string | null | undefined): url is string => {
+  if (!url) return false;
+  if (url.startsWith("data:image/svg")) return false;
+  if (url.includes("imgen.x.ai/xai-imgen/xai-tmp-imgen")) return false;
+  if (url.includes("xai-tmp-imgen")) return false;
+  return true;
+};
+
+const preloadImage = (url: string) => new Promise<void>((resolve) => {
+  const img = new Image();
+  let settled = false;
+
+  const finish = () => {
+    if (settled) return;
+    settled = true;
+    resolve();
+  };
+
+  const decodeAndFinish = () => {
+    if (typeof img.decode === "function") {
+      void img.decode().catch(() => undefined).finally(finish);
+      return;
+    }
+    finish();
+  };
+
+  img.onload = decodeAndFinish;
+  img.onerror = finish;
+  img.src = url;
+
+  if (img.complete) {
+    decodeAndFinish();
+  }
+});
 
 const FreshLoadRedirect = () => {
   const location = useLocation();
@@ -249,8 +284,10 @@ const OnboardingRedirectGate = () => {
 const AppRoutes = () => {
   const location = useLocation();
   const { loading: authLoading, user } = useAuth();
+  const { characters, generations, charactersReady, generationsReady } = useAppData();
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
   const [headerRevealed, setHeaderRevealed] = useState(false);
+  const [criticalImagesReady, setCriticalImagesReady] = useState(false);
   const splashHiddenRef = useRef(false);
   useEffect(() => {
     const eventName = getBlockingLoadersEventName();
@@ -264,7 +301,6 @@ const AppRoutes = () => {
   }, []);
 
   const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
-  const { charactersReady, generationsReady } = useAppData();
   const { resolved: onboardingResolved } = useOnboarded();
   const isStaticOrAuthRoute =
     location.pathname === "/auth" ||
@@ -275,6 +311,88 @@ const AppRoutes = () => {
     location.pathname.startsWith("/help/") ||
     location.pathname.startsWith("/info/");
   const hasUserContext = !!user || hasCachedUser;
+  const criticalImageUrls = useMemo(() => {
+    if (!user || isStaticOrAuthRoute) return [];
+
+    const urls = new Set<string>();
+    const pushUrl = (url: string | null | undefined) => {
+      if (isRenderableImageUrl(url)) urls.add(url);
+    };
+    const path = location.pathname;
+
+    if (path === "/") {
+      generations
+        .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl).slice(0, 1))
+        .slice(0, 8)
+        .forEach(pushUrl);
+
+      characters
+        .filter((character) => character.face_image_url && character.face_angle_url && character.body_anchor_url)
+        .slice(0, 4)
+        .forEach((character) => pushUrl(character.face_image_url));
+
+      return Array.from(urls);
+    }
+
+    if (path === "/characters") {
+      characters
+        .filter((character) => character.face_image_url && character.face_angle_url && character.body_anchor_url)
+        .slice(0, 12)
+        .forEach((character) => pushUrl(character.face_image_url));
+
+      return Array.from(urls);
+    }
+
+    if (path.startsWith("/characters/")) {
+      const characterId = path.split("/")[2] ?? "";
+      const activeCharacter = characters.find((character) => character.id === characterId);
+      pushUrl(activeCharacter?.face_image_url);
+      pushUrl(activeCharacter?.face_angle_url);
+      pushUrl(activeCharacter?.body_anchor_url);
+      return Array.from(urls);
+    }
+
+    if (path === "/storage" || path === "/history") {
+      generations
+        .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl))
+        .slice(0, 12)
+        .forEach(pushUrl);
+
+      return Array.from(urls);
+    }
+
+    if (path === "/create" || path === "/index") {
+      characters
+        .filter((character) => !!character.face_image_url)
+        .slice(0, 8)
+        .forEach((character) => pushUrl(character.face_image_url));
+
+      return Array.from(urls);
+    }
+
+    return [];
+  }, [characters, generations, isStaticOrAuthRoute, location.pathname, user]);
+
+  useEffect(() => {
+    if (authLoading) return;
+
+    if (!user || isStaticOrAuthRoute || criticalImageUrls.length === 0) {
+      setCriticalImagesReady(true);
+      return;
+    }
+
+    let cancelled = false;
+    setCriticalImagesReady(false);
+
+    void Promise.all(criticalImageUrls.map(preloadImage)).finally(() => {
+      if (!cancelled) setCriticalImagesReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user]);
+
   // Safety ceiling: if data fetch silently stalls (network failure that didn't throw),
   // release the splash after 12s so the user is never trapped on yellow forever.
   // Under normal conditions this never fires — charactersReady/generationsReady flip
@@ -285,10 +403,15 @@ const AppRoutes = () => {
     return () => clearTimeout(timer);
   }, []);
   const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
+  const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
+  const criticalImagesStillLoading = !!user && !isStaticOrAuthRoute && !criticalImagesReady;
   const stillResolving =
     authLoading ||
     (!authLoading && !!user && location.pathname === "/auth") ||
-    dataStillLoading;
+    dataStillLoading ||
+    onboardingStillLoading ||
+    criticalImagesStillLoading ||
+    blockingLoaders > 0;
   const suppressUnauthRoutes =
     hasCachedUser && authLoading && !user &&
     (location.pathname === "/" || location.pathname === "/auth");
