@@ -187,20 +187,20 @@ const InstructionalSlide = ({
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className="w-full max-w-sm md:max-w-lg mx-auto flex flex-col items-center"
-          style={{ paddingTop: "18vh" }}
+          style={{ paddingTop: "53vh" }}
         >
-          {/* Emoji — shifted 8% lower toward the title */}
+          {/* Emoji — shifted lower toward the title */}
           {slide.emoji === "🦊" ? (
             <img
               src={foxEmojiImg}
               alt="🦊"
               className="mb-3 md:mb-4 inline-block"
-              style={{ width: 52, height: 52, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}
+              style={{ width: 52, height: 52, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(45%)" }}
             />
           ) : (
             <span
               className="text-[52px] md:text-[70px] mb-3 md:mb-4 inline-block"
-              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(30%)" }}
+              style={{ animation: "emoji-bounce 1.6s ease-in-out infinite", transform: "translateY(45%)" }}
             >
               {slide.emoji}
             </span>
