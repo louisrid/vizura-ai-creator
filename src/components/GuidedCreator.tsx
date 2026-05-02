@@ -20,7 +20,7 @@ foxPreload.src = foxEmojiImg;
 const Y = "#ffe603";
 const FLOW_STATE_KEY = "facefox_guided_flow_state";
 const HERO_SEEN_KEY = "facefox_hero_seen";
-const SLIDE_TOP_OFFSET = "26vh";
+const SLIDE_TOP_OFFSET = "22vh";
 const SLIDE_CONTENT_GAP = 10;
 const SLIDE_MIN_CONTENT_SCALE = 0.70;
 
