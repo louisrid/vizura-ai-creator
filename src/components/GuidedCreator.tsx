@@ -1050,6 +1050,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {/* Red spacer rectangle — hidden on hero slide (hero has its own self-contained layout) */}
       {visualStepType !== "hero" && (
         <div
+          ref={spacerRef}
           style={{
             width: "100%",
             height: "14.1vh",
