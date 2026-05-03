@@ -448,7 +448,7 @@ const AppRoutes = () => {
     !isStaticOrAuthRoute &&
     ((needsCharacters && !charactersReady) || (needsGenerations && !generationsReady));
   const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
-  const criticalImagesStillLoading = !!user && !isStaticOrAuthRoute && !criticalImagesReady;
+  const criticalImagesStillLoading = !splashHiddenRef.current && !!hasUserContext && !isStaticOrAuthRoute && !criticalImagesReady;
   const stillResolving =
     authLoading ||
     (!authLoading && !!user && location.pathname === "/auth") ||
