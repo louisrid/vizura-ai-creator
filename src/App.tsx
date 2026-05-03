@@ -453,7 +453,16 @@ const AppRoutes = () => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
     return () => clearTimeout(timer);
   }, []);
-  const dataStillLoading = !dataLoadGracePassed && hasUserContext && !isStaticOrAuthRoute && (!charactersReady || !generationsReady);
+  // Per-route data needs: only block on the data the current page actually renders.
+  // Avoids long splashes on pages like /create or /index that don't need generations.
+  const path = location.pathname;
+  const needsGenerations = path === "/" || path === "/storage" || path === "/history";
+  const needsCharacters = !isStaticOrAuthRoute;
+  const dataStillLoading =
+    !dataLoadGracePassed &&
+    hasUserContext &&
+    !isStaticOrAuthRoute &&
+    ((needsCharacters && !charactersReady) || (needsGenerations && !generationsReady));
   const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
   const criticalImagesStillLoading = !!user && !isStaticOrAuthRoute && !criticalImagesReady;
   const stillResolving =
