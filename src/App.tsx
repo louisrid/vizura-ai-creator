@@ -317,6 +317,9 @@ const AppRoutes = () => {
     location.pathname.startsWith("/help/") ||
     location.pathname.startsWith("/info/");
   const hasUserContext = !!user || hasCachedUser;
+  const path = location.pathname;
+  const needsGenerations = path === "/" || path === "/storage" || path === "/history";
+  const needsCharacters = !isStaticOrAuthRoute;
   const criticalImageUrls = useMemo(() => {
     if (!user || isStaticOrAuthRoute) return [];
 
@@ -324,7 +327,6 @@ const AppRoutes = () => {
     const pushUrl = (url: string | null | undefined) => {
       if (isRenderableImageUrl(url)) urls.add(url);
     };
-    const path = location.pathname;
     const routeState = (location.state as { openCreator?: boolean; preselectedCharacterId?: string } | null) ?? null;
     const openingCreator = !!routeState.openCreator;
     const preferredCharacterId = routeState.preselectedCharacterId || (typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "");
@@ -408,7 +410,7 @@ const AppRoutes = () => {
       return;
     }
 
-    const dataReady = charactersReady && generationsReady;
+    const dataReady = (!needsCharacters || charactersReady) && (!needsGenerations || generationsReady);
     const withinInitialWindow = !splashHiddenRef.current && Date.now() - mountTimeRef.current < INITIAL_PAINT_WINDOW_MS;
 
     // No URLs to preload right now.
@@ -459,9 +461,6 @@ const AppRoutes = () => {
   }, [location.pathname, location.key]);
   // Per-route data needs: only block on the data the current page actually renders.
   // Avoids long splashes on pages like /create or /index that don't need generations.
-  const path = location.pathname;
-  const needsGenerations = path === "/" || path === "/storage" || path === "/history";
-  const needsCharacters = !isStaticOrAuthRoute;
   const dataStillLoading =
     !dataLoadGracePassed &&
     hasUserContext &&
