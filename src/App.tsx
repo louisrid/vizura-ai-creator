@@ -434,7 +434,7 @@ const AppRoutes = () => {
     void Promise.all(newUrls.map(preloadImage)).then(() => {
       setCriticalImagesReady(true);
     });
-  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady, needsCharacters, needsGenerations, characters, generations]);
+  }, [authLoading, hasUserContext, criticalImageUrls, isStaticOrAuthRoute, charactersReady, generationsReady, needsCharacters, needsGenerations, characters, generations]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
