@@ -365,10 +365,10 @@ const Header = () => {
               {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
-                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[35px] h-[35px] md:w-[43px] md:h-[43px]"
+                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[36px] h-[36px] md:w-[44px] md:h-[44px]"
                   style={{
                     borderRadius: "50%",
-                    backgroundColor: "#000000",
+                    backgroundColor: "hsl(var(--card))",
                     border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
                     transform: "translateX(-2px)",
                   }}
