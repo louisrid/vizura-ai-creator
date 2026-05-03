@@ -63,7 +63,7 @@ const MyCharacters = () => {
       <DotDecal />
 
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[32px] md:px-[56px] pt-[32px] pb-[280px]">
-        <div className="flex items-center gap-3 mb-12">
+        <div className="flex items-center gap-3 mb-11">
           <BackButton />
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>

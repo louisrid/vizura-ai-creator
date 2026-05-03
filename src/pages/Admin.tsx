@@ -562,7 +562,7 @@ const Admin = () => {
           />
         ) : (
           <>
-            <div className="flex items-center gap-3 mb-12">
+            <div className="flex items-center gap-3 mb-11">
               <BackButton />
               <PageTitle className="mb-0">admin</PageTitle>
             </div>
