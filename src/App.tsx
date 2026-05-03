@@ -325,20 +325,22 @@ const AppRoutes = () => {
       if (isRenderableImageUrl(url)) urls.add(url);
     };
     const path = location.pathname;
-    const openingCreator = !!(location.state as { openCreator?: boolean } | null)?.openCreator;
+    const routeState = (location.state as { openCreator?: boolean; preselectedCharacterId?: string } | null) ?? null;
+    const openingCreator = !!routeState.openCreator;
+    const preferredCharacterId = routeState.preselectedCharacterId || (typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "");
 
     if (path === "/") {
       // When opening the creator overlay, Home content is covered — skip preloading its images.
       if (openingCreator) return [];
 
-      generations
-        .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl).slice(0, 1))
-        .slice(0, 20)
-        .forEach(pushUrl);
+        generations
+          .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl).slice(0, 1))
+          .slice(0, 4)
+          .forEach(pushUrl);
 
       characters
         .filter((character) => character.face_image_url && character.face_angle_url && character.body_anchor_url)
-        .slice(0, 12)
+          .slice(0, 4)
         .forEach((character) => pushUrl(character.face_image_url));
 
       return Array.from(urls);
@@ -347,7 +349,7 @@ const AppRoutes = () => {
     if (path === "/characters") {
       characters
         .filter((character) => character.face_image_url && character.face_angle_url && character.body_anchor_url)
-        .slice(0, 12)
+        .slice(0, 6)
         .forEach((character) => pushUrl(character.face_image_url));
 
       return Array.from(urls);
@@ -365,17 +367,16 @@ const AppRoutes = () => {
     if (path === "/storage" || path === "/history") {
       generations
         .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl))
-        .slice(0, 12)
+        .slice(0, 6)
         .forEach(pushUrl);
 
       return Array.from(urls);
     }
 
     if (path === "/create" || path === "/index") {
-      characters
-        .filter((character) => !!character.face_image_url)
-        .slice(0, 8)
-        .forEach((character) => pushUrl(character.face_image_url));
+      const preferredCharacter = characters.find((character) => character.id === preferredCharacterId)
+        ?? characters.find((character) => !!character.face_image_url);
+      pushUrl(preferredCharacter?.face_image_url);
 
       return Array.from(urls);
     }
@@ -386,10 +387,18 @@ const AppRoutes = () => {
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
   const initialPreloadDoneRef = useRef(false);
   const mountTimeRef = useRef<number>(Date.now());
+  const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   // Within this window after mount, treat newly-arrived URLs as part of the
   // initial paint and keep the splash up while they preload. After this window,
   // any new URLs come from background refreshes and must NOT re-trigger the loader.
   const INITIAL_PAINT_WINDOW_MS = 6000;
+  useEffect(() => {
+    mountTimeRef.current = Date.now();
+    initialPreloadDoneRef.current = false;
+    splashHiddenRef.current = false;
+    setDataLoadGracePassed(false);
+  }, [location.pathname, location.key]);
+
   useEffect(() => {
     if (authLoading) return;
 
@@ -400,7 +409,7 @@ const AppRoutes = () => {
     }
 
     const dataReady = charactersReady && generationsReady;
-    const withinInitialWindow = Date.now() - mountTimeRef.current < INITIAL_PAINT_WINDOW_MS;
+    const withinInitialWindow = !splashHiddenRef.current && Date.now() - mountTimeRef.current < INITIAL_PAINT_WINDOW_MS;
 
     // No URLs to preload right now.
     if (criticalImageUrls.length === 0) {
@@ -429,7 +438,7 @@ const AppRoutes = () => {
     //  - this is the very first preload pass on this mount, OR
     //  - we're still inside the initial paint window AND data just became ready
     //    (fresh URLs from the first DB fetch should be preloaded before paint).
-    const shouldBlock = !initialPreloadDoneRef.current || withinInitialWindow;
+    const shouldBlock = !splashHiddenRef.current && (!initialPreloadDoneRef.current || withinInitialWindow);
     if (shouldBlock) setCriticalImagesReady(false);
 
     void Promise.all(newUrls.map(preloadImage)).finally(() => {
@@ -444,15 +453,10 @@ const AppRoutes = () => {
     };
   }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady]);
 
-  // Safety ceiling: if data fetch silently stalls (network failure that didn't throw),
-  // release the splash after 12s so the user is never trapped on yellow forever.
-  // Under normal conditions this never fires — charactersReady/generationsReady flip
-  // first and dataStillLoading drops to false.
-  const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [location.pathname, location.key]);
   // Per-route data needs: only block on the data the current page actually renders.
   // Avoids long splashes on pages like /create or /index that don't need generations.
   const path = location.pathname;
