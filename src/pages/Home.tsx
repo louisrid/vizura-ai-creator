@@ -237,7 +237,8 @@ const Home = () => {
   // (dataLoading removed — App-level splash + cached data handle initial render)
 
   // Never trap logged-in users behind a blank startup screen while state revalidates.
-  const pageHidden = showGuided || (!autoOpenEvaluated && !user);
+  const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
+  const pageHidden = showGuided || (!autoOpenEvaluated && !user && !hasCachedUser);
 
   return (
     <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
