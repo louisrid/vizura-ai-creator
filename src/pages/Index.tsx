@@ -791,10 +791,18 @@ const Index = () => {
             <div className="relative" ref={dropdownRef2}>
               <button
                 type="button"
-                onPointerDown={(e) => e.stopPropagation()}
-                onClick={() => setCharDropdownOpen((v) => !v)}
+                ref={charToggleRef2}
+                onPointerDown={(e) => {
+                  if (e.button !== 0) return;
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  charWasOpenRef.current = charDropdownOpen;
+                  if (!charDropdownOpen) setCharDropdownOpen(true);
+                }}
+                onPointerMove={handleCharPointerMove}
+                onPointerUp={handleCharPointerEnd}
+                onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -810,7 +818,6 @@ const Index = () => {
                 </span>
                 <ChevronDown size={20} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
-              {charDropdownContent}
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
