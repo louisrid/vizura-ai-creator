@@ -397,8 +397,12 @@ const AppRoutes = () => {
   // (just warms browser cache), so letting old preloads finish is harmless and
   // avoids the race where cancellation leaves criticalImagesReady stuck false.
   useEffect(() => {
-    if (authLoading) return;
-    if (!user || isStaticOrAuthRoute) {
+    if (!hasUserContext && !authLoading) {
+      setCriticalImagesReady(true);
+      return;
+    }
+    if (!hasUserContext) return;
+    if (isStaticOrAuthRoute) {
       setCriticalImagesReady(true);
       return;
     }
