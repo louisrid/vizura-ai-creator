@@ -33,7 +33,7 @@ const Storage = () => {
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
   const [hidden, setHidden] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
-    try { return localStorage.getItem("facefox_storage_hidden") === "1"; } catch { return false; }
+    try { return localStorage.getItem("facefox_storage_hidden") !== "0"; } catch { return true; }
   });
   const toggleHidden = () => {
     setHidden((prev) => {
