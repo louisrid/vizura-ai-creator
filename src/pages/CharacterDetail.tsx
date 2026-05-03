@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Loader2, Trash2, Lock, RefreshCw, Camera, Check } from "lucide-react";
+import { Loader2, Trash2, Lock, RefreshCw, Gem, Check } from "lucide-react";
 import { useAppData } from "@/contexts/AppDataContext";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
@@ -502,12 +502,10 @@ const CharacterDetail = () => {
         <div className="mx-auto w-full max-w-lg px-[32px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-xl"
-            style={{ height: 52, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603", padding: "0 16px" }}
+            className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2"
+            style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 10 }}
           >
-            <span className="flex items-center justify-center gap-2">
-              create photo <Camera size={18} strokeWidth={3} />
-            </span>
+            create photo <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
           </button>
         </div>
       </div>
@@ -602,12 +600,10 @@ const CharacterDetail = () => {
             <div className="flex-1" />
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-xl"
-              style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
+              className="w-full h-16 text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2"
+              style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 10 }}
             >
-              <span className="flex items-center justify-center gap-2">
-                create photo <Camera size={18} strokeWidth={3} />
-              </span>
+              create photo <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
             </button>
           </div>
         </div>
