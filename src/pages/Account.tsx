@@ -28,7 +28,8 @@ const Account = () => {
     if (params.get("checkout") === "success") { refetchSub(); }
   }, [location.search, refetchSub]);
 
-  if (authLoading) {
+  const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
+  if (authLoading && !hasCachedUser) {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
