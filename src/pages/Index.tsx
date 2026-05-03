@@ -721,9 +721,8 @@ const Index = () => {
           </div>
 
           <div className="w-[75%] mx-auto flex flex-col gap-5" style={{ overflowAnchor: "none" }}>
-            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden" style={{ aspectRatio: "9/16" }}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full" style={{ aspectRatio: previewAspect }}>
+            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+              <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -738,7 +737,6 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                </div>
               </div>
             </div>
           </div>
