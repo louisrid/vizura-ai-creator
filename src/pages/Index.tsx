@@ -836,6 +836,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
+          </div>
 
           {/* Right: controls */}
           <div className="col-span-7 flex flex-col gap-6">
