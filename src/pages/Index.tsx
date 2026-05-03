@@ -726,7 +726,7 @@ const Index = () => {
                 className="relative flex w-full items-center justify-center bg-card"
                 style={{ aspectRatio: "9/16" }}
               >
-                <div className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "100%" }}>
+                <div className="w-full mx-auto" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -824,7 +824,7 @@ const Index = () => {
                 className="relative flex w-full items-center justify-center bg-card"
                 style={{ aspectRatio: "9/16" }}
               >
-                <div className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "100%" }}>
+                <div className="w-full mx-auto" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
