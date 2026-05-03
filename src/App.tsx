@@ -328,8 +328,8 @@ const AppRoutes = () => {
       if (isRenderableImageUrl(url)) urls.add(url);
     };
     const routeState = (location.state as { openCreator?: boolean; preselectedCharacterId?: string } | null) ?? null;
-    const openingCreator = !!routeState.openCreator;
-    const preferredCharacterId = routeState.preselectedCharacterId || (typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "");
+    const openingCreator = !!routeState?.openCreator;
+    const preferredCharacterId = routeState?.preselectedCharacterId || (typeof window !== "undefined" ? sessionStorage.getItem("facefox_last_selected_character_id") ?? "" : "");
 
     if (path === "/") {
       // When opening the creator overlay, Home content is covered — skip preloading its images.
