@@ -396,37 +396,32 @@ const AppRoutes = () => {
   // Key design: never cancel in-flight preloads. Preloading is side-effect-free
   // (just warms browser cache), so letting old preloads finish is harmless and
   // avoids the race where cancellation leaves criticalImagesReady stuck false.
-  const activePreloadRef = useRef<Promise<void> | null>(null);
   useEffect(() => {
     if (authLoading) return;
     if (!user || isStaticOrAuthRoute) {
       setCriticalImagesReady(true);
       return;
     }
-    // Data not ready yet — no URLs to preload, but don't flip ready yet either.
-    // Wait for data so we can preload its images before showing the page.
     const dataReady = (!needsCharacters || charactersReady) && (!needsGenerations || generationsReady);
     if (!dataReady) return;
-    // No images needed for this route.
     if (criticalImageUrls.length === 0) {
       setCriticalImagesReady(true);
       return;
     }
-    // All URLs already preloaded this session.
+    // Mark URLs as "in progress" immediately so re-runs don't start duplicate preloads.
     const newUrls = criticalImageUrls.filter((url) => !preloadedUrlsRef.current.has(url));
     if (newUrls.length === 0) {
       setCriticalImagesReady(true);
       return;
     }
-    // Start preloading. Don't cancel on re-render — let it finish.
-    const preloadPromise = Promise.all(newUrls.map(preloadImage)).then(() => {
-      newUrls.forEach((url) => preloadedUrlsRef.current.add(url));
-      // Only flip ready if this is still the most recent preload batch.
-      if (activePreloadRef.current === preloadPromise) {
-        setCriticalImagesReady(true);
-      }
+    // Add to ref NOW, before the async work. This prevents re-runs from
+    // seeing these same URLs as "new" and starting duplicate batches.
+    newUrls.forEach((url) => preloadedUrlsRef.current.add(url));
+    // Preload all images. When done, flip ready. No ref comparison needed
+    // because each URL is only preloaded once (guarded by preloadedUrlsRef).
+    void Promise.all(newUrls.map(preloadImage)).then(() => {
+      setCriticalImagesReady(true);
     });
-    activePreloadRef.current = preloadPromise;
   }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady, needsCharacters, needsGenerations]);
 
   useEffect(() => {
