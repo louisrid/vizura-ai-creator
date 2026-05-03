@@ -384,7 +384,7 @@ const AppRoutes = () => {
     }
 
     return [];
-  }, [characters, generations, isStaticOrAuthRoute, location.pathname, location.state, user]);
+  }, [characters, generations, isStaticOrAuthRoute, location.pathname, location.state, hasUserContext]);
 
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
