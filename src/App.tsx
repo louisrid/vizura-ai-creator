@@ -459,11 +459,6 @@ const AppRoutes = () => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
     return () => clearTimeout(timer);
   }, [location.pathname, location.key]);
-  const [splashSafetyCeiling, setSplashSafetyCeiling] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => setSplashSafetyCeiling(true), 8000);
-    return () => clearTimeout(timer);
-  }, [location.pathname, location.key]);
   // Per-route data needs: only block on the data the current page actually renders.
   // Avoids long splashes on pages like /create or /index that don't need generations.
   const dataStillLoading =
@@ -474,14 +469,12 @@ const AppRoutes = () => {
   const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
   const criticalImagesStillLoading = !!user && !isStaticOrAuthRoute && !criticalImagesReady;
   const stillResolving =
-    !splashSafetyCeiling && (
-      authLoading ||
-      (!authLoading && !!user && location.pathname === "/auth") ||
-      dataStillLoading ||
-      onboardingStillLoading ||
-      criticalImagesStillLoading ||
-      blockingLoaders > 0
-    );
+    authLoading ||
+    (!authLoading && !!user && location.pathname === "/auth") ||
+    dataStillLoading ||
+    onboardingStillLoading ||
+    criticalImagesStillLoading ||
+    blockingLoaders > 0;
   const suppressUnauthRoutes =
     hasCachedUser && authLoading && !user &&
     (location.pathname === "/" || location.pathname === "/auth");
@@ -495,17 +488,10 @@ const AppRoutes = () => {
     return () => clearTimeout(timer);
   }, [stillResolving, blockingLoaders, location.key]);
 
-  useEffect(() => {
-    if (!stillResolving) {
-      const timer = setTimeout(() => setHeaderRevealed(true), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [stillResolving]);
-
   return (
     <div style={{ overscrollBehavior: "none" }}>
       {(stillResolving || suppressUnauthRoutes) && <LoadingScreen />}
-      {headerRevealed && !suppressUnauthRoutes && (
+      {!suppressUnauthRoutes && (
         <>
           <HeaderTransition />
           <Routes location={location}>
