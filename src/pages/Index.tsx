@@ -681,21 +681,29 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[72px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[96px] md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
         <div className="flex flex-col gap-7">
-          <div className="w-[75%] mx-auto flex flex-col gap-5">
+          <div className="w-[75%] mx-auto flex flex-col gap-5" style={{ overflowAnchor: "none" }}>
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
-                onPointerDown={(e) => e.stopPropagation()}
-                onClick={() => setCharDropdownOpen((v) => !v)}
+                ref={charToggleRef}
+                onPointerDown={(e) => {
+                  if (e.button !== 0) return;
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  charWasOpenRef.current = charDropdownOpen;
+                  if (!charDropdownOpen) setCharDropdownOpen(true);
+                }}
+                onPointerMove={handleCharPointerMove}
+                onPointerUp={handleCharPointerEnd}
+                onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -711,7 +719,6 @@ const Index = () => {
                 </span>
                 <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
-              {charDropdownContent}
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
