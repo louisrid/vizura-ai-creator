@@ -256,20 +256,39 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
+  const updateCharDropdownPos = useCallback(() => {
+    const ref = charToggleRef.current || charToggleRef2.current;
+    const rect = ref?.getBoundingClientRect();
+    if (!rect) return;
+    setCharDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+  }, []);
+
+  useEffect(() => {
     if (!charDropdownOpen) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
-      // Check both mobile and desktop refs
-      const inDropdown1 = dropdownRef.current?.contains(target);
-      const inDropdown2 = dropdownRef2.current?.contains(target);
-      if (!inDropdown1 && !inDropdown2) {
-        setCharDropdownOpen(false);
-      }
+    updateCharDropdownPos();
+    window.addEventListener("resize", updateCharDropdownPos);
+    window.addEventListener("scroll", updateCharDropdownPos, true);
+    return () => {
+      window.removeEventListener("resize", updateCharDropdownPos);
+      window.removeEventListener("scroll", updateCharDropdownPos, true);
     };
-    // Use pointerdown with a slight delay to avoid race with the toggle onClick
-    const wrappedHandler = (e: PointerEvent) => handler(e as unknown as MouseEvent);
-    document.addEventListener("pointerdown", wrappedHandler, true);
-    return () => document.removeEventListener("pointerdown", wrappedHandler, true);
+  }, [charDropdownOpen, updateCharDropdownPos]);
+
+  useEffect(() => {
+    if (!charDropdownOpen) return;
+    const handler = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (charToggleRef.current?.contains(target)) return;
+      if (charToggleRef2.current?.contains(target)) return;
+      if (dropdownRef.current?.contains(target)) return;
+      if (dropdownRef2.current?.contains(target)) return;
+      const portal = document.getElementById("char-dropdown-portal");
+      if (portal?.contains(target)) return;
+      setCharDropdownOpen(false);
+      setCharHighlight(null);
+    };
+    document.addEventListener("pointerdown", handler, true);
+    return () => document.removeEventListener("pointerdown", handler, true);
   }, [charDropdownOpen]);
 
   useEffect(() => {
