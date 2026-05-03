@@ -80,8 +80,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
-            style={{ backgroundColor: "#000000" }}
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">subscription</span>
@@ -97,8 +96,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
-            style={{ backgroundColor: "#000000" }}
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">change password</span>
@@ -110,8 +108,7 @@ const Account = () => {
         {user?.email === "louisjridland@gmail.com" && (
           <div className="w-full pt-3">
             <button
-              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
-              style={{ backgroundColor: "#000000" }}
+              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
             >
               admin
