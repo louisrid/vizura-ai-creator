@@ -370,7 +370,7 @@ const Header = () => {
                     borderRadius: "50%",
                     backgroundColor: "hsl(var(--card))",
                     border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
-                    transform: "translateX(-2px)",
+                    transform: "translateX(0px)",
                   }}
                   aria-label="my account"
                 >
@@ -383,7 +383,7 @@ const Header = () => {
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[35px] md:h-[43px]"
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[37px] md:h-[45px]"
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
