@@ -387,72 +387,47 @@ const AppRoutes = () => {
   }, [characters, generations, isStaticOrAuthRoute, location.pathname, location.state, user]);
 
   const preloadedUrlsRef = useRef<Set<string>>(new Set());
-  const initialPreloadDoneRef = useRef(false);
-  const mountTimeRef = useRef<number>(Date.now());
   const [dataLoadGracePassed, setDataLoadGracePassed] = useState(false);
-  // Within this window after mount, treat newly-arrived URLs as part of the
-  // initial paint and keep the splash up while they preload. After this window,
-  // any new URLs come from background refreshes and must NOT re-trigger the loader.
-  const INITIAL_PAINT_WINDOW_MS = 6000;
   useEffect(() => {
-    mountTimeRef.current = Date.now();
-    initialPreloadDoneRef.current = false;
     setDataLoadGracePassed(false);
   }, [location.pathname, location.key]);
 
+  // Preload critical images so the page looks ready when the splash hides.
+  // Key design: never cancel in-flight preloads. Preloading is side-effect-free
+  // (just warms browser cache), so letting old preloads finish is harmless and
+  // avoids the race where cancellation leaves criticalImagesReady stuck false.
+  const activePreloadRef = useRef<Promise<void> | null>(null);
   useEffect(() => {
     if (authLoading) return;
-
     if (!user || isStaticOrAuthRoute) {
       setCriticalImagesReady(true);
-      initialPreloadDoneRef.current = true;
       return;
     }
-
+    // Data not ready yet — no URLs to preload, but don't flip ready yet either.
+    // Wait for data so we can preload its images before showing the page.
     const dataReady = (!needsCharacters || charactersReady) && (!needsGenerations || generationsReady);
-    const withinInitialWindow = !splashHiddenRef.current && Date.now() - mountTimeRef.current < INITIAL_PAINT_WINDOW_MS;
-
-    // No URLs to preload right now.
+    if (!dataReady) return;
+    // No images needed for this route.
     if (criticalImageUrls.length === 0) {
-      // If data isn't ready yet and we're still in the initial window, keep the
-      // splash up — URLs may arrive imminently and we want to preload them
-      // before the user sees grey image boxes.
-      if (!dataReady && withinInitialWindow) {
-        setCriticalImagesReady(false);
-      } else {
-        setCriticalImagesReady(true);
-        initialPreloadDoneRef.current = true;
-      }
+      setCriticalImagesReady(true);
       return;
     }
-
-    // Only block on URLs we have NOT already preloaded this session.
+    // All URLs already preloaded this session.
     const newUrls = criticalImageUrls.filter((url) => !preloadedUrlsRef.current.has(url));
     if (newUrls.length === 0) {
       setCriticalImagesReady(true);
-      initialPreloadDoneRef.current = true;
       return;
     }
-
-    let cancelled = false;
-    // Block the splash if either:
-    //  - this is the very first preload pass on this mount, OR
-    //  - we're still inside the initial paint window AND data just became ready
-    //    (fresh URLs from the first DB fetch should be preloaded before paint).
-    const shouldBlock = !splashHiddenRef.current && (!initialPreloadDoneRef.current || withinInitialWindow);
-    if (shouldBlock) setCriticalImagesReady(false);
-
-    void Promise.all(newUrls.map(preloadImage)).finally(() => {
-      if (cancelled) return;
+    // Start preloading. Don't cancel on re-render — let it finish.
+    const preloadPromise = Promise.all(newUrls.map(preloadImage)).then(() => {
       newUrls.forEach((url) => preloadedUrlsRef.current.add(url));
-      setCriticalImagesReady(true);
-      initialPreloadDoneRef.current = true;
+      // Only flip ready if this is still the most recent preload batch.
+      if (activePreloadRef.current === preloadPromise) {
+        setCriticalImagesReady(true);
+      }
     });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady]);
+    activePreloadRef.current = preloadPromise;
+  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady, needsCharacters, needsGenerations]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
@@ -466,11 +441,13 @@ const AppRoutes = () => {
     !isStaticOrAuthRoute &&
     ((needsCharacters && !charactersReady) || (needsGenerations && !generationsReady));
   const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
+  const criticalImagesStillLoading = !!user && !isStaticOrAuthRoute && !criticalImagesReady;
   const stillResolving =
     authLoading ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading ||
     onboardingStillLoading ||
+    criticalImagesStillLoading ||
     blockingLoaders > 0;
   const suppressUnauthRoutes =
     hasCachedUser && authLoading && !user &&
