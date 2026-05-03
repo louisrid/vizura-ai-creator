@@ -13,7 +13,15 @@ const ONBOARDING_CHANGED_EVENT = "facefox:onboarding-changed";
 // the DB fetch immediately after sign-in.
 export function useOnboarded() {
   const { user } = useAuth();
-  const [state, setState] = useState<CachedOnboardingState | null>(() => readCachedOnboardingState(user?.id));
+  const [state, setState] = useState<CachedOnboardingState | null>(() => {
+    if (user?.id) return readCachedOnboardingState(user.id);
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = localStorage.getItem("facefox_cached_user");
+      const cachedId = raw ? JSON.parse(raw)?.id : localStorage.getItem("facefox_cached_user_id");
+      return cachedId ? readCachedOnboardingState(cachedId) : null;
+    } catch { return null; }
+  });
 
   useEffect(() => {
     if (!user) {
