@@ -722,12 +722,11 @@ const Index = () => {
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
-              <motion.section
-                layout
+              <div
                 className="relative flex w-full items-center justify-center bg-card"
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                style={{ aspectRatio: "9/16" }}
               >
-                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                <div className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "100%" }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -742,8 +741,8 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                </motion.div>
-              </motion.section>
+                </div>
+              </div>
             </div>
           </div>
 
