@@ -87,7 +87,7 @@ const preloadImage = (url: string) => new Promise<void>((resolve) => {
   img.src = url;
 
   if (img.complete) {
-    decodeAndFinish();
+    finish();
   }
 });
 
