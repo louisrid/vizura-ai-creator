@@ -406,10 +406,11 @@ const AppRoutes = () => {
     if (!dataReady) return;
     if (criticalImageUrls.length === 0) {
       // Only flip ready if there truly are no images to show.
-      // On home page, characters/generations may still be populating
-      // so URLs could appear on the next render. Don't flip ready prematurely.
-      const hasImageSources = characters.length > 0 || generations.length > 0;
-      if (!hasImageSources) {
+      // If ready flags are true but arrays are empty, data is still populating
+      // from cache — URLs will appear on the next render. Don't flip ready.
+      const dataExpected = (needsCharacters && charactersReady) || (needsGenerations && generationsReady);
+      const hasData = characters.length > 0 || generations.length > 0;
+      if (!dataExpected || hasData) {
         setCriticalImagesReady(true);
       }
       return;
@@ -422,6 +423,7 @@ const AppRoutes = () => {
     }
     // Add to ref NOW, before the async work. This prevents re-runs from
     // seeing these same URLs as "new" and starting duplicate batches.
+    setCriticalImagesReady(false);
     newUrls.forEach((url) => preloadedUrlsRef.current.add(url));
     // Preload all images. When done, flip ready. No ref comparison needed
     // because each URL is only preloaded once (guarded by preloadedUrlsRef).
