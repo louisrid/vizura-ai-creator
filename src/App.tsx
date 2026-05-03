@@ -292,7 +292,7 @@ const AppRoutes = () => {
   const { loading: authLoading, user } = useAuth();
   const { characters, generations, charactersReady, generationsReady } = useAppData();
   const [blockingLoaders, setBlockingLoaders] = useState(() => getBlockingLoaderCount());
-  const [headerRevealed, setHeaderRevealed] = useState(false);
+  
   const [criticalImagesReady, setCriticalImagesReady] = useState(false);
   const splashHiddenRef = useRef(false);
   useEffect(() => {
