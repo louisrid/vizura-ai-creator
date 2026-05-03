@@ -682,7 +682,7 @@ const Index = () => {
 
       {/* Mobile layout */}
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[110px] md:hidden">
-        <div className="flex items-center gap-3 mb-7">
+        <div className="flex items-center gap-3 mb-[34px]">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -722,12 +722,11 @@ const Index = () => {
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
-              <motion.section
-                layout
+              <div
                 className="relative flex w-full items-center justify-center bg-card"
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                style={{ aspectRatio: "9/16" }}
               >
-                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                <div className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "100%" }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -742,8 +741,8 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                </motion.div>
-              </motion.section>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -780,7 +779,7 @@ const Index = () => {
 
       {/* Desktop layout — two-column */}
       <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[56px] pt-[32px] pb-[280px]">
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-[38px]">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -821,12 +820,11 @@ const Index = () => {
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
-              <motion.section
-                layout
+              <div
                 className="relative flex w-full items-center justify-center bg-card"
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                style={{ aspectRatio: "9/16" }}
               >
-                <motion.div layout className="w-full" style={{ aspectRatio: previewAspect }}>
+                <div className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "100%" }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -841,8 +839,8 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                </motion.div>
-              </motion.section>
+                </div>
+              </div>
             </div>
           </div>
 
