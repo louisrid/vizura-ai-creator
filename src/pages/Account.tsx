@@ -102,11 +102,9 @@ const Account = () => {
             <span className="text-sm font-[800] lowercase text-white">change password</span>
             <ChevronRight size={16} strokeWidth={2.5} className="text-white" />
           </button>
-        </div>
 
-        {/* Admin button */}
-        {user?.email === "louisjridland@gmail.com" && (
-          <div className="w-full pt-3">
+          {/* Admin button */}
+          {user?.email === "louisjridland@gmail.com" && (
             <button
               className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
@@ -114,8 +112,9 @@ const Account = () => {
               admin
               <Eye size={16} strokeWidth={2.5} />
             </button>
-          </div>
-        )}
+          )}
+        </div>
+
 
         {/* Sign out */}
         <button
