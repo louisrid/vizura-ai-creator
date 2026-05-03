@@ -360,7 +360,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onError={(e) => (e.currentTarget.style.display = "none")} />
                       )}
                     </AspectRatio>
                   </button>
@@ -543,7 +543,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="async" onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onError={(e) => (e.currentTarget.style.display = "none")} />
                       )}
                     </AspectRatio>
                   </button>
