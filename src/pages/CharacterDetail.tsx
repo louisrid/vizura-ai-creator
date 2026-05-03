@@ -502,7 +502,7 @@ const CharacterDetail = () => {
         <div className="mx-auto w-full max-w-lg px-[32px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
+            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-xl"
             style={{ height: 52, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
