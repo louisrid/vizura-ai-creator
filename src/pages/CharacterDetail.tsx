@@ -602,7 +602,7 @@ const CharacterDetail = () => {
             <div className="flex-1" />
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-base"
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-xl"
               style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">
