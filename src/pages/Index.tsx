@@ -255,7 +255,6 @@ const Index = () => {
     try { sessionStorage.removeItem("facefox_photo_prompt"); } catch {}
   }, []);
 
-  useEffect(() => {
   const updateCharDropdownPos = useCallback(() => {
     const ref = charToggleRef.current || charToggleRef2.current;
     const rect = ref?.getBoundingClientRect();
