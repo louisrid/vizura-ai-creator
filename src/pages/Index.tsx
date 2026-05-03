@@ -721,9 +721,8 @@ const Index = () => {
           </div>
 
           <div className="w-[75%] mx-auto flex flex-col gap-5" style={{ overflowAnchor: "none" }}>
-            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden" style={{ aspectRatio: "9/16" }}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full" style={{ aspectRatio: previewAspect }}>
+            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+              <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -738,7 +737,6 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                </div>
               </div>
             </div>
           </div>
@@ -747,7 +745,7 @@ const Index = () => {
 
           <div className="flex gap-3">
             <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
-            <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); }} />
+            <RatioDropdown value={photoRatio} onChange={(v) => { const y = window.scrollY; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { window.scrollTo(0, y); }); }} />
           </div>
 
           <div className="relative">
@@ -816,9 +814,8 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden" style={{ aspectRatio: "9/16" }}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full" style={{ aspectRatio: previewAspect }}>
+            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+              <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
@@ -833,7 +830,6 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                </div>
               </div>
             </div>
           </div>
@@ -844,7 +840,7 @@ const Index = () => {
 
             <div className="flex gap-4">
               <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
-              <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); }} />
+              <RatioDropdown value={photoRatio} onChange={(v) => { const y = window.scrollY; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { window.scrollTo(0, y); }); }} />
             </div>
 
             <div className="relative">
