@@ -58,7 +58,7 @@ const isRenderableImageUrl = (url: string | null | undefined): url is string => 
   return true;
 };
 
-const PRELOAD_TIMEOUT_MS = 3500;
+const PRELOAD_TIMEOUT_MS = 8000;
 const preloadImage = (url: string) => new Promise<void>((resolve) => {
   const img = new Image();
   let settled = false;
