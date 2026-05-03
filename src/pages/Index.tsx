@@ -744,9 +744,9 @@ const Index = () => {
 
           <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("facefox_photo_expression", v); }} />
 
-          <div className="flex gap-3">
+          <div className="flex gap-3" ref={ratioRowRef}>
             <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
-            <RatioDropdown value={photoRatio} onChange={(v) => { const y = window.scrollY; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { window.scrollTo(0, y); }); }} />
+            <RatioDropdown value={photoRatio} onChange={(v) => { const topBefore = ratioRowRef.current?.getBoundingClientRect().top ?? 0; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { const topAfter = ratioRowRef.current?.getBoundingClientRect().top ?? 0; const drift = topAfter - topBefore; if (drift !== 0) window.scrollBy(0, drift); }); }} />
           </div>
 
           <div className="relative">
