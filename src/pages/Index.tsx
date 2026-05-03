@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef, useMemo, Fragment } from "react";
+import { useEffect, useState, useRef, useMemo, Fragment, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, ChevronDown, Gem, User } from "lucide-react";
