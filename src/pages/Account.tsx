@@ -37,7 +37,7 @@ const Account = () => {
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
             <div className="h-7 w-28" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
-          <div className="flex flex-col items-center mb-8 mt-4">
+          <div className="flex flex-col items-center mb-8">
             <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
             <div className="h-4 w-40" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
@@ -66,7 +66,7 @@ const Account = () => {
         </div>
 
         {/* Profile avatar + email */}
-        <div className="flex flex-col items-center mb-8 mt-4">
+        <div className="flex flex-col items-center mb-8">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mb-3 bg-neon-yellow"
           >
