@@ -321,7 +321,7 @@ const AppRoutes = () => {
   const needsGenerations = path === "/" || path === "/storage" || path === "/history";
   const needsCharacters = !isStaticOrAuthRoute;
   const criticalImageUrls = useMemo(() => {
-    if (!user || isStaticOrAuthRoute) return [];
+    if (!hasUserContext || isStaticOrAuthRoute) return [];
 
     const urls = new Set<string>();
     const pushUrl = (url: string | null | undefined) => {
