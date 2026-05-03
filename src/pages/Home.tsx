@@ -451,7 +451,7 @@ const Home = () => {
           {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
 
           {/* Two action buttons */}
-          <div className="flex gap-3 mb-8 mt-[16px]">
+          <div className="flex gap-3 mb-8 mt-[24px]">
             <button
               type="button"
               onClick={handleOpenCreator}
