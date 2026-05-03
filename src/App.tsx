@@ -333,12 +333,12 @@ const AppRoutes = () => {
 
       generations
         .flatMap((generation) => (generation.image_urls ?? []).filter(isRenderableImageUrl).slice(0, 1))
-        .slice(0, 8)
+        .slice(0, 20)
         .forEach(pushUrl);
 
       characters
         .filter((character) => character.face_image_url && character.face_angle_url && character.body_anchor_url)
-        .slice(0, 4)
+        .slice(0, 12)
         .forEach((character) => pushUrl(character.face_image_url));
 
       return Array.from(urls);
