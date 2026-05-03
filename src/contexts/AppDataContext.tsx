@@ -205,6 +205,12 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     const id = ++fetchIdRef.current;
 
     if (!user) {
+      const hasCachedUser = !!localStorage.getItem("facefox_cached_user");
+      if (hasCachedUser) {
+        // Auth token is refreshing — keep cache intact.
+        // When auth resolves, the effect re-runs with the real user.
+        return;
+      }
       setCharacters([]);
       setGenerations([]);
       setCharactersReady(true);
