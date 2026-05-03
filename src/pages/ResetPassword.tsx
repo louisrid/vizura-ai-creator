@@ -45,7 +45,7 @@ const ResetPassword = () => {
       <DotDecal />
       <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-[32px] md:px-[56px] pt-[32px] pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
         <div className="w-full md:max-w-md">
-          <div className="flex items-center gap-3 mb-[34px]">
+          <div className="flex items-center gap-3 mb-14">
             <BackButton />
             <PageTitle className="mb-0">reset password</PageTitle>
           </div>
