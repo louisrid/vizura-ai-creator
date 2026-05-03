@@ -37,7 +37,7 @@ const Account = () => {
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
             <div className="h-7 w-28" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
-          <div className="flex flex-col items-center mb-8 mt-4">
+          <div className="flex flex-col items-center mb-8">
             <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
             <div className="h-4 w-40" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
           </div>
@@ -60,13 +60,13 @@ const Account = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[280px] flex flex-col items-center">
-        <div className="flex items-center gap-3 mb-14 w-full">
+        <div className="flex items-center gap-3 mb-10 w-full">
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
 
         {/* Profile avatar + email */}
-        <div className="flex flex-col items-center mb-8 mt-4">
+        <div className="flex flex-col items-center mb-8">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mb-3 bg-neon-yellow"
           >
@@ -102,11 +102,9 @@ const Account = () => {
             <span className="text-sm font-[800] lowercase text-white">change password</span>
             <ChevronRight size={16} strokeWidth={2.5} className="text-white" />
           </button>
-        </div>
 
-        {/* Admin button */}
-        {user?.email === "louisjridland@gmail.com" && (
-          <div className="w-full pt-3">
+          {/* Admin button */}
+          {user?.email === "louisjridland@gmail.com" && (
             <button
               className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
@@ -114,8 +112,9 @@ const Account = () => {
               admin
               <Eye size={16} strokeWidth={2.5} />
             </button>
-          </div>
-        )}
+          )}
+        </div>
+
 
         {/* Sign out */}
         <button
@@ -222,7 +221,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 4%)" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}

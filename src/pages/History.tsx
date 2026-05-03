@@ -66,13 +66,13 @@ const History = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <DotDecal />
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[32px] md:px-[56px] pt-[32px] pb-[280px]">
-        <div className="flex items-center gap-3 mb-14">
+        <div className="flex items-center gap-3 mb-10">
           <BackButton />
           <PageTitle className="mb-0">history</PageTitle>
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(0 0% 4%)" }}>
+          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
