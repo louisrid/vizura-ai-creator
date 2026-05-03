@@ -321,7 +321,7 @@ const AppRoutes = () => {
   const needsGenerations = path === "/" || path === "/storage" || path === "/history";
   const needsCharacters = !isStaticOrAuthRoute;
   const criticalImageUrls = useMemo(() => {
-    if (!user || isStaticOrAuthRoute) return [];
+    if (!hasUserContext || isStaticOrAuthRoute) return [];
 
     const urls = new Set<string>();
     const pushUrl = (url: string | null | undefined) => {
@@ -397,8 +397,12 @@ const AppRoutes = () => {
   // (just warms browser cache), so letting old preloads finish is harmless and
   // avoids the race where cancellation leaves criticalImagesReady stuck false.
   useEffect(() => {
-    if (authLoading) return;
-    if (!user || isStaticOrAuthRoute) {
+    if (!hasUserContext && !authLoading) {
+      setCriticalImagesReady(true);
+      return;
+    }
+    if (!hasUserContext) return;
+    if (isStaticOrAuthRoute) {
       setCriticalImagesReady(true);
       return;
     }
@@ -430,7 +434,7 @@ const AppRoutes = () => {
     void Promise.all(newUrls.map(preloadImage)).then(() => {
       setCriticalImagesReady(true);
     });
-  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady, needsCharacters, needsGenerations, characters, generations]);
+  }, [authLoading, hasUserContext, criticalImageUrls, isStaticOrAuthRoute, charactersReady, generationsReady, needsCharacters, needsGenerations, characters, generations]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
