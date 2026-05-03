@@ -405,7 +405,13 @@ const AppRoutes = () => {
     const dataReady = (!needsCharacters || charactersReady) && (!needsGenerations || generationsReady);
     if (!dataReady) return;
     if (criticalImageUrls.length === 0) {
-      setCriticalImagesReady(true);
+      // Only flip ready if there truly are no images to show.
+      // On home page, characters/generations may still be populating
+      // so URLs could appear on the next render. Don't flip ready prematurely.
+      const hasImageSources = characters.length > 0 || generations.length > 0;
+      if (!hasImageSources) {
+        setCriticalImagesReady(true);
+      }
       return;
     }
     // Mark URLs as "in progress" immediately so re-runs don't start duplicate preloads.
@@ -422,7 +428,7 @@ const AppRoutes = () => {
     void Promise.all(newUrls.map(preloadImage)).then(() => {
       setCriticalImagesReady(true);
     });
-  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady, needsCharacters, needsGenerations]);
+  }, [authLoading, criticalImageUrls, isStaticOrAuthRoute, user, charactersReady, generationsReady, needsCharacters, needsGenerations, characters, generations]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
