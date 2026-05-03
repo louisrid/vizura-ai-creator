@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef, useMemo, Fragment } from "react";
+import { useEffect, useState, useRef, useMemo, Fragment, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { Loader2, ChevronDown, Gem, User } from "lucide-react";
@@ -242,6 +243,9 @@ const Index = () => {
   const dropdownRef2 = useRef<HTMLDivElement>(null);
   const charToggleRef = useRef<HTMLButtonElement>(null);
   const charToggleRef2 = useRef<HTMLButtonElement>(null);
+  const [charHighlight, setCharHighlight] = useState<number | null>(null);
+  const charWasOpenRef = useRef(false);
+  const [charDropdownPos, setCharDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
@@ -251,21 +255,39 @@ const Index = () => {
     try { sessionStorage.removeItem("facefox_photo_prompt"); } catch {}
   }, []);
 
+  const updateCharDropdownPos = useCallback(() => {
+    const ref = charToggleRef.current || charToggleRef2.current;
+    const rect = ref?.getBoundingClientRect();
+    if (!rect) return;
+    setCharDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+  }, []);
+
   useEffect(() => {
     if (!charDropdownOpen) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
-      // Check both mobile and desktop refs
-      const inDropdown1 = dropdownRef.current?.contains(target);
-      const inDropdown2 = dropdownRef2.current?.contains(target);
-      if (!inDropdown1 && !inDropdown2) {
-        setCharDropdownOpen(false);
-      }
+    updateCharDropdownPos();
+    window.addEventListener("resize", updateCharDropdownPos);
+    window.addEventListener("scroll", updateCharDropdownPos, true);
+    return () => {
+      window.removeEventListener("resize", updateCharDropdownPos);
+      window.removeEventListener("scroll", updateCharDropdownPos, true);
     };
-    // Use pointerdown with a slight delay to avoid race with the toggle onClick
-    const wrappedHandler = (e: PointerEvent) => handler(e as unknown as MouseEvent);
-    document.addEventListener("pointerdown", wrappedHandler, true);
-    return () => document.removeEventListener("pointerdown", wrappedHandler, true);
+  }, [charDropdownOpen, updateCharDropdownPos]);
+
+  useEffect(() => {
+    if (!charDropdownOpen) return;
+    const handler = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (charToggleRef.current?.contains(target)) return;
+      if (charToggleRef2.current?.contains(target)) return;
+      if (dropdownRef.current?.contains(target)) return;
+      if (dropdownRef2.current?.contains(target)) return;
+      const portal = document.getElementById("char-dropdown-portal");
+      if (portal?.contains(target)) return;
+      setCharDropdownOpen(false);
+      setCharHighlight(null);
+    };
+    document.addEventListener("pointerdown", handler, true);
+    return () => document.removeEventListener("pointerdown", handler, true);
   }, [charDropdownOpen]);
 
   useEffect(() => {
@@ -531,35 +553,74 @@ const Index = () => {
   }
 
   /* ── Character dropdown content (shared between mobile/desktop) ── */
-  const charDropdownContent = (
+  const handleCharPointerMove = (e: React.PointerEvent) => {
+    if (!charDropdownOpen) return;
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const item = el ? (el as Element).closest("[data-char-idx]") as HTMLElement | null : null;
+    setCharHighlight(item ? Number(item.getAttribute("data-char-idx")) : null);
+  };
+
+  const handleCharPointerEnd = (e: React.PointerEvent) => {
+    const btn = e.currentTarget as HTMLElement;
+    if ((btn as any).hasPointerCapture?.(e.pointerId)) (btn as any).releasePointerCapture(e.pointerId);
+    if (e.type === "pointercancel") { setCharHighlight(null); return; }
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const item = el ? (el as Element).closest("[data-char-idx]") as HTMLElement | null : null;
+    if (item) {
+      const idx = Number(item.getAttribute("data-char-idx"));
+      if (idx === characters.length) {
+        setCharDropdownOpen(false);
+        setCharHighlight(null);
+        sessionStorage.removeItem("facefox_creator_dismissed");
+        sessionStorage.removeItem("facefox_guided_flow_state");
+        navigate("/", { state: { openCreator: true } });
+      } else {
+        const c = characters[idx];
+        if (c) { handleCharacterSelect(c.id); setCharDropdownOpen(false); setCharHighlight(null); }
+      }
+      return;
+    }
+    const onBtn = !!el && btn.contains(el as Node);
+    if (onBtn) { if (charWasOpenRef.current) { setCharDropdownOpen(false); setCharHighlight(null); } return; }
+    setCharDropdownOpen(false);
+    setCharHighlight(null);
+  };
+
+  const charDropdownContent = charDropdownPos ? createPortal(
     <AnimatePresence>
       {charDropdownOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
-          className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden"
-          style={{ borderRadius: 10, border: "2px solid hsl(var(--border-mid))", backgroundColor: "#000000", boxShadow: "0 8px 32px rgba(0,0,0,0.8)" }}
+          id="char-dropdown-portal"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.12, ease: "easeOut" }}
+          className="fixed overflow-hidden"
+          style={{
+            top: charDropdownPos.top,
+            left: charDropdownPos.left,
+            width: charDropdownPos.width,
+            zIndex: 10001,
+            borderRadius: 10,
+            border: "2px solid hsl(var(--border-mid))",
+            backgroundColor: "#000000",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
+          }}
         >
           {characters.map((c, idx) => {
-            const isFirst = idx === 0;
-            const isLast = idx === characters.length - 1 && !(characters.length === 0 && user);
             const isSelected = selectedCharId === c.id;
-            const borderRadius = isFirst && isLast ? "10px" : isFirst ? "10px 10px 0 0" : isLast ? "0 0 10px 10px" : "0";
             return (
-              <Fragment key={c.id}>
-                {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--border-mid))", margin: "0" }} />}
+              <div key={c.id}>
+                {idx > 0 && <div style={{ height: 1, backgroundColor: "hsl(var(--border-mid))" }} />}
                 <button
                   type="button"
-                  onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); }}
+                  data-char-idx={idx}
+                  onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); setCharHighlight(null); }}
                   className="flex w-full items-center gap-3 px-4 py-3"
                   style={{
-                    backgroundColor: isSelected ? "hsl(var(--card))" : "transparent",
-                    borderRadius,
+                    backgroundColor: charHighlight === idx ? "hsl(var(--card))" : isSelected ? "hsl(var(--card))" : "transparent",
+                    touchAction: "none",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? "hsl(var(--card))" : "transparent")}
                 >
                   {c.face_image_url ? (
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/10">
@@ -570,42 +631,43 @@ const Index = () => {
                       <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
                     </div>
                   )}
-                  <span
-                    className="text-lg font-[900] lowercase truncate"
-                    style={{ color: isSelected ? "#ffe603" : "#ffffff" }}
-                  >
+                  <span className="text-lg font-[900] lowercase truncate" style={{ color: isSelected ? "#ffe603" : "#ffffff" }}>
                     {c.name || "unnamed"}
                   </span>
                 </button>
-              </Fragment>
+              </div>
             );
           })}
           {characters.length === 0 && user && (
-            <Fragment>
+            <div>
               <button
                 type="button"
+                data-char-idx={characters.length}
                 onClick={() => {
                   setCharDropdownOpen(false);
+                  setCharHighlight(null);
                   sessionStorage.removeItem("facefox_creator_dismissed");
                   sessionStorage.removeItem("facefox_guided_flow_state");
                   navigate("/", { state: { openCreator: true } });
                 }}
-                className="flex w-full items-center gap-3 px-4 py-3 transition-colors duration-150"
-                style={{ borderRadius: "10px" }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "hsl(var(--card))")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                className="flex w-full items-center gap-3 px-4 py-3"
+                style={{
+                  backgroundColor: charHighlight === characters.length ? "hsl(var(--card))" : "transparent",
+                  touchAction: "none",
+                }}
               >
                 <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                   <span className="text-xs">+</span>
                 </div>
                 <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
               </button>
-            </Fragment>
+            </div>
           )}
         </motion.div>
       )}
-    </AnimatePresence>
-  );
+    </AnimatePresence>,
+    document.body,
+  ) : null;
 
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
@@ -619,21 +681,29 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[72px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[96px] md:hidden">
         <div className="flex items-center gap-3 mb-7">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
 
         <div className="flex flex-col gap-7">
-          <div className="w-[75%] mx-auto flex flex-col gap-5">
+          <div className="w-[75%] mx-auto flex flex-col gap-5" style={{ overflowAnchor: "none" }}>
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
-                onPointerDown={(e) => e.stopPropagation()}
-                onClick={() => setCharDropdownOpen((v) => !v)}
+                ref={charToggleRef}
+                onPointerDown={(e) => {
+                  if (e.button !== 0) return;
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  charWasOpenRef.current = charDropdownOpen;
+                  if (!charDropdownOpen) setCharDropdownOpen(true);
+                }}
+                onPointerMove={handleCharPointerMove}
+                onPointerUp={handleCharPointerEnd}
+                onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -649,7 +719,6 @@ const Index = () => {
                 </span>
                 <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
-              {charDropdownContent}
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
@@ -722,10 +791,18 @@ const Index = () => {
             <div className="relative" ref={dropdownRef2}>
               <button
                 type="button"
-                onPointerDown={(e) => e.stopPropagation()}
-                onClick={() => setCharDropdownOpen((v) => !v)}
+                ref={charToggleRef2}
+                onPointerDown={(e) => {
+                  if (e.button !== 0) return;
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  charWasOpenRef.current = charDropdownOpen;
+                  if (!charDropdownOpen) setCharDropdownOpen(true);
+                }}
+                onPointerMove={handleCharPointerMove}
+                onPointerUp={handleCharPointerEnd}
+                onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 10, backgroundColor: "#ffe603" }}
+                style={{ borderRadius: 10, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -741,7 +818,6 @@ const Index = () => {
                 </span>
                 <ChevronDown size={20} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
               </button>
-              {charDropdownContent}
             </div>
 
             <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
@@ -813,6 +889,7 @@ const Index = () => {
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
       </div>
+      {charDropdownContent}
     </div>
   );
 };

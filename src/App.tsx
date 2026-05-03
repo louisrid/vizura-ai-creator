@@ -397,7 +397,6 @@ const AppRoutes = () => {
   useEffect(() => {
     mountTimeRef.current = Date.now();
     initialPreloadDoneRef.current = false;
-    splashHiddenRef.current = false;
     setDataLoadGracePassed(false);
   }, [location.pathname, location.key]);
 
