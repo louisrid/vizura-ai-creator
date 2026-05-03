@@ -840,7 +840,7 @@ const Index = () => {
 
             <div className="flex gap-4">
               <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
-              <RatioDropdown value={photoRatio} onChange={(v) => { setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); }} />
+              <RatioDropdown value={photoRatio} onChange={(v) => { const y = window.scrollY; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { window.scrollTo(0, y); }); }} />
             </div>
 
             <div className="relative">
