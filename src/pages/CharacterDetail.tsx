@@ -313,7 +313,7 @@ const CharacterDetail = () => {
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
         <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[48px] pt-[32px] pb-[280px]">
-          <div className="flex items-center gap-3 mb-[34px]">
+          <div className="flex items-center gap-3 mb-14">
             <BackButton />
           </div>
         </main>
@@ -326,7 +326,7 @@ const CharacterDetail = () => {
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
         <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[48px] pt-[32px] pb-[280px]">
-          <div className="flex items-center gap-3 mb-[34px]">
+          <div className="flex items-center gap-3 mb-14">
             <BackButton />
           </div>
           <p className="text-sm font-[900] lowercase text-center mt-16 text-white">
@@ -438,7 +438,7 @@ const CharacterDetail = () => {
 
       {/* Mobile layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
-        <div className="flex items-center gap-3 mb-[34px]" style={{ position: "relative", zIndex: 10 }}>
+        <div className="flex items-center gap-3 mb-14" style={{ position: "relative", zIndex: 10 }}>
           {onboardingComplete ? <BackButton /> : (
             <button
               type="button"
@@ -502,7 +502,7 @@ const CharacterDetail = () => {
         <div className="mx-auto w-full max-w-lg px-[32px] pt-12" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)" }}>
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-[16px]"
+            className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all text-xl"
             style={{ height: 52, color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603", padding: "0 16px" }}
           >
             <span className="flex items-center justify-center gap-2">
@@ -514,7 +514,7 @@ const CharacterDetail = () => {
 
       {/* Desktop layout — two-column side by side */}
       <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-[56px] pt-7 pb-10 min-h-screen">
-        <div className="flex items-center gap-3 mb-[38px]">
+        <div className="flex items-center gap-3 mb-16">
           {onboardingComplete ? <BackButton /> : (
             <button
               type="button"
@@ -602,7 +602,7 @@ const CharacterDetail = () => {
             <div className="flex-1" />
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
-              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-base"
+              className="flex items-center justify-center gap-2 w-full font-[900] lowercase transition-all h-14 text-xl"
               style={{ color: "#ffffff", borderRadius: 10, backgroundColor: "#000000", border: "2px solid #ffe603" }}
             >
               <span className="flex items-center justify-center gap-2">

@@ -246,6 +246,7 @@ const Index = () => {
   const [charHighlight, setCharHighlight] = useState<number | null>(null);
   const charWasOpenRef = useRef(false);
   const [charDropdownPos, setCharDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const ratioRowRef = useRef<HTMLDivElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
@@ -682,7 +683,7 @@ const Index = () => {
 
       {/* Mobile layout */}
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[32px] pb-[110px] md:hidden">
-        <div className="flex items-center gap-3 mb-[34px]">
+        <div className="flex items-center gap-3 mb-14">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -743,9 +744,9 @@ const Index = () => {
 
           <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("facefox_photo_expression", v); }} />
 
-          <div className="flex gap-3">
+          <div className="flex gap-3" ref={ratioRowRef}>
             <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
-            <RatioDropdown value={photoRatio} onChange={(v) => { const y = window.scrollY; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { window.scrollTo(0, y); }); }} />
+            <RatioDropdown value={photoRatio} onChange={(v) => { const topBefore = ratioRowRef.current?.getBoundingClientRect().top ?? 0; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { const topAfter = ratioRowRef.current?.getBoundingClientRect().top ?? 0; const drift = topAfter - topBefore; if (drift !== 0) window.scrollBy(0, drift); }); }} />
           </div>
 
           <div className="relative">
@@ -774,7 +775,7 @@ const Index = () => {
 
       {/* Desktop layout — two-column */}
       <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[56px] pt-[32px] pb-[280px]">
-        <div className="flex items-center gap-3 mb-[38px]">
+        <div className="flex items-center gap-3 mb-16">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -838,9 +839,9 @@ const Index = () => {
           <div className="col-span-7 flex flex-col gap-6">
             <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("facefox_photo_expression", v); }} />
 
-            <div className="flex gap-4">
+            <div className="flex gap-4" ref={ratioRowRef}>
               <PhotoTypeDropdown value={photoType} onChange={(v) => { setPhotoType(v); sessionStorage.setItem("facefox_photo_type", v); }} />
-              <RatioDropdown value={photoRatio} onChange={(v) => { const y = window.scrollY; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { window.scrollTo(0, y); }); }} />
+              <RatioDropdown value={photoRatio} onChange={(v) => { const topBefore = ratioRowRef.current?.getBoundingClientRect().top ?? 0; setPhotoRatio(v); sessionStorage.setItem("facefox_photo_ratio", v); requestAnimationFrame(() => { const topAfter = ratioRowRef.current?.getBoundingClientRect().top ?? 0; const drift = topAfter - topBefore; if (drift !== 0) window.scrollBy(0, drift); }); }} />
             </div>
 
             <div className="relative">
