@@ -1,10 +1,13 @@
-const LoadingScreen = () => {
+import { forwardRef } from "react";
+
+const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
 
   // Markup matches main.tsx splash exactly so the transition splash → LoadingScreen
   // shows zero movement: same flex layout, same -4vh offset, same 24px text,
   // same 12px gap, same 14rem × 12px bar, same yellow fill animation.
   return (
     <div
+      ref={ref}
       className="fixed inset-0"
       style={{ zIndex: 99999, background: "#000000" }}
       role="status"
@@ -46,6 +49,8 @@ const LoadingScreen = () => {
       </div>
     </div>
   );
-};
+});
+
+LoadingScreen.displayName = "LoadingScreen";
 
 export default LoadingScreen;
