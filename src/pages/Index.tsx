@@ -688,45 +688,42 @@ const Index = () => {
         </div>
 
         <div className="flex flex-col gap-7">
-          <div className="w-[75%] mx-auto flex flex-col gap-5" style={{ overflowAnchor: "none" }}>
-            <div className="relative" ref={dropdownRef}>
-              <button
-                type="button"
-                ref={charToggleRef}
-                onPointerDown={(e) => {
-                  if (e.button !== 0) return;
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                  charWasOpenRef.current = charDropdownOpen;
-                  if (!charDropdownOpen) setCharDropdownOpen(true);
-                }}
-                onPointerMove={handleCharPointerMove}
-                onPointerUp={handleCharPointerEnd}
-                onPointerCancel={handleCharPointerEnd}
-                className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-                style={{ borderRadius: 10, backgroundColor: "#ffe603", touchAction: "none" }}
-              >
-                {selectedChar?.face_image_url ? (
-                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
-                    <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
-                    <User size={18} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
-                  </div>
-                )}
-                <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
-                  {selectedChar?.name || "select character"}
-                </span>
-                <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
-              </button>
-            </div>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              ref={charToggleRef}
+              onPointerDown={(e) => {
+                if (e.button !== 0) return;
+                e.currentTarget.setPointerCapture(e.pointerId);
+                charWasOpenRef.current = charDropdownOpen;
+                if (!charDropdownOpen) setCharDropdownOpen(true);
+              }}
+              onPointerMove={handleCharPointerMove}
+              onPointerUp={handleCharPointerEnd}
+              onPointerCancel={handleCharPointerEnd}
+              className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
+              style={{ borderRadius: 10, backgroundColor: "#ffe603", touchAction: "none" }}
+            >
+              {selectedChar?.face_image_url ? (
+                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
+                  <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.1)" }}>
+                  <User size={18} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
+                </div>
+              )}
+              <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
+                {selectedChar?.name || "select character"}
+              </span>
+              <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+          </div>
 
-            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
-              <div
-                className="relative flex w-full items-center justify-center bg-card"
-                style={{ aspectRatio: "9/16" }}
-              >
-                <div className="w-full" style={{ aspectRatio: previewAspect, maxHeight: "100%" }}>
+          <div className="w-[75%] mx-auto flex flex-col gap-5" style={{ overflowAnchor: "none" }}>
+            <div className="relative rounded-[10px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden" style={{ aspectRatio: "9/16" }}>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
                     src={resultImage}
