@@ -246,6 +246,7 @@ const Index = () => {
   const [charHighlight, setCharHighlight] = useState<number | null>(null);
   const charWasOpenRef = useRef(false);
   const [charDropdownPos, setCharDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const ratioRowRef = useRef<HTMLDivElement>(null);
 
   const selectedChar = useMemo(() => characters.find((c) => c.id === selectedCharId), [characters, selectedCharId]);
   const placeholderText = useStaticPlaceholder(selectedChar?.name || "luna");
