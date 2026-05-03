@@ -889,6 +889,7 @@ const Index = () => {
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
       </div>
+      {charDropdownContent}
     </div>
   );
 };
