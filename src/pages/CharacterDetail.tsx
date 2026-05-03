@@ -308,7 +308,8 @@ const CharacterDetail = () => {
     navigate("/characters", { replace: true });
   };
 
-  if (loading || authLoading) {
+  const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
+  if (loading || (authLoading && !hasCachedUser)) {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
