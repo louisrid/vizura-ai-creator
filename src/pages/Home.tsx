@@ -263,7 +263,7 @@ const Home = () => {
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-6 mt-[16px]">
+          <div className="flex gap-2 mb-6 mt-[24px]">
             {/* Create Character - solid yellow */}
             <button
               type="button"
