@@ -33,13 +33,13 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "rgba(255,255,255,0.1)", borderRadius: 8, position: "relative" }}>
+        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "rgba(255,255,255,0.1)", borderRadius: 7, position: "relative" }}>
           <div
             style={{
               width: "40%",
               height: "100%",
               background: "#ffe603",
-              borderRadius: 8,
+              borderRadius: 7,
               boxShadow: "0 0 10px #ffe603, 0 0 20px rgba(255,230,3,0.25)",
               animation: "facefox-bar 1.4s ease-in-out infinite",
               position: "absolute",
