@@ -440,6 +440,14 @@ const AppRoutes = () => {
     const timer = setTimeout(() => setDataLoadGracePassed(true), 4500);
     return () => clearTimeout(timer);
   }, [location.pathname, location.key]);
+  // Hard ceiling: splash must never show longer than 12 seconds total, no matter what.
+  const [splashCeilingReached, setSplashCeilingReached] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSplashCeilingReached(true), 12000);
+
+    return () => clearTimeout(timer);
+  }, []);
   // Per-route data needs: only block on the data the current page actually renders.
   // Avoids long splashes on pages like /create or /index that don't need generations.
   const dataStillLoading =
@@ -449,11 +457,13 @@ const AppRoutes = () => {
     ((needsCharacters && !charactersReady) || (needsGenerations && !generationsReady));
   const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
   const stillResolving =
-    authLoading ||
-    (!authLoading && !!user && location.pathname === "/auth") ||
-    dataStillLoading ||
-    onboardingStillLoading ||
-    blockingLoaders > 0;
+    !splashCeilingReached && (
+      authLoading ||
+      (!authLoading && !!user && location.pathname === "/auth") ||
+      dataStillLoading ||
+      onboardingStillLoading ||
+      blockingLoaders > 0
+    );
   const suppressUnauthRoutes =
     hasCachedUser && authLoading && !user &&
     (location.pathname === "/" || location.pathname === "/auth");
