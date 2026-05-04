@@ -13,7 +13,7 @@
 
 @layer base {
   :root {
-    --radius: 5px;
+    --radius: 6px;
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
@@ -153,7 +153,7 @@
 /* Content pill */
 .content-pill {
   background: hsl(var(--card));
-  border-radius: 10px;
+  border-radius: 6px;
   box-shadow: 0 2px 12px -2px hsl(0 0% 0% / 0.06), 0 1px 4px -1px hsl(0 0% 0% / 0.04);
 }
 
