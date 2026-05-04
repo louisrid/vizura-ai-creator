@@ -358,7 +358,7 @@ const Home = () => {
           {/* Latest Photos Section */}
           <section className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
+              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
@@ -413,7 +413,7 @@ const Home = () => {
           {/* My Characters Section */}
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[15px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
+              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
