@@ -49,7 +49,7 @@ const Home = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded } = useAppData();
+  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded, generationsReady } = useAppData();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const shouldOpenGuidedOnMount = openCreatorRequested;
