@@ -69,7 +69,7 @@ const ImageZoomViewer = ({ url, onClose, showDownload = true, downloadFilename =
               {footer ?? (showDownload && (
                 <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
                   <a href={url} download={downloadFilename} target="_blank" className="flex-1">
-                    <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-xs md:text-sm font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
+                    <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
                       download <Download size={12} strokeWidth={2.5} />
                     </Button>
                   </a>

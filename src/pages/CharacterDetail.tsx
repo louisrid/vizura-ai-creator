@@ -650,7 +650,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
-                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors disabled:opacity-50"
+                  className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase text-white transition-colors disabled:opacity-50"
                   style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                 >
                   no
@@ -658,7 +658,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
-                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
+                  className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
                   style={{ backgroundColor: "#1a0505", borderRadius: 10, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
