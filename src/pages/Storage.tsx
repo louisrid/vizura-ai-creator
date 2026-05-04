@@ -152,7 +152,7 @@ const Storage = () => {
               padding: 8,
               borderRadius: 10,
               backgroundColor: "#000000",
-              border: "2px solid hsl(0 0% 11%)",
+              border: "2px solid hsl(var(--border-mid))",
             }}
             aria-label={hidden ? "show photos" : "hide photos"}
           >
@@ -210,7 +210,7 @@ const Storage = () => {
                   download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-[10px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#000000", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
+                  style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
