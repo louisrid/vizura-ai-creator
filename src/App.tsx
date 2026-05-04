@@ -448,13 +448,11 @@ const AppRoutes = () => {
     !isStaticOrAuthRoute &&
     ((needsCharacters && !charactersReady) || (needsGenerations && !generationsReady));
   const onboardingStillLoading = !!user && !isStaticOrAuthRoute && !onboardingResolved;
-  const criticalImagesStillLoading = !splashHiddenRef.current && !!hasUserContext && !isStaticOrAuthRoute && !criticalImagesReady;
   const stillResolving =
     authLoading ||
     (!authLoading && !!user && location.pathname === "/auth") ||
     dataStillLoading ||
     onboardingStillLoading ||
-    criticalImagesStillLoading ||
     blockingLoaders > 0;
   const suppressUnauthRoutes =
     hasCachedUser && authLoading && !user &&
