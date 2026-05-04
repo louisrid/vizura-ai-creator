@@ -243,29 +243,24 @@ const Home = () => {
   // MUST register synchronously (in useState init) so blockingLoaders > 0
   // on the very first render — before App.tsx computes stillResolving.
   const loadedCountRef = useRef(0);
-  const unblockRef = useRef<(() => void) | null>(null);
+  const [unblock] = useState(() => {
+    const splashEl = typeof document !== "undefined" ? document.getElementById("splash-screen") : null;
+    if (!splashEl) return null; // In-app navigation — don't block
+    return registerBlockingLoader();
+  });
+  const unblockRef = useRef(unblock);
 
+  // If there are no images to wait for, unblock immediately
   useEffect(() => {
-    // Take ownership of the early blocker from main.tsx (don't release it)
-    const early = (window as any).__facebox_early_unblock as (() => void) | undefined;
-    if (early) {
-      delete (window as any).__facebox_early_unblock;
+    if (expectedImageCount === 0 && unblockRef.current) {
+      unblockRef.current();
+      unblockRef.current = null;
     }
-
-    if (expectedImageCount === 0) {
-      // No images to wait for — release the early blocker
-      if (early) early();
-      return;
-    }
-
-    // Use the early blocker as our unblock function.
-    // If no early blocker (in-app navigation), register a new one.
-    unblockRef.current = early || registerBlockingLoader();
-
+    // Safety timeout: never hold splash longer than 10 seconds
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
     }, 10000);
-    return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
+    return () => clearTimeout(timer);
   }, [expectedImageCount]);
 
   const handleImageLoaded = useCallback(() => {
@@ -320,8 +315,8 @@ const Home = () => {
                 minWidth: 0,
                 backgroundColor: "#ffe603",
                 padding: "16px 14px 16px 20px",
-                borderRadius: 6,
-                fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif",
+                borderRadius: 10,
+                fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
               <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
@@ -344,8 +339,8 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 padding: "16px 20px 16px 14px",
-                borderRadius: 6,
-                fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif",
+                borderRadius: 10,
+                fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
@@ -364,11 +359,11 @@ const Home = () => {
           <section className="mb-6">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
-                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
                 >
                   see all →
                 </button>
@@ -392,7 +387,7 @@ const Home = () => {
                     }}
                     className="overflow-hidden"
                     style={{
-                      borderRadius: 6,
+                      borderRadius: 10,
                       border: "none",
                       backgroundColor: "hsl(var(--card))",
                       cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
@@ -419,8 +414,8 @@ const Home = () => {
           <section>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -437,7 +432,7 @@ const Home = () => {
                       onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
                       className="overflow-hidden"
                       style={{
-                        borderRadius: 6,
+                        borderRadius: 10,
                         backgroundColor: "hsl(var(--card))",
                         cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                       }}
@@ -460,7 +455,7 @@ const Home = () => {
                     onClick={() => navigate(`/characters/${char.id}`)}
                     className="relative overflow-hidden"
                     style={{
-                      borderRadius: 6,
+                      borderRadius: 10,
                       border: "none",
                       backgroundColor: "hsl(var(--card))",
                     }}
@@ -507,7 +502,7 @@ const Home = () => {
                 minWidth: 0,
                 backgroundColor: "#ffe603",
                 padding: "22px 20px",
-                borderRadius: 6,
+                borderRadius: 10,
               }}
             >
               <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
@@ -528,7 +523,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 padding: "22px 20px",
-                borderRadius: 6,
+                borderRadius: 10,
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",
@@ -547,11 +542,11 @@ const Home = () => {
           <section className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
                 <button
                   onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
-                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}
                 >
                   see all →
                 </button>
@@ -575,7 +570,7 @@ const Home = () => {
                     }}
                     className={`overflow-hidden ${!isPlaceholder ? "hover-lift" : ""}`}
                     style={{
-                      borderRadius: 6,
+                      borderRadius: 10,
                       border: "none",
                       backgroundColor: "hsl(var(--card))",
                       cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
@@ -602,8 +597,8 @@ const Home = () => {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
-              <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
+              <div className="relative" style={{ overflow: "hidden", borderRadius: 10 }}>
+                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 10 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -620,7 +615,7 @@ const Home = () => {
                       onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
                       className="overflow-hidden"
                       style={{
-                        borderRadius: 6,
+                        borderRadius: 10,
                         backgroundColor: "hsl(var(--card))",
                         cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                       }}
@@ -643,7 +638,7 @@ const Home = () => {
                     onClick={() => navigate(`/characters/${char.id}`)}
                     className="relative overflow-hidden hover-lift"
                     style={{
-                      borderRadius: 6,
+                      borderRadius: 10,
                       border: "none",
                       backgroundColor: "hsl(var(--card))",
                     }}
@@ -686,7 +681,7 @@ const Home = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[6px] overflow-hidden"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="truncate flex-1 text-left">{selectedImage.prompt}</span>
@@ -696,7 +691,7 @@ const Home = () => {
             <a href={selectedImage.url} download={`facefox-${selectedImage.id}.png`} target="_blank" className="block">
               <button
                 type="button"
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white rounded-[6px]"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white rounded-[10px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 download <Download size={12} strokeWidth={2.5} />
