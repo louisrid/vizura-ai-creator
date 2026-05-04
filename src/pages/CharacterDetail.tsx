@@ -313,7 +313,7 @@ const CharacterDetail = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[56px] pt-[38px] pb-[280px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[56px] pt-[44px] pb-[280px]">
           <div className="flex items-center gap-3 mb-11">
             <BackButton />
           </div>
@@ -326,7 +326,7 @@ const CharacterDetail = () => {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
         <DotDecal />
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[56px] pt-[38px] pb-[280px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[56px] pt-[44px] pb-[280px]">
           <div className="flex items-center gap-3 mb-11">
             <BackButton />
           </div>
