@@ -490,7 +490,7 @@ const CharacterDetail = () => {
             <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[10px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[7px] text-white">{t.label}</span>
+                  <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
                   <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[10px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
@@ -650,7 +650,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
-                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase text-white transition-colors disabled:opacity-50"
+                  className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase text-white transition-colors disabled:opacity-50"
                   style={{ backgroundColor: "hsl(var(--card))", borderRadius: 10 }}
                 >
                   no
@@ -658,7 +658,7 @@ const CharacterDetail = () => {
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
-                  className="flex-1 h-12 md:h-14 text-sm md:text-base font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
+                  className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
                   style={{ backgroundColor: "#1a0505", borderRadius: 10, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}

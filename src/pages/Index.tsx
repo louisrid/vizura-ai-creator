@@ -103,7 +103,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               type="button"
               aria-pressed={isSelected}
               onClick={() => onChange(opt)}
-              className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[17px] font-[900] lowercase transition-all"
+              className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[16px] font-[900] lowercase transition-all"
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
                 color: isSelected ? "#000000" : "#ffffff",

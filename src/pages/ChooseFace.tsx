@@ -979,7 +979,7 @@ const ChooseFace = () => {
                 <button
                   type="button"
                   onClick={() => void generateFaces()}
-                  className="h-10 px-4 text-[12px] font-[900] lowercase"
+                  className="h-10 px-4 text-base font-[900] lowercase"
                   style={{ backgroundColor: "#ffe603", color: "#000000", borderRadius: 10 }}
                 >
                   try again
