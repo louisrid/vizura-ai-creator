@@ -92,7 +92,7 @@ const ChatPill = ({
         <div
           className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
           style={{
-            borderRadius: 8,
+            borderRadius: 10,
             backgroundColor: bgColor,
             color: highlight ? "#ffffff" : "#000000",
             border: "none",
