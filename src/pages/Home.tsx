@@ -49,7 +49,7 @@ const Home = () => {
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
-  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded } = useAppData();
+  const { characters: cachedChars, generations: cachedGens, charactersReady: cachedCharsLoaded, generationsReady } = useAppData();
   const locationState = ((location.state as { openCreator?: boolean; onboardingRedirect?: boolean } | null) ?? null);
   const openCreatorRequested = Boolean(locationState?.openCreator);
   const shouldOpenGuidedOnMount = openCreatorRequested;
@@ -252,20 +252,43 @@ const Home = () => {
       delete (window as any).__facebox_early_unblock;
     }
 
-    if (expectedImageCount === 0) {
-      // No images — release immediately
-      if (early) early();
+    // Wait for data to load before deciding what to do.
+    // If we release early when data hasn't loaded, expectedImageCount goes 0→N
+    // later and we'd register a NEW blocker, causing a second loading bar.
+    const dataReady = cachedCharsLoaded && generationsReady;
+    if (!dataReady) {
+      // Hold the blocker — keep it until data loads
+      unblockRef.current = unblockRef.current || early || registerBlockingLoader();
       return;
     }
 
-    // Use the early blocker as our unblock. If none (in-app nav), register a new one.
-    unblockRef.current = early || registerBlockingLoader();
+    if (expectedImageCount === 0) {
+      // Data loaded, no images — release
+      const toRelease = unblockRef.current || early;
+      if (toRelease) toRelease();
+      unblockRef.current = null;
+      return;
+    }
 
+    // Data loaded, images expected — keep blocker until images load
+    if (!unblockRef.current) {
+      unblockRef.current = early || registerBlockingLoader();
+    }
+
+    // Fast-path: if all images are already in the DOM and browser-cached, unblock immediately
+    requestAnimationFrame(() => {
+      const imgs = document.querySelectorAll<HTMLImageElement>('img[data-home-image="1"]');
+      if (imgs.length >= expectedImageCount && Array.from(imgs).every(img => img.complete && img.naturalHeight > 0)) {
+        if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
+      }
+    });
+
+    // Safety timeout: 3 seconds for cached images, but never longer than that
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
-    }, 10000);
+    }, 3000);
     return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
-  }, [expectedImageCount]);
+  }, [expectedImageCount, cachedCharsLoaded, generationsReady]);
 
   const handleImageLoaded = useCallback(() => {
     loadedCountRef.current += 1;
@@ -298,7 +321,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-[50px] pb-[280px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[24px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[56px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -405,7 +428,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
+                        <img src={photo.url} alt="latest photo" data-home-image="1" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       )}
                     </AspectRatio>
                   </button>
@@ -466,7 +489,7 @@ const Home = () => {
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
+                        <img src={char.face_image_url!} alt={char.name} data-home-image="1" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
@@ -486,7 +509,7 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-[56px] pt-[62px] pb-[280px]">
-          <h1 className="flex w-full flex-col items-start text-[54px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[16px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[54px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[44px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[10px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -588,7 +611,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
+                        <img src={photo.url} alt="latest photo" data-home-image="1" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       )}
                     </AspectRatio>
                   </button>
@@ -649,7 +672,7 @@ const Home = () => {
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
+                        <img src={char.face_image_url!} alt={char.name} data-home-image="1" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={32} strokeWidth={2.5} style={{ color: "#ffffff" }} />
