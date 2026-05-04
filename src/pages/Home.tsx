@@ -244,9 +244,14 @@ const Home = () => {
   // on the very first render — before App.tsx computes stillResolving.
   const loadedCountRef = useRef(0);
   const [unblock] = useState(() => {
-    const splashEl = typeof document !== "undefined" ? document.getElementById("splash-screen") : null;
-    if (!splashEl) return null; // In-app navigation — don't block
-    return registerBlockingLoader();
+    // Take ownership of the early blocking loader registered in main.tsx
+    const early = typeof window !== "undefined" ? (window as any).__facebox_early_unblock : null;
+    if (early) {
+      delete (window as any).__facebox_early_unblock;
+      return early as () => void;
+    }
+    // Fallback: if no early registration (in-app navigation), don't block
+    return null;
   });
   const unblockRef = useRef(unblock);
 

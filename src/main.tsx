@@ -41,4 +41,15 @@ if (splash) {
   `;
 }
 
+// Pre-register a blocking loader for image-heavy pages so the splash
+// stays up on the very first React render. Home.tsx will unblock it
+// once all images have loaded (or the safety timeout fires).
+import { registerBlockingLoader } from "@/lib/startupSplash";
+const hasCachedData = !!localStorage.getItem("facefox_cached_characters");
+const isImageRoute = window.location.pathname === "/" || window.location.pathname === "/characters" || window.location.pathname.startsWith("/characters/") || window.location.pathname === "/storage" || window.location.pathname === "/history";
+if (splash && hasCachedData && isImageRoute) {
+  const earlyUnblock = registerBlockingLoader();
+  (window as any).__facebox_early_unblock = earlyUnblock;
+}
+
 createRoot(document.getElementById("root")!).render(<App />);
