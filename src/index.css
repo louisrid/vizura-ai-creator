@@ -6,14 +6,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Provicali';
-  src: url('/fonts/Provicali.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -118,7 +110,7 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Provicali', -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
     overflow: hidden;
     overscroll-behavior: contain;

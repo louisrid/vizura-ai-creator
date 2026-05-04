@@ -25,7 +25,7 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
           gap: 16,
           background: "#000000",
           color: "#ffffff",
-          fontFamily: "'Provicali',-apple-system,'SF Pro Display',system-ui,sans-serif",
+          fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif",
           fontWeight: 900,
           textTransform: "lowercase",
           letterSpacing: "-0.02em",
