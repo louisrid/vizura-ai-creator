@@ -254,7 +254,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-[50px] pb-[280px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[46px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[32px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[32px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -361,7 +361,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => (e.currentTarget.style.opacity = "1")} onError={(e) => (e.currentTarget.style.display = "none")} />
                       )}
                     </AspectRatio>
                   </button>
@@ -422,7 +422,7 @@ const Home = () => {
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => { (e.target as HTMLImageElement).style.opacity = "1"; }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
@@ -442,7 +442,7 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-[56px] pt-[62px] pb-[280px]">
-          <h1 className="flex w-full flex-col items-start text-[57px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[20px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[54px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[20px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[10px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -544,7 +544,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => (e.currentTarget.style.opacity = "1")} onError={(e) => (e.currentTarget.style.display = "none")} />
                       )}
                     </AspectRatio>
                   </button>
@@ -605,7 +605,7 @@ const Home = () => {
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => { (e.target as HTMLImageElement).style.opacity = "1"; }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={32} strokeWidth={2.5} style={{ color: "#ffffff" }} />
