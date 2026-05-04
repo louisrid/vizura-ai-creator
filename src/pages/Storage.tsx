@@ -199,7 +199,7 @@ const Storage = () => {
                     <img
                       src={img.url}
                       alt=""
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover" loading="eager" decoding="sync"
                       style={hidden ? { filter: "blur(20px) brightness(0.3)" } : undefined}
                       onError={() => { handleDelete(img); }}
                     />
