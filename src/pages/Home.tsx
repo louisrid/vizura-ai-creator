@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import { displayAge } from "@/lib/displayAge";
 import { User, Copy, Download } from "lucide-react";
@@ -231,6 +232,38 @@ const Home = () => {
     return slots;
   }, [characters]);
 
+  // Count how many images will actually render (have URLs)
+  const expectedImageCount = useMemo(() => {
+    const photoCount = photoSlots.filter(p => p.url).length;
+    const charCount = charSlots.filter(c => c?.face_image_url).length;
+    return photoCount + charCount;
+  }, [photoSlots, charSlots]);
+
+  // Block the splash until all images have loaded (initial page load only)
+  const loadedCountRef = useRef(0);
+  const unblockRef = useRef<(() => void) | null>(null);
+  const blockedRef = useRef(false);
+
+  useEffect(() => {
+    const splashEl = document.getElementById("splash-screen");
+    if (!splashEl || expectedImageCount === 0 || blockedRef.current) return;
+    blockedRef.current = true;
+    loadedCountRef.current = 0;
+    unblockRef.current = registerBlockingLoader();
+    const timer = setTimeout(() => {
+      if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
+    }, 10000);
+    return () => { clearTimeout(timer); };
+  }, [expectedImageCount]);
+
+  const handleImageLoaded = useCallback(() => {
+    loadedCountRef.current += 1;
+    if (loadedCountRef.current >= expectedImageCount && unblockRef.current) {
+      unblockRef.current();
+      unblockRef.current = null;
+    }
+  }, [expectedImageCount]);
+
   // Lock conditions: only show locks after state is confirmed — never flash for users with characters
   const showLocks = lockStateResolved && charsLoaded && !effectiveOnboardingComplete && resolvedCharacterCount === 0;
 
@@ -361,7 +394,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => (e.currentTarget.style.opacity = "1")} onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       )}
                     </AspectRatio>
                   </button>
@@ -422,7 +455,7 @@ const Home = () => {
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => { (e.target as HTMLImageElement).style.opacity = "1"; }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
@@ -544,7 +577,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => (e.currentTarget.style.opacity = "1")} onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       )}
                     </AspectRatio>
                   </button>
@@ -605,7 +638,7 @@ const Home = () => {
                   >
                     <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
-                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => { (e.target as HTMLImageElement).style.opacity = "1"; }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        <img src={char.face_image_url!} alt={char.name} className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <User size={32} strokeWidth={2.5} style={{ color: "#ffffff" }} />
