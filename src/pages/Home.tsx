@@ -243,24 +243,28 @@ const Home = () => {
   // MUST register synchronously (in useState init) so blockingLoaders > 0
   // on the very first render — before App.tsx computes stillResolving.
   const loadedCountRef = useRef(0);
-  const [unblock] = useState(() => {
-    const splashEl = typeof document !== "undefined" ? document.getElementById("splash-screen") : null;
-    if (!splashEl) return null; // In-app navigation — don't block
-    return registerBlockingLoader();
-  });
-  const unblockRef = useRef(unblock);
+  const unblockRef = useRef<(() => void) | null>(null);
 
-  // If there are no images to wait for, unblock immediately
   useEffect(() => {
-    if (expectedImageCount === 0 && unblockRef.current) {
-      unblockRef.current();
-      unblockRef.current = null;
+    // Take ownership of the early blocker registered in main.tsx (don't release it yet)
+    const early = (window as any).__facebox_early_unblock as (() => void) | undefined;
+    if (early) {
+      delete (window as any).__facebox_early_unblock;
     }
-    // Safety timeout: never hold splash longer than 10 seconds
+
+    if (expectedImageCount === 0) {
+      // No images — release immediately
+      if (early) early();
+      return;
+    }
+
+    // Use the early blocker as our unblock. If none (in-app nav), register a new one.
+    unblockRef.current = early || registerBlockingLoader();
+
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
     }, 10000);
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
   }, [expectedImageCount]);
 
   const handleImageLoaded = useCallback(() => {
@@ -294,7 +298,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-[50px] pb-[280px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[16px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[24px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -482,7 +486,7 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-[56px] pt-[62px] pb-[280px]">
-          <h1 className="flex w-full flex-col items-start text-[54px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[8px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[54px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[16px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[10px] whitespace-nowrap text-left">
               <span>making today?</span>
