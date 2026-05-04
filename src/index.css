@@ -17,7 +17,7 @@
     --foreground: 0 0% 100%;
 
     /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
-    --card: 0 0% 0%;
+    --card: 0 0% 5%;
     --card-foreground: 0 0% 100%;
 
     --popover: 0 0% 2%;
@@ -96,7 +96,7 @@
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 100%;
+    --border-mid: 0 0% 11%;
 
     /* DARKER border grey — for menu dropdowns */
     --border-dark: 0 0% 5%;
