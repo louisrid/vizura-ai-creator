@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
+import DotDecal from "@/components/DotDecal";
 
 
 import type { SlideConfig } from "@/components/InstructionalSlide";
@@ -841,8 +842,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div> */}
-        <div style={{ fontSize: 88, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 0, marginBottom: 10, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.3s ease' }}>facebox</div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: heroPhase >= 3 ? 1 : 0, transition: 'opacity 0.3s ease' }}>
+        <div style={{ position: 'relative', zIndex: 1, fontSize: 88, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: '20vh', marginBottom: 10 }}>facebox</div>
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 180, padding: '12px 0', fontSize: 26, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 6, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
