@@ -516,6 +516,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
+      <SignOutOverlay />
       {(stillResolving || suppressUnauthRoutes) && <LoadingScreen />}
       {!suppressUnauthRoutes && (
         <>
