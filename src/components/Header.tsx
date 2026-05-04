@@ -39,7 +39,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(({ menuDisable
     onPointerUp={onPointerEnd}
     onPointerCancel={onPointerEnd}
     disabled={menuDisabled}
-    className="flex items-center justify-center w-[42px] h-[42px] md:w-[52px] md:h-[52px]"
+    className="flex items-center justify-center w-[38px] h-[38px] md:w-[46px] md:h-[46px]"
     style={{
       borderRadius: 6,
       backgroundColor: menuDisabled ? "hsl(0 0% 0%)" : "#000000",
@@ -365,7 +365,7 @@ const Header = () => {
               {isLoggedIn && (
                 <button
                   onClick={() => { navigate("/account"); }}
-                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[36px] h-[36px] md:w-[44px] md:h-[44px]"
+                  className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[38px] h-[38px] md:w-[46px] md:h-[46px]"
                   style={{
                     borderRadius: "50%",
                     backgroundColor: "hsl(var(--card))",
@@ -383,7 +383,7 @@ const Header = () => {
               <div className="flex items-center gap-3 md:gap-5">
                 <div className="relative">
                   <div
-                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[37px] md:h-[45px]"
+                    className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[38px] md:h-[46px]"
                     style={{
                       backgroundColor: "#050a10",
                       border: "2px solid #00e0ff",
