@@ -73,7 +73,7 @@ const MyCharacters = () => {
           <button
             onClick={handleCreateCharacter}
             className="overflow-hidden transition-transform hover-lift"
-            style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)", border: "none" }}
+            style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))", border: "none" }}
           >
             <AspectRatio ratio={3 / 4}>
               <div className="flex h-full w-full items-center justify-center">
@@ -92,7 +92,7 @@ const MyCharacters = () => {
                 style={{
                   borderRadius: 10,
                   border: "none",
-                  backgroundColor: "hsl(0 0% 5%)",
+                  backgroundColor: "hsl(var(--card))",
                 }}
               >
                 <AspectRatio ratio={3 / 4}>
@@ -104,7 +104,7 @@ const MyCharacters = () => {
                       onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "hsl(0 0% 5%)" }}>
+                    <div className="flex h-full w-full items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                       <svg width="28" height="28" viewBox="0 0 24 24" fill="hsl(var(--border-mid))">
                         <circle cx="12" cy="8" r="5" />
                         <path d="M3.5 21.5a8.5 8.5 0 0 1 17 0c0 1.1-.9 2-2 2h-13a2 2 0 0 1-2-2Z" />
