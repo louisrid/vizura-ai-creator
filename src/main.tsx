@@ -19,7 +19,9 @@ sessionStorage.removeItem("facefox_hero_seen");
 
 sessionStorage.removeItem("facefox_guided_flow_state");
 
-localStorage.removeItem("facefox_pending_creation");
+if (sessionStorage.getItem("facefox_signup_gate_active") !== "1") {
+  localStorage.removeItem("facefox_pending_creation");
+}
 
 const splash = document.getElementById("splash-screen");
 

@@ -843,9 +843,9 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div> */}
-        <div style={{ position: 'relative', zIndex: 1, fontSize: 88, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: '8vh', marginBottom: 10 }}>facebox</div>
+        <div style={{ position: 'relative', zIndex: 1, fontSize: 88, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 0, marginBottom: 24 }}>facebox</div>
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 6, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 6, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
@@ -1043,8 +1043,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       {/* Content area — fades between slides, anchored to fixed top so emoji+title stay consistent */}
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
-          className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" ? "items-center justify-center" : "items-center justify-start"}`}
-          style={visualStepType !== "hero" ? { paddingTop: 168, paddingBottom: 0 } : undefined}
+          className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center" : "items-center justify-start"}`}
+          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 168, paddingBottom: 0 }}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
