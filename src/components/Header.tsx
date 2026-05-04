@@ -260,8 +260,8 @@ const Header = () => {
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
   const isHomeRoute = pathname === "/";
   const headerContainerClass = isHomeRoute
-    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[44px] pb-3 md:max-w-3xl md:px-[56px] md:pt-[56px]"
-    : "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[44px] pb-3 md:max-w-6xl md:px-[56px] md:pt-[56px]";
+    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[44px] pb-5 md:max-w-3xl md:px-[56px] md:pt-[56px]"
+    : "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[44px] pb-5 md:max-w-6xl md:px-[56px] md:pt-[56px]";
   
 
   // Detect desktop
@@ -370,7 +370,7 @@ const Header = () => {
                     borderRadius: "50%",
                     backgroundColor: "hsl(var(--card))",
                     border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
-                    transform: "translateX(0px)",
+                    transform: "translateX(-1px)",
                   }}
                   aria-label="my account"
                 >

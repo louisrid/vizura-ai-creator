@@ -15,7 +15,7 @@ const ModalCloseButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAtt
       )}
       style={{
         backgroundColor: "hsl(var(--card))",
-        border: "2px solid hsl(var(--foreground) / 0.25)",
+        border: "2px solid hsl(var(--border-mid))",
         color: "hsl(var(--foreground))",
         ...style,
       }}
