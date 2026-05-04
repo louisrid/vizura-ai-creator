@@ -6,13 +6,7 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'ClassVariable';
-  src: url('/fonts/ClassVariable.ttf') format('truetype');
-  font-weight: 1 999;
-  font-style: normal;
-  font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -118,7 +112,7 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'ClassVariable', -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    font-family: 'Cal Sans', -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
     overflow: hidden;
     overscroll-behavior: contain;
