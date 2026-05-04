@@ -32,7 +32,7 @@ const SET3_SLIDES: SlideConfig[] = [
     pills: [{ text: "make any picture you want 📸", side: "left" }],
   },
   {
-    emoji: "🦊",
+    emoji: "⚙️",
     title: "facebox is the #1 tool to",
     pills: [
       { text: "generate ai characters 🧑", side: "left" },

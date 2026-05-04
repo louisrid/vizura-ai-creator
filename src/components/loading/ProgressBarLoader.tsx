@@ -170,12 +170,7 @@ const ProgressBarLoader = ({
       className="relative z-10 flex flex-col items-center justify-center px-2"
       style={{ ...contentStyle, overflow: "hidden", touchAction: "none", gap: 0 }}
     >
-      <img
-        src={foxEmojiImg}
-        alt="🦊"
-        className="inline-block select-none"
-        style={{ width: 100, height: 100, objectFit: 'contain', animation: "emoji-bounce 1.6s ease-in-out infinite", marginBottom: 20 }}
-      />
+      <span style={{ fontSize: 28 }}>⚙️</span>
 
       <motion.div
         className="flex h-8 items-center justify-center"
