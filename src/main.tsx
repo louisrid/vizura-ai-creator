@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
 // If the user was mid-onboarding when the page loaded, wipe the flow state
 // so they land on the hero/start screen fresh
