@@ -246,20 +246,21 @@ const Home = () => {
   const unblockRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    // Consume early registration from main.tsx
+    // Take ownership of the early blocker from main.tsx (don't release it)
     const early = (window as any).__facebox_early_unblock as (() => void) | undefined;
     if (early) {
       delete (window as any).__facebox_early_unblock;
     }
 
     if (expectedImageCount === 0) {
+      // No images to wait for — release the early blocker
       if (early) early();
       return;
     }
 
-    // Replace the early blocker with our own that waits for images
-    if (early) early();
-    unblockRef.current = registerBlockingLoader();
+    // Use the early blocker as our unblock function.
+    // If no early blocker (in-app navigation), register a new one.
+    unblockRef.current = early || registerBlockingLoader();
 
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
