@@ -49,7 +49,17 @@ const hasCachedData = !!localStorage.getItem("facefox_cached_characters");
 const isImageRoute = window.location.pathname === "/" || window.location.pathname === "/characters" || window.location.pathname.startsWith("/characters/") || window.location.pathname === "/storage" || window.location.pathname === "/history";
 if (splash && hasCachedData && isImageRoute) {
   const earlyUnblock = registerBlockingLoader();
-  (window as any).__facebox_early_unblock = earlyUnblock;
+  let released = false;
+  const releaseEarly = () => {
+    if (released) return;
+    released = true;
+    earlyUnblock();
+    delete (window as any).__facebox_early_unblock;
+  };
+  (window as any).__facebox_early_unblock = releaseEarly;
+  // Global safety: if Home never mounts/claims (e.g. redirect to /auth, route mismatch),
+  // never let the splash hang. Release after 8s no matter what.
+  setTimeout(releaseEarly, 8000);
 }
 
 createRoot(document.getElementById("root")!).render(<App />);
