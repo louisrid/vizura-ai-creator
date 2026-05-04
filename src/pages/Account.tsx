@@ -35,16 +35,16 @@ const Account = () => {
         <DotDecal />
         <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-11 w-full">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
-            <div className="h-7 w-28" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-7 w-28" style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="flex flex-col items-center mb-8">
             <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(var(--card))" }} />
-            <div className="h-4 w-40" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-4 w-40" style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="w-full flex flex-col gap-3">
-            <div className="w-full h-14" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
-            <div className="w-full h-14" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-14" style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-14" style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }} />
           </div>
         </main>
       </div>
@@ -81,7 +81,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-3">
           <button
-            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[5px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">subscription</span>
@@ -97,7 +97,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[5px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-sm font-[800] lowercase text-white">change password</span>
@@ -107,7 +107,7 @@ const Account = () => {
           {/* Admin button */}
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[5px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
             >
               admin
@@ -124,7 +124,7 @@ const Account = () => {
             color: "#ffffff",
             backgroundColor: "#1a0505",
             border: "2px solid #ff4444",
-            borderRadius: 6,
+            borderRadius: 5,
           }}
           onClick={handleSignOut}
         >
@@ -222,12 +222,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 5, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? (
               <><Loader2 className="animate-spin" size={18} />connecting...</>
@@ -256,7 +256,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
           <input
@@ -268,14 +268,14 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             spellCheck={false}
             autoCorrect="off"
             className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
-            style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 5, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
           <button
             onClick={handleEmailAuth}
             disabled={submitting || googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 5, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
           </button>

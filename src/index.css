@@ -13,7 +13,7 @@
 
 @layer base {
   :root {
-    --radius: 6px;
+    --radius: 5px;
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 

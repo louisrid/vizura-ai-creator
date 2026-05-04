@@ -400,13 +400,13 @@ const CharacterDetail = () => {
     return (
       <div
         className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift cursor-pointer"
-        style={{ borderRadius: 6, backgroundColor: "#000000" }}
+        style={{ borderRadius: 5, backgroundColor: "#000000" }}
         onClick={() => { if (isValidImg(url) && !showSpinner && !isRevealing) setZoomedUrl(url!); }}
       >
         {showSpinner || isRevealing ? (
           <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
         ) : isValidImg(url) ? (
-          <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 6 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+          <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 5 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
         ) : null}
         {overlay === "lock" && isValidImg(url) && (
           <div className="absolute flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#ffe603", top: -6, right: -6 }}>
@@ -444,7 +444,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-              style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+              style={{ borderRadius: 5, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -456,11 +456,11 @@ const CharacterDetail = () => {
           <PageTitle className="mb-0">your character</PageTitle>
         </div>
         <div className="flex flex-col gap-3">
-          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }} className="p-5">
+          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 6 }} />
-                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 6, backgroundColor: "#ffe603" }}>
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 5 }} />
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 5, backgroundColor: "#ffe603" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
               </div>
@@ -486,12 +486,12 @@ const CharacterDetail = () => {
             </div>
           </div>
           {/* Latest photos section removed from mobile */}
-          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }} className="px-3 py-2">
+          <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5 }} className="px-3 py-2">
             <div className="grid grid-cols-4 gap-1">
               {traits.map((t) => (
-                <div key={t.label} className="rounded-[6px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
+                <div key={t.label} className="rounded-[5px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[6px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
+                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[5px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -504,7 +504,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2"
-            style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 6 }}
+            style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 5 }}
           >
             create photo <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
           </button>
@@ -518,7 +518,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[48px] h-[48px]"
-              style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+              style={{ borderRadius: 5, backgroundColor: "#ffe603" }}
               aria-label="go back"
             >
               <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -532,11 +532,11 @@ const CharacterDetail = () => {
         <div className="grid grid-cols-12 gap-8">
           {/* Left: photos */}
           <div className="col-span-7">
-            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }} className="p-6">
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 6 }} />
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 6, backgroundColor: "#ffe603" }}>
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 5 }} />
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 5, backgroundColor: "#ffe603" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
                 </div>
@@ -563,7 +563,7 @@ const CharacterDetail = () => {
             </div>
             {/* Latest photos — desktop — only show if there are photos */}
             {latestPhotos.length > 0 && (
-              <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }} className="p-5 mt-5">
+              <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5 }} className="p-5 mt-5">
                 <h3 className="text-xl font-[900] lowercase text-white mb-3">latest photos</h3>
                 <div className="grid grid-cols-3 gap-3">
                   {Array.from({ length: 6 }).map((_, i) => {
@@ -572,11 +572,11 @@ const CharacterDetail = () => {
                       <div
                         key={photo?.id ?? `dplaceholder-${i}`}
                         className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                        style={{ borderRadius: 6, backgroundColor: "#000000" }}
+                        style={{ borderRadius: 5, backgroundColor: "#000000" }}
                         onClick={() => { if (photo) setZoomedUrl(photo.url); }}
                       >
                         {photo && (
-                          <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 6 }} />
+                          <img src={photo.url} alt="" className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 5 }} />
                         )}
                       </div>
                     );
@@ -587,11 +587,11 @@ const CharacterDetail = () => {
           </div>
           {/* Right: details + actions */}
           <div className="col-span-5 flex flex-col gap-5">
-            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }} className="p-5">
+            <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5 }} className="p-5">
               <h3 className="text-sm font-[900] lowercase text-white mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
-                  <div key={t.label} className="rounded-[6px] px-3 py-2 text-center" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+                  <div key={t.label} className="rounded-[5px] px-3 py-2 text-center" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px] text-white">{t.label}</span>
                     <span className={`inline-block font-[800] text-white leading-none text-[14px] ${t.value === "XL" ? "normal-case" : "lowercase"}`}>{t.value}</span>
                   </div>
@@ -602,7 +602,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="w-full h-16 text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2"
-              style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 6 }}
+              style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 5 }}
             >
               create photo <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
             </button>
@@ -636,7 +636,7 @@ const CharacterDetail = () => {
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-sm md:max-w-md"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6, border: "2px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5, border: "2px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
             >
               <ModalCloseButton onClick={() => setShowDelete(false)} />
 
@@ -651,7 +651,7 @@ const CharacterDetail = () => {
                   onClick={() => !deleting && setShowDelete(false)}
                   disabled={deleting}
                   className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase text-white transition-colors disabled:opacity-50"
-                  style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }}
+                  style={{ backgroundColor: "hsl(var(--card))", borderRadius: 5 }}
                 >
                   no
                 </button>
@@ -659,7 +659,7 @@ const CharacterDetail = () => {
                   onClick={handleDelete}
                   disabled={deleting}
                   className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
-                  style={{ backgroundColor: "#1a0505", borderRadius: 6, border: "2px solid #ff4444", color: "#ff4444" }}
+                  style={{ backgroundColor: "#1a0505", borderRadius: 5, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
                 </button>
