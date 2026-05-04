@@ -32,6 +32,53 @@ import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboar
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 
+const SignOutOverlay = () => {
+  const [phase, setPhase] = useState<"in" | "hold" | "out" | null>(null);
+  useEffect(() => {
+    const onStart = () => {
+      setPhase("in");
+      sessionStorage.setItem("facefox_signout_phase", "in");
+      setTimeout(() => {
+        setPhase("hold");
+        sessionStorage.setItem("facefox_signout_phase", "hold");
+      }, 400);
+      setTimeout(() => {
+        setPhase("out");
+        sessionStorage.setItem("facefox_signout_phase", "out");
+      }, 550);
+      setTimeout(() => {
+        setPhase(null);
+        sessionStorage.removeItem("facefox_signout_phase");
+      }, 950);
+    };
+    window.addEventListener("facefox-signing-out", onStart);
+    const existing = sessionStorage.getItem("facefox_signout_phase");
+    if (existing === "in" || existing === "hold" || existing === "out") {
+      onStart();
+    }
+    return () => window.removeEventListener("facefox-signing-out", onStart);
+  }, []);
+  if (!phase) return null;
+  const animation =
+    phase === "in" ? "facefox-fade-in 400ms ease forwards"
+    : phase === "out" ? "facefox-fade-out 400ms ease forwards"
+    : "none";
+  const opacity = phase === "in" ? 0 : 1;
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "#000000",
+        zIndex: 9999,
+        pointerEvents: "none",
+        opacity,
+        animation,
+      }}
+    />
+  );
+};
+
 let redirectLock = false;
 const acquireRedirectLock = (): boolean => {
   if (redirectLock) return false;
