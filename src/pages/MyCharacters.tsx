@@ -73,7 +73,7 @@ const MyCharacters = () => {
           <button
             onClick={handleCreateCharacter}
             className="overflow-hidden transition-transform hover-lift"
-            style={{ borderRadius: 9, backgroundColor: "hsl(var(--card))", border: "none" }}
+            style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))", border: "none" }}
           >
             <AspectRatio ratio={3 / 4}>
               <div className="flex h-full w-full items-center justify-center">
@@ -90,7 +90,7 @@ const MyCharacters = () => {
                 onClick={() => navigate(`/characters/${char.id}`)}
                 className="relative overflow-hidden transition-all duration-200 hover-lift"
                 style={{
-                  borderRadius: 9,
+                  borderRadius: 8,
                   border: "none",
                   backgroundColor: "hsl(var(--card))",
                 }}
