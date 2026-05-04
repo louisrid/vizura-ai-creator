@@ -554,10 +554,15 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // where content appears centered before snapping to top-aligned).
   const [visualStepType, setVisualStepType] = useState<string>(stepType);
   const prevVisibleRef = useRef(visible);
+  const prevStepTypeRef = useRef(stepType);
   useEffect(() => {
     const justOpened = visible && !prevVisibleRef.current;
     prevVisibleRef.current = visible;
-    if (justOpened) {
+    const wasHero = prevStepTypeRef.current === "hero";
+    const isHero = stepType === "hero";
+    prevStepTypeRef.current = stepType;
+    // Update layout immediately if either side is hero (hero transitions are instant, no fade)
+    if (justOpened || wasHero || isHero) {
       setVisualStepType(stepType);
       return;
     }
