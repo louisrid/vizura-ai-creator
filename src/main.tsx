@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 import "./index.css";
 
 // If the user was mid-onboarding when the page loaded, wipe the flow state
@@ -39,6 +40,13 @@ if (splash) {
       </div>
     </div>
   `;
+}
+
+const hasCachedData = !!localStorage.getItem("facefox_cached_characters");
+if (splash && hasCachedData && window.location.pathname === "/") {
+  const earlyUnblock = registerBlockingLoader();
+  (window as any).__facebox_early_unblock = earlyUnblock;
+  setTimeout(() => { if ((window as any).__facebox_early_unblock) { earlyUnblock(); delete (window as any).__facebox_early_unblock; } }, 12000);
 }
 
 createRoot(document.getElementById("root")!).render(<App />);

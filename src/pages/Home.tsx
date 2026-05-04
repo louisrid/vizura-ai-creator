@@ -243,24 +243,28 @@ const Home = () => {
   // MUST register synchronously (in useState init) so blockingLoaders > 0
   // on the very first render — before App.tsx computes stillResolving.
   const loadedCountRef = useRef(0);
-  const [unblock] = useState(() => {
-    const splashEl = typeof document !== "undefined" ? document.getElementById("splash-screen") : null;
-    if (!splashEl) return null; // In-app navigation — don't block
-    return registerBlockingLoader();
-  });
-  const unblockRef = useRef(unblock);
+  const unblockRef = useRef<(() => void) | null>(null);
 
-  // If there are no images to wait for, unblock immediately
   useEffect(() => {
-    if (expectedImageCount === 0 && unblockRef.current) {
-      unblockRef.current();
-      unblockRef.current = null;
+    // Consume early registration from main.tsx
+    const early = (window as any).__facebox_early_unblock as (() => void) | undefined;
+    if (early) {
+      delete (window as any).__facebox_early_unblock;
     }
-    // Safety timeout: never hold splash longer than 10 seconds
+
+    if (expectedImageCount === 0) {
+      if (early) early();
+      return;
+    }
+
+    // Replace the early blocker with our own that waits for images
+    if (early) early();
+    unblockRef.current = registerBlockingLoader();
+
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
     }, 10000);
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
   }, [expectedImageCount]);
 
   const handleImageLoaded = useCallback(() => {
