@@ -35,16 +35,16 @@ const Account = () => {
         <DotDecal />
         <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[38px] pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-11 w-full">
-            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
-            <div className="h-7 w-28" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="w-[40px] h-[40px]" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-7 w-28" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="flex flex-col items-center mb-8">
-            <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(0 0% 5%)" }} />
-            <div className="h-4 w-40" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="w-20 h-20 rounded-full mb-3" style={{ backgroundColor: "hsl(var(--card))" }} />
+            <div className="h-4 w-40" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
           </div>
           <div className="w-full flex flex-col gap-3">
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
-            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(0 0% 5%)" }} />
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
+            <div className="w-full h-14" style={{ borderRadius: 10, backgroundColor: "hsl(var(--card))" }} />
           </div>
         </main>
       </div>
