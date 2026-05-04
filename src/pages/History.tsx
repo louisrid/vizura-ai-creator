@@ -72,13 +72,13 @@ const History = () => {
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-[10px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+          <div className="rounded-[6px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
               onClick={() => navigate("/create")}
               className="h-12 md:h-14 w-full max-w-[12rem] mx-auto flex items-center justify-center gap-2 bg-neon-yellow text-lg md:text-xl font-extrabold lowercase text-neon-yellow-foreground hover:opacity-90 transition-all"
-              style={{ borderRadius: 10 }}
+              style={{ borderRadius: 6 }}
             >
               create photo <Camera size={16} strokeWidth={2.5} />
             </button>
@@ -89,7 +89,7 @@ const History = () => {
               <button
                 key={item.id}
                 onClick={() => setExpanded(item)}
-                className="w-full text-left rounded-[10px] overflow-hidden transition-all hover:border-foreground/60 hover-lift"
+                className="w-full text-left rounded-[6px] overflow-hidden transition-all hover:border-foreground/60 hover-lift"
                 style={{ backgroundColor: "hsl(var(--card))", border: "none" }}
               >
                 <img src={item.url} alt="" className="w-full aspect-[4/3] object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
@@ -133,7 +133,7 @@ const History = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[10px] overflow-hidden"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[6px] overflow-hidden"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="truncate flex-1 text-left">{expanded.prompt}</span>
@@ -143,7 +143,7 @@ const History = () => {
             <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="block">
               <button
                 type="button"
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white rounded-[10px]"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white rounded-[6px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 download <Download size={12} strokeWidth={2.5} />
