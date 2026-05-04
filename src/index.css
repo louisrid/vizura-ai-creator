@@ -96,7 +96,7 @@
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 11%;
+    --border-mid: 0 0% 100%;
 
     /* DARKER border grey — for menu dropdowns */
     --border-dark: 0 0% 5%;
