@@ -92,7 +92,7 @@ const ChatPill = ({
         <div
           className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
           style={{
-            borderRadius: 8,
+            borderRadius: 7,
             backgroundColor: bgColor,
             color: highlight ? "#ffffff" : "#000000",
             border: "none",
@@ -137,7 +137,7 @@ const NavArrow = ({
       }}
       className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
       style={{
-        borderRadius: 8,
+        borderRadius: 7,
         backgroundColor: isForward ? Y : "#000000",
         border: isForward ? "none" : `2px solid ${Y}`,
         outline: "none",
