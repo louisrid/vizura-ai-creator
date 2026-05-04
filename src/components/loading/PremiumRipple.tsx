@@ -10,12 +10,7 @@ interface PremiumRippleProps {
 const PremiumRipple = ({ size = 120 }: PremiumRippleProps) => {
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      <img
-        src={foxEmojiImg}
-        alt="🦊"
-        className="animate-bounce select-none"
-        style={{ width: size * 0.5, height: size * 0.5, objectFit: 'contain' }}
-      />
+      <span style={{ fontSize: 28 }}>⚙️</span>
     </div>
   );
 };
