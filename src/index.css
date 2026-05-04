@@ -254,3 +254,8 @@ html {
 input, textarea, select {
   font-size: 16px !important;
 }
+
+@keyframes facefox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
