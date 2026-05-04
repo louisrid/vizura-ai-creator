@@ -49,18 +49,7 @@ const hasCachedData = !!localStorage.getItem("facefox_cached_characters");
 const isImageRoute = window.location.pathname === "/" || window.location.pathname === "/characters" || window.location.pathname.startsWith("/characters/") || window.location.pathname === "/storage" || window.location.pathname === "/history";
 if (splash && hasCachedData && isImageRoute) {
   const earlyUnblock = registerBlockingLoader();
-  let released = false;
-  const releaseEarly = () => {
-    if (released) return;
-    released = true;
-    earlyUnblock();
-    if ((window as any).__facebox_early_unblock === releaseEarly) {
-      delete (window as any).__facebox_early_unblock;
-    }
-  };
-
-  (window as any).__facebox_early_unblock = releaseEarly;
-  setTimeout(releaseEarly, 5000);
+  (window as any).__facebox_early_unblock = earlyUnblock;
 }
 
 createRoot(document.getElementById("root")!).render(<App />);

@@ -243,32 +243,29 @@ const Home = () => {
   // MUST register synchronously (in useState init) so blockingLoaders > 0
   // on the very first render — before App.tsx computes stillResolving.
   const loadedCountRef = useRef(0);
-  const unblockRef = useRef<(() => void) | null>(null);
-
-  useEffect(() => {
-    // Only block on initial page load — if splash-screen is gone, this is in-app navigation
-    const splashEl = document.getElementById("splash-screen");
-
-    if (!splashEl || expectedImageCount === 0) {
-      // Consume the early unblock if it exists
-      const early = (window as any).__facebox_early_unblock;
-      if (early) { early(); delete (window as any).__facebox_early_unblock; }
-      return;
+  const [unblock] = useState(() => {
+    // Take ownership of the early blocking loader registered in main.tsx
+    const early = typeof window !== "undefined" ? (window as any).__facebox_early_unblock : null;
+    if (early) {
+      delete (window as any).__facebox_early_unblock;
+      return early as () => void;
     }
+    // Fallback: if no early registration (in-app navigation), don't block
+    return null;
+  });
+  const unblockRef = useRef(unblock);
 
-    // Consume early unblock (it may already be released, that's fine)
-    const early = (window as any).__facebox_early_unblock;
-    if (early) { early(); delete (window as any).__facebox_early_unblock; }
-
-    // Register our own blocking loader — this one stays until images load
-    unblockRef.current = registerBlockingLoader();
-
-    // Safety timeout
+  // If there are no images to wait for, unblock immediately
+  useEffect(() => {
+    if (expectedImageCount === 0 && unblockRef.current) {
+      unblockRef.current();
+      unblockRef.current = null;
+    }
+    // Safety timeout: never hold splash longer than 10 seconds
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
     }, 10000);
-
-    return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
+    return () => clearTimeout(timer);
   }, [expectedImageCount]);
 
   const handleImageLoaded = useCallback(() => {
