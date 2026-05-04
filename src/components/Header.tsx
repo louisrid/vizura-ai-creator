@@ -360,7 +360,7 @@ const Header = () => {
           <div className={headerContainerClass}>
             <div className="flex items-center gap-[10px] md:gap-[12px]">
               <button onClick={() => { handleLogoClick(); }} className="flex items-center transition-opacity duration-150">
-                <span className="text-[26px] md:text-[34px] font-[900] text-white tracking-tight leading-none">facebox</span>
+                <span className="text-[26px] md:text-[34px] text-white tracking-tight leading-none" style={{ fontFamily: "'Roundo', sans-serif", fontWeight: 400 }}>facebox</span>
               </button>
               {isLoggedIn && (
                 <button
