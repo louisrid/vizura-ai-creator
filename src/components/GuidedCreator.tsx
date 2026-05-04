@@ -554,10 +554,15 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   // where content appears centered before snapping to top-aligned).
   const [visualStepType, setVisualStepType] = useState<string>(stepType);
   const prevVisibleRef = useRef(visible);
+  const prevStepTypeRef = useRef(stepType);
   useEffect(() => {
     const justOpened = visible && !prevVisibleRef.current;
     prevVisibleRef.current = visible;
-    if (justOpened) {
+    const wasHero = prevStepTypeRef.current === "hero";
+    const isHero = stepType === "hero";
+    prevStepTypeRef.current = stepType;
+    // Update layout immediately if either side is hero (hero transitions are instant, no fade)
+    if (justOpened || wasHero || isHero) {
       setVisualStepType(stepType);
       return;
     }
@@ -571,20 +576,28 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   const showNavigation = !isHeroSlide && !isSignupScreen;
   const [showNavigationDelayed, setShowNavigationDelayed] = useState(showNavigation);
   const prevVisibleForNavRef = useRef(visible);
+  const prevStepTypeForNavRef = useRef(stepType);
   useEffect(() => {
     const justOpened = visible && !prevVisibleForNavRef.current;
     prevVisibleForNavRef.current = visible;
+    const wasHero = prevStepTypeForNavRef.current === "hero";
+    prevStepTypeForNavRef.current = stepType;
     if (justOpened && showNavigation) {
       setShowNavigationDelayed(true);
       return;
     }
     if (showNavigation) {
+      // No delay when transitioning from hero (hero exits instantly with no fade)
+      if (wasHero) {
+        setShowNavigationDelayed(true);
+        return;
+      }
       const timer = setTimeout(() => setShowNavigationDelayed(true), 450);
       return () => clearTimeout(timer);
     } else {
       setShowNavigationDelayed(false);
     }
-  }, [showNavigation, visible]);
+  }, [showNavigation, visible, stepType]);
   const currentTraitIndex = currentStep.type === "trait" ? currentStep.traitIndex : -1;
 
   useLayoutEffect(() => {
