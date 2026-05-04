@@ -239,21 +239,28 @@ const Home = () => {
     return photoCount + charCount;
   }, [photoSlots, charSlots]);
 
-  // Block the splash until all images have loaded (initial page load only)
+  // Block the splash until all images have loaded (initial page load only).
+  // MUST register synchronously (in useState init) so blockingLoaders > 0
+  // on the very first render — before App.tsx computes stillResolving.
   const loadedCountRef = useRef(0);
-  const unblockRef = useRef<(() => void) | null>(null);
-  const blockedRef = useRef(false);
+  const [unblock] = useState(() => {
+    const splashEl = typeof document !== "undefined" ? document.getElementById("splash-screen") : null;
+    if (!splashEl) return null; // In-app navigation — don't block
+    return registerBlockingLoader();
+  });
+  const unblockRef = useRef(unblock);
 
+  // If there are no images to wait for, unblock immediately
   useEffect(() => {
-    const splashEl = document.getElementById("splash-screen");
-    if (!splashEl || expectedImageCount === 0 || blockedRef.current) return;
-    blockedRef.current = true;
-    loadedCountRef.current = 0;
-    unblockRef.current = registerBlockingLoader();
+    if (expectedImageCount === 0 && unblockRef.current) {
+      unblockRef.current();
+      unblockRef.current = null;
+    }
+    // Safety timeout: never hold splash longer than 10 seconds
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
     }, 10000);
-    return () => { clearTimeout(timer); };
+    return () => clearTimeout(timer);
   }, [expectedImageCount]);
 
   const handleImageLoaded = useCallback(() => {
