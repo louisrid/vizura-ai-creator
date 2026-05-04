@@ -852,7 +852,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 180, padding: '10px 0', fontSize: 26, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 6, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 6, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
