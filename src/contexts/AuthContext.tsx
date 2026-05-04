@@ -100,8 +100,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       if (user) {
         localStorage.setItem("facefox_cached_user", JSON.stringify(user));
-      } else if (!loading) {
-        localStorage.removeItem("facefox_cached_user");
       }
     } catch {}
   }, [user, loading]);
@@ -123,6 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const nextUser = session?.user ?? null;
         if (event === "SIGNED_OUT") {
           setUser(null);
+          try { localStorage.removeItem("facefox_cached_user"); } catch {}
           clearSpecialAccountCache();
           clearCachedOnboardingState();
           return;
