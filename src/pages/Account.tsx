@@ -13,7 +13,6 @@ import DotDecal from "@/components/DotDecal";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
-  const [signingOut, setSigningOut] = useState(false);
   const { subscribed, refetch: refetchSub } = useSubscription();
   const location = useLocation();
   const navigate = useTransitionNavigate();
@@ -55,7 +54,8 @@ const Account = () => {
   if (!user) return <SignInView signIn={signIn} signUp={signUp} redirectTo={redirectTo} />;
 
   const handleSignOut = async () => {
-    setSigningOut(true);
+    sessionStorage.setItem("facefox_signing_out", "1");
+    window.dispatchEvent(new Event("facefox-signing-out"));
     await new Promise(r => setTimeout(r, 600));
     await signOut();
     navigate("/");
@@ -65,19 +65,6 @@ const Account = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      {signingOut && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 99999,
-            backgroundColor: "#000000",
-            opacity: 0,
-            animation: "facefox-fade-in 400ms ease forwards",
-            pointerEvents: "all",
-          }}
-        />
-      )}
       <DotDecal />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[280px] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-11 w-full">

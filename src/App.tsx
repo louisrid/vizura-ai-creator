@@ -32,6 +32,36 @@ import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboar
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 
+const SignOutOverlay = () => {
+  const [active, setActive] = useState(() => sessionStorage.getItem("facefox_signing_out") === "1");
+  useEffect(() => {
+    const onStart = () => setActive(true);
+    window.addEventListener("facefox-signing-out", onStart);
+    if (active) {
+      const t = setTimeout(() => {
+        sessionStorage.removeItem("facefox_signing_out");
+        setActive(false);
+      }, 2500);
+      return () => { clearTimeout(t); window.removeEventListener("facefox-signing-out", onStart); };
+    }
+    return () => window.removeEventListener("facefox-signing-out", onStart);
+  }, [active]);
+  if (!active) return null;
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 999999,
+        backgroundColor: "#000000",
+        opacity: 0,
+        animation: "facefox-fade-in 400ms ease forwards",
+        pointerEvents: "all",
+      }}
+    />
+  );
+};
+
 let redirectLock = false;
 const acquireRedirectLock = (): boolean => {
   if (redirectLock) return false;
@@ -469,6 +499,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
+      <SignOutOverlay />
       {(stillResolving || suppressUnauthRoutes) && <LoadingScreen />}
       {!suppressUnauthRoutes && (
         <>
