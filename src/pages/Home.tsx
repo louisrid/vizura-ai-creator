@@ -276,7 +276,7 @@ const Home = () => {
                 backgroundColor: "#ffe603",
                 padding: "16px 14px 16px 20px",
                 borderRadius: 10,
-                fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
+                fontFamily: "'Rabbid', -apple-system, 'SF Pro Display', system-ui, sans-serif",
               }}
             >
               <span className="text-[16px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
@@ -300,7 +300,7 @@ const Home = () => {
                 minWidth: 0,
                 padding: "16px 20px 16px 14px",
                 borderRadius: 10,
-                fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
+                fontFamily: "'Rabbid', -apple-system, 'SF Pro Display', system-ui, sans-serif",
                 color: "#ffffff",
                 backgroundColor: "#000000",
                 border: "2px solid #ffe603",

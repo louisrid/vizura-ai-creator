@@ -6,6 +6,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Rabbid';
+  src: url('/fonts/RabbidHighwaySignII.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -110,7 +118,7 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    font-family: 'Rabbid', -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
     overflow: hidden;
     overscroll-behavior: contain;
