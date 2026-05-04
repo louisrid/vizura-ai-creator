@@ -43,7 +43,7 @@ const BouncingEmoji = ({ emoji }: { emoji: string }) => (
     className="flex items-center justify-center"
     style={{ height: EMOJI_SLOT_HEIGHT, marginTop: EMOJI_MARGIN_TOP, marginBottom: EMOJI_MARGIN_BOTTOM }}
   >
-    {emoji === "🦊" ? (
+    {false ? (
       <img
         src={foxEmojiImg}
         alt="🦊"
