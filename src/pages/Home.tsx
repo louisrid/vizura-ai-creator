@@ -361,7 +361,7 @@ const Home = () => {
                           <div className="h-full w-full" />
                         )
                       ) : (
-                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" onError={(e) => (e.currentTarget.style.display = "none")} />
+                        <img src={photo.url} alt="latest photo" className="h-full w-full object-cover" loading="eager" decoding="sync" style={{ opacity: 0, transition: "opacity 0.3s ease" }} onLoad={(e) => (e.currentTarget.style.opacity = "1")} onError={(e) => (e.currentTarget.style.display = "none")} />
                       )}
                     </AspectRatio>
                   </button>
