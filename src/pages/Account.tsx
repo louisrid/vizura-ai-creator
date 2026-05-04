@@ -54,6 +54,8 @@ const Account = () => {
   if (!user) return <SignInView signIn={signIn} signUp={signUp} redirectTo={redirectTo} />;
 
   const handleSignOut = async () => {
+    window.dispatchEvent(new Event("facefox-signing-out"));
+    await new Promise(r => setTimeout(r, 400));
     await signOut();
     navigate("/");
   };
