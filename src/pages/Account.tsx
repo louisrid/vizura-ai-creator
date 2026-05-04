@@ -53,7 +53,26 @@ const Account = () => {
 
   if (!user) return <SignInView signIn={signIn} signUp={signUp} redirectTo={redirectTo} />;
 
-  const handleSignOut = async () => { await signOut(); navigate("/"); };
+  const handleSignOut = async () => {
+    // Fade entire site to black, hold briefly, then sign out + navigate.
+    // Hero will fade in on the start screen after re-mount.
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed", inset: "0", background: "#000000",
+      zIndex: "2147483647", opacity: "0",
+      transition: "opacity 0.35s ease", pointerEvents: "auto",
+    });
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+    await new Promise((r) => setTimeout(r, 380));
+    await signOut();
+    navigate("/");
+    // Hold black a tiny moment, then fade out so hero fades in cleanly
+    setTimeout(() => {
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.remove(), 400);
+    }, 250);
+  };
 
   const initial = (user.email?.[0] || "?").toUpperCase();
 
