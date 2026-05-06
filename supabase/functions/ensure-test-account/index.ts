@@ -19,6 +19,15 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Safe-by-default: this endpoint provisions preview accounts seeded with gems
+  // and must NEVER be reachable in production. Require an explicit opt-in env var.
+  if (Deno.env.get("ALLOW_TEST_ACCOUNTS") !== "true") {
+    return new Response(JSON.stringify({ error: "disabled" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const { email = `preview-default${PREVIEW_EMAIL_DOMAIN}`, password = DEFAULT_PASSWORD } = await req.json().catch(() => ({}));
     const normalisedEmail = normaliseEmail(email);
