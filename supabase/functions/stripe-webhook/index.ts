@@ -1,7 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const IS_DEMO_MODE = (Deno.env.get("IS_DEMO_MODE") ?? "true") === "true";
+// Safe-by-default: signature verification is only skipped when IS_DEMO_MODE is
+// explicitly set to "true". A missing env var means production mode.
+const IS_DEMO_MODE = Deno.env.get("IS_DEMO_MODE") === "true";
 const MEMBERSHIP_GEMS = 50;
 
 serve(async (req) => {
