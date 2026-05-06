@@ -111,7 +111,7 @@
   html, body {
     @apply bg-background text-foreground antialiased;
     font-family: 'DM Sans', -apple-system, system-ui, sans-serif;
-    font-weight: 300;
+    font-weight: 600;
     overflow: hidden;
     overscroll-behavior: contain;
     overscroll-behavior-y: none;
