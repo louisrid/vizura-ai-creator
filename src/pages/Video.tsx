@@ -1,11 +1,13 @@
 import { Sparkles } from "lucide-react";
 import PageTitle from "@/components/PageTitle";
+import BackButton from "@/components/BackButton";
 
 const Video = () => (
   <div className="min-h-screen bg-background">
     <main className="w-full max-w-lg md:max-w-3xl mx-auto px-[24px] md:px-[44px] pt-[44px] pb-[140px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
       <div className="w-full">
         <div className="flex items-center gap-3 mb-12">
+          <BackButton always />
           <PageTitle className="mb-0">video</PageTitle>
         </div>
         <div className="border-[2px] border-neon-yellow rounded-[6px] p-8 md:p-12 text-center bg-card md:max-w-md md:mx-auto">
