@@ -772,7 +772,7 @@ const Index = () => {
       </main>
 
       {/* Desktop layout — two-column */}
-      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[56px] pt-[44px] pb-[280px]">
+      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[56px] pt-[44px] pb-[140px]">
         <div className="flex items-center gap-3 mb-12">
           <BackButton />
           <PageTitle className="mb-0">create photo</PageTitle>
