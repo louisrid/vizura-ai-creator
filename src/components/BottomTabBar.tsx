@@ -60,15 +60,18 @@ const BottomTabBar = () => {
       }}
       aria-label="primary navigation"
     >
-      {TABS.map((tab) => {
+      {TABS.map((tab, index) => {
         const { Icon } = tab;
         const active = isActive(tab.path);
         return (
           <button
             key={tab.path}
             onClick={() => { markLateralNav(); navigate(tab.path); }}
-            className="flex-1 flex flex-col items-center justify-start gap-0.5 pt-3 pb-6 transition-opacity"
-            style={{ color: active ? "#ffe603" : "#ffffff" }}
+            className="flex-1 flex flex-col items-center justify-start gap-0.5 pt-4 pb-6 transition-opacity"
+            style={{
+              color: active ? "#ffe603" : "#ffffff",
+              borderLeft: index === 0 ? "none" : "2px solid hsl(var(--border-mid))",
+            }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
