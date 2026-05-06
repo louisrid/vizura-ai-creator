@@ -12,7 +12,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import { useOnboarded } from "@/hooks/useOnboarded";
 
-import DotDecal from "@/components/DotDecal";
 import LockOverlay from "@/components/LockOverlay";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
@@ -317,7 +316,6 @@ const Home = () => {
       />
 
       {!pageHidden && <div className="relative flex h-full flex-col">
-        <DotDecal />
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-[50px] pb-[280px] md:hidden">
           {/* Hero */}

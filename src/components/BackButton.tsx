@@ -5,8 +5,9 @@ import { getNavDepth } from "@/lib/navigation";
 const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
   const navigate = useTransitionNavigate();
 
+  if (getNavDepth() < 1) return null;
+
   const handleBack = () => {
-    // If we have navigation history depth > 1, go back; otherwise go home
     if (getNavDepth() > 1) {
       navigate(-1);
     } else {

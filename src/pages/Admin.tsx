@@ -6,7 +6,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import PageTitle from "@/components/PageTitle";
-import DotDecal from "@/components/DotDecal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { supabase } from "@/integrations/supabase/client";
 import { displayAge } from "@/lib/displayAge";
@@ -550,7 +549,6 @@ const Admin = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[32px] md:px-[56px] pt-[44px] pb-[280px]">
 

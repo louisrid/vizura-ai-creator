@@ -29,7 +29,7 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Video from "./pages/Video";
 import BottomTabBar from "@/components/BottomTabBar";
-import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
+import { trackNavigation, resetNavDepth } from "@/lib/navigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
@@ -231,7 +231,7 @@ const ScrollToTop = () => {
       resetNavDepth();
       isFirst.current = false;
     }
-    incrementNavDepth();
+    trackNavigation(location.pathname);
     const root = document.getElementById("root");
     if (root) root.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;

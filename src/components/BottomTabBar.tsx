@@ -2,6 +2,7 @@ import { Home, Camera, Video, LayoutGrid } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useAuth } from "@/contexts/AuthContext";
+import { markLateralNav } from "@/lib/navigation";
 
 const TABS = [
   { label: "home", path: "/", icon: Home },
@@ -39,7 +40,7 @@ const BottomTabBar = () => {
         return (
           <button
             key={tab.path}
-            onClick={() => navigate(tab.path)}
+            onClick={() => { markLateralNav(); navigate(tab.path); }}
             className="flex-1 flex flex-col items-center justify-center gap-1.5 py-4 transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}

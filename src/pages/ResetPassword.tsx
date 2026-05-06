@@ -4,7 +4,6 @@ import { Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import BackButton from "@/components/BackButton";
-import DotDecal from "@/components/DotDecal";
 import PageTitle from "@/components/PageTitle";
 
 const ResetPassword = () => {
@@ -42,7 +41,6 @@ const ResetPassword = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
       <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-[32px] md:px-[56px] pt-[44px] pb-[280px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
         <div className="w-full md:max-w-md">
           <div className="flex items-center gap-3 mb-11">

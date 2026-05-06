@@ -9,7 +9,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
-import DotDecal from "@/components/DotDecal";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
@@ -32,7 +31,6 @@ const Account = () => {
   if (authLoading && !hasCachedUser) {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
         <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[280px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-11 w-full">
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }} />
@@ -64,7 +62,6 @@ const Account = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[280px] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-11 w-full">
           <BackButton />
@@ -221,7 +218,6 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-[44px] pb-[280px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
           <BackButton />

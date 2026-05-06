@@ -5,6 +5,7 @@ import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import TopGradientBar from "@/components/TopGradientBar";
+import { markLateralNav } from "@/lib/navigation";
 
 const Header = () => {
   const navigate = useTransitionNavigate();
@@ -18,7 +19,7 @@ const Header = () => {
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
   const isHomeRoute = pathname === "/";
 
-  const handleLogoClick = () => navigate("/");
+  const handleLogoClick = () => { markLateralNav(); navigate("/"); };
 
   const headerContainerClass = isHomeRoute
     ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[50px] pb-3 md:max-w-3xl md:px-[56px] md:pt-[56px]"
@@ -40,7 +41,7 @@ const Header = () => {
             </button>
             {isLoggedIn && (
               <button
-                onClick={() => navigate("/account")}
+                onClick={() => { markLateralNav(); navigate("/account"); }}
                 className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[38px] h-[38px] md:w-[46px] md:h-[46px]"
                 style={{
                   borderRadius: "50%",
@@ -58,7 +59,7 @@ const Header = () => {
           {isLoggedIn && !isAuthPage && (
             <div className="flex items-center gap-3 md:gap-5">
               <button
-                onClick={() => navigate("/top-ups")}
+                onClick={() => { markLateralNav(); navigate("/top-ups"); }}
                 className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[46px] md:h-[54px]"
                 style={{
                   backgroundColor: "#050a10",
@@ -72,7 +73,7 @@ const Header = () => {
               </button>
 
               <button
-                onClick={() => navigate("/account")}
+                onClick={() => { markLateralNav(); navigate("/account"); }}
                 className="flex items-center justify-center w-[46px] h-[46px] md:w-[54px] md:h-[54px]"
                 style={{
                   backgroundColor: "hsl(var(--card))",
