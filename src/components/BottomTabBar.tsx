@@ -1,11 +1,11 @@
-import { Home, Plus, Video, LayoutGrid } from "lucide-react";
+import { Home, Camera, Video, LayoutGrid } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useAuth } from "@/contexts/AuthContext";
 
 const TABS = [
   { label: "home", path: "/", icon: Home },
-  { label: "create", path: "/create", icon: Plus },
+  { label: "photo", path: "/create", icon: Camera },
   { label: "video", path: "/video", icon: Video },
   { label: "storage", path: "/storage", icon: LayoutGrid },
 ];
