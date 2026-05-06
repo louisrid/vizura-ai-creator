@@ -27,6 +27,7 @@ import History from "./pages/History";
 import Info from "./pages/Info";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import BottomTabBar from "@/components/BottomTabBar";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
 import { getBlockingLoaderCount, getBlockingLoadersEventName, hideStartupSplash } from "@/lib/startupSplash";
@@ -540,6 +541,7 @@ const AppRoutes = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <BottomTabBar />
         </>
       )}
     </div>
