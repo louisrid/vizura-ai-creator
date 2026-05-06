@@ -90,7 +90,7 @@ const ChatPill = ({
     >
       <div className="relative">
         <div
-          className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
+          className="px-4 py-2 text-[12px] md:text-[14px] font-[600] lowercase leading-snug"
           style={{
             borderRadius: 6,
             backgroundColor: bgColor,
@@ -266,7 +266,7 @@ const InstructionalSlide = ({
         >
           <BouncingEmoji emoji={slide.emoji} />
 
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[36px] md:text-[52px] font-[600] lowercase leading-[1.05] tracking-tight text-white">
             {slide.title}
           </h2>
 

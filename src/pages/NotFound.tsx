@@ -18,8 +18,8 @@ const NotFound = () => {
           <PageTitle className="mb-0">not found</PageTitle>
         </div>
         <div className="border-2 border-[hsl(var(--border-mid))] rounded-[6px] p-6 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-          <p className="text-xs font-extrabold lowercase mb-3 text-foreground">page not found</p>
-          <a href="/" className="text-[10px] font-extrabold lowercase text-foreground underline">
+          <p className="text-xs font-semibold lowercase mb-3 text-foreground">page not found</p>
+          <a href="/" className="text-[10px] font-semibold lowercase text-foreground underline">
             back to home
           </a>
         </div>

@@ -133,7 +133,7 @@ const SlideDropdown = ({ label, value, options, onChange }: SlideDropdownProps) 
                 type="button"
                 data-dropdown-idx={idx}
                 onClick={() => handleSelect(idx)}
-                className="w-full flex items-center px-4 py-3 text-base font-[900] lowercase"
+                className="w-full flex items-center px-4 py-3 text-base font-[600] lowercase"
                 style={{
                   color: value === opt.value ? "#ffe603" : "#ffffff",
                   backgroundColor: highlight === idx ? "hsl(var(--border-mid))" : "transparent",
@@ -152,7 +152,7 @@ const SlideDropdown = ({ label, value, options, onChange }: SlideDropdownProps) 
 
   return (
     <div className="flex-1">
-      <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">{label}</span>
+      <span className="block text-lg md:text-xl font-[600] lowercase mb-2 text-white">{label}</span>
       <div className="relative">
         <button
           ref={btnRef}
@@ -169,7 +169,7 @@ const SlideDropdown = ({ label, value, options, onChange }: SlideDropdownProps) 
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4"
           style={{ borderRadius: 6, backgroundColor: "#ffe603", touchAction: "none" }}
         >
-          <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
+          <span className="flex-1 text-left text-base md:text-lg font-[600] lowercase text-black">{selected.label}</span>
           <ChevronDown
             size={18}
             strokeWidth={2.5}

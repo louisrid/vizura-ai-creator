@@ -59,7 +59,7 @@ const TRAITS = [
 type TraitKey = (typeof TRAITS)[number]["key"];
 
 /* ── Shared styles ── */
-const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white";
+const SLIDE_TITLE_CLASS = "text-center text-[36px] md:text-[52px] font-[600] lowercase leading-[1.05] tracking-tight text-white";
 
 const BouncingEmoji = ({ emoji }: { emoji: string }) => (
   <div
@@ -127,7 +127,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     style={{
       borderRadius: 6,
       padding: 0,
-      fontWeight: 900,
+      fontWeight: 600,
       textTransform: "lowercase",
       letterSpacing: "-0.01em",
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
@@ -325,7 +325,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
   if (handoffLoading) {
     return (
       <div className="flex min-h-full w-full flex-col items-center justify-center gap-4 bg-background">
-        <h2 className="text-2xl font-[900] lowercase tracking-tight text-foreground">loading...</h2>
+        <h2 className="text-2xl font-[600] lowercase tracking-tight text-foreground">loading...</h2>
         <div className="h-3 w-full max-w-[14rem] overflow-hidden bg-white/10">
           <div className="facefox-loading-bar h-full w-[60%] bg-neon-yellow" />
         </div>
@@ -342,7 +342,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
         >
           🔐
         </span>
-        <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+        <h2 className="text-center text-[40px] md:text-[56px] font-[600] lowercase leading-[1.05] tracking-tight text-white">
            {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
         </h2>
 
@@ -351,7 +351,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: Y, color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: Y, color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 600, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
               <>
@@ -368,7 +368,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
 
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
-            <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
+            <span className="text-[11px] font-semibold lowercase text-white">or use email</span>
             <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(var(--border-mid))" }} />
           </div>
 
@@ -376,7 +376,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             type="email" placeholder="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
-            className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
+            className="w-full h-12 px-4 text-base font-semibold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
             style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
             disabled={googleLoading}
           />
@@ -385,7 +385,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onChange={(e) => setPassword(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-            className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
+            className="w-full h-12 px-4 text-base font-semibold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
             style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
             disabled={googleLoading}
           />
@@ -393,7 +393,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEmailAuth(); }}
             disabled={emailLoading}
-            className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
+            className="w-full h-14 text-sm font-[600] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
             style={{ borderRadius: 6, background: '#ffe603', color: '#000000' }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "signing in..."}</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
@@ -856,14 +856,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div> */}
         <div style={{ position: 'relative', zIndex: 1, fontSize: 86, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 12, marginBottom: 24 }}>facebox</div>
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 6, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 600, background: '#ffe603', border: 'none', borderRadius: 6, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 6, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 600, background: '#000000', border: '2px solid #ffe603', borderRadius: 6, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -899,7 +899,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                       transition={shouldAnim ? { duration: 0.25, delay: i * 0.5 + 0.5, ease: [0.25, 0.8, 0.25, 1] } : undefined}
                     >
                       <div className="relative">
-                        <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
+                        <div className="px-4 py-2 text-[12px] md:text-[14px] font-[600] lowercase leading-snug"
                           style={{
                             borderRadius: 6,
                             backgroundColor: bgColor,
@@ -945,7 +945,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                 placeholder="type a name…"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
-                className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[22px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
+                className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[22px] font-[600] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
                 style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               />
               <motion.button
@@ -996,14 +996,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       return (
         <div className="flex w-full flex-col items-center">
           <BouncingEmoji emoji="🖌️" />
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
-          <h2 className="text-center text-[36px] md:text-[52px] font-[900] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[600] lowercase leading-[1.05] tracking-tight text-white">your character</h2>
+          <h2 className="text-center text-[36px] md:text-[52px] font-[600] lowercase leading-[1.05] tracking-tight"><span className="text-white">is </span><span style={{ color: "#00e0ff" }}>almost here!</span></h2>
           <div ref={contentSlotRef} className="w-full" style={{ marginTop: SLIDE_CONTENT_GAP, height: contentHeight }}>
             <div ref={contentInnerRef} style={{ transform: `scale(${contentScale})`, transformOrigin: "top center" }}>
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
-                className="w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 mx-auto"
+                className="w-full max-w-[17rem] h-14 text-xl font-[600] lowercase transition-all flex items-center justify-center gap-1.5 mx-auto"
                 style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 6, border: "2px solid #00e0ff" }}
               >
                 {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
@@ -1238,7 +1238,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           >
             🔐
           </span>
-          <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
+          <h2 className="text-center text-[40px] md:text-[56px] font-[600] lowercase leading-[1.05] tracking-tight text-white">
             {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
           </h2>
           <div className="mt-8 w-full rounded-[6px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
@@ -1246,7 +1246,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
               className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: Y, color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: Y, color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 600, textTransform: "lowercase", border: "none" }}
             >
               {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
                 <>
@@ -1263,7 +1263,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
 
             <div className="flex items-center gap-3">
               <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 4%)" }} />
-              <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
+              <span className="text-[11px] font-semibold lowercase text-white">or use email</span>
               <div className="flex-1 h-[2px]" style={{ backgroundColor: "hsl(0 0% 4%)" }} />
             </div>
 
@@ -1271,7 +1271,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               type="email" placeholder="email" value={email}
               onChange={(e) => setEmail(e.target.value)}
               onClick={(e) => e.stopPropagation()}
-              className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
+              className="w-full h-12 px-4 text-base font-semibold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
               style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
@@ -1280,7 +1280,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onChange={(e) => setPassword(e.target.value)}
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
-              className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
+              className="w-full h-12 px-4 text-base font-semibold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
               style={{ borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
@@ -1288,7 +1288,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             <button
               onClick={handleEmailAuth}
               disabled={emailLoading || googleLoading}
-              className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
+              className="w-full h-14 text-sm font-[600] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
               style={{ borderRadius: 6, background: '#ffe603', color: '#000000' }}
             >
               {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "signing in..."}</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
@@ -1297,7 +1297,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             <button
               type="button"
               onClick={() => setIsSignUp((v) => !v)}
-              className="w-full text-center text-[11px] font-extrabold lowercase text-white hover:opacity-80 transition-colors duration-150"
+              className="w-full text-center text-[11px] font-semibold lowercase text-white hover:opacity-80 transition-colors duration-150"
             >
               {isSignUp ? "already have an account? " : "no account? "}
               <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>

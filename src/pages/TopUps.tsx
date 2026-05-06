@@ -148,15 +148,15 @@ const TopUps = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1.5">
                       <Gift size={20} strokeWidth={2.5} className="text-white" />
-                      <span className="text-lg font-[900] lowercase text-white">welcome gift!</span>
+                      <span className="text-lg font-[600] lowercase text-white">welcome gift!</span>
                     </div>
-                    <p className="text-[13px] font-[800] lowercase text-white/80 leading-tight mb-3">
+                    <p className="text-[13px] font-[600] lowercase text-white/80 leading-tight mb-3">
                       claim your free gems to get started
                     </p>
                     <button
                       onClick={handleClaimFree}
                       disabled={claiming}
-                      className="flex items-center gap-2 rounded-[6px] px-5 py-3 text-sm font-[900] lowercase transition-all disabled:opacity-60"
+                      className="flex items-center gap-2 rounded-[6px] px-5 py-3 text-sm font-[600] lowercase transition-all disabled:opacity-60"
                       style={{ backgroundColor: "#ffffff", color: "#000000" }}
                     >
                       {claiming ? (
@@ -190,15 +190,15 @@ const TopUps = () => {
               {/* Left side */}
               <div className="flex-1 flex flex-col relative z-[1]">
                 <div>
-                  <span className="block text-[32px] leading-[0.95] font-[900] lowercase text-white">{pack.name}</span>
-                  <span className="inline-flex items-center gap-1.5 text-[32px] leading-[0.95] font-[900] lowercase text-white">
+                  <span className="block text-[32px] leading-[0.95] font-[600] lowercase text-white">{pack.name}</span>
+                  <span className="inline-flex items-center gap-1.5 text-[32px] leading-[0.95] font-[600] lowercase text-white">
                     pack <Gem size={20} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
                   </span>
                 </div>
 
                 {pack.badge && (
                   <div className="mt-2">
-                    <span className="inline-block rounded-[6px] px-3 py-1 text-[10px] font-[900] lowercase bg-neon-yellow text-neon-yellow-foreground">
+                    <span className="inline-block rounded-[6px] px-3 py-1 text-[10px] font-[600] lowercase bg-neon-yellow text-neon-yellow-foreground">
                       {pack.badge}
                     </span>
                   </div>
@@ -206,7 +206,7 @@ const TopUps = () => {
 
                 <div className="mt-auto pt-2">
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-[6px] px-3.5 py-1.5 text-[13px] font-[900] lowercase text-white"
+                    className="inline-flex items-center gap-1.5 rounded-[6px] px-3.5 py-1.5 text-[13px] font-[600] lowercase text-white"
                     style={{ backgroundColor: "#050a10", border: "2px solid #00e0ff" }}
                   >
                     <Gem size={13} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
@@ -226,7 +226,7 @@ const TopUps = () => {
                 className="relative z-[1] flex flex-col items-center justify-center gap-3 min-w-[90px]"
                 style={{ opacity: buying === pack.id ? 0.6 : 1 }}
               >
-                <span className="text-3xl font-[900] text-white">${pack.price}</span>
+                <span className="text-3xl font-[600] text-white">${pack.price}</span>
                 <span
                   className="cart-btn rounded-[6px] px-5 py-3 bg-neon-yellow text-neon-yellow-foreground flex items-center justify-center"
                 >

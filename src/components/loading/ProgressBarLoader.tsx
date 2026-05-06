@@ -182,7 +182,7 @@ const ProgressBarLoader = ({
         <AnimatePresence mode="wait">
           <motion.p
             key={safePhrases[phraseIndex]}
-            className="text-center font-[900] lowercase text-white"
+            className="text-center font-[600] lowercase text-white"
             style={{ fontSize: 26, letterSpacing: "-0.02em", lineHeight: 1, margin: 0 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -215,7 +215,7 @@ const ProgressBarLoader = ({
             }}
           />
         </div>
-        <span className="text-center font-[900] lowercase tabular-nums" style={{ color: "#ffffff", fontSize: 26, letterSpacing: "-0.02em", lineHeight: 1 }}>{pct}%</span>
+        <span className="text-center font-[600] lowercase tabular-nums" style={{ color: "#ffffff", fontSize: 26, letterSpacing: "-0.02em", lineHeight: 1 }}>{pct}%</span>
       </motion.div>
     </div>
   );
