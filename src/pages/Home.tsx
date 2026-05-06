@@ -150,9 +150,9 @@ const Home = () => {
       return;
     }
 
-    // No user → show the hero/start-now screen (GuidedCreator step 0)
-    setShowGuided(true);
-    setSkipWelcome(false);
+    // No user → show the dashboard signed-out view (start slides temporarily disabled)
+    setShowGuided(false);
+    setSkipWelcome(true);
     setAutoOpenEvaluated(true);
   }, [authLoading, openCreatorRequested, user, navigate, lockStateResolved, charsLoaded, resolvedCharacterCount]);
 
