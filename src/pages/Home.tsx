@@ -694,7 +694,7 @@ const Home = () => {
                         </div>
                       )}
                     </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
+                    <div className="absolute bottom-0 inset-x-0 bg-black/80 px-3 pb-3 pt-5">
                       <span className="block text-[13px] font-[600] lowercase text-white leading-tight truncate">{char.name}</span>
                       <span className="block text-[10px] font-[600] lowercase text-white">age {displayAge(char.id, char.age)}</span>
                     </div>
