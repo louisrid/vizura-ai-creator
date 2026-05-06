@@ -110,8 +110,8 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
-    font-weight: 700;
+    font-family: 'DM Sans', -apple-system, system-ui, sans-serif;
+    font-weight: 300;
     overflow: hidden;
     overscroll-behavior: contain;
     overscroll-behavior-y: none;
@@ -147,7 +147,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-extrabold lowercase tracking-tight;
+    @apply font-semibold lowercase tracking-tight;
   }
 }
 

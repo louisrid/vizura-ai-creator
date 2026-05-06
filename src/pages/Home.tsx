@@ -335,7 +335,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[44px] pb-[16px] md:hidden overflow-hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[50px] font-[900] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left">
+          <h1 className="flex w-full flex-col items-start text-[50px] font-[600] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -360,7 +360,7 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[14px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <span className="text-[14px] font-[600] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
@@ -387,7 +387,7 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[14px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <span className="relative z-[1] text-[14px] font-[600] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
               <svg className="relative z-[1]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
@@ -399,11 +399,11 @@ const Home = () => {
           {/* Latest Photos Section */}
           <section className="mb-3">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
+              <h2 className="text-[14px] font-[600] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
-                  className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
+                  className="text-[11px] font-[600] lowercase px-3 py-1.5 transition-transform"
                   style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}
                 >
                   see all →
@@ -452,9 +452,9 @@ const Home = () => {
           {/* My Characters Section */}
           <section>
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
+              <h2 className="text-[14px] font-[600] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
-                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[600] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -512,8 +512,8 @@ const Home = () => {
                       )}
                     </AspectRatio>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
-                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                      <span className="block text-[9px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
+                      <span className="block text-[11px] font-[600] lowercase text-white leading-tight truncate">{char.name}</span>
+                      <span className="block text-[9px] font-[600] lowercase text-white">age {displayAge(char.id, char.age)}</span>
                     </div>
                   </button>
                 );
@@ -524,7 +524,7 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-[44px] pt-[62px] pb-[140px]">
-          <h1 className="flex w-full flex-col items-start text-[56px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[8px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[56px] font-[600] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[8px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[10px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -547,7 +547,7 @@ const Home = () => {
                 borderRadius: 6,
               }}
             >
-              <span className="text-[22px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <span className="text-[22px] font-[600] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
@@ -571,7 +571,7 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <span className="relative z-[1] text-[22px] font-[600] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
               <svg className="relative z-[1]" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
@@ -583,11 +583,11 @@ const Home = () => {
           {/* Latest Photos Section */}
           <section className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
+              <h2 className="text-[18px] font-[600] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
-                  className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
+                  className="text-[13px] font-[600] lowercase px-4 py-2 transition-transform hover-glow"
                   style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}
                 >
                   see all →
@@ -638,9 +638,9 @@ const Home = () => {
           {/* My Characters Section */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
+              <h2 className="text-[18px] font-[600] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
-                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[600] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -695,8 +695,8 @@ const Home = () => {
                       )}
                     </AspectRatio>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
-                      <span className="block text-[13px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                      <span className="block text-[10px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
+                      <span className="block text-[13px] font-[600] lowercase text-white leading-tight truncate">{char.name}</span>
+                      <span className="block text-[10px] font-[600] lowercase text-white">age {displayAge(char.id, char.age)}</span>
                     </div>
                   </button>
                 );
@@ -723,7 +723,7 @@ const Home = () => {
                     navigator.clipboard.writeText(text).then(() => toast.success("copied")).catch(() => toast.error("copy error"));
                   }
                 }}
-                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[6px] overflow-hidden"
+                className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[600] lowercase text-white text-left rounded-[6px] overflow-hidden"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="truncate flex-1 text-left">{selectedImage.prompt}</span>
@@ -733,7 +733,7 @@ const Home = () => {
             <a href={selectedImage.url} download={`facefox-${selectedImage.id}.png`} target="_blank" className="block">
               <button
                 type="button"
-                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white rounded-[6px]"
+                className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[600] lowercase text-white rounded-[6px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 download <Download size={12} strokeWidth={2.5} />

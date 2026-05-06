@@ -76,9 +76,9 @@ const Account = () => {
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center mb-2 bg-neon-yellow"
           >
-            <span className="text-2xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
+            <span className="text-2xl font-[600] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
-          <span className="text-xs font-[800] lowercase text-white truncate max-w-[280px]">
+          <span className="text-xs font-[600] lowercase text-white truncate max-w-[280px]">
             {user.email || "..."}
           </span>
         </div>
@@ -89,10 +89,10 @@ const Account = () => {
             className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
-            <span className="text-xs font-[800] lowercase text-white">subscription</span>
+            <span className="text-xs font-[600] lowercase text-white">subscription</span>
             <div className="flex items-center gap-2">
               <span
-                className="text-[11px] font-[800] lowercase"
+                className="text-[11px] font-[600] lowercase"
                 style={{ color: subscribed ? "#12e62b" : "#ffffff" }}
               >
                 {subscribed ? "active" : "inactive"}
@@ -105,14 +105,14 @@ const Account = () => {
             className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
-            <span className="text-xs font-[800] lowercase text-white">change password</span>
+            <span className="text-xs font-[600] lowercase text-white">change password</span>
             <ChevronRight size={14} strokeWidth={2.5} className="text-white" />
           </button>
 
           {/* Admin button */}
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[600] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
             >
               admin
@@ -124,7 +124,7 @@ const Account = () => {
 
         {/* Sign out */}
         <button
-          className="mt-6 px-5 py-2.5 text-xs font-[900] lowercase transition-all hover:opacity-90"
+          className="mt-6 px-5 py-2.5 text-xs font-[600] lowercase transition-all hover:opacity-90"
           style={{
             color: "#ffffff",
             backgroundColor: "#1a0505",
@@ -140,7 +140,7 @@ const Account = () => {
           <button
             type="button"
             onClick={() => navigate("/info")}
-            className="text-[11px] font-extrabold lowercase underline transition-colors"
+            className="text-[11px] font-semibold lowercase underline transition-colors"
             style={{ color: "#ffffff" }}
           >
             terms &amp; privacy
@@ -231,7 +231,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 600, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? (
               <><Loader2 className="animate-spin" size={18} />connecting...</>
@@ -249,7 +249,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           </button>
           <div className="flex items-center gap-3">
             <div className="flex-1 h-[2px] bg-border" />
-            <span className="text-[10px] font-extrabold lowercase text-white">or use email</span>
+            <span className="text-[10px] font-semibold lowercase text-white">or use email</span>
             <div className="flex-1 h-[2px] bg-border" />
           </div>
           <input
@@ -259,7 +259,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-semibold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
@@ -271,7 +271,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-semibold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
             disabled={submitting || googleLoading}
           />
@@ -279,14 +279,14 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onClick={handleEmailAuth}
             disabled={submitting || googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 600, textTransform: "lowercase", border: "none" }}
           >
             {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
           </button>
           <button
             type="button"
             onClick={() => setIsSignUpMode((v) => !v)}
-            className="w-full text-center text-[11px] font-extrabold lowercase text-muted-foreground hover:text-muted-foreground transition-colors"
+            className="w-full text-center text-[11px] font-semibold lowercase text-muted-foreground hover:text-muted-foreground transition-colors"
           >
             {isSignUpMode ? "already have an account? sign in" : "no account? sign up"}
           </button>

@@ -12,8 +12,8 @@ const ComingSoon = ({ title }: { title: string }) => (
         </div>
         <div className="border-[2px] border-neon-yellow rounded-[6px] p-8 md:p-12 text-center bg-card md:max-w-md md:mx-auto">
           <Sparkles size={20} className="mx-auto mb-3 text-neon-yellow md:w-7 md:h-7" />
-          <p className="text-sm md:text-base font-extrabold lowercase text-foreground">coming soon</p>
-          <p className="text-xs md:text-sm font-bold lowercase text-foreground/50 mt-2">this feature is on the way</p>
+          <p className="text-sm md:text-base font-semibold lowercase text-foreground">coming soon</p>
+          <p className="text-xs md:text-sm font-semibold lowercase text-foreground/50 mt-2">this feature is on the way</p>
         </div>
       </div>
     </main>

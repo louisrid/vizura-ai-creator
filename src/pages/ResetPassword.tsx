@@ -50,13 +50,13 @@ const ResetPassword = () => {
 
           {success ? (
             <div className="border-[2px] border-[hsl(var(--border-mid))] rounded-[6px] p-6 md:p-8 text-center">
-              <p className="text-xs md:text-sm font-extrabold lowercase mb-1 text-foreground">password updated</p>
-              <p className="text-[10px] md:text-[12px] font-bold lowercase text-foreground/50">redirecting...</p>
+              <p className="text-xs md:text-sm font-semibold lowercase mb-1 text-foreground">password updated</p>
+              <p className="text-[10px] md:text-[12px] font-semibold lowercase text-foreground/50">redirecting...</p>
             </div>
           ) : !isRecovery ? (
             <div className="border-[2px] border-[hsl(var(--border-mid))] rounded-[6px] p-6 md:p-8 text-center">
-              <p className="text-xs md:text-sm font-extrabold lowercase mb-3 text-foreground">invalid link</p>
-              <button onClick={() => navigate("/account")} className="font-extrabold lowercase text-foreground underline text-[10px] md:text-[12px]">
+              <p className="text-xs md:text-sm font-semibold lowercase mb-3 text-foreground">invalid link</p>
+              <button onClick={() => navigate("/account")} className="font-semibold lowercase text-foreground underline text-[10px] md:text-[12px]">
                 back to sign in
               </button>
             </div>
@@ -64,13 +64,13 @@ const ResetPassword = () => {
             <div className="border-[2px] border-[hsl(var(--border-mid))] rounded-[6px] p-4 md:p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-[6px] text-xs md:text-sm">
+                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-semibold lowercase rounded-[6px] text-xs md:text-sm">
                     {error}
                   </div>
                 )}
 
                 <div>
-                  <span className="block text-xs md:text-sm font-extrabold lowercase text-foreground mb-2">new password</span>
+                  <span className="block text-xs md:text-sm font-semibold lowercase text-foreground mb-2">new password</span>
                   <div className="relative">
                     <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
                     <input
@@ -79,7 +79,7 @@ const ResetPassword = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
+                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
                       style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }}
                       placeholder="••••••••"
                     />
@@ -87,7 +87,7 @@ const ResetPassword = () => {
                 </div>
 
                 <div>
-                  <span className="block text-xs md:text-sm font-extrabold lowercase text-foreground mb-2">confirm password</span>
+                  <span className="block text-xs md:text-sm font-semibold lowercase text-foreground mb-2">confirm password</span>
                   <div className="relative">
                     <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground" />
                     <input
@@ -96,7 +96,7 @@ const ResetPassword = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-extrabold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
+                      className="w-full border-2 border-[hsl(var(--border-mid))] text-foreground pl-10 pr-4 py-3.5 text-2xl font-semibold lowercase placeholder:text-muted-foreground focus:outline-none focus:border-neon-yellow transition-colors"
                       style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }}
                       placeholder="••••••••"
                     />

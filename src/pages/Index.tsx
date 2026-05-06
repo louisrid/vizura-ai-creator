@@ -87,7 +87,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
   label: string; options: string[]; value: string; onChange: (v: string) => void;
 }) => (
   <div className="flex-1 flex flex-col gap-2">
-    <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
+    <span className="text-lg md:text-xl font-[600] lowercase text-white">{label}</span>
     <div className="flex items-stretch rounded-[6px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
@@ -102,7 +102,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
               type="button"
               aria-pressed={isSelected}
               onClick={() => onChange(opt)}
-              className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[16px] font-[900] lowercase transition-all"
+              className="flex-1 flex items-center justify-center px-0 py-[12px] md:py-[14px] text-[16px] md:text-[16px] font-[600] lowercase transition-all"
               style={{
                 backgroundColor: isSelected ? "#ffe603" : "transparent",
                 color: isSelected ? "#000000" : "#ffffff",
@@ -145,8 +145,8 @@ const HighlightedPromptArea = ({
         onBlur={() => setFocused(false)}
         spellCheck={false}
         autoCorrect="off"
-        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-white focus:outline-none"
-        style={{ caretColor: "hsl(var(--foreground))", fontStyle: "normal", fontWeight: 900, textDecoration: "none" }}
+        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[600] lowercase whitespace-pre-wrap break-words text-white focus:outline-none"
+        style={{ caretColor: "hsl(var(--foreground))", fontStyle: "normal", fontWeight: 600, textDecoration: "none" }}
       />
       {!value && !focused && <div data-placeholder>{placeholder}</div>}
     </div>
@@ -182,7 +182,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
   onClick: () => void; disabled: boolean; isGenerating: boolean; onboardingComplete: boolean;
 }) => (
   <button
-    className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+    className="w-full h-14 md:h-16 text-xl md:text-2xl font-[600] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
     style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 6 }}
     onClick={onClick}
     disabled={disabled}
@@ -631,7 +631,7 @@ const Index = () => {
                       <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
                     </div>
                   )}
-                  <span className="text-lg font-[900] lowercase truncate" style={{ color: isSelected ? "#ffe603" : "#ffffff" }}>
+                  <span className="text-lg font-[600] lowercase truncate" style={{ color: isSelected ? "#ffe603" : "#ffffff" }}>
                     {c.name || "unnamed"}
                   </span>
                 </button>
@@ -659,7 +659,7 @@ const Index = () => {
                 <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                   <span className="text-xs">+</span>
                 </div>
-                <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
+                <span className="text-lg font-[600] lowercase" style={{ color: "#ffe603" }}>create character</span>
               </button>
             </div>
           )}
@@ -712,7 +712,7 @@ const Index = () => {
                   <User size={18} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
                 </div>
               )}
-              <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
+              <span className="flex-1 text-left text-xl font-[600] lowercase text-black truncate">
                 {selectedChar?.name || "select character"}
               </span>
               <ChevronDown size={18} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
@@ -748,7 +748,7 @@ const Index = () => {
           </div>
 
           <div className="relative">
-            <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
+            <span className="block text-lg md:text-xl font-[600] lowercase mb-2 text-white">describe your photo</span>
             <HighlightedPromptArea
               value={prompt}
               onChange={(v) => {
@@ -757,7 +757,7 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <span className="text-2xl font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
+                  <span className="text-2xl font-semibold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
                 </div>
               }
             />
@@ -765,7 +765,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[6px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[6px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-semibold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -806,7 +806,7 @@ const Index = () => {
                     <User size={20} strokeWidth={3} style={{ color: "rgba(0,0,0,0.4)" }} />
                   </div>
                 )}
-                <span className="flex-1 text-left text-xl font-[900] lowercase text-black truncate">
+                <span className="flex-1 text-left text-xl font-[600] lowercase text-black truncate">
                   {selectedChar?.name || "select character"}
                 </span>
                 <ChevronDown size={20} strokeWidth={2.5} className={`text-black/40 transition-transform duration-200 ${charDropdownOpen ? "rotate-180" : ""}`} />
@@ -843,7 +843,7 @@ const Index = () => {
             </div>
 
             <div className="relative">
-              <span className="block text-lg md:text-xl font-[900] lowercase mb-2 text-white">describe your photo</span>
+              <span className="block text-lg md:text-xl font-[600] lowercase mb-2 text-white">describe your photo</span>
               <HighlightedPromptArea
                 value={prompt}
                 onChange={(v) => {
@@ -852,7 +852,7 @@ const Index = () => {
                 charName={selectedChar?.name || ""}
                 placeholder={
                   <div className="pointer-events-none absolute left-4 top-3 right-4">
-                    <span className="text-2xl font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
+                    <span className="text-2xl font-semibold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
                   </div>
                 }
               />
@@ -863,7 +863,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[6px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[6px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-semibold lowercase text-destructive">
             {error}
           </div>
         )}
