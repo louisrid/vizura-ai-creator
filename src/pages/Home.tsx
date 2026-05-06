@@ -333,9 +333,9 @@ const Home = () => {
 
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[28px] pb-[20px] md:hidden overflow-hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[44px] pb-[16px] md:hidden overflow-hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[34px] font-[900] lowercase leading-[0.94] tracking-[-1.2px] text-white mb-0 mt-0 text-left">
+          <h1 className="flex w-full flex-col items-start text-[50px] font-[900] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
