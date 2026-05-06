@@ -22,8 +22,8 @@ const Header = () => {
   const handleLogoClick = () => { markLateralNav(); navigate("/"); };
 
   const headerContainerClass = isHomeRoute
-    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[24px] pt-[26px] pb-4 md:max-w-3xl md:px-[40px] md:pt-[30px] md:pb-5"
-    : "mx-auto flex w-full max-w-lg items-center justify-between px-[24px] pt-[26px] pb-4 md:max-w-3xl md:px-[40px] md:pt-[30px] md:pb-5";
+    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[24px] pt-[30px] pb-5 md:max-w-3xl md:px-[40px] md:pt-[34px] md:pb-6"
+    : "mx-auto flex w-full max-w-lg items-center justify-between px-[24px] pt-[30px] pb-5 md:max-w-3xl md:px-[40px] md:pt-[34px] md:pb-6";
 
   return (
     <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid hsl(var(--border-mid))" }}>
