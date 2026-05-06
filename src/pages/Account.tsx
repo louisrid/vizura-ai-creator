@@ -62,58 +62,58 @@ const Account = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[140px] flex flex-col items-center">
-        <div className="flex items-center gap-3 mb-11 w-full">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[200px] flex flex-col items-center">
+        <div className="flex items-center gap-3 mb-8 w-full">
           <BackButton />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
 
         {/* Profile avatar + email */}
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-6">
           <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mb-3 bg-neon-yellow"
+            className="w-16 h-16 rounded-full flex items-center justify-center mb-2 bg-neon-yellow"
           >
-            <span className="text-3xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
+            <span className="text-2xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
-          <span className="text-sm font-[800] lowercase text-white truncate max-w-[280px]">
+          <span className="text-xs font-[800] lowercase text-white truncate max-w-[280px]">
             {user.email || "..."}
           </span>
         </div>
 
         {/* Settings rows */}
-        <div className="w-full flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-2">
           <button
-            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
-            <span className="text-sm font-[800] lowercase text-white">subscription</span>
+            <span className="text-xs font-[800] lowercase text-white">subscription</span>
             <div className="flex items-center gap-2">
               <span
-                className="text-xs font-[800] lowercase"
+                className="text-[11px] font-[800] lowercase"
                 style={{ color: subscribed ? "#12e62b" : "#ffffff" }}
               >
                 {subscribed ? "active" : "inactive"}
               </span>
-              <ChevronRight size={16} strokeWidth={2.5} className="text-white" />
+              <ChevronRight size={14} strokeWidth={2.5} className="text-white" />
             </div>
           </button>
 
           <button
-            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 py-4 transition-colors hover:bg-card"
+            className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
-            <span className="text-sm font-[800] lowercase text-white">change password</span>
-            <ChevronRight size={16} strokeWidth={2.5} className="text-white" />
+            <span className="text-xs font-[800] lowercase text-white">change password</span>
+            <ChevronRight size={14} strokeWidth={2.5} className="text-white" />
           </button>
 
           {/* Admin button */}
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-5 py-4 text-sm font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
             >
               admin
-              <Eye size={16} strokeWidth={2.5} />
+              <Eye size={14} strokeWidth={2.5} />
             </button>
           )}
         </div>
@@ -121,7 +121,7 @@ const Account = () => {
 
         {/* Sign out */}
         <button
-          className="mt-8 px-6 py-3 text-sm font-[900] lowercase transition-all hover:opacity-90"
+          className="mt-6 px-5 py-2.5 text-xs font-[900] lowercase transition-all hover:opacity-90"
           style={{
             color: "#ffffff",
             backgroundColor: "#1a0505",
@@ -133,7 +133,7 @@ const Account = () => {
           sign out
         </button>
 
-        <div className="pt-6">
+        <div className="pt-4">
           <button
             type="button"
             onClick={() => navigate("/info")}
