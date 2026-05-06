@@ -133,6 +133,12 @@
     scroll-behavior: smooth;
   }
 
+  /* Tiny extra height so iOS rubber-bands at the bottom only (header stays put at top) */
+  #root > * {
+    min-height: calc(100% + 1px);
+    padding-bottom: 16px;
+  }
+
   /* Desktop: remove fixed positioning, full-height scroll */
   @media (min-width: 768px) {
     html, body {
