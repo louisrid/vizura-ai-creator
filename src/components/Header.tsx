@@ -57,22 +57,23 @@ const Header = () => {
 
           {isLoggedIn && !isAuthPage && (
             <div className="flex items-center gap-3 md:gap-5">
-              <div
-                className="flex items-center gap-1 md:gap-2 px-2.5 md:px-4 select-none h-[38px] md:h-[46px]"
+              <button
+                onClick={() => navigate("/top-ups")}
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[46px] md:h-[54px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
                   borderRadius: 6,
                 }}
-                aria-label="gem balance"
+                aria-label="buy gems"
               >
-                <Gem size={13} strokeWidth={2.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[13px] md:text-[16px] font-[900] lowercase text-white">{gems}</span>
-              </div>
+                <Gem size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[15px] md:text-[18px] font-[900] lowercase text-white">{gems}</span>
+              </button>
 
               <button
                 onClick={() => navigate("/account")}
-                className="flex items-center justify-center w-[38px] h-[38px] md:w-[46px] md:h-[46px]"
+                className="flex items-center justify-center w-[46px] h-[46px] md:w-[54px] md:h-[54px]"
                 style={{
                   backgroundColor: "hsl(var(--card))",
                   border: "2px solid hsl(var(--border-mid))",
@@ -80,7 +81,7 @@ const Header = () => {
                 }}
                 aria-label="settings"
               >
-                <Settings size={16} strokeWidth={2.5} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
+                <Settings size={20} strokeWidth={3} className="md:!w-[24px] md:!h-[24px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
