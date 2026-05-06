@@ -108,15 +108,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     let cancelled = false;
 
     const initializeAuth = async () => {
-      // Force-logout: bump this number to invalidate all existing sessions
-      const FORCE_LOGOUT_VERSION = "2";
-      const storedVersion = localStorage.getItem("facefox_logout_version");
-      if (storedVersion !== FORCE_LOGOUT_VERSION) {
-        localStorage.setItem("facefox_logout_version", FORCE_LOGOUT_VERSION);
-        localStorage.removeItem("facefox_cached_user");
-        try { await supabase.auth.signOut(); } catch {}
-      }
-
       const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
         const nextUser = session?.user ?? null;
         if (event === "SIGNED_OUT") {

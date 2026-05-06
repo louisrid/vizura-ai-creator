@@ -42,22 +42,24 @@ const Header = () => {
                 facebox
               </span>
             </button>
-            <button
-              onClick={() => goOrAuth("/account")}
-              className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[34px] h-[34px] md:w-[40px] md:h-[40px]"
-              style={{
-                borderRadius: "50%",
-                backgroundColor: "hsl(var(--card))",
-                border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
-                transform: "translateX(-1px)",
-              }}
-              aria-label="my account"
-            >
-              <User size={14} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
-            </button>
+            {isLoggedIn && (
+              <button
+                onClick={() => goOrAuth("/account")}
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[34px] h-[34px] md:w-[40px] md:h-[40px]"
+                style={{
+                  borderRadius: "50%",
+                  backgroundColor: "hsl(var(--card))",
+                  border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                  transform: "translateX(-1px)",
+                }}
+                aria-label="my account"
+              >
+                <User size={14} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
+              </button>
+            )}
           </div>
 
-          {!isAuthPage && (
+          {!isAuthPage && isLoggedIn && (
             <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => goOrAuth("/top-ups")}
@@ -86,6 +88,20 @@ const Header = () => {
                 <Settings size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
+          )}
+          {!isAuthPage && !isLoggedIn && (
+            <button
+              onClick={() => { markLateralNav(); navigate("/auth"); }}
+              className="flex items-center justify-center px-4 h-[38px] md:h-[44px]"
+              style={{
+                backgroundColor: "#ffe603",
+                border: "2px solid #ffe603",
+                borderRadius: 6,
+              }}
+              aria-label="log in"
+            >
+              <span className="text-[14px] md:text-[16px] font-[900] lowercase text-black">log in</span>
+            </button>
           )}
         </div>
       </div>
