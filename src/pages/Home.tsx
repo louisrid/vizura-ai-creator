@@ -150,9 +150,9 @@ const Home = () => {
       return;
     }
 
-    // No user → show the hero/start-now screen (GuidedCreator step 0)
-    setShowGuided(true);
-    setSkipWelcome(false);
+    // No user → show the dashboard signed-out view (start slides temporarily disabled)
+    setShowGuided(false);
+    setSkipWelcome(true);
     setAutoOpenEvaluated(true);
   }, [authLoading, openCreatorRequested, user, navigate, lockStateResolved, charsLoaded, resolvedCharacterCount]);
 
@@ -164,6 +164,7 @@ const Home = () => {
   }, [resolvedCharacterCount, openCreatorRequested]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
+    if (!user) { navigate("/auth?redirect=/"); return; }
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
     sessionStorage.removeItem(DISMISSED_KEY);
     setSkipWelcome(isFull ? false : !!user);
@@ -386,7 +387,7 @@ const Home = () => {
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button
-                  onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
+                  onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
                   style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}
                 >
@@ -440,7 +441,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -569,7 +570,7 @@ const Home = () => {
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button
-                  onClick={() => { if (!onboardingComplete) return; navigate("/storage"); }}
+                  onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
                   style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}
                 >
@@ -623,7 +624,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
-                <button onClick={() => { if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
