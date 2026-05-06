@@ -333,7 +333,7 @@ const Home = () => {
 
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[50px] pb-[140px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[28px] pb-[20px] md:hidden overflow-hidden">
           {/* Hero */}
           <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[14px] text-left">
             <span className="block w-full text-left">what are we</span>
