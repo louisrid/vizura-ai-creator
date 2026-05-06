@@ -59,7 +59,7 @@ const Header = () => {
             )}
           </div>
 
-          {!isAuthPage && (
+          {!isAuthPage && isLoggedIn && (
             <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => goOrAuth("/top-ups")}
