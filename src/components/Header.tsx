@@ -22,11 +22,11 @@ const Header = () => {
   const handleLogoClick = () => { markLateralNav(); navigate("/"); };
 
   const headerContainerClass = isHomeRoute
-    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[50px] pb-3 md:max-w-3xl md:px-[56px] md:pt-[56px]"
-    : "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[50px] pb-3 md:max-w-6xl md:px-[56px] md:pt-[56px]";
+    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[28px] pb-4 md:max-w-3xl md:px-[56px] md:pt-[32px]"
+    : "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[28px] pb-4 md:max-w-6xl md:px-[56px] md:pt-[32px]";
 
   return (
-    <header className="relative" style={{ zIndex: 9990, backgroundColor: "#000000" }}>
+    <header className="relative" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid hsl(var(--border-mid))" }}>
       <TopGradientBar />
       <div className="relative">
         <div className={headerContainerClass}>
@@ -60,7 +60,7 @@ const Header = () => {
             <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => { markLateralNav(); navigate("/top-ups"); }}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[46px] md:h-[54px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[42px] md:h-[50px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
