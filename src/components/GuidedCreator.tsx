@@ -8,7 +8,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/components/ui/sonner";
 import { readCachedOnboardingState } from "@/lib/onboardingState";
-import DotDecal from "@/components/DotDecal";
 
 
 import type { SlideConfig } from "@/components/InstructionalSlide";
@@ -807,7 +806,6 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
     const on = heroPhase >= 2;
     return (
       <div className="flex w-full flex-col items-center justify-center" style={{ minHeight: '100%', position: 'relative' }}>
-        <DotDecal />
         {/* <div style={{ position: 'relative', width: 298, height: 298, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 15 }}>
           {[
             { size: 294, w: 8, spd: 0.45, del: 0.22, dash: false, gapFraction: 0.08, baseRotation: 115 },

@@ -6,7 +6,6 @@ import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
-import DotDecal from "@/components/DotDecal";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
 
@@ -64,7 +63,6 @@ const History = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[32px] md:px-[56px] pt-[44px] pb-[280px]">
         <div className="flex items-center gap-3 mb-11">
           <BackButton />

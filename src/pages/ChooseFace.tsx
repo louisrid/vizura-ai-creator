@@ -13,7 +13,6 @@ import { displayAge } from "@/lib/displayAge";
 import PageTitle from "@/components/PageTitle";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 
-import DotDecal from "@/components/DotDecal";
 import { SignInOverlay } from "@/components/GuidedCreator";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -819,7 +818,6 @@ const ChooseFace = () => {
       {/* Face picker — shown after loading completes */}
         {!loading && faces.length > 0 && (
           <>
-            <DotDecal />
 
             <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-4 pb-[280px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-3 mb-5">

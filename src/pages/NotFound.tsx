@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import DotDecal from "@/components/DotDecal";
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,7 +12,6 @@ const NotFound = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[32px] pt-[44px] pb-[280px]">
         <div className="flex items-center gap-3 mb-11">
           <BackButton />

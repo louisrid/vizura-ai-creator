@@ -14,7 +14,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
-import DotDecal from "@/components/DotDecal";
 import RegenerateConfirmDialog from "@/components/RegenerateConfirmDialog";
 import { displayAge } from "@/lib/displayAge";
 import { mergeCachedOnboardingState, readCachedOnboardingState } from "@/lib/onboardingState";
@@ -312,7 +311,6 @@ const CharacterDetail = () => {
   if (loading || (authLoading && !hasCachedUser)) {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
         <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[56px] pt-[44px] pb-[280px]">
           <div className="flex items-center gap-3 mb-11">
             <BackButton />
@@ -325,7 +323,6 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="relative min-h-screen bg-background overflow-hidden">
-        <DotDecal />
         <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[32px] md:px-[56px] pt-[44px] pb-[280px]">
           <div className="flex items-center gap-3 mb-11">
             <BackButton />
@@ -435,7 +432,6 @@ const CharacterDetail = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <DotDecal />
 
       {/* Mobile layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[32px] pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
