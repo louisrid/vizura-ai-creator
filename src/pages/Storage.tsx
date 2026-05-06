@@ -138,7 +138,7 @@ const Storage = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[44px] pt-[44px] pb-[140px]">
         <div className="flex items-center gap-3 mb-11">
-          <BackButton />
+          <BackButton always />
           <PageTitle className="mb-0 whitespace-nowrap">my storage</PageTitle>
           <button
             type="button"
