@@ -2,10 +2,14 @@ import { forwardRef } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { getNavDepth } from "@/lib/navigation";
 
-const BackButton = forwardRef<HTMLButtonElement>((_, ref) => {
+interface BackButtonProps {
+  always?: boolean;
+}
+
+const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(({ always = false }, ref) => {
   const navigate = useTransitionNavigate();
 
-  if (getNavDepth() < 1) return null;
+  if (!always && getNavDepth() < 1) return null;
 
   const handleBack = () => {
     if (getNavDepth() > 1) {
