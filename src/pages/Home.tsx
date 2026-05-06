@@ -164,6 +164,7 @@ const Home = () => {
   }, [resolvedCharacterCount, openCreatorRequested]);
 
   function handleOpenCreator(forceFullFlow?: boolean | React.MouseEvent) {
+    if (!user) { navigate("/auth?redirect=/"); return; }
     const isFull = typeof forceFullFlow === "boolean" ? forceFullFlow : false;
     sessionStorage.removeItem(DISMISSED_KEY);
     setSkipWelcome(isFull ? false : !!user);
