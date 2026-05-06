@@ -236,7 +236,7 @@ button, a[role="button"], [role="button"] {
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(255, 230, 3, 0.15);
+    
   }
 
   /* Subtle border glow on hover */
