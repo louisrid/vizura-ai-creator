@@ -42,6 +42,10 @@ const isValidImageUrl = (url: string): boolean => {
   return true;
 };
 
+// Module-level flag — Home only triggers the yellow loading bar on its FIRST
+// mount per session. Subsequent visits (e.g. back from another page) skip it.
+let homeHasLoadedOnce = false;
+
 
 
 const Home = () => {
@@ -252,6 +256,13 @@ const Home = () => {
       delete (window as any).__facebox_early_unblock;
     }
 
+    // Skip blocking the splash on subsequent Home visits (e.g. back from another page).
+    if (homeHasLoadedOnce) {
+      if (early) early();
+      if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
+      return;
+    }
+
     // Wait for data to load before deciding what to do.
     // If we release early when data hasn't loaded, expectedImageCount goes 0→N
     // later and we'd register a NEW blocker, causing a second loading bar.
@@ -267,6 +278,7 @@ const Home = () => {
       const toRelease = unblockRef.current || early;
       if (toRelease) toRelease();
       unblockRef.current = null;
+      homeHasLoadedOnce = true;
       return;
     }
 
@@ -280,12 +292,14 @@ const Home = () => {
       const imgs = document.querySelectorAll<HTMLImageElement>('img[data-home-image="1"]');
       if (imgs.length >= expectedImageCount && Array.from(imgs).every(img => img.complete && img.naturalHeight > 0)) {
         if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
+        homeHasLoadedOnce = true;
       }
     });
 
     // Safety timeout: 3 seconds for cached images, but never longer than that
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
+      homeHasLoadedOnce = true;
     }, 3000);
     return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
   }, [expectedImageCount, cachedCharsLoaded, generationsReady]);
@@ -295,6 +309,7 @@ const Home = () => {
     if (loadedCountRef.current >= expectedImageCount && unblockRef.current) {
       unblockRef.current();
       unblockRef.current = null;
+      homeHasLoadedOnce = true;
     }
   }, [expectedImageCount]);
 
