@@ -139,11 +139,11 @@ const Storage = () => {
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[32px] md:px-[56px] pt-[44px] pb-[140px]">
         <div className="flex items-center gap-3 mb-11">
           <BackButton />
-          <PageTitle className="mb-0">my storage</PageTitle>
+          <PageTitle className="mb-0 whitespace-nowrap">my storage</PageTitle>
           <button
             type="button"
             onClick={toggleHidden}
-            className="ml-auto flex items-center justify-center"
+            className="ml-auto flex shrink-0 items-center justify-center"
             style={{
               width: 40,
               height: 40,
