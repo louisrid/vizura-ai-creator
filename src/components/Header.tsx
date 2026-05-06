@@ -22,11 +22,11 @@ const Header = () => {
   const handleLogoClick = () => { markLateralNav(); navigate("/"); };
 
   const headerContainerClass = isHomeRoute
-    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[28px] pb-4 md:max-w-3xl md:px-[56px] md:pt-[32px]"
-    : "mx-auto flex w-full max-w-lg items-center justify-between px-[32px] pt-[28px] pb-4 md:max-w-6xl md:px-[56px] md:pt-[32px]";
+    ? "mx-auto flex w-full max-w-lg items-center justify-between px-[24px] pt-[44px] pb-7 md:max-w-3xl md:px-[40px] md:pt-[52px] md:pb-8"
+    : "mx-auto flex w-full max-w-lg items-center justify-between px-[24px] pt-[44px] pb-7 md:max-w-3xl md:px-[40px] md:pt-[52px] md:pb-8";
 
   return (
-    <header className="relative" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid hsl(var(--border-mid))" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid hsl(var(--border-mid))" }}>
       <TopGradientBar />
       <div className="relative">
         <div className={headerContainerClass}>
