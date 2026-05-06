@@ -96,7 +96,7 @@
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 7%;
+    --border-mid: 0 0% 9%;
 
     /* DARKER border grey — for menu dropdowns */
     --border-dark: 0 0% 5%;
@@ -128,7 +128,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
     scroll-behavior: smooth;
   }
 
