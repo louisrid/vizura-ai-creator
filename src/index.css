@@ -113,8 +113,7 @@
     font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 700;
     overflow: hidden;
-    overscroll-behavior: contain;
-    overscroll-behavior-y: none;
+    overscroll-behavior-y: auto;
     -webkit-overflow-scrolling: touch;
     position: fixed;
     width: 100%;
@@ -128,9 +127,14 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: none;
-    overscroll-behavior-y: none;
+    overscroll-behavior-y: auto;
     scroll-behavior: smooth;
+  }
+
+  /* Add a little extra scroll room + soft rubber-band bounce on every page */
+  #root > * {
+    padding-bottom: 24px;
+    min-height: calc(100% + 1px);
   }
 
   /* Desktop: remove fixed positioning, full-height scroll */
@@ -138,11 +142,11 @@
     html, body {
       position: static;
       overflow: hidden;
-      overscroll-behavior: contain;
+      overscroll-behavior-y: auto;
     }
     #root {
       height: 100vh;
-      overscroll-behavior: contain;
+      overscroll-behavior-y: auto;
     }
   }
 
