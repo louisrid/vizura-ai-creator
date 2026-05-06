@@ -89,6 +89,20 @@ const Header = () => {
               </button>
             </div>
           )}
+          {!isAuthPage && !isLoggedIn && (
+            <button
+              onClick={() => { markLateralNav(); navigate("/auth"); }}
+              className="flex items-center justify-center px-4 h-[38px] md:h-[44px]"
+              style={{
+                backgroundColor: "#ffe603",
+                border: "2px solid #ffe603",
+                borderRadius: 6,
+              }}
+              aria-label="log in"
+            >
+              <span className="text-[14px] md:text-[16px] font-[900] lowercase text-black">log in</span>
+            </button>
+          )}
         </div>
       </div>
     </header>
