@@ -11,6 +11,7 @@ import { AppDataProvider, useAppData } from "@/contexts/AppDataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useOnboarded } from "@/hooks/useOnboarded";
 import HeaderTransition from "@/components/HeaderTransition";
+import ScrollToTop from "@/components/ScrollToTop";
 import LoadingScreen from "@/components/LoadingScreen";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
@@ -518,6 +519,7 @@ const AppRoutes = () => {
 
   return (
     <div style={{ overscrollBehavior: "none" }}>
+      <ScrollToTop />
       <SignOutOverlay />
       {(stillResolving || suppressUnauthRoutes) && <LoadingScreen />}
       {!suppressUnauthRoutes && (
