@@ -209,9 +209,8 @@ const ProgressBarLoader = ({
               transformOrigin: "left center",
               transition: "transform 120ms linear",
               willChange: "transform",
-              background: "linear-gradient(90deg, #00e0ff 0%, #00e0ff 85%, #00bcd4 100%)",
+              background: "#00e0ff",
               borderRadius: 9999,
-              boxShadow: "0 0 10px #00e0ff, 0 0 20px rgba(0,224,255,0.25)",
             }}
           />
         </div>

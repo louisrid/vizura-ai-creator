@@ -333,9 +333,9 @@ const Home = () => {
 
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[44px] pb-[16px] md:hidden overflow-hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[80px] pb-[16px] md:hidden overflow-hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[50px] font-[600] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left">
+          <h1 className="flex w-full flex-col items-start text-[52px] font-[900] lowercase leading-[0.94] tracking-[-2px] text-white mb-0 mt-0 text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -345,7 +345,7 @@ const Home = () => {
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-3 mt-[14px]">
+          <div className="flex gap-2 mb-4 mt-[22px]">
             {/* Create Character - solid yellow */}
             <button
               type="button"
@@ -355,12 +355,12 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffe603",
-                padding: "10px 14px 10px 18px",
+                padding: "20px 14px 20px 18px",
                 borderRadius: 6,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[14px] font-[600] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <span className="text-[18px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
@@ -379,7 +379,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "10px 18px 10px 14px",
+                padding: "20px 18px 20px 14px",
                 borderRadius: 6,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
@@ -387,7 +387,7 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[14px] font-[600] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <span className="relative z-[1] text-[18px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
               <svg className="relative z-[1]" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
@@ -399,7 +399,7 @@ const Home = () => {
           {/* Latest Photos Section */}
           <section className="mb-3">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[14px] font-[600] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
+              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
@@ -452,7 +452,7 @@ const Home = () => {
           {/* My Characters Section */}
           <section>
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[14px] font-[600] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
+              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[600] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 6 }}>
                   manage →
@@ -511,7 +511,7 @@ const Home = () => {
                         </div>
                       )}
                     </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
+                    <div className="absolute bottom-0 inset-x-0 bg-black/80 px-2 pb-2 pt-4">
                       <span className="block text-[11px] font-[600] lowercase text-white leading-tight truncate">{char.name}</span>
                       <span className="block text-[9px] font-[600] lowercase text-white">age {displayAge(char.id, char.age)}</span>
                     </div>
@@ -694,7 +694,7 @@ const Home = () => {
                         </div>
                       )}
                     </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-5">
+                    <div className="absolute bottom-0 inset-x-0 bg-black/80 px-3 pb-3 pt-5">
                       <span className="block text-[13px] font-[600] lowercase text-white leading-tight truncate">{char.name}</span>
                       <span className="block text-[10px] font-[600] lowercase text-white">age {displayAge(char.id, char.age)}</span>
                     </div>

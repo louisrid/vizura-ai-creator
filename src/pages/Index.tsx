@@ -604,7 +604,7 @@ const Index = () => {
             borderRadius: 6,
             border: "2px solid hsl(var(--border-mid))",
             backgroundColor: "#000000",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
+            
           }}
         >
           {characters.map((c, idx) => {
@@ -871,7 +871,7 @@ const Index = () => {
 
       <ImageZoomViewer url={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-[24px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
+      <div className="fixed left-0 right-0 bottom-0 z-10 px-[24px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "#000000", paddingTop: 24 }}>
         <div className="mx-auto max-w-lg pointer-events-auto">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
