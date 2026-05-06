@@ -42,8 +42,17 @@ const BottomTabBar = () => {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
 
-  if (authLoading || !user) return null;
+  if (authLoading) return null;
   if (location.pathname === "/auth" || location.pathname === "/reset-password") return null;
+
+  const handleNav = (path: string) => {
+    markLateralNav();
+    if (!user && path !== "/") {
+      navigate(`/auth?redirect=${encodeURIComponent(path)}`);
+      return;
+    }
+    navigate(path);
+  };
 
   const isActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
@@ -66,7 +75,7 @@ const BottomTabBar = () => {
         return (
           <button
             key={tab.path}
-            onClick={() => { markLateralNav(); navigate(tab.path); }}
+            onClick={() => handleNav(tab.path)}
             className="flex-1 flex flex-col items-center justify-start gap-0.5 pt-5 pb-6 transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
