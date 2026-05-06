@@ -126,17 +126,7 @@
     background-color: hsl(var(--background));
   }
 
-  /* Fixed dot-matrix overlay above page backgrounds, below content */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9990;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.22) 2px, transparent 2.5px);
-    background-size: 44px 44px;
-    background-position: 0 0;
-  }
+
 
   #root {
     width: 100%;
