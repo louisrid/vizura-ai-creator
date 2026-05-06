@@ -6,6 +6,7 @@ const LockOverlay = ({ borderRadius = 10 }: { borderRadius?: number }) => (
       inset: 0,
       backgroundColor: "rgba(0,0,0,0.55)",
       borderRadius: Math.max(borderRadius - 2, 0),
+      boxShadow: "0 0 0 4px rgba(0,0,0,0.55)",
       zIndex: 20,
     }}
   />

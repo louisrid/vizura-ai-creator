@@ -880,7 +880,7 @@ const ChooseFace = () => {
                   <button
                     onClick={() => { if (selectedIndex !== null) handleSelectFace(selectedIndex); }}
                     disabled={selectedIndex === null}
-                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-lg md:text-xl font-[600] lowercase transition-none disabled:cursor-not-allowed"
+                    className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-lg md:text-xl font-[900] lowercase transition-none disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 6,
                       backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
@@ -910,7 +910,7 @@ const ChooseFace = () => {
                         }
                         setShowRegenConfirm(true);
                       }}
-                      className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-lg md:text-xl font-[600] lowercase transition-all duration-150"
+                      className="flex h-14 md:h-16 w-full items-center justify-center gap-1.5 text-lg md:text-xl font-[900] lowercase transition-all duration-150"
                       disabled={regeneratingFaces && onboardingComplete}
                       style={{
                         borderRadius: 6,
@@ -955,8 +955,8 @@ const ChooseFace = () => {
                         <div className="grid grid-cols-4 gap-1.5">
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[6px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                              <span className="block font-[600] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                              <span className={`inline-block font-[600] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[6px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "6px 12px" }}>{t.value}</span>
+                              <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
+                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[6px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>
@@ -972,12 +972,12 @@ const ChooseFace = () => {
         {!loading && faces.length === 0 && !showSignIn && (
           <main className="mx-auto flex h-[calc(100dvh-57px)] w-full max-w-lg flex-col px-[14px] pt-8">
             <div className="mt-16 flex flex-col items-center gap-4">
-              <p className="text-sm font-[600] lowercase text-white">{generationError || "no faces generated yet"}</p>
+              <p className="text-sm font-[900] lowercase text-white">{generationError || "no faces generated yet"}</p>
               {generationError && (
                 <button
                   type="button"
                   onClick={() => void generateFaces()}
-                  className="h-10 px-4 text-base font-[600] lowercase"
+                  className="h-10 px-4 text-base font-[900] lowercase"
                   style={{ backgroundColor: "#ffe603", color: "#000000", borderRadius: 6 }}
                 >
                   try again

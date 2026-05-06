@@ -8,7 +8,7 @@ const Info = () => (
         <BackButton />
         <PageTitle className="mb-0">info</PageTitle>
       </div>
-      <p className="text-sm font-semibold lowercase text-white">
+      <p className="text-sm font-extrabold lowercase text-white">
         terms &amp; privacy — coming soon
       </p>
     </main>

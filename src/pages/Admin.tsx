@@ -78,16 +78,16 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                     if (copyFallback()) done(); else toast.error("copy error");
                   }
                 }}
-                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[600] lowercase text-white text-left rounded-[6px]"
+                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[6px]"
                 style={{ backgroundColor: "#000000" }}
               >
                 <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
                 <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />
               </button>
             ) : (
-              <p className="text-[12px] md:text-[14px] font-semibold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
+              <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
             )}
-            <p className="text-[10px] md:text-[12px] font-semibold lowercase" style={{ color: "#ffffff" }}>
+            <p className="text-[10px] md:text-[12px] font-extrabold lowercase" style={{ color: "#ffffff" }}>
               {photo.user_email}
               {photo.character_name && ` · ${photo.character_name}`}
               {` · ${fmtDate(photo.created_at)}`}
@@ -135,7 +135,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
       {isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 6 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
-        <span className="text-[9px] md:text-[11px] font-[600] lowercase" style={{ color: "#ffffff" }}>no photo</span>
+        <span className="text-[9px] md:text-[11px] font-[900] lowercase" style={{ color: "#ffffff" }}>no photo</span>
       )}
     </div>
   );
@@ -155,7 +155,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
 
       <div className="flex flex-col gap-3 max-w-lg">
         <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }} className="p-5">
-          <h1 className="font-[600] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
+          <h1 className="font-[900] lowercase tracking-tight text-white leading-none text-[30px] mb-5">
             {displayName}, {ageDisplay}
           </h1>
           <div className="grid grid-cols-3 gap-2" style={{ overflow: "visible" }}>
@@ -168,8 +168,8 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
           <div className="grid grid-cols-4 gap-1.5">
             {traits.map((t) => (
               <div key={t.label} className="rounded-[6px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                <span className="block font-[600] uppercase leading-none mb-1 text-[8px]" style={{ color: "#ffffff" }}>{t.label}</span>
-                <span className="block font-[600] lowercase text-white leading-none text-[11px]">{t.value}</span>
+                <span className="block font-[800] uppercase leading-none mb-1 text-[8px]" style={{ color: "#ffffff" }}>{t.label}</span>
+                <span className="block font-[800] lowercase text-white leading-none text-[11px]">{t.value}</span>
               </div>
             ))}
           </div>
@@ -262,10 +262,10 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
         </button>
         <PageTitle className="mb-0">user storage</PageTitle>
       </div>
-      <p className="text-[13px] font-semibold lowercase mb-3" style={{ color: "#ffe603" }}>{email}</p>
+      <p className="text-[13px] font-extrabold lowercase mb-3" style={{ color: "#ffe603" }}>{email}</p>
       <button
         onClick={() => setConfirmReset(true)}
-        className="w-full flex items-center justify-center text-[14px] font-[600] lowercase mb-6 transition-transform"
+        className="w-full flex items-center justify-center text-[14px] font-[900] lowercase mb-6 transition-transform"
         style={{ padding: "12px 0", color: "#ff4444", borderRadius: 6, border: "2px solid #ff4444", backgroundColor: "transparent" }}
       >
         reset user
@@ -278,7 +278,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
           {/* Characters */}
           {characters.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-sm md:text-base font-[600] lowercase text-white mb-3">characters ({characters.length})</h2>
+              <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">characters ({characters.length})</h2>
               <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
                 {characters.map((c: any) => (
                   <button
@@ -298,9 +298,9 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                         </div>
                       </AspectRatio>
                     )}
-                    <div className="absolute bottom-0 inset-x-0 bg-black/80 px-2 pb-2 pt-4">
-                      <span className="block text-[11px] font-[600] lowercase text-white leading-tight truncate">{c.name || "unnamed"}</span>
-                      <span className="block text-[9px] font-[600] lowercase" style={{ color: "#ffffff" }}>age {displayAge(c.id, c.age)}</span>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
+                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{c.name || "unnamed"}</span>
+                      <span className="block text-[9px] font-[800] lowercase" style={{ color: "#ffffff" }}>age {displayAge(c.id, c.age)}</span>
                     </div>
                   </button>
                 ))}
@@ -310,9 +310,9 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
 
           {/* Photos */}
           <div className="mb-8">
-            <h2 className="text-sm md:text-base font-[600] lowercase text-white mb-3">photos ({images.length})</h2>
+            <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">photos ({images.length})</h2>
             {images.length === 0 ? (
-              <p className="text-[11px] font-semibold lowercase text-muted-foreground py-6 text-center">no photos</p>
+              <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no photos</p>
             ) : (
               <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
                 {images.map((img) => (
@@ -329,7 +329,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                       href={img.url}
                       download={`facefox-${img.id}.png`}
                       target="_blank"
-                      className="flex items-center justify-center gap-1.5 rounded-b-[6px] py-2.5 text-[10px] md:text-[11px] font-semibold lowercase transition-opacity hover:opacity-80"
+                      className="flex items-center justify-center gap-1.5 rounded-b-[6px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
                       style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                     >
                       download
@@ -396,7 +396,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                           if (copyFallback()) done(); else toast.error("copy error");
                         }
                       }}
-                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[600] lowercase text-white text-left rounded-[6px]"
+                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[6px]"
                       style={{ backgroundColor: "#000000" }}
                     >
                       <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
@@ -431,14 +431,14 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               className="w-full max-w-sm p-5"
               style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6, border: "2px solid hsl(var(--border-mid))" }}
             >
-              <p className="text-[13px] md:text-[14px] font-[600] lowercase text-white leading-snug mb-5">
+              <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
                 reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirmReset(false)}
                   disabled={resetting}
-                  className="flex-1 text-[11px] md:text-[12px] font-semibold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50"
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50"
                   style={{ color: "#ffffff", borderRadius: 6, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
                 >
                   cancel
@@ -446,7 +446,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                 <button
                   onClick={handleReset}
                   disabled={resetting}
-                  className="flex-1 text-[11px] md:text-[12px] font-semibold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1.5"
+                  className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1.5"
                   style={{ color: "#ffffff", borderRadius: 6, backgroundColor: "#ff4444", border: "2px solid #ff4444" }}
                 >
                   {resetting && <Loader2 size={12} className="animate-spin" strokeWidth={3} />}
@@ -580,15 +580,15 @@ const Admin = () => {
                     ].map(({ label, value, icon: Icon }) => (
                       <div key={label} className="flex flex-col items-center justify-center py-4 md:py-6" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}>
                         <Icon size={16} strokeWidth={2.5} style={{ color: "#ffe603" }} className="mb-1 md:w-5 md:h-5" />
-                        <span className="text-[28px] md:text-[36px] font-[600] text-white leading-none">{value.toLocaleString()}</span>
-                        <span className="text-[9px] md:text-[11px] font-semibold lowercase mt-1" style={{ color: "#ffffff" }}>{label}</span>
+                        <span className="text-[28px] md:text-[36px] font-[900] text-white leading-none">{value.toLocaleString()}</span>
+                        <span className="text-[9px] md:text-[11px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>{label}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* LATEST PHOTOS */}
                   <div className="mb-8">
-                    <h2 className="text-sm md:text-base font-[600] lowercase text-white mb-3">latest photos</h2>
+                    <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">latest photos</h2>
                     {photos.length > 0 ? (
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
                         {photos.map((p: any, i: number) => {
@@ -598,16 +598,16 @@ const Admin = () => {
                               <img src={p.image_url} alt="" className="w-full aspect-[3/4] object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                               <div className="px-3 py-2.5 space-y-1">
                                 {type === "system" ? (
-                                  <span className="inline-block text-[9px] md:text-[10px] font-[600] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
+                                  <span className="inline-block text-[9px] md:text-[10px] font-[800] lowercase px-2 py-0.5" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
                                     {label}
                                   </span>
                                 ) : (
-                                  <p className="text-[10px] md:text-[11px] font-semibold lowercase text-white truncate leading-tight">{label}</p>
+                                  <p className="text-[10px] md:text-[11px] font-extrabold lowercase text-white truncate leading-tight">{label}</p>
                                 )}
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-[9px] md:text-[10px] font-semibold lowercase truncate" style={{ color: "#ffffff" }}>{p.user_email}</p>
+                                  <p className="text-[9px] md:text-[10px] font-extrabold lowercase truncate" style={{ color: "#ffffff" }}>{p.user_email}</p>
                                   {p.character_name && (
-                                    <span className="text-[9px] md:text-[10px] font-semibold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
+                                    <span className="text-[9px] md:text-[10px] font-extrabold lowercase shrink-0" style={{ color: "#ffe603" }}>· {p.character_name}</span>
                                   )}
                                 </div>
                               </div>
@@ -616,7 +616,7 @@ const Admin = () => {
                         })}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-semibold lowercase text-muted-foreground py-6 text-center">no photos yet</p>
+                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no photos yet</p>
                     )}
                   </div>
                 </div>
@@ -625,7 +625,7 @@ const Admin = () => {
                 <div className="md:col-span-5">
                   {/* ACTIVE USERS */}
                   <div className="mb-8">
-                    <h2 className="text-sm md:text-base font-[600] lowercase text-white mb-3">active users (7d)</h2>
+                    <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">active users (7d)</h2>
                     {activeUsers.length > 0 ? (
                       <div className="space-y-1.5">
                         {activeUsers.map((u: any, i: number) => (
@@ -635,35 +635,35 @@ const Admin = () => {
                             className="w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 text-left transition-all hover:ring-1 hover:ring-foreground/20"
                             style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}
                           >
-                            <span className="text-[11px] md:text-[12px] font-semibold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
+                            <span className="text-[11px] md:text-[12px] font-extrabold lowercase text-white truncate flex-1 mr-3">{u.email}</span>
                             <div className="flex items-center gap-3 shrink-0">
-                              <span className="text-[10px] md:text-[11px] font-semibold lowercase" style={{ color: "#ffffff" }}>{u.photos_this_week} photos</span>
-                              <span className="text-[10px] md:text-[11px] font-semibold lowercase" style={{ color: "#00e0ff" }}>{u.gems_remaining}💎</span>
+                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "#ffffff" }}>{u.photos_this_week} photos</span>
+                              <span className="text-[10px] md:text-[11px] font-extrabold lowercase" style={{ color: "#00e0ff" }}>{u.gems_remaining}💎</span>
                             </div>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-semibold lowercase text-muted-foreground py-6 text-center">no recent activity</p>
+                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no recent activity</p>
                     )}
                   </div>
 
                   {/* FLAGGED */}
                   <div className="mb-8">
-                    <h2 className="text-sm md:text-base font-[600] lowercase text-white mb-3">flagged</h2>
+                    <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">flagged</h2>
                     {rejected.length > 0 ? (
                       <div className="space-y-1.5">
                         {rejected.map((r: any, i: number) => (
                           <div key={r.id || i} className="px-3.5 py-2.5 md:py-3" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))" }}>
-                            <p className="text-[11px] md:text-[12px] font-semibold lowercase text-white leading-snug">{r.prompt_text}</p>
-                            <p className="text-[9px] md:text-[10px] font-semibold lowercase mt-1" style={{ color: "#ffffff" }}>
+                            <p className="text-[11px] md:text-[12px] font-extrabold lowercase text-white leading-snug">{r.prompt_text}</p>
+                            <p className="text-[9px] md:text-[10px] font-extrabold lowercase mt-1" style={{ color: "#ffffff" }}>
                               {r.user_email} · {fmtDate(r.rejected_at)}
                             </p>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-semibold lowercase text-muted-foreground py-6 text-center">no rejected prompts</p>
+                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no rejected prompts</p>
                     )}
                   </div>
                 </div>

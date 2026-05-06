@@ -26,7 +26,7 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
           background: "#000000",
           color: "#ffffff",
           fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif",
-          fontWeight: 600,
+          fontWeight: 900,
           textTransform: "lowercase",
           letterSpacing: "-0.02em",
           marginTop: "-4vh",
@@ -40,6 +40,7 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
               height: "100%",
               background: "#ffe603",
               borderRadius: 2,
+              boxShadow: "0 0 10px #ffe603, 0 0 20px rgba(255,230,3,0.25)",
               animation: "facefox-bar 1.4s ease-in-out infinite",
               position: "absolute",
             }}

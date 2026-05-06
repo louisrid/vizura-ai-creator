@@ -182,7 +182,7 @@ const Auth = () => {
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-                  style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 600, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
+                  style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -204,7 +204,7 @@ const Auth = () => {
 
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-[2px] bg-border" />
-                  <span className="text-[11px] font-semibold lowercase text-white">or use email</span>
+                  <span className="text-[11px] font-extrabold lowercase text-white">or use email</span>
                   <div className="flex-1 h-[2px] bg-border" />
                 </div>
               </>
@@ -217,7 +217,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-semibold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }}
               disabled={submitting || googleLoading}
             />
@@ -229,7 +229,7 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-semibold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-2 border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "hsl(var(--card))", borderRadius: 6 }}
               disabled={submitting || googleLoading}
             />
@@ -238,7 +238,7 @@ const Auth = () => {
               onClick={handleEmailAuth}
               disabled={submitting || googleLoading}
               className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 600, textTransform: "lowercase", border: "none" }}
+              style={{ background: "#ffe603", color: "#000000", borderRadius: 6, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {submitting ? (
                 <>

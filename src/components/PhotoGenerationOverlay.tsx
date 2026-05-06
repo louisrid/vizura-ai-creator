@@ -104,7 +104,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
         >
           <div className="relative z-10 flex w-full max-w-xs md:max-w-md flex-col items-center gap-1.5" style={{ marginTop: 24 }}>
             <motion.p
-              className="text-center text-[2.2rem] font-[600] lowercase text-white mb-0.5"
+              className="text-center text-[2.2rem] font-[900] lowercase text-white mb-0.5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.34, delay: 0.18, ease: "easeInOut" }}
@@ -124,7 +124,7 @@ const PhotoGenerationOverlay = ({ open, phase, phrases, resultImageUrl }: PhotoG
             )}
 
             <motion.p
-              className="text-[14px] font-[600] lowercase text-white mt-5"
+              className="text-[14px] font-[900] lowercase text-white mt-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.45, delay: 0.9, ease: "easeInOut" }}

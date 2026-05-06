@@ -35,7 +35,7 @@ export const ProgressDots = ({ current, total }: { current: number; total: numbe
 /* ── big title ── */
 export const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode; delay?: number }) => (
   <h2
-    className="text-center text-[2rem] font-[600] lowercase leading-[1.1] tracking-tight"
+    className="text-center text-[2rem] font-[900] lowercase leading-[1.1] tracking-tight"
     style={{ color: "#ffffff" }}
   >
     {children}
@@ -45,7 +45,7 @@ export const BigTitle = ({ children, delay = 0.1 }: { children: React.ReactNode;
 /* ── subtitle ── */
 export const Subtitle = ({ children, delay = 0.2 }: { children: React.ReactNode; delay?: number }) => (
   <p
-    className="max-w-[18rem] text-center text-[0.94rem] font-semibold lowercase leading-snug"
+    className="max-w-[18rem] text-center text-[0.94rem] font-bold lowercase leading-snug"
     style={{ color: "#ffffff" }}
   >
     {children}
@@ -117,7 +117,7 @@ export const GoldButton = ({
       onClick(e);
     }}
     disabled={disabled}
-    className="relative mt-5 h-16 w-full border-2 text-xl font-[600] lowercase tracking-tight disabled:opacity-60 active:scale-[0.93]"
+    className="relative mt-5 h-16 w-full border-2 text-xl font-[900] lowercase tracking-tight disabled:opacity-60 active:scale-[0.93]"
     style={{
       background: "hsl(var(--neon-yellow))",
       borderColor: "hsl(var(--neon-yellow))",
@@ -137,7 +137,7 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
       e.stopPropagation();
       onClick(e);
     }}
-    className={`mt-2 text-[0.6rem] font-semibold lowercase underline underline-offset-4 ${className}`}
+    className={`mt-2 text-[0.6rem] font-bold lowercase underline underline-offset-4 ${className}`}
     style={{ color: "#ffffff" }}
   >
     {label}
@@ -147,7 +147,7 @@ export const DismissLink = ({ onClick, label = "maybe later", delay = 0.5, class
 /* ── swipe hint ── */
 export const SwipeHint = () => (
   <p
-    className="text-xs font-semibold lowercase"
+    className="text-xs font-bold lowercase"
     style={{ color: "#ffffff" }}
   >
     press arrow to continue
