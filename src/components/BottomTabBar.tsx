@@ -67,7 +67,7 @@ const BottomTabBar = () => {
           <button
             key={tab.path}
             onClick={() => { markLateralNav(); navigate(tab.path); }}
-            className="flex-1 flex flex-col items-center justify-center gap-0.5 py-6 transition-opacity"
+            className="flex-1 flex flex-col items-center justify-start gap-0.5 pt-3 pb-6 transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
