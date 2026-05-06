@@ -309,6 +309,7 @@ const Home = () => {
     if (loadedCountRef.current >= expectedImageCount && unblockRef.current) {
       unblockRef.current();
       unblockRef.current = null;
+      homeHasLoadedOnce = true;
     }
   }, [expectedImageCount]);
 
