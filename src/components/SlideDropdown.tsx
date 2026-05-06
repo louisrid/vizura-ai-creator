@@ -123,7 +123,7 @@ const SlideDropdown = ({ label, value, options, onChange }: SlideDropdownProps) 
             borderRadius: 6,
             border: "2px solid hsl(var(--border-mid))",
             backgroundColor: "#000000",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
+            
           }}
         >
           {options.map((opt, idx) => (
