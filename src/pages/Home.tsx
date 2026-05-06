@@ -379,7 +379,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "22px 18px 22px 14px",
+                padding: "14px 18px 14px 14px",
                 borderRadius: 6,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
