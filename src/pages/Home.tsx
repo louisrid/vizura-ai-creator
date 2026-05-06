@@ -453,16 +453,19 @@ const Home = () => {
                     <button
                       key={`empty-${i}`}
                       type="button"
-                      onClick={() => { if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator(); }}
+                      onClick={() => {
+                        if (!user) { navigate("/auth?redirect=/"); return; }
+                        if (isFirstEmpty && effectiveOnboardingComplete) handleOpenCreator();
+                      }}
                       className="overflow-hidden"
                       style={{
                         borderRadius: 6,
                         backgroundColor: "hsl(var(--card))",
-                        cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
+                        cursor: (!user || (isFirstEmpty && effectiveOnboardingComplete)) ? "pointer" : "default",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
-                        {isFirstEmpty ? (
+                        {(isFirstEmpty || !user) ? (
                           <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <div className="h-full w-full" />
