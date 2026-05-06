@@ -42,6 +42,10 @@ const isValidImageUrl = (url: string): boolean => {
   return true;
 };
 
+// Module-level flag — Home only triggers the yellow loading bar on its FIRST
+// mount per session. Subsequent visits (e.g. back from another page) skip it.
+let homeHasLoadedOnce = false;
+
 
 
 const Home = () => {
