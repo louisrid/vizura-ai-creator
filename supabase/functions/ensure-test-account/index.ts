@@ -105,7 +105,7 @@ serve(async (req) => {
     if (!creditRows?.length) {
       const { error } = await admin.from("credits").insert({
         user_id: userId,
-        balance: 1000,
+        balance: 10,
       });
       if (error) throw error;
     }
