@@ -27,6 +27,7 @@ import History from "./pages/History";
 import Info from "./pages/Info";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Video from "./pages/Video";
 import BottomTabBar from "@/components/BottomTabBar";
 import { incrementNavDepth, resetNavDepth } from "@/lib/navigation";
 import { fetchAndCacheOnboardingState, needsOnboardingRedirect, readCachedOnboardingState } from "@/lib/onboardingState";
@@ -532,6 +533,7 @@ const AppRoutes = () => {
             <Route path="/characters" element={<MyCharacters />} />
             <Route path="/characters/:id" element={<CharacterDetail />} />
             <Route path="/storage" element={<Storage />} />
+            <Route path="/video" element={<Video />} />
             <Route path="/top-ups" element={<TopUps />} />
             <Route path="/account" element={<Account />} />
             <Route path="/help" element={<Help />} />
