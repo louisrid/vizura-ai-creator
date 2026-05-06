@@ -397,8 +397,8 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-6">
-            <div className="flex items-center justify-between mb-3">
+          <section className="mb-4">
+            <div className="flex items-center justify-between mb-2">
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 6 }}>
                 <button
