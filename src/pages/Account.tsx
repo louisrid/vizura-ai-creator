@@ -52,10 +52,13 @@ const Account = () => {
   if (!user) return <SignInView signIn={signIn} signUp={signUp} redirectTo={redirectTo} />;
 
   const handleSignOut = async () => {
+    // Fire fade-in. App.tsx overlay timing: in 0-400ms, hold 400-550ms, out 550-950ms.
+    // Wait for screen to be fully black before signOut + navigate so the user
+    // never sees the Account page reappear mid-flow.
     window.dispatchEvent(new Event("facefox-signing-out"));
-    await new Promise(r => setTimeout(r, 400));
-    await signOut();
-    navigate("/");
+    await new Promise(r => setTimeout(r, 420));
+    try { await signOut(); } catch (err) { console.error("signOut failed:", err); }
+    navigate("/", { replace: true });
   };
 
   const initial = (user.email?.[0] || "?").toUpperCase();
