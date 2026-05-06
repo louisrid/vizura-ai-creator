@@ -41,12 +41,12 @@ const BottomTabBar = () => {
             key={tab.path}
             onClick={() => navigate(tab.path)}
             className="flex-1 flex flex-col items-center justify-center gap-1.5 py-4 transition-opacity"
-            style={{ color: active ? "#ffe603" : "rgba(255,255,255,0.5)" }}
+            style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
-            <Icon size={28} strokeWidth={2.75} />
-            <span className="text-[11px] font-[900] lowercase tracking-wide">{tab.label}</span>
+            <Icon size={26} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+            <span className="text-[10px] font-[900] lowercase tracking-wide">{tab.label}</span>
           </button>
         );
       })}
