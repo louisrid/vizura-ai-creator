@@ -64,7 +64,7 @@ const Account = () => {
     <div className="relative min-h-screen bg-background overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-[44px] pb-[200px] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-8 w-full">
-          <BackButton />
+          <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
 
@@ -220,7 +220,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
     <div className="relative min-h-screen bg-background overflow-hidden">
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-[44px] pb-[140px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-3 w-full">
-          <BackButton />
+          <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
         <div className="w-full p-5 space-y-3" style={{ borderRadius: 6, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
