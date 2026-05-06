@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -226,7 +226,7 @@ const ScrollToTop = () => {
   const location = useLocation();
   const isFirst = useRef(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isFirst.current) {
       resetNavDepth();
       isFirst.current = false;
