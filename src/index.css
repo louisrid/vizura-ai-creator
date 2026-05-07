@@ -118,7 +118,7 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'LTSuperior', -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 400;
     overflow: hidden;
     overscroll-behavior: contain;
