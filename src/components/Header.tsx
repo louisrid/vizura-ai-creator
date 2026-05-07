@@ -4,7 +4,7 @@ import { Gem, Settings, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import TopGradientBar from "@/components/TopGradientBar";
+
 import { markLateralNav } from "@/lib/navigation";
 
 const Header = () => {
@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid hsl(var(--border-mid))" }}>
-      <TopGradientBar />
+      
       <div className="relative">
         <div className={headerContainerClass}>
           <div className="flex items-center gap-[10px] md:gap-[12px]">
