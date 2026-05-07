@@ -36,8 +36,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[22px] md:text-[28px] text-white tracking-tight leading-none"
-                style={{ fontFamily: "'Roundo', sans-serif", fontWeight: 400 }}
+                className="text-[26px] md:text-[32px] text-white tracking-tight leading-none"
+                style={{ fontFamily: "'Roundo', sans-serif", fontWeight: 400, transform: "translateY(1px)" }}
               >
                 facebox
               </span>
