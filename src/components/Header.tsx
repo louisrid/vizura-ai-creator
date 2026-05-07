@@ -54,7 +54,7 @@ const Header = () => {
                 }}
                 aria-label="my account"
               >
-                <User size={14} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
+                <User size={16} strokeWidth={3.5} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
