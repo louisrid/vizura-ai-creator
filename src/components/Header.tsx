@@ -48,8 +48,8 @@ const Header = () => {
                 className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[34px] h-[34px] md:w-[40px] md:h-[40px]"
                 style={{
                   borderRadius: "50%",
-                  backgroundColor: "hsl(var(--card))",
-                  border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "hsl(var(--border-mid))"}`,
+                  backgroundColor: "#000000",
+                  border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
                   transform: "translateX(-1px)",
                 }}
                 aria-label="my account"
@@ -79,7 +79,7 @@ const Header = () => {
                 onClick={() => goOrAuth("/account")}
                 className="flex items-center justify-center w-[42px] h-[42px] md:w-[48px] md:h-[48px]"
                 style={{
-                  backgroundColor: "hsl(var(--card))",
+                  backgroundColor: "#000000",
                   border: "2px solid #ffffff",
                   borderRadius: 8,
                 }}
