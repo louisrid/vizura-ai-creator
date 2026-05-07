@@ -88,7 +88,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[5px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+    <div className="flex items-stretch rounded-[8px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -137,7 +137,7 @@ const HighlightedPromptArea = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-[5px] border-2 border-[hsl(var(--border-mid))] bg-card">
+    <div className="relative overflow-hidden rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -183,7 +183,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 5 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 8 }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -601,7 +601,7 @@ const Index = () => {
             left: charDropdownPos.left,
             width: charDropdownPos.width,
             zIndex: 10001,
-            borderRadius: 5,
+            borderRadius: 8,
             border: "2px solid hsl(var(--border-mid))",
             backgroundColor: "#000000",
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
@@ -701,7 +701,7 @@ const Index = () => {
               onPointerUp={handleCharPointerEnd}
               onPointerCancel={handleCharPointerEnd}
               className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-              style={{ borderRadius: 5, backgroundColor: "#ffffff", touchAction: "none" }}
+              style={{ borderRadius: 8, backgroundColor: "#ffffff", touchAction: "none" }}
             >
               {selectedChar?.face_image_url ? (
                 <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -720,7 +720,7 @@ const Index = () => {
           </div>
 
           <div className="w-[75%] mx-auto flex flex-col gap-5 mt-5" style={{ overflowAnchor: "none" }}>
-            <div className="relative rounded-[5px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -765,7 +765,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[5px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[8px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -795,7 +795,7 @@ const Index = () => {
                 onPointerUp={handleCharPointerEnd}
                 onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 5, backgroundColor: "#ffffff", touchAction: "none" }}
+                style={{ borderRadius: 8, backgroundColor: "#ffffff", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -813,7 +813,7 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="relative rounded-[5px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden mt-3">
+            <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden mt-3">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -863,7 +863,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[5px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[8px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
