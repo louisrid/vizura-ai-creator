@@ -1,6 +1,6 @@
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useLocation } from "react-router-dom";
-import { Gem, Settings, User } from "@/lib/icons";
+import { Gem, LinkExternal, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -63,7 +63,7 @@ const Header = () => {
             <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[38px] md:h-[44px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[42px] md:h-[48px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
@@ -85,7 +85,7 @@ const Header = () => {
                 }}
                 aria-label="settings"
               >
-                <Settings size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
+                <LinkExternal size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
