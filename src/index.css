@@ -7,9 +7,9 @@
 }
 
 @font-face {
-  font-family: 'Newake';
-  src: url('/fonts/NewakeFont-Demo.otf') format('opentype');
-  font-weight: 400;
+  font-family: 'LTSuperior';
+  src: url('/fonts/LTSuperior-SemiBold.ttf') format('truetype');
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -118,7 +118,7 @@
 
   html, body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Newake', -apple-system, 'SF Pro Display', system-ui, sans-serif;
+    font-family: 'LTSuperior', -apple-system, 'SF Pro Display', system-ui, sans-serif;
     font-weight: 400;
     overflow: hidden;
     overscroll-behavior: contain;
