@@ -168,7 +168,7 @@ const Auth = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-7 md:max-w-2xl md:px-[44px]">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[18px] pt-7 md:max-w-2xl md:px-[44px]">
         <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-3">
             <BackButton always />
