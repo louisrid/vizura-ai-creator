@@ -1,6 +1,6 @@
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useLocation } from "react-router-dom";
-import { Gem, Settings, User } from "lucide-react";
+import { Gem, Settings, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";

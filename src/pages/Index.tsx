@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useMemo, Fragment, useCallback } from "rea
 import { createPortal } from "react-dom";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Loader2, ChevronDown, Gem, User } from "lucide-react";
+import { Loader2, ChevronDown, Gem, User } from "@/lib/icons";
 import ImageZoomViewer from "@/components/ImageZoomViewer";
 import { toast } from "@/components/ui/sonner";
 import { motion, AnimatePresence } from "framer-motion";

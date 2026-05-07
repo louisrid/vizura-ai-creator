@@ -5,7 +5,7 @@ import InstructionalSlide from "@/components/InstructionalSlide";
 import type { SlideConfig } from "@/components/InstructionalSlide";
 import { mergeCachedOnboardingState } from "@/lib/onboardingState";
 import { useOnboarded } from "@/hooks/useOnboarded";
-import { RefreshCw, Gem, Loader2 } from "lucide-react";
+import { RefreshCw, Gem, Loader2 } from "@/lib/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { registerNavGuard, clearNavGuard } from "@/lib/navGuard";
 import { displayAge } from "@/lib/displayAge";

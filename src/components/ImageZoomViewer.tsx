@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download } from "lucide-react";
+import { Download } from "@/lib/icons";
 import { ReactNode, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import ModalCloseButton from "@/components/ModalCloseButton";

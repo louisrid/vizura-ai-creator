@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Download, Calendar, Wand2, User, Camera, Copy } from "lucide-react";
+import { Download, Calendar, Wand2, User, Camera, Copy } from "@/lib/icons";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
 import { useAuth } from "@/contexts/AuthContext";

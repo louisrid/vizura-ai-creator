@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Gem, ShoppingCart, Gift, Sparkles } from "lucide-react";
+import { Gem, ShoppingCart, Gift, Sparkles } from "@/lib/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
