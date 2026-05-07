@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "@/lib/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 import PageTitle from "@/components/PageTitle";

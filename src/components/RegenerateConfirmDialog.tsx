@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Gem } from "lucide-react";
+import { Loader2, Gem } from "@/lib/icons";
 import ModalCloseButton from "@/components/ModalCloseButton";
 
 interface RegenerateConfirmDialogProps {

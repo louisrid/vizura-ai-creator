@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { Sparkles } from "@/lib/icons";
 import PageTitle from "@/components/PageTitle";
 import BackButton from "@/components/BackButton";
 

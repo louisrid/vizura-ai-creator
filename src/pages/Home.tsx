@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { registerBlockingLoader } from "@/lib/startupSplash";
 
 import { displayAge } from "@/lib/displayAge";
-import { User, Copy, Download } from "lucide-react";
+import { User, Copy, Download } from "@/lib/icons";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Loader2, Trash2, Lock, RefreshCw, Gem, Check } from "lucide-react";
+import { Loader2, Trash2, Lock, RefreshCw, Gem, Check } from "@/lib/icons";
 import { useAppData } from "@/contexts/AppDataContext";
 import ModalCloseButton from "@/components/ModalCloseButton";
 import ImageZoomViewer from "@/components/ImageZoomViewer";

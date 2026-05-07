@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { displayAge } from "@/lib/displayAge";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Plus } from "lucide-react";
+import { Plus } from "@/lib/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import BackButton from "@/components/BackButton";

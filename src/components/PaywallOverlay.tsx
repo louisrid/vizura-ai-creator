@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from "@/lib/icons";
 import { supabase } from "@/integrations/supabase/client";
 import OverlayShell from "./overlay/OverlayShell";
 import {

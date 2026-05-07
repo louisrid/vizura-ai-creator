@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "@/lib/icons";
 
 const NEON_BLUE = "hsl(var(--neon-green))";
 const PURE_WHITE = "hsl(var(--foreground))";

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "@/lib/icons";
 export const LIGHT_BLUE = "hsl(195 100% 55%)";
 const PURE_WHITE = "#ffffff";
 

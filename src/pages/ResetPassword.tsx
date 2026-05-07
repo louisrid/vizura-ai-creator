@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { Lock, Loader2 } from "lucide-react";
+import { Lock, Loader2 } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import BackButton from "@/components/BackButton";
