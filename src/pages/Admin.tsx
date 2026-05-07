@@ -146,7 +146,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 40, height: 40, borderRadius: 6, backgroundColor: "#ffe603" }}
+          style={{ width: 40, height: 40, borderRadius: 6, backgroundColor: "#ffffff" }}
         >
           <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>
@@ -256,7 +256,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
-          style={{ width: 40, height: 40, borderRadius: 6, backgroundColor: "#ffe603" }}
+          style={{ width: 40, height: 40, borderRadius: 6, backgroundColor: "#ffffff" }}
         >
           <ArrowLeft size={14} strokeWidth={2.5} color="#000000" />
         </button>

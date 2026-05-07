@@ -440,7 +440,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-              style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+              style={{ borderRadius: 6, backgroundColor: "#ffffff" }}
               aria-label="go back"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -456,7 +456,7 @@ const CharacterDetail = () => {
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
                 <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 6 }} />
-                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 6, backgroundColor: "#ffe603" }}>
+                <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 6, backgroundColor: "#ffffff" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
               </div>
@@ -514,7 +514,7 @@ const CharacterDetail = () => {
             <button
               type="button"
               className="flex items-center justify-center w-[48px] h-[48px]"
-              style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+              style={{ borderRadius: 6, backgroundColor: "#ffffff" }}
               aria-label="go back"
             >
               <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -532,7 +532,7 @@ const CharacterDetail = () => {
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
                   <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 6 }} />
-                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 6, backgroundColor: "#ffe603" }}>
+                  <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 6, backgroundColor: "#ffffff" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
                 </div>

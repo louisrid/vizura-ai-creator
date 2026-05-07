@@ -701,7 +701,7 @@ const Index = () => {
               onPointerUp={handleCharPointerEnd}
               onPointerCancel={handleCharPointerEnd}
               className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-              style={{ borderRadius: 6, backgroundColor: "#ffe603", touchAction: "none" }}
+              style={{ borderRadius: 6, backgroundColor: "#ffffff", touchAction: "none" }}
             >
               {selectedChar?.face_image_url ? (
                 <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -795,7 +795,7 @@ const Index = () => {
                 onPointerUp={handleCharPointerEnd}
                 onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 6, backgroundColor: "#ffe603", touchAction: "none" }}
+                style={{ borderRadius: 6, backgroundColor: "#ffffff", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">

@@ -394,7 +394,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEmailAuth(); }}
             disabled={emailLoading}
             className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-            style={{ borderRadius: 6, background: '#ffe603', color: '#000000' }}
+            style={{ borderRadius: 6, background: '#ffffff', color: '#000000' }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "signing in..."}</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
           </button>
@@ -856,7 +856,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div> */}
         <div style={{ position: 'relative', zIndex: 1, fontSize: 86, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 12, marginBottom: 24 }}>facebox</div>
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffe603', border: 'none', borderRadius: 6, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffffff', border: 'none', borderRadius: 6, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
@@ -1289,7 +1289,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={handleEmailAuth}
               disabled={emailLoading || googleLoading}
               className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-              style={{ borderRadius: 6, background: '#ffe603', color: '#000000' }}
+              style={{ borderRadius: 6, background: '#ffffff', color: '#000000' }}
             >
               {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "signing in..."}</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
             </button>
