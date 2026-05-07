@@ -67,7 +67,7 @@ const Header = () => {
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
-                  borderRadius: 6,
+                  borderRadius: 3,
                 }}
                 aria-label="buy gems"
               >
@@ -81,7 +81,7 @@ const Header = () => {
                 style={{
                   backgroundColor: "hsl(var(--card))",
                   border: "2px solid hsl(var(--border-mid))",
-                  borderRadius: 6,
+                  borderRadius: 3,
                 }}
                 aria-label="settings"
               >
@@ -96,7 +96,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#ffffff",
                 border: "2px solid #ffffff",
-                borderRadius: 6,
+                borderRadius: 3,
               }}
               aria-label="log in"
             >
