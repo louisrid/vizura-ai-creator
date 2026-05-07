@@ -1,6 +1,6 @@
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useLocation } from "react-router-dom";
-import { Gem, LinkExternal, User } from "@/lib/icons";
+import { Gem, Settings, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -85,7 +85,7 @@ const Header = () => {
                 }}
                 aria-label="settings"
               >
-                <LinkExternal size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
+                <Settings size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
