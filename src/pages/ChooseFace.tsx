@@ -825,7 +825,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
                   className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 6, backgroundColor: "#ffe603" }}
+                  style={{ borderRadius: 6, backgroundColor: "#ffffff" }}
                   aria-label="go back"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
@@ -883,7 +883,7 @@ const ChooseFace = () => {
                     className="flex h-14 md:h-16 w-full items-center justify-center gap-2 text-lg md:text-xl font-[900] lowercase transition-none disabled:cursor-not-allowed"
                     style={{
                       borderRadius: 6,
-                      backgroundColor: selectedIndex !== null ? "#ffe603" : "hsl(var(--card))",
+                      backgroundColor: selectedIndex !== null ? "#ffffff" : "hsl(var(--card))",
                       color: selectedIndex !== null ? "#000000" : "#ffffff",
                     }}
                   >
@@ -978,7 +978,7 @@ const ChooseFace = () => {
                   type="button"
                   onClick={() => void generateFaces()}
                   className="h-10 px-4 text-base font-[900] lowercase"
-                  style={{ backgroundColor: "#ffe603", color: "#000000", borderRadius: 6 }}
+                  style={{ backgroundColor: "#ffffff", color: "#000000", borderRadius: 6 }}
                 >
                   try again
                 </button>
