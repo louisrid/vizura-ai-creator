@@ -25,6 +25,7 @@ import {
   Plus as UiPlus,
   RefreshCw01 as UiRefresh,
   Settings01 as UiSettings,
+  LinkExternal01 as UiLinkExternal,
   ShoppingCart01 as UiShoppingCart,
   Stars02 as UiSparkles,
   Trash01 as UiTrash,
@@ -85,6 +86,7 @@ export const Lock = wrap(UiLock);
 export const Plus = wrap(UiPlus);
 export const RefreshCw = wrap(UiRefresh);
 export const Settings = wrap(UiSettings);
+export const LinkExternal = wrap(UiLinkExternal);
 export const ShoppingCart = wrap(UiShoppingCart);
 export const Sparkles = wrap(UiSparkles);
 export const Trash2 = wrap(UiTrash);
