@@ -335,7 +335,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[18px] pt-[50px] pb-[140px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[14px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[42px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[14px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -524,7 +524,7 @@ const Home = () => {
 
         {/* Desktop layout */}
         <main className="hidden md:block relative z-[1] w-full max-w-3xl mx-auto px-[44px] pt-[62px] pb-[140px]">
-          <h1 className="flex w-full flex-col items-start text-[56px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[8px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[53px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[8px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[10px] whitespace-nowrap text-left">
               <span>making today?</span>
