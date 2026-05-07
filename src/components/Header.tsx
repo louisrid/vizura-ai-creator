@@ -4,7 +4,7 @@ import { Gem, Settings, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import TopGradientBar from "@/components/TopGradientBar";
+
 import { markLateralNav } from "@/lib/navigation";
 
 const Header = () => {
@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid hsl(var(--border-mid))" }}>
-      <TopGradientBar />
+      
       <div className="relative">
         <div className={headerContainerClass}>
           <div className="flex items-center gap-[10px] md:gap-[12px]">
@@ -67,7 +67,7 @@ const Header = () => {
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
-                  borderRadius: 3,
+                  borderRadius: 5,
                 }}
                 aria-label="buy gems"
               >
@@ -81,7 +81,7 @@ const Header = () => {
                 style={{
                   backgroundColor: "hsl(var(--card))",
                   border: "2px solid hsl(var(--border-mid))",
-                  borderRadius: 3,
+                  borderRadius: 5,
                 }}
                 aria-label="settings"
               >
@@ -96,7 +96,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#ffffff",
                 border: "2px solid #ffffff",
-                borderRadius: 3,
+                borderRadius: 5,
               }}
               aria-label="log in"
             >

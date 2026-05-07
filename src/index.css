@@ -20,7 +20,7 @@
 
 @layer base {
   :root {
-    --radius: 3px;
+    --radius: 5px;
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 

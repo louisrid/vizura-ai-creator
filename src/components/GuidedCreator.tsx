@@ -86,7 +86,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
         disabled={disabled}
         className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
         style={{
-          borderRadius: 3,
+          borderRadius: 5,
           backgroundColor: isForward ? fillColor : "#000000",
           border: isForward ? "none" : `2px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
@@ -125,7 +125,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
     }
     className="inline-flex items-center justify-center h-[46px] md:h-[54px] text-[14px] md:text-[16px] w-[110px] md:w-[132px]"
     style={{
-      borderRadius: 3,
+      borderRadius: 5,
       padding: 0,
       fontWeight: 900,
       textTransform: "lowercase",
@@ -346,12 +346,12 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
            {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
         </h2>
 
-        <div className="mt-8 w-full rounded-[3px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+        <div className="mt-8 w-full rounded-[5px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-            style={{ background: Y, color: "#000000", borderRadius: 3, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+            style={{ background: Y, color: "#000000", borderRadius: 5, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
               <>
@@ -377,7 +377,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-            style={{ borderRadius: 3, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 5, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
             disabled={googleLoading}
           />
           <input
@@ -386,7 +386,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-            style={{ borderRadius: 3, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 5, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
             disabled={googleLoading}
           />
 
@@ -394,7 +394,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEmailAuth(); }}
             disabled={emailLoading}
             className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-            style={{ borderRadius: 3, background: '#ffffff', color: '#000000' }}
+            style={{ borderRadius: 5, background: '#ffffff', color: '#000000' }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "signing in..."}</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
           </button>
@@ -856,14 +856,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         </div> */}
         <div style={{ position: 'relative', zIndex: 1, fontSize: 86, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 12, marginBottom: 24 }}>facebox</div>
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffffff', border: 'none', borderRadius: 3, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffffff', border: 'none', borderRadius: 5, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
             <button type="button" onClick={(e) => {
               e.preventDefault(); e.stopPropagation();
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 3, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#000000', border: '2px solid #ffe603', borderRadius: 5, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -901,7 +901,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                       <div className="relative">
                         <div className="px-4 py-2 text-[12px] md:text-[14px] font-[900] lowercase leading-snug"
                           style={{
-                            borderRadius: 3,
+                            borderRadius: 5,
                             backgroundColor: bgColor,
                             color: isMiddle ? "#ffffff" : "#000000",
                             border: "none",
@@ -946,14 +946,14 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
                 className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[22px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-                style={{ borderRadius: 3, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+                style={{ borderRadius: 5, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               />
               <motion.button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); randomiseName(); }}
                 whileTap={{ scale: 0.85, rotate: 180 }}
                 className="flex h-[56px] w-[56px] md:h-[66px] md:w-[66px] shrink-0 items-center justify-center text-black transition-opacity duration-150"
-                style={{ borderRadius: 3, backgroundColor: Y }}
+                style={{ borderRadius: 5, backgroundColor: Y }}
               >
                 <RefreshCw size={20} strokeWidth={2.5} />
               </motion.button>
@@ -1004,7 +1004,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }}
                 className="w-full max-w-[17rem] h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-1.5 mx-auto"
-                style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 3, border: "2px solid #00e0ff" }}
+                style={{ backgroundColor: "#050a10", color: "#ffffff", borderRadius: 5, border: "2px solid #00e0ff" }}
               >
                 {showGemCost ? (<>create <span style={{ color: "#00e0ff" }}>•</span> 50 <Gem size={15} strokeWidth={2.5} style={{ color: "#00e0ff" }} /></>) : "create 🖌️"}
               </button>
@@ -1044,7 +1044,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
             {Array.from({ length: dashCount }).map((_, i) => (
               <div key={i} className="transition-all duration-300" style={{
-                width: 10, height: 10, borderRadius: 3, flexShrink: 0,
+                width: 10, height: 10, borderRadius: 5, flexShrink: 0,
                 background: i <= dashActive ? Y : "rgba(250,204,21,0.30)",
               }} />
             ))}
@@ -1241,12 +1241,12 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
           </h2>
-          <div className="mt-8 w-full rounded-[3px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="mt-8 w-full rounded-[5px] border-2 border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}
               className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: Y, color: "#000000", borderRadius: 3, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: Y, color: "#000000", borderRadius: 5, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
             >
               {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
                 <>
@@ -1272,7 +1272,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onChange={(e) => setEmail(e.target.value)}
               onClick={(e) => e.stopPropagation()}
               className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-              style={{ borderRadius: 3, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+              style={{ borderRadius: 5, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
             <input
@@ -1281,7 +1281,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-              style={{ borderRadius: 3, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+              style={{ borderRadius: 5, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
 
@@ -1289,7 +1289,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={handleEmailAuth}
               disabled={emailLoading || googleLoading}
               className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-              style={{ borderRadius: 3, background: '#ffffff', color: '#000000' }}
+              style={{ borderRadius: 5, background: '#ffffff', color: '#000000' }}
             >
               {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "signing in..."}</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
             </button>
