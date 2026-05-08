@@ -43,7 +43,7 @@ const RegenerateConfirmDialog = ({
             transition={{ duration: 0.15, ease: "easeOut" }}
             className="relative w-full max-w-sm"
             style={{
-              backgroundColor: "#000000",
+              backgroundColor: "hsl(var(--card))",
               borderRadius: 8,
               border: "3px solid hsl(var(--border-mid))",
               padding: "28px 24px 24px",
