@@ -670,7 +670,14 @@ const Index = () => {
   ) : null;
 
   return (
-    <div className="relative min-h-screen bg-background overflow-x-hidden">
+    <div
+      className="relative min-h-screen bg-background overflow-x-hidden"
+      style={{
+        backgroundImage: "url('/bg-pattern.png')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "auto",
+      }}
+    >
       <PhotoGenerationOverlay
         open={photoOverlayPhase !== "hidden"}
         phase={photoOverlayPhase === "hidden" ? "loading" : photoOverlayPhase}
