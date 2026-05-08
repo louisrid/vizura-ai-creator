@@ -171,7 +171,7 @@ const Auth = () => {
     <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-7 md:max-w-2xl md:px-[44px]">
         <div className="w-full md:max-w-md md:mx-auto">
-          <div className="mb-7 flex items-center gap-6">
+          <div className="mb-7 flex items-center gap-5">
             <BackButton always />
             <PageTitle className="mb-0">log in</PageTitle>
           </div>
