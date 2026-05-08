@@ -150,7 +150,7 @@ const TopUps = () => {
                       <Gift size={20} strokeWidth={2.5} className="text-white" />
                       <span className="text-lg font-[900] lowercase text-white">welcome gift!</span>
                     </div>
-                    <p className="text-[13px] font-[800] lowercase text-white/80 leading-tight mb-3">
+                    <p className="text-[13px] font-[800] lowercase text-white leading-tight mb-3">
                       claim your free gems to get started
                     </p>
                     <button

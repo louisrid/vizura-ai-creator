@@ -286,7 +286,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <button
             type="button"
             onClick={() => setIsSignUpMode((v) => !v)}
-            className="w-full text-center text-[11px] font-extrabold lowercase text-muted-foreground hover:text-muted-foreground transition-colors"
+            className="w-full text-center text-[11px] font-extrabold lowercase text-white transition-colors"
           >
             {isSignUpMode ? "already have an account? sign in" : "no account? sign up"}
           </button>

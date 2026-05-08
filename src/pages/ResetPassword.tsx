@@ -64,7 +64,7 @@ const ResetPassword = () => {
             <div className="border-[2px] border-[hsl(var(--border-mid))] rounded-[8px] p-4 md:p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <div className="border-[2px] border-destructive/30 bg-destructive/5 p-3 text-destructive font-extrabold lowercase rounded-[8px] text-xs md:text-sm">
+                  <div className="border-[2px] border-destructive bg-[#1a0808] p-3 text-destructive font-extrabold lowercase rounded-[8px] text-xs md:text-sm">
                     {error}
                   </div>
                 )}
