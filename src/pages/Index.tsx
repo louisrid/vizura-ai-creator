@@ -681,7 +681,7 @@ const Index = () => {
 
       {/* Mobile layout */}
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[160px] md:hidden">
-        <div className="flex items-center gap-6 mb-11">
+        <div className="flex items-center gap-5 mb-11">
           <BackButton always />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
@@ -773,7 +773,7 @@ const Index = () => {
 
       {/* Desktop layout — two-column */}
       <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[44px] pt-[44px] pb-[140px]">
-        <div className="flex items-center gap-6 mb-12">
+        <div className="flex items-center gap-5 mb-12">
           <BackButton always />
           <PageTitle className="mb-0">create photo</PageTitle>
         </div>
