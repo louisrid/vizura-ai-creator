@@ -323,7 +323,7 @@ const Home = () => {
   const pageHidden = showGuided || (!autoOpenEvaluated && !user && !hasCachedUser);
 
   return (
-    <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : "bg-background"}`}>
+    <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : ""}`}>
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
