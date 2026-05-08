@@ -21,7 +21,7 @@
 @layer base {
   :root {
     --radius: 8px;
-    --background: 0 0% 4%;
+    --background: 0 0% 7%;
     --foreground: 0 0% 100%;
 
     /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
