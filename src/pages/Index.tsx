@@ -719,7 +719,7 @@ const Index = () => {
             </button>
           </div>
 
-          <div className="w-[75%] mx-auto flex flex-col gap-5 mt-5" style={{ overflowAnchor: "none" }}>
+          <div className="w-[92%] mx-auto flex flex-col gap-5 mt-3" style={{ overflowAnchor: "none" }}>
             <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
@@ -780,7 +780,7 @@ const Index = () => {
 
         <div className="grid grid-cols-12 gap-8">
           {/* Left: preview + character selector */}
-          <div className="col-span-5 flex flex-col gap-5">
+          <div className="col-span-7 flex flex-col gap-5">
             <div className="relative" ref={dropdownRef2}>
               <button
                 type="button"
@@ -813,7 +813,7 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden mt-3">
+            <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -834,7 +834,7 @@ const Index = () => {
           </div>
 
           {/* Right: controls */}
-          <div className="col-span-7 flex flex-col gap-6">
+          <div className="col-span-5 flex flex-col gap-6">
             <ExpressionDropdown value={expression} onChange={(v) => { setExpression(v); sessionStorage.setItem("facefox_photo_expression", v); }} />
 
             <div className="flex gap-4" ref={ratioRowRef}>
