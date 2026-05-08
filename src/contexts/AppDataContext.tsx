@@ -140,14 +140,16 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
         .order("created_at", { ascending: false })
         .limit(10);
 
-      if (!error && data) {
+      if (error) {
+        console.error("[AppData] characters fetch error:", error.message, error);
+      } else if (data) {
         setCharacters(data as CachedCharacter[]);
         writeLocal(CHARS_KEY, data);
         writeLocal(CACHE_USER_KEY, user.id);
         try { localStorage.setItem(CACHE_TIMESTAMP_KEY, String(Date.now())); } catch {}
       }
     } catch (err) {
-      console.error("refreshCharacters failed:", err);
+      console.error("[AppData] refreshCharacters threw:", err);
     } finally {
       window.clearTimeout(readyTimer);
       // Always flip ready, even on error — otherwise blocking loaders never release
@@ -177,14 +179,16 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
         .order("created_at", { ascending: false })
         .limit(20);
 
-      if (!error && data) {
+      if (error) {
+        console.error("[AppData] generations fetch error:", error.message, error);
+      } else if (data) {
         setGenerations(data as CachedGeneration[]);
         writeLocal(GENS_KEY, data);
         writeLocal(CACHE_USER_KEY, user.id);
         try { localStorage.setItem(CACHE_TIMESTAMP_KEY, String(Date.now())); } catch {}
       }
     } catch (err) {
-      console.error("refreshGenerations failed:", err);
+      console.error("[AppData] refreshGenerations threw:", err);
     } finally {
       window.clearTimeout(readyTimer);
       if (!releasedReady) setGenerationsReady(true);
@@ -268,6 +272,30 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       window.removeEventListener("facefox:generations-changed", handleGensChanged);
     };
   }, [refreshCharacters, refreshGenerations]);
+
+  // Self-heal cache: refetch on supabase auth events (SIGNED_IN, TOKEN_REFRESHED)
+  // and on window focus / tab visibility — covers cases where the initial fetch
+  // raced an unauthenticated session and silently returned nothing.
+  useEffect(() => {
+    if (!user) return;
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+        void refreshAll();
+      }
+    });
+
+    const handleFocus = () => { void refreshAll(); };
+    const handleVisibility = () => { if (document.visibilityState === "visible") void refreshAll(); };
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      sub.subscription.unsubscribe();
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [user?.id, refreshAll]);
 
   return (
     <AppDataContext.Provider
