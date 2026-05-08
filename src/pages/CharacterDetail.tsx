@@ -568,7 +568,7 @@ const CharacterDetail = () => {
                       <div
                         key={photo?.id ?? `dplaceholder-${i}`}
                         className="relative aspect-[3/4] w-full flex items-center justify-center cursor-pointer"
-                        style={{ borderRadius: 8, backgroundColor: "#000000" }}
+                        style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }}
                         onClick={() => { if (photo) setZoomedUrl(photo.url); }}
                       >
                         {photo && (
