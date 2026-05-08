@@ -43,7 +43,10 @@ const BottomTabBar = () => {
   const { user, loading: authLoading } = useAuth();
 
   if (authLoading) return null;
-  if (location.pathname === "/auth" || location.pathname === "/reset-password") return null;
+  if (location.pathname === "/reset-password") return null;
+
+  const isAuthPage = location.pathname === "/auth";
+  const authRedirect = isAuthPage ? new URLSearchParams(location.search).get("redirect") : null;
 
   const handleNav = (path: string) => {
     markLateralNav();
@@ -55,6 +58,11 @@ const BottomTabBar = () => {
   };
 
   const isActive = (path: string) => {
+    if (isAuthPage) {
+      if (!authRedirect) return false;
+      if (path === "/") return authRedirect === "/";
+      return authRedirect === path || authRedirect.startsWith(path + "/");
+    }
     if (path === "/") return location.pathname === "/";
     return location.pathname === path || location.pathname.startsWith(path + "/");
   };
