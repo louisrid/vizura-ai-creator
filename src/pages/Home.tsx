@@ -323,7 +323,7 @@ const Home = () => {
   const pageHidden = showGuided || (!autoOpenEvaluated && !user && !hasCachedUser);
 
   return (
-    <div className={`relative min-h-[calc(100dvh-57px)] overflow-hidden ${pageHidden ? "bg-nav" : ""}`}>
+    <div className="relative min-h-[calc(100dvh-57px)] overflow-hidden">
       <GuidedCreator
         open={showGuided}
         onComplete={handleGuidedComplete}
@@ -703,14 +703,6 @@ const Home = () => {
             </div>
           </section>
         </main>
-
-        {!user && (
-          <div
-            className="absolute inset-0 z-[100]"
-            style={{ backgroundColor: "#000000" }}
-            aria-hidden="true"
-          />
-        )}
       </div>}
 
       <ImageZoomViewer
