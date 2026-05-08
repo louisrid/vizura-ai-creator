@@ -139,7 +139,7 @@ const NavArrow = ({
       style={{
         borderRadius: 8,
         backgroundColor: isForward ? Y : "hsl(var(--card))",
-        border: isForward ? "none" : `3px solid ${Y}`,
+        border: isForward ? "none" : `2px solid ${Y}`,
         outline: "none",
         padding: 0,
         cursor: "pointer",

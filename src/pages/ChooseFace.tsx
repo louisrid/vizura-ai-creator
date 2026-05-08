@@ -859,7 +859,7 @@ const ChooseFace = () => {
                         className="relative aspect-[3/4] w-full transition-all duration-300 ease-out"
                         style={{
                           borderRadius: 8,
-                          border: selectedIndex === i ? "3px solid #ffe603" : "3px solid transparent",
+                          border: selectedIndex === i ? "2px solid #ffe603" : "2px solid transparent",
                           overflow: "hidden",
                         }}
                       >
@@ -915,7 +915,7 @@ const ChooseFace = () => {
                       style={{
                         borderRadius: 8,
                         backgroundColor: "#050a10",
-                        border: "3px solid #00e0ff",
+                        border: "2px solid #00e0ff",
                         color: "#ffffff",
                       }}
                     >
@@ -956,7 +956,7 @@ const ChooseFace = () => {
                           {traitItems.map((t) => (
                             <div key={t.label} className="rounded-[8px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                               <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[3px] border-[hsl(var(--border-mid))] rounded-[8px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "6px 12px" }}>{t.value}</span>
+                              <span className={`inline-block font-[800] text-white leading-none text-[11px] border-[2px] border-[hsl(var(--border-mid))] rounded-[8px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "6px 12px" }}>{t.value}</span>
                             </div>
                           ))}
                         </div>
