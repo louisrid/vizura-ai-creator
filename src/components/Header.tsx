@@ -29,7 +29,7 @@ const Header = () => {
   const headerContainerClass = "mx-auto flex h-[88px] w-full max-w-lg items-center justify-between px-[20px] md:h-[100px] md:max-w-3xl md:px-[36px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid #ffe603" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "1.5px solid #ffe603" }}>
       
       <div className="relative">
         <div className={headerContainerClass}>
@@ -49,7 +49,7 @@ const Header = () => {
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
-                  border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
+                  border: `1.5px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
                   transform: "translateX(2px)",
                 }}
                 aria-label="my account"
@@ -66,7 +66,7 @@ const Header = () => {
                 className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[38px] md:h-[44px]"
                 style={{
                   backgroundColor: "#050a10",
-                  border: "2px solid #00e0ff",
+                  border: "1.5px solid #00e0ff",
                   borderRadius: 8,
                 }}
                 aria-label="buy gems"
@@ -80,7 +80,7 @@ const Header = () => {
                 className="flex items-center justify-center w-[38px] h-[38px] md:w-[44px] md:h-[44px]"
                 style={{
                   backgroundColor: "#000000",
-                  border: "2px solid #ffe603",
+                  border: "1.5px solid #ffe603",
                   borderRadius: 8,
                 }}
                 aria-label="settings"
@@ -95,7 +95,7 @@ const Header = () => {
               className="flex items-center justify-center px-4 h-[34px] md:h-[40px]"
               style={{
                 backgroundColor: "#ffffff",
-                border: "2px solid #ffffff",
+                border: "1.5px solid #ffffff",
                 borderRadius: 8,
               }}
               aria-label="log in"
