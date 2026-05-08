@@ -62,7 +62,7 @@ const MyCharacters = () => {
 
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[20px] md:px-[44px] pt-[44px] pb-[140px]">
         <div className="flex items-center gap-4 mb-11">
-          <BackButton />
+          <BackButton always />
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
 
