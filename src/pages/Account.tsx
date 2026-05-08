@@ -255,7 +255,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 8, backgroundColor: "#000000" }}
             disabled={submitting || googleLoading}
           />
@@ -267,7 +267,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 8, backgroundColor: "#000000" }}
             disabled={submitting || googleLoading}
           />

@@ -12,10 +12,6 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
       style={{
         zIndex: 99999,
         backgroundColor: "#000000",
-        backgroundImage: "url('/site-bg-pattern.png'), url('/site-bg-pattern.png')",
-        backgroundRepeat: "repeat",
-        backgroundSize: "360px auto, 360px auto",
-        backgroundPosition: "top center, top center",
       }}
       role="status"
       aria-live="polite"
