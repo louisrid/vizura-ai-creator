@@ -397,7 +397,7 @@ const CharacterDetail = () => {
     return (
       <div
         className="relative aspect-[3/4] w-full flex items-center justify-center hover-lift cursor-pointer"
-        style={{ borderRadius: 8, backgroundColor: "#000000" }}
+        style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }}
         onClick={() => { if (isValidImg(url) && !showSpinner && !isRevealing) setZoomedUrl(url!); }}
       >
         {showSpinner || isRevealing ? (
