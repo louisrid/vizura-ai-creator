@@ -719,7 +719,7 @@ const Index = () => {
             </button>
           </div>
 
-          <div className="w-[92%] mx-auto flex flex-col gap-5 mt-3" style={{ overflowAnchor: "none" }}>
+          <div className="flex flex-col gap-5 mt-3" style={{ overflowAnchor: "none" }}>
             <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
