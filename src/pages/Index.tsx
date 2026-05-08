@@ -765,7 +765,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[8px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[8px] border-[3px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -863,7 +863,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[8px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[8px] border-[3px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}

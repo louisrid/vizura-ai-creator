@@ -87,7 +87,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-2">
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
+            className="w-full rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-xs font-[800] lowercase text-white">subscription</span>
@@ -103,7 +103,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
+            className="w-full rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-xs font-[800] lowercase text-white">change password</span>
@@ -113,7 +113,7 @@ const Account = () => {
           {/* Admin button */}
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
             >
               admin
