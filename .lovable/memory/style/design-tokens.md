@@ -1,13 +1,19 @@
+---
+name: design-tokens
+description: Updated grey color tokens after 10% darkening sitewide
+type: design
+---
+
 # Memory: style/design-tokens
 Updated: now
 
 The application uses a unified design system with a 10px squircle corner radius and 2px border thickness. 
 
-**Two standardised greys sitewide (no other grey values):**
-- **Border grey**: `hsl(var(--border-mid))` = `0 0% 22%` (#383838) — all borders, dividers, button outlines, user icon. NEVER used for fills or text.
-- **Card/fill grey**: `hsl(var(--card))` = `0 0% 6%` (#0f0f0f) — all card backgrounds and container fills.
-- **Dark fill grey**: `hsl(0 0% 10%)` (#1a1a1a) — dropdown menus, dividers in dropdowns, skeleton loaders, empty character/photo slots.
-- Rule: borders use border-mid only. Fills use card (6%) or dark fill (10%). Never mix tiers.
+**Standardised greys sitewide (no other grey values):**
+- **Border grey**: `hsl(var(--border-mid))` = `0 0% 4%` (#0a0a0a) — all borders, dividers, button outlines, user icon. NEVER used for fills or text.
+- **Card/fill grey**: `hsl(var(--card))` = `0 0% 0%` (#000000) — all card backgrounds and container fills.
+- **Dark fill grey**: `hsl(0 0% 0%)` (#000000) — dropdown menus, dividers in dropdowns, skeleton loaders, empty character/photo slots.
+- Rule: borders use border-mid only. Fills use card (0%) or dark fill (0%). Never mix tiers.
 - `--muted-foreground` is `0 0% 100%` (white) — no grey text anywhere
 - All text is pure white (#ffffff) or pure black (#000000), never grey
 
