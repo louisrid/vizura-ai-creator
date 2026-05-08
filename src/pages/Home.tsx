@@ -520,6 +520,7 @@ const Home = () => {
               })}
             </div>
           </section>
+          </div>
         </main>
 
         {/* Desktop layout */}
