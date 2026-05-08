@@ -181,8 +181,9 @@
 }
 
 @keyframes facefox-bar {
-  0% { left: -40%; }
-  100% { left: 100%; }
+  0%   { left: 0%; }
+  50%  { left: 60%; }
+  100% { left: 0%; }
 }
 
 @keyframes facefox-dot {
