@@ -1,5 +1,6 @@
 import { forwardRef, useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import foxEmojiImg from "@/assets/fox-emoji.png";
+import GoogleIcon from "@/components/GoogleIcon";
 import { createPortal } from "react-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { motion, AnimatePresence } from "framer-motion";

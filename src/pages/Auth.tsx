@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
+import GoogleIcon from "@/components/GoogleIcon";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowRight, Loader2 } from "@/lib/icons";

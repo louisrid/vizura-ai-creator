@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { ArrowRight, Loader2, Eye, ChevronRight } from "@/lib/icons";
+import GoogleIcon from "@/components/GoogleIcon";
 
 import BackButton from "@/components/BackButton";
 import PageTitle from "@/components/PageTitle";
