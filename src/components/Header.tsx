@@ -50,7 +50,7 @@ const Header = () => {
                   borderRadius: "50%",
                   backgroundColor: "#000000",
                   border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
-                  transform: "translateX(-1px)",
+                  transform: "translateX(2px)",
                 }}
                 aria-label="my account"
               >
