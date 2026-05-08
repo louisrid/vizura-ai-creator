@@ -310,7 +310,7 @@ const CharacterDetail = () => {
   const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
   if (loading || (authLoading && !hasCachedUser)) {
     return (
-      <div className="relative min-h-screen bg-background overflow-hidden">
+      <div className="relative min-h-screen overflow-hidden">
         <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[20px] md:px-[44px] pt-[44px] pb-[200px]">
           <div className="flex items-center gap-3 mb-11">
             <BackButton />
@@ -322,7 +322,7 @@ const CharacterDetail = () => {
 
   if (!character) {
     return (
-      <div className="relative min-h-screen bg-background overflow-hidden">
+      <div className="relative min-h-screen overflow-hidden">
         <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[20px] md:px-[44px] pt-[44px] pb-[200px]">
           <div className="flex items-center gap-3 mb-11">
             <BackButton />
@@ -431,7 +431,7 @@ const CharacterDetail = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
 
       {/* Mobile layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>

@@ -37,7 +37,7 @@ const MyCharacters = () => {
       .slice(0, 12) as Character[];
   }, [cachedChars]);
 
-  if (!authLoading && !user) return <div className="min-h-screen bg-background" />;
+  if (!authLoading && !user) return <div className="min-h-screen" />;
 
   const handleCreateCharacter = () => {
     sessionStorage.removeItem("facefox_creator_dismissed");
@@ -58,7 +58,7 @@ const MyCharacters = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
 
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[20px] md:px-[44px] pt-[44px] pb-[140px]">
         <div className="flex items-center gap-4 mb-11">

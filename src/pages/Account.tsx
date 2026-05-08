@@ -31,7 +31,7 @@ const Account = () => {
   const hasCachedUser = typeof window !== "undefined" && !!localStorage.getItem("facefox_cached_user");
   if (authLoading && !hasCachedUser) {
     return (
-      <div className="relative min-h-screen bg-background overflow-hidden">
+      <div className="relative min-h-screen overflow-hidden">
         <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[140px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-11 w-full">
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
@@ -65,7 +65,7 @@ const Account = () => {
   const initial = (user.email?.[0] || "?").toUpperCase();
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[200px] flex flex-col items-center">
         <div className="flex items-center gap-4 mb-8 w-full">
           <BackButton always />
@@ -221,7 +221,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
   };
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[44px] pb-[140px] flex flex-col items-center">
         <div className="mb-4 flex items-center gap-4 w-full">
           <BackButton always />

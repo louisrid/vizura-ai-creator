@@ -548,7 +548,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[20px] md:px-[44px] pt-[44px] pb-[140px]">
 
