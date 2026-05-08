@@ -335,11 +335,11 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[40px] pb-[100px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[38px] font-[900] lowercase leading-[0.94] tracking-[-1.4px] text-white mb-0 mt-[18px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[18px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
-              <span aria-hidden="true" className="shrink-0">✨</span>
+              <span aria-hidden="true" className="shrink-0" style={{ opacity: 1, filter: 'none' }}>✨</span>
             </span>
           </h1>
 
@@ -354,7 +354,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffffff",
-                padding: "10px 12px 10px 16px",
+                padding: "18px 12px 18px 16px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
@@ -378,7 +378,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "10px 16px 10px 12px",
+                padding: "18px 16px 18px 12px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
