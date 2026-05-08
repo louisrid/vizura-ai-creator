@@ -191,7 +191,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => { if (!hidden) setExpanded(img); }}
-                  className="group relative rounded-t-[6px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
+                  className="group relative rounded-t-[8px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img
@@ -207,7 +207,7 @@ const Storage = () => {
                   href={img.url}
                   download={`facefox-${img.id}.png`}
                   target="_blank"
-                  className="flex items-center justify-center gap-1.5 rounded-b-[6px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center gap-1.5 rounded-b-[8px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
                   style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
@@ -281,7 +281,7 @@ const Storage = () => {
               </a>
               <Button
                 variant="outline"
-                className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive/30 bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
                 onClick={() => handleDelete(expanded)}
               >
                 <Trash2 size={12} strokeWidth={2.5} />
