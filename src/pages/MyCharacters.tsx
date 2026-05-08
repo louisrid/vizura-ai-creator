@@ -110,11 +110,11 @@ const MyCharacters = () => {
                     </div>
                   )}
                 </AspectRatio>
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-5">
-                  <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-tight truncate">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black to-transparent px-2 pb-2 pt-3">
+                  <span className="block text-[11px] md:text-[13px] font-[900] lowercase text-white leading-none truncate">
                     {char.name || "unnamed"}
                   </span>
-                  <span className="block text-[9px] md:text-[11px] font-[800] lowercase text-white">
+                  <span className="block text-[9px] md:text-[11px] font-[800] lowercase text-white mt-0.5">
                     age {displayAge(char.id, char.age)}
                   </span>
                 </div>
