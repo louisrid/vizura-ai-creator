@@ -915,7 +915,7 @@ const ChooseFace = () => {
                       style={{
                         borderRadius: 8,
                         backgroundColor: "#050a10",
-                        border: "2px solid #00e0ff",
+                        border: "3px solid #00e0ff",
                         color: "#ffffff",
                       }}
                     >

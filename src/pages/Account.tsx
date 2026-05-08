@@ -129,7 +129,7 @@ const Account = () => {
           style={{
             color: "#ffffff",
             backgroundColor: "#1a0505",
-            border: "2px solid #ff4444",
+            border: "3px solid #ff4444",
             borderRadius: 8,
           }}
           onClick={handleSignOut}
@@ -227,7 +227,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))", border: "3px solid hsl(var(--border-mid))" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}

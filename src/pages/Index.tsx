@@ -183,7 +183,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 8 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "3px solid #00e0ff", borderRadius: 8 }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -602,7 +602,7 @@ const Index = () => {
             width: charDropdownPos.width,
             zIndex: 10001,
             borderRadius: 8,
-            border: "2px solid hsl(var(--border-mid))",
+            border: "3px solid hsl(var(--border-mid))",
             backgroundColor: "#000000",
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
           }}
@@ -656,7 +656,7 @@ const Index = () => {
                   touchAction: "none",
                 }}
               >
-                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
+                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "3px solid rgba(250,204,21,0.3)" }}>
                   <span className="text-xs">+</span>
                 </div>
                 <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
