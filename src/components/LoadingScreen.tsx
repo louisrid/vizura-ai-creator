@@ -12,10 +12,10 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
       style={{
         zIndex: 99999,
         backgroundColor: "#000000",
-        backgroundImage: "url('/site-bg-pattern.png')",
+        backgroundImage: "url('/site-bg-pattern.png'), url('/site-bg-pattern.png')",
         backgroundRepeat: "repeat",
-        backgroundSize: "360px auto",
-        backgroundPosition: "top center",
+        backgroundSize: "360px auto, 360px auto",
+        backgroundPosition: "top center, top center",
       }}
       role="status"
       aria-live="polite"
@@ -39,7 +39,7 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "hsl(0 0% 28%)", borderRadius: 2, position: "relative" }}>
+        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "hsl(var(--card))", borderRadius: 2, position: "relative" }}>
           <div
             style={{
               width: "40%",
