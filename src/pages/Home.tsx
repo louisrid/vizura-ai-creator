@@ -344,7 +344,7 @@ const Home = () => {
           </h1>
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-3 mt-[20px]">
+          <div className="flex gap-2 mb-3 mt-[28px]">
             {/* Create Character - solid yellow */}
             <button
               type="button"
