@@ -26,7 +26,7 @@ const Header = () => {
     navigate(path);
   };
 
-  const headerContainerClass = "mx-auto flex w-full max-w-lg items-center justify-between px-[20px] pt-[46px] pb-4 md:max-w-3xl md:px-[36px] md:pt-[50px] md:pb-5 min-h-[96px] md:min-h-[108px]";
+  const headerContainerClass = "mx-auto flex w-full max-w-lg items-center justify-between px-[20px] pt-[36px] pb-[14px] md:max-w-3xl md:px-[36px] md:pt-[40px] md:pb-[16px] min-h-[86px] md:min-h-[96px]";
 
   return (
     <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #ffffff" }}>
@@ -36,8 +36,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[23px] md:text-[29px] text-white tracking-[-0.5px] leading-none"
-                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, transform: "translateY(-2px)" }}
+                className="text-[21px] md:text-[26px] text-white tracking-[-0.5px] leading-none"
+                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, transform: "translateY(0)" }}
               >
                 facebox
               </span>
@@ -45,7 +45,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[34px] h-[34px] md:w-[40px] md:h-[40px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[31px] h-[31px] md:w-[36px] md:h-[36px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
@@ -54,7 +54,7 @@ const Header = () => {
                 }}
                 aria-label="my account"
               >
-                <User size={16} strokeWidth={3.5} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
+                <User size={14} strokeWidth={3.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
@@ -63,7 +63,7 @@ const Header = () => {
             <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[42px] md:h-[48px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[38px] md:h-[44px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
@@ -71,13 +71,13 @@ const Header = () => {
                 }}
                 aria-label="buy gems"
               >
-                <Gem size={14} strokeWidth={3} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[14px] md:text-[16px] font-[900] lowercase text-white leading-none mt-[-2px]">{isLoggedIn ? gems : 0}</span>
+                <Gem size={13} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white leading-none mt-[-2px]">{isLoggedIn ? gems : 0}</span>
               </button>
 
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center w-[42px] h-[42px] md:w-[48px] md:h-[48px]"
+                className="flex items-center justify-center w-[38px] h-[38px] md:w-[44px] md:h-[44px]"
                 style={{
                   backgroundColor: "#000000",
                   border: "2px solid #ffffff",
@@ -85,14 +85,14 @@ const Header = () => {
                 }}
                 aria-label="settings"
               >
-                <Settings size={18} strokeWidth={3} className="md:!w-[22px] md:!h-[22px]" style={{ color: "#ffffff" }} />
+                <Settings size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
           {!isAuthPage && !isLoggedIn && (
             <button
               onClick={() => { markLateralNav(); navigate("/auth"); }}
-              className="flex items-center justify-center px-4 h-[38px] md:h-[44px]"
+              className="flex items-center justify-center px-4 h-[34px] md:h-[40px]"
               style={{
                 backgroundColor: "#ffffff",
                 border: "2px solid #ffffff",
@@ -100,7 +100,7 @@ const Header = () => {
               }}
               aria-label="log in"
             >
-              <span className="text-[14px] md:text-[16px] font-[900] lowercase text-black">log in</span>
+              <span className="text-[13px] md:text-[15px] font-[900] lowercase text-black">log in</span>
             </button>
           )}
         </div>

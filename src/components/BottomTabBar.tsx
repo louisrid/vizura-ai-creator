@@ -76,13 +76,13 @@ const BottomTabBar = () => {
           <button
             key={tab.path}
             onClick={() => handleNav(tab.path)}
-            className="flex-1 flex flex-col items-center justify-center gap-1 pt-[14px] pb-[26px] transition-opacity"
+            className="flex-1 flex flex-col items-center justify-center gap-1 pt-[10px] pb-[22px] transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
-            <Icon size={25} />
-            <span className="text-[13px] font-[800] lowercase tracking-wide">{tab.label}</span>
+            <Icon size={22} />
+            <span className="text-[12px] font-[800] lowercase tracking-wide">{tab.label}</span>
           </button>
         );
       })}
