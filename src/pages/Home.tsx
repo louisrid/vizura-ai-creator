@@ -396,13 +396,13 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-3">
-            <div className="flex items-center justify-between mb-1.5">
-              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
+          <section className="mb-2">
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-[13px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
-                  className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform"
+                  className="text-[10px] font-[800] lowercase px-2.5 py-1 transition-transform"
                   style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}
                 >
                   see all →
@@ -410,7 +410,7 @@ const Home = () => {
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-4 gap-1.5">
               {photoSlots.map((photo, i) => {
                 const isPlaceholder = !photo.url;
                 const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
@@ -434,7 +434,7 @@ const Home = () => {
                     <AspectRatio ratio={3 / 4}>
                       {isPlaceholder ? (
                         isFirstPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <div className="h-full w-full" />
                         )
@@ -450,16 +450,16 @@ const Home = () => {
 
           {/* My Characters Section */}
           <section>
-            <div className="flex items-center justify-between mb-1.5">
-              <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-[13px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
-                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[10px] font-[800] lowercase px-2.5 py-1 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-4 gap-1.5">
               {charSlots.map((char, i) => {
                 if (!char) {
                   const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
@@ -480,7 +480,7 @@ const Home = () => {
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isFirstEmpty ? (
-                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <div className="h-full w-full" />
                         )}
@@ -506,13 +506,13 @@ const Home = () => {
                         <img src={char.face_image_url!} alt={char.name} data-home-image="1" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
-                          <User size={28} strokeWidth={2.5} style={{ color: "#ffffff" }} />
+                          <User size={24} strokeWidth={2.5} style={{ color: "#ffffff" }} />
                         </div>
                       )}
                     </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-4">
-                      <span className="block text-[11px] font-[900] lowercase text-white leading-tight truncate">{char.name}</span>
-                      <span className="block text-[9px] font-[800] lowercase text-white">age {displayAge(char.id, char.age)}</span>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black to-transparent px-2 pb-1.5 pt-2">
+                      <span className="block text-[10px] font-[900] lowercase text-white leading-none truncate">{char.name}</span>
+                      <span className="block text-[8px] font-[800] lowercase text-white mt-0">age {displayAge(char.id, char.age)}</span>
                     </div>
                   </button>
                 );
