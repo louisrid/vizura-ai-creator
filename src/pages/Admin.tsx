@@ -312,7 +312,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
           <div className="mb-8">
             <h2 className="text-sm md:text-base font-[900] lowercase text-white mb-3">photos ({images.length})</h2>
             {images.length === 0 ? (
-              <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no photos</p>
+              <p className="text-[11px] font-extrabold lowercase text-white py-6 text-center">no photos</p>
             ) : (
               <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5 md:gap-4">
                 {images.map((img) => (
@@ -616,7 +616,7 @@ const Admin = () => {
                         })}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no photos yet</p>
+                      <p className="text-[11px] font-extrabold lowercase text-white py-6 text-center">no photos yet</p>
                     )}
                   </div>
                 </div>
@@ -644,7 +644,7 @@ const Admin = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no recent activity</p>
+                      <p className="text-[11px] font-extrabold lowercase text-white py-6 text-center">no recent activity</p>
                     )}
                   </div>
 
@@ -663,7 +663,7 @@ const Admin = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] font-extrabold lowercase text-muted-foreground py-6 text-center">no rejected prompts</p>
+                      <p className="text-[11px] font-extrabold lowercase text-white py-6 text-center">no rejected prompts</p>
                     )}
                   </div>
                 </div>
