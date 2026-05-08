@@ -54,7 +54,7 @@ const History = () => {
     return allItems;
   }, [generations, cachedChars]);
 
-  if (!authLoading && !user) return <div className="min-h-screen bg-background" />;
+  if (!authLoading && !user) return <div className="min-h-screen" />;
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -62,7 +62,7 @@ const History = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[20px] md:px-[44px] pt-[44px] pb-[140px]">
         <div className="flex items-center gap-4 mb-11">
           <BackButton />

@@ -670,7 +670,7 @@ const Index = () => {
   ) : null;
 
   return (
-    <div className="relative min-h-screen bg-background overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-hidden">
       <PhotoGenerationOverlay
         open={photoOverlayPhase !== "hidden"}
         phase={photoOverlayPhase === "hidden" ? "loading" : photoOverlayPhase}

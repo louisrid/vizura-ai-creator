@@ -731,7 +731,7 @@ const ChooseFace = () => {
 
   if (showPaywall) {
     return (
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen">
         <PaywallOverlay open={true} onClose={() => navigate("/")} hasSubscription={subscribed} />
       </div>
     );
@@ -777,7 +777,7 @@ const ChooseFace = () => {
 
   return (
     <>
-      <div className="relative min-h-screen overflow-hidden bg-background w-full">
+      <div className="relative min-h-screen overflow-hidden w-full">
         <SignInOverlay open={showSignIn} onSignedIn={handleSignedIn} />
 
         <AnimatePresence>
