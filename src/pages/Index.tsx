@@ -618,7 +618,7 @@ const Index = () => {
                   onClick={() => { handleCharacterSelect(c.id); setCharDropdownOpen(false); setCharHighlight(null); }}
                   className="flex w-full items-center gap-3 px-4 py-3"
                   style={{
-                    backgroundColor: charHighlight === idx ? "hsl(var(--card))" : isSelected ? "hsl(var(--card))" : "transparent",
+                    backgroundColor: isSelected ? "#ffe603" : charHighlight === idx ? "hsl(var(--card))" : "transparent",
                     touchAction: "none",
                   }}
                 >
@@ -627,11 +627,11 @@ const Index = () => {
                       <img src={c.face_image_url} alt="" className="w-full h-full object-cover" />
                     </div>
                   ) : (
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
-                      <User size={16} strokeWidth={3} style={{ color: "#ffffff" }} />
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: isSelected ? "rgba(0,0,0,0.1)" : "hsl(var(--card))" }}>
+                      <User size={16} strokeWidth={3} style={{ color: isSelected ? "#000000" : "#ffffff" }} />
                     </div>
                   )}
-                  <span className="text-lg font-[900] lowercase truncate" style={{ color: isSelected ? "#ffe603" : "#ffffff" }}>
+                  <span className="text-lg font-[900] lowercase truncate" style={{ color: isSelected ? "#000000" : "#ffffff" }}>
                     {c.name || "unnamed"}
                   </span>
                 </button>
@@ -701,7 +701,7 @@ const Index = () => {
               onPointerUp={handleCharPointerEnd}
               onPointerCancel={handleCharPointerEnd}
               className="flex w-full items-center gap-3 h-14 px-4 transition-colors active:scale-[0.99]"
-              style={{ borderRadius: 8, backgroundColor: "#ffffff", touchAction: "none" }}
+              style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
             >
               {selectedChar?.face_image_url ? (
                 <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
@@ -795,7 +795,7 @@ const Index = () => {
                 onPointerUp={handleCharPointerEnd}
                 onPointerCancel={handleCharPointerEnd}
                 className="flex w-full items-center gap-3 h-16 px-5 transition-colors active:scale-[0.99] hover-glow"
-                style={{ borderRadius: 8, backgroundColor: "#ffffff", touchAction: "none" }}
+                style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
                   <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
