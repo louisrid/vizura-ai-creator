@@ -76,7 +76,7 @@ const BottomTabBar = () => {
           <button
             key={tab.path}
             onClick={() => handleNav(tab.path)}
-            className="flex-1 flex flex-col items-center justify-start gap-1.5 pt-5 pb-10 transition-opacity"
+            className="flex-1 flex flex-col items-center justify-center gap-1.5 pt-[22px] pb-[42px] transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
