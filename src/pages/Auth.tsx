@@ -176,14 +176,14 @@ const Auth = () => {
             <PageTitle className="mb-0">sign in</PageTitle>
           </div>
 
-          <div className="rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="rounded-[8px] border-[1.5px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             {!inWebView && (
               <>
                 <button
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-                  style={{ background: "#000000", color: "#ffffff", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "2px solid hsl(var(--border-mid))", WebkitTapHighlightColor: "transparent" }}
+                  style={{ background: "#000000", color: "#ffffff", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "1.5px solid hsl(var(--border-mid))", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -213,7 +213,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-[1.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#000000", borderRadius: 8 }}
               disabled={submitting || googleLoading}
             />
@@ -225,7 +225,7 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-[1.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#000000", borderRadius: 8 }}
               disabled={submitting || googleLoading}
             />
@@ -234,7 +234,7 @@ const Auth = () => {
               onClick={handleEmailAuth}
               disabled={submitting || googleLoading}
               className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: "#000000", color: "#ffffff", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "2px solid hsl(var(--border-mid))" }}
+              style={{ background: "#000000", color: "#ffffff", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "1.5px solid hsl(var(--border-mid))" }}
             >
               {submitting ? (
                 <>
