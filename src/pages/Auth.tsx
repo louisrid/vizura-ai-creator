@@ -243,7 +243,7 @@ const Auth = () => {
                 </>
               ) : (
                 <>
-                  sign in
+                  log in
                   <ArrowRight size={14} />
                 </>
               )}
