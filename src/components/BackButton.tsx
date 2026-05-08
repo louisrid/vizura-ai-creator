@@ -28,7 +28,7 @@ const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(({ always = fa
       style={{
         borderRadius: 8,
         backgroundColor: "#000000",
-        border: "2px solid #ffffff",
+        border: "3px solid #ffffff",
       }}
       aria-label="go back"
     >
