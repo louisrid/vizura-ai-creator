@@ -335,7 +335,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[40px] pb-[100px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[6px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[18px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -354,13 +354,13 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffffff",
-                padding: "26px 12px 26px 16px",
+                padding: "18px 12px 18px 16px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
             >
-              <span className="text-[15px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span className="text-[14px] font-[900] lowercase leading-[1.0] text-black text-left">create<br />character</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -378,7 +378,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "26px 16px 26px 12px",
+                padding: "18px 16px 18px 12px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
@@ -386,8 +386,8 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[15px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
-              <svg className="relative z-[1]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span className="relative z-[1] text-[14px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <svg className="relative z-[1]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
@@ -396,13 +396,13 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-1.5">
+          <section className="mb-2">
             <div className="flex items-center justify-between mb-1">
               <h2 className="text-[13px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
-                  className="text-[9px] font-[800] lowercase px-2 py-[3px] transition-transform"
+                  className="text-[10px] font-[800] lowercase px-2.5 py-1 transition-transform"
                   style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}
                 >
                   see all →
@@ -410,7 +410,7 @@ const Home = () => {
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-4 gap-1.5">
               {photoSlots.map((photo, i) => {
                 const isPlaceholder = !photo.url;
                 const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
@@ -431,7 +431,7 @@ const Home = () => {
                       cursor: isPlaceholder && !isFirstPlaceholder && user ? "default" : "pointer",
                     }}
                   >
-                    <AspectRatio ratio={1.12}>
+                    <AspectRatio ratio={3 / 4}>
                       {isPlaceholder ? (
                         isFirstPlaceholder ? (
                           <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
@@ -453,13 +453,13 @@ const Home = () => {
             <div className="flex items-center justify-between mb-1">
               <h2 className="text-[13px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
-                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[9px] font-[800] lowercase px-2 py-[3px] transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[10px] font-[800] lowercase px-2.5 py-1 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-4 gap-1.5">
               {charSlots.map((char, i) => {
                 if (!char) {
                   const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
@@ -478,7 +478,7 @@ const Home = () => {
                         cursor: (!user || (isFirstEmpty && effectiveOnboardingComplete)) ? "pointer" : "default",
                       }}
                     >
-                      <AspectRatio ratio={1.12}>
+                      <AspectRatio ratio={3 / 4}>
                         {isFirstEmpty ? (
                           <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
@@ -501,7 +501,7 @@ const Home = () => {
                       backgroundColor: "hsl(var(--card))",
                     }}
                   >
-                    <AspectRatio ratio={1.12}>
+                    <AspectRatio ratio={3 / 4}>
                       {hasFace ? (
                         <img src={char.face_image_url!} alt={char.name} data-home-image="1" className="h-full w-full object-cover" loading="eager" decoding="sync" onLoad={handleImageLoaded} onError={handleImageLoaded} />
                       ) : (
@@ -510,8 +510,8 @@ const Home = () => {
                         </div>
                       )}
                     </AspectRatio>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent px-1.5 pb-1 pt-4">
-                      <span className="block text-[9px] font-[900] lowercase text-white leading-none truncate">{char.name}</span>
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black to-transparent px-2 pb-1.5 pt-2">
+                      <span className="block text-[10px] font-[900] lowercase text-white leading-none truncate">{char.name}</span>
                       <span className="block text-[8px] font-[800] lowercase text-white mt-0">age {displayAge(char.id, char.age)}</span>
                     </div>
                   </button>
