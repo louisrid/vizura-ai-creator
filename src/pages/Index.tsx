@@ -731,7 +731,7 @@ const Index = () => {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "3px solid #ffe603" }}>
                       <span className="text-xl">🪄</span>
                     </div>
                   </div>
@@ -824,7 +824,7 @@ const Index = () => {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "3px solid #ffe603" }}>
                       <span className="text-2xl">🪄</span>
                     </div>
                   </div>
