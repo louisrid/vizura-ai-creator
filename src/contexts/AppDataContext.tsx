@@ -179,14 +179,16 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
         .order("created_at", { ascending: false })
         .limit(20);
 
-      if (!error && data) {
+      if (error) {
+        console.error("[AppData] generations fetch error:", error.message, error);
+      } else if (data) {
         setGenerations(data as CachedGeneration[]);
         writeLocal(GENS_KEY, data);
         writeLocal(CACHE_USER_KEY, user.id);
         try { localStorage.setItem(CACHE_TIMESTAMP_KEY, String(Date.now())); } catch {}
       }
     } catch (err) {
-      console.error("refreshGenerations failed:", err);
+      console.error("[AppData] refreshGenerations threw:", err);
     } finally {
       window.clearTimeout(readyTimer);
       if (!releasedReady) setGenerationsReady(true);
