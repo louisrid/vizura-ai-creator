@@ -80,7 +80,7 @@ const Header = () => {
                 className="flex items-center justify-center w-[38px] h-[38px] md:w-[44px] md:h-[44px]"
                 style={{
                   backgroundColor: "#000000",
-                  border: "3px solid #ffffff",
+                  border: "3px solid #ffe603",
                   borderRadius: 8,
                 }}
                 aria-label="settings"
