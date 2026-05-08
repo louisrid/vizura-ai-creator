@@ -335,7 +335,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[80px] pb-[220px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[43px] font-[900] lowercase leading-[0.94] tracking-[-1.65px] text-white mb-0 mt-0 text-left">
+          <h1 className="flex w-full flex-col items-start text-[48px] font-[900] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -427,14 +427,14 @@ const Home = () => {
                     style={{
                       borderRadius: 8,
                       border: "none",
-                      backgroundColor: "#ffffff",
+                      backgroundColor: "hsl(var(--card))",
                       cursor: isPlaceholder && !isFirstPlaceholder && user ? "default" : "pointer",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
                       {isPlaceholder ? (
                         isFirstPlaceholder ? (
-                          <div className="flex h-full w-full items-center justify-center text-black"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <div className="h-full w-full" />
                         )
@@ -474,13 +474,13 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 8,
-                        backgroundColor: "#ffffff",
+                        backgroundColor: "hsl(var(--card))",
                         cursor: (!user || (isFirstEmpty && effectiveOnboardingComplete)) ? "pointer" : "default",
                       }}
                     >
                       <AspectRatio ratio={3 / 4}>
                         {isFirstEmpty ? (
-                          <div className="flex h-full w-full items-center justify-center text-black"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                          <div className="flex h-full w-full items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
                         ) : (
                           <div className="h-full w-full" />
                         )}
