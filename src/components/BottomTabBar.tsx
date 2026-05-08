@@ -61,11 +61,10 @@ const BottomTabBar = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-[9000] flex md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[72px] md:hidden"
       style={{
         backgroundColor: "#000000",
         borderTop: "4px solid #ffe603",
-        paddingBottom: "env(safe-area-inset-bottom)",
       }}
       aria-label="primary navigation"
     >
@@ -76,7 +75,7 @@ const BottomTabBar = () => {
           <button
             key={tab.path}
             onClick={() => handleNav(tab.path)}
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-[14px] min-h-[72px] transition-opacity"
+            className="flex h-full flex-1 flex-col items-center justify-center gap-1 transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
