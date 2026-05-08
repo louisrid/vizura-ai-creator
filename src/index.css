@@ -25,27 +25,27 @@
     --foreground: 0 0% 100%;
 
     /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
-    --card: 0 0% 7%;
+    --card: 0 0% 0%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 2%;
+    --popover: 0 0% 0%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 2%;
+    --secondary: 0 0% 0%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 2%;
+    --muted: 0 0% 0%;
     --muted-foreground: 0 0% 100%;
 
     --accent: 54 100% 51%;
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
-    --border: 0 0% 13%;
-    --input: 0 0% 13%;
+    --border: 0 0% 3%;
+    --input: 0 0% 3%;
     --ring: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -80,34 +80,34 @@
     --loader-pink: 330 80% 55%;
     --loader-blue: 210 100% 55%;
 
-    --sidebar-background: 0 0% 4%;
+    --sidebar-background: 0 0% 0%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 2%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 0%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 13%;
+    --sidebar-border: 0 0% 3%;
     --sidebar-ring: 0 0% 100%;
 
     /* custom tokens */
     --nav: 0 0% 0%;
     --page-bg: 0 0% 0%;
     --nav-foreground: 0 0% 100%;
-    --surface-dark: 0 0% 2%;
+    --surface-dark: 0 0% 0%;
     --surface-dark-foreground: 0 0% 100%;
-    --surface-elevated: 0 0% 2%;
+    --surface-elevated: 0 0% 0%;
 
     /* wizard bg */
-    --wizard-bg: 0 0% 2%;
+    --wizard-bg: 0 0% 0%;
 
-    --surface-strong: 0 0% 2%;
+    --surface-strong: 0 0% 0%;
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 14%;
+    --border-mid: 0 0% 4%;
 
     /* DARKER border grey — for menu dropdowns */
-    --border-dark: 0 0% 5%;
+    --border-dark: 0 0% 0%;
   }
 }
 
