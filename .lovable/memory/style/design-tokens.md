@@ -9,10 +9,9 @@ Updated: now
 
 The application uses a unified design system with a 10px squircle corner radius and 2px border thickness. 
 
-**Standardised greys sitewide (no other grey values):**
-- **Border grey**: `hsl(var(--border-mid))` = `0 0% 5%` (#0d0d0d) — all borders, dividers, button outlines, user icon. NEVER used for fills or text.
-- **Card/fill grey**: `hsl(var(--card))` = `0 0% 5%` (#0d0d0d) — all card backgrounds and container fills.
-- Rule: borders and cards share the same grey value. Fills use card. Never mix tiers.
+**Standardised greys sitewide:**
+- **Card/fill grey**: `hsl(var(--card))` = `0 0% 10%` (#1a1a1a) — all card backgrounds, input fields, container fills. Lighter so fields stand out on login forms etc.
+- **Border grey**: `hsl(var(--border-mid))` = `0 0% 4%` (#0a0a0a) — all borders, dividers, button outlines. Darker than cards so the two never blend.
 - `--muted-foreground` is `0 0% 100%` (white) — no grey text anywhere
 - All text is pure white (#ffffff) or pure black (#000000), never grey
 
