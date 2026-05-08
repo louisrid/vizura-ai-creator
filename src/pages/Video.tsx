@@ -6,7 +6,7 @@ const Video = () => (
   <div className="min-h-screen">
     <main className="w-full max-w-lg md:max-w-3xl mx-auto px-[20px] md:px-[44px] pt-[44px] pb-[140px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
       <div className="w-full">
-        <div className="flex items-center gap-5 mb-12">
+        <div className="flex items-center gap-6 mb-12">
           <BackButton always />
           <PageTitle className="mb-0">video</PageTitle>
         </div>
