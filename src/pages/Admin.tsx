@@ -54,7 +54,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                   e.preventDefault();
                   const btn = e.currentTarget;
                   btn.style.backgroundColor = "hsl(var(--card))";
-                  setTimeout(() => { btn.style.backgroundColor = "#000000"; }, 150);
+                  setTimeout(() => { btn.style.backgroundColor = "hsl(var(--card))"; }, 150);
                   const text = photo.prompt as string;
                   const copyFallback = () => {
                     try {
@@ -79,7 +79,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                   }
                 }}
                 className="w-full flex items-start gap-2 px-3 py-2.5 border-[3px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[8px]"
-                style={{ backgroundColor: "#000000" }}
+                style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
                 <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />
@@ -131,7 +131,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
   const ageDisplay = displayAge(character.id, character.age);
 
   const imgSlot = (url: string | null | undefined, label: string) => (
-    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 8, backgroundColor: "#000000" }}>
+    <div className="relative aspect-[3/4] w-full flex items-center justify-center" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }}>
       {isValidImg(url) ? (
         <img src={url!} alt={label} className="h-full w-full absolute inset-0" style={{ objectFit: "cover", borderRadius: 8 }} onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       ) : (
@@ -372,7 +372,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                         e.preventDefault();
                         const btn = e.currentTarget;
                         btn.style.backgroundColor = "hsl(var(--card))";
-                        setTimeout(() => { btn.style.backgroundColor = "#000000"; }, 150);
+                        setTimeout(() => { btn.style.backgroundColor = "hsl(var(--card))"; }, 150);
                         const text = expanded!.prompt;
                         const copyFallback = () => {
                           try {
@@ -397,7 +397,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                         }
                       }}
                       className="w-full flex items-start gap-2 px-3 py-2.5 border-[3px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[8px]"
-                      style={{ backgroundColor: "#000000" }}
+                      style={{ backgroundColor: "hsl(var(--card))" }}
                     >
                       <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
                       <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />

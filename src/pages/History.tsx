@@ -132,7 +132,7 @@ const History = () => {
                   }
                 }}
                 className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[3px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[8px] overflow-hidden"
-                style={{ backgroundColor: "#000000" }}
+                style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 <span className="truncate flex-1 text-left">{expanded.prompt}</span>
                 <Copy size={12} strokeWidth={2.5} className="shrink-0" />
@@ -142,7 +142,7 @@ const History = () => {
               <button
                 type="button"
                 className="h-10 md:h-12 w-full flex items-center justify-center gap-2 border-[3px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white rounded-[8px]"
-                style={{ backgroundColor: "#000000" }}
+                style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 download <Download size={12} strokeWidth={2.5} />
               </button>

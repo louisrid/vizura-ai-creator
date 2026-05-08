@@ -182,7 +182,7 @@ const TopUps = () => {
               key={pack.id}
               className="relative rounded-[8px] overflow-hidden p-5 flex gap-4"
               style={{
-                backgroundColor: "#000000",
+                backgroundColor: "hsl(var(--card))",
                 border: "3px solid hsl(var(--border-mid))",
                 minHeight: 170,
               }}
