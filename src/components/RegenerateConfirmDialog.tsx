@@ -45,7 +45,7 @@ const RegenerateConfirmDialog = ({
             style={{
               backgroundColor: "hsl(var(--card))",
               borderRadius: 8,
-              border: "1.5px solid hsl(var(--border-mid))",
+              border: "2px solid hsl(var(--border-mid))",
               padding: "28px 24px 24px",
             }}
           >
@@ -68,7 +68,7 @@ const RegenerateConfirmDialog = ({
                   onClick={onConfirm}
                   disabled={loading}
                   className="flex-1 h-12 text-lg font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
-                  style={{ backgroundColor: "#050a10", borderRadius: 8, border: "1.5px solid #00e0ff", color: "#ffffff" }}
+                  style={{ backgroundColor: "#050a10", borderRadius: 8, border: "2px solid #00e0ff", color: "#ffffff" }}
                 >
                   {loading ? (
                     <Loader2 className="animate-spin mx-auto" size={18} />

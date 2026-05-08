@@ -121,7 +121,7 @@ const SlideDropdown = ({ label, value, options, onChange }: SlideDropdownProps) 
             width: pos.width,
             zIndex: 10001,
             borderRadius: 8,
-            border: "1.5px solid hsl(var(--border-mid))",
+            border: "2px solid hsl(var(--border-mid))",
             backgroundColor: "hsl(var(--card))",
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
           }}

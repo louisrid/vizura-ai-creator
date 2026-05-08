@@ -421,7 +421,7 @@ const CharacterDetail = () => {
               onRegenClick?.();
             }}
             className="absolute flex items-center justify-center transition-transform"
-            style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "1.5px solid #00e0ff", top: -6, right: -6 }}
+            style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#050a10", border: "2px solid #00e0ff", top: -6, right: -6 }}
           >
             <RefreshCw size={13} strokeWidth={3} color="#ffffff" />
           </button>
@@ -455,7 +455,7 @@ const CharacterDetail = () => {
           <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "1.5px solid hsl(var(--border-mid))", borderRadius: 8 }} />
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 8 }} />
                 <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 8, backgroundColor: "#ffffff" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
@@ -487,7 +487,7 @@ const CharacterDetail = () => {
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[8px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[1.5px] border-[hsl(var(--border-mid))] rounded-[8px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
+                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2px] border-[hsl(var(--border-mid))] rounded-[8px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -500,7 +500,7 @@ const CharacterDetail = () => {
           <button
             onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
             className="w-full h-14 text-xl font-[900] lowercase transition-all flex items-center justify-center gap-2"
-            style={{ backgroundColor: "#050a10", color: "#ffffff", border: "1.5px solid #00e0ff", borderRadius: 8 }}
+            style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 8 }}
           >
             create photo <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
           </button>
@@ -531,7 +531,7 @@ const CharacterDetail = () => {
             <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "1.5px solid hsl(var(--border-mid))", borderRadius: 8 }} />
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))", borderRadius: 8 }} />
                   <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 8, backgroundColor: "#ffffff" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
@@ -587,7 +587,7 @@ const CharacterDetail = () => {
               <h3 className="text-sm font-[900] lowercase text-white mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
-                  <div key={t.label} className="rounded-[8px] px-3 py-2 text-center" style={{ backgroundColor: "hsl(var(--card))", border: "1.5px solid hsl(var(--border-mid))" }}>
+                  <div key={t.label} className="rounded-[8px] px-3 py-2 text-center" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px] text-white">{t.label}</span>
                     <span className={`inline-block font-[800] text-white leading-none text-[14px] ${t.value === "XL" ? "normal-case" : "lowercase"}`}>{t.value}</span>
                   </div>
@@ -598,7 +598,7 @@ const CharacterDetail = () => {
             <button
               onClick={() => navigate("/create", { state: { preselectedCharacterId: character.id } })}
               className="w-full h-16 text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2"
-              style={{ backgroundColor: "#050a10", color: "#ffffff", border: "1.5px solid #00e0ff", borderRadius: 8 }}
+              style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 8 }}
             >
               create photo <Gem size={14} strokeWidth={2.5} style={{ color: "#00e0ff" }} />
             </button>
@@ -632,7 +632,7 @@ const CharacterDetail = () => {
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-sm md:max-w-md"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "1.5px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "2px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
             >
               <ModalCloseButton onClick={() => setShowDelete(false)} />
 
@@ -655,7 +655,7 @@ const CharacterDetail = () => {
                   onClick={handleDelete}
                   disabled={deleting}
                   className="flex-1 h-12 md:h-14 text-lg md:text-xl font-[900] lowercase transition-colors disabled:opacity-50 flex items-center justify-center"
-                  style={{ backgroundColor: "#1a0505", borderRadius: 8, border: "1.5px solid #ff4444", color: "#ff4444" }}
+                  style={{ backgroundColor: "#1a0505", borderRadius: 8, border: "2px solid #ff4444", color: "#ff4444" }}
                 >
                   {deleting ? <Loader2 className="animate-spin mx-auto" size={18} /> : "delete"}
                 </button>

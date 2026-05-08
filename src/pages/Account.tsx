@@ -87,7 +87,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-2">
           <button
-            className="w-full rounded-[8px] border-[1.5px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-xs font-[800] lowercase text-white">subscription</span>
@@ -103,7 +103,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[1.5px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
             onClick={() => toast("coming soon")}
           >
             <span className="text-xs font-[800] lowercase text-white">change password</span>
@@ -113,7 +113,7 @@ const Account = () => {
           {/* Admin button */}
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[8px] border-[1.5px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
               onClick={() => navigate("/admin")}
             >
               admin
@@ -129,7 +129,7 @@ const Account = () => {
           style={{
             color: "#ffffff",
             backgroundColor: "#1a0505",
-            border: "1.5px solid #ff4444",
+            border: "2px solid #ff4444",
             borderRadius: 8,
           }}
           onClick={handleSignOut}
@@ -227,7 +227,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))", border: "1.5px solid hsl(var(--border-mid))" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -255,7 +255,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-[1.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 8, backgroundColor: "#000000" }}
             disabled={submitting || googleLoading}
           />
@@ -267,7 +267,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-[1.5px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-muted-foreground outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 8, backgroundColor: "#000000" }}
             disabled={submitting || googleLoading}
           />
