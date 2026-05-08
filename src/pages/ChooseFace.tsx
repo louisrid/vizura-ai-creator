@@ -863,7 +863,7 @@ const ChooseFace = () => {
                           overflow: "hidden",
                         }}
                       >
-                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: "#000000" }}>
+                        <div className="w-full h-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                           {regeneratingFaces ? (
                             <Loader2 className="animate-spin" size={18} style={{ color: "#ffffff" }} strokeWidth={3} />
                           ) : (

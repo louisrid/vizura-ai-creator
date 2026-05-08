@@ -603,7 +603,7 @@ const Index = () => {
             zIndex: 10001,
             borderRadius: 8,
             border: "3px solid hsl(var(--border-mid))",
-            backgroundColor: "#000000",
+            backgroundColor: "hsl(var(--card))",
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
           }}
         >

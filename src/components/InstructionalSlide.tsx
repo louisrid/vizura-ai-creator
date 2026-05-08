@@ -138,7 +138,7 @@ const NavArrow = ({
       className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
       style={{
         borderRadius: 8,
-        backgroundColor: isForward ? Y : "#000000",
+        backgroundColor: isForward ? Y : "hsl(var(--card))",
         border: isForward ? "none" : `3px solid ${Y}`,
         outline: "none",
         padding: 0,

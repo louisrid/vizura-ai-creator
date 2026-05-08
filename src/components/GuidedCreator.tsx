@@ -88,7 +88,7 @@ const NavArrow = ({ direction, onClick, disabled, colorOverride }: { direction: 
         className="flex items-center justify-center transition-opacity duration-150 w-[66px] h-[66px] md:w-[82px] md:h-[82px]"
         style={{
           borderRadius: 8,
-          backgroundColor: isForward ? fillColor : "#000000",
+          backgroundColor: isForward ? fillColor : "hsl(var(--card))",
           border: isForward ? "none" : `3px solid ${fillColor}`,
           outline: "none", padding: 0, cursor: "pointer",
           color: isForward ? "#000000" : "#ffffff",
@@ -859,7 +859,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#000000', border: '3px solid #ffe603', borderRadius: 8, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: 'hsl(var(--card))', border: '3px solid #ffe603', borderRadius: 8, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
