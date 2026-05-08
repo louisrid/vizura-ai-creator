@@ -410,7 +410,7 @@ const Home = () => {
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-1.5 mx-auto" style={{ maxWidth: "78%" }}>
+            <div className="grid grid-cols-4 gap-1.5">
               {photoSlots.map((photo, i) => {
                 const isPlaceholder = !photo.url;
                 const isFirstPlaceholder = isPlaceholder && !photoSlots.slice(0, i).some(p => !p.url);
@@ -459,7 +459,7 @@ const Home = () => {
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-1.5 mx-auto" style={{ maxWidth: "78%" }}>
+            <div className="grid grid-cols-4 gap-1.5">
               {charSlots.map((char, i) => {
                 if (!char) {
                   const isFirstEmpty = !charSlots.slice(0, i).some(c => c === null);
