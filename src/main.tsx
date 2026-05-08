@@ -32,16 +32,16 @@ if (splash) {
     transition: "opacity 0.3s ease-in-out",
     pointerEvents: "auto",
     backgroundColor: "#000000",
-    backgroundImage: "url('/site-bg-pattern.png')",
+    backgroundImage: "url('/site-bg-pattern.png'), url('/site-bg-pattern.png')",
     backgroundRepeat: "repeat",
-    backgroundSize: "360px auto",
-    backgroundPosition: "top center",
+    backgroundSize: "360px auto, 360px auto",
+    backgroundPosition: "top center, top center",
   });
 
   splash.innerHTML = `
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#ffffff;font-family:-apple-system,'SF Pro Display',system-ui,sans-serif;font-weight:900;text-transform:lowercase;letter-spacing:-0.02em;margin-top:-4vh;">
       <h1 style="margin:0;font-size:24px;line-height:1;">loading...</h1>
-      <div style="width:14rem;height:8px;overflow:hidden;background:hsl(0 0% 28%);border-radius:2px;position:relative;">
+      <div style="width:14rem;height:8px;overflow:hidden;background:hsl(0 0% 3%);border-radius:2px;position:relative;">
         <div style="width:40%;height:100%;background:#ffe603;border-radius:2px;animation:facefox-bar 1.6s ease-in-out infinite;position:absolute;"></div>
       </div>
     </div>
