@@ -378,7 +378,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "18px 16px 18px 12px",
+                padding: "26px 16px 26px 12px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
@@ -386,8 +386,8 @@ const Home = () => {
                 border: "2px solid #ffe603",
               }}
             >
-              <span className="relative z-[1] text-[14px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
-              <svg className="relative z-[1]" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span className="relative z-[1] text-[15px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
+              <svg className="relative z-[1]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                 <circle cx="12" cy="13" r="4" />
               </svg>
