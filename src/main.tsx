@@ -32,10 +32,6 @@ if (splash) {
     transition: "opacity 0.3s ease-in-out",
     pointerEvents: "auto",
     backgroundColor: "#000000",
-    backgroundImage: "url('/site-bg-pattern.png'), url('/site-bg-pattern.png')",
-    backgroundRepeat: "repeat",
-    backgroundSize: "360px auto, 360px auto",
-    backgroundPosition: "top center, top center",
   });
 
   splash.innerHTML = `
