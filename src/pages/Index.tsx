@@ -88,7 +88,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[8px] border-2 border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+    <div className="flex items-stretch rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -137,7 +137,7 @@ const HighlightedPromptArea = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card">
+    <div className="relative overflow-hidden rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -704,7 +704,7 @@ const Index = () => {
               style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
             >
               {selectedChar?.face_image_url ? (
-                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
+                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-[3px] border-black/15">
                   <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
                 </div>
               ) : (
@@ -720,7 +720,7 @@ const Index = () => {
           </div>
 
           <div className="flex flex-col gap-5 mt-3" style={{ overflowAnchor: "none" }}>
-            <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -798,7 +798,7 @@ const Index = () => {
                 style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
-                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-black/15">
+                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-[3px] border-black/15">
                     <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
                   </div>
                 ) : (
@@ -813,7 +813,7 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="relative rounded-[8px] border-2 border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
