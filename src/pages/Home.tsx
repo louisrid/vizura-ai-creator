@@ -333,9 +333,9 @@ const Home = () => {
 
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[50px] pb-[140px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[20px] pb-[110px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[45px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[22px] text-left">
+          <h1 className="flex w-full flex-col items-start text-[45px] font-[900] lowercase leading-[0.94] tracking-[-1.6px] text-white mb-0 mt-[6px] text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -345,7 +345,7 @@ const Home = () => {
           {/* <div className="mt-5 mb-6" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
 
           {/* Two action buttons — extended outward to align with photo pill row edges */}
-          <div className="flex gap-2 mb-6 mt-[24px]">
+          <div className="flex gap-2 mb-4 mt-[18px]">
             {/* Create Character - solid yellow */}
             <button
               type="button"
@@ -355,7 +355,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffffff",
-                padding: "16px 14px 16px 20px",
+                padding: "12px 14px 12px 18px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
@@ -379,7 +379,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "16px 20px 16px 14px",
+                padding: "12px 18px 12px 14px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
@@ -397,8 +397,8 @@ const Home = () => {
           </div>
 
           {/* Latest Photos Section */}
-          <section className="mb-6">
-            <div className="flex items-center justify-between mb-3">
+          <section className="mb-4">
+            <div className="flex items-center justify-between mb-2">
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🖼️ latest photos</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
                 <button
@@ -451,7 +451,7 @@ const Home = () => {
 
           {/* My Characters Section */}
           <section>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
               <h2 className="text-[14px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
                 <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[11px] font-[800] lowercase px-3 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
