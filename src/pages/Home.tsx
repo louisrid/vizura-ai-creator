@@ -395,7 +395,7 @@ const Home = () => {
             </button>
           </div>
 
-          <div style={{ transform: "scale(0.82)", transformOrigin: "top center", width: "100%" }}>
+          <div style={{ transform: "scale(0.88)", transformOrigin: "top center", width: "113.636%", marginLeft: "-6.818%" }}>
           {/* Latest Photos Section */}
           <section className="mb-2">
             <div className="flex items-center justify-between mb-1">
