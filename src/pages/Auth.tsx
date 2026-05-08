@@ -182,7 +182,7 @@ const Auth = () => {
                   onClick={handleGoogleSignIn}
                   disabled={googleLoading || submitting}
                   className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-                  style={{ background: "#ffffff", color: "#000000", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none", WebkitTapHighlightColor: "transparent" }}
+                  style={{ background: "#000000", color: "#ffffff", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "2px solid #ffffff", WebkitTapHighlightColor: "transparent" }}
                 >
                   {googleLoading ? (
                     <>
@@ -238,7 +238,7 @@ const Auth = () => {
               onClick={handleEmailAuth}
               disabled={submitting || googleLoading}
               className="w-full h-14 md:h-16 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
-              style={{ background: "#ffffff", color: "#000000", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
+              style={{ background: "#000000", color: "#ffffff", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "2px solid #ffffff" }}
             >
               {submitting ? (
                 <>
