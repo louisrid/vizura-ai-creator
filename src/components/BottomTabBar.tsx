@@ -64,7 +64,7 @@ const BottomTabBar = () => {
       className="fixed bottom-0 left-0 right-0 z-[9000] flex md:hidden"
       style={{
         backgroundColor: "#000000",
-        borderTop: "3px solid #ffffff",
+        borderTop: "4px solid #ffffff",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
       aria-label="primary navigation"
