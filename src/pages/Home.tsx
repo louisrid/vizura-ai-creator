@@ -427,7 +427,7 @@ const Home = () => {
                     style={{
                       borderRadius: 8,
                       border: "none",
-                      backgroundColor: "hsl(var(--card))",
+                      backgroundColor: "#000000",
                       cursor: isPlaceholder && !isFirstPlaceholder && user ? "default" : "pointer",
                     }}
                   >
@@ -474,7 +474,7 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 8,
-                        backgroundColor: "hsl(var(--card))",
+                        backgroundColor: "#000000",
                         cursor: (!user || (isFirstEmpty && effectiveOnboardingComplete)) ? "pointer" : "default",
                       }}
                     >
