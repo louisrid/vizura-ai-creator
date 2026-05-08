@@ -395,6 +395,7 @@ const Home = () => {
             </button>
           </div>
 
+          <div style={{ transform: "scale(0.82)", transformOrigin: "top center", width: "100%" }}>
           {/* Latest Photos Section */}
           <section className="mb-2">
             <div className="flex items-center justify-between mb-1">
@@ -519,6 +520,7 @@ const Home = () => {
               })}
             </div>
           </section>
+          </div>
         </main>
 
         {/* Desktop layout */}
