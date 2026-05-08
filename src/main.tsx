@@ -37,7 +37,7 @@ if (splash) {
   splash.innerHTML = `
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#ffffff;font-family:-apple-system,'SF Pro Display',system-ui,sans-serif;font-weight:900;text-transform:lowercase;letter-spacing:-0.02em;margin-top:-4vh;">
       <h1 style="margin:0;font-size:24px;line-height:1;">loading...</h1>
-      <div style="width:14rem;height:8px;overflow:hidden;background:hsl(0 0% 3%);border-radius:2px;position:relative;">
+      <div style="width:14rem;height:8px;overflow:hidden;background:hsl(0 0% 7%);border-radius:2px;position:relative;">
         <div style="width:40%;height:100%;background:#ffe603;border-radius:2px;animation:facefox-bar 1.6s ease-in-out infinite;position:absolute;"></div>
       </div>
     </div>

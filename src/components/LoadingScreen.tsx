@@ -35,7 +35,7 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "hsl(var(--card))", borderRadius: 2, position: "relative" }}>
+        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "hsl(var(--border-mid))", borderRadius: 2, position: "relative" }}>
           <div
             style={{
               width: "40%",
