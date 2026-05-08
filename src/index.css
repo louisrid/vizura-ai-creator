@@ -154,12 +154,11 @@
     content: "";
     position: fixed;
     inset: 0;
-    background-image: url('/bg-pattern.png');
+    background-image: url('/bg-pattern-overlay.png');
     background-repeat: repeat;
     background-size: 240px auto;
     background-position: top center;
-    opacity: 0.88;
-    filter: brightness(2.8) contrast(1.15);
+    opacity: 1;
     pointer-events: none;
     z-index: 0;
   }
