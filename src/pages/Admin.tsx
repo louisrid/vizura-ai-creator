@@ -142,7 +142,7 @@ const AdminCharacterDetail = ({ character, onBack }: { character: any; onBack: (
 
   return (
     <>
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-4 mb-2">
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
@@ -252,7 +252,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
 
   return (
     <>
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-4 mb-2">
         <button
           onClick={onBack}
           className="flex items-center justify-center shrink-0"
@@ -560,7 +560,7 @@ const Admin = () => {
           />
         ) : (
           <>
-            <div className="flex items-center gap-3 mb-11">
+            <div className="flex items-center gap-4 mb-11">
               <BackButton />
               <PageTitle className="mb-0">admin</PageTitle>
             </div>
