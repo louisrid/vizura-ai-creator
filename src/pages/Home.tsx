@@ -335,7 +335,7 @@ const Home = () => {
 
         <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[60px] pb-[220px] md:hidden">
           {/* Hero */}
-          <h1 className="flex w-full flex-col items-start text-[48px] font-[900] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left">
+          <h1 className="flex w-full flex-col items-start text-[45px] font-[900] lowercase leading-[0.94] tracking-[-1.7px] text-white mb-0 mt-0 text-left">
             <span className="block w-full text-left">what are we</span>
             <span className="inline-flex items-center justify-start gap-[8px] whitespace-nowrap text-left">
               <span>making today?</span>
@@ -354,7 +354,7 @@ const Home = () => {
                 flex: "1 1 0%",
                 minWidth: 0,
                 backgroundColor: "#ffffff",
-                padding: "28px 12px 28px 16px",
+                padding: "23px 12px 23px 16px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
               }}
@@ -378,7 +378,7 @@ const Home = () => {
               style={{
                 flex: "1 1 0%",
                 minWidth: 0,
-                padding: "28px 16px 28px 12px",
+                padding: "23px 16px 23px 12px",
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
