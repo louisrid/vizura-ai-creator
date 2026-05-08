@@ -43,7 +43,10 @@ const BottomTabBar = () => {
   const { user, loading: authLoading } = useAuth();
 
   if (authLoading) return null;
-  if (location.pathname === "/auth" || location.pathname === "/reset-password") return null;
+  if (location.pathname === "/reset-password") return null;
+
+  const isAuthPage = location.pathname === "/auth";
+  const authRedirect = isAuthPage ? new URLSearchParams(location.search).get("redirect") : null;
 
   const handleNav = (path: string) => {
     markLateralNav();
@@ -55,6 +58,11 @@ const BottomTabBar = () => {
   };
 
   const isActive = (path: string) => {
+    if (isAuthPage) {
+      if (!authRedirect) return false;
+      if (path === "/") return authRedirect === "/";
+      return authRedirect === path || authRedirect.startsWith(path + "/");
+    }
     if (path === "/") return location.pathname === "/";
     return location.pathname === path || location.pathname.startsWith(path + "/");
   };
@@ -75,13 +83,20 @@ const BottomTabBar = () => {
           <button
             key={tab.path}
             onClick={() => handleNav(tab.path)}
-            className="flex h-full flex-1 flex-col items-center justify-center gap-1 transition-opacity"
+            className="relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
             <Icon size={22} />
             <span className="text-[12px] font-[800] lowercase tracking-wide">{tab.label}</span>
+            {active && (
+              <span
+                aria-hidden
+                className="absolute left-1/2 -translate-x-1/2"
+                style={{ bottom: 0, height: 3, width: "60%", backgroundColor: "#ffe603" }}
+              />
+            )}
           </button>
         );
       })}
