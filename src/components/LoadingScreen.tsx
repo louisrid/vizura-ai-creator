@@ -33,18 +33,8 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "rgba(255,230,3,0.10)", borderRadius: 2, position: "relative" }}>
-          <div
-            style={{
-              width: "40%",
-              height: "100%",
-              background: "#ffe603",
-              borderRadius: 2,
-              boxShadow: "0 0 10px #ffe603, 0 0 20px rgba(255,230,3,0.25)",
-              animation: "facefox-bar 1.4s ease-in-out infinite",
-              position: "absolute",
-            }}
-          />
+        <div className="facefox-dots" aria-hidden="true">
+          <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
         </div>
       </div>
     </div>
