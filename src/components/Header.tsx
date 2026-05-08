@@ -26,7 +26,7 @@ const Header = () => {
     navigate(path);
   };
 
-  const headerContainerClass = "mx-auto flex w-full max-w-lg items-center justify-between px-[20px] pt-[36px] pb-[14px] md:max-w-3xl md:px-[36px] md:pt-[40px] md:pb-[16px] min-h-[86px] md:min-h-[96px]";
+  const headerContainerClass = "mx-auto flex w-full max-w-lg items-center justify-between px-[20px] pt-[24px] pb-[10px] md:max-w-3xl md:px-[36px] md:pt-[28px] md:pb-[12px] min-h-[72px] md:min-h-[84px]";
 
   return (
     <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #ffffff" }}>
