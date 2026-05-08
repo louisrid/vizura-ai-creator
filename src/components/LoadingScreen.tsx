@@ -9,7 +9,14 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
     <div
       ref={ref}
       className="fixed inset-0"
-      style={{ zIndex: 99999, background: "#000000" }}
+      style={{
+        zIndex: 99999,
+        backgroundColor: "#000000",
+        backgroundImage: "url('/site-bg-pattern.png')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "360px auto",
+        backgroundPosition: "top center",
+      }}
       role="status"
       aria-live="polite"
       aria-label="loading"
@@ -23,7 +30,6 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
           alignItems: "center",
           justifyContent: "center",
           gap: 16,
-          background: "#000000",
           color: "#ffffff",
           fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif",
           fontWeight: 900,
@@ -33,7 +39,7 @@ const LoadingScreen = forwardRef<HTMLDivElement>((_props, ref) => {
         }}
       >
         <h1 style={{ margin: 0, fontSize: 24, lineHeight: 1 }}>loading...</h1>
-        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "hsl(var(--card))", borderRadius: 2, position: "relative" }}>
+        <div style={{ width: "14rem", height: 8, overflow: "hidden", background: "hsl(0 0% 28%)", borderRadius: 2, position: "relative" }}>
           <div
             style={{
               width: "40%",
