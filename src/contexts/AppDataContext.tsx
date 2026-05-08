@@ -273,6 +273,30 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     };
   }, [refreshCharacters, refreshGenerations]);
 
+  // Self-heal cache: refetch on supabase auth events (SIGNED_IN, TOKEN_REFRESHED)
+  // and on window focus / tab visibility — covers cases where the initial fetch
+  // raced an unauthenticated session and silently returned nothing.
+  useEffect(() => {
+    if (!user) return;
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+        void refreshAll();
+      }
+    });
+
+    const handleFocus = () => { void refreshAll(); };
+    const handleVisibility = () => { if (document.visibilityState === "visible") void refreshAll(); };
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      sub.subscription.unsubscribe();
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [user?.id, refreshAll]);
+
   return (
     <AppDataContext.Provider
       value={{
