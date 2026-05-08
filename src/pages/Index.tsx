@@ -88,7 +88,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+    <div className="flex items-stretch rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -137,7 +137,7 @@ const HighlightedPromptArea = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card">
+    <div className="relative overflow-hidden rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -183,7 +183,7 @@ const CreateButton = ({ onClick, disabled, isGenerating, onboardingComplete }: {
 }) => (
   <button
     className="w-full h-14 md:h-16 text-xl md:text-2xl font-[900] lowercase transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "3px solid #00e0ff", borderRadius: 8 }}
+    style={{ backgroundColor: "#050a10", color: "#ffffff", border: "2px solid #00e0ff", borderRadius: 8 }}
     onClick={onClick}
     disabled={disabled}
   >
@@ -602,7 +602,7 @@ const Index = () => {
             width: charDropdownPos.width,
             zIndex: 10001,
             borderRadius: 8,
-            border: "3px solid hsl(var(--border-mid))",
+            border: "2px solid hsl(var(--border-mid))",
             backgroundColor: "hsl(var(--card))",
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
           }}
@@ -656,7 +656,7 @@ const Index = () => {
                   touchAction: "none",
                 }}
               >
-                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "3px solid rgba(250,204,21,0.3)" }}>
+                <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: "rgba(250,204,21,0.1)", border: "2px solid rgba(250,204,21,0.3)" }}>
                   <span className="text-xs">+</span>
                 </div>
                 <span className="text-lg font-[900] lowercase" style={{ color: "#ffe603" }}>create character</span>
@@ -704,7 +704,7 @@ const Index = () => {
               style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
             >
               {selectedChar?.face_image_url ? (
-                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-[3px] border-black/15">
+                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border-[2px] border-black/15">
                   <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
                 </div>
               ) : (
@@ -720,7 +720,7 @@ const Index = () => {
           </div>
 
           <div className="flex flex-col gap-5 mt-3" style={{ overflowAnchor: "none" }}>
-            <div className="relative rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -731,7 +731,7 @@ const Index = () => {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "3px solid #ffe603" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 48, height: 48, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
                       <span className="text-xl">🪄</span>
                     </div>
                   </div>
@@ -765,7 +765,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[8px] border-[3px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[8px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}
@@ -798,7 +798,7 @@ const Index = () => {
                 style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
               >
                 {selectedChar?.face_image_url ? (
-                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-[3px] border-black/15">
+                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 border-[2px] border-black/15">
                     <img src={selectedChar.face_image_url} alt="" className="w-full h-full object-cover" />
                   </div>
                 ) : (
@@ -813,7 +813,7 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="relative rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -824,7 +824,7 @@ const Index = () => {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "3px solid #ffe603" }}>
+                    <div className="flex items-center justify-center rounded-full" style={{ width: 64, height: 64, backgroundColor: "rgba(250,204,21,0.08)", border: "2px solid #ffe603" }}>
                       <span className="text-2xl">🪄</span>
                     </div>
                   </div>
@@ -863,7 +863,7 @@ const Index = () => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-[8px] border-[3px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
+          <div className="mt-4 rounded-[8px] border-[2px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
           </div>
         )}

@@ -29,7 +29,7 @@ const Header = () => {
   const headerContainerClass = "mx-auto flex h-[88px] w-full max-w-lg items-center justify-between px-[20px] md:h-[100px] md:max-w-3xl md:px-[36px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "3px solid #ffe603" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid #ffe603" }}>
       
       <div className="relative">
         <div className={headerContainerClass}>
@@ -95,7 +95,7 @@ const Header = () => {
               className="flex items-center justify-center px-4 h-[34px] md:h-[40px]"
               style={{
                 backgroundColor: "#ffffff",
-                border: "3px solid #ffffff",
+                border: "2px solid #ffffff",
                 borderRadius: 8,
               }}
               aria-label="log in"
