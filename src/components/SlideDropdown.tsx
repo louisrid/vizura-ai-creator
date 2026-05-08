@@ -167,7 +167,7 @@ const SlideDropdown = ({ label, value, options, onChange }: SlideDropdownProps) 
           onPointerUp={handlePointerEnd}
           onPointerCancel={handlePointerEnd}
           className="flex w-full items-center gap-3 h-14 md:h-16 px-4"
-          style={{ borderRadius: 8, backgroundColor: "#ffffff", touchAction: "none" }}
+          style={{ borderRadius: 8, backgroundColor: "#ffe603", touchAction: "none" }}
         >
           <span className="flex-1 text-left text-base md:text-lg font-[900] lowercase text-black">{selected.label}</span>
           <ChevronDown
