@@ -210,12 +210,12 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
       });
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
-        toast.error("sign in error");
+        toast.error("log in error");
         setGoogleLoading(false);
       }
     } catch (err: any) {
       sessionStorage.removeItem("facefox_post_auth_home");
-      toast.error("sign in error");
+      toast.error("log in error");
       setGoogleLoading(false);
     }
   };
@@ -239,7 +239,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             ) : (
               <>
                 <GoogleIcon />
-                sign in with google
+                log in with google
               </>
             )}
           </button>
@@ -277,14 +277,14 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             className="w-full h-14 flex items-center justify-center gap-2 disabled:opacity-50 transition-transform duration-150"
             style={{ background: "#ffffff", color: "#000000", borderRadius: 8, fontSize: 14, fontWeight: 900, textTransform: "lowercase", border: "none" }}
           >
-            {submitting ? (<><Loader2 className="animate-spin" size={18} />signing in...</>) : (<>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>)}
+            {submitting ? (<><Loader2 className="animate-spin" size={18} />logging in...</>) : (<>{isSignUpMode ? "sign up" : "log in"}<ArrowRight size={14} /></>)}
           </button>
           <button
             type="button"
             onClick={() => setIsSignUpMode((v) => !v)}
             className="w-full text-center text-[11px] font-extrabold lowercase text-white transition-colors"
           >
-            {isSignUpMode ? "already have an account? sign in" : "no account? sign up"}
+            {isSignUpMode ? "already have an account? log in" : "no account? sign up"}
           </button>
         </div>
       </main>

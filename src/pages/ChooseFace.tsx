@@ -531,7 +531,7 @@ const ChooseFace = () => {
     clearNavGuard();
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {
-      toast.error("sign in first");
+      toast.error("log in first");
       return false;
     }
 

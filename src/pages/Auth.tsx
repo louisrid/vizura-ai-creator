@@ -145,7 +145,7 @@ const Auth = () => {
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_login_only");
-        toast.error("sign in error");
+        toast.error("log in error");
         setGoogleLoading(false);
         return;
       }
@@ -155,7 +155,7 @@ const Auth = () => {
     } catch (err: any) {
       sessionStorage.removeItem("facefox_post_auth_home");
       sessionStorage.removeItem("facefox_login_only");
-      toast.error("sign in error");
+      toast.error("log in error");
       setGoogleLoading(false);
     }
   };
@@ -173,7 +173,7 @@ const Auth = () => {
         <div className="w-full md:max-w-md md:mx-auto">
           <div className="mb-7 flex items-center gap-4">
             <BackButton always />
-            <PageTitle className="mb-0">sign in</PageTitle>
+            <PageTitle className="mb-0">log in</PageTitle>
           </div>
 
           <div className="rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
@@ -193,7 +193,7 @@ const Auth = () => {
                   ) : (
                     <>
                       <GoogleIcon />
-                      sign in with google
+                      log in with google
                     </>
                   )}
                 </button>
@@ -239,11 +239,11 @@ const Auth = () => {
               {submitting ? (
                 <>
                   <Loader2 className="animate-spin" size={18} />
-                  signing in...
+                  logging in...
                 </>
               ) : (
                 <>
-                  sign in
+                  log in
                   <ArrowRight size={14} />
                 </>
               )}

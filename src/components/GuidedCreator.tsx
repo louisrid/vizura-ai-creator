@@ -272,13 +272,13 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_signup_gate_active");
-        toast.error("sign in error");
+        toast.error("log in error");
         setGoogleLoading(false);
       }
     } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
       sessionStorage.removeItem("facefox_signup_gate_active");
-      toast.error("sign in error");
+      toast.error("log in error");
       setGoogleLoading(false);
     }
   };
@@ -344,7 +344,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
           🔐
         </span>
         <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-           {isSignUpMode ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
+           {isSignUpMode ? <>sign up<br/>to save her</> : <>log in<br/>to save her</>}
         </h2>
 
         <div className="mt-8 w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
@@ -357,7 +357,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
               <>
                 <GoogleIcon />
-                {isSignUpMode ? "sign up with google" : "sign in with google"}
+                {isSignUpMode ? "sign up with google" : "log in with google"}
               </>
             )}
           </button>
@@ -392,7 +392,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
             style={{ borderRadius: 8, background: '#ffffff', color: '#000000' }}
           >
-            {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "signing in..."}</> : <>{isSignUpMode ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
+            {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "logging in..."}</> : <>{isSignUpMode ? "sign up" : "log in"}<ArrowRight size={14} /></>}
           </button>
 
         </div>
@@ -1186,13 +1186,13 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
       if (result?.error) {
         sessionStorage.removeItem("facefox_post_auth_home");
         sessionStorage.removeItem("facefox_signup_gate_active");
-        toast.error("sign in error");
+        toast.error("log in error");
         setGoogleLoading(false);
       }
     } catch {
       sessionStorage.removeItem("facefox_post_auth_home");
       sessionStorage.removeItem("facefox_signup_gate_active");
-      toast.error("sign in error");
+      toast.error("log in error");
       setGoogleLoading(false);
     }
   };
@@ -1235,7 +1235,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
             🔐
           </span>
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
-            {isSignUp ? <>sign up<br/>to save her</> : <>sign in<br/>to save her</>}
+            {isSignUp ? <>sign up<br/>to save her</> : <>log in<br/>to save her</>}
           </h2>
           <div className="mt-8 w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
@@ -1247,7 +1247,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               {googleLoading ? <><Loader2 className="animate-spin" size={18} />connecting...</> : (
                 <>
                   <GoogleIcon />
-                  {isSignUp ? "sign up with google" : "sign in with google"}
+                  {isSignUp ? "sign up with google" : "log in with google"}
                 </>
               )}
             </button>
@@ -1282,7 +1282,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
               style={{ borderRadius: 8, background: '#ffffff', color: '#000000' }}
             >
-              {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "signing in..."}</> : <>{isSignUp ? "sign up" : "sign in"}<ArrowRight size={14} /></>}
+              {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "logging in..."}</> : <>{isSignUp ? "sign up" : "log in"}<ArrowRight size={14} /></>}
             </button>
 
             <button
@@ -1291,7 +1291,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               className="w-full text-center text-[11px] font-extrabold lowercase text-white hover:opacity-80 transition-colors duration-150"
             >
               {isSignUp ? "already have an account? " : "no account? "}
-              <span className="underline">{isSignUp ? "sign in" : "sign up"}</span>
+              <span className="underline">{isSignUp ? "log in" : "sign up"}</span>
             </button>
           </div>
 
