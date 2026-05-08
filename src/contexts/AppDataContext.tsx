@@ -140,14 +140,16 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
         .order("created_at", { ascending: false })
         .limit(10);
 
-      if (!error && data) {
+      if (error) {
+        console.error("[AppData] characters fetch error:", error.message, error);
+      } else if (data) {
         setCharacters(data as CachedCharacter[]);
         writeLocal(CHARS_KEY, data);
         writeLocal(CACHE_USER_KEY, user.id);
         try { localStorage.setItem(CACHE_TIMESTAMP_KEY, String(Date.now())); } catch {}
       }
     } catch (err) {
-      console.error("refreshCharacters failed:", err);
+      console.error("[AppData] refreshCharacters threw:", err);
     } finally {
       window.clearTimeout(readyTimer);
       // Always flip ready, even on error — otherwise blocking loaders never release
