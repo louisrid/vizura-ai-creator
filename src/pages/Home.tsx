@@ -383,7 +383,7 @@ const Home = () => {
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
                 backgroundColor: "hsl(var(--card))",
-                border: "2px solid #ffe603",
+                border: "3px solid #ffe603",
               }}
             >
               <span className="relative z-[1] text-[15px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
@@ -567,7 +567,7 @@ const Home = () => {
                 borderRadius: 8,
                 color: "#ffffff",
                 backgroundColor: "hsl(var(--card))",
-                border: "2px solid #ffe603",
+                border: "3px solid #ffe603",
               }}
             >
               <span className="relative z-[1] text-[22px] font-[900] lowercase leading-[1.0] text-left" style={{ color: "#ffffff" }}>create<br />photo</span>
