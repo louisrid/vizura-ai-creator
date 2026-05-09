@@ -72,7 +72,7 @@ const BottomTabBar = () => {
       className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[82px] md:hidden"
       style={{
         backgroundColor: "#000000",
-        borderTop: "2px solid #ffe603",
+        borderTop: "3px solid #ffe603",
         paddingTop: "3px",
         paddingBottom: "3px",
       }}
