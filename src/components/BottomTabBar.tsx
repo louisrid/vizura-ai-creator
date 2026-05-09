@@ -69,10 +69,10 @@ const BottomTabBar = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[66px] md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[88px] md:hidden"
       style={{
         backgroundColor: "#000000",
-        borderTop: "3px solid #ffe603",
+        borderTop: "2px solid #ffe603",
       }}
       aria-label="primary navigation"
     >
@@ -83,18 +83,18 @@ const BottomTabBar = () => {
           <button
             key={tab.path}
             onClick={() => handleNav(tab.path)}
-            className="relative flex h-full flex-1 flex-col items-center justify-center gap-[3px] transition-opacity"
+            className="relative flex h-full flex-1 flex-col items-center justify-center gap-1 transition-opacity"
             style={{ color: active ? "#ffe603" : "#ffffff" }}
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
-            <Icon size={17} />
-            <span className="text-[9px] font-[800] lowercase tracking-wide">{tab.label}</span>
+            <Icon size={22} />
+            <span className="text-[12px] font-[800] lowercase tracking-wide">{tab.label}</span>
             {active && (
               <span
                 aria-hidden
                 className="absolute left-1/2 -translate-x-1/2"
-                style={{ bottom: 0, height: 2, width: "60%", backgroundColor: "#ffe603" }}
+                style={{ bottom: 0, height: 3, width: "60%", backgroundColor: "#ffe603" }}
               />
             )}
           </button>
