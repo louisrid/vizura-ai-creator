@@ -382,7 +382,7 @@ const Home = () => {
                 borderRadius: 8,
                 fontFamily: "-apple-system, 'SF Pro Display', 'SF Pro Rounded', system-ui, sans-serif",
                 color: "#ffffff",
-                backgroundColor: "hsl(var(--card))",
+                backgroundColor: "#000000",
                 border: "3px solid #ffe603",
               }}
             >
@@ -403,7 +403,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[10px] font-[800] lowercase px-2.5 py-1.5 transition-transform"
-                  style={{ color: "#ffffff", backgroundColor: "hsl(var(--card))", border: "2px solid #ffe603", borderRadius: 8 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}
                 >
                   see all →
                 </button>
@@ -453,7 +453,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[13px] font-[900] lowercase flex items-center gap-1.5" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
-                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[10px] font-[800] lowercase px-2.5 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "hsl(var(--card))", border: "2px solid #ffe603", borderRadius: 8 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[10px] font-[800] lowercase px-2.5 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
@@ -566,7 +566,7 @@ const Home = () => {
                 padding: "22px 20px",
                 borderRadius: 8,
                 color: "#ffffff",
-                backgroundColor: "hsl(var(--card))",
+                backgroundColor: "#000000",
                 border: "3px solid #ffe603",
               }}
             >
@@ -587,7 +587,7 @@ const Home = () => {
                 <button
                   onClick={() => { if (!user) { navigate("/auth?redirect=/storage"); return; } if (!onboardingComplete) return; navigate("/storage"); }}
                   className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow"
-                  style={{ color: "#ffffff", backgroundColor: "hsl(var(--card))", border: "2px solid #ffe603", borderRadius: 8 }}
+                  style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}
                 >
                   see all →
                 </button>
@@ -639,7 +639,7 @@ const Home = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[18px] font-[900] lowercase flex items-center gap-2" style={{ color: "#ffffff" }}>🧑 my characters</h2>
               <div className="relative" style={{ overflow: "hidden", borderRadius: 8 }}>
-                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "hsl(var(--card))", border: "2px solid #ffe603", borderRadius: 8 }}>
+                <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
                   manage →
                 </button>
                 {!onboardingComplete && <LockOverlay borderRadius={10} />}
