@@ -94,8 +94,8 @@ const Header = () => {
               onClick={() => { markLateralNav(); navigate("/auth"); }}
               className="flex items-center justify-center px-4 h-[34px] md:h-[40px]"
               style={{
-                backgroundColor: "#ffffff",
-                border: "2px solid #ffffff",
+                backgroundColor: "#ffe603",
+                border: "2px solid #ffe603",
                 borderRadius: 8,
               }}
               aria-label="log in"

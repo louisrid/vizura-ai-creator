@@ -390,7 +390,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEmailAuth(); }}
             disabled={emailLoading}
             className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-            style={{ borderRadius: 8, background: '#ffffff', color: '#000000' }}
+            style={{ borderRadius: 8, background: '#ffe603', color: '#000000' }}
           >
             {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUpMode ? "signing up..." : "logging in..."}</> : <>{isSignUpMode ? "sign up" : "log in"}<ArrowRight size={14} /></>}
           </button>
@@ -850,7 +850,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div> */}
-        <div style={{ position: 'relative', zIndex: 1, fontSize: 92, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 12, marginBottom: 24 }}>facebox</div>
+        <div style={{ position: 'relative', zIndex: 1, fontSize: 92, fontFamily: "'Roundo', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, marginBottom: 24 }}>facebox</div>
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffffff', border: 'none', borderRadius: 8, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
@@ -859,7 +859,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
               heroVisited.current = true; markHeroSeen();
               navigateTo(`/auth${window.location.search}`);
               window.setTimeout(() => { setVisible(false); }, 520);
-            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: 'hsl(var(--card))', border: '3px solid #ffe603', borderRadius: 8, color: '#ffffff', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
+            }} style={{ width: 130, padding: '10px 0', fontSize: 22, fontWeight: 900, background: '#ffe603', border: '3px solid #ffe603', borderRadius: 8, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>login</button>
           )}
         </div>
       </div>
@@ -1051,7 +1051,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center" : "items-center justify-start"}`}
-          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 130, paddingBottom: 0 }}
+          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 136, paddingBottom: 0 }}
         >
           {isHeroSlide ? (
             <div className="w-full">{renderSlide()}</div>
@@ -1280,7 +1280,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={handleEmailAuth}
               disabled={emailLoading || googleLoading}
               className="w-full h-14 text-sm font-[900] lowercase flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:opacity-90"
-              style={{ borderRadius: 8, background: '#ffffff', color: '#000000' }}
+              style={{ borderRadius: 8, background: '#ffe603', color: '#000000' }}
             >
               {emailLoading ? <><Loader2 className="animate-spin" size={18} />{isSignUp ? "signing up..." : "logging in..."}</> : <>{isSignUp ? "sign up" : "log in"}<ArrowRight size={14} /></>}
             </button>
