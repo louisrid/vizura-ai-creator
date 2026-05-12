@@ -296,12 +296,13 @@ const Home = () => {
       }
     });
 
-    // Safety timeout: 1.5 seconds — never hold the yellow bar longer than that
-    // even on slow networks. Cached content is already visible behind the bar.
+    // Safety timeout: 8 seconds — hold the yellow bar long enough for images
+    // to actually load and decode. The image onLoad handler will unblock faster
+    // in the common path; this only fires if something stalls.
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
       homeHasLoadedOnce = true;
-    }, 1500);
+    }, 8000);
     return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
   }, [expectedImageCount, cachedCharsLoaded, generationsReady]);
 
