@@ -85,7 +85,7 @@ const Home = () => {
 
   const characters = useMemo(() => {
     return cachedChars
-      .filter((c) => c.face_image_url && c.face_angle_url && c.body_anchor_url)
+      .filter((c) => c.face_image_url)
       .slice(0, 4) as CharacterPreview[];
   }, [cachedChars]);
 
@@ -333,7 +333,7 @@ const Home = () => {
 
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[92px] pb-[220px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[80px] pb-[220px] md:hidden">
           {/* Hero */}
           <h1 className="flex w-full flex-col items-start text-[44px] font-[900] lowercase leading-[0.94] tracking-[-1.7px] text-white mb-0 mt-0 text-left">
             <span className="block w-full text-left">what are we</span>
