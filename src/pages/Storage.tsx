@@ -27,7 +27,7 @@ let storageHasLoadedOnce = false;
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars } = useAppData();
+  const { generations, characters: cachedChars, generationsReady } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
