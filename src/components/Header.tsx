@@ -78,14 +78,10 @@ const Header = () => {
               <button
                 onClick={() => goOrAuth("/account")}
                 className="flex items-center justify-center w-[38px] h-[38px] md:w-[44px] md:h-[44px]"
-                style={{
-                  backgroundColor: "#000000",
-                  border: "2px solid #ffe603",
-                  borderRadius: 8,
-                }}
+                style={{ backgroundColor: "transparent", border: "none" }}
                 aria-label="settings"
               >
-                <Settings size={16} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
+                <Settings size={24} strokeWidth={3} className="md:!w-[28px] md:!h-[28px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
