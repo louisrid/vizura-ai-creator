@@ -78,8 +78,8 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
       ]);
 
       const [creditsRes, profileRes] = await Promise.all([
-        withTimeout(supabase.from("credits").select("balance").eq("user_id", user.id).single()),
-        withTimeout(supabase.from("profiles").select("has_claimed_free_gems, onboarding_complete").eq("user_id", user.id).single()),
+        withTimeout(Promise.resolve(supabase.from("credits").select("balance").eq("user_id", user.id).single())),
+        withTimeout(Promise.resolve(supabase.from("profiles").select("has_claimed_free_gems, onboarding_complete").eq("user_id", user.id).single())),
       ]);
 
       if (creditsRes.error) {
