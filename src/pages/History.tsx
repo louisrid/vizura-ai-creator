@@ -19,7 +19,7 @@ interface HistoryItem {
 
 const History = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars, generationsReady, charactersReady } = useAppData();
+  const { generations, characters: cachedChars } = useAppData();
   const navigate = useTransitionNavigate();
   const [expanded, setExpanded] = useState<HistoryItem | null>(null);
 

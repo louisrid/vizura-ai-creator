@@ -127,90 +127,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (!nextUser) return;
 
         if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-          // Login-only Google flow: if this OAuth round-trip was started from the
-          // "sign in" button, the account MUST already have a Facefox profile.
-          // If not, immediately sign back out and bounce to the hero with a toast.
-          if (event === "SIGNED_IN" && typeof window !== "undefined" &&
-              sessionStorage.getItem("facefox_login_only") === "1") {
+          // Clear leftover gate flags from any previous "login-only" / "signup-only" round-trips.
+          try {
             sessionStorage.removeItem("facefox_login_only");
-            void (async () => {
-              try {
-                const { data: profileRow } = await supabase
-                  .from("profiles")
-                  .select("user_id")
-                  .eq("user_id", nextUser.id)
-                  .maybeSingle();
-                if (!profileRow) {
-                  try {
-                    sessionStorage.removeItem("facefox_post_auth_home");
-                    sessionStorage.removeItem("facefox_signup_gate_active");
-                    sessionStorage.removeItem("facefox_guided_flow_state");
-                    sessionStorage.removeItem("facefox_resume_after_auth");
-                  } catch {}
-                  await supabase.auth.signOut();
-                  setUser(null);
-                  clearSpecialAccountCache();
-                  clearCachedOnboardingState();
-                  if (typeof window !== "undefined") {
-                    const { toast } = await import("@/components/ui/sonner");
-                    toast("press start instead!");
-                    if (window.location.pathname !== "/") {
-                      window.location.replace("/");
-                    }
-                  }
-                  return;
-                }
-              } catch (lookupErr) {
-                console.warn("login-only profile check failed:", lookupErr);
-              }
-              setUser(nextUser);
-              syncSpecialAccountCache(nextUser);
-              void fetchAndCacheOnboardingState(nextUser.id);
-              void hydrateUser(nextUser);
-            })();
-            return;
-          }
-
-          if (event === "SIGNED_IN" && typeof window !== "undefined" &&
-              sessionStorage.getItem("facefox_signup_only") === "1") {
             sessionStorage.removeItem("facefox_signup_only");
-            void (async () => {
-              try {
-                const { data: profileRow } = await supabase
-                  .from("profiles")
-                  .select("user_id, onboarding_complete")
-                  .eq("user_id", nextUser.id)
-                  .maybeSingle();
-                if (profileRow && profileRow.onboarding_complete) {
-                  try {
-                    sessionStorage.removeItem("facefox_post_auth_home");
-                    sessionStorage.removeItem("facefox_signup_gate_active");
-                    sessionStorage.removeItem("facefox_guided_flow_state");
-                    sessionStorage.removeItem("facefox_resume_after_auth");
-                  } catch {}
-                  await supabase.auth.signOut();
-                  setUser(null);
-                  clearSpecialAccountCache();
-                  clearCachedOnboardingState();
-                  if (typeof window !== "undefined") {
-                    const { toast } = await import("@/components/ui/sonner");
-                    toast("press login instead!");
-                    if (window.location.pathname !== "/") {
-                      window.location.replace("/");
-                    }
-                  }
-                  return;
-                }
-              } catch (lookupErr) {
-                console.warn("signup-only profile check failed:", lookupErr);
-              }
-              setUser(nextUser);
-              syncSpecialAccountCache(nextUser);
-              void fetchAndCacheOnboardingState(nextUser.id);
-              void hydrateUser(nextUser);
-            })();
-            return;
-          }
+          } catch {}
 
           setUser(nextUser);
           syncSpecialAccountCache(nextUser);
