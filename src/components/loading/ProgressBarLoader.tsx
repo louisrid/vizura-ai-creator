@@ -170,7 +170,7 @@ const ProgressBarLoader = ({
       className="relative z-10 flex flex-col items-center justify-center px-2"
       style={{ ...contentStyle, overflow: "hidden", touchAction: "none", gap: 0 }}
     >
-      <span style={{ fontSize: 28 }}>⚙️</span>
+      <span className="inline-block animate-bounce" style={{ fontSize: 26, marginBottom: 24 }}>⚙️</span>
 
       <motion.div
         className="flex h-8 items-center justify-center"

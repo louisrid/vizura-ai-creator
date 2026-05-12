@@ -691,8 +691,12 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
   }, [maybeShowNameToast]);
 
   const randomiseName = useCallback(() => {
-    updateCharacterName(RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)]);
-  }, [updateCharacterName]);
+    const nextName = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
+    setSelections((p) => ({ ...p, characterName: nextName }));
+    if (visible && isNameSlide) {
+      toast.success(getRandomNameToast());
+    }
+  }, [visible, isNameSlide]);
 
   const advance = useCallback(() => {
     toast.dismiss();
