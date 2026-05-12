@@ -24,17 +24,17 @@ const Header = () => {
     navigate(path);
   };
 
-  const headerContainerClass = "mx-auto flex h-[78px] w-full max-w-lg items-center justify-between px-[20px] md:h-[100px] md:max-w-3xl md:px-[36px]";
+  const headerContainerClass = "mx-auto flex h-[72px] w-full max-w-lg items-center justify-between px-[20px] md:h-[92px] md:max-w-3xl md:px-[36px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #ffe603", paddingTop: "13px" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #ffe603", paddingTop: "12px" }}>
       
       <div className="relative">
         <div className={headerContainerClass}>
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[22px] md:text-[27px] text-white tracking-[-0.5px] leading-none"
+                className="text-[20px] md:text-[25px] text-white tracking-[-0.5px] leading-none"
                 style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, transform: "translateY(0)" }}
               >
                 facebox
@@ -43,7 +43,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[31px] h-[31px] md:w-[36px] md:h-[36px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[29px] h-[29px] md:w-[33px] md:h-[33px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
@@ -52,7 +52,7 @@ const Header = () => {
                 }}
                 aria-label="my account"
               >
-                <User size={14} strokeWidth={3.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
+                <User size={13} strokeWidth={3.5} className="md:!w-[17px] md:!h-[17px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
@@ -61,7 +61,7 @@ const Header = () => {
             <div className="flex items-center gap-3 md:gap-5">
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[38px] md:h-[44px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[35px] md:h-[40px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
@@ -69,7 +69,7 @@ const Header = () => {
                 }}
                 aria-label="buy gems"
               >
-                <Gem size={13} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
+                <Gem size={12} strokeWidth={3} className="md:!w-[15px] md:!h-[15px]" style={{ color: "#00e0ff" }} />
                 <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white leading-none mt-[-2px]">{gems}</span>
               </button>
 
@@ -79,14 +79,14 @@ const Header = () => {
                 style={{ backgroundColor: "transparent", border: "none" }}
                 aria-label="settings"
               >
-                <Settings size={24} strokeWidth={3} className="md:!w-[28px] md:!h-[28px]" style={{ color: "#ffffff" }} />
+                <Settings size={22} strokeWidth={3} className="md:!w-[26px] md:!h-[26px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
           {!isAuthPage && !isLoggedIn && (
             <button
               onClick={() => { markLateralNav(); navigate("/auth"); }}
-              className="flex items-center justify-center px-4 h-[34px] md:h-[40px]"
+              className="flex items-center justify-center px-4 h-[31px] md:h-[37px]"
               style={{
                 backgroundColor: "#ffe603",
                 border: "2px solid #ffe603",
