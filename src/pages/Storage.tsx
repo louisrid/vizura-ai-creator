@@ -27,7 +27,7 @@ let storageHasLoadedOnce = false;
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars } = useAppData();
+  const { generations, characters: cachedChars, generationsReady } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
@@ -115,6 +115,17 @@ const Storage = () => {
       if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
       return;
     }
+    // Wait for the AppData fetch to settle before deciding whether to release.
+    // If we release based on images.length === 0 BEFORE the fetch completes, the
+    // user sees the yellow bar disappear, then grey skeletons for the duration
+    // of the fetch + image decode. Hold the loader until generationsReady is true,
+    // then evaluate.
+    if (!generationsReady) {
+      if (!unblockStorageRef.current) {
+        unblockStorageRef.current = registerBlockingLoader();
+      }
+      return;
+    }
     if (expectedStorageImageCount === 0) {
       if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
       storageHasLoadedOnce = true;
@@ -135,7 +146,7 @@ const Storage = () => {
       storageHasLoadedOnce = true;
     }, 8000);
     return () => { clearTimeout(timer); if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; } };
-  }, [expectedStorageImageCount]);
+  }, [expectedStorageImageCount, generationsReady]);
 
   if (!authLoading && !user) return <div className="min-h-screen" />;
 
