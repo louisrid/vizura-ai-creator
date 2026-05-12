@@ -346,15 +346,17 @@ const Index = () => {
     };
   }, []);
 
-  // Use cached characters instead of fetching
+  // Use cached characters instead of fetching.
+  // Do NOT gate on `cachedCharsLoaded` — the AppDataContext hydrates `cachedCharacters`
+  // synchronously from localStorage on mount, so reading it directly avoids a flash where
+  // the selector shows "select character" during the yellow load bar even when a persisted
+  // selection exists. The effect re-runs when `cachedCharacters` updates with fresh data.
   useEffect(() => {
     if (!user) {
       setCharacters([]);
       setCharactersLoaded(true);
       return;
     }
-    if (!cachedCharsLoaded) return;
-
     const data = cachedCharacters as Character[];
     if (data.length > 0) {
       setCharacters(data);

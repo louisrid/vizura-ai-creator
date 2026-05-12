@@ -1051,7 +1051,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center" : "items-center justify-start"}`}
-          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 110, paddingBottom: 0 }}
+          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 130, paddingBottom: 0 }}
         >
           {isHeroSlide ? (
             <div className="w-full">{renderSlide()}</div>
