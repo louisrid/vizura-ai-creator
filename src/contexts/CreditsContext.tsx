@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { readCachedOnboardingState } from "@/lib/onboardingState";
 
 
 interface GemsContextType {
@@ -30,6 +31,15 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     const rawUser = localStorage.getItem("facefox_cached_user");
     const userId = rawUser ? (() => { try { return JSON.parse(rawUser)?.id; } catch { return null; } })() : localStorage.getItem("facefox_cached_user_id");
     return userId ? localStorage.getItem("facefox_gems_claimed:" + userId) === "1" : false;
+  });
+  // Track onboarding completion sync from cache so the gem mask doesn't lag a network roundtrip.
+  // Default true so completed users never see a 0 flash on mount before profile fetch returns.
+  const [onboardingComplete, setOnboardingComplete] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const rawUser = localStorage.getItem("facefox_cached_user");
+    const userId = rawUser ? (() => { try { return JSON.parse(rawUser)?.id; } catch { return null; } })() : localStorage.getItem("facefox_cached_user_id");
+    const cached = userId ? readCachedOnboardingState(userId) : null;
+    return cached?.onboardingComplete ?? true;
   });
 
   const getCacheKey = useCallback((userId: string) => `${GEMS_CACHE_PREFIX}${userId}`, []);
@@ -79,6 +89,8 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
       if (claimed && typeof window !== "undefined") {
         window.localStorage.setItem(`${CLAIMED_CACHE_PREFIX}${user.id}`, "1");
       }
+      const onbComplete = !!profileRes.data?.onboarding_complete;
+      setOnboardingComplete(onbComplete);
     } catch (e) {
       console.error("Gems fetch error:", e);
     } finally {
@@ -108,9 +120,13 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     fetchGems();
   }, [authLoading, fetchGems, readCachedGems, user]);
 
-  // Mask gems to 0 only until user has claimed free OR made a paid purchase.
-  // has_claimed_free_gems is flipped to true on free claim AND on first paid purchase.
-  const shouldMask = !hasClaimedFreeGems;
+  // Mask gems to 0 ONLY during onboarding AND before the user has claimed free gems.
+  // New users get hidden onboarding credits used for regenerations during the creation
+  // flow — those must never be exposed. After they claim 5 free gems OR complete onboarding
+  // (taps "create photo" the first time, which resets balance to 0 in the DB), show the
+  // real balance. Completed users never see a 0 flash because `onboardingComplete` defaults
+  // to `true` and is hydrated synchronously from localStorage.
+  const shouldMask = !onboardingComplete && !hasClaimedFreeGems;
   const gems = shouldMask ? 0 : rawGems;
 
   return (
