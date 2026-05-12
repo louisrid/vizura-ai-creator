@@ -242,9 +242,11 @@ const Storage = () => {
                     <img
                       src={img.url}
                       alt=""
+                      data-storage-image="1"
                       className="h-full w-full object-cover"
                       style={hidden ? { filter: "blur(20px) brightness(0.3)" } : undefined}
-                      onError={() => { handleDelete(img); }}
+                      onLoad={handleStorageImageLoaded}
+                      onError={() => { handleStorageImageLoaded(); handleDelete(img); }}
                     />
                   </AspectRatio>
                 </button>
