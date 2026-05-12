@@ -54,7 +54,7 @@ const GENS_KEY = "facefox_cached_generations";
 const CACHE_USER_KEY = "facefox_cached_user_id";
 const CACHE_TIMESTAMP_KEY = "facefox_cache_timestamp";
 const CACHE_STALE_MS = 30_000;
-const QUERY_TIMEOUT_MS = 8_000;
+const QUERY_TIMEOUT_MS = 3_000;
 
 const readLocal = <T,>(key: string): T | null => {
   try {
@@ -102,19 +102,19 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     return cached && cachedUserId ? cached : [];
   });
 
-  // "ready" = pages can safely render from cache or an empty state without
-  // showing grey placeholders forever while background fetches settle.
+  // "ready" = pages can render from cache instantly without grey placeholders.
+  // Mark ready as soon as a cached array exists in any form — do not gate on a
+  // strict user-id match, which fails on auth refresh / cache-key-shape mismatches
+  // and would otherwise force pages back into a grey-skeleton state on every reload.
   const [charactersReady, setCharactersReady] = useState(() => {
     if (typeof window === "undefined") return false;
-    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
     const cached = readLocal<CachedCharacter[]>(CHARS_KEY);
-    return !!cachedUserId && Array.isArray(cached);
+    return Array.isArray(cached);
   });
   const [generationsReady, setGenerationsReady] = useState(() => {
     if (typeof window === "undefined") return false;
-    const cachedUserId = localStorage.getItem(CACHE_USER_KEY);
     const cached = readLocal<CachedGeneration[]>(GENS_KEY);
-    return !!cachedUserId && Array.isArray(cached);
+    return Array.isArray(cached);
   });
 
   const fetchIdRef = useRef(0);
@@ -239,12 +239,17 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
       setCharactersReady(true);
       setGenerationsReady(true);
     } else {
-      // Different user — clear stale cache
-      clearLocal();
-      setCharacters([]);
-      setGenerations([]);
-      setCharactersReady(false);
-      setGenerationsReady(false);
+      // User-id mismatch (e.g. cache-key-shape skew, auth refresh race). Do NOT
+      // wipe the cache — keep showing the old data so the UI never falls back to
+      // grey skeletons. The background refresh below will overwrite with fresh data.
+      // If it turns out to truly be a different user, the next fetch will update
+      // characters/generations to the correct set.
+      const cachedChars = readLocal<CachedCharacter[]>(CHARS_KEY);
+      const cachedGens = readLocal<CachedGeneration[]>(GENS_KEY);
+      if (cachedChars) setCharacters(cachedChars);
+      if (cachedGens) setGenerations(cachedGens);
+      setCharactersReady(true);
+      setGenerationsReady(true);
     }
 
     // Check cache staleness — if older than 30s, refetch immediately in background
