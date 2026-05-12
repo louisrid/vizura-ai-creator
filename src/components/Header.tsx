@@ -17,8 +17,6 @@ const Header = () => {
 
   const isLoggedIn = !!user?.id;
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
-  
-
   const handleLogoClick = () => { markLateralNav(); navigate("/"); };
   const goOrAuth = (path: string) => {
     markLateralNav();
