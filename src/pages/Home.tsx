@@ -296,11 +296,12 @@ const Home = () => {
       }
     });
 
-    // Safety timeout: 3 seconds for cached images, but never longer than that
+    // Safety timeout: 1.5 seconds — never hold the yellow bar longer than that
+    // even on slow networks. Cached content is already visible behind the bar.
     const timer = setTimeout(() => {
       if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; }
       homeHasLoadedOnce = true;
-    }, 3000);
+    }, 1500);
     return () => { clearTimeout(timer); if (unblockRef.current) { unblockRef.current(); unblockRef.current = null; } };
   }, [expectedImageCount, cachedCharsLoaded, generationsReady]);
 
