@@ -54,7 +54,7 @@ const GENS_KEY = "facefox_cached_generations";
 const CACHE_USER_KEY = "facefox_cached_user_id";
 const CACHE_TIMESTAMP_KEY = "facefox_cache_timestamp";
 const CACHE_STALE_MS = 30_000;
-const QUERY_TIMEOUT_MS = 3_000;
+const QUERY_TIMEOUT_MS = 8_000;
 
 const readLocal = <T,>(key: string): T | null => {
   try {
