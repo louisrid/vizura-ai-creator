@@ -70,10 +70,16 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     try {
-      // Fetch credits and profile in parallel
+      // Fetch credits and profile in parallel, with an 8s timeout per query so a
+      // silent network hang doesn't leave the gem count stale for 30+ seconds.
+      const withTimeout = <T,>(p: Promise<T>): Promise<T> => Promise.race([
+        p,
+        new Promise<T>((_, reject) => setTimeout(() => reject(new Error("gems fetch timeout")), 8000)),
+      ]);
+
       const [creditsRes, profileRes] = await Promise.all([
-        supabase.from("credits").select("balance").eq("user_id", user.id).single(),
-        supabase.from("profiles").select("has_claimed_free_gems, onboarding_complete").eq("user_id", user.id).single(),
+        withTimeout(supabase.from("credits").select("balance").eq("user_id", user.id).single()),
+        withTimeout(supabase.from("profiles").select("has_claimed_free_gems, onboarding_complete").eq("user_id", user.id).single()),
       ]);
 
       if (creditsRes.error) {
@@ -118,6 +124,19 @@ export const GemsProvider = ({ children }: { children: ReactNode }) => {
     }
     setLoading(true);
     fetchGems();
+    // Refetch gems when the tab regains focus, the user navigates back, or when
+    // generations change (every photo costs gems, so balance is out of date).
+    if (typeof window === "undefined") return;
+    const handleRefresh = () => { void fetchGems(); };
+    const handleVisibility = () => { if (document.visibilityState === "visible") void fetchGems(); };
+    window.addEventListener("focus", handleRefresh);
+    window.addEventListener("facefox:generations-changed", handleRefresh);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.removeEventListener("focus", handleRefresh);
+      window.removeEventListener("facefox:generations-changed", handleRefresh);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [authLoading, fetchGems, readCachedGems, user]);
 
   // Mask gems to 0 ONLY during onboarding AND before the user has claimed free gems.
