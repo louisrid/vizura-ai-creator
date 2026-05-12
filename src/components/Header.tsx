@@ -17,7 +17,7 @@ const Header = () => {
 
   const isLoggedIn = !!user?.id;
   const isAuthPage = pathname === "/auth" || pathname === "/reset-password";
-  const isHomeRoute = pathname === "/";
+  
 
   const handleLogoClick = () => { markLateralNav(); navigate("/"); };
   const goOrAuth = (path: string) => {
@@ -72,7 +72,7 @@ const Header = () => {
                 aria-label="buy gems"
               >
                 <Gem size={13} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white leading-none mt-[-2px]">{isLoggedIn ? gems : 0}</span>
+                <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white leading-none mt-[-2px]">{gems}</span>
               </button>
 
               <button
