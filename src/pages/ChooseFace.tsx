@@ -819,16 +819,20 @@ const ChooseFace = () => {
         {!loading && faces.length > 0 && (
           <>
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[14px] pt-4 pb-[140px] md:max-w-3xl md:px-10">
-              <div className="flex items-center gap-4 mb-5">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[20px] pt-[44px] pb-[140px] md:max-w-3xl md:px-10">
+              <div className="flex items-center gap-5 mb-11">
                 <button
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
-                  className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
-                  style={{ borderRadius: 8, backgroundColor: "#ffffff" }}
+                  className="flex items-center justify-center hover:opacity-90 transition-colors active:scale-95 w-[40px] h-[40px] md:w-[48px] md:h-[48px] mt-6 md:mt-8"
+                  style={{
+                    borderRadius: 8,
+                    backgroundColor: "hsl(var(--card))",
+                    border: "2px solid #ffe603",
+                  }}
                   aria-label="go back"
                 >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-[16px] md:h-[16px]">
                     <line x1="12" y1="7" x2="2" y2="7" />
                     <polyline points="7,2 2,7 7,12" />
                   </svg>
@@ -837,7 +841,7 @@ const ChooseFace = () => {
               </div>
 
 
-              <div className="mx-auto mt-2 flex w-full max-w-[26rem] md:max-w-[40rem] flex-col gap-4 md:gap-6">
+              <div className="mx-auto flex w-full max-w-[26rem] md:max-w-[40rem] flex-col gap-4 md:gap-6">
                 <div className="grid grid-cols-3 gap-3 md:gap-6">
                   {faces.map((url, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
