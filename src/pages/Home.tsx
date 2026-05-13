@@ -6,7 +6,7 @@ import { User, Copy, Download } from "@/lib/icons";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
-import WelcomeDialog from "@/components/WelcomeDialog";
+
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
