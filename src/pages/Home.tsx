@@ -183,26 +183,6 @@ const Home = () => {
     return () => window.removeEventListener("facefox:open-creator", handler);
   }, [user]);
 
-  useEffect(() => {
-    if (showGuided) {
-      if (typeof window !== "undefined") localStorage.setItem("facefox_welcome_dismissed", "1");
-      setWelcomeOpen(false);
-      return;
-    }
-    if (!lockStateResolved || !charsLoaded) return;
-    if (effectiveOnboardingComplete) return;
-    if (typeof window !== "undefined" && localStorage.getItem("facefox_welcome_dismissed") === "1") return;
-    setWelcomeOpen(true);
-  }, [lockStateResolved, charsLoaded, effectiveOnboardingComplete, showGuided]);
-
-  useEffect(() => {
-    const handler = () => {
-      if (typeof window !== "undefined") localStorage.removeItem("facefox_welcome_dismissed");
-      setWelcomeOpen(true);
-    };
-    window.addEventListener("facefox:open-welcome", handler);
-    return () => window.removeEventListener("facefox:open-welcome", handler);
-  }, []);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
