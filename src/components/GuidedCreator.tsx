@@ -1039,6 +1039,20 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           opacity: 1,
         }}
       >
+      {/* facebox wordmark — centered at top, matching the header's logo position on non-creator routes */}
+      {visualStepType !== "hero" && visualStepType !== "signup" && (
+        <div className="absolute inset-x-0 top-0 z-20 pointer-events-none" style={{ paddingTop: 11 }}>
+          <div className="mx-auto flex h-[66px] w-full max-w-lg items-center justify-center px-[20px] md:h-[85px] md:max-w-3xl md:px-[36px]">
+            <span
+              className="text-[18px] md:text-[23px] text-white tracking-[-0.5px] leading-none"
+              style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900 }}
+            >
+              facebox
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Progress dashes — static, never fade during transitions */}
       <div className="absolute inset-x-0 z-10 flex flex-col items-center px-4" style={{ top: 0, paddingTop: "max(env(safe-area-inset-top), 64px)", opacity: showDashes ? 1 : 0, pointerEvents: showDashes ? 'auto' as const : 'none' as const, display: "none" }}>
           <div className="flex items-center justify-center gap-[6px] md:gap-[8px] mx-auto">
@@ -1055,7 +1069,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
       <div className="flex-1 flex justify-center px-6 md:px-12 min-h-0 overflow-hidden">
         <div
           className={`mx-auto flex w-full flex-col ${visualStepType === "signup" ? "max-w-md md:max-w-lg" : "max-w-sm md:max-w-lg"} ${visualStepType === "hero" || visualStepType === "signup" ? "items-center justify-center" : "items-center justify-start"}`}
-          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 136, paddingBottom: 0 }}
+          style={visualStepType === "hero" || visualStepType === "signup" ? undefined : { paddingTop: 142, paddingBottom: 0 }}
         >
           {isHeroSlide ? (
             <div className="w-full">{renderSlide()}</div>
