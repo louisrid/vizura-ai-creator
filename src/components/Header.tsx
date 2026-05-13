@@ -34,8 +34,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[18px] md:text-[23px] text-white tracking-[-0.5px] leading-none"
-                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, transform: "translateY(0)" }}
+                className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none"
+                style={{ fontFamily: "'Welbut', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 400, transform: "translateY(0)" }}
               >
                 facebox
               </span>
@@ -58,7 +58,7 @@ const Header = () => {
           </div>
 
           {!isAuthPage && isLoggedIn && (
-            <div className="flex items-center gap-3 md:gap-5">
+            <div className="flex items-center gap-[10px] md:gap-[12px]">
               <button
                 onClick={() => goOrAuth("/top-ups")}
                 className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[32px] md:h-[37px]"
