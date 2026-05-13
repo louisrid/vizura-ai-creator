@@ -34,8 +34,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none"
-                style={{ fontFamily: "'Welbut', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 400, transform: "translateY(0)" }}
+                className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none lowercase"
+                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900 }}
               >
                 facebox
               </span>
@@ -58,7 +58,7 @@ const Header = () => {
           </div>
 
           {!isAuthPage && isLoggedIn && (
-            <div className="flex items-center gap-[10px] md:gap-[12px]">
+            <div className="flex items-center gap-[14px] md:gap-[16px]">
               {user?.email === "louisjridland@gmail.com" && pathname === "/" && (
                 <button
                   onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
@@ -86,7 +86,7 @@ const Header = () => {
 
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center w-[38px] h-[38px] md:w-[44px] md:h-[44px]"
+                className="flex items-center justify-center w-[32px] h-[32px] md:w-[37px] md:h-[37px]"
                 style={{ backgroundColor: "transparent", border: "none" }}
                 aria-label="settings"
               >
