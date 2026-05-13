@@ -56,12 +56,12 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
               backgroundColor: "hsl(var(--card))",
               border: "2px solid hsl(var(--border-mid))",
               borderRadius: 10,
-              padding: "26px 22px 22px",
+              padding: 10,
             }}
           >
             <ModalCloseButton onClick={onClose} aria-label="dismiss welcome" />
 
-            <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="flex items-center justify-center gap-2 mt-3 mb-1">
               <Sparkles size={18} strokeWidth={3} style={{ color: "#ffe603" }} />
               <h2
                 id="welcome-dialog-title"
@@ -73,13 +73,13 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
             </div>
 
             <p
-              className="text-[14px] lowercase text-white text-center mt-2 mb-5"
+              className="text-[14px] lowercase text-white text-center mt-2 mb-3"
               style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700, letterSpacing: "-0.2px" }}
             >
               let's create your first ai character
             </p>
 
-            <div className="grid grid-cols-3 gap-2 mb-5">
+            <div className="grid grid-cols-3 gap-2 mb-3">
               {[1, 2, 3].map((n) => (
                 <div
                   key={n}
@@ -104,14 +104,14 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
               onClick={onStart}
               className="flex items-center justify-center w-full select-none"
               style={{
-                backgroundColor: "#000000",
+                backgroundColor: "#ffe603",
                 border: "2px solid #ffe603",
                 borderRadius: 10,
                 height: 48,
                 fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif",
                 fontWeight: 900,
                 fontSize: 16,
-                color: "#ffffff",
+                color: "#000000",
                 letterSpacing: "-0.3px",
                 textTransform: "lowercase",
               }}
