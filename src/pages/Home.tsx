@@ -92,7 +92,7 @@ const Home = () => {
 
   const charsLoaded = cachedCharsLoaded;
   const [showGuided, setShowGuided] = useState(() => shouldOpenGuidedOnMount);
-  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(() => shouldOpenGuidedOnMount);
