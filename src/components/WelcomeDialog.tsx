@@ -37,8 +37,8 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[10000] flex items-center justify-center px-5"
-          style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)" }}
+          className="fixed inset-0 z-[10000] flex items-center justify-center"
+          style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", padding: 10 }}
           onClick={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
@@ -51,7 +51,7 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 4 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-[360px]"
+            className="relative w-full h-full flex flex-col"
             style={{
               backgroundColor: "hsl(var(--card))",
               border: "2px solid hsl(var(--border-mid))",
@@ -62,39 +62,38 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
           >
             <ModalCloseButton onClick={onClose} aria-label="dismiss welcome" />
 
-            <div className="flex items-center justify-center gap-[6px] pt-[14px] pb-[2px]">
-              <Sparkles size={18} strokeWidth={3} style={{ color: "#ffe603" }} />
+            <div className="flex items-center justify-center gap-[8px] pt-[10px] pb-[6px]">
+              <Sparkles size={22} strokeWidth={3} style={{ color: "#ffe603" }} />
               <h2
                 id="welcome-dialog-title"
-                className="text-[24px] leading-none lowercase text-white text-center"
-                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.6px" }}
+                className="text-[28px] leading-none lowercase text-white text-center"
+                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.7px" }}
               >
                 welcome to facebox
               </h2>
             </div>
 
             <p
-              className="text-[13px] lowercase text-white text-center pt-[6px] pb-[12px]"
+              className="text-[15px] lowercase text-white text-center pb-[10px]"
               style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 600, letterSpacing: "-0.2px" }}
             >
               let's create your first ai character
             </p>
 
-            <div className="grid grid-cols-3 gap-[6px] pb-[10px]">
+            <div className="flex-1 grid grid-cols-1 gap-[10px] pb-[10px] min-h-0">
               {[1, 2, 3].map((n) => (
                 <div
                   key={n}
-                  style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#000" }}
+                  className="relative w-full h-full overflow-hidden"
+                  style={{ borderRadius: 10, backgroundColor: "#000" }}
                 >
-                  <AspectRatio ratio={3 / 4}>
-                    <img
-                      src={`/welcome/${n}.jpg`}
-                      alt=""
-                      className="h-full w-full object-cover"
-                      loading="eager"
-                      draggable={false}
-                    />
-                  </AspectRatio>
+                  <img
+                    src={`/welcome/${n}.jpg`}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="eager"
+                    draggable={false}
+                  />
                 </div>
               ))}
             </div>
@@ -103,15 +102,15 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
               ref={startBtnRef}
               type="button"
               onClick={onStart}
-              className="flex items-center justify-center w-full select-none"
+              className="flex items-center justify-center w-full select-none shrink-0"
               style={{
                 backgroundColor: "#ffe603",
                 border: "2px solid #ffe603",
                 borderRadius: 10,
-                height: 50,
+                height: 56,
                 fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif",
                 fontWeight: 900,
-                fontSize: 16,
+                fontSize: 17,
                 color: "#000000",
                 letterSpacing: "-0.3px",
                 textTransform: "lowercase",
