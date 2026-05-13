@@ -51,39 +51,40 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 4 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-[380px]"
+            className="relative w-full max-w-[360px]"
             style={{
               backgroundColor: "hsl(var(--card))",
               border: "2px solid hsl(var(--border-mid))",
-              borderRadius: 10,
+              borderRadius: 14,
               padding: 10,
+              boxShadow: "0 24px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02) inset",
             }}
           >
             <ModalCloseButton onClick={onClose} aria-label="dismiss welcome" />
 
-            <div className="flex items-center justify-center gap-2 mt-3 mb-1">
+            <div className="flex items-center justify-center gap-[6px] pt-[14px] pb-[2px]">
               <Sparkles size={18} strokeWidth={3} style={{ color: "#ffe603" }} />
               <h2
                 id="welcome-dialog-title"
-                className="text-[22px] leading-none lowercase text-white text-center"
-                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.5px" }}
+                className="text-[24px] leading-none lowercase text-white text-center"
+                style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.6px" }}
               >
                 welcome to facebox
               </h2>
             </div>
 
             <p
-              className="text-[14px] lowercase text-white text-center mt-2 mb-3"
-              style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700, letterSpacing: "-0.2px" }}
+              className="text-[13px] lowercase text-white text-center pt-[6px] pb-[12px]"
+              style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 600, letterSpacing: "-0.2px" }}
             >
               let's create your first ai character
             </p>
 
-            <div className="grid grid-cols-3 gap-2 mb-3">
+            <div className="grid grid-cols-3 gap-[6px] pb-[10px]">
               {[1, 2, 3].map((n) => (
                 <div
                   key={n}
-                  style={{ borderRadius: 10, overflow: "hidden", border: "2px solid hsl(var(--border-mid))" }}
+                  style={{ borderRadius: 10, overflow: "hidden", backgroundColor: "#000" }}
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img
@@ -107,7 +108,7 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
                 backgroundColor: "#ffe603",
                 border: "2px solid #ffe603",
                 borderRadius: 10,
-                height: 48,
+                height: 50,
                 fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif",
                 fontWeight: 900,
                 fontSize: 16,
