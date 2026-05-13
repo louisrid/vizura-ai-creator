@@ -1045,7 +1045,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           <div className="mx-auto flex h-[66px] w-full max-w-lg items-center justify-center px-[20px] md:h-[85px] md:max-w-3xl md:px-[36px]">
             <span
               className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none lowercase"
-              style={{ fontFamily: "'Utendo', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700 }}
+              style={{ fontWeight: 900 }}
             >
               facebox
             </span>
