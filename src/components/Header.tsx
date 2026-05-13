@@ -1,6 +1,6 @@
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useLocation } from "react-router-dom";
-import { Gem, Settings, User } from "@/lib/icons";
+import { Gem, Settings, User, Sparkles } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -72,6 +72,17 @@ const Header = () => {
                 <Gem size={11} strokeWidth={3} className="md:!w-[14px] md:!h-[14px]" style={{ color: "#00e0ff" }} />
                 <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white leading-none">{gems}</span>
               </button>
+
+              {user?.email === "louisjridland@gmail.com" && pathname === "/" && (
+                <button
+                  onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
+                  className="flex items-center justify-center h-[32px] w-[32px] md:h-[37px] md:w-[37px]"
+                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8 }}
+                  aria-label="test welcome popup"
+                >
+                  <Sparkles size={14} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffe603" }} />
+                </button>
+              )}
 
               <button
                 onClick={() => goOrAuth("/account")}
