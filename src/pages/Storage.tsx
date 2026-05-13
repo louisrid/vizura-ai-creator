@@ -22,8 +22,6 @@ interface StorageImage {
   characterName?: string;
 }
 
-let storageHasLoadedOnce = false;
-
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
   const { generations, characters: cachedChars, generationsReady } = useAppData();
