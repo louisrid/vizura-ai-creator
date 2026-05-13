@@ -73,45 +73,48 @@ const Account = () => {
         </div>
 
         {/* Avatar */}
-        <div className="w-full flex justify-end mb-6">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-neon-yellow">
-            <span className="text-2xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
+        <div className="w-full flex justify-center mb-10">
+          <div className="w-28 h-28 rounded-full flex items-center justify-center bg-neon-yellow">
+            <span className="text-5xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
         </div>
 
         {/* Settings rows */}
-        <div className="w-full max-w-[240px] flex flex-col gap-2.5 self-center">
+        <div className="w-full max-w-[300px] flex flex-col gap-3.5 self-center">
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">change password</span>
-            <Lock size={13} strokeWidth={2.5} className="text-white shrink-0" />
+            <Lock size={16} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">subscription</span>
-            <Gem size={13} strokeWidth={2.5} className="text-white shrink-0" />
+            <Gem size={16} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">support</span>
-            <span className="text-[13px] leading-none flex items-center">✉️</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white shrink-0">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" />
+            </svg>
           </button>
 
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
+              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
               onClick={() => navigate("/admin")}
             >
               <span className="leading-none">admin</span>
-              <Eye size={13} strokeWidth={2.5} className="text-white shrink-0" />
+              <Eye size={16} strokeWidth={2.5} className="text-white shrink-0" />
             </button>
           )}
         </div>
