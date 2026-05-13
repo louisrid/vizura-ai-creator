@@ -34,8 +34,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none lowercase"
-                style={{ fontFamily: "'Utendo', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700 }}
+                className="text-[20px] md:text-[26px] text-white tracking-[-0.5px] leading-none lowercase"
+                style={{ fontFamily: "'Utendo', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700, transform: "translateY(2px)", display: "inline-block" }}
               >
                 facebox
               </span>
@@ -63,7 +63,7 @@ const Header = () => {
                 <button
                   onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
                   className="flex items-center justify-center h-[32px] w-[32px] md:h-[37px] md:w-[37px]"
-                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8 }}
+                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8, transform: "translateX(4px)" }}
                   aria-label="test welcome popup"
                 >
                   <Sparkles size={14} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffe603" }} />
