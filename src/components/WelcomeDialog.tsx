@@ -38,7 +38,7 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[10000] flex items-center justify-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", padding: 10 }}
+          style={{ backgroundColor: "rgba(0,0,0,0.83)", backdropFilter: "blur(4px)", padding: 26 }}
           onClick={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
