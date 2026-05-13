@@ -73,36 +73,36 @@ const Account = () => {
         </div>
 
         {/* Avatar */}
-        <div className="w-full flex justify-center mt-6 mb-8">
-          <div className="w-20 h-20 rounded-full flex items-center justify-center bg-neon-yellow">
-            <span className="text-3xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
+        <div className="w-full flex justify-center mt-12 mb-12">
+          <div className="w-28 h-28 rounded-full flex items-center justify-center bg-neon-yellow">
+            <span className="text-5xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
         </div>
 
         {/* Settings rows */}
-        <div className="w-full max-w-[220px] flex flex-col gap-2 self-center">
+        <div className="w-full flex flex-col gap-3 self-center">
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[11px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 h-14 text-[14px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">change password</span>
-            <Lock size={14} strokeWidth={2.5} className="text-white shrink-0" />
+            <Lock size={20} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[11px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 h-14 text-[14px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">subscription</span>
-            <Gem size={14} strokeWidth={2.5} className="text-white shrink-0" />
+            <Gem size={20} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[11px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 h-14 text-[14px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">support</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white shrink-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white shrink-0">
               <rect x="3" y="5" width="18" height="14" rx="2" />
               <path d="m3 7 9 6 9-6" />
             </svg>
@@ -110,18 +110,18 @@ const Account = () => {
 
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[11px] font-[900] lowercase text-white"
+              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-5 h-14 text-[14px] font-[900] lowercase text-white"
               onClick={() => navigate("/admin")}
             >
               <span className="leading-none">admin</span>
-              <Eye size={14} strokeWidth={2.5} className="text-white shrink-0" />
+              <Eye size={20} strokeWidth={2.5} className="text-white shrink-0" />
             </button>
           )}
         </div>
 
         <button
-          className="self-center mt-5 px-3 py-1.5 text-[9px] font-[900] lowercase"
-          style={{ color: "#ffffff", backgroundColor: "#1a0505", border: "2px solid #ff4444", borderRadius: 8 }}
+          className="self-center mt-10 px-4 py-2 text-[11px] font-[900] lowercase"
+          style={{ color: "#ffffff", backgroundColor: "#1a0505", border: "2px solid #ff4444", borderRadius: 10 }}
           onClick={handleSignOut}
         >
           sign out
