@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { ArrowRight, Loader2, Eye, Gem } from "@/lib/icons";
+import { ArrowRight, Loader2, Eye, Gem, Lock, Settings } from "@/lib/icons";
 import GoogleIcon from "@/components/GoogleIcon";
 
 import BackButton from "@/components/BackButton";
@@ -80,37 +80,38 @@ const Account = () => {
         </div>
 
         {/* Settings rows */}
-        <div className="w-full max-w-[340px] flex flex-col gap-3 self-center">
+        <div className="w-full max-w-[240px] flex flex-col gap-2.5 self-center">
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-5 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
-            <span>change password</span>
+            <span className="leading-none">change password</span>
+            <Lock size={13} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-5 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
-            <span>subscription</span>
-            <Gem size={14} strokeWidth={2.5} className="text-white" />
+            <span className="leading-none">subscription</span>
+            <Gem size={13} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-5 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
-            <span>support</span>
-            <span className="text-[14px] leading-none">✉️</span>
+            <span className="leading-none">support</span>
+            <span className="text-[13px] leading-none flex items-center">✉️</span>
           </button>
 
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-5 text-[13px] font-[900] lowercase text-white"
+              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-3 h-10 text-[12px] font-[900] lowercase text-white"
               onClick={() => navigate("/admin")}
             >
-              admin
-              <Eye size={14} strokeWidth={2.5} />
+              <span className="leading-none">admin</span>
+              <Eye size={13} strokeWidth={2.5} className="text-white shrink-0" />
             </button>
           )}
         </div>
