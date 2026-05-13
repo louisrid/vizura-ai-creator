@@ -1,7 +1,6 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { registerBlockingLoader } from "@/lib/startupSplash";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Trash2, Wand2, Copy, Eye, EyeOff } from "@/lib/icons";
 import { toast } from "@/components/ui/sonner";
@@ -23,11 +22,9 @@ interface StorageImage {
   characterName?: string;
 }
 
-let storageHasLoadedOnce = false;
-
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
-  const { generations, characters: cachedChars, generationsReady } = useAppData();
+  const { generations, characters: cachedChars } = useAppData();
   const navigate = useTransitionNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState<StorageImage | null>(null);
@@ -95,58 +92,8 @@ const Storage = () => {
     }
   }, [images]);
 
-  // Block the yellow load bar until all visible images on /storage have loaded.
-  // First visit only — subsequent navigations skip the block.
-  const expectedStorageImageCount = images.length;
-  const loadedStorageCountRef = useRef(0);
-  const unblockStorageRef = useRef<(() => void) | null>(null);
+  const handleStorageImageLoaded = () => {};
 
-  const handleStorageImageLoaded = useCallback(() => {
-    loadedStorageCountRef.current += 1;
-    if (loadedStorageCountRef.current >= expectedStorageImageCount && unblockStorageRef.current) {
-      unblockStorageRef.current();
-      unblockStorageRef.current = null;
-      storageHasLoadedOnce = true;
-    }
-  }, [expectedStorageImageCount]);
-
-  useEffect(() => {
-    if (storageHasLoadedOnce) {
-      if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
-      return;
-    }
-    // Wait for the AppData fetch to settle before deciding whether to release.
-    // If we release based on images.length === 0 BEFORE the fetch completes, the
-    // user sees the yellow bar disappear, then grey skeletons for the duration
-    // of the fetch + image decode. Hold the loader until generationsReady is true,
-    // then evaluate.
-    if (!generationsReady) {
-      if (!unblockStorageRef.current) {
-        unblockStorageRef.current = registerBlockingLoader();
-      }
-      return;
-    }
-    if (expectedStorageImageCount === 0) {
-      if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
-      storageHasLoadedOnce = true;
-      return;
-    }
-    if (!unblockStorageRef.current) {
-      unblockStorageRef.current = registerBlockingLoader();
-    }
-    requestAnimationFrame(() => {
-      const imgs = document.querySelectorAll('img[data-storage-image="1"]');
-      if (imgs.length >= expectedStorageImageCount && Array.from(imgs).every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalHeight > 0)) {
-        if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
-        storageHasLoadedOnce = true;
-      }
-    });
-    const timer = setTimeout(() => {
-      if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
-      storageHasLoadedOnce = true;
-    }, 8000);
-    return () => { clearTimeout(timer); if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; } };
-  }, [expectedStorageImageCount, generationsReady]);
 
   if (!authLoading && !user) return <div className="min-h-screen" />;
 
