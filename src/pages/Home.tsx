@@ -6,7 +6,7 @@ import { User, Copy, Download } from "@/lib/icons";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import GuidedCreator, { type GuidedSelections } from "@/components/GuidedCreator";
-import WelcomeDialog from "@/components/WelcomeDialog";
+
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 import { useAuth } from "@/contexts/AuthContext";
@@ -92,7 +92,7 @@ const Home = () => {
 
   const charsLoaded = cachedCharsLoaded;
   const [showGuided, setShowGuided] = useState(() => shouldOpenGuidedOnMount);
-  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [selectedImage, setSelectedImage] = useState<LatestImage | null>(null);
   const [autoOpenEvaluated, setAutoOpenEvaluated] = useState(() => shouldOpenGuidedOnMount);
@@ -183,26 +183,6 @@ const Home = () => {
     return () => window.removeEventListener("facefox:open-creator", handler);
   }, [user]);
 
-  useEffect(() => {
-    if (showGuided) {
-      if (typeof window !== "undefined") localStorage.setItem("facefox_welcome_dismissed", "1");
-      setWelcomeOpen(false);
-      return;
-    }
-    if (!lockStateResolved || !charsLoaded) return;
-    if (effectiveOnboardingComplete) return;
-    if (typeof window !== "undefined" && localStorage.getItem("facefox_welcome_dismissed") === "1") return;
-    setWelcomeOpen(true);
-  }, [lockStateResolved, charsLoaded, effectiveOnboardingComplete, showGuided]);
-
-  useEffect(() => {
-    const handler = () => {
-      if (typeof window !== "undefined") localStorage.removeItem("facefox_welcome_dismissed");
-      setWelcomeOpen(true);
-    };
-    window.addEventListener("facefox:open-welcome", handler);
-    return () => window.removeEventListener("facefox:open-welcome", handler);
-  }, []);
 
   const handleGuidedComplete = async (selections: GuidedSelections) => {
     const draft = {
@@ -355,22 +335,9 @@ const Home = () => {
         onExit={handleGuidedExit}
         skipWelcome={skipWelcome}
       />
-      <WelcomeDialog
-        open={welcomeOpen}
-        onClose={() => {
-          if (typeof window !== "undefined") localStorage.setItem("facefox_welcome_dismissed", "1");
-          setWelcomeOpen(false);
-        }}
-        onStart={() => {
-          if (typeof window !== "undefined") localStorage.setItem("facefox_welcome_dismissed", "1");
-          setWelcomeOpen(false);
-          handleOpenCreator();
-        }}
-      />
-
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[70px] pb-[220px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[110px] pb-[220px] md:hidden">
           {/* Hero */}
           <h1 className="flex w-full flex-col items-start font-[900] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left" style={{ fontSize: "clamp(34px, 11.5vw, 48px)" }}>
             <span className="block w-full text-left">what are we</span>

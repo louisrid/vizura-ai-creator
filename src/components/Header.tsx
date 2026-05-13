@@ -1,6 +1,6 @@
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
 import { useLocation } from "react-router-dom";
-import { Gem, Settings, User, Sparkles } from "@/lib/icons";
+import { Gem, Settings, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -34,8 +34,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[20px] md:text-[26px] text-white tracking-[-0.5px] leading-none lowercase"
-                style={{ fontFamily: "'Utendo', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700, transform: "translateY(2px)", display: "inline-block" }}
+                className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none lowercase"
+                style={{ fontWeight: 900 }}
               >
                 facebox
               </span>
@@ -59,16 +59,7 @@ const Header = () => {
 
           {!isAuthPage && isLoggedIn && (
             <div className="flex items-center gap-[14px] md:gap-[16px]">
-              {user?.email === "louisjridland@gmail.com" && pathname === "/" && (
-                <button
-                  onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
-                  className="flex items-center justify-center h-[32px] w-[32px] md:h-[37px] md:w-[37px]"
-                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8, transform: "translateX(4px)" }}
-                  aria-label="test welcome popup"
-                >
-                  <Sparkles size={14} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffe603" }} />
-                </button>
-              )}
+
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
