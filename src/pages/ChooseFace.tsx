@@ -819,7 +819,7 @@ const ChooseFace = () => {
         {!loading && faces.length > 0 && (
           <>
 
-            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[20px] pt-[44px] pb-[140px] md:max-w-3xl md:px-10">
+            <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[20px] pt-[28px] pb-[140px] md:max-w-3xl md:px-10">
               <div className="flex items-center gap-5 mb-11">
                 <button
                   type="button"

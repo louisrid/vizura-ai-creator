@@ -32,7 +32,7 @@ const Account = () => {
   if (authLoading && !hasCachedUser) {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[140px] flex flex-col items-center">
+        <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[28px] pb-[140px] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-11 w-full">
             <div className="w-[40px] h-[40px]" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
             <div className="h-7 w-28" style={{ borderRadius: 8, backgroundColor: "hsl(var(--card))" }} />
@@ -66,7 +66,7 @@ const Account = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[140px] flex flex-col items-center">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[28px] pb-[140px] flex flex-col items-center">
         <div className="flex items-center gap-5 mb-11 w-full">
           <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
@@ -209,7 +209,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[44px] pb-[140px] flex flex-col items-center">
+      <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[28px] pb-[140px] flex flex-col items-center">
         <div className="flex items-center gap-5 mb-11 w-full">
           <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>

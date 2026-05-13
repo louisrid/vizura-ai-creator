@@ -41,7 +41,7 @@ const ResetPassword = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-[20px] md:px-[44px] pt-[44px] pb-[140px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-2xl mx-auto px-[20px] md:px-[44px] pt-[28px] pb-[140px] md:flex md:flex-col md:items-center md:justify-center md:min-h-screen md:pt-0 md:pb-0">
         <div className="w-full md:max-w-md">
           <div className="flex items-center gap-5 mb-11">
             <BackButton always />
