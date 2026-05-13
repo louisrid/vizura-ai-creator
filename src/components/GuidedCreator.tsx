@@ -854,7 +854,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
           })}
           <img src={foxEmojiImg} alt="🦊" style={{ width: 120, height: 120, opacity: heroPhase >= 1 ? 1 : 0, transition: 'opacity 1.2s ease', objectFit: 'contain' }} />
         </div> */}
-        <div style={{ position: 'relative', zIndex: 1, fontSize: 116, fontFamily: "'Welbut', sans-serif", fontWeight: 400, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, marginBottom: 24 }}>facebox</div>
+        <div style={{ position: 'relative', zIndex: 1, fontSize: 116, fontFamily: "'Utendo', sans-serif", fontWeight: 700, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 4, marginBottom: 24 }}>facebox</div>
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
           <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); advance(); }} style={{ width: 130, padding: '12px 0', fontSize: 22, fontWeight: 900, background: '#ffffff', border: 'none', borderRadius: 8, color: '#000000', textTransform: 'lowercase', cursor: 'pointer', letterSpacing: '-0.02em' }}>start</button>
           {(
@@ -1044,8 +1044,8 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
         <div className="absolute inset-x-0 top-0 z-20 pointer-events-none" style={{ paddingTop: 11 }}>
           <div className="mx-auto flex h-[66px] w-full max-w-lg items-center justify-center px-[20px] md:h-[85px] md:max-w-3xl md:px-[36px]">
             <span
-              className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none"
-              style={{ fontFamily: "'Welbut', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 400 }}
+              className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none lowercase"
+              style={{ fontFamily: "'Utendo', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700 }}
             >
               facebox
             </span>
