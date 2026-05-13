@@ -68,7 +68,7 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
                 <h2
                   id="welcome-dialog-title"
                   className="leading-none lowercase text-white text-center whitespace-nowrap"
-                  style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.9px", fontSize: "clamp(24px, 8.2vw, 40px)" }}
+                  style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.9px", fontSize: "clamp(20px, 7vw, 36px)" }}
                 >
                   welcome to facebox
                 </h2>
