@@ -59,16 +59,7 @@ const Header = () => {
 
           {!isAuthPage && isLoggedIn && (
             <div className="flex items-center gap-[14px] md:gap-[16px]">
-              {user?.email === "louisjridland@gmail.com" && pathname === "/" && (
-                <button
-                  onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
-                  className="flex items-center justify-center h-[32px] w-[32px] md:h-[37px] md:w-[37px]"
-                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8, transform: "translateX(4px)" }}
-                  aria-label="test welcome popup"
-                >
-                  <Sparkles size={14} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffe603" }} />
-                </button>
-              )}
+
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
