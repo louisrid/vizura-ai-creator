@@ -66,14 +66,14 @@ const Account = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[160px] flex flex-col items-center">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[44px] pb-[140px] flex flex-col items-center">
         <div className="flex items-center gap-5 mb-11 w-full">
           <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
 
         {/* Avatar */}
-        <div className="w-full flex justify-center mt-4 mb-6">
+        <div className="w-full flex justify-center mt-6 mb-5">
           <div className="w-[90px] h-[90px] rounded-full flex items-center justify-center bg-neon-yellow">
             <span className="text-4xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
@@ -130,8 +130,7 @@ const Account = () => {
         <button
           type="button"
           onClick={() => navigate("/info")}
-          className="self-center mt-16 text-[9px] font-extrabold lowercase underline"
-          style={{ color: "#555555" }}
+          className="self-center mt-16 text-[9px] font-extrabold lowercase underline text-white"
         >
           terms &amp; privacy
         </button>
