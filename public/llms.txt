@@ -1,0 +1,21 @@
+# facebox
+
+> facebox is the all-in-one AI girl studio — create stunning, consistent AI girls with multiple angles and bodies in seconds at facebox.dev.
+
+## Pages
+
+- [Home](/): the all-in-one AI girl studio start screen.
+- [Log in](/auth): log in to your facebox account.
+- [Generate face](/generate-face): generate a brand new AI face for a character.
+- [Choose face](/choose-face): pick a face for your character.
+- [Create photo](/create): create a new AI photo of an existing character.
+- [My characters](/characters): browse and manage your AI characters.
+- [Storage](/storage): all your generated photos in one place.
+- [Video](/video): AI video face-swap (coming soon).
+- [Gems](/top-ups): top up your gems for more generations.
+- [My account](/account): manage your account and subscription.
+
+## Optional
+
+- [Help](/help): support and FAQs.
+- [Info](/info): terms and privacy.
