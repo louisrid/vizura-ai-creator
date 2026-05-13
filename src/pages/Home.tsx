@@ -335,22 +335,9 @@ const Home = () => {
         onExit={handleGuidedExit}
         skipWelcome={skipWelcome}
       />
-      <WelcomeDialog
-        open={welcomeOpen}
-        onClose={() => {
-          if (typeof window !== "undefined") localStorage.setItem("facefox_welcome_dismissed", "1");
-          setWelcomeOpen(false);
-        }}
-        onStart={() => {
-          if (typeof window !== "undefined") localStorage.setItem("facefox_welcome_dismissed", "1");
-          setWelcomeOpen(false);
-          handleOpenCreator();
-        }}
-      />
-
       {!pageHidden && <div className="relative flex h-full flex-col">
 
-        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[70px] pb-[220px] md:hidden">
+        <main className="relative z-[1] mx-auto w-full max-w-lg px-[20px] pt-[110px] pb-[220px] md:hidden">
           {/* Hero */}
           <h1 className="flex w-full flex-col items-start font-[900] lowercase leading-[0.94] tracking-[-1.8px] text-white mb-0 mt-0 text-left" style={{ fontSize: "clamp(34px, 11.5vw, 48px)" }}>
             <span className="block w-full text-left">what are we</span>
