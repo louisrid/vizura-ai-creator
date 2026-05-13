@@ -23,7 +23,7 @@ interface StorageImage {
   characterName?: string;
 }
 
-let storageHasLoadedOnce = false;
+let storageHasLoadedOnce = typeof window !== "undefined" && !!(window as any).__facefox_storage_preloaded;
 
 const Storage = () => {
   const { user, loading: authLoading } = useAuth();
@@ -111,6 +111,9 @@ const Storage = () => {
   }, [expectedStorageImageCount]);
 
   useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).__facefox_storage_preloaded) {
+      storageHasLoadedOnce = true;
+    }
     if (storageHasLoadedOnce) {
       if (unblockStorageRef.current) { unblockStorageRef.current(); unblockStorageRef.current = null; }
       return;

@@ -1,6 +1,7 @@
 import { createContext, useContext, useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { registerBlockingLoader } from "@/lib/startupSplash";
 
 /**
  * Global app data cache with localStorage persistence.
@@ -266,7 +267,55 @@ export const AppDataProvider = ({ children }: { children: React.ReactNode }) => 
     return () => { fetchIdRef.current = id + 1; };
   }, [authLoading, user?.id]);
 
-  // Listen for data-changed events
+  // Preload all Storage page images during the INITIAL site load so that
+  // navigating to /storage never shows the yellow load bar. Once finished,
+  // sets a window flag the Storage page reads to skip its own blocker.
+  const storagePreloadStartedRef = useRef(false);
+  useEffect(() => {
+    if (!generationsReady) return;
+    if (storagePreloadStartedRef.current) return;
+    if (typeof window === "undefined") return;
+    if ((window as any).__facefox_storage_preloaded) return;
+    storagePreloadStartedRef.current = true;
+
+    // Mirror Storage.tsx filter
+    const urls: string[] = [];
+    generations.forEach((gen) => {
+      if (gen.prompt === "character references" || gen.prompt === "face generation") return;
+      (gen.image_urls || []).forEach((url: string) => {
+        if (!url || url.trim() === "" || url.startsWith("data:image/svg") || url.includes("imgen.x.ai") || url.includes("xai-tmp-imgen")) return;
+        urls.push(url);
+      });
+    });
+
+    if (urls.length === 0) {
+      (window as any).__facefox_storage_preloaded = true;
+      return;
+    }
+
+    const release = registerBlockingLoader();
+    let remaining = urls.length;
+    let released = false;
+    const finish = () => {
+      if (released) return;
+      released = true;
+      (window as any).__facefox_storage_preloaded = true;
+      release();
+    };
+    const safety = window.setTimeout(finish, 8000);
+    urls.forEach((url) => {
+      const img = new Image();
+      const done = () => {
+        remaining -= 1;
+        if (remaining <= 0) { window.clearTimeout(safety); finish(); }
+      };
+      img.onload = done;
+      img.onerror = done;
+      img.src = url;
+    });
+  }, [generationsReady, generations]);
+
+
   useEffect(() => {
     const handleCharsChanged = () => { void refreshCharacters(); };
     const handleGensChanged = () => { void refreshGenerations(); };
