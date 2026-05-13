@@ -63,12 +63,12 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
             <ModalCloseButton onClick={onClose} aria-label="dismiss welcome" />
 
             <div className="flex flex-col items-center justify-start w-full h-full" style={{ paddingTop: 80 }}>
-              <div className="flex items-center justify-center gap-[10px]">
-                <Sparkles size={28} strokeWidth={3} style={{ color: "#ffe603" }} />
+              <div className="flex items-center justify-center gap-[10px] w-full px-2">
+                <Sparkles size={28} strokeWidth={3} style={{ color: "#ffe603", flexShrink: 0 }} />
                 <h2
                   id="welcome-dialog-title"
-                  className="text-[38px] leading-none lowercase text-white text-center"
-                  style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.9px" }}
+                  className="leading-none lowercase text-white text-center whitespace-nowrap"
+                  style={{ fontFamily: "-apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 900, letterSpacing: "-0.9px", fontSize: "clamp(24px, 8.2vw, 40px)" }}
                 >
                   welcome to facebox
                 </h2>
