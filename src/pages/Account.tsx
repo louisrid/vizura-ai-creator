@@ -13,7 +13,7 @@ import { toast } from "@/components/ui/sonner";
 
 const Account = () => {
   const { user, loading: authLoading, signOut, signIn, signUp } = useAuth();
-  const { subscribed, refetch: refetchSub } = useSubscription();
+  const { refetch: refetchSub } = useSubscription();
   const location = useLocation();
   const navigate = useTransitionNavigate();
   const searchParams = new URLSearchParams(location.search);
