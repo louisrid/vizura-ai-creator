@@ -27,7 +27,7 @@ const Header = () => {
   const headerContainerClass = "mx-auto flex h-[66px] w-full max-w-lg items-center justify-between px-[20px] md:h-[85px] md:max-w-3xl md:px-[36px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #ffe603", paddingTop: "11px" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: pathname === "/account" ? "none" : "4px solid #ffe603", paddingTop: "11px" }}>
       
       <div className="relative">
         <div className={headerContainerClass}>
