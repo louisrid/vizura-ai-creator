@@ -34,8 +34,8 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[20px] md:text-[26px] text-white tracking-[-0.5px] leading-none lowercase"
-                style={{ fontFamily: "'Utendo', -apple-system, 'SF Pro Display', system-ui, sans-serif", fontWeight: 700, transform: "translateY(2px)", display: "inline-block" }}
+                className="text-[22px] md:text-[28px] text-white tracking-[-0.5px] leading-none lowercase"
+                style={{ fontWeight: 900 }}
               >
                 facebox
               </span>
