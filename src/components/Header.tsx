@@ -59,6 +59,17 @@ const Header = () => {
 
           {!isAuthPage && isLoggedIn && (
             <div className="flex items-center gap-[10px] md:gap-[12px]">
+              {user?.email === "louisjridland@gmail.com" && pathname === "/" && (
+                <button
+                  onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
+                  className="flex items-center justify-center h-[32px] w-[32px] md:h-[37px] md:w-[37px]"
+                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8 }}
+                  aria-label="test welcome popup"
+                >
+                  <Sparkles size={14} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffe603" }} />
+                </button>
+              )}
+
               <button
                 onClick={() => goOrAuth("/top-ups")}
                 className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[32px] md:h-[37px]"
@@ -72,17 +83,6 @@ const Header = () => {
                 <Gem size={11} strokeWidth={3} className="md:!w-[14px] md:!h-[14px]" style={{ color: "#00e0ff" }} />
                 <span className="text-[13px] md:text-[15px] font-[900] lowercase text-white leading-none">{gems}</span>
               </button>
-
-              {user?.email === "louisjridland@gmail.com" && pathname === "/" && (
-                <button
-                  onClick={() => window.dispatchEvent(new Event("facefox:open-welcome"))}
-                  className="flex items-center justify-center h-[32px] w-[32px] md:h-[37px] md:w-[37px]"
-                  style={{ backgroundColor: "#050a10", border: "2px solid #ffe603", borderRadius: 8 }}
-                  aria-label="test welcome popup"
-                >
-                  <Sparkles size={14} strokeWidth={3} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffe603" }} />
-                </button>
-              )}
 
               <button
                 onClick={() => goOrAuth("/account")}
