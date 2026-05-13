@@ -1,7 +1,6 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-import { registerBlockingLoader } from "@/lib/startupSplash";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, Trash2, Wand2, Copy, Eye, EyeOff } from "@/lib/icons";
 import { toast } from "@/components/ui/sonner";
