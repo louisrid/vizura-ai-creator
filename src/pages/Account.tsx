@@ -72,48 +72,41 @@ const Account = () => {
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
 
-        {/* Profile avatar + email */}
-        <div className="flex flex-col items-center mb-6">
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center mb-2 bg-neon-yellow"
-          >
+        {/* Avatar */}
+        <div className="w-full flex justify-end mb-6">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-neon-yellow">
             <span className="text-2xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
-          <span className="text-xs font-[800] lowercase text-white truncate max-w-[280px]">
-            {user.email || "..."}
-          </span>
         </div>
 
         {/* Settings rows */}
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full max-w-[340px] flex flex-col gap-3 self-center">
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-5 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
-            <span className="text-xs font-[800] lowercase text-white">subscription</span>
-            <div className="flex items-center gap-2">
-              <span
-                className="text-[11px] font-[800] lowercase"
-                style={{ color: subscribed ? "#12e62b" : "#ffffff" }}
-              >
-                {subscribed ? "active" : "inactive"}
-              </span>
-              <ChevronRight size={14} strokeWidth={2.5} className="text-white" />
-            </div>
+            <span>change password</span>
           </button>
 
           <button
-            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-3 transition-colors hover:bg-card"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-5 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
-            <span className="text-xs font-[800] lowercase text-white">change password</span>
-            <ChevronRight size={14} strokeWidth={2.5} className="text-white" />
+            <span>subscription</span>
+            <Gem size={14} strokeWidth={2.5} className="text-white" />
           </button>
 
-          {/* Admin button */}
+          <button
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 py-5 text-[13px] font-[900] lowercase text-white"
+            onClick={() => toast("coming soon")}
+          >
+            <span>support</span>
+            <span className="text-[14px] leading-none">✉️</span>
+          </button>
+
           {user?.email === "louisjridland@gmail.com" && (
             <button
-              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-3 text-xs font-[900] lowercase text-white transition-colors hover:bg-card"
+              className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-center gap-2 px-4 py-5 text-[13px] font-[900] lowercase text-white"
               onClick={() => navigate("/admin")}
             >
               admin
@@ -122,31 +115,22 @@ const Account = () => {
           )}
         </div>
 
-
-        {/* Sign out */}
         <button
-          className="mt-6 px-5 py-2.5 text-xs font-[900] lowercase transition-all hover:opacity-90"
-          style={{
-            color: "#ffffff",
-            backgroundColor: "#1a0505",
-            border: "2px solid #ff4444",
-            borderRadius: 8,
-          }}
+          className="self-center mt-6 px-4 py-2 text-[10px] font-[900] lowercase"
+          style={{ color: "#ffffff", backgroundColor: "#1a0505", border: "2px solid #ff4444", borderRadius: 8 }}
           onClick={handleSignOut}
         >
           sign out
         </button>
 
-        <div className="pt-4">
-          <button
-            type="button"
-            onClick={() => navigate("/info")}
-            className="text-[11px] font-extrabold lowercase underline transition-colors"
-            style={{ color: "#ffffff" }}
-          >
-            terms &amp; privacy
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => navigate("/info")}
+          className="self-center mt-16 text-[9px] font-extrabold lowercase underline"
+          style={{ color: "#555555" }}
+        >
+          terms &amp; privacy
+        </button>
       </main>
     </div>
   );
