@@ -80,22 +80,31 @@ const WelcomeDialog = ({ open, onClose, onStart }: WelcomeDialogProps) => {
               let's create your first ai character
             </p>
 
-            <div className="flex-1 grid grid-cols-1 gap-[10px] pb-[10px] min-h-0">
-              {[1, 2, 3].map((n) => (
-                <div
-                  key={n}
-                  className="relative w-full h-full overflow-hidden"
-                  style={{ borderRadius: 10, backgroundColor: "#000" }}
-                >
-                  <img
-                    src={`/welcome/${n}.jpg`}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover"
-                    loading="eager"
-                    draggable={false}
-                  />
-                </div>
-              ))}
+            <div
+              className="flex-1 relative w-full overflow-hidden mb-[10px] min-h-0"
+              style={{ borderRadius: 10, backgroundColor: "#000" }}
+            >
+              <div
+                className="absolute inset-0 flex"
+                style={{
+                  width: "600%",
+                  animation: "welcome-slide 18s linear infinite",
+                  willChange: "transform",
+                }}
+              >
+                {[1, 2, 3, 1, 2, 3].map((n, i) => (
+                  <div key={i} className="relative h-full" style={{ width: "16.6666%" }}>
+                    <img
+                      src={`/welcome/${n}.jpg`}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
+                      loading="eager"
+                      draggable={false}
+                    />
+                  </div>
+                ))}
+              </div>
+              <style>{`@keyframes welcome-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
             </div>
 
             <button
