@@ -562,13 +562,16 @@ const App = () => (
           <SubscriptionProvider>
             <AppDataProvider>
               <BrowserRouter>
-                <Sonner />
-                <PostAuthHomeRedirect />
-                <FreshLoadRedirect />
-                <ScrollToTop />
-                <TopOverscrollGuard />
-                <OnboardingRedirectGate />
-                <AppRoutes />
+                <HelmetProvider>
+                  <RouteHead />
+                  <Sonner />
+                  <PostAuthHomeRedirect />
+                  <FreshLoadRedirect />
+                  <ScrollToTop />
+                  <TopOverscrollGuard />
+                  <OnboardingRedirectGate />
+                  <AppRoutes />
+                </HelmetProvider>
               </BrowserRouter>
             </AppDataProvider>
           </SubscriptionProvider>
