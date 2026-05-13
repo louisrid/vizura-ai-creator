@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+import RouteHead from "@/components/RouteHead";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -560,13 +562,16 @@ const App = () => (
           <SubscriptionProvider>
             <AppDataProvider>
               <BrowserRouter>
-                <Sonner />
-                <PostAuthHomeRedirect />
-                <FreshLoadRedirect />
-                <ScrollToTop />
-                <TopOverscrollGuard />
-                <OnboardingRedirectGate />
-                <AppRoutes />
+                <HelmetProvider>
+                  <RouteHead />
+                  <Sonner />
+                  <PostAuthHomeRedirect />
+                  <FreshLoadRedirect />
+                  <ScrollToTop />
+                  <TopOverscrollGuard />
+                  <OnboardingRedirectGate />
+                  <AppRoutes />
+                </HelmetProvider>
               </BrowserRouter>
             </AppDataProvider>
           </SubscriptionProvider>
