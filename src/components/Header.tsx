@@ -84,6 +84,7 @@ const Header = () => {
               >
                 <Settings size={22} strokeWidth={3} className="md:!w-[25px] md:!h-[25px]" style={{ color: "#ffffff" }} />
               </button>
+            </div>
           )}
           {!isAuthPage && !isLoggedIn && (
             <button
