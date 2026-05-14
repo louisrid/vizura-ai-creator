@@ -70,7 +70,7 @@ const History = () => {
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-[8px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+          <div className="rounded-[8px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border-mid))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
