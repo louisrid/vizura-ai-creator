@@ -141,7 +141,7 @@ const TopUps = () => {
                 className="relative rounded-[8px] overflow-hidden p-5"
                 style={{
                   background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f59e0b 100%)",
-                  border: "2.25px solid hsl(var(--border-mid))",
+                  border: "2.5px solid hsl(var(--border-mid))",
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -183,7 +183,7 @@ const TopUps = () => {
               className="relative rounded-[8px] overflow-hidden p-5 flex gap-4"
               style={{
                 backgroundColor: "hsl(var(--card))",
-                border: "2.25px solid hsl(var(--border-mid))",
+                border: "2.5px solid hsl(var(--border-mid))",
                 minHeight: 170,
               }}
             >
