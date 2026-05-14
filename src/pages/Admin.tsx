@@ -78,7 +78,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                     if (copyFallback()) done(); else toast.error("copy error");
                   }
                 }}
-                className="w-full flex items-start gap-2 px-3 py-2.5 border-[1.75px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[8px]"
+                className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[8px]"
                 style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
@@ -330,7 +330,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                       download={`facefox-${img.id}.png`}
                       target="_blank"
                       className="flex items-center justify-center gap-1.5 rounded-b-[6px] py-2.5 text-[10px] md:text-[11px] font-extrabold lowercase transition-opacity hover:opacity-80"
-                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "1.75px solid hsl(var(--border-mid))", borderTop: "none" }}
+                      style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
                     >
                       download
                       <Download size={12} strokeWidth={2.5} />
@@ -362,7 +362,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               className="relative w-full max-w-[280px] md:max-w-[480px]"
             >
               <ModalCloseButton onClick={() => setExpanded(null)} />
-              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "1.75px solid hsl(var(--border-mid))" }}>
+              <div className="overflow-hidden" style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "2px solid hsl(var(--border-mid))" }}>
                 <img src={expanded.url} alt="" className="w-full object-contain max-h-[50vh] md:max-h-[65vh]" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 {expanded.prompt && expanded.prompt !== "character references" && expanded.prompt !== "face generation" && (
                   <div className="px-3 md:px-4 pt-2.5 pb-2.5">
@@ -396,7 +396,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                           if (copyFallback()) done(); else toast.error("copy error");
                         }
                       }}
-                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[1.75px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[8px]"
+                      className="w-full flex items-start gap-2 px-3 py-2.5 border-[2px] border-[hsl(var(--border-mid))] text-[10px] md:text-[12px] font-[800] lowercase text-white text-left rounded-[8px]"
                       style={{ backgroundColor: "hsl(var(--card))" }}
                     >
                       <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
@@ -429,7 +429,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-sm p-5"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "1.75px solid hsl(var(--border-mid))" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "2px solid hsl(var(--border-mid))" }}
             >
               <p className="text-[13px] md:text-[14px] font-[900] lowercase text-white leading-snug mb-5">
                 reset {email}? this will delete all their characters, photos, storage, and reset their profile. this cannot be undone.
@@ -439,7 +439,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   onClick={() => setConfirmReset(false)}
                   disabled={resetting}
                   className="flex-1 text-[11px] md:text-[12px] font-extrabold lowercase py-2.5 transition-opacity hover:opacity-80 disabled:opacity-50"
-                  style={{ color: "#ffffff", borderRadius: 8, border: "1.75px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
+                  style={{ color: "#ffffff", borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "transparent" }}
                 >
                   cancel
                 </button>
