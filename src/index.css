@@ -159,17 +159,7 @@
   }
 
   #root::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url('/site-bg-pattern.png');
-    background-repeat: repeat;
-    background-size: 360px auto;
-    background-position: top center;
-    opacity: 1;
-    filter: brightness(1.16);
-    pointer-events: none;
-    z-index: 0;
+    content: none;
   }
 
   #root > * {
