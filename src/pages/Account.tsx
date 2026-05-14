@@ -120,7 +120,7 @@ const Account = () => {
         </div>
 
         <button
-          className="self-center mt-8 px-3.5 py-1.5 text-[10px] font-[900] lowercase"
+          className="self-center mt-6 px-3.5 py-1.5 text-[10px] font-[900] lowercase"
           style={{ color: "#ffffff", backgroundColor: "#1a0505", border: "2px solid #ff4444", borderRadius: 10 }}
           onClick={handleSignOut}
         >
@@ -130,7 +130,7 @@ const Account = () => {
         <button
           type="button"
           onClick={() => navigate("/info")}
-          className="self-center mt-16 text-[9px] font-extrabold lowercase underline text-white"
+          className="self-center mt-6 text-[9px] font-extrabold lowercase underline text-white"
         >
           terms &amp; privacy
         </button>
