@@ -550,7 +550,7 @@ const Admin = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[34px] pb-[140px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[42px] pb-[140px]">
 
         {viewingUserId ? (
           <UserStorageView
@@ -560,7 +560,7 @@ const Admin = () => {
           />
         ) : (
           <>
-            <div className="flex items-center gap-[14px] mb-14">
+            <div className="flex items-center gap-[14px] mb-10">
               <BackButton />
               <PageTitle className="mb-0">admin</PageTitle>
             </div>
