@@ -245,7 +245,8 @@ const Storage = () => {
               >
                 <button
                   onClick={() => { if (!hidden) setExpanded(img); }}
-                  className="group relative rounded-t-[8px] border-[3px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
+                  className="group relative rounded-t-[8px] border-[3px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden text-left"
+                  style={{ backgroundColor: "hsl(0 0% 12%)" }}
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img
@@ -264,7 +265,7 @@ const Storage = () => {
                   download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-[8px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "3px solid hsl(var(--border-mid))", borderTop: "none" }}
+                  style={{ backgroundColor: "hsl(0 0% 12%)", color: "#ffffff", border: "3px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
