@@ -245,7 +245,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => { if (!hidden) setExpanded(img); }}
-                  className="group relative rounded-t-[8px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
+                  className="group relative rounded-t-[8px] border-[3px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img
