@@ -24,7 +24,7 @@ const Header = () => {
     navigate(path);
   };
 
-  const headerContainerClass = "mx-auto flex h-[56px] w-full max-w-lg items-center justify-between px-[28px] md:h-[73px] md:max-w-3xl md:px-[44px]";
+  const headerContainerClass = "mx-auto flex h-[63px] w-full max-w-lg items-center justify-between px-[28px] md:h-[80px] md:max-w-3xl md:px-[44px]";
 
   return (
     <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #000000", paddingTop: "23px" }}>
@@ -34,7 +34,7 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[18px] md:text-[24px] text-white tracking-[-0.5px] leading-none lowercase"
+                className="text-[20px] md:text-[27px] text-white tracking-[-0.5px] leading-none lowercase"
                 style={{ fontWeight: 900 }}
               >
                 facebox
@@ -43,7 +43,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[27px] h-[27px] md:w-[29px] md:h-[29px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[30px] h-[30px] md:w-[33px] md:h-[33px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
@@ -52,7 +52,7 @@ const Header = () => {
                 }}
                 aria-label="my account"
               >
-                <User size={13} strokeWidth={3.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffffff" }} />
+                <User size={15} strokeWidth={3.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
@@ -63,7 +63,7 @@ const Header = () => {
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[33px] md:h-[38px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[37px] md:h-[42px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
@@ -71,8 +71,8 @@ const Header = () => {
                 }}
                 aria-label="buy gems"
               >
-                <Gem size={11} strokeWidth={3} className="md:!w-[13px] md:!h-[13px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[11px] md:text-[13px] font-[900] lowercase text-white leading-none">{gems}</span>
+                <Gem size={12} strokeWidth={3} className="md:!w-[15px] md:!h-[15px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[12px] md:text-[15px] font-[900] lowercase text-white leading-none">{gems}</span>
               </button>
 
               <button
@@ -81,14 +81,14 @@ const Header = () => {
                 style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-2px" }}
                 aria-label="settings"
               >
-                <Settings size={25} strokeWidth={3} className="md:!w-[28px] md:!h-[28px]" style={{ color: "#ffffff" }} />
+                <Settings size={28} strokeWidth={3} className="md:!w-[31px] md:!h-[31px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
           {!isAuthPage && !isLoggedIn && (
             <button
               onClick={() => { markLateralNav(); navigate("/auth"); }}
-              className="flex items-center justify-center px-3 h-[27px] md:h-[32px]"
+              className="flex items-center justify-center px-3 h-[30px] md:h-[36px]"
               style={{
                 backgroundColor: "#ffffff",
                 border: "2px solid #ffffff",
@@ -96,7 +96,7 @@ const Header = () => {
               }}
               aria-label="log in"
             >
-              <span className="text-[11px] md:text-[13px] font-[900] lowercase text-black leading-none">log in</span>
+              <span className="text-[12px] md:text-[15px] font-[900] lowercase text-black leading-none">log in</span>
             </button>
           )}
         </div>
