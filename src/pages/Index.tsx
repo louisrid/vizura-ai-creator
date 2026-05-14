@@ -682,7 +682,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[28px] pb-[160px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[52px] pb-[160px] md:hidden">
         <div className="flex items-center gap-[14px] mb-14">
           <BackButton always />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -774,7 +774,7 @@ const Index = () => {
       </main>
 
       {/* Desktop layout — two-column */}
-      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[44px] pt-[28px] pb-[140px]">
+      <main className="hidden md:block relative z-[1] w-full max-w-6xl mx-auto px-[44px] pt-[52px] pb-[140px]">
         <div className="flex items-center gap-[14px] mb-14">
           <BackButton always />
           <PageTitle className="mb-0">create photo</PageTitle>
