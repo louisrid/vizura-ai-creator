@@ -108,15 +108,6 @@ const Account = () => {
             </svg>
           </button>
 
-          {user?.email === "louisjridland@gmail.com" && (
-            <button
-              className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-11 text-[12px] font-[900] lowercase text-white"
-              onClick={() => navigate("/admin")}
-            >
-              <span className="leading-none">admin</span>
-              <Eye size={16} strokeWidth={2.5} className="text-white shrink-0" />
-            </button>
-          )}
         </div>
 
         <button
@@ -134,6 +125,18 @@ const Account = () => {
         >
           terms &amp; privacy
         </button>
+
+        {user?.email === "louisjridland@gmail.com" && (
+          <button
+            type="button"
+            onClick={() => navigate("/admin")}
+            className="self-center mt-6 px-3.5 py-1.5 text-[10px] font-[900] lowercase flex items-center gap-1.5"
+            style={{ color: "hsl(var(--neon-green))", backgroundColor: "#031a08", border: "2px solid hsl(var(--neon-green))", borderRadius: 10 }}
+          >
+            <Eye size={12} strokeWidth={3} />
+            admin
+          </button>
+        )}
       </main>
     </div>
   );
