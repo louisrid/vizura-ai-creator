@@ -24,17 +24,17 @@ const Header = () => {
     navigate(path);
   };
 
-  const headerContainerClass = "mx-auto flex h-[58px] w-full max-w-lg items-center justify-between px-[20px] md:h-[75px] md:max-w-3xl md:px-[36px]";
+  const headerContainerClass = "mx-auto flex h-[56px] w-full max-w-lg items-center justify-between px-[20px] md:h-[73px] md:max-w-3xl md:px-[36px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #000000", paddingTop: "7px" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #000000", paddingTop: "11px" }}>
       
       <div className="relative">
         <div className={headerContainerClass}>
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[19px] md:text-[25px] text-white tracking-[-0.5px] leading-none lowercase"
+                className="text-[18px] md:text-[24px] text-white tracking-[-0.5px] leading-none lowercase"
                 style={{ fontWeight: 900 }}
               >
                 facebox
@@ -43,7 +43,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[24px] h-[24px] md:w-[26px] md:h-[26px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[23px] h-[23px] md:w-[25px] md:h-[25px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
@@ -63,7 +63,7 @@ const Header = () => {
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[28px] md:h-[33px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[27px] md:h-[32px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
@@ -81,14 +81,14 @@ const Header = () => {
                 style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-4px" }}
                 aria-label="settings"
               >
-                <Settings size={18} strokeWidth={3} className="md:!w-[21px] md:!h-[21px]" style={{ color: "#ffffff" }} />
+                <Settings size={17} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
           {!isAuthPage && !isLoggedIn && (
             <button
               onClick={() => { markLateralNav(); navigate("/auth"); }}
-              className="flex items-center justify-center px-3 h-[28px] md:h-[33px]"
+              className="flex items-center justify-center px-3 h-[27px] md:h-[32px]"
               style={{
                 backgroundColor: "#ffffff",
                 border: "2px solid #ffffff",
