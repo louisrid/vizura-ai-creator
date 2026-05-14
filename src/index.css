@@ -172,7 +172,7 @@
     background-size: 360px auto;
     background-position: top center;
     opacity: 1;
-    filter: brightness(1.26);
+    filter: brightness(1.16);
     pointer-events: none;
     z-index: 0;
   }
