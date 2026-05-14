@@ -43,7 +43,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[24px] h-[24px] md:w-[26px] md:h-[26px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[23px] h-[23px] md:w-[25px] md:h-[25px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
