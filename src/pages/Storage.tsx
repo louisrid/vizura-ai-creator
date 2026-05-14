@@ -204,7 +204,7 @@ const Storage = () => {
               padding: 8,
               borderRadius: 8,
               backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border-mid))",
+              border: "1.5px solid hsl(var(--border-mid))",
             }}
             aria-label={hidden ? "show photos" : "hide photos"}
           >
@@ -217,7 +217,7 @@ const Storage = () => {
         </div>
 
         {images.length === 0 ? (
-          <div className="rounded-[8px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border-mid))" }}>
+          <div className="rounded-[8px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "1.5px solid hsl(var(--border-mid))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -264,7 +264,7 @@ const Storage = () => {
                   download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-[8px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "1px solid hsl(var(--border-mid))", borderTop: "none" }}
+                  style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "1.5px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
@@ -321,7 +321,7 @@ const Storage = () => {
                         if (copyFallback()) done(); else toast.error("copy error");
                      }
                    }}
-                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[1px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[8px] overflow-hidden"
+                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[1.5px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[8px] overflow-hidden"
                    style={{ backgroundColor: "hsl(var(--card))" }}
                  >
                    <span className="truncate flex-1 text-left">{expanded!.prompt}</span>
@@ -331,7 +331,7 @@ const Storage = () => {
             )}
             <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
               <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="flex-1">
-                <Button variant="outline" className="w-full h-10 md:h-12 border-[1px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
+                <Button variant="outline" className="w-full h-10 md:h-12 border-[1.5px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />
                 </Button>
               </a>
