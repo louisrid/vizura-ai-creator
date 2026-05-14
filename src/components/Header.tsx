@@ -34,7 +34,7 @@ const Header = () => {
           <div className="flex items-center gap-[10px] md:gap-[12px]">
             <button onClick={handleLogoClick} className="flex items-center transition-opacity duration-150">
               <span
-                className="text-[18px] md:text-[24px] text-white tracking-[-0.5px] leading-none lowercase"
+                className="text-[20px] md:text-[26px] text-white tracking-[-0.5px] leading-none lowercase"
                 style={{ fontWeight: 900 }}
               >
                 facebox
@@ -43,7 +43,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[23px] h-[23px] md:w-[25px] md:h-[25px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[26px] h-[26px] md:w-[28px] md:h-[28px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
@@ -52,7 +52,7 @@ const Header = () => {
                 }}
                 aria-label="my account"
               >
-                <User size={11} strokeWidth={3.5} className="md:!w-[14px] md:!h-[14px]" style={{ color: "#ffffff" }} />
+                <User size={13} strokeWidth={3.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
