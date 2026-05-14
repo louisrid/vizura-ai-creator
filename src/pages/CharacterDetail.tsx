@@ -455,7 +455,7 @@ const CharacterDetail = () => {
           <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8 }} className="p-5">
             {editingName ? (
               <div className="flex items-center gap-2 mb-5">
-                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "2.5px solid hsl(var(--border-mid))", borderRadius: 8 }} />
+                <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-3 py-0" style={{ fontSize: 30, height: 52, backgroundColor: "hsl(var(--card))", border: "3px solid hsl(var(--border-mid))", borderRadius: 8 }} />
                 <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 52, height: 52, borderRadius: 8, backgroundColor: "#ffffff" }}>
                   {savingName ? <Loader2 size={16} className="animate-spin text-black" /> : <Check size={18} strokeWidth={3} color="#000000" />}
                 </button>
@@ -487,7 +487,7 @@ const CharacterDetail = () => {
               {traits.map((t) => (
                 <div key={t.label} className="rounded-[8px] py-2 text-center" style={{ backgroundColor: "hsl(var(--card))" }}>
                   <span className="block font-[800] uppercase leading-none mb-1.5 text-[8px] text-white">{t.label}</span>
-                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[2.5px] border-[hsl(var(--border-mid))] rounded-[8px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
+                  <span className={`inline-block font-[800] text-white leading-none text-[10px] border-[3px] border-[hsl(var(--border-mid))] rounded-[8px] ${t.value === "XL" ? "normal-case" : "lowercase"}`} style={{ backgroundColor: "hsl(var(--card))", padding: "4px 8px" }}>{t.value}</span>
                 </div>
               ))}
             </div>
@@ -531,7 +531,7 @@ const CharacterDetail = () => {
             <div style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8 }} className="p-6">
               {editingName ? (
                 <div className="flex items-center gap-3 mb-6">
-                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "2.5px solid hsl(var(--border-mid))", borderRadius: 8 }} />
+                  <Input ref={nameInputRef} value={editName} onChange={(e) => setEditName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveEditName(); if (e.key === "Escape") { setEditingName(false); } }} className="flex-1 font-[900] lowercase text-white px-4 py-0" style={{ fontSize: 40, height: 60, backgroundColor: "hsl(var(--card))", border: "3px solid hsl(var(--border-mid))", borderRadius: 8 }} />
                   <button onClick={saveEditName} disabled={savingName} className="flex items-center justify-center shrink-0" style={{ width: 60, height: 60, borderRadius: 8, backgroundColor: "#ffffff" }}>
                     {savingName ? <Loader2 size={18} className="animate-spin text-black" /> : <Check size={22} strokeWidth={3} color="#000000" />}
                   </button>
@@ -587,7 +587,7 @@ const CharacterDetail = () => {
               <h3 className="text-sm font-[900] lowercase text-white mb-3">traits</h3>
                <div className="grid grid-cols-2 gap-2">
                 {traits.map((t) => (
-                  <div key={t.label} className="rounded-[8px] px-3 py-2 text-center" style={{ backgroundColor: "hsl(var(--card))", border: "2.5px solid hsl(var(--border-mid))" }}>
+                  <div key={t.label} className="rounded-[8px] px-3 py-2 text-center" style={{ backgroundColor: "hsl(var(--card))", border: "3px solid hsl(var(--border-mid))" }}>
                     <span className="block font-[800] uppercase leading-none mb-1.5 text-[9px] text-white">{t.label}</span>
                     <span className={`inline-block font-[800] text-white leading-none text-[14px] ${t.value === "XL" ? "normal-case" : "lowercase"}`}>{t.value}</span>
                   </div>
@@ -632,7 +632,7 @@ const CharacterDetail = () => {
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="relative w-full max-w-sm md:max-w-md"
-              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "2.5px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
+              style={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "3px solid hsl(var(--border-mid))", padding: "28px 24px 24px" }}
             >
               <ModalCloseButton onClick={() => setShowDelete(false)} />
 
