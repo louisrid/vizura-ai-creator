@@ -90,15 +90,8 @@ const BottomTabBar = () => {
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
-            <Icon size={21} />
-            <span className="text-[12px] font-[800] lowercase tracking-wide">{tab.label}</span>
-            {active && (
-              <span
-                aria-hidden
-                className="absolute left-1/2 -translate-x-1/2"
-                style={{ bottom: 0, height: 3, width: "60%", backgroundColor: "#ffe603" }}
-              />
-            )}
+            <Icon size={24} />
+            <span className="text-[13px] font-[800] lowercase tracking-wide">{tab.label}</span>
           </button>
         );
       })}
