@@ -58,7 +58,7 @@ const Header = () => {
           </div>
 
           {!isAuthPage && isLoggedIn && (
-            <div className="flex items-center gap-[14px] md:gap-[16px]" style={{ marginLeft: "8px" }}>
+            <div className="flex items-center gap-[14px] md:gap-[16px]" style={{ marginLeft: "5px" }}>
 
 
               <button
