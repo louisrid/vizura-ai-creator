@@ -191,7 +191,7 @@ const Storage = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[20px] md:px-[44px] pt-[28px] pb-[140px]">
-        <div className="flex items-center gap-3 mb-14">
+        <div className="flex items-center gap-[14px] mb-14">
           <BackButton always />
           <PageTitle className="mb-0 whitespace-nowrap">my storage</PageTitle>
           <button
