@@ -63,7 +63,7 @@ const Header = () => {
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[36px] md:h-[41px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[33px] md:h-[38px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
