@@ -61,7 +61,7 @@ const MyCharacters = () => {
     <div className="relative min-h-screen overflow-hidden">
 
       <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[42px] pb-[140px]">
-        <div className="flex items-center gap-[14px] mb-10">
+        <div className="flex items-center gap-[14px] mb-12">
           <BackButton always />
           <PageTitle className="mb-0">my characters</PageTitle>
         </div>
