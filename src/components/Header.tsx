@@ -43,7 +43,7 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[27px] h-[27px] md:w-[29px] md:h-[29px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[30px] h-[30px] md:w-[33px] md:h-[33px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
@@ -52,7 +52,7 @@ const Header = () => {
                 }}
                 aria-label="my account"
               >
-                <User size={13} strokeWidth={3.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffffff" }} />
+                <User size={15} strokeWidth={3.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
