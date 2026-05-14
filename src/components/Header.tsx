@@ -27,7 +27,7 @@ const Header = () => {
   const headerContainerClass = "mx-auto flex h-[56px] w-full max-w-lg items-center justify-between px-[28px] md:h-[73px] md:max-w-3xl md:px-[44px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #000000", paddingTop: "22px" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #000000", paddingTop: "26px" }}>
       
       <div className="relative">
         <div className={headerContainerClass}>
