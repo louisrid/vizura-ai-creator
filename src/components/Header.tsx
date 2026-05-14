@@ -1,5 +1,4 @@
 import { useTransitionNavigate } from "@/hooks/useTransitionNavigate";
-
 import { useLocation } from "react-router-dom";
 import { Gem, Settings, User } from "@/lib/icons";
 import { useGems } from "@/contexts/CreditsContext";
@@ -28,7 +27,8 @@ const Header = () => {
   const headerContainerClass = "mx-auto flex h-[56px] w-full max-w-lg items-center justify-between px-[28px] md:h-[73px] md:max-w-3xl md:px-[44px]";
 
   return (
-    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "2px solid #ffe603" }}>
+    <header className="sticky top-0" style={{ zIndex: 9990, backgroundColor: "#000000", borderBottom: "4px solid #000000", paddingTop: "23px" }}>
+      
       <div className="relative">
         <div className={headerContainerClass}>
           <div className="flex items-center gap-[10px] md:gap-[12px]">

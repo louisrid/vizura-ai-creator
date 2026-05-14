@@ -134,7 +134,7 @@ const InteractivePill = ({ label, selected, shaking, onClick }: {
       transition: "background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out",
       ...(selected
         ? { backgroundColor: Y, color: "#000000", border: `2px solid ${Y}` }
-        : { backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))" }
+        : { backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "3px solid hsl(var(--border-mid))" }
       ),
     }}
   >
@@ -373,7 +373,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onChange={(e) => setEmail(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-            style={{ borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 8, border: "3px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
             disabled={googleLoading}
           />
           <input
@@ -382,7 +382,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-            style={{ borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+            style={{ borderRadius: 8, border: "3px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
             disabled={googleLoading}
           />
 
@@ -946,7 +946,7 @@ const GuidedCreator = forwardRef<HTMLDivElement, GuidedCreatorProps>(({ open, on
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advance(); } }}
                 className="h-[58px] md:h-[68px] flex-1 min-w-0 px-4 text-[18px] md:text-[22px] font-[900] lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150"
-                style={{ borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+                style={{ borderRadius: 8, border: "3px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               />
               <motion.button
                 type="button"
@@ -1281,7 +1281,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onChange={(e) => setEmail(e.target.value)}
               onClick={(e) => e.stopPropagation()}
               className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-              style={{ borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+              style={{ borderRadius: 8, border: "3px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
             <input
@@ -1290,7 +1290,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               className="w-full h-12 px-4 text-base font-extrabold lowercase text-white placeholder:text-white/30 outline-none transition-colors duration-150 focus:border-neon-yellow"
-              style={{ borderRadius: 8, border: "2px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
+              style={{ borderRadius: 8, border: "3px solid hsl(var(--border-mid))", backgroundColor: "hsl(var(--card))" }}
               disabled={emailLoading || googleLoading}
             />
 
