@@ -82,7 +82,7 @@ const PhotoModal = ({ photo, onClose }: { photo: any; onClose: () => void }) => 
                 style={{ backgroundColor: "hsl(var(--card))" }}
               >
                 <span className="line-clamp-2 flex-1 leading-snug">{photo.prompt}</span>
-                <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />
+                <Copy size={13} strokeWidth={2.5} className="shrink-0 mt-0.5" />
               </button>
             ) : (
               <p className="text-[12px] md:text-[14px] font-extrabold lowercase text-white leading-snug">{photo.prompt || "no prompt"}</p>
@@ -400,7 +400,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                       style={{ backgroundColor: "hsl(var(--card))" }}
                     >
                       <span className="line-clamp-2 flex-1 leading-snug">{expanded.prompt}</span>
-                      <Copy size={13} strokeWidth={2.5} className="shrink-0 opacity-60 mt-0.5" />
+                      <Copy size={13} strokeWidth={2.5} className="shrink-0 mt-0.5" />
                     </button>
                   </div>
                 )}
