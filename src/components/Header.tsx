@@ -81,7 +81,7 @@ const Header = () => {
                 style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-4px" }}
                 aria-label="settings"
               >
-                <Settings size={18} strokeWidth={3} className="md:!w-[21px] md:!h-[21px]" style={{ color: "#ffffff" }} />
+                <Settings size={17} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
