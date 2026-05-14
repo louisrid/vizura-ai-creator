@@ -13,7 +13,7 @@ const NotFound = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[28px] pb-[140px]">
-        <div className="flex items-center gap-3 mb-14">
+        <div className="flex items-center gap-[14px] mb-14">
           <BackButton />
           <PageTitle className="mb-0">not found</PageTitle>
         </div>
