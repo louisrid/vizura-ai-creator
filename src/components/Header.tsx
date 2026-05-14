@@ -88,7 +88,7 @@ const Header = () => {
           {!isAuthPage && !isLoggedIn && (
             <button
               onClick={() => { markLateralNav(); navigate("/auth"); }}
-              className="flex items-center justify-center px-3 h-[28px] md:h-[33px]"
+              className="flex items-center justify-center px-3 h-[27px] md:h-[32px]"
               style={{
                 backgroundColor: "#ffffff",
                 border: "2px solid #ffffff",
