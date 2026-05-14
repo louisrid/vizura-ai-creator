@@ -28,7 +28,7 @@ const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(({ always = fa
       style={{
         borderRadius: 9.6,
         backgroundColor: "hsl(var(--card))",
-        border: "2px solid #ffffff",
+        border: "2px solid #ffe603",
       }}
       aria-label="go back"
     >
