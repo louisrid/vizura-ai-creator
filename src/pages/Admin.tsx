@@ -319,7 +319,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   <div key={img.id} className="flex flex-col hover-lift">
                     <button
                       onClick={() => setExpanded(img)}
-                      className="group relative rounded-t-[6px] border-[1px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
+                      className="group relative rounded-t-[6px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
                     >
                       <AspectRatio ratio={3 / 4}>
                         <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
