@@ -71,8 +71,8 @@ const Header = () => {
                 }}
                 aria-label="buy gems"
               >
-                <Gem size={12} strokeWidth={3} className="md:!w-[14px] md:!h-[14px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[12px] md:text-[14px] font-[900] lowercase text-white leading-none">{gems}</span>
+                <Gem size={11} strokeWidth={3} className="md:!w-[13px] md:!h-[13px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[11px] md:text-[13px] font-[900] lowercase text-white leading-none">{gems}</span>
               </button>
 
               <button
