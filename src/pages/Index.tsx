@@ -88,7 +88,7 @@ const ToggleBox = ({ label, options, value, onChange }: {
 }) => (
   <div className="flex-1 flex flex-col gap-2">
     <span className="text-lg md:text-xl font-[900] lowercase text-white">{label}</span>
-    <div className="flex items-stretch rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
+    <div className="flex items-stretch rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] overflow-hidden" style={{ backgroundColor: "hsl(var(--card))" }}>
       {options.map((opt, i) => {
         const isSelected = value === opt;
         const isFirst = i === 0;
@@ -137,7 +137,7 @@ const HighlightedPromptArea = ({
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className="relative overflow-hidden rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card">
+    <div className="relative overflow-hidden rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card">
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -604,7 +604,7 @@ const Index = () => {
             width: charDropdownPos.width,
             zIndex: 10001,
             borderRadius: 8,
-            border: "3px solid hsl(var(--border-mid))",
+            border: "2px solid hsl(var(--border-mid))",
             backgroundColor: "hsl(var(--card))",
             boxShadow: "0 8px 32px rgba(0,0,0,0.8)",
           }}
@@ -722,7 +722,7 @@ const Index = () => {
           </div>
 
           <div className="flex flex-col gap-5 mt-3" style={{ overflowAnchor: "none" }}>
-            <div className="relative rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
@@ -815,7 +815,7 @@ const Index = () => {
               </button>
             </div>
 
-            <div className="relative rounded-[8px] border-[3px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
+            <div className="relative rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card overflow-hidden">
               <div className="w-full" style={{ aspectRatio: previewAspect }}>
                 {resultImage ? (
                   <img
