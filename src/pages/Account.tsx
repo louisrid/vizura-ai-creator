@@ -73,7 +73,7 @@ const Account = () => {
         </div>
 
         {/* Avatar */}
-        <div className="w-full flex justify-center mt-6 mb-5">
+        <div className="w-full flex justify-center mb-5">
           <div className="w-[90px] h-[90px] rounded-full flex items-center justify-center bg-neon-yellow">
             <span className="text-4xl font-[900] text-neon-yellow-foreground leading-none">{initial}</span>
           </div>
