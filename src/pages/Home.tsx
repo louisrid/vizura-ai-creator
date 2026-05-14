@@ -431,7 +431,7 @@ const Home = () => {
                     style={{
                       borderRadius: 8,
                       border: "none",
-                      backgroundColor: "hsl(0 0% 9%)",
+                      backgroundColor: "hsl(0 0% 4%)",
                       cursor: isPlaceholder && !isFirstPlaceholder && user ? "default" : "pointer",
                     }}
                   >
@@ -478,7 +478,7 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 8,
-                        backgroundColor: "hsl(0 0% 9%)",
+                        backgroundColor: "hsl(0 0% 4%)",
                         cursor: (!user || (isFirstEmpty && effectiveOnboardingComplete)) ? "pointer" : "default",
                       }}
                     >
@@ -502,7 +502,7 @@ const Home = () => {
                     style={{
                       borderRadius: 8,
                       border: "none",
-                      backgroundColor: "hsl(0 0% 9%)",
+                      backgroundColor: "hsl(0 0% 4%)",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
@@ -617,7 +617,7 @@ const Home = () => {
                     style={{
                       borderRadius: 8,
                       border: "none",
-                      backgroundColor: "hsl(0 0% 9%)",
+                      backgroundColor: "hsl(0 0% 4%)",
                       cursor: isPlaceholder && !isFirstPlaceholder ? "default" : "pointer",
                     }}
                   >
@@ -661,7 +661,7 @@ const Home = () => {
                       className="overflow-hidden"
                       style={{
                         borderRadius: 8,
-                        backgroundColor: "hsl(0 0% 9%)",
+                        backgroundColor: "hsl(0 0% 4%)",
                         cursor: isFirstEmpty && effectiveOnboardingComplete ? "pointer" : "default",
                       }}
                     >
@@ -685,7 +685,7 @@ const Home = () => {
                     style={{
                       borderRadius: 8,
                       border: "none",
-                      backgroundColor: "hsl(0 0% 9%)",
+                      backgroundColor: "hsl(0 0% 4%)",
                     }}
                   >
                     <AspectRatio ratio={3 / 4}>
