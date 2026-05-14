@@ -58,32 +58,32 @@ const Header = () => {
           </div>
 
           {!isAuthPage && isLoggedIn && (
-            <div className="flex items-center gap-[14px] md:gap-[16px]">
+            <div className="flex items-center gap-[18px] md:gap-[20px]">
 
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[27px] md:h-[32px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[32px] md:h-[37px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
                   borderRadius: 9.6,
+                  marginRight: "2px",
                 }}
                 aria-label="buy gems"
               >
-                <Gem size={10} strokeWidth={3} className="md:!w-[12px] md:!h-[12px]" style={{ color: "#00e0ff" }} />
-                <span className="text-[11px] md:text-[13px] font-[900] lowercase text-white leading-none">{gems}</span>
+                <Gem size={11} strokeWidth={3} className="md:!w-[13px] md:!h-[13px]" style={{ color: "#00e0ff" }} />
+                <span className="text-[12px] md:text-[14px] font-[900] lowercase text-white leading-none">{gems}</span>
               </button>
 
               <button
                 onClick={() => goOrAuth("/account")}
                 className="flex items-center justify-center"
-                style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-4px" }}
+                style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-2px" }}
                 aria-label="settings"
               >
-                <Settings size={17} strokeWidth={3} className="md:!w-[20px] md:!h-[20px]" style={{ color: "#ffffff" }} />
+                <Settings size={22} strokeWidth={3} className="md:!w-[25px] md:!h-[25px]" style={{ color: "#ffffff" }} />
               </button>
-            </div>
           )}
           {!isAuthPage && !isLoggedIn && (
             <button
