@@ -43,22 +43,22 @@ const Header = () => {
             {isLoggedIn && (
               <button
                 onClick={() => goOrAuth("/account")}
-                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[26px] h-[26px] md:w-[28px] md:h-[28px]"
+                className="flex items-center justify-center shrink-0 transition-transform duration-150 w-[30px] h-[30px] md:w-[32px] md:h-[32px]"
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#000000",
                   border: `2px solid ${subscribed ? "hsl(var(--neon-green))" : "#ffffff"}`,
-                  transform: "translateX(2px)",
+                  transform: "translateX(0px)",
                 }}
                 aria-label="my account"
               >
-                <User size={13} strokeWidth={3.5} className="md:!w-[16px] md:!h-[16px]" style={{ color: "#ffffff" }} />
+                <User size={15} strokeWidth={3.5} className="md:!w-[18px] md:!h-[18px]" style={{ color: "#ffffff" }} />
               </button>
             )}
           </div>
 
           {!isAuthPage && isLoggedIn && (
-            <div className="flex items-center gap-[14px] md:gap-[16px]" style={{ marginLeft: "8px" }}>
+            <div className="flex items-center gap-[14px] md:gap-[16px]" style={{ marginLeft: "5px" }}>
 
 
               <button
@@ -81,7 +81,7 @@ const Header = () => {
                 style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-2px" }}
                 aria-label="settings"
               >
-                <Settings size={25} strokeWidth={3} className="md:!w-[28px] md:!h-[28px]" style={{ color: "#ffffff" }} />
+                <Settings size={28} strokeWidth={3} className="md:!w-[31px] md:!h-[31px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
