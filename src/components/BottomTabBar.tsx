@@ -74,6 +74,7 @@ const BottomTabBar = () => {
         backgroundColor: "#000000",
         paddingTop: "3px",
         paddingBottom: "3px",
+        borderTop: "3px solid #ffe603",
       }}
       aria-label="primary navigation"
     >
