@@ -82,7 +82,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-2.5 self-center">
           <button
-            className="w-full rounded-[9.6px] border-[3px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[9.6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">change password</span>
@@ -90,7 +90,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[9.6px] border-[3px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[9.6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">subscription</span>
@@ -98,7 +98,7 @@ const Account = () => {
           </button>
 
           <button
-            className="w-full rounded-[9.6px] border-[3px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[9.6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">support</span>
@@ -217,7 +217,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
           <BackButton always />
           <PageTitle className="mb-0">settings</PageTitle>
         </div>
-        <div className="w-full p-5 space-y-3" style={{ borderRadius: 9.6, backgroundColor: "hsl(var(--card))", border: "3px solid hsl(var(--border-mid))" }}>
+        <div className="w-full p-5 space-y-3" style={{ borderRadius: 9.6, backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
           <button
             onClick={handleGoogleSignIn}
             disabled={googleLoading || submitting}
@@ -245,7 +245,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onChange={(e) => setEmail(e.target.value)}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-[3px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 9.6, backgroundColor: "#000000" }}
             disabled={submitting || googleLoading}
           />
@@ -257,7 +257,7 @@ const SignInView = ({ signIn, signUp, redirectTo }: { signIn: (e: string, p: str
             onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
             spellCheck={false}
             autoCorrect="off"
-            className="w-full h-12 border-[3px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
+            className="w-full h-12 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
             style={{ borderRadius: 9.6, backgroundColor: "#000000" }}
             disabled={submitting || googleLoading}
           />
