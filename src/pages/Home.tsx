@@ -534,7 +534,7 @@ const Home = () => {
               <span aria-hidden="true" className="shrink-0">✨</span>
             </span>
           </h1>
-          {/* <div className="mt-6 mb-10" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
+          {/* <div className="mt-6 mb-12" style={{ width: 60, height: 8, borderRadius: 9999, backgroundColor: "#ffe603" }} /> */}
 
           {/* Two action buttons */}
           <div className="flex gap-3 mb-8 mt-[24px]">

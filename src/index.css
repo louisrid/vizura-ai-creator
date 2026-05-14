@@ -52,8 +52,8 @@
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
     --ring: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -94,7 +94,7 @@
     --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 0 0% 0%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 18%;
+    --sidebar-border: 0 0% 16%;
     --sidebar-ring: 0 0% 100%;
 
     /* custom tokens */
@@ -112,7 +112,7 @@
     --destructive-surface: 0 48% 12%;
 
     /* LIGHTER grey — borders, dividers only (NOT fills, NOT text) */
-    --border-mid: 0 0% 18%;
+    --border-mid: 0 0% 16%;
 
     /* DARKER border grey — for menu dropdowns */
     --border-dark: 0 0% 0%;

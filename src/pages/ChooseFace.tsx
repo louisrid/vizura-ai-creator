@@ -820,7 +820,7 @@ const ChooseFace = () => {
           <>
 
             <main className="relative z-[1] mx-auto flex w-full max-w-lg flex-col overflow-y-auto px-[24px] pt-[42px] pb-[140px] md:max-w-3xl md:px-10">
-              <div className="flex items-center gap-[14px] mb-10">
+              <div className="flex items-center gap-[14px] mb-12">
                 <button
                   type="button"
                   onClick={() => setShowBackConfirm(true)}
