@@ -45,7 +45,7 @@ const RegenerateConfirmDialog = ({
             style={{
               backgroundColor: "hsl(var(--card))",
               borderRadius: 8,
-              border: "1.5px solid hsl(var(--border-mid))",
+              border: "1.75px solid hsl(var(--border-mid))",
               padding: "28px 24px 24px",
             }}
           >
