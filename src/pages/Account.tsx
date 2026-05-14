@@ -80,29 +80,29 @@ const Account = () => {
         </div>
 
         {/* Settings rows */}
-        <div className="w-full max-w-[280px] flex flex-col gap-2.5 self-center">
+        <div className="w-full flex flex-col gap-2.5 self-center">
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-11 text-[12px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">change password</span>
-            <Lock size={16} strokeWidth={2.5} className="text-white shrink-0" />
+            <Lock size={18} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-11 text-[12px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">subscription</span>
-            <Gem size={16} strokeWidth={2.5} className="text-white shrink-0" />
+            <Gem size={18} strokeWidth={2.5} className="text-white shrink-0" />
           </button>
 
           <button
-            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-11 text-[12px] font-[900] lowercase text-white"
+            className="w-full rounded-[10px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">support</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white shrink-0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white shrink-0">
               <rect x="3" y="5" width="18" height="14" rx="2" />
               <path d="m3 7 9 6 9-6" />
             </svg>
