@@ -58,21 +58,20 @@ const Header = () => {
           </div>
 
           {!isAuthPage && isLoggedIn && (
-            <div className="flex items-center gap-[18px] md:gap-[20px]">
+            <div className="flex items-center gap-[14px] md:gap-[16px]" style={{ marginLeft: "8px" }}>
 
 
               <button
                 onClick={() => goOrAuth("/top-ups")}
-                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[32px] md:h-[37px]"
+                className="flex items-center gap-1 md:gap-2 px-3 md:px-4 select-none h-[36px] md:h-[41px]"
                 style={{
                   backgroundColor: "#050a10",
                   border: "2px solid #00e0ff",
                   borderRadius: 9.6,
-                  marginRight: "2px",
                 }}
                 aria-label="buy gems"
               >
-                <Gem size={11} strokeWidth={3} className="md:!w-[13px] md:!h-[13px]" style={{ color: "#00e0ff" }} />
+                <Gem size={12} strokeWidth={3} className="md:!w-[14px] md:!h-[14px]" style={{ color: "#00e0ff" }} />
                 <span className="text-[12px] md:text-[14px] font-[900] lowercase text-white leading-none">{gems}</span>
               </button>
 
@@ -82,7 +81,7 @@ const Header = () => {
                 style={{ backgroundColor: "transparent", border: "none", padding: 0, marginLeft: "-2px" }}
                 aria-label="settings"
               >
-                <Settings size={22} strokeWidth={3} className="md:!w-[25px] md:!h-[25px]" style={{ color: "#ffffff" }} />
+                <Settings size={25} strokeWidth={3} className="md:!w-[28px] md:!h-[28px]" style={{ color: "#ffffff" }} />
               </button>
             </div>
           )}
