@@ -347,7 +347,7 @@ const SignupGate = ({ selections }: { selections: GuidedSelections }) => {
            {isSignUpMode ? <>sign up<br/>to save her</> : <>log in<br/>to save her</>}
         </h2>
 
-        <div className="mt-8 w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+        <div className="mt-8 w-full rounded-[8px] border-[1px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleGoogle(); }}
             disabled={googleLoading}
@@ -1255,7 +1255,7 @@ export const SignInOverlay = ({ open, onSignedIn }: { open: boolean; onSignedIn:
           <h2 className="text-center text-[40px] md:text-[56px] font-[900] lowercase leading-[1.05] tracking-tight text-white">
             {isSignUp ? <>sign up<br/>to save her</> : <>log in<br/>to save her</>}
           </h2>
-          <div className="mt-8 w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="mt-8 w-full rounded-[8px] border-[1px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             <button
               onClick={handleGoogle}
               disabled={googleLoading || emailLoading}

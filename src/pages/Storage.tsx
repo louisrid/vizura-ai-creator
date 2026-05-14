@@ -245,7 +245,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => { if (!hidden) setExpanded(img); }}
-                  className="group relative rounded-t-[8px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
+                  className="group relative rounded-t-[8px] border-[1px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img
@@ -321,7 +321,7 @@ const Storage = () => {
                         if (copyFallback()) done(); else toast.error("copy error");
                      }
                    }}
-                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[8px] overflow-hidden"
+                   className="h-10 md:h-12 w-full flex items-center gap-2 px-3 border-[1px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase text-white text-left rounded-[8px] overflow-hidden"
                    style={{ backgroundColor: "hsl(var(--card))" }}
                  >
                    <span className="truncate flex-1 text-left">{expanded!.prompt}</span>
@@ -331,13 +331,13 @@ const Storage = () => {
             )}
             <div className="p-3 md:p-4 flex gap-2" style={{ backgroundColor: "hsl(var(--card))", borderRadius: "0 0 10px 10px" }}>
               <a href={expanded.url} download={`facefox-${expanded.id}.png`} target="_blank" className="flex-1">
-                <Button variant="outline" className="w-full h-10 md:h-12 border-[2px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
+                <Button variant="outline" className="w-full h-10 md:h-12 border-[1px] border-[hsl(var(--border-mid))] text-base md:text-lg font-[900] lowercase hover:opacity-90" style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff" }}>
                   download <Download size={12} strokeWidth={2.5} />
                 </Button>
               </a>
               <Button
                 variant="outline"
-                className="h-10 md:h-12 px-3 md:px-4 border-[2px] border-destructive bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                className="h-10 md:h-12 px-3 md:px-4 border-[1px] border-destructive bg-[#1a0808] text-destructive hover:bg-destructive hover:text-destructive-foreground"
                 onClick={() => handleDelete(expanded)}
               >
                 <Trash2 size={12} strokeWidth={2.5} />

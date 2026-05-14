@@ -176,7 +176,7 @@ const Auth = () => {
             <PageTitle className="mb-0">log in</PageTitle>
           </div>
 
-          <div className="rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
+          <div className="rounded-[8px] border-[1px] border-[hsl(var(--border-mid))] p-5 md:p-8 space-y-3 md:space-y-4" style={{ backgroundColor: "hsl(var(--card))" }}>
             {!inWebView && (
               <>
                 <button
@@ -213,7 +213,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-[1px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#000000", borderRadius: 8 }}
               disabled={submitting || googleLoading}
             />
@@ -225,7 +225,7 @@ const Auth = () => {
               onKeyDown={(e) => { if (e.key === "Enter") handleEmailAuth(); }}
               spellCheck={false}
               autoCorrect="off"
-              className="w-full h-12 md:h-14 border-[2px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
+              className="w-full h-12 md:h-14 border-[1px] border-[hsl(var(--border-mid))] px-4 text-base font-extrabold lowercase text-foreground placeholder:text-white/60 outline-none focus:border-neon-yellow transition-colors"
               style={{ backgroundColor: "#000000", borderRadius: 8 }}
               disabled={submitting || googleLoading}
             />
