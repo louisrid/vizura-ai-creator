@@ -204,7 +204,7 @@ const Storage = () => {
               padding: 8,
               borderRadius: 8,
               backgroundColor: "hsl(var(--card))",
-              border: "2px solid hsl(var(--border-mid))",
+              border: "1px solid hsl(var(--border-mid))",
             }}
             aria-label={hidden ? "show photos" : "hide photos"}
           >
@@ -217,7 +217,7 @@ const Storage = () => {
         </div>
 
         {images.length === 0 ? (
-          <div className="rounded-[8px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "2px solid hsl(var(--border-mid))" }}>
+          <div className="rounded-[8px] p-8 md:p-12 text-center md:max-w-md md:mx-auto" style={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border-mid))" }}>
             <Wand2 size={32} className="text-white mx-auto mb-4 md:w-10 md:h-10" />
             <p className="text-xs md:text-sm font-extrabold lowercase mb-4 text-foreground">no photos yet</p>
             <button
@@ -264,7 +264,7 @@ const Storage = () => {
                   download={`facefox-${img.id}.png`}
                   target="_blank"
                   className="flex items-center justify-center gap-1.5 rounded-b-[8px] py-2.5 text-[10px] md:text-[11px] font-[900] lowercase transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "2px solid hsl(var(--border-mid))", borderTop: "none" }}
+                  style={{ backgroundColor: "hsl(var(--card))", color: "#ffffff", border: "1px solid hsl(var(--border-mid))", borderTop: "none" }}
                 >
                    download
                    <Download size={12} strokeWidth={2.5} />
