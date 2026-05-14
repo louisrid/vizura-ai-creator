@@ -65,7 +65,7 @@ const Account = () => {
   const initial = (user.email?.[0] || "?").toUpperCase();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black">
+    <div className="relative min-h-screen overflow-hidden">
       <main className="relative z-[1] w-full max-w-lg mx-auto px-[20px] pt-[28px] pb-[140px] flex flex-col items-center">
         <div className="flex items-center gap-5 mb-14 w-full">
           <BackButton always />
