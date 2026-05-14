@@ -190,8 +190,8 @@ const Storage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[34px] pb-[140px]">
-        <div className="flex items-center gap-[14px] mb-14">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[42px] pb-[140px]">
+        <div className="flex items-center gap-[14px] mb-10">
           <BackButton always />
           <PageTitle className="mb-0 whitespace-nowrap">my storage</PageTitle>
           <button
@@ -245,7 +245,7 @@ const Storage = () => {
               >
                 <button
                   onClick={() => { if (!hidden) setExpanded(img); }}
-                  className="group relative rounded-t-[8px] border-[1px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
+                  className="group relative rounded-t-[8px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card text-left"
                 >
                   <AspectRatio ratio={3 / 4}>
                     <img

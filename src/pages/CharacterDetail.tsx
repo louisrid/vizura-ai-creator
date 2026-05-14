@@ -311,8 +311,8 @@ const CharacterDetail = () => {
   if (loading || (authLoading && !hasCachedUser)) {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[34px] pb-[200px]">
-          <div className="flex items-center gap-[14px] mb-14">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[42px] pb-[200px]">
+          <div className="flex items-center gap-[14px] mb-10">
             <BackButton />
           </div>
         </main>
@@ -323,8 +323,8 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[34px] pb-[200px]">
-          <div className="flex items-center gap-[14px] mb-14">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[42px] pb-[200px]">
+          <div className="flex items-center gap-[14px] mb-10">
             <BackButton />
           </div>
           <p className="text-sm font-[900] lowercase text-center mt-16 text-white">
@@ -435,7 +435,7 @@ const CharacterDetail = () => {
 
       {/* Mobile layout */}
       <main className="relative z-[1] mx-auto w-full max-w-lg px-[24px] pt-7 pb-4 md:hidden" style={{ minHeight: "100dvh", overflow: "hidden" }}>
-        <div className="flex items-center gap-[14px] mb-14" style={{ position: "relative", zIndex: 10 }}>
+        <div className="flex items-center gap-[14px] mb-10" style={{ position: "relative", zIndex: 10 }}>
           {onboardingComplete ? <BackButton /> : (
             <button
               type="button"
@@ -509,7 +509,7 @@ const CharacterDetail = () => {
 
       {/* Desktop layout — two-column side by side */}
       <main className="hidden md:block relative z-[1] mx-auto w-full max-w-5xl px-[44px] pt-7 pb-10 min-h-screen">
-        <div className="flex items-center gap-[14px] mb-14">
+        <div className="flex items-center gap-[14px] mb-10">
           {onboardingComplete ? <BackButton /> : (
             <button
               type="button"

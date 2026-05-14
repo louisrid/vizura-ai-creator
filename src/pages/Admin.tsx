@@ -319,7 +319,7 @@ const UserStorageView = ({ userId, onBack, onReset }: { userId: string; onBack: 
                   <div key={img.id} className="flex flex-col hover-lift">
                     <button
                       onClick={() => setExpanded(img)}
-                      className="group relative rounded-t-[6px] border-[1px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
+                      className="group relative rounded-t-[6px] border-[2px] border-b-0 border-[hsl(var(--border-mid))] overflow-hidden bg-card transition-all hover:border-foreground/60 text-left"
                     >
                       <AspectRatio ratio={3 / 4}>
                         <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
@@ -550,7 +550,7 @@ const Admin = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {selectedPhoto && <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />}
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[34px] pb-[140px]">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[42px] pb-[140px]">
 
         {viewingUserId ? (
           <UserStorageView
@@ -560,7 +560,7 @@ const Admin = () => {
           />
         ) : (
           <>
-            <div className="flex items-center gap-[14px] mb-14">
+            <div className="flex items-center gap-[14px] mb-10">
               <BackButton />
               <PageTitle className="mb-0">admin</PageTitle>
             </div>

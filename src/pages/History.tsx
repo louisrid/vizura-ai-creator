@@ -63,8 +63,8 @@ const History = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[34px] pb-[140px]">
-        <div className="flex items-center gap-[14px] mb-14">
+      <main className="relative z-[1] w-full max-w-lg md:max-w-6xl mx-auto px-[24px] md:px-[48px] pt-[42px] pb-[140px]">
+        <div className="flex items-center gap-[14px] mb-10">
           <BackButton />
           <PageTitle className="mb-0">history</PageTitle>
         </div>
