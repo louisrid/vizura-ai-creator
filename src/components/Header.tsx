@@ -92,7 +92,7 @@ const Header = () => {
               style={{
                 backgroundColor: "#ffe603",
                 border: "2px solid #ffe603",
-                borderRadius: 8,
+                borderRadius: 10,
               }}
               aria-label="log in"
             >
