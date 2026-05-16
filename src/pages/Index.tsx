@@ -907,7 +907,7 @@ const Index = () => {
 
       <ImageZoomViewer url={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      <div className="fixed left-0 right-0 z-[9001] px-[24px] md:hidden pointer-events-none" style={{ bottom: 88, paddingBottom: 16, background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
+      <div className="fixed left-0 right-0 z-[9001] px-[24px] md:hidden pointer-events-none" style={{ bottom: 104, paddingBottom: 16, background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
         <div className="mx-auto max-w-lg pointer-events-auto">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
