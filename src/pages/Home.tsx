@@ -411,7 +411,7 @@ const Home = () => {
                 >
                   see all →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {showLocks && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-1.5">
@@ -460,7 +460,7 @@ const Home = () => {
                 <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[10px] font-[800] lowercase px-2.5 py-1.5 transition-transform" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
                   manage →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {showLocks && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-1.5">
@@ -595,7 +595,7 @@ const Home = () => {
                 >
                   see all →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {showLocks && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
@@ -646,7 +646,7 @@ const Home = () => {
                 <button onClick={() => { if (!user) { navigate("/auth?redirect=/characters"); return; } if (!onboardingComplete) return; navigate("/characters"); }} className="text-[13px] font-[800] lowercase px-4 py-2 transition-transform hover-glow" style={{ color: "#ffffff", backgroundColor: "#000000", border: "2px solid #ffe603", borderRadius: 8 }}>
                   manage →
                 </button>
-                {!onboardingComplete && <LockOverlay borderRadius={10} />}
+                {showLocks && <LockOverlay borderRadius={10} />}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
