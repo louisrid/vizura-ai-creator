@@ -52,8 +52,8 @@
     --accent-foreground: 0 0% 0%;
 
     /* LIGHTER grey — borders, dividers only */
-    --border: 0 0% 13%;
-    --input: 0 0% 13%;
+    --border: 0 0% 19%;
+    --input: 0 0% 19%;
     --ring: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -94,7 +94,7 @@
     --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 0 0% 0%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 13%;
+    --sidebar-border: 0 0% 19%;
     --sidebar-ring: 0 0% 100%;
 
     /* custom tokens */
