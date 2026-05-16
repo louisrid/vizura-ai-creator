@@ -32,8 +32,8 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    /* DARKER grey — fills, backgrounds, cards, inputs, skeletons */
-    --card: 0 0% 4%;
+    /* DARKER grey — fills, backgrounds, cards, inputs, skeletons. Darker than --border-mid (14%) so borders stand out. */
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 100%;
 
     --popover: 0 0% 0%;
