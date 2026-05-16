@@ -134,19 +134,53 @@ const HighlightedPromptArea = ({
   value: string; onChange: (v: string) => void; charName: string;
   placeholder: React.ReactNode;
 }) => {
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(false);
-
+  const highlightedHtml = useMemo(() => {
+    if (!value) return "";
+    if (!charName.trim()) return escapeHtml(value);
+    const escapedName = charName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(^|[\\s,.\\/!?;:\\-])(${escapedName})(?=[\\s,.\\/!?;:\\-]|$)`, "gi");
+    const parts: string[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(value)) !== null) {
+      const boundary = match[1] ?? "";
+      const name = match[2] ?? "";
+      const matchStart = match.index;
+      const highlightStart = matchStart + boundary.length;
+      const highlightEnd = highlightStart + name.length;
+      if (lastIndex < matchStart) parts.push(escapeHtml(value.slice(lastIndex, matchStart)));
+      if (boundary) parts.push(escapeHtml(boundary));
+      parts.push(`<span style="color:hsl(var(--neon-yellow));">${escapeHtml(name)}</span>`);
+      lastIndex = highlightEnd;
+    }
+    if (lastIndex < value.length) parts.push(escapeHtml(value.slice(lastIndex)));
+    return parts.join("");
+  }, [value, charName]);
   return (
     <div className="relative overflow-hidden rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card">
+      <div
+        ref={overlayRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words px-4 py-3 text-[28px] leading-9 font-[900] lowercase text-white"
+        dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+      />
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onScroll={(e) => {
+          if (overlayRef.current) {
+            overlayRef.current.scrollTop = e.currentTarget.scrollTop;
+            overlayRef.current.scrollLeft = e.currentTarget.scrollLeft;
+          }
+        }}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         spellCheck={false}
         autoCorrect="off"
-        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-2xl font-[900] lowercase whitespace-pre-wrap break-words text-white focus:outline-none"
-        style={{ caretColor: "hsl(var(--foreground))", fontStyle: "normal", fontWeight: 900, textDecoration: "none" }}
+        className="relative z-[1] w-full min-h-[176px] md:min-h-[200px] resize-none bg-transparent px-4 py-3 text-[28px] leading-9 font-[900] lowercase whitespace-pre-wrap break-words text-transparent focus:outline-none"
+        style={{ caretColor: "hsl(var(--foreground))", WebkitTextFillColor: "transparent" }}
       />
       {!value && !focused && <div data-placeholder>{placeholder}</div>}
     </div>
@@ -759,7 +793,7 @@ const Index = () => {
               charName={selectedChar?.name || ""}
               placeholder={
                 <div className="pointer-events-none absolute left-4 top-3 right-4">
-                  <span className="text-2xl font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
+                  <span className="text-[28px] leading-9 font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
                 </div>
               }
             />
@@ -854,7 +888,7 @@ const Index = () => {
                 charName={selectedChar?.name || ""}
                 placeholder={
                   <div className="pointer-events-none absolute left-4 top-3 right-4">
-                    <span className="text-2xl font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
+                    <span className="text-[28px] leading-9 font-extrabold lowercase" style={{ color: "rgba(255,255,255,0.25)" }}>{placeholderText}</span>
                   </div>
                 }
               />
@@ -873,7 +907,7 @@ const Index = () => {
 
       <ImageZoomViewer url={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      <div className="fixed left-0 right-0 bottom-0 z-10 px-[24px] md:hidden pointer-events-none" style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)", background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
+      <div className="fixed left-0 right-0 z-[9001] px-[24px] md:hidden pointer-events-none" style={{ bottom: 88, paddingBottom: 10, background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
         <div className="mx-auto max-w-lg pointer-events-auto">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
