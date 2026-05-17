@@ -800,7 +800,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mt-16">
+        <div className="mt-10">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
 
