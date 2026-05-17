@@ -82,7 +82,7 @@ const Account = () => {
         {/* Settings rows */}
         <div className="w-full flex flex-col gap-2.5 self-center">
           <button
-            className="w-full rounded-[9.6px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
+            className="w-full rounded-[8px] border-[2px] border-[hsl(var(--border-mid))] bg-card flex items-center justify-between px-4 h-14 text-[13px] font-[900] lowercase text-white"
             onClick={() => toast("coming soon")}
           >
             <span className="leading-none">change password</span>
