@@ -716,7 +716,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-[34px] pb-[220px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-[34px] pb-[140px] md:hidden">
         <div className="flex items-center gap-[14px] mb-12">
           <BackButton always />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -798,6 +798,10 @@ const Index = () => {
               }
             />
           </div>
+        </div>
+
+        <div className="mt-16">
+          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
 
         {error && (
@@ -907,11 +911,6 @@ const Index = () => {
 
       <ImageZoomViewer url={expandedImage} onClose={() => setExpandedImage(null)} />
 
-      <div className="fixed left-0 right-0 z-[9001] px-[24px] md:hidden pointer-events-none" style={{ bottom: 104, paddingBottom: 16, background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 70%, transparent 100%)", paddingTop: 24 }}>
-        <div className="mx-auto max-w-lg pointer-events-auto">
-          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
-        </div>
-      </div>
       {charDropdownContent}
     </div>
   );
