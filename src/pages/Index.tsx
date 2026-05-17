@@ -800,6 +800,10 @@ const Index = () => {
           </div>
         </div>
 
+        <div className="mt-16">
+          <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
+        </div>
+
         {error && (
           <div className="mt-4 rounded-[8px] border-[1px] border-destructive/30 bg-destructive/5 p-4 text-sm font-extrabold lowercase text-destructive">
             {error}
