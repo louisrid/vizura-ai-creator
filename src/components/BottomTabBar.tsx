@@ -69,7 +69,7 @@ const BottomTabBar = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[88px] md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[84px] md:hidden"
       style={{
         backgroundColor: "#000000",
         paddingTop: "3px",
@@ -90,8 +90,8 @@ const BottomTabBar = () => {
             aria-label={tab.label}
             aria-current={active ? "page" : undefined}
           >
-            <Icon size={24} />
-            <span className="text-[13px] font-[800] lowercase tracking-wide">{tab.label}</span>
+            <Icon size={23} />
+            <span className="text-[12px] font-[800] lowercase tracking-wide">{tab.label}</span>
           </button>
         );
       })}

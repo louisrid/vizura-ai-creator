@@ -716,7 +716,7 @@ const Index = () => {
       <PaywallOverlay open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Mobile layout */}
-      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-[34px] pb-[140px] md:hidden">
+      <main className="relative z-[1] w-full max-w-lg mx-auto px-[24px] pt-[34px] pb-[128px] md:hidden">
         <div className="flex items-center gap-[14px] mb-12">
           <BackButton always />
           <PageTitle className="mb-0">create photo</PageTitle>
@@ -800,7 +800,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mt-16">
+        <div className="mt-10">
           <CreateButton onClick={handleCreate} disabled={createDisabled} isGenerating={isGenerating} onboardingComplete={onboardingComplete} />
         </div>
 
