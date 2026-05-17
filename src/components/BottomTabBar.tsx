@@ -69,7 +69,7 @@ const BottomTabBar = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[88px] md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-[9000] flex h-[84px] md:hidden"
       style={{
         backgroundColor: "#000000",
         paddingTop: "3px",
