@@ -311,7 +311,7 @@ const CharacterDetail = () => {
   if (loading || (authLoading && !hasCachedUser)) {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[34px] pb-[200px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[34px] pb-[160px]">
           <div className="flex items-center gap-[14px] mb-12">
             <BackButton />
           </div>
@@ -323,7 +323,7 @@ const CharacterDetail = () => {
   if (!character) {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[34px] pb-[200px]">
+        <main className="relative z-[1] mx-auto w-full max-w-lg md:max-w-3xl px-[24px] md:px-[48px] pt-[34px] pb-[160px]">
           <div className="flex items-center gap-[14px] mb-12">
             <BackButton />
           </div>
